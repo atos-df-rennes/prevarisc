@@ -996,10 +996,18 @@
                 $('#adresse-modal #geolocme_nominatim').attr('disabled', true);
                 /***** Carte IGN *****/
                 <?php if($this->key_ign != null): ?>
+
+                    <?php
+                        $public_dir = $_SERVER['DOCUMENT_ROOT'];
+                        $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+                        $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+                    ?>
+
                     viewer = initViewer('geoportail-container',
                                         '<?php echo $this->key_ign ?>',
                                         [<?php echo $this->default_lon ?>, <?php echo $this->default_lat ?>],
-                                        '<b>Centre par défaut</b>');
+                                        '<b>Centre par défaut</b>',
+                                        '<?php echo $autoconf_path ?>');
 
                     viewer.listen('mapLoaded', afterInitMap);
                     viewer.listen('located', afterPositionLocated);
@@ -1057,8 +1065,12 @@
                             adresse += numero + ", ";
                         }
                         adresse += voie + ", " + codepostal +  ", " + commune;
+
                         $("span.result").text("Géolocalisation en cours...");
-                        viewer.setCenter({location : adresse});
+                        viewer.setCenter({
+                            location : adresse,
+                            locationType : ['StreetAddress']
+                        });
 
                         return false;
                     });

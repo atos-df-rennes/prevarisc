@@ -304,6 +304,13 @@
                     div[id^=GPelevationPathPanel-] {top:-75px;}
                     </style>
                     <script type="text/javascript">
+
+                        <?php
+                            $public_dir = $_SERVER['DOCUMENT_ROOT'];
+                            $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+                            $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+                        ?>
+
                         viewer = initViewer('geoportail-container',
                                             '<?php echo $this->key_ign ?>',
                                             [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,
@@ -312,7 +319,8 @@
                                                 "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "
                                                 +"<?php echo $this->etablissement['adresses'][0]['LIBELLE_RUE'] ?><br/>"+
                                                 "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+ 
-                                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>");
+                                                "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>",
+                                                '<?php echo $autoconf_path ?>');
                             
                         viewer.listen('mapLoaded', afterInitMap);
                         viewer.listen('azimuthChanged', onRotation);

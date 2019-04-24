@@ -153,12 +153,12 @@ function loadBloc($bloc) {
     });
 };
 
-function initViewer(divId, ignKey, center, description) {
+function initViewer(divId, ignKey, center, description, autoconfPath) {
     viewer = Gp.Map.load(
         divId, // identifiant du conteneur HTML
         {
             apiKey : ignKey,
-            configUrl : "/js/sdk-ol/autoconf-https.json",
+            configUrl : autoconfPath,
             // chargement de la cartographie en 2D
             viewMode : "2d",
             // niveau de zoom de la carte (de 1 à 21)
