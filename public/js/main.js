@@ -259,3 +259,30 @@ function updateCoordinates(center, sourceProj, destProj) {
 
     return lonlat;
 }
+
+function geocodeWithJsAutoconf(apiKey, adresse, filterOptionsType, projection, viewer, nbCouches) {
+    Gp.Services.geocode({
+        apiKey: apiKey,
+        location: adresse,
+        filterOptions: [{
+            type: filterOptionsType
+        }],
+        srs: projection,
+        onSuccess: function(t) {
+            var newCenter = {
+                x: t.locations[0].position.y,
+                y: t.locations[0].position.x,
+                projection: "EPSG:4326"
+            };
+            viewer.setCenter(newCenter);
+            $("span.result").text("Géolocalisée IGN");
+            $('#geoportail-container').css('visibility', 'visible');
+            // Changement des coordonnées et du marker 
+            lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');
+            putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
+        },
+        onFailure: function() {
+            console.log('Erreur du service de géocodage ! Veuillez réessayer');
+        }
+    });
+}

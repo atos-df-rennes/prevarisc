@@ -1010,8 +1010,8 @@
                                         '<?php echo $autoconf_path ?>');
 
                     viewer.listen('mapLoaded', afterInitMap);
-                    viewer.listen('located', afterPositionLocated);
-                    viewer.listen('azimuthChanged', onRotation);                    
+                    //viewer.listen('located', afterPositionLocated);
+                    viewer.listen('azimuthChanged', onRotation);
                     function afterInitMap () {
                         // Ajout du bouton FullScreen sur la carte
                         var fsControl = new ol.control.FullScreen({});
@@ -1026,18 +1026,18 @@
                         // On enlève le marker par défaut, les outils de mesures, et le reset d'orientation
                         $('.ol-overlay-container').css('display', 'none');
                         $('div[id^=GPtoolbox-measure-main-]').css('display', 'none');
-                        $('.ol-rotate').css('visibilty', 'hidden');
+                        $('.ol-rotate').css('display', 'none');
 
                         $('#adresse-modal #geolocme').removeAttr('disabled');
                         $('#adresse-modal #geolocme_nominatim').removeAttr('disabled');
                     };
-                    function afterPositionLocated () {
+                    /*function afterPositionLocated () {
                         $("span.result").text("Géolocalisée IGN");
                         $('#geoportail-container').css('visibility', 'visible');
                         // Changement des coordonnées et du marker 
                         lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');
                         putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
-                    };
+                    };*/
                     function onRotation () {
                         viewer.getAzimuth() === 0 ? $('.ol-rotate').css('display', 'none') : $('.ol-rotate').css('display', 'block');
                     };
@@ -1067,10 +1067,17 @@
                         adresse += voie + ", " + codepostal +  ", " + commune;
 
                         $("span.result").text("Géolocalisation en cours...");
-                        viewer.setCenter({
+                        /*viewer.setCenter({
                             location : adresse,
-                            locationType : ['StreetAddress']
-                        });
+                            locationType : ['StreetAddress'],
+                            projection : "EPSG:4326"
+                        });*/
+                        geocodeWithJsAutoconf('<?php echo $this->key_ign ?>',
+                                              adresse,
+                                              'StreetAddress',
+                                              'EPSG:4326',
+                                              viewer,
+                                              nbCouches);
 
                         return false;
                     });
