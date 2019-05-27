@@ -8,14 +8,16 @@
         //Fonction qui r�cup�re toutes les infos g�n�rales d'un dossier
         public function getGeneral($id)
         {
-            $select = "SELECT *
-            FROM dossier, dossiertype, dossiernature, commission, commissiontype
-            WHERE dossier.commission_dossier =	commission.id_commission
-            AND commission.id_commissiontype = commissiontype.id_commissiontype
-            AND dossier.type_dossier = dossiertype.id_dossiertype
-            AND dossier.nature_dossier = dossiernature.id_dossiernature
-            AND dossier.datesuppression_dossier IS NULL
-            AND dossier.id_dossier = '".$id."';";
+            $select = "
+                    SELECT *
+                    from dossier d
+                    join dossiertype dt ON d.TYPE_DOSSIER = dt.ID_DOSSIERTYPE
+                    join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
+                    join commission c ON d.COMMISSION_DOSSIER = c.ID_COMMISSION
+                    join commissiontype ct ON c.ID_COMMISSIONTYPE = ct.ID_COMMISSIONTYPE
+                    where d.ID_DOSSIER = '$id'
+                    and d.DATESUPPRESSION_DOSSIER IS NULL;
+                    ";
             //echo $select;
             return $this->getAdapter()->fetchRow($select);
         }
@@ -388,5 +390,38 @@
                     ";
 
             return $this->getAdapter()->fetchAll($select);
+        }
+
+        // Retourne l'ID du dernier dossier donnant avis pour un établissement donné
+        public function getDernierIdDossierDonnantAvis($idEtab)
+        {
+            $select = "
+                    SELECT ID_DOSSIER from (
+                        (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
+                        from etablissement e 
+                        join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                        join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
+                        join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
+                        where e.ID_ETABLISSEMENT = '$idEtab'
+                        and dn.ID_NATURE in (7,16,17,19,21,23,24,26,28,29,47,48)
+                        and d.AVIS_DOSSIER_COMMISSION in (1,2)
+                        order by d.DATECOMM_DOSSIER desc
+                        limit 1)
+                        UNION
+                        (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
+                        from etablissement e 
+                        join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                        join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
+                        join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
+                        where e.ID_ETABLISSEMENT = '$idEtab'
+                        and dn.ID_NATURE in (7,16,17,19,21,23,24,26,28,29,47,48)
+                        and d.AVIS_DOSSIER_COMMISSION in (1,2)
+                        order by d.DATEVISITE_DOSSIER desc
+                        limit 1)
+                    order by DATECOMM_DOSSIER desc
+                    limit 1) as result;
+                    ";
+
+            return $this->getAdapter()->fetchRow($select);
         }
     }

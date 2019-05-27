@@ -759,6 +759,19 @@ class Service_Dossier
         return new Zend_Date($date, Zend_Date::DATES);
     }
 
+    // Retrouve l'avis du dernier dossier donnant avis pour l'établissement courant uniquement
+    public function saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache) {
+        $dbEtab = new Model_DbTable_Etablissement();
+        $etab = $dbEtab->find($etab['ID_ETABLISSEMENT'])->current();
+
+        $etab->ID_DOSSIER_DONNANT_AVIS = $dernierDossierDonnantAvis['ID_DOSSIER'];
+        $etab->save();
+
+        $cache->remove(sprintf('etablissement_id_%d', $etab['ID_ETABLISSEMENT']));
+
+        return $etab;
+    }
+
     public function saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $repercuterAvis = false) {
         $dbEtab = new Model_DbTable_Etablissement();
         $DBdossier = new Model_DbTable_Dossier();

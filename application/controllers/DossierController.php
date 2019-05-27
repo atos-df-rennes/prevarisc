@@ -1189,13 +1189,15 @@ class DossierController extends Zend_Controller_Action
                         $dateDelete->delete();
                     }
                 }
-            } 
-            
+            }
+
+            $naturesDonnantAvis = array(7,16,17,19,21,23,24,26,28,29,47,48);
+
             //On met le champ ID_DOSSIER_DONNANT_AVIS de établissement avec l'ID du dossier que l'on vient d'enregistrer dans les cas suivant
             if ($this->_getParam("AVIS_DOSSIER_COMMISSION") 
                     && ($this->_getParam("AVIS_DOSSIER_COMMISSION") == 1 || $this->_getParam("AVIS_DOSSIER_COMMISSION") == 2)
                     && $service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)) {
-                
+
                 if ($this->_getParam('do') == 'new' && $this->_getParam('idEtablissement')) {
                     $listeEtab = array(array(
                         'ID_ETABLISSEMENT' => $this->_getParam('idEtablissement'),
@@ -1256,6 +1258,22 @@ class DossierController extends Zend_Controller_Action
                             ));
                         }
                     }
+                }
+            } 
+            //On passe d'un dossier donnant avis à un dossier ne donnant pas avis (edit)
+            else if ($this->_getParam("AVIS_DOSSIER_COMMISSION") 
+                    && ($this->_getParam("AVIS_DOSSIER_COMMISSION") == 1 || $this->_getParam("AVIS_DOSSIER_COMMISSION") == 2)
+                    && !$service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature) && $this->_getParam('do') == 'edit'
+                    && in_array($oldNature, $naturesDonnantAvis)) {
+                $listeEtab = $DBetablissementDossier->getEtablissementListe($idDossier);
+
+                $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+
+                $dbDossier = new Model_DbTable_Dossier();
+                //on récupère les infos du dernier dossier donnant avis de l'établissement courant
+                foreach ($listeEtab as $etab) {
+                    $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                    $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
                 }
             }
             
