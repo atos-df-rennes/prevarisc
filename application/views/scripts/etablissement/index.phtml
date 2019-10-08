@@ -310,7 +310,7 @@
                             $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
                             $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
                         ?>
-
+			
                         viewer = initViewer('geoportail-container',
                                             '<?php echo $this->key_ign ?>',
                                             [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,

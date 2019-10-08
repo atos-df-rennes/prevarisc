@@ -42,9 +42,9 @@ $(document).ready(function(){
             }
         });
         
-        $("[name='dateDocManquant[]'").blur(function() {
-            if($("[name='dateDocManquant[]'").val() != '') {
-                $("[name='dateDocManquant[]'").css("border-color","black");
+        $("#dateDocManquant_1").blur(function() {
+            if($("#dateDocManquant_1").val() != '') {
+                $("#dateDocManquant_1").css("border-color","black");
             }
         });
 	

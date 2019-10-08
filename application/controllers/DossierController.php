@@ -1276,6 +1276,10 @@ class DossierController extends Zend_Controller_Action
                     $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
                 }
             }
+
+            // Clean du cache de la recherche pour rester à jour
+            $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
             
             //on envoi l'id à la vue pour qu'elle puisse rediriger vers la bonne page
             $idArray = array('id'=>$nouveauDossier->ID_DOSSIER);
@@ -2833,9 +2837,19 @@ class DossierController extends Zend_Controller_Action
     public function deleteAction()
     {
         try {
+            $DBetablissementDossier = new Model_DbTable_EtablissementDossier();
+            $listeEtab = $DBetablissementDossier->getEtablissementListe($this->_getParam("id"));
+            $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
             $service_dossier = new Service_Dossier();
             $service_dossier->delete($this->_getParam("id"));
+
+            $dbDossier = new Model_DbTable_Dossier();
+            //on récupère les infos du dernier dossier donnant avis de l'établissement courant
+            foreach ($listeEtab as $etab) {
+                $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
+            }
 
             // Récupération de la ressource cache à partir du bootstrap
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
