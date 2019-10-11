@@ -128,12 +128,7 @@
             formatItem: function(item) {
                 return item.LIBELLE_COMMUNE + " (" + item.NUMINSEE_COMMUNE + ")";
             }
-        }).result(function(e, item) {
-
-        }).click(function() {
-
         });
-
 
         $("#commissionSelect").live('change',function(){
                 $("#ID_AFFECTATION_DOSSIER_COMMISSION").val('');
@@ -1400,7 +1395,7 @@ echo "
                 echo "<input type='radio' name='servInst' value='servInstGrp' ".(('new' == $action || 'servInstGrp' == $this->infosDossier['TYPESERVINSTRUC_DOSSIER'] || NULL == $this->infosDossier['TYPESERVINSTRUC_DOSSIER']) ? "checked='checked'" : "")."  />&nbsp;&nbsp;";
                 echo listeGroupementServInstructeur($this->infosDossier['SERVICEINSTRUC_DOSSIER'], 10, $this->infosDossier['TYPESERVINSTRUC_DOSSIER']);
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='servInst' value='servInstCommune' ".(('servInstCommune' == $this->infosDossier['TYPESERVINSTRUC_DOSSIER']) ? "checked='checked'" : "")."/>&nbsp;";
-                echo "<input type='text' name='servInstVille' id='servInstVille' ".(('servInstGrp' == $this->infosDossier['TYPESERVINSTRUC_DOSSIER'] || 'new' == $action) ? "disabled='disabled'" : "")." value='".(('servInstCommune' == $this->infosDossier['TYPESERVINSTRUC_DOSSIER'] && $this->infosDossier['SERVICEINSTRUC_DOSSIER'] != '') ? $this->infosDossier['SERVICEINSTRUC_DOSSIER'] : "")."' />";
+                echo '<input type="text" name="servInstVille" id="servInstVille" '.(("servInstGrp" == $this->infosDossier["TYPESERVINSTRUC_DOSSIER"] || "new" == $action) ? 'disabled="disabled"' : '').' value="'.(("servInstCommune" == $this->infosDossier["TYPESERVINSTRUC_DOSSIER"] && $this->infosDossier["SERVICEINSTRUC_DOSSIER"] != "") ? $this->infosDossier["SERVICEINSTRUC_DOSSIER"] : '').'" />';
                 echo "
 					</div>
 				</li>
