@@ -181,9 +181,6 @@ class DossierController extends Zend_Controller_Action
             $this->view->idDossier = ($this->_getParam("id"));
 
             $this->view->verrou = $dossier->VERROU_DOSSIER;
-
-
-
         }
     }
 
@@ -223,7 +220,6 @@ class DossierController extends Zend_Controller_Action
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam("id"));
         }else if($this->_getParam("id_etablissement")){
             $this->view->enteteEtab = $service_dossier->getEtabInfos(null,$this->_getParam("id_etablissement"));
-        }else{
         }
 
         $this->view->idEtablissement = $this->_getParam("id_etablissement");
@@ -261,7 +257,6 @@ class DossierController extends Zend_Controller_Action
 
         if ($this->_getParam("idEtablissement")) {
             $this->view->idEtablissement = $this->_getParam("idEtablissement");
-        } else {
         }
 
         /******

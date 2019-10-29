@@ -246,16 +246,23 @@ class SearchController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('search');
 
+        // Gestion droit export Calc
+        $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+        $this->view->is_allowed_export_calc = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], "export", "export_doss");
+
         $service_search = new Service_Search;
         $service_commissions = new Service_Commission;
         $service_adresse = new Service_Adresse;
         $service_dossier = new Service_Dossier;
+        $service_groupementcommunes = new Service_GroupementCommunes();
 
         $this->view->DB_type = $service_dossier->getAllTypes();
         $this->view->array_commissions = $service_commissions->getCommissionsAndTypes();
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && $this->_request->getQuery()['commune'] != '' ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : array();
+        $typeGroupementTerritorial = array(5);
+        $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
         $checkDateFormat = function($date) {
             if (!$date) return false;
@@ -264,35 +271,218 @@ class SearchController extends Zend_Controller_Action
         };
 
         if($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
-            try {
-                $parameters = $this->_request->getQuery();
-                $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
-                $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
-                $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
-                $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
-                $criteresRecherche = array();
-                $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
-                $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
-                $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
-                $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && $parameters['commune'] != '' ? $parameters['commune'] : null;
-                $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && $parameters['voie'] != '' ? $parameters['voie'] : null;
-                $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && $parameters['preventionniste'] != '' ? $parameters['preventionniste'] : null;
-                $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
-                $criteresRecherche['dateCreationEnd'] = array_key_exists('date-creation-end', $parameters) && $checkDateFormat($parameters['date-creation-end']) ? $parameters['date-creation-end'] : null;
-                $criteresRecherche['dateReceptionStart'] = array_key_exists('date-reception-start', $parameters) && $checkDateFormat($parameters['date-reception-start']) ? $parameters['date-reception-start'] : null;
-                $criteresRecherche['dateReceptionEnd'] = array_key_exists('date-reception-end', $parameters) && $checkDateFormat($parameters['date-reception-end']) ? $parameters['date-reception-end'] : null;
-                $criteresRecherche['dateReponseStart'] = array_key_exists('date-reponse-start', $parameters) && $checkDateFormat($parameters['date-reponse-start']) ? $parameters['date-reponse-start'] : null;
-                $criteresRecherche['dateReponseEnd'] = array_key_exists('date-reponse-end', $parameters) && $checkDateFormat($parameters['date-reponse-end']) ? $parameters['date-reponse-end'] : null;
-
-                $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page,$criteresRecherche);
-
-                $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
-                $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
-
-                $this->view->results = $paginator;
-            }
-            catch(Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
+            if (!empty($_GET)) {
+                // Export Calc
+                if (isset ( $_GET ['Exporter'] )) {
+                    try {
+                        $parameters = $this->_request->getQuery();
+                        $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
+                        $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
+                        $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
+                        $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
+                        $criteresRecherche = array();
+                        $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
+                        $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
+                        $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
+                        $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters ) && count ( $parameters ['avisDiffere'] ) == 1 ? $parameters ['avisDiffere'] [0] == 'true' : null;
+                        $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && $parameters['commune'] != '' ? $parameters['commune'] : null;
+                        $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && $parameters['voie'] != '' ? $parameters['voie'] : null;
+                        $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && $parameters['courrier'] != '' ? $parameters['courrier'] : null;
+                        $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && $parameters['preventionniste'] != '' ? $parameters['preventionniste'] : null;
+                        $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
+                        $criteresRecherche['dateCreationEnd'] = array_key_exists('date-creation-end', $parameters) && $checkDateFormat($parameters['date-creation-end']) ? $parameters['date-creation-end'] : null;
+                        $criteresRecherche['dateReceptionStart'] = array_key_exists('date-reception-start', $parameters) && $checkDateFormat($parameters['date-reception-start']) ? $parameters['date-reception-start'] : null;
+                        $criteresRecherche['dateReceptionEnd'] = array_key_exists('date-reception-end', $parameters) && $checkDateFormat($parameters['date-reception-end']) ? $parameters['date-reception-end'] : null;
+                        $criteresRecherche['dateReponseStart'] = array_key_exists('date-reponse-start', $parameters) && $checkDateFormat($parameters['date-reponse-start']) ? $parameters['date-reponse-start'] : null;
+                        $criteresRecherche['dateReponseEnd'] = array_key_exists('date-reponse-end', $parameters) && $checkDateFormat($parameters['date-reponse-end']) ? $parameters['date-reponse-end'] : null;
+                        $criteresRecherche['dateCommissionStart'] = array_key_exists('date-commission-start', $parameters) && $checkDateFormat($parameters['date-commission-start']) ? $parameters['date-commission-start'] : null;
+                        $criteresRecherche['dateCommissionEnd'] = array_key_exists('date-commission-end', $parameters) && $checkDateFormat($parameters['date-commission-end']) ? $parameters['date-commission-end'] : null;
+                        $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
+                        $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
+                        $criteresRecherche['groupements_territoriaux'] = array_key_exists ( 'groupements_territoriaux', $parameters ) && $parameters ['groupements_territoriaux'] != '' ? $parameters ['groupements_territoriaux'] : null;
+                        $criteresRecherche['label'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] != '#' ? $parameters ['label'] : null;
+                        $criteresRecherche['identifiant'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] == '#' ? substr ( $parameters ['label'], 1 ) : null;
+                        
+                        $search = $service_search->extractionDossiers($types, $objet, $num_doc_urba, null, null, $criteresRecherche);
+                        
+                        $objPHPExcel = new PHPExcel ();
+                        $objPHPExcel->setActiveSheetIndex ( 0 );
+                        $sheet = $objPHPExcel->getActiveSheet ();
+                        $sheet->setTitle ( 'Liste des dossiers' );
+                        
+                        $objPHPExcel->getDefaultStyle ()->getFont ()->setName ( 'Arial' )->setSize ( 10 )->setBold ( false );
+                        $sheet->getDefaultRowDimension ()->setRowHeight ( - 1 );
+                        
+                        // Formattage des titres de colonnes
+                        $styleArray = array (
+                                'borders' => array (
+                                        'allborders' => array (
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                                        )
+                                )
+                        );
+                        $sheet->getStyle ( 'A1:U1' )->applyFromArray ( $styleArray );
+                        unset ( $styleArray );
+                        $sheet->getStyle ( 'A1:U1' )->getAlignment ()->setHorizontal ( PHPExcel_Style_Alignment::HORIZONTAL_CENTER );
+                        $sheet->getStyle ( 'A1:U1' )->getFont ()->setSize ( 11 )->setBold ( true );
+                        
+                        foreach ( range ( 'A', 'U' ) as $columnID ) {
+                            $sheet->getColumnDimension ( $columnID )->setAutoSize ( true );
+                        }
+                        
+                        $sheet->setCellValueByColumnAndRow ( 0, 1, "Groupement" );
+                        $sheet->setCellValueByColumnAndRow ( 1, 1, "Commune" );
+                        $sheet->setCellValueByColumnAndRow ( 2, 1, "Catégorie" );
+                        $sheet->setCellValueByColumnAndRow ( 3, 1, "Type" );
+                        $sheet->setCellValueByColumnAndRow ( 4, 1, "Activité" );
+                        $sheet->setCellValueByColumnAndRow ( 5, 1, "Code/identifiant établissement" );
+                        $sheet->setCellValueByColumnAndRow ( 6, 1, "Libellé établissement" );
+                        $sheet->setCellValueByColumnAndRow ( 7, 1, "Statut" );
+                        $sheet->setCellValueByColumnAndRow ( 8, 1, "Genre" );
+                        $sheet->setCellValueByColumnAndRow ( 9, 1, "Type du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 10, 1, "Nature du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 11, 1, "Date de création du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 12, 1, "Objet du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 13, 1, "Numéro document urbanisme" );
+                        $sheet->setCellValueByColumnAndRow ( 14, 1, "Date de visite" );
+                        $sheet->setCellValueByColumnAndRow ( 15, 1, "Date de la commission en salle" );
+                        $sheet->setCellValueByColumnAndRow ( 16, 1, "Commission du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Avis rapporteur" );
+                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Avis commission" );
+                        $sheet->setCellValueByColumnAndRow ( 19, 1, "Préventionniste en charge du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 20, 1, "Pièces jointes ?" );
+                        
+                        $ligne = 2;
+                        foreach ( $search ['results'] as $row ) {
+                            
+                            $sheet->setCellValueByColumnAndRow ( 0, $ligne, $row ['LIBELLE_GROUPEMENT'] );
+                            $sheet->setCellValueByColumnAndRow ( 1, $ligne, $row ['LIBELLE_COMMUNE'] );
+                            $sheet->setCellValueByColumnAndRow ( 2, $ligne, $row ['LIBELLE_CATEGORIE'] );
+                            $sheet->setCellValueByColumnAndRow ( 3, $ligne, $row ['LIBELLE_TYPE_ETABLISSEMENT'] );
+                            $sheet->setCellValueByColumnAndRow ( 4, $ligne, $row ['LIBELLE_ACTIVITE'] );
+                            $sheet->setCellValueByColumnAndRow ( 5, $ligne, $row ['NUMEROID_ETABLISSEMENT'] );
+                            $sheet->setCellValueByColumnAndRow ( 6, $ligne, $row ['LIBELLE_ETABLISSEMENTINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 7, $ligne, $row ['LIBELLE_STATUT'] );
+                            $sheet->setCellValueByColumnAndRow ( 8, $ligne, $row ['LIBELLE_GENRE'] );
+                            $sheet->setCellValueByColumnAndRow ( 9, $ligne, $row ['LIBELLE_DOSSIERTYPE'] );
+                            $sheet->setCellValueByColumnAndRow ( 10, $ligne, $row ['LIBELLE_DOSSIERNATURE'] );
+                            if ($row ['DATEINSERT_DOSSIER'] != '') {
+                                $dateCreationDossier = explode ( "-", $row ['DATEINSERT_DOSSIER'] );
+                                // Formattage du jour, qui contient aussi l'heure -> ne passe pas avec FormattedPHPToExcel
+                                $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
+                                $datetimeCreationDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCreationDossier [0], $dateCreationDossier [1], $dateCreationDossier [2] );
+                                $sheet->setCellValueByColumnAndRow ( 11, $ligne, $datetimeCreationDossier );
+                                $sheet->getStyleByColumnAndRow ( 11, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                            }
+                            $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['OBJET_DOSSIER'] );
+                            $sheet->setCellValueByColumnAndRow ( 13, $ligne, $row ['NUM_DOCURBA'] );
+                            if ($row ['DATEVISITE_DOSSIER'] != '') {
+                                $dateVisiteDossier = explode ( "-", $row ['DATEVISITE_DOSSIER'] );
+                                $datetimeVisiteDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateVisiteDossier [0], $dateVisiteDossier [1], $dateVisiteDossier [2] );
+                                $sheet->setCellValueByColumnAndRow ( 14, $ligne, $datetimeVisiteDossier );
+                                $sheet->getStyleByColumnAndRow ( 14, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                            }
+                            if ($row ['DATECOMM_DOSSIER'] != '') {
+                                $dateCommissionDossier = explode ( "-", $row ['DATECOMM_DOSSIER'] );
+                                $datetimeCommissionDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCommissionDossier [0], $dateCommissionDossier [1], $dateCommissionDossier [2] );
+                                $sheet->setCellValueByColumnAndRow ( 15, $ligne, $datetimeCommissionDossier );
+                                $sheet->getStyleByColumnAndRow ( 15, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                            }
+                            $sheet->setCellValueByColumnAndRow ( 16, $ligne, $row ['LIBELLE_COMMISSION'] );
+                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_AVIS_RAPPORTEUR'] );
+                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['LIBELLE_AVIS_COMMISSION'] );
+                            $sheet->setCellValueByColumnAndRow ( 19, $ligne, $row ['PRENOM_UTILISATEURINFORMATIONS'] . " " . $row ['NOM_UTILISATEURINFORMATIONS'] );
+                            if ($row ['ID_PIECEJOINTE'] != '') {
+                                $sheet->setCellValueByColumnAndRow ( 20, $ligne, "Oui" );
+                            } else {
+                                $sheet->setCellValueByColumnAndRow ( 20, $ligne, "Non" );
+                            }
+                            
+                            $ligne ++;
+                        }
+                        
+                        $this->view->writer = PHPExcel_IOFactory::createWriter ( $objPHPExcel, 'Excel5' );
+                        
+                        // Ensuite j'ai choisi de désactiver mon layout
+                        $this->_helper->layout ()->disableLayout ();
+                        
+                        header("Content-Type: application/vnd.oasis.opendocument.spreadsheet");
+                        $filename = "Export_Dossiers_".date('Y-m-d_H-i-s').".ods";
+                        header("Content-Disposition: attachment; filename=".$filename."");
+                        $this->view->writer->save('php://output');
+                        exit();
+                        
+                    } catch ( Exception $e ) {
+                        $this->_helper->flashMessenger ( array (
+                                'context' => 'error',
+                                'title' => 'Problème d\'export',
+                                'message' => 'L\'export a rencontré un problème. Veuillez rééssayez. (' . $e->getMessage () . ')'
+                        ) );
+                    }
+                    
+                } else {
+                    // Recherche
+                    
+                    // Si premier affichage de la page
+                    if (! isset ( $_GET ['Rechercher'] )) {
+                        // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
+                        $service_user = new Service_User ();
+                        $this->view->user = $service_user->find ( Zend_Auth::getInstance ()->getIdentity () ['ID_UTILISATEUR'] );
+                    }
+                    
+                    try {
+                        $parameters = $this->_request->getQuery();
+                        $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
+                        $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
+                        $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
+                        $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
+                        $criteresRecherche = array();
+                        $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
+                        $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
+                        $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
+                        $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters ) && count ( $parameters ['avisDiffere'] ) == 1 ? $parameters ['avisDiffere'] [0] == 'true' : null;
+                        $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && $parameters['commune'] != '' ? $parameters['commune'] : null;
+                        $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && $parameters['voie'] != '' ? $parameters['voie'] : null;
+                        $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && $parameters['courrier'] != '' ? $parameters['courrier'] : null;
+                        $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && $parameters['preventionniste'] != '' ? $parameters['preventionniste'] : null;
+                        $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
+                        $criteresRecherche['dateCreationEnd'] = array_key_exists('date-creation-end', $parameters) && $checkDateFormat($parameters['date-creation-end']) ? $parameters['date-creation-end'] : null;
+                        $criteresRecherche['dateReceptionStart'] = array_key_exists('date-reception-start', $parameters) && $checkDateFormat($parameters['date-reception-start']) ? $parameters['date-reception-start'] : null;
+                        $criteresRecherche['dateReceptionEnd'] = array_key_exists('date-reception-end', $parameters) && $checkDateFormat($parameters['date-reception-end']) ? $parameters['date-reception-end'] : null;
+                        $criteresRecherche['dateReponseStart'] = array_key_exists('date-reponse-start', $parameters) && $checkDateFormat($parameters['date-reponse-start']) ? $parameters['date-reponse-start'] : null;
+                        $criteresRecherche['dateReponseEnd'] = array_key_exists('date-reponse-end', $parameters) && $checkDateFormat($parameters['date-reponse-end']) ? $parameters['date-reponse-end'] : null;
+                        $criteresRecherche['dateCommissionStart'] = array_key_exists('date-commission-start', $parameters) && $checkDateFormat($parameters['date-commission-start']) ? $parameters['date-commission-start'] : null;
+                        $criteresRecherche['dateCommissionEnd'] = array_key_exists('date-commission-end', $parameters) && $checkDateFormat($parameters['date-commission-end']) ? $parameters['date-commission-end'] : null;
+                        $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
+                        $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
+                        if (array_key_exists ( 'groupements_territoriaux', $parameters ) && $parameters ['groupements_territoriaux'] != '') {
+                            $criteresRecherche['groupements_territoriaux'] = $parameters ['groupements_territoriaux'];
+                        } else {
+                            if ($this->view->user != null && array_key_exists ( 'groupements', $this->view->user ) && count ( $this->view->user ['groupements'] ) > 0) {
+                                $criteresRecherche['groupements_territoriaux'] = array ();
+                                foreach ( $this->view->user ['groupements'] as $groupement ) {
+                                    if ($groupement ['ID_GROUPEMENT'] != null) {
+                                        array_push ( $criteresRecherche['groupements_territoriaux'], $groupement ['ID_GROUPEMENT'] );
+                                    }
+                                }
+                            } else {
+                                $criteresRecherche['groupements_territoriaux'] = null;
+                            }
+                        }
+                        $criteresRecherche['label'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] != '#' ? $parameters ['label'] : null;
+                        $criteresRecherche['identifiant'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] == '#' ? substr ( $parameters ['label'], 1 ) : null;
+                        
+                        $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page,$criteresRecherche);
+                        
+                        $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
+                        $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
+                        
+                        $this->view->results = $paginator;
+                    }
+                    catch(Exception $e) {
+                        $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
+                    }
+                }
             }
         }
     }

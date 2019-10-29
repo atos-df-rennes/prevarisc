@@ -301,6 +301,7 @@ class Service_Search
         ->joinLeft(array("adressecommunesite" => "adressecommune"), "etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE")
         ->joinLeft(array("etablissementadressecell" => "etablissementadresse"), "etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)", "ID_RUE AS ID_RUE_CELL")
         ->joinLeft(array("adressecommunecell" => "adressecommune"), "etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE")
+        ->where("e.DATESUPPRESSION_ETABLISSEMENT IS NULL")
         ->order("adressecommune.LIBELLE_COMMUNE ASC")
         ->order("categorie.LIBELLE_CATEGORIE ASC")
         ->order("type.LIBELLE_TYPE ASC")
@@ -680,6 +681,245 @@ class Service_Search
             $cache->save(serialize($results));
         }
 
+        return $results;
+    }
+
+    /**
+     * Recherche des dossiers pour l'extraction Calc
+     *
+     * @param array $types
+     * @param string $objet
+     * @param string $num_doc_urba
+     * @param int $parent Id d'un dossier parent
+     * @param bool $avis_differe Avis différé
+     * @return array
+     */
+    public function extractionDossiers($types = null, $objet = null, $num_doc_urba = null, $parent = null, $avis_differe = null, $criterias = null)
+    {
+        // Récupération de la ressource cache à partir du bootstrap
+        $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+        
+        // Identifiant de la recherche
+        $search_id = 'search_dossiers_' . md5(serialize(func_get_args()));
+        
+        if(($results = unserialize($cache->load($search_id))) === false) {
+            
+            // Création de l'objet recherche
+            $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
+            
+            // Requête principale
+            $select->from(array("d" => "dossier"))
+            ->columns(array(
+                    "NB_DOSS_LIES" => new Zend_Db_Expr("(SELECT COUNT(dossierlie.ID_DOSSIER2)
+                        FROM dossier
+                        INNER JOIN dossierlie ON dossier.ID_DOSSIER = dossierlie.ID_DOSSIER1
+                        WHERE dossier.ID_DOSSIER = d.ID_DOSSIER)"),
+                    "NB_URBA" => new Zend_Db_Expr("( SELECT group_concat(dossierdocurba.NUM_DOCURBA, ', ')
+                        FROM dossier
+                        INNER JOIN dossierdocurba ON dossierdocurba.ID_DOSSIER = dossier.ID_DOSSIER
+                        WHERE dossier.ID_DOSSIER = d.ID_DOSSIER
+                        LIMIT 1)"),
+                    "ALERTE_RECEPTION_TRAVAUX" => new Zend_Db_Expr("(SELECT COUNT(dossierlie.ID_DOSSIER2)
+                        FROM dossier
+                        INNER JOIN dossierlie ON dossier.ID_DOSSIER = dossierlie.ID_DOSSIER1
+                        INNER JOIN dossiernature ON dossierlie.ID_DOSSIER1 = dossiernature.ID_DOSSIER
+                        WHERE (dossiernature.ID_NATURE = 2 OR dossiernature.ID_NATURE = 1 OR dossiernature.ID_NATURE = 13 OR dossiernature.ID_NATURE = 12) AND dossier.ID_DOSSIER = d.ID_DOSSIER)"),
+                    "ECHEANCIER_TRAVAUX" => new Zend_Db_Expr("(SELECT COUNT(dossierlie.ID_DOSSIER1)
+                        FROM dossier
+                        INNER JOIN dossierlie ON dossier.ID_DOSSIER = dossierlie.ID_DOSSIER2
+                        INNER JOIN dossiernature ON dossierlie.ID_DOSSIER1 = dossiernature.ID_DOSSIER
+                        WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)")))
+                        ->joinLeft("dossierlie", "d.ID_DOSSIER = dossierlie.ID_DOSSIER2")
+                        ->joinLeft("commission", "d.COMMISSION_DOSSIER = commission.ID_COMMISSION","LIBELLE_COMMISSION")
+                        ->join("dossiernature", "dossiernature.ID_DOSSIER = d.ID_DOSSIER", null)
+                        ->join("dossiernatureliste", "dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE", array("LIBELLE_DOSSIERNATURE", "ID_DOSSIERNATURE"))
+                        ->join("dossiertype", "dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE", "LIBELLE_DOSSIERTYPE")
+                        ->join(array("ed"=>"etablissementdossier"), "d.ID_DOSSIER = ed.ID_DOSSIER", null)
+                        ->join(array("e"=>"etablissement"), "ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT", "NUMEROID_ETABLISSEMENT")
+                        ->join(array("ei" =>"etablissementinformations"), "e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )", array("LIBELLE_ETABLISSEMENTINFORMATIONS","ID_ETABLISSEMENT","ID_CATEGORIE"))
+                        ->joinLeft("categorie", "categorie.ID_CATEGORIE = ei.ID_CATEGORIE", "LIBELLE_CATEGORIE")
+                        ->joinLeft("type","type.ID_TYPE = ei.ID_TYPE",array("ID_TYPE","LIBELLE_TYPE AS LIBELLE_TYPE_ETABLISSEMENT"))
+                        ->joinLeft("typeactivite", "ei.ID_TYPEACTIVITE = typeactivite.ID_TYPEACTIVITE", "LIBELLE_ACTIVITE")
+                        ->joinLeft("statut", "ei.ID_STATUT = statut.ID_STATUT", "LIBELLE_STATUT")
+                        ->join("genre","genre.ID_GENRE = ei.ID_GENRE","LIBELLE_GENRE")
+                        ->joinLeft(array("ar"=>"avis"), "d.AVIS_DOSSIER = ar.ID_AVIS", "LIBELLE_AVIS AS LIBELLE_AVIS_RAPPORTEUR")
+                        ->joinLeft(array("ac"=>"avis"), "d.AVIS_DOSSIER_COMMISSION = ac.ID_AVIS", "LIBELLE_AVIS AS LIBELLE_AVIS_COMMISSION")
+                        ->joinLeft("dossierdocurba","dossierdocurba.ID_DOSSIER = d.ID_DOSSIER","NUM_DOCURBA")
+                        ->joinLeft("dossieraffectation","dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER",null)
+                        ->joinLeft("datecommission","datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT",null)
+                        ->joinLeft("dossierpreventionniste","dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER",null)
+                        ->joinLeft("utilisateur", "dossierpreventionniste.ID_PREVENTIONNISTE = utilisateur.ID_UTILISATEUR")
+                        ->joinLeft("utilisateurinformations", "utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS",array("NOM_UTILISATEURINFORMATIONS", "PRENOM_UTILISATEURINFORMATIONS"))
+                        ->joinLeft(array("ea" => "etablissementadresse"),"ea.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT",null)
+                        ->joinLeft("adressecommune", "ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", array("CODEPOSTAL_COMMUNE","LIBELLE_COMMUNE"))
+                        ->joinLeft("groupementcommune", "groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", null)
+                        ->joinLeft("groupement", "groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT", "LIBELLE_GROUPEMENT")
+                        ->joinLeft("dossierpj", "dossierpj.ID_DOSSIER = d.ID_DOSSIER", "ID_PIECEJOINTE")
+                        ->group("d.ID_DOSSIER")
+                        ;
+            
+            // Gestion des groupements territoriaux liés aux établissements et des établissements sans adresse (et donc sans groupement territorial lié)
+            $select->where('groupement.ID_GROUPEMENTTYPE = 5 or groupement.ID_GROUPEMENTTYPE IS NULL');
+            
+            // Critères : numéro de doc urba
+            if($num_doc_urba !== null) {
+                $select->having("NB_URBA like ?", "%$num_doc_urba%");
+            }
+            
+            // Critères : objet
+            if($objet !== null) {
+                
+                $cleanObjet = trim($objet);
+                
+                // recherche par id
+                if (substr($cleanObjet, 0, 1) == "#") {
+                    $select->having("NB_URBA like ?", "%".substr($cleanObjet, 1)."%");
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                } else  if (preg_match('/^[0-9A-Z\.]+$/', $cleanObjet) === 1) {
+                    $select->having("NB_URBA like ?", "%".$cleanObjet."%");
+                    // cas par défaut
+                } else {
+                    $this->setCriteria($select, "OBJET_DOSSIER", $cleanObjet, false);
+                }
+            }
+            
+            // Critères : parent
+            if($parent !== null) {
+                $select->where($parent == 0 ? "dossierlie.ID_DOSSIER1 IS NULL" : "dossierlie.ID_DOSSIER1 = ?", $parent);
+            }
+            
+            // Critères : type
+            if($types !== null) {
+                $this->setCriteria($select, "dossiertype.ID_DOSSIERTYPE", $types);
+            }
+            
+            // Critères : avis différé
+            if($avis_differe !== null) {
+                $this->setCriteria($select, "d.DIFFEREAVIS_DOSSIER", $avis_differe);
+            }
+            
+            // Critères : commissions
+            if (isset($criterias['commissions']) && $criterias['commissions'] !== null){
+                $this->setCriteria($select, "datecommission.COMMISSION_CONCERNE", $criterias['commissions']);
+            }
+            
+            // Critères : avis commission
+            if (isset($criterias['avisCommission']) && $criterias['avisCommission'] !== null){
+                $this->setCriteria($select, "d.AVIS_DOSSIER_COMMISSION", $criterias['avisCommission']);
+            }
+            
+            // Critères : avis rapporteur
+            if (isset($criterias['avisRapporteur']) && $criterias['avisRapporteur'] !== null){
+                $this->setCriteria($select, "d.AVIS_DOSSIER", $criterias['avisRapporteur']);
+            }
+            
+            // Critères : avis différé
+            if (isset($criterias['avisDiffere']) && $criterias['avisDiffere'] !== null){
+                $this->setCriteria($select, "d.DIFFEREAVIS_DOSSIER", $criterias['avisDiffere']);
+            }
+            
+            // Critères : permis
+            if (isset($criterias['permis']) && $criterias['permis'] !== null){
+                $this->setCriteria($select, "dossierdocurba.NUM_DOCURBA", $criterias['permis']);
+            }
+            
+            // Critères : courrier
+            if (isset($criterias['courrier']) && $criterias['courrier'] !== null){
+                $this->setCriteria($select, "d.REFCOURRIER_DOSSIER", $criterias['courrier'], false);
+            }
+            
+            // Critères : preventionniste
+            if (isset($criterias['preventionniste']) && $criterias['preventionniste'] !== null){
+                $this->setCriteria($select, "dossierpreventionniste.ID_PREVENTIONNISTE", $criterias['preventionniste']);
+            }
+            
+            if (isset($criterias['commune']) && $criterias['commune'] !== null){
+                $this->setCriteria($select, "ea.NUMINSEE_COMMUNE", $criterias['commune']);
+            }
+            
+            if (isset($criterias['voie']) && $criterias['voie'] !== null){
+                $this->setCriteria($select, "ea.ID_RUE", $criterias['voie']);
+            }
+            
+            // Critère : groupement territorial
+            if(isset($criterias['groupements_territoriaux']) && $criterias['groupements_territoriaux'] !== null) {
+                $this->setCriteria($select, "groupement.ID_GROUPEMENT", $criterias['groupements_territoriaux']);
+            }
+            
+            // Critères : nom de l'établissement
+            if(isset($criterias['label']) && $criterias['label'] !== null) {
+                
+                $cleanLabel = trim($criterias['label']);
+                
+                // recherche par id
+                if (substr($cleanLabel, 0, 1) == "#") {
+                    $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", substr($cleanLabel, 1), false);
+                    
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                } else  if (preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel) === 1) {
+                    $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", $cleanLabel, false);
+                    
+                    // cas par défaut
+                } else {
+                    $this->setCriteria($select, "LIBELLE_ETABLISSEMENTINFORMATIONS", $cleanLabel, false);
+                }
+            }
+            
+            // Critères : identifiant
+            if(isset($criterias['identifiant']) && $criterias['identifiant'] !== null) {
+                $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", $criterias['identifiant']);
+            }
+            
+            if (isset($criterias['dateCreationStart']) && $criterias['dateCreationStart'] !== null){
+                $select->where("d.DATEINSERT_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateCreationStart']);
+            }
+            if (isset($criterias['dateCreationEnd']) && $criterias['dateCreationEnd'] !== null){
+                $select->where("d.DATEINSERT_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateCreationEnd']);
+            }
+            if (isset($criterias['dateReceptionStart']) && $criterias['dateReceptionStart'] !== null){
+                $select->where("d.DATESDIS_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateReceptionStart']);
+            }
+            if (isset($criterias['dateReceptionEnd']) && $criterias['dateReceptionEnd'] !== null){
+                $select->where("d.DATESDIS_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateReceptionEnd']);
+            }
+            if (isset($criterias['dateReponseStart']) && $criterias['dateReponseStart'] !== null){
+                $select->where("d.DATEREP_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateReponseStart']);
+            }
+            if (isset($criterias['dateReponseEnd']) && $criterias['dateReponseEnd'] !== null){
+                $select->where("d.DATEREP_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateReponseEnd']);
+            }
+            if (isset($criterias['dateCommissionStart']) && $criterias['dateCommissionStart'] !== null){
+                $select->where("d.DATECOMM_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateCommissionStart']);
+            }
+            if (isset($criterias['dateCommissionEnd']) && $criterias['dateCommissionEnd'] !== null){
+                $select->where("d.DATECOMM_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateCommissionEnd']);
+            }
+            if (isset($criterias['dateVisiteStart']) && $criterias['dateVisiteStart'] !== null){
+                $select->where("d.DATEVISITE_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateVisiteStart']);
+            }
+            if (isset($criterias['dateVisiteEnd']) && $criterias['dateVisiteEnd'] !== null){
+                $select->where("d.DATEVISITE_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')",$criterias['dateVisiteEnd']);
+            }
+            
+            $select->order("adressecommune.LIBELLE_COMMUNE ASC")
+            ->order("categorie.LIBELLE_CATEGORIE ASC")
+            ->order("type.LIBELLE_TYPE ASC")
+            ->order("ei.LIBELLE_ETABLISSEMENTINFORMATIONS ASC")
+            ->order("d.DATEINSERT_DOSSIER DESC");;
+            
+            // Construction du résultat
+            $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
+            $results = array(
+                    'results' => $select->query()->fetchAll(),
+                    'search_metadata' => array(
+                            'search_id' => $search_id,
+                            'count' => count($rows_counter)
+                    )
+            );
+            
+            $cache->save(serialize($results));
+        }
+        
         return $results;
     }
 
