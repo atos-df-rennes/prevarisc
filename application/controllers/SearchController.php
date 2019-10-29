@@ -25,7 +25,6 @@ class SearchController extends Zend_Controller_Action
         $service_famille = new Service_Famille;
         $service_classe = new Service_Classe;
         $service_commission = new Service_Commission;
-        $service_groupementcommunes = new Service_GroupementCommunes();
 
         $this->view->DB_genre = $service_genre->getAll();
         $this->view->DB_statut = $service_statut->getAll();
@@ -35,8 +34,6 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_typeactivite = $service_typeactivite->getAllWithTypes();
         $this->view->DB_famille = $service_famille->getAll();
         $this->view->DB_commission = $service_commission->getAll();
-        $typeGroupementTerritorial = array(5);
-        $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
         if($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
             if (!empty($_GET)) {
@@ -59,9 +56,8 @@ class SearchController extends Zend_Controller_Action
                         $street = array_key_exists('street', $parameters) && $parameters['street'] != '' ? $parameters['street'] : null;
                         $number = array_key_exists('number', $parameters) && $parameters['number'] != '' ? $parameters['number'] : null;
                         $commissions = array_key_exists('commissions', $parameters) && $parameters['commissions'] != '' ? $parameters['commissions'] : null;
-                        $groupements_territoriaux = array_key_exists('groupements_territoriaux', $parameters) && $parameters['groupements_territoriaux'] != '' ? $parameters['groupements_territoriaux'] : null;
 
-                        $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux);
+                        $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions);
 
                         $objPHPExcel = new PHPExcel ();
                         $objPHPExcel->setActiveSheetIndex ( 0 );
@@ -79,12 +75,12 @@ class SearchController extends Zend_Controller_Action
                                         )
                                 )
                         );
-                        $sheet->getStyle('A1:T1')->applyFromArray($styleArray);
+                        $sheet->getStyle('A1:S1')->applyFromArray($styleArray);
                         unset($styleArray);
-                        $sheet->getStyle('A1:T1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                        $sheet->getStyle('A1:T1')->getFont()->setSize(11)->setBold(true);
+                        $sheet->getStyle('A1:S1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $sheet->getStyle('A1:S1')->getFont()->setSize(11)->setBold(true);
                          
-                        foreach(range('A','T') as $columnID) {
+                        foreach(range('A','S') as $columnID) {
                             $sheet->getColumnDimension($columnID)->setAutoSize(true);
                         }
                          
@@ -105,9 +101,8 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow ( 14, 1, "Date de dernière visite" );
                         $sheet->setCellValueByColumnAndRow ( 15, 1, "Date de prochaine visite" );
                         $sheet->setCellValueByColumnAndRow ( 16, 1, "Adresse" );
-                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Groupement territorial compétent" );
-                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Libellé du père/site" );
-                        $sheet->setCellValueByColumnAndRow ( 19, 1, "Genre" );
+                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Libellé du père/site" );
+                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Genre" );
                          
                         $ligne = 2;
                         foreach ($search['results'] as $row) {
@@ -160,9 +155,8 @@ class SearchController extends Zend_Controller_Action
                             }
                 
                             $sheet->setCellValueByColumnAndRow ( 16, $ligne, $row ['NUMERO_ADRESSE'] . " " . $row ['LIBELLE_RUE'] . " " . $row ['COMPLEMENT_ADRESSE'] . " " . $row ['CODEPOSTAL_COMMUNE'] );
-                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_GROUPEMENT'] );
-                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['LIBELLE_ETABLISSEMENT_PERE'] );
-                            $sheet->setCellValueByColumnAndRow ( 19, $ligne, $row ['LIBELLE_GENRE'] );
+                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_ETABLISSEMENT_PERE'] );
+                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['LIBELLE_GENRE'] );
                              
                             $ligne ++;
                         }
@@ -187,14 +181,6 @@ class SearchController extends Zend_Controller_Action
                      
                 } else {
                 // Recherche
-                    
-                    // Si premier affichage de la page
-                    if (!isset($_GET['Rechercher'])) {
-                        // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
-                        $service_user = new Service_User;
-                        $this->view->user = $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
-                    }
-                    
                     try {
                         $parameters = $this->_request->getQuery();
                         $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
@@ -212,22 +198,8 @@ class SearchController extends Zend_Controller_Action
                         $street = array_key_exists('street', $parameters) && $parameters['street'] != '' ? $parameters['street'] : null;
                         $number = array_key_exists('number', $parameters) && $parameters['number'] != '' ? $parameters['number'] : null;
                         $commissions = array_key_exists('commissions', $parameters) && $parameters['commissions'] != '' ? $parameters['commissions'] : null;
-                        if (array_key_exists('groupements_territoriaux', $parameters) && $parameters['groupements_territoriaux'] != '') {
-                            $groupements_territoriaux = $parameters['groupements_territoriaux'];
-                        } else {
-                            if ($this->view->user != null && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
-                                $groupements_territoriaux = array();
-                                foreach ($this->view->user['groupements'] as $groupement) {
-                                    if ($groupement['ID_GROUPEMENT'] != null) {
-                                        array_push($groupements_territoriaux, $groupement['ID_GROUPEMENT']);
-                                    }
-                                }
-                            } else {
-                                $groupements_territoriaux = null;
-                            }
-                        }
                         
-                        $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, 50, $page);
+                        $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, 50, $page);
 
                         $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                         $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
@@ -254,15 +226,12 @@ class SearchController extends Zend_Controller_Action
         $service_commissions = new Service_Commission;
         $service_adresse = new Service_Adresse;
         $service_dossier = new Service_Dossier;
-        $service_groupementcommunes = new Service_GroupementCommunes();
 
         $this->view->DB_type = $service_dossier->getAllTypes();
         $this->view->array_commissions = $service_commissions->getCommissionsAndTypes();
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && $this->_request->getQuery()['commune'] != '' ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : array();
-        $typeGroupementTerritorial = array(5);
-        $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
         $checkDateFormat = function($date) {
             if (!$date) return false;
@@ -299,7 +268,6 @@ class SearchController extends Zend_Controller_Action
                         $criteresRecherche['dateCommissionEnd'] = array_key_exists('date-commission-end', $parameters) && $checkDateFormat($parameters['date-commission-end']) ? $parameters['date-commission-end'] : null;
                         $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
                         $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
-                        $criteresRecherche['groupements_territoriaux'] = array_key_exists ( 'groupements_territoriaux', $parameters ) && $parameters ['groupements_territoriaux'] != '' ? $parameters ['groupements_territoriaux'] : null;
                         $criteresRecherche['label'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] != '#' ? $parameters ['label'] : null;
                         $criteresRecherche['identifiant'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] == '#' ? substr ( $parameters ['label'], 1 ) : null;
                         
@@ -321,81 +289,79 @@ class SearchController extends Zend_Controller_Action
                                         )
                                 )
                         );
-                        $sheet->getStyle ( 'A1:U1' )->applyFromArray ( $styleArray );
+                        $sheet->getStyle ( 'A1:T1' )->applyFromArray ( $styleArray );
                         unset ( $styleArray );
-                        $sheet->getStyle ( 'A1:U1' )->getAlignment ()->setHorizontal ( PHPExcel_Style_Alignment::HORIZONTAL_CENTER );
-                        $sheet->getStyle ( 'A1:U1' )->getFont ()->setSize ( 11 )->setBold ( true );
+                        $sheet->getStyle ( 'A1:T1' )->getAlignment ()->setHorizontal ( PHPExcel_Style_Alignment::HORIZONTAL_CENTER );
+                        $sheet->getStyle ( 'A1:T1' )->getFont ()->setSize ( 11 )->setBold ( true );
                         
-                        foreach ( range ( 'A', 'U' ) as $columnID ) {
+                        foreach ( range ( 'A', 'T' ) as $columnID ) {
                             $sheet->getColumnDimension ( $columnID )->setAutoSize ( true );
                         }
                         
-                        $sheet->setCellValueByColumnAndRow ( 0, 1, "Groupement" );
-                        $sheet->setCellValueByColumnAndRow ( 1, 1, "Commune" );
-                        $sheet->setCellValueByColumnAndRow ( 2, 1, "Catégorie" );
-                        $sheet->setCellValueByColumnAndRow ( 3, 1, "Type" );
-                        $sheet->setCellValueByColumnAndRow ( 4, 1, "Activité" );
-                        $sheet->setCellValueByColumnAndRow ( 5, 1, "Code/identifiant établissement" );
-                        $sheet->setCellValueByColumnAndRow ( 6, 1, "Libellé établissement" );
-                        $sheet->setCellValueByColumnAndRow ( 7, 1, "Statut" );
-                        $sheet->setCellValueByColumnAndRow ( 8, 1, "Genre" );
-                        $sheet->setCellValueByColumnAndRow ( 9, 1, "Type du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 10, 1, "Nature du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 11, 1, "Date de création du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 12, 1, "Objet du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 13, 1, "Numéro document urbanisme" );
-                        $sheet->setCellValueByColumnAndRow ( 14, 1, "Date de visite" );
-                        $sheet->setCellValueByColumnAndRow ( 15, 1, "Date de la commission en salle" );
-                        $sheet->setCellValueByColumnAndRow ( 16, 1, "Commission du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Avis rapporteur" );
-                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Avis commission" );
-                        $sheet->setCellValueByColumnAndRow ( 19, 1, "Préventionniste en charge du dossier" );
-                        $sheet->setCellValueByColumnAndRow ( 20, 1, "Pièces jointes ?" );
+                        $sheet->setCellValueByColumnAndRow ( 0, 1, "Commune" );
+                        $sheet->setCellValueByColumnAndRow ( 1, 1, "Catégorie" );
+                        $sheet->setCellValueByColumnAndRow ( 2, 1, "Type" );
+                        $sheet->setCellValueByColumnAndRow ( 3, 1, "Activité" );
+                        $sheet->setCellValueByColumnAndRow ( 4, 1, "Code/identifiant établissement" );
+                        $sheet->setCellValueByColumnAndRow ( 5, 1, "Libellé établissement" );
+                        $sheet->setCellValueByColumnAndRow ( 6, 1, "Statut" );
+                        $sheet->setCellValueByColumnAndRow ( 7, 1, "Genre" );
+                        $sheet->setCellValueByColumnAndRow ( 8, 1, "Type du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 9, 1, "Nature du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 10, 1, "Date de création du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 11, 1, "Objet du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 12, 1, "Numéro document urbanisme" );
+                        $sheet->setCellValueByColumnAndRow ( 13, 1, "Date de visite" );
+                        $sheet->setCellValueByColumnAndRow ( 14, 1, "Date de la commission en salle" );
+                        $sheet->setCellValueByColumnAndRow ( 15, 1, "Commission du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 16, 1, "Avis rapporteur" );
+                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Avis commission" );
+                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Préventionniste en charge du dossier" );
+                        $sheet->setCellValueByColumnAndRow ( 19, 1, "Pièces jointes ?" );
                         
                         $ligne = 2;
                         foreach ( $search ['results'] as $row ) {
                             
-                            $sheet->setCellValueByColumnAndRow ( 0, $ligne, $row ['LIBELLE_GROUPEMENT'] );
-                            $sheet->setCellValueByColumnAndRow ( 1, $ligne, $row ['LIBELLE_COMMUNE'] );
-                            $sheet->setCellValueByColumnAndRow ( 2, $ligne, $row ['LIBELLE_CATEGORIE'] );
-                            $sheet->setCellValueByColumnAndRow ( 3, $ligne, $row ['LIBELLE_TYPE_ETABLISSEMENT'] );
-                            $sheet->setCellValueByColumnAndRow ( 4, $ligne, $row ['LIBELLE_ACTIVITE'] );
-                            $sheet->setCellValueByColumnAndRow ( 5, $ligne, $row ['NUMEROID_ETABLISSEMENT'] );
-                            $sheet->setCellValueByColumnAndRow ( 6, $ligne, $row ['LIBELLE_ETABLISSEMENTINFORMATIONS'] );
-                            $sheet->setCellValueByColumnAndRow ( 7, $ligne, $row ['LIBELLE_STATUT'] );
-                            $sheet->setCellValueByColumnAndRow ( 8, $ligne, $row ['LIBELLE_GENRE'] );
-                            $sheet->setCellValueByColumnAndRow ( 9, $ligne, $row ['LIBELLE_DOSSIERTYPE'] );
-                            $sheet->setCellValueByColumnAndRow ( 10, $ligne, $row ['LIBELLE_DOSSIERNATURE'] );
+                            $sheet->setCellValueByColumnAndRow ( 0, $ligne, $row ['LIBELLE_COMMUNE'] );
+                            $sheet->setCellValueByColumnAndRow ( 1, $ligne, $row ['LIBELLE_CATEGORIE'] );
+                            $sheet->setCellValueByColumnAndRow ( 2, $ligne, $row ['LIBELLE_TYPE_ETABLISSEMENT'] );
+                            $sheet->setCellValueByColumnAndRow ( 3, $ligne, $row ['LIBELLE_ACTIVITE'] );
+                            $sheet->setCellValueByColumnAndRow ( 4, $ligne, $row ['NUMEROID_ETABLISSEMENT'] );
+                            $sheet->setCellValueByColumnAndRow ( 5, $ligne, $row ['LIBELLE_ETABLISSEMENTINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 6, $ligne, $row ['LIBELLE_STATUT'] );
+                            $sheet->setCellValueByColumnAndRow ( 7, $ligne, $row ['LIBELLE_GENRE'] );
+                            $sheet->setCellValueByColumnAndRow ( 8, $ligne, $row ['LIBELLE_DOSSIERTYPE'] );
+                            $sheet->setCellValueByColumnAndRow ( 9, $ligne, $row ['LIBELLE_DOSSIERNATURE'] );
                             if ($row ['DATEINSERT_DOSSIER'] != '') {
                                 $dateCreationDossier = explode ( "-", $row ['DATEINSERT_DOSSIER'] );
                                 // Formattage du jour, qui contient aussi l'heure -> ne passe pas avec FormattedPHPToExcel
                                 $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
                                 $datetimeCreationDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCreationDossier [0], $dateCreationDossier [1], $dateCreationDossier [2] );
-                                $sheet->setCellValueByColumnAndRow ( 11, $ligne, $datetimeCreationDossier );
-                                $sheet->getStyleByColumnAndRow ( 11, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                                $sheet->setCellValueByColumnAndRow ( 10, $ligne, $datetimeCreationDossier );
+                                $sheet->getStyleByColumnAndRow ( 10, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
                             }
-                            $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['OBJET_DOSSIER'] );
-                            $sheet->setCellValueByColumnAndRow ( 13, $ligne, $row ['NUM_DOCURBA'] );
+                            $sheet->setCellValueByColumnAndRow ( 11, $ligne, $row ['OBJET_DOSSIER'] );
+                            $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['NUM_DOCURBA'] );
                             if ($row ['DATEVISITE_DOSSIER'] != '') {
                                 $dateVisiteDossier = explode ( "-", $row ['DATEVISITE_DOSSIER'] );
                                 $datetimeVisiteDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateVisiteDossier [0], $dateVisiteDossier [1], $dateVisiteDossier [2] );
-                                $sheet->setCellValueByColumnAndRow ( 14, $ligne, $datetimeVisiteDossier );
-                                $sheet->getStyleByColumnAndRow ( 14, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                                $sheet->setCellValueByColumnAndRow ( 13, $ligne, $datetimeVisiteDossier );
+                                $sheet->getStyleByColumnAndRow ( 13, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
                             }
                             if ($row ['DATECOMM_DOSSIER'] != '') {
                                 $dateCommissionDossier = explode ( "-", $row ['DATECOMM_DOSSIER'] );
                                 $datetimeCommissionDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCommissionDossier [0], $dateCommissionDossier [1], $dateCommissionDossier [2] );
-                                $sheet->setCellValueByColumnAndRow ( 15, $ligne, $datetimeCommissionDossier );
-                                $sheet->getStyleByColumnAndRow ( 15, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                                $sheet->setCellValueByColumnAndRow ( 14, $ligne, $datetimeCommissionDossier );
+                                $sheet->getStyleByColumnAndRow ( 14, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
                             }
-                            $sheet->setCellValueByColumnAndRow ( 16, $ligne, $row ['LIBELLE_COMMISSION'] );
-                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_AVIS_RAPPORTEUR'] );
-                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['LIBELLE_AVIS_COMMISSION'] );
-                            $sheet->setCellValueByColumnAndRow ( 19, $ligne, $row ['PRENOM_UTILISATEURINFORMATIONS'] . " " . $row ['NOM_UTILISATEURINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 15, $ligne, $row ['LIBELLE_COMMISSION'] );
+                            $sheet->setCellValueByColumnAndRow ( 16, $ligne, $row ['LIBELLE_AVIS_RAPPORTEUR'] );
+                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_AVIS_COMMISSION'] );
+                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['PRENOM_UTILISATEURINFORMATIONS'] . " " . $row ['NOM_UTILISATEURINFORMATIONS'] );
                             if ($row ['ID_PIECEJOINTE'] != '') {
-                                $sheet->setCellValueByColumnAndRow ( 20, $ligne, "Oui" );
+                                $sheet->setCellValueByColumnAndRow ( 19, $ligne, "Oui" );
                             } else {
-                                $sheet->setCellValueByColumnAndRow ( 20, $ligne, "Non" );
+                                $sheet->setCellValueByColumnAndRow ( 19, $ligne, "Non" );
                             }
                             
                             $ligne ++;
@@ -422,14 +388,6 @@ class SearchController extends Zend_Controller_Action
                     
                 } else {
                     // Recherche
-                    
-                    // Si premier affichage de la page
-                    if (! isset ( $_GET ['Rechercher'] )) {
-                        // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
-                        $service_user = new Service_User ();
-                        $this->view->user = $service_user->find ( Zend_Auth::getInstance ()->getIdentity () ['ID_UTILISATEUR'] );
-                    }
-                    
                     try {
                         $parameters = $this->_request->getQuery();
                         $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
@@ -455,20 +413,6 @@ class SearchController extends Zend_Controller_Action
                         $criteresRecherche['dateCommissionEnd'] = array_key_exists('date-commission-end', $parameters) && $checkDateFormat($parameters['date-commission-end']) ? $parameters['date-commission-end'] : null;
                         $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
                         $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
-                        if (array_key_exists ( 'groupements_territoriaux', $parameters ) && $parameters ['groupements_territoriaux'] != '') {
-                            $criteresRecherche['groupements_territoriaux'] = $parameters ['groupements_territoriaux'];
-                        } else {
-                            if ($this->view->user != null && array_key_exists ( 'groupements', $this->view->user ) && count ( $this->view->user ['groupements'] ) > 0) {
-                                $criteresRecherche['groupements_territoriaux'] = array ();
-                                foreach ( $this->view->user ['groupements'] as $groupement ) {
-                                    if ($groupement ['ID_GROUPEMENT'] != null) {
-                                        array_push ( $criteresRecherche['groupements_territoriaux'], $groupement ['ID_GROUPEMENT'] );
-                                    }
-                                }
-                            } else {
-                                $criteresRecherche['groupements_territoriaux'] = null;
-                            }
-                        }
                         $criteresRecherche['label'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] != '#' ? $parameters ['label'] : null;
                         $criteresRecherche['identifiant'] = array_key_exists ( 'label', $parameters ) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] == '#' ? substr ( $parameters ['label'], 1 ) : null;
                         

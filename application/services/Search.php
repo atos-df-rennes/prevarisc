@@ -25,7 +25,7 @@ class Service_Search
      * @param int $page par défaut = 1
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $count = 10, $page = 1)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -65,7 +65,6 @@ class Service_Search
                 //->joinLeft("utilisateur", "utilisateur.ID_UTILISATEUR = etablissementinformationspreventionniste.ID_UTILISATEUR", "ID_UTILISATEUR")
                 ->joinLeft("etablissementadresse", "e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT", array("NUMINSEE_COMMUNE", "LON_ETABLISSEMENTADRESSE", "LAT_ETABLISSEMENTADRESSE", "ID_ADRESSE", "ID_RUE", "NUMERO_ADRESSE"))
                 ->joinLeft("adressecommune", "etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT")
-                //->joinLeft("groupementcommune", "groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE")
                 ->joinLeft("adresserue", "adresserue.ID_RUE = etablissementadresse.ID_RUE", "LIBELLE_RUE")
                 ->joinLeft(array("etablissementadressesite" => "etablissementadresse"), "etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)", "ID_RUE AS ID_RUE_SITE")
                 ->joinLeft(array("adressecommunesite" => "adressecommune"), "etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE")
@@ -184,11 +183,6 @@ class Service_Search
             if($commissions !== null) {
               $this->setCriteria($select, "ID_COMMISSION", $commissions);
             }
-            
-            // Critère : groupement territorial
-            if($groupements_territoriaux !== null) {
-              $this->setCriteria($select, "ID_GROUPEMENT", $groupements_territoriaux);
-            }
 
             // Critères : géolocalisation
             if($lon !== null && $lat !== null) {
@@ -247,7 +241,7 @@ class Service_Search
      * @param int $street_id
      * @return array
      */
-    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null)
+    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null)
     {
       // Récupération de la ressource cache à partir du bootstrap
       $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -293,8 +287,6 @@ class Service_Search
         ->joinLeft("etablissementadresse", "e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT", array("NUMINSEE_COMMUNE", "ID_ADRESSE", "ID_RUE", "NUMERO_ADRESSE", "COMPLEMENT_ADRESSE"))
         ->joinLeft("adresserue", "adresserue.ID_RUE = etablissementadresse.ID_RUE", "LIBELLE_RUE")
         ->joinLeft("adressecommune", "etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", array("CODEPOSTAL_COMMUNE","LIBELLE_COMMUNE"))
-        ->joinLeft("groupementcommune", "groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE")
-        ->joinLeft("groupement", "groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5", "LIBELLE_GROUPEMENT")
         ->joinLeft("etablissementlie", "e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT")
         ->joinLeft(array("etablissementinformationspere" => "etablissementinformations"), "etablissementinformationspere.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT", array("LIBELLE_ETABLISSEMENT_PERE" => "LIBELLE_ETABLISSEMENTINFORMATIONS"))
         ->joinLeft(array("etablissementadressesite" => "etablissementadresse"), "etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)", "ID_RUE AS ID_RUE_SITE")
@@ -414,11 +406,6 @@ class Service_Search
         // Critère : commission
         if($commissions !== null) {
           $this->setCriteria($select, "commission.ID_COMMISSION", $commissions);
-        }
-        
-        // Critère : groupement territorial
-        if($groupements_territoriaux !== null) {
-          $this->setCriteria($select, "groupement.ID_GROUPEMENT", $groupements_territoriaux);
         }
     
         // Critères : géolocalisation
@@ -752,14 +739,9 @@ class Service_Search
                         ->joinLeft("utilisateurinformations", "utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS",array("NOM_UTILISATEURINFORMATIONS", "PRENOM_UTILISATEURINFORMATIONS"))
                         ->joinLeft(array("ea" => "etablissementadresse"),"ea.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT",null)
                         ->joinLeft("adressecommune", "ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", array("CODEPOSTAL_COMMUNE","LIBELLE_COMMUNE"))
-                        ->joinLeft("groupementcommune", "groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", null)
-                        ->joinLeft("groupement", "groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT", "LIBELLE_GROUPEMENT")
                         ->joinLeft("dossierpj", "dossierpj.ID_DOSSIER = d.ID_DOSSIER", "ID_PIECEJOINTE")
                         ->group("d.ID_DOSSIER")
                         ;
-            
-            // Gestion des groupements territoriaux liés aux établissements et des établissements sans adresse (et donc sans groupement territorial lié)
-            $select->where('groupement.ID_GROUPEMENTTYPE = 5 or groupement.ID_GROUPEMENTTYPE IS NULL');
             
             // Critères : numéro de doc urba
             if($num_doc_urba !== null) {
@@ -839,11 +821,6 @@ class Service_Search
             
             if (isset($criterias['voie']) && $criterias['voie'] !== null){
                 $this->setCriteria($select, "ea.ID_RUE", $criterias['voie']);
-            }
-            
-            // Critère : groupement territorial
-            if(isset($criterias['groupements_territoriaux']) && $criterias['groupements_territoriaux'] !== null) {
-                $this->setCriteria($select, "groupement.ID_GROUPEMENT", $criterias['groupements_territoriaux']);
             }
             
             // Critères : nom de l'établissement

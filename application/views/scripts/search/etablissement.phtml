@@ -51,6 +51,12 @@
                 <option value='true' <?php if(isset($_GET["avis"]) && in_array('true', (array) $_GET["avis"])) echo 'selected' ?>>Favorable</option>
                 <option value='false' <?php if(isset($_GET["avis"]) && in_array('false', (array) $_GET["avis"])) echo 'selected' ?>>Défavorable</option>
             </select>
+
+            <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
+                <?php foreach( $this->DB_commission as $commission ) : ?>
+                    <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
+                <?php endforeach ?>
+            </select>
         </div>
 
         <div id='criteres_plus' style='margin-top: 4px; margin-bottom: 4px'>
@@ -93,30 +99,6 @@
                     <?php endforeach ?>
                 </select>
             </span>
-        </div>
-
-        <div>
-            <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_commission as $commission ) : ?>
-                        <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
-                <?php endforeach ?>
-            </select>
-            <select name='groupements_territoriaux[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
-                    <?php $selected = false; ?>                    
-                    <?php if ($this->user['groupements'] != null): ?>
-                        <?php foreach($this->user['groupements'] as $user_groupement): ?>
-                            <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
-                                <?php $selected = true; ?>
-                                <?php break; ?>
-                            <?php endif ?>
-                        <?php endforeach ?>
-                    <?php endif ?>
-                    <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
-                        <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
         </div>
     </div>
 
