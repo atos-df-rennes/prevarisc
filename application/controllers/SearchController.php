@@ -75,12 +75,12 @@ class SearchController extends Zend_Controller_Action
                                         )
                                 )
                         );
-                        $sheet->getStyle('A1:S1')->applyFromArray($styleArray);
+                        $sheet->getStyle('A1:V1')->applyFromArray($styleArray);
                         unset($styleArray);
-                        $sheet->getStyle('A1:S1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                        $sheet->getStyle('A1:S1')->getFont()->setSize(11)->setBold(true);
+                        $sheet->getStyle('A1:V1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $sheet->getStyle('A1:V1')->getFont()->setSize(11)->setBold(true);
                          
-                        foreach(range('A','S') as $columnID) {
+                        foreach(range('A','V') as $columnID) {
                             $sheet->getColumnDimension($columnID)->setAutoSize(true);
                         }
                          
@@ -94,19 +94,21 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow ( 7, 1, "Statut" );
                         $sheet->setCellValueByColumnAndRow ( 8, 1, "Avis" );
                         $sheet->setCellValueByColumnAndRow ( 9, 1, "Date du dernier avis" );
-                        $sheet->setCellValueByColumnAndRow ( 10, 1, "Date du premier avis défavorable consécutif" );
-                        $sheet->setCellValueByColumnAndRow ( 11, 1, "Effectif total" );
-                        $sheet->setCellValueByColumnAndRow ( 12, 1, "Effectif public" );
-                        $sheet->setCellValueByColumnAndRow ( 13, 1, "Effectif personnel" );
-                        $sheet->setCellValueByColumnAndRow ( 14, 1, "Date de dernière visite" );
-                        $sheet->setCellValueByColumnAndRow ( 15, 1, "Date de prochaine visite" );
-                        $sheet->setCellValueByColumnAndRow ( 16, 1, "Adresse" );
-                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Libellé du père/site" );
-                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Genre" );
+                        $sheet->setCellValueByColumnAndRow ( 10, 1, "Date du premier avis favorable" );
+                        $sheet->setCellValueByColumnAndRow ( 11, 1, "Date du premier avis défavorable consécutif" );
+                        $sheet->setCellValueByColumnAndRow ( 12, 1, "Effectif total" );
+                        $sheet->setCellValueByColumnAndRow ( 13, 1, "Effectif public" );
+                        $sheet->setCellValueByColumnAndRow ( 14, 1, "Effectif personnel" );
+                        $sheet->setCellValueByColumnAndRow ( 15, 1, "Date de dernière visite" );
+                        $sheet->setCellValueByColumnAndRow ( 16, 1, "Date de prochaine visite périodique" );
+                        $sheet->setCellValueByColumnAndRow ( 17, 1, "Date de visite prévue" );
+                        $sheet->setCellValueByColumnAndRow ( 18, 1, "Adresse" );
+                        $sheet->setCellValueByColumnAndRow ( 19, 1, "Libellé du père/site" );
+                        $sheet->setCellValueByColumnAndRow ( 20, 1, "Genre" );
+                        $sheet->setCellValueByColumnAndRow ( 21, 1, "Préventionniste" );
                          
                         $ligne = 2;
                         foreach ($search['results'] as $row) {
-                             
                             $sheet->setCellValueByColumnAndRow ( 0, $ligne, $row ['LIBELLE_COMMUNE'] );
                             $sheet->setCellValueByColumnAndRow ( 1, $ligne, $row ['LIBELLE_CATEGORIE'] );
                             $sheet->setCellValueByColumnAndRow ( 2, $ligne, $row ['LIBELLE_TYPE'] );
@@ -123,40 +125,52 @@ class SearchController extends Zend_Controller_Action
                                 $sheet->setCellValueByColumnAndRow ( 9, $ligne, $datetimeDernierAvis );
                                 $sheet->getStyleByColumnAndRow( 9, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                             }
+
+                            if ($row ['DATE_PREMIER_AVIS_FAVORABLE'] != '') {
+                                $datePremierAvisFavorable = explode ( "-", $row ['DATE_PREMIER_AVIS_FAVORABLE'] );
+                                $datePremierAvisFavorable = PHPExcel_Shared_Date::FormattedPHPToExcel ( $datePremierAvisFavorable [0], $datePremierAvisFavorable [1], $datePremierAvisFavorable [2] );
+                                $sheet->setCellValueByColumnAndRow ( 10, $ligne, $datePremierAvisFavorable );
+                                $sheet->getStyleByColumnAndRow ( 10, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                            }
                              
                             if ($row ['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF'] != '') {
                                 $datePremierAvisDefavorableConsecutif = explode("-",$row ['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']);
                                 $datetimePremierAvisDefavorableConsecutif = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisDefavorableConsecutif[0], $datePremierAvisDefavorableConsecutif[1], $datePremierAvisDefavorableConsecutif[2]);
-                                $sheet->setCellValueByColumnAndRow ( 10, $ligne, $datetimePremierAvisDefavorableConsecutif );
-                                $sheet->getStyleByColumnAndRow( 10, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
+                                $sheet->setCellValueByColumnAndRow ( 11, $ligne, $datetimePremierAvisDefavorableConsecutif );
+                                $sheet->getStyleByColumnAndRow( 11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                             }
                              
-                            $sheet->setCellValueByColumnAndRow ( 11, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] );
-                            $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] );
-                            $sheet->setCellValueByColumnAndRow ( 13, $ligne, $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 13, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] );
+                            $sheet->setCellValueByColumnAndRow ( 14, $ligne, $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'] );
                              
                             if ($row ['DATE_DERNIERE_VISITE'] != '') {
-                                 
                                 $dateDerniereVisite = explode("-",$row ['DATE_DERNIERE_VISITE']);
                                 $datetimeDerniereVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDerniereVisite[0], $dateDerniereVisite[1], $dateDerniereVisite[2]);
-                                $sheet->setCellValueByColumnAndRow ( 14, $ligne, $datetimeDerniereVisite );
-                                $sheet->getStyleByColumnAndRow( 14, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
+                                $sheet->setCellValueByColumnAndRow ( 15, $ligne, $datetimeDerniereVisite );
+                                $sheet->getStyleByColumnAndRow( 15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                                  
                                 if($row ['PERIODICITE_ETABLISSEMENTINFORMATIONS'] != 0) {
                                      
                                     $dateProchaineVisite = date ( 'Y-m-j' , strtotime("+".$row ['PERIODICITE_ETABLISSEMENTINFORMATIONS']." months", strtotime($row ['DATE_DERNIERE_VISITE'])) );
                                     $dateProchaineVisite = explode("-",$dateProchaineVisite);
                                     $datetimeProchaineVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateProchaineVisite[0], $dateProchaineVisite[1], $dateProchaineVisite[2]);
-                                    $sheet->setCellValueByColumnAndRow(15, $ligne, $datetimeProchaineVisite);
-                                    $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
-                
+                                    $sheet->setCellValueByColumnAndRow(16, $ligne, $datetimeProchaineVisite);
+                                    $sheet->getStyleByColumnAndRow(16, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                                 }
-                                 
                             }
                 
-                            $sheet->setCellValueByColumnAndRow ( 16, $ligne, $row ['NUMERO_ADRESSE'] . " " . $row ['LIBELLE_RUE'] . " " . $row ['COMPLEMENT_ADRESSE'] . " " . $row ['CODEPOSTAL_COMMUNE'] );
-                            $sheet->setCellValueByColumnAndRow ( 17, $ligne, $row ['LIBELLE_ETABLISSEMENT_PERE'] );
-                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['LIBELLE_GENRE'] );
+                            if ($row ['DATE_VISITE_PREVUE'] != '') {
+                                $dateVisitePrevue = explode ( "-", $row ['DATE_VISITE_PREVUE'] );
+                                $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExceel ( $dateVisitePrevue [0], $dateVisitePrevue [1], $dateVisitePrevue [2] );
+                                $sheet->setCellValueByColumnAndRow ( 17, $ligne, $datetimeVisitePrevue );
+                                $sheet->getStyleByColumnAndRow ( 17, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
+                            }
+                            
+                            $sheet->setCellValueByColumnAndRow ( 18, $ligne, $row ['NUMERO_ADRESSE'] . " " . $row ['LIBELLE_RUE'] . " " . $row ['COMPLEMENT_ADRESSE'] . " " . $row ['CODEPOSTAL_COMMUNE'] );
+                            $sheet->setCellValueByColumnAndRow ( 19, $ligne, $row ['LIBELLE_ETABLISSEMENT_PERE'] );
+                            $sheet->setCellValueByColumnAndRow ( 20, $ligne, $row ['LIBELLE_GENRE'] );
+                            $sheet->setCellValueByColumnAndRow ( 21, $ligne, $row ['PRENOM_UTILISATEURINFORMATIONS'] . " " . $row ['NOM_UTILISATEURINFORMATIONS'] );
                              
                             $ligne ++;
                         }
@@ -321,7 +335,6 @@ class SearchController extends Zend_Controller_Action
                         
                         $ligne = 2;
                         foreach ( $search ['results'] as $row ) {
-                            
                             $sheet->setCellValueByColumnAndRow ( 0, $ligne, $row ['LIBELLE_COMMUNE'] );
                             $sheet->setCellValueByColumnAndRow ( 1, $ligne, $row ['LIBELLE_CATEGORIE'] );
                             $sheet->setCellValueByColumnAndRow ( 2, $ligne, $row ['LIBELLE_TYPE_ETABLISSEMENT'] );

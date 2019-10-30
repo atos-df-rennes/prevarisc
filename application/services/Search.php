@@ -257,11 +257,21 @@ class Service_Search
         // Requête principale
         $select->from(array("e" => "etablissement"), array("NUMEROID_ETABLISSEMENT"))
         ->columns(array(
+            "DATE_PREMIER_AVIS_FAVORABLE" => new Zend_Db_Expr("(SELECT MIN(dossier.DATEVISITE_DOSSIER)
+                        FROM dossier
+                        INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                        INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                        WHERE dossiernature.ID_NATURE IN (19, 21, 23, 24, 26, 28, 29, 47, 48) AND dossier.AVIS_DOSSIER_COMMISSION = 1 AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)"),
             "DATE_DERNIERE_VISITE" => new Zend_Db_Expr("(SELECT MAX(dossier.DATEVISITE_DOSSIER)
                         FROM dossier
               INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
                         INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
-                        WHERE dossiernature.ID_NATURE IN (21, 26, 47, 48) AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)"),
+                        WHERE dossiernature.ID_NATURE IN (21, 26, 47, 48) AND dossier.DATEVISITE_DOSSIER < CURDATE() AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)"),
+                    "DATE_VISITE_PREVUE" => new Zend_Db_Expr("(SELECT MAX(dossier.DATEVISITE_DOSSIER)
+                        FROM dossier
+                        INNER JOIN dossiernature ON dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                        INNER JOIN etablissementdossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
+                        WHERE dossiernature.ID_NATURE IN (21, 26, 47, 48) AND dossier.DATEVISITE_DOSSIER >= CURDATE() AND etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)"),
             "DATE_DERNIER_AVIS" => new Zend_Db_Expr("(SELECT CASE
               WHEN d.DATEVISITE_DOSSIER IS NOT NULL THEN (SELECT dossier.DATEVISITE_DOSSIER FROM dossier where dossier.ID_DOSSIER = d.ID_DOSSIER)
                 WHEN d.DATECOMM_DOSSIER IS NOT NULL THEN (SELECT dossier.DATECOMM_DOSSIER FROM dossier where dossier.ID_DOSSIER = d.ID_DOSSIER)
@@ -293,6 +303,9 @@ class Service_Search
         ->joinLeft(array("adressecommunesite" => "adressecommune"), "etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE")
         ->joinLeft(array("etablissementadressecell" => "etablissementadresse"), "etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)", "ID_RUE AS ID_RUE_CELL")
         ->joinLeft(array("adressecommunecell" => "adressecommune"), "etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE", "LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE")
+        ->joinLeft("etablissementinformationspreventionniste", "etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS")
+        ->joinLeft("utilisateur", "etablissementinformationspreventionniste.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR")
+        ->joinLeft("utilisateurinformations", "utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS",array("NOM_UTILISATEURINFORMATIONS", "PRENOM_UTILISATEURINFORMATIONS"))
         ->where("e.DATESUPPRESSION_ETABLISSEMENT IS NULL")
         ->order("adressecommune.LIBELLE_COMMUNE ASC")
         ->order("categorie.LIBELLE_CATEGORIE ASC")
