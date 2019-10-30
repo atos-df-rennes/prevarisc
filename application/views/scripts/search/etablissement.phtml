@@ -109,9 +109,15 @@
         <div class='pull-left'>
             <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
         </div>
-        <div class='pull-right'>
-            <input type='submit' class='btn btn-success' id='exporter' name='Exporter' value='Export Calc' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
-        </div>
+        <?php if( $this->results->getTotalItemCount() <= 10000 ) : ?>
+            <div class='pull-right'>
+                <input type='submit' class='btn btn-success' id='exporter' name='Exporter' value='Export Calc' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+            </div>
+        <?php else : ?>
+            <div class='pull-right' <?php echo (($this->is_allowed_export_calc) ? '' : 'style="visibility: hidden;"') ?>>
+                <small style='font-weight:bold;color:red;'>La fonctionnalité d'export Calc est limitée à 10 000 éléments</small>
+            </div>
+        <?php endif ?>
     </div>
     <ul class='recherche_liste unstyled'>
     <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->results ) ?>
