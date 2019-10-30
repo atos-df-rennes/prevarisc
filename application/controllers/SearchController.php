@@ -121,6 +121,9 @@ class SearchController extends Zend_Controller_Action
                              
                             if ($row ['DATE_DERNIER_AVIS'] != '') {
                                 $dateDernierAvis = explode("-",$row ['DATE_DERNIER_AVIS']);
+                                if (!is_numeric($dateDernierAvis[2]))
+                                    // Formattage du jour, qui peut contenir l'heure -> ne passe pas avec FormattedPHPToExcel
+                                    $dateDernierAvis[2] = substr($dateDernierAvis[2], 0, 2);
                                 $datetimeDernierAvis = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDernierAvis[0], $dateDernierAvis[1], $dateDernierAvis[2]);
                                 $sheet->setCellValueByColumnAndRow ( 9, $ligne, $datetimeDernierAvis );
                                 $sheet->getStyleByColumnAndRow( 9, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -128,6 +131,8 @@ class SearchController extends Zend_Controller_Action
 
                             if ($row ['DATE_PREMIER_AVIS_FAVORABLE'] != '') {
                                 $datePremierAvisFavorable = explode ( "-", $row ['DATE_PREMIER_AVIS_FAVORABLE'] );
+                                if (!is_numeric($datePremierAvisFavorable[2]))
+                                    $datePremierAvisFavorable[2] = substr($datePremierAvisFavorable[2], 0, 2);
                                 $datePremierAvisFavorable = PHPExcel_Shared_Date::FormattedPHPToExcel ( $datePremierAvisFavorable [0], $datePremierAvisFavorable [1], $datePremierAvisFavorable [2] );
                                 $sheet->setCellValueByColumnAndRow ( 10, $ligne, $datePremierAvisFavorable );
                                 $sheet->getStyleByColumnAndRow ( 10, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
@@ -135,6 +140,8 @@ class SearchController extends Zend_Controller_Action
                              
                             if ($row ['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF'] != '') {
                                 $datePremierAvisDefavorableConsecutif = explode("-",$row ['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']);
+                                if (!is_numeric($datePremierAvisDefavorableConsecutif[2]))
+                                    $datePremierAvisDefavorableConsecutif[2] = substr($datePremierAvisDefavorableConsecutif[2], 0, 2);
                                 $datetimePremierAvisDefavorableConsecutif = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisDefavorableConsecutif[0], $datePremierAvisDefavorableConsecutif[1], $datePremierAvisDefavorableConsecutif[2]);
                                 $sheet->setCellValueByColumnAndRow ( 11, $ligne, $datetimePremierAvisDefavorableConsecutif );
                                 $sheet->getStyleByColumnAndRow( 11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -146,6 +153,8 @@ class SearchController extends Zend_Controller_Action
                              
                             if ($row ['DATE_DERNIERE_VISITE'] != '') {
                                 $dateDerniereVisite = explode("-",$row ['DATE_DERNIERE_VISITE']);
+                                if (!is_numeric($dateDerniereVisite[2]))
+                                    $dateDerniereVisite[2] = substr($dateDerniereVisite[2], 0, 2);
                                 $datetimeDerniereVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDerniereVisite[0], $dateDerniereVisite[1], $dateDerniereVisite[2]);
                                 $sheet->setCellValueByColumnAndRow ( 15, $ligne, $datetimeDerniereVisite );
                                 $sheet->getStyleByColumnAndRow( 15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -154,6 +163,8 @@ class SearchController extends Zend_Controller_Action
                                      
                                     $dateProchaineVisite = date ( 'Y-m-j' , strtotime("+".$row ['PERIODICITE_ETABLISSEMENTINFORMATIONS']." months", strtotime($row ['DATE_DERNIERE_VISITE'])) );
                                     $dateProchaineVisite = explode("-",$dateProchaineVisite);
+                                    if (!is_numeric($dateProchaineVisite[2]))
+                                        $dateProchaineVisite[2] = substr($dateProchaineVisite[2], 0, 2);
                                     $datetimeProchaineVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateProchaineVisite[0], $dateProchaineVisite[1], $dateProchaineVisite[2]);
                                     $sheet->setCellValueByColumnAndRow(16, $ligne, $datetimeProchaineVisite);
                                     $sheet->getStyleByColumnAndRow(16, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
@@ -162,6 +173,8 @@ class SearchController extends Zend_Controller_Action
                 
                             if ($row ['DATE_VISITE_PREVUE'] != '') {
                                 $dateVisitePrevue = explode ( "-", $row ['DATE_VISITE_PREVUE'] );
+                                if (!is_numeric($dateVisitePrevue[2]))
+                                    $dateVisitePrevue[2] = substr($dateVisitePrevue[2], 0, 2);
                                 $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExceel ( $dateVisitePrevue [0], $dateVisitePrevue [1], $dateVisitePrevue [2] );
                                 $sheet->setCellValueByColumnAndRow ( 17, $ligne, $datetimeVisitePrevue );
                                 $sheet->getStyleByColumnAndRow ( 17, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
@@ -347,8 +360,8 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow ( 9, $ligne, $row ['LIBELLE_DOSSIERNATURE'] );
                             if ($row ['DATEINSERT_DOSSIER'] != '') {
                                 $dateCreationDossier = explode ( "-", $row ['DATEINSERT_DOSSIER'] );
-                                // Formattage du jour, qui contient aussi l'heure -> ne passe pas avec FormattedPHPToExcel
-                                $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
+                                if (!is_numeric($dateCreationDossier[2]))
+                                    $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
                                 $datetimeCreationDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCreationDossier [0], $dateCreationDossier [1], $dateCreationDossier [2] );
                                 $sheet->setCellValueByColumnAndRow ( 10, $ligne, $datetimeCreationDossier );
                                 $sheet->getStyleByColumnAndRow ( 10, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
@@ -357,12 +370,16 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow ( 12, $ligne, $row ['NUM_DOCURBA'] );
                             if ($row ['DATEVISITE_DOSSIER'] != '') {
                                 $dateVisiteDossier = explode ( "-", $row ['DATEVISITE_DOSSIER'] );
+                                if (!is_numeric($dateVisiteDossier[2]))
+                                    $dateVisiteDossier[2] = substr($dateVisiteDossier[2], 0, 2);
                                 $datetimeVisiteDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateVisiteDossier [0], $dateVisiteDossier [1], $dateVisiteDossier [2] );
                                 $sheet->setCellValueByColumnAndRow ( 13, $ligne, $datetimeVisiteDossier );
                                 $sheet->getStyleByColumnAndRow ( 13, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
                             }
                             if ($row ['DATECOMM_DOSSIER'] != '') {
                                 $dateCommissionDossier = explode ( "-", $row ['DATECOMM_DOSSIER'] );
+                                if (!is_numeric($dateCommissionDossier[2]))
+                                    $dateCommissionDossier[2] = substr($dateCommissionDossier[2], 0, 2);
                                 $datetimeCommissionDossier = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateCommissionDossier [0], $dateCommissionDossier [1], $dateCommissionDossier [2] );
                                 $sheet->setCellValueByColumnAndRow ( 14, $ligne, $datetimeCommissionDossier );
                                 $sheet->getStyleByColumnAndRow ( 14, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
