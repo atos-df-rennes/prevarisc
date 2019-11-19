@@ -4,13 +4,10 @@
 </h1>
 
 <p class="lead">
-    <strong>Ne vous inquiétez pas, tout va bien se passer !</strong> 
-    Nous avons été prévenus, nous nous engageons à corriger ce problème dans les plus brefs délais.
+    <strong>Contactez votre service informatique !</strong>
 </p>
 
-<?php if (!$this->showException): ?>
-<!--
-<?php endif ?>
+<?php if ($this->showException): ?>
 <div class="well">
     <h3>Exception information:</h3>
     <p>
@@ -25,8 +22,6 @@
     <pre><?php echo $this->escape(var_export($this->request->getParams(), true)) ?>
     </pre>
 </div>
-<?php if (!$this->showException): ?>
--->
 <?php endif ?>
 
 <p class='text-center'>

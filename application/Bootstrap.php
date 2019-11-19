@@ -168,4 +168,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $namespace;
     }
 
+    public function _initLog()
+    {
+        $logDir = getenv('PREVARISC_LOG_DIR');
+        $logDate = date('Ymd');
+
+        $writer = new Zend_Log_Writer_Stream($logDir."/app-error_log-".$logDate);
+        $logger = new Zend_Log($writer);
+
+        return $logger;
+    }
 }
