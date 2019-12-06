@@ -175,7 +175,7 @@ class SearchController extends Zend_Controller_Action
                                 $dateVisitePrevue = preg_split("/-|\//", $row['DATE_VISITE_PREVUE']);
                                 if (!is_numeric($dateVisitePrevue[2]))
                                     $dateVisitePrevue[2] = substr($dateVisitePrevue[2], 0, 2);
-                                $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExceel ( $dateVisitePrevue [0], $dateVisitePrevue [1], $dateVisitePrevue [2] );
+                                $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExcel ( $dateVisitePrevue [0], $dateVisitePrevue [1], $dateVisitePrevue [2] );
                                 $sheet->setCellValueByColumnAndRow ( 17, $ligne, $datetimeVisitePrevue );
                                 $sheet->getStyleByColumnAndRow ( 17, $ligne )->getNumberFormat ()->setFormatCode ( PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY );
                             }
