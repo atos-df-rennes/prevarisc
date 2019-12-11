@@ -30,6 +30,8 @@ class ErrorController extends Zend_Controller_Action
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
                 }
+                else
+                    $priority = Zend_Log::ERR;
                 break;
                 
             default:
@@ -41,7 +43,7 @@ class ErrorController extends Zend_Controller_Action
         }
         
         // Log exception, if logger available
-        if ($log = $this->getLog()) {
+        if ($log = $this->getLog()) {            
             $log->log($this->view->message."\n".$errors->exception, $priority);
             $log->log("Request Parameters\n".print_r($errors->request->getParams(), true), $priority);
         }

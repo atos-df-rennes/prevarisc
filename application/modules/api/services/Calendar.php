@@ -85,7 +85,7 @@ class Api_Service_Calendar
 
         $dbDateCommission = new Model_DbTable_DateCommission;
 
-        if (!$isAllowedToViewAll) {
+        if ($isAllowedToViewAll) {
             $userid = null;
             $commission = null;
         }
