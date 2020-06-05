@@ -1056,6 +1056,19 @@
                         if (numero) {
                             adresse += numero + ", ";
                         }
+
+                        // On regarde si la voie contient une commune entre parenthèses
+                        var regExp = /\(([^)]+)\)/;
+                        var matches = regExp.exec(voie);
+
+                        if (matches) {
+                            // matches[1] contient la valeur entre parenthèses
+                            commune = matches[1];
+
+                            // On retire la commune de la voie
+                            voie = voie.split(regExp)[0].trim();
+                        }
+
                         adresse += voie + ", " + codepostal +  ", " + commune;
 
                         $("span.result").text("Géolocalisation en cours...");
