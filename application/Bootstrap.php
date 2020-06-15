@@ -168,7 +168,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $namespace;
     }
 
-    public function _initLog()
+    /*public function _initLog()
     {
         $logDir = getenv('PREVARISC_LOG_DIR');
 
@@ -176,5 +176,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $logger = new Zend_Log($writer);
 
         return $logger;
-    }
+    }*/
 }
