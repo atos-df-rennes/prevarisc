@@ -49,8 +49,8 @@
             $db->beginTransaction();
 
             try {
-                $db->query($sql);
-                $db->commit();
+                $db->getConnection()->query($sql);
+                $db->getConnection()->commit();
             }
             catch(Exception $e) {
                 $db->rollBack();
