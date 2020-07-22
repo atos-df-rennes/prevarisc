@@ -99,6 +99,10 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             ));
         }
 
+        // Récupération de la ressource cache à partir du bootstrap
+        $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+        $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+
         // Redirection
         $this->_helper->redirector('index');
     }
