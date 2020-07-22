@@ -5,7 +5,7 @@
             <input type='hidden' name='ID_COMMISSIONMEMBRE[]' value='<?php echo $this->id_membre ?>' />
 
             <!-- Libellé du membre-->
-            <input type='text' name='<?php echo $this->id_membre ?>_LIBELLE_COMMISSIONMEMBRE' value='<?php echo $this->libelle ?>' />
+            <input type='text' name='<?php echo $this->id_membre ?>_LIBELLE_COMMISSIONMEMBRE' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' />
             <br/>
 
             <!-- Obligatoire / facultatif / pour information -->

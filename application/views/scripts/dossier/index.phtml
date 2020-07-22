@@ -1281,18 +1281,6 @@ echo "
 			<h4>Informations sur le dossier</h4>
 			<!-- BEGIN UL InfosDossier -->
 			<ul id='InfosDossier' class='list unstyled' >
-			<!--
-				<li class='row-fluid' id='' >
-					<div class='left libelle span3' style='float:left;'>Statut du dossier</div>
-					<div class='right value span9'>
-						<select name='ETAT_DOSSIER' id='ETAT_DOSSIER' >
-							<option value='0'>En attente</option>
-							<option value='1'>Validé</option>
-							<option value='2'>Projet abandonné</option>
-						</select>
-					</div>
-				</li>
-			-->
 				<li class='row-fluid' id='DATEINSERT' style='".((in_array('DATEINSERT', $this->afficherChamps) && $this->infosDossier['DATEINSERT_DOSSIER'] != '') ? "" : "display:none;")."margin-bottom:20px;'>
 					<div class='left libelle span3' style='float:left;'>Date de création du dossier</div>
 					<div class='right value span9' ".(('new' == $action) ? "style='display:none;'" : "").">

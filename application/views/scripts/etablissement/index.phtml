@@ -315,9 +315,9 @@
                                             '<?php echo $this->key_ign ?>',
                                             [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,
                                              <?php echo $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] ?>],
-                                            "<b><?php echo $this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?></b><br/>"+
+                                            "<b><?php echo htmlspecialchars($this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'], ENT_QUOTES) ?></b><br/>"+
                                                 "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "
-                                                +"<?php echo $this->etablissement['adresses'][0]['LIBELLE_RUE'] ?><br/>"+
+                                                +"<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?><br/>"+
                                                 "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+ 
                                                 "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>",
                                                 '<?php echo $autoconf_path ?>');
