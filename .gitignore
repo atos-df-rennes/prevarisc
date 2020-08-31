@@ -10,3 +10,5 @@ vendor
 /nbproject
 *.phar
 composer.lock
+/public/ign/*
+/public/data/uploads/commission
