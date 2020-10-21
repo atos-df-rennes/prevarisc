@@ -11,15 +11,15 @@ class SearchController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('search');
 
-        $service_search = new Service_Search;
+        $service_search = new Service_Search();
 
-        $service_genre = new Service_Genre;
-        $service_statut = new Service_Statut;
-        $service_avis = new Service_Avis;
-        $service_categorie = new Service_Categorie;
-        $service_typeactivite = new Service_TypeActivite;
-        $service_famille = new Service_Famille;
-        $service_classe = new Service_Classe;
+        $service_genre = new Service_Genre();
+        $service_statut = new Service_Statut();
+        $service_avis = new Service_Avis();
+        $service_categorie = new Service_Categorie();
+        $service_typeactivite = new Service_TypeActivite();
+        $service_famille = new Service_Famille();
+        $service_classe = new Service_Classe();
 
         $this->view->DB_genre = $service_genre->getAll();
         $this->view->DB_statut = $service_statut->getAll();
@@ -29,12 +29,12 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_typeactivite = $service_typeactivite->getAllWithTypes();
         $this->view->DB_famille = $service_famille->getAll();
 
-        if($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
                 $label = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] != '#' ? $parameters['label'] : null;
-                $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#'? substr($parameters['label'], 1) : null;
+                $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#' ? substr($parameters['label'], 1) : null;
                 $genres = array_key_exists('genres', $parameters) ? $parameters['genres'] : null;
                 $categories = array_key_exists('categories', $parameters) ? $parameters['categories'] : null;
                 $classes = array_key_exists('classes', $parameters) ? $parameters['classes'] : null;
@@ -53,9 +53,8 @@ class SearchController extends Zend_Controller_Action
                 $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
                 $this->view->results = $paginator;
-            }
-            catch(Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. (' . $e->getMessage() . ')'));
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. ('.$e->getMessage().')'));
             }
         }
     }
@@ -64,10 +63,10 @@ class SearchController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('search');
 
-        $service_search = new Service_Search;
-        $service_commissions = new Service_Commission;
-        $service_adresse = new Service_Adresse;
-        $service_dossier = new Service_Dossier;
+        $service_search = new Service_Search();
+        $service_commissions = new Service_Commission();
+        $service_adresse = new Service_Adresse();
+        $service_dossier = new Service_Dossier();
 
         $this->view->DB_type = $service_dossier->getAllTypes();
         $this->view->array_commissions = $service_commissions->getCommissionsAndTypes();
@@ -75,18 +74,21 @@ class SearchController extends Zend_Controller_Action
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && $this->_request->getQuery()['commune'] != '' ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : array();
 
-        $checkDateFormat = function($date) {
-            if (!$date) return false;
+        $checkDateFormat = function ($date) : bool {
+            if (!$date) {
+                return false;
+            }
             $dateArgs = explode('/', $date);
+
             return checkdate($dateArgs[1], $dateArgs[0], $dateArgs[2]);
         };
 
-        if($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                 $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
-                $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
+                $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != '' && (string) $parameters['objet'][0] != '#' ? $parameters['objet'] : null;
                 $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
                 $criteresRecherche = array();
                 $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
@@ -102,15 +104,14 @@ class SearchController extends Zend_Controller_Action
                 $criteresRecherche['dateReponseStart'] = array_key_exists('date-reponse-start', $parameters) && $checkDateFormat($parameters['date-reponse-start']) ? $parameters['date-reponse-start'] : null;
                 $criteresRecherche['dateReponseEnd'] = array_key_exists('date-reponse-end', $parameters) && $checkDateFormat($parameters['date-reponse-end']) ? $parameters['date-reponse-end'] : null;
 
-                $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page,$criteresRecherche);
+                $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page, $criteresRecherche);
 
                 $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                 $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
                 $this->view->results = $paginator;
-            }
-            catch(Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
         }
     }
@@ -119,12 +120,12 @@ class SearchController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('search');
 
-        $service_search = new Service_Search;
-        $service_user = new Service_User;
+        $service_search = new Service_Search();
+        $service_user = new Service_User();
 
         $this->view->DB_fonction = $service_user->getAllFonctions();
 
-        if($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
@@ -137,45 +138,44 @@ class SearchController extends Zend_Controller_Action
                 $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
                 $this->view->results = $paginator;
-            }
-            catch(Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
         }
     }
-    
+
     public function displayAjaxSearchEtablissementAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $service_search = new Service_Search;
+        $service_search = new Service_Search();
 
         $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null);
 
         $data = $data['results'];
 
         $html = "<ul class='recherche_liste'>";
-        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/etablissement.phtml', (array) $data );
-        $html .= "</ul>";
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/etablissement.phtml', (array) $data);
+        $html .= '</ul>';
 
         echo $html;
     }
-    
+
     public function displayAjaxSearchDossierAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $service_search = new Service_Search;
+        $service_search = new Service_Search();
 
         $data = $service_search->dossiers(null, null, null, $this->_request->parent, null, 100);
 
         $data = $data['results'];
 
         $html = "<ul class='recherche_liste'>";
-        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $data );
-        $html .= "</ul>";
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $data);
+        $html .= '</ul>';
 
         echo $html;
     }

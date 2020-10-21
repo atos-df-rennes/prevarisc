@@ -8,17 +8,20 @@
         private $key_ign;
         private $interactive_layer = array();
 
-        public function carte($lat, $lon, $markers = array(), array $size = array('height' => '100%'), $zoom  = 17)
+        /**
+         * @return false|self
+         */
+        public function carte($lat, $lon, $markers = array(), array $size = array('height' => '100%'), $zoom = 17)
         {
             // Récupération des couches
-            $model_couchecarto = new Model_DbTable_CoucheCarto;
+            $model_couchecarto = new Model_DbTable_CoucheCarto();
             $couches = $model_couchecarto->getList();
             if (count($couches) == 0) {
                 return false;
             }
 
             // Récupération de la liste des couches intéractives
-            $this->interactive_layer =$model_couchecarto->getInteractList();
+            $this->interactive_layer = $model_couchecarto->getInteractList();
 
             // Récupération de la clé IGN
             $key_ign = null;
@@ -44,51 +47,53 @@
         }
 
         // Création du conteneur
+
         public function buildContainer($size)
         {
             echo '<script type="text/javascript" src="//api.ign.fr/geoportail/api/js/1.3/GeoportalExtended.js"></script>';
-            echo '<div id="geo_container" style="height: ' . $size['height'] . '"></div>';
+            echo '<div id="geo_container" style="height: '.$size['height'].'"></div>';
         }
 
         // Chargements des couches
         public function loadOverlays()
         {
             // On récupère les couches
-            $model_couchecarto = new Model_DbTable_CoucheCarto;
+            $model_couchecarto = new Model_DbTable_CoucheCarto();
             $rowset_couches = $model_couchecarto->getList();
 
-            if(count($rowset_couches) == 0)
-
+            if (count($rowset_couches) == 0) {
                 return null;
+            }
 
             foreach ($rowset_couches as $row) {
-
-                $this->overlays[$row->NOM_COUCHECARTOTYPE][] = array (
-                    "name" => $row->NOM_COUCHECARTO,
-                    "url" => $row->URL_COUCHECARTO,
-                    "options" => array (
-                        "params" => array (
-                            "layers" => $row->LAYERS_COUCHECARTO,
-                            "format" => $row->FORMAT_COUCHECARTO,
-                            "transparent" => $row->TRANSPARENT_COUCHECARTO == 1 ? true : false,
+                $this->overlays[$row->NOM_COUCHECARTOTYPE][] = array(
+                    'name' => $row->NOM_COUCHECARTO,
+                    'url' => $row->URL_COUCHECARTO,
+                    'options' => array(
+                        'params' => array(
+                            'layers' => $row->LAYERS_COUCHECARTO,
+                            'format' => $row->FORMAT_COUCHECARTO,
+                            'transparent' => $row->TRANSPARENT_COUCHECARTO == 1 ? true : false,
                         ),
-                        "options" => array (
-                            "projection"=> "EPSG:4326",
-                            "isBaseLayer" => $row->ISBASELAYER_COUCHECARTO == 1 ? true : false,
-                            "visibility" => false
-                        )
-                    )
+                        'options' => array(
+                            'projection' => 'EPSG:4326',
+                            'isBaseLayer' => $row->ISBASELAYER_COUCHECARTO == 1 ? true : false,
+                            'visibility' => false,
+                        ),
+                    ),
                 );
             }
         }
 
         // Définition du zoom
+
         public function setZoom($zoom)
         {
             $this->zoom = $zoom;
         }
 
         // On positionne le centre de la carte aux coordonnées lat / lon
+
         public function setCenter($lat, $lon)
         {
             $this->lat = $lat;
@@ -96,29 +101,31 @@
         }
 
         // On load dans un tableau les marqueurs
+
         public function setMarkers($markers)
         {
             $this->markers = $markers;
         }
 
         // Chargement de la carte
+
         public function load()
         {
             echo '
                 <script>
                     var map = Geoportal.load("geo_container",
-                        ["'. $this->key_ign . '"],
-                        {lat:  ' . $this->lat . ', lon:  ' . $this->lon . '},
-                        ' . $this->zoom . ',
+                        ["'.$this->key_ign.'"],
+                        {lat:  ' .$this->lat.', lon:  '.$this->lon.'},
+                        ' .$this->zoom.',
                         {
-                            overlays: ' . Zend_Json::Encode($this->overlays) . ',
+                            overlays: ' .Zend_Json::Encode($this->overlays).',
                             viewerClass: Geoportal.Viewer.Default,
                             onView: function() {
                                 var markersLayer = new OpenLayers.Layer.Vector("Marqueurs non modifiables");
                                 var draggableMarkersLayer = new OpenLayers.Layer.Vector("Marqueurs");
 
                                 this.getViewer().getMap().addLayers([markersLayer, draggableMarkersLayer]);
-                                var markers = ' . Zend_Json::Encode($this->markers) . ';
+                                var markers = ' .Zend_Json::Encode($this->markers).';
 
                                 var drag = new OpenLayers.Control.DragFeature(draggableMarkersLayer);
                                 this.getViewer().getMap().addControl(drag);
@@ -157,14 +164,19 @@
         }
 
         // Méthodes statiques
-        public static function Marker($label, $lat, $lon, $draggable = false, $img = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png')
+        /**
+         * @return array
+         *
+         * @psalm-return array{label:mixed, lat:mixed, lon:mixed, draggable:mixed, img:mixed}
+         */
+        public static function Marker($label, $lat, $lon, $draggable = false, $img = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png'): array
         {
             return array(
-                "label" => $label,
-                "lat" => $lat,
-                "lon" => $lon,
-                "draggable" => $draggable,
-                "img" => $img
+                'label' => $label,
+                'lat' => $lat,
+                'lon' => $lon,
+                'draggable' => $draggable,
+                'img' => $img,
             );
         }
     }

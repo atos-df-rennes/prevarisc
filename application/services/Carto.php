@@ -3,37 +3,37 @@
 class Service_Carto
 {
     /**
-     * Initialisation des ressources exterieures
-     *
+     * Initialisation des ressources exterieures.
      */
     public function __construct()
     {
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-        $this->repository = $model_couchecarto = new Model_DbTable_CoucheCarto;
+        $this->repository = $model_couchecarto = new Model_DbTable_CoucheCarto();
     }
 
     /**
-     * Récupération de toutes les couches cartographiques
+     * Récupération de toutes les couches cartographiques.
      *
      * @return array
      */
     public function getAll()
     {
-        if(($couches_carto = unserialize($this->cache->load('couches_cartographiques'))) === false) {
+        if (($couches_carto = unserialize($this->cache->load('couches_cartographiques'))) === false) {
             // On récupère l'ensemble des couches
             $couches_carto = $this->repository->fetchAll()->toArray();
 
             // On stocke en cache
             $this->cache->save(serialize($couches_carto));
         }
-        
+
         return $couches_carto;
     }
 
     /**
-     * Récupération d'une couche cartographique
+     * Récupération d'une couche cartographique.
      *
      * @param int $id_couche_cartographique
+     *
      * @return array
      */
     public function findById($id_couche_cartographique)
@@ -42,11 +42,10 @@ class Service_Carto
     }
 
     /**
-     * Édition d'une couche cartographique
+     * Édition d'une couche cartographique.
      *
      * @param array $data
-     * @param int $id_couche_cartographique Optionnel
-     * @return array
+     * @param int   $id_couche_cartographique Optionnel
      */
     public function save($data, $id_couche_cartographique = null)
     {
@@ -56,14 +55,13 @@ class Service_Carto
     }
 
     /**
-     * Suppression d'une couche cartographique
+     * Suppression d'une couche cartographique.
      *
      * @param int $id_couche_cartographique
-     * @return array
      */
     public function delete($id_couche_cartographique)
     {
-        $this->repository->delete("ID_COUCHECARTO = " . $id_couche_cartographique);
+        $this->repository->delete('ID_COUCHECARTO = '.$id_couche_cartographique);
         $this->cache->remove('couches_cartographiques');
     }
 }

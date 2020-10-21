@@ -3,53 +3,56 @@
 class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
 {
     /**
-	 *
-	 * The folder to be appended to the base url to find minify on your server.
-	 * The default assumes you installed minify in your documentroot\min directory
-	 * if you modified the directory name at all, you need to let the helper know
-	 * here.
-	 * @var string
-	 */
+     * The folder to be appended to the base url to find minify on your server.
+     * The default assumes you installed minify in your documentroot\min directory
+     * if you modified the directory name at all, you need to let the helper know
+     * here.
+     *
+     * @var string
+     */
     protected $_minifyLocation = '/min/';
 
     /**
-	 * Registry key for placeholder
-	 * @var string
-	 */
+     * Registry key for placeholder.
+     *
+     * @var string
+     */
 //	protected $_regKey = 'RC_View_Helper_MinifyHeadScript';
 
     /**
-	 * Return headScript object
-	 *
-	 * Returns headScript helper object; optionally, allows specifying a script
-	 * or script file to include.
-	 *
-	 * @param  string $mode 			Script or file
-	 * @param  string $spec 			Script/url
-	 * @param  string $placement	Append, prepend, or set
-	 * @param  array  $attrs 			Array of script attributes
-	 * @param  string $type 			Script type and/or array of script attributes
-	 * @return Zend_View_Helper_HeadScript
-	 */
+     * Return headScript object.
+     *
+     * Returns headScript helper object; optionally, allows specifying a script
+     * or script file to include.
+     *
+     * @param string $mode      Script or file
+     * @param string $spec      Script/url
+     * @param string $placement Append, prepend, or set
+     * @param array  $attrs     Array of script attributes
+     * @param string $type      Script type and/or array of script attributes
+     *
+     * @return Zend_View_Helper_HeadScript
+     */
     public function minifyHeadScript($mode = Zend_View_Helper_HeadScript::FILE, $spec = null, $placement = 'APPEND', array $attrs = array(), $type = 'text/javascript')
     {
         return parent::headScript($mode, $spec, $placement, $attrs, $type);
     }
 
     /**
-	 *
-	 * Gets a string representation of the headscripts suitable for inserting
-	 * in the html head section. All included javascript files will be minified
-	 * and any script sections will remain as is.
-	 *
-	 * It is important to note that the minified javascript files will be minified
-	 * in reverse order of being added to this object, and ALL files will be rendered
-	 * prior to inline scripts being rendered.
-	 *
-	 * @see Zend_View_Helper_HeadScript->toString()
-	 * @param  string|int $indent
-	 * @return string
-	 */
+     * Gets a string representation of the headscripts suitable for inserting
+     * in the html head section. All included javascript files will be minified
+     * and any script sections will remain as is.
+     *
+     * It is important to note that the minified javascript files will be minified
+     * in reverse order of being added to this object, and ALL files will be rendered
+     * prior to inline scripts being rendered.
+     *
+     * @see Zend_View_Helper_HeadScript->toString()
+     *
+     * @param string|int $indent
+     *
+     * @return string
+     */
     public function toString($indent = null)
     {
         // An array of Script Items to be rendered
@@ -96,10 +99,10 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
             $items[] = $this->_generateMinifyItem($scripts);
         }
 
-        return $indent . implode($this->_escape($this->getSeparator()) . $indent, $items);
+        return $indent.implode($this->_escape($this->getSeparator()).$indent, $items);
     }
 
-    protected function _isNeedToMinify($item)
+    protected function _isNeedToMinify($item): bool
     {
         return isset($item->attributes ['src'])
                 && !empty($item->attributes ['src'])
@@ -107,6 +110,9 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
                 && !isset($item->attributes['minify_disabled']);
     }
 
+    /**
+     * @return string
+     */
     protected function _generateMinifyItem(array $scripts)
     {
         $baseUrl = $this->getBaseUrl();
@@ -116,32 +122,31 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
         $minScript = new stdClass();
         $minScript->type = 'text/javascript';
         if (is_null($baseUrl) || $baseUrl == '') {
-            $minScript->attributes['src'] = $this->getMinUrl() . '?f=' . implode(',', $scripts);
+            $minScript->attributes['src'] = $this->getMinUrl().'?f='.implode(',', $scripts);
         } else {
-            $minScript->attributes['src'] = $this->getMinUrl() . '?b=' . $baseUrl . '&f=' . implode(',', $scripts);
+            $minScript->attributes['src'] = $this->getMinUrl().'?b='.$baseUrl.'&f='.implode(',', $scripts);
         }
 
         return $this->itemToString($minScript, '', '', '');
     }
 
     /**
-	 * Retrieve the minify url
-	 *
-	 * @return string
-	 */
+     * Retrieve the minify url.
+     *
+     * @return string
+     */
     public function getMinUrl()
     {
-        return $this->getBaseUrl() . $this->_minifyLocation;
+        return $this->getBaseUrl().$this->_minifyLocation;
     }
 
     /**
-	 * Retrieve the currently set base URL
-	 *
-	 * @return string
-	 */
+     * Retrieve the currently set base URL.
+     *
+     * @return string
+     */
     public function getBaseUrl()
     {
         return Zend_Controller_Front::getInstance()->getBaseUrl();
     }
-
 }

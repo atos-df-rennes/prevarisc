@@ -9,17 +9,15 @@
 
     class Model_DbTable_Classement extends Zend_Db_Table_Abstract
     {
+        protected $_name = 'classement'; // Nom de la base
+        protected $_primary = 'ID_CLASSEMENT'; // Cle primaire
 
-        protected $_name="classement"; // Nom de la base
-        protected $_primary = "ID_CLASSEMENT"; // Cle primaire
-        
-        
-        public function fetchAllPK()
+        public function fetchAllPK(): array
         {
             $all = $this->fetchAll()->toArray();
             $result = array();
             foreach ($all as $row) {
-                $result[$row["ID_CLASSEMENT"]] = $row;
+                $result[$row['ID_CLASSEMENT']] = $row;
             }
 
             return $result;

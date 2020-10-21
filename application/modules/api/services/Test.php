@@ -3,12 +3,12 @@
 class Api_Service_Test
 {
     /**
-     * Test
+     * Test.
      *
      * @return string
      */
-	public function test()
-	{
+    public function test(): string
+    {
         return 'Api OK';
     }
 }

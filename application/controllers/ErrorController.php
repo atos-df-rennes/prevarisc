@@ -7,12 +7,13 @@ class ErrorController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('error');
 
         $errors = $this->_getParam('error_handler');
-        
+
         if (!$errors || !$errors instanceof ArrayObject) {
             $this->view->message = 'Vous avez atteint la page d\'erreur';
+
             return;
         }
-        
+
         // On envoie le bon code erreur en fonction du type
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
@@ -25,15 +26,15 @@ class ErrorController extends Zend_Controller_Action
                 break;
 
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER:
-                if($errors->exception->getCode() == 401) {
+                if ($errors->exception->getCode() == 401) {
                     $this->getResponse()->setHttpResponseCode(401);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
-                }
-                else
+                } else {
                     $priority = Zend_Log::ERR;
+                }
                 break;
-                
+
             default:
                 // Type de l'erreur : application error
                 $this->getResponse()->setHttpResponseCode(500);
@@ -41,23 +42,23 @@ class ErrorController extends Zend_Controller_Action
                 $this->view->message = 'L\'application a levée une erreur';
                 break;
         }
-        
+
         // Log exception, if logger available
-        if ($log = $this->getLog()) {            
+        if ($log = $this->getLog()) {
             $log->log($this->view->message."\n".$errors->exception, $priority);
             $log->log("Request Parameters\n".print_r($errors->request->getParams(), true), $priority);
         }
-        
+
         // Si l'affichage des exceptions est activé, on envoie un message
         $this->view->showException = $this->getInvokeArg('displayExceptions');
         $this->view->exception = $errors->exception;
-        
+
         // On envoie la requête de l'erreur sur la vue
-        $this->view->request   = $errors->request;
+        $this->view->request = $errors->request;
     }
-    
+
     /**
-     * Récupération des logs
+     * Récupération des logs.
      *
      * @return Zend_Log
      */
@@ -68,6 +69,7 @@ class ErrorController extends Zend_Controller_Action
             return false;
         }
         $log = $bootstrap->getResource('Log');
+
         return $log;
     }
 }
