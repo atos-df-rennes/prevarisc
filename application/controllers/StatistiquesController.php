@@ -35,7 +35,6 @@
             if ($this->_getParam('format') == 'json') {
                 $this->view->result = $champs_supplementaires;
             } else {
-                $model_stat = new Model_DbTable_Statistiques();
                 $this->view->columns = $noms_des_colonnes_a_afficher;
                 $this->view->results = $requete->go();
                 $this->view->titre = array(

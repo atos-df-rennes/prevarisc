@@ -8,7 +8,7 @@ class AdminController extends Zend_Controller_Action
 
         $this->_helper->layout->setLayout('menu_admin');
 
-        if (getenv('PREVARISC_BRANCH') == false) {
+        if (!getenv('PREVARISC_BRANCH')) {
             try {
                 $git = new SebastianBergmann\Git\Git(APPLICATION_PATH.DS.'..');
                 $revisions = $git->getRevisions();

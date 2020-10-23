@@ -25,10 +25,11 @@ class Form_Login extends Zend_Form
         if (getenv('PREVARISC_ENFORCE_SECURITY') == 1) {
             $regex_validator = new Zend_Validate_Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/');
             $regex_validator->setMessage(
-                    'Votre mot de passe doit contenir au moins 8 caractères '
-                    .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial. '
-                    .'Si celui-ci est définit dans un système externe à Prévarisc, merci de le changer dans ce système.',
-                    Zend_Validate_Regex::NOT_MATCH);
+                'Votre mot de passe doit contenir au moins 8 caractères '
+                .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial. '
+                .'Si celui-ci est définit dans un système externe à Prévarisc, merci de le changer dans ce système.',
+                Zend_Validate_Regex::NOT_MATCH
+            );
             $password_validators[] = $regex_validator;
         }
 

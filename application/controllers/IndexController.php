@@ -20,7 +20,6 @@ class IndexController extends Zend_Controller_Action
                 !$blocConfig['acl']
                 || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))
             ) {
-                $method = $blocConfig['method'];
                 $blocs[$blocId] = array(
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],

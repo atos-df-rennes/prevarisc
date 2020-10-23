@@ -65,7 +65,7 @@ class PieceJointeController extends Zend_Controller_Action
 
         if (
             !$piece_jointe
-            || count($piece_jointe) == 0
+            || empty($piece_jointe)
         ) {
             throw new Zend_Controller_Action_Exception('Cannot find piece jointe for id '.$this->_request->idpj, 404);
         }
@@ -250,6 +250,8 @@ class PieceJointeController extends Zend_Controller_Action
                 case 'dateCommission':
                     $DBitem = new Model_DbTable_DateCommissionPj();
                     break;
+                default:
+                    break;
             }
 
             // On supprime dans la BDD et physiquement
@@ -305,7 +307,7 @@ class PieceJointeController extends Zend_Controller_Action
            $listePj = array();
        }
 
-        $pj = count($listePj) > 0 ? $listePj[0] : null;
+        $pj = !empty($listePj) ? $listePj[0] : null;
 
         if (!$pj) {
             return;
