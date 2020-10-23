@@ -1,20 +1,20 @@
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
 <?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
    <ul class='nav nav-tabs nav-stacked menu_dashboard' >
-        <li class="<?php echo $action_name == 'index' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"index")) ?>'><i class="icon-info-sign icon-black"></i> Général</a></li>
+        <li class="<?php echo $action_name == 'index' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"index")) ?>'><em class="icon-info-sign icon-black"></em> Général</a></li>
         <?php if($this->etablissement['informations']['LIBELLE_GENRE'] != 'Site' ) : ?>
-            <li class="<?php echo $action_name == 'textes-applicables' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"textes-applicables")) ?>'><i class="icon-align-center icon-black"></i> Textes applicables</a></li>
-            <li class="<?php echo $action_name == 'descriptif' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"descriptif")) ?>'><i class="icon-book icon-black"></i> Descriptif</a></li>
+            <li class="<?php echo $action_name == 'textes-applicables' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"textes-applicables")) ?>'><em class="icon-align-center icon-black"></em> Textes applicables</a></li>
+            <li class="<?php echo $action_name == 'descriptif' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"descriptif")) ?>'><em class="icon-book icon-black"></em> Descriptif</a></li>
         <?php endif ?>
-        <li class="<?php echo $action_name == 'pieces-jointes' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"pieces-jointes")) ?>'><i class="icon-share icon-black"></i> Pièces jointes</a></li>
-        <li class="<?php echo $action_name == 'contacts' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"contacts")) ?>'><i class="icon-user icon-black"></i> Contacts</a></li>
-        <li class="<?php echo $action_name == 'dossiers' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"dossiers")) ?>'><i class="icon-folder-open icon-black"></i> Dossiers</a></li>
-        <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>"><a class='sep' href='<?php echo $this->url(array("action"=>"historique")) ?>'><i class="icon-repeat icon-black"></i> Afficher l'historique</a></li>
+        <li class="<?php echo $action_name == 'pieces-jointes' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"pieces-jointes")) ?>'><em class="icon-share icon-black"></em> Pièces jointes</a></li>
+        <li class="<?php echo $action_name == 'contacts' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"contacts")) ?>'><em class="icon-user icon-black"></em> Contacts</a></li>
+        <li class="<?php echo $action_name == 'dossiers' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"dossiers")) ?>'><em class="icon-folder-open icon-black"></em> Dossiers</a></li>
+        <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>"><a class='sep' href='<?php echo $this->url(array("action"=>"historique")) ?>'><em class="icon-repeat icon-black"></em> Afficher l'historique</a></li>
         <li class="nav-header">Actions</li>
-        <li><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true)?> '><i class="icon-plus icon-black"></i> Ajouter un dossier</a></li>
+        <li><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true)?> '><em class="icon-plus icon-black"></em> Ajouter un dossier</a></li>
 		<?php if($this->is_allowed_delete_etablissement): ?>
         <li>
-            <a id="suppressionEtablissement" href="#"><i class="icon-remove icon-black"></i>Supprimer l'établissement</a>
+            <a id="suppressionEtablissement" href="#"><em class="icon-remove icon-black"></em>Supprimer l'établissement</a>
         </li>
         <?php endif ?>
 	</ul>
