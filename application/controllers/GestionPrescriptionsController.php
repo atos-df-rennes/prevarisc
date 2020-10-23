@@ -70,8 +70,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-/* GESTION CATEGORIES */
-
+    /* GESTION CATEGORIES */
     public function formcategorieAction()
     {
         if ($this->_getParam('id')) {
@@ -85,6 +84,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
     {
         try {
             $dbCat = new Model_DbTable_PrescriptionCat();
+
             if ($this->_getParam('idCat')) {
                 //Edition
                 $this->view->do = 'edit';
@@ -99,6 +99,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 ++$numCategorie;
                 $categorie->NUM_PRESCRIPTION_CAT = $numCategorie++;
             }
+
             $categorie->LIBELLE_PRESCRIPTION_CAT = $this->_getParam('LIBELLE_PRESCRIPTION_CAT');
             $categorie->save();
             $this->view->categorie = $categorie;
@@ -117,8 +118,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-/* GESTION TEXTES */
-
+    /* GESTION TEXTES */
     public function formtexteAction()
     {
         if ($this->_getParam('idCat')) {
@@ -137,18 +137,21 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         try {
             $dbTexte = new Model_DbTable_PrescriptionTexte();
             $texte = null;
+
             if ($this->_getParam('idCategorie')) {
                 //Sauvegarde d'un nouveau texte
                 $this->view->do = 'new';
                 $texte = $dbTexte->createRow();
                 //On recupere le num max de la catégorie
                 $numMax = $dbTexte->recupMaxNumTexte($this->_getParam('idCategorie'));
+
                 if (!$numMax['maxnum']) {
                     $numTexte = 1;
                 } else {
                     $numTexte = $numMax['maxnum'];
                     ++$numTexte;
                 }
+
                 $texte->NUM_PRESCRIPTIONTEXTE = $numTexte;
                 $texte->ID_PRESCRIPTIONCAT = $this->_getParam('idCategorie');
             } elseif ($this->_getParam('idTexte')) {
@@ -156,6 +159,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $this->view->do = 'edit';
                 $texte = $dbTexte->find($this->_getParam('idTexte'))->current();
             }
+
             $texte->LIBELLE_PRESCRIPTIONTEXTE = $this->_getParam('LIBELLE_PRESCRIPTIONTEXTE');
             $texte->save();
             $this->view->texte = $texte;
@@ -174,8 +178,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-/* GESTION ARTICLES */
-
+    /* GESTION ARTICLES */
     public function formarticleAction()
     {
         if ($this->_getParam('idTexte')) {
@@ -194,18 +197,21 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         try {
             $dbArticle = new Model_DbTable_PrescriptionArticle();
             $article = null;
+
             if ($this->_getParam('idTexte')) {
                 //Sauvegarde d'un nouveau article
                 $this->view->do = 'new';
                 $article = $dbArticle->createRow();
                 //On recupere le num max de la catégorie
                 $numMax = $dbArticle->recupMaxNumArticle($this->_getParam('idTexte'));
+
                 if (!$numMax['maxnum']) {
                     $numArticle = 1;
                 } else {
                     $numArticle = $numMax['maxnum'];
                     ++$numArticle;
                 }
+
                 $article->NUM_PRESCRIPTIONARTICLE = $numArticle;
                 $article->ID_PRESCRIPTIONTEXTE = $this->_getParam('idTexte');
             } elseif ($this->_getParam('idArticle')) {
@@ -213,6 +219,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $this->view->do = 'edit';
                 $article = $dbArticle->find($this->_getParam('idArticle'))->current();
             }
+
             $article->LIBELLE_PRESCRIPTIONARTICLE = $this->_getParam('LIBELLE_PRESCRIPTIONARTICLE');
             $article->save();
             $this->view->article = $article;
@@ -249,18 +256,19 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             $this->view->do = 'new';
             $dbCategorie = new Model_DbTable_PrescriptionCat();
             $this->view->listeCategorie = $dbCategorie->recupPrescriptionCat();
+
             switch ($this->_getParam('typePresc')) {
                 case 'addPrescriptionCat':
                     //cas d'une prescription dans une catégorie
                     $this->view->categorie = $this->_getParam('empl');
-                break;
+                    break;
                 case 'addPrescriptionTexte':
                     //cas d'une prescription dans un texte
                     $dbPrescTexte = new Model_DbTable_PrescriptionTexte();
                     $texteInfo = $dbPrescTexte->find($this->_getParam('empl'))->current();
                     $this->view->categorie = $texteInfo->ID_PRESCRIPTIONCAT;
                     $this->view->texte = $this->_getParam('empl');
-                break;
+                    break;
                 case 'addPrescriptionArticle':
                     //cas d'une prescription dans un article
                     $dbPrescArticle = new Model_DbTable_PrescriptionArticle();
@@ -272,10 +280,9 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->view->categorie = $texteInfo->ID_PRESCRIPTIONCAT;
 
                     $this->view->article = $this->_getParam('empl');
-                break;
+                    break;
                 default:
-
-                break;
+                    break;
             }
         }
     }
@@ -286,12 +293,19 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->texte = $this->_getParam('PRESCRIPTIONTYPE_TEXTE');
         $this->view->article = $this->_getParam('PRESCRIPTIONTYPE_ARTICLE');
 
-        if (!$this->view->categorie && !$this->view->texte && !$this->view->article) {
+        if (
+            !$this->view->categorie
+            && !$this->view->texte
+            && !$this->view->article
+        ) {
             //on affiche les catégories
             $dbPrescriptionCat = new Model_DbTable_PrescriptionCat();
             $listePrescriptionCat = $dbPrescriptionCat->recupPrescriptionCat();
             $this->view->categorieListe = $listePrescriptionCat;
-        } elseif (!$this->view->texte && !$this->view->article) {
+        } elseif (
+            !$this->view->texte
+            && !$this->view->article
+        ) {
             $dbPrescriptionCat = new Model_DbTable_PrescriptionCat();
             $categorieLibelle = $dbPrescriptionCat->find($this->view->categorie)->current()->toArray();
             $this->view->categorieLibelle = $categorieLibelle['LIBELLE_PRESCRIPTION_CAT'];
@@ -348,12 +362,12 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-/* GESTION DES TEXTES */
-
+    /* GESTION DES TEXTES */
     public function gestionTextesAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
         $service_prescTextes = new Service_Prescriptions();
+
         if ($this->_request->isPost()) {
             try {
                 $post = $this->_request->getPost();
@@ -412,12 +426,11 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->liste_textes = $liste_textes;
     }
 
-/* GESTION DES ARTICLES */
-
+    /* GESTION DES ARTICLES */
     public function gestionArticlesAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
-        //1 On affiche tous les textes accessible dans les prescriptions
+        // On affiche tous les textes accessible dans les prescriptions
         $service_prescription = new Service_Prescriptions();
 
         if ($this->_request->isPost()) {
@@ -434,7 +447,6 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'L\'article a bien été supprimé'));
                 }
             } catch (Exception $e) {
-                //$this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')'));
             }
         }
 
@@ -478,8 +490,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->liste_articles = $liste_articles;
     }
 
-/* GESTION DES RAPPELS REGLEMENTAIRES */
-
+    /* GESTION DES RAPPELS REGLEMENTAIRES */
     public function gestionRappelRegAction()
     {
         $service_prescription = new Service_Prescriptions();
@@ -536,8 +547,8 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->typeAction = $typeAction;
         $this->view->libelle = $prescriptionInfo[0]['PRESCRIPTIONREGL_LIBELLE'];
     }
-/* FORMULAIRE DE PRESCRIPTIONS */
 
+    /* FORMULAIRE DE PRESCRIPTIONS */
     public function prescriptionFormAction()
     {
         $this->_helper->layout->setLayout('menu_admin');

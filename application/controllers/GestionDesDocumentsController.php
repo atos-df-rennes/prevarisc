@@ -11,7 +11,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('check', 'json')
-            ->initContext();
+                    ->initContext();
     }
 
     public function indexAction()
@@ -28,7 +28,10 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         $fichierVer = array();
         $dossierVer = array();
         while ($elementVer = readdir($dirVer)) {
-            if ($elementVer != '.' && $elementVer != '..') {
+            if (
+                $elementVer != '.'
+                && $elementVer != '..'
+            ) {
                 if ($elementVer != '.gitignore') {
                     if (!is_dir($pathVer.DS.$elementVer)) {
                         $fichierVer[] = $elementVer;
@@ -51,7 +54,10 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             $dossier = array(); // on déclare le tableau contenant le nom des dossiers
 
             while ($element = readdir($dir)) {
-                if ($element != '.' && $element != '..') {
+                if (
+                    $element != '.'
+                    && $element != '..'
+                ) {
                     if ($element != '.gitignore') {
                         if (!is_dir($path.DS.$element)) {
                             $fichier[] = $element;

@@ -30,9 +30,11 @@ class UsersController extends Zend_Controller_Action
         $this->view->fonctions = $service_user->getAllFonctions();
         $this->view->communes = $service_adresse->getAllCommunes();
         $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = array('LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
-                                                 || getenv('PREVARISC_NTLM_ENABLED')
-                                                 || getenv('PREVARISC_CAS_ENABLED'), );
+        $this->view->params = array('LDAP_ACTIF' =>
+            getenv('PREVARISC_LDAP_ENABLED')
+            || getenv('PREVARISC_NTLM_ENABLED')
+            || getenv('PREVARISC_CAS_ENABLED')
+        );
 
         $this->view->add = false;
 
@@ -62,9 +64,11 @@ class UsersController extends Zend_Controller_Action
         $this->view->fonctions = $service_user->getAllFonctions();
         $this->view->communes = $service_adresse->getAllCommunes();
         $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = array('LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
-                                                 || getenv('PREVARISC_NTLM_ENABLED')
-                                                 || getenv('PREVARISC_CAS_ENABLED'), );
+        $this->view->params = array('LDAP_ACTIF' =>
+            getenv('PREVARISC_LDAP_ENABLED')
+            || getenv('PREVARISC_NTLM_ENABLED')
+            || getenv('PREVARISC_CAS_ENABLED')
+        );
 
         $this->view->add = true;
 
@@ -103,14 +107,20 @@ class UsersController extends Zend_Controller_Action
                     foreach ($privileges as $id_privilege => $value_privilege) {
                         $groupe_privilege_exists = $model_groupes_privilege->find($id_groupe, $id_privilege)->current() !== null;
 
-                        if ($value_privilege == 1 && !$groupe_privilege_exists) {
+                        if (
+                            $value_privilege == 1
+                            && !$groupe_privilege_exists
+                        ) {
                             $row_groupe_priv = $model_groupes_privilege->createRow();
                             $row_groupe_priv->ID_GROUPE = $id_groupe;
                             $row_groupe_priv->id_privilege = $id_privilege;
                             $row_groupe_priv->save();
                         }
 
-                        if ($value_privilege == 0 && $groupe_privilege_exists) {
+                        if (
+                            $value_privilege == 0
+                            && $groupe_privilege_exists
+                        ) {
                             $model_groupes_privilege->delete('ID_GROUPE = '.$id_groupe.' AND id_privilege = '.$id_privilege);
                         }
                     }
@@ -257,7 +267,6 @@ class UsersController extends Zend_Controller_Action
 
                 switch ($this->_request->type_ressource) {
                     case 'etablissement':
-
                         switch ($this->_request->genre) {
                             case '2':
                                 $name = 'etablissement_erp_';
@@ -288,7 +297,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '3':
                                 $name = 'etablissement_cell_';
                                 $name .= (is_array($this->_request->types) ? implode($this->_request->types, '-') : '0').'_';
@@ -312,7 +320,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= (is_array($this->_request->categories) ? 'Catégories '.implode($this->_request->categories, '-') : 'Toutes les catégories');
                                 $text .= ')';
                                 break;
-
                             case '4':
                                 $name = 'etablissement_hab_';
                                 $name .= (is_array($this->_request->familles) ? implode($this->_request->familles, '-') : '0').'_';
@@ -339,7 +346,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '5':
                                 $name = 'etablissement_igh_';
                                 $name .= (is_array($this->_request->classes) ? implode($this->_request->classes, '-') : '0').'_';
@@ -367,7 +373,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '6':
                                 $name = 'etablissement_eic_';
                                 $name .= $this->_request->groupements.'_';
@@ -378,7 +383,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '7':
                                 $name = 'etablissement_camp_';
                                 $name .= $this->_request->groupements.'_';
@@ -389,7 +393,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '8':
                                 $name = 'etablissement_temp_';
                                 $name .= $this->_request->groupements.'_';
@@ -400,7 +403,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '9':
                                 $name = 'etablissement_iop_';
                                 $name .= $this->_request->groupements.'_';
@@ -411,7 +413,6 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
-
                             case '10':
                                 $name = 'etablissement_zone_';
                                 $name .= (is_array($this->_request->classements) ? implode($this->_request->classements, '-') : '0').'_';
@@ -444,7 +445,6 @@ class UsersController extends Zend_Controller_Action
                         $model_privilege->createRow(array('name' => 'edit_ets', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
 
                         break;
-
                     case 'dossier':
                         $name = 'dossier_';
                         $name .= (is_array($this->_request->dossier_natures) ? implode($this->_request->dossier_natures, '-') : '0');
@@ -470,7 +470,6 @@ class UsersController extends Zend_Controller_Action
                         $model_privilege->createRow(array('name' => 'view_doss', 'text' => 'Lecture', 'id_resource' => $id_resource))->save();
                         $model_privilege->createRow(array('name' => 'edit_doss', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
                         $model_privilege->createRow(array('name' => 'verrouillage_dossier', 'text' => 'Verrouillage d\'un dossier', 'id_resource' => $id_resource))->save();
-
                         break;
                 }
 

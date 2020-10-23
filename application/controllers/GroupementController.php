@@ -49,7 +49,11 @@ class GroupementController extends Zend_Controller_Action
         // Coordonnées du groupement
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
-        if (isset($_GET['id']) && $_GET['id'] != 0) {
+        $this->view->preventionnistes = array();
+        if (
+            isset($_GET['id'])
+            && $_GET['id'] != 0
+        ) {
             $groupement = $groupements->find($_GET['id'])->current();
             $this->view->groupement = $groupement->toArray();
             $this->view->libelle = $groupement['LIBELLE_GROUPEMENT'];
@@ -57,8 +61,6 @@ class GroupementController extends Zend_Controller_Action
             $this->view->preventionnistes = $groupements->getPreventionnistes($_GET['id']);
             $this->view->ville_du_groupement = $groupement->findModel_DbTable_AdresseCommuneViaModel_DbTable_GroupementCommune()->toArray();
             $this->view->user_info = $DB_informations->find($groupement->ID_UTILISATEURINFORMATIONS)->current();
-        } else {
-            $this->view->preventionnistes = array();
         }
     }
 

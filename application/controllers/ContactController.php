@@ -27,7 +27,6 @@ class ContactController extends Zend_Controller_Action
         $this->view->item = $this->_request->item;
         $this->view->id = $this->_request->id;
         $this->view->verrou = $this->_request->verrou;
-
         $this->view->ajax = $this->_request->ajax;
 
         // Si on est dans un établissement, on cherche les contacts des ets parents
