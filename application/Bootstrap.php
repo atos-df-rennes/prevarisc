@@ -11,7 +11,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_View());
         Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_ACL());
         Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_XmlHttpRequest());
-        //Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_Security);
 
         // Chargement des plugins tiers
         if (getenv('PREVARISC_THIRDPARTY_PLUGINS')) {
@@ -182,14 +181,4 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         return $namespace;
     }
-
-    /*public function _initLog()
-    {
-        $logDir = getenv('PREVARISC_LOG_DIR');
-
-        $writer = new Zend_Log_Writer_Stream($logDir."/app-error_log");
-        $logger = new Zend_Log($writer);
-
-        return $logger;
-    }*/
 }
