@@ -83,23 +83,11 @@ class Service_Dossier
             throw new Exception($msg);
         } else {
             $DBsave = new Model_DbTable_DossierPj();
-            $DBetab = new Model_DbTable_EtablissementPj();
 
-            $linkPj = $DBsave->createRow(array(
+            $DBsave->createRow(array(
                 'ID_DOSSIER' => $id_dossier,
                 'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
             ))->save();
-
-            /*
-            if ($this->_getParam('etab')) {
-                foreach ($this->_getParam('etab') as $etabLink ) {
-                    $linkEtab = $DBetab->createRow();
-                    $linkEtab->ID_ETABLISSEMENT = $etabLink;
-                    $linkEtab->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
-                    $linkEtab->save();
-                }
-            }
-            */
         }
     }
 
@@ -164,20 +152,18 @@ class Service_Dossier
         $old_titre = null;
 
         foreach ($textes_applicables_non_organises as $texte_applicable) {
-            if (true) {
-                $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
+            $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
 
-                if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
-                    $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = array();
-                }
-
-                $textes_applicables[ $texte_applicable['LIBELLE_TYPETEXTEAPPL' ]][$texte_applicable['ID_TEXTESAPPL']] = array(
-                  'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
-                  'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
-                );
-
-                $old_titre = $new_titre;
+            if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
+                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = array();
             }
+
+            $textes_applicables[ $texte_applicable['LIBELLE_TYPETEXTEAPPL' ]][$texte_applicable['ID_TEXTESAPPL']] = array(
+                'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
+                'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
+            );
+
+            $old_titre = $new_titre;
         }
 
         return $textes_applicables;
@@ -200,7 +186,7 @@ class Service_Dossier
 
         //On récupère le premier établissements afin de mettre à jour ses textes applicables lorsque l'on est dans une visite
         $id_etablissement = null;
-        if (2 == $type || 3 == $type) {
+        if (in_array($type, array(2, 3))) {
             $tabEtablissement = $dbDossier->getEtablissementDossier($id_dossier);
             $id_etablissement = isset($tabEtablissement[0]) ? $tabEtablissement[0]['ID_ETABLISSEMENT'] : null;
         }
@@ -210,7 +196,7 @@ class Service_Dossier
                 $texte_applicable = $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current();
                 if ($texte_applicable !== null) {
                     $texte_applicable->delete();
-                    if ((2 == $type || 3 == $type) && $id_etablissement) {
+                    if (in_array($type, array(2, 3)) && $id_etablissement) {
                         $texte_applicable = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
                         if ($texte_applicable !== null) {
                             $texte_applicable->delete();
@@ -410,7 +396,6 @@ class Service_Dossier
                 $numPrescription = $nbPrescription['maxnum'];
                 ++$numPrescription;
 
-                $oldType = $prescEdit->TYPE_PRESCRIPTION_DOSSIER;
                 $newCount = true;
             } else {
                 $numPrescription = $prescEdit->NUM_PRESCRIPTION_DOSSIER;
@@ -422,7 +407,7 @@ class Service_Dossier
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = $post['TYPE_PRESCRIPTION_DOSSIER'];
             $prescEdit->save();
 
-            if ($newCount == true) {
+            if ($newCount) {
                 //il faut effectuer une nouvelle numérotation des prescriptions du type que l'on abandonne
                 $nbPresc = 1;
                 $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
@@ -562,7 +547,6 @@ class Service_Dossier
                 ++$nbPresc;
             }
         }
-        $id_dossier = $post['id_dossier'];
     }
 
     public function copyPrescriptionDossier($listePrescription, $idDossier)
@@ -853,14 +837,14 @@ class Service_Dossier
         $deleteDossier = true;
         if ($uniqueEtab) {
             $DB_etsDossier = new Model_DbTable_EtablissementDossier();
-            $deleteDossier = !(count($DB_etsDossier->getEtablissementListe($idDossier)) > 1);
+            $deleteDossier = count($DB_etsDossier->getEtablissementListe($idDossier)) <= 1;
         }
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
 
             //suppression de la date de passage en commission
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
-            $affectDossier = $dbAffectDossier->deleteDateDossierAffect($idDossier);
+            $dbAffectDossier->deleteDateDossierAffect($idDossier);
 
             $dossier->save();
         }
