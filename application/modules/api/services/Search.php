@@ -26,9 +26,7 @@ class Api_Service_Search
     public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
-        $results = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $count, $page);
-
-        return $results;
+        return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $count, $page);
     }
 
     /**
@@ -47,9 +45,7 @@ class Api_Service_Search
     public function dossiers($types = null, $objet = null, $num_doc_urba = null, $parent = null, $avis_differe = null, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
-        $results = $service_search->dossiers($types, $objet, $num_doc_urba, $parent, $avis_differe, $count, $page);
-
-        return $results;
+        return $service_search->dossiers($types, $objet, $num_doc_urba, $parent, $avis_differe, $count, $page);
     }
 
     /**
@@ -67,8 +63,6 @@ class Api_Service_Search
     public function users($fonctions = null, $name = null, $groups = null, $actif = true, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
-        $results = $service_search->users($fonctions, $name, $groups, $actif, $count, $page);
-
-        return $results;
+        return $service_search->users($fonctions, $name, $groups, $actif, $count, $page);
     }
 }

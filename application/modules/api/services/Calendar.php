@@ -21,7 +21,7 @@ class Api_Service_Calendar
         if ($commission) {
             $dbCommission = new Model_DbTable_Commission();
             $resultLibelle = $dbCommission->getLibelleCommissions($commission);
-            if (count($resultLibelle) > 0) {
+            if (!empty($resultLibelle)) {
                 $calendrierNom .= ' '.$resultLibelle[0]['LIBELLE_COMMISSION'];
             }
         }
@@ -259,7 +259,7 @@ class Api_Service_Calendar
                 $dbGroupement = new Model_DbTable_Groupement();
                 $serviceInstruct = $dbGroupement->getByLibelle(
                             $commissionEvent['SERVICEINSTRUC_DOSSIER']);
-                $serviceInstruct = count($serviceInstruct) > 0 ?
+                $serviceInstruct = !empty($serviceInstruct) ?
                                     $serviceInstruct[0] : null;
             }
             if ($maire && count($maire) > 0) {
@@ -352,38 +352,36 @@ class Api_Service_Calendar
     private function formatUtilisateurInformations($user): string
     {
         $str = '';
-        if ($user && is_array($user)) {
-            if ($user['NOM_UTILISATEURINFORMATIONS']) {
-                $str .= sprintf('- %s : %s %s',
-                        $user['LIBELLE_FONCTION'],
-                        $user['NOM_UTILISATEURINFORMATIONS'],
-                        $user['PRENOM_UTILISATEURINFORMATIONS']);
-                if ($user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
-                        && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
-                        && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
-                        && $user['CPADRESSE_UTILISATEURINFORMATIONS']
-                        && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']) {
-                    $str .= sprintf(', %s %s, %s %s',
-                                $user['NUMEROADRESSE_UTILISATEURINFORMATIONS'],
-                                $user['RUEADRESSE_UTILISATEURINFORMATIONS'],
-                                $user['CPADRESSE_UTILISATEURINFORMATIONS'],
-                                $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
-                            );
-                }
-                if ($user['TELFIXE_UTILISATEURINFORMATIONS']) {
-                    $str .= sprintf(', %s',
-                        $user['TELFIXE_UTILISATEURINFORMATIONS']);
-                }
-                if ($user['TELFAX_UTILISATEURINFORMATIONS']) {
-                    $str .= sprintf(', %s',
-                        $user['TELFAX_UTILISATEURINFORMATIONS']);
-                }
-                if ($user['MAIL_UTILISATEURINFORMATIONS']) {
-                    $str .= sprintf(', %s',
-                        $user['MAIL_UTILISATEURINFORMATIONS']);
-                }
-                $str .= "\n";
+        if ($user && is_array($user) && $user['NOM_UTILISATEURINFORMATIONS']) {
+            $str .= sprintf('- %s : %s %s',
+                    $user['LIBELLE_FONCTION'],
+                    $user['NOM_UTILISATEURINFORMATIONS'],
+                    $user['PRENOM_UTILISATEURINFORMATIONS']);
+            if ($user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
+                    && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
+                    && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
+                    && $user['CPADRESSE_UTILISATEURINFORMATIONS']
+                    && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']) {
+                $str .= sprintf(', %s %s, %s %s',
+                            $user['NUMEROADRESSE_UTILISATEURINFORMATIONS'],
+                            $user['RUEADRESSE_UTILISATEURINFORMATIONS'],
+                            $user['CPADRESSE_UTILISATEURINFORMATIONS'],
+                            $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
+                        );
             }
+            if ($user['TELFIXE_UTILISATEURINFORMATIONS']) {
+                $str .= sprintf(', %s',
+                    $user['TELFIXE_UTILISATEURINFORMATIONS']);
+            }
+            if ($user['TELFAX_UTILISATEURINFORMATIONS']) {
+                $str .= sprintf(', %s',
+                    $user['TELFAX_UTILISATEURINFORMATIONS']);
+            }
+            if ($user['MAIL_UTILISATEURINFORMATIONS']) {
+                $str .= sprintf(', %s',
+                    $user['MAIL_UTILISATEURINFORMATIONS']);
+            }
+            $str .= "\n";
         }
 
         return $str;

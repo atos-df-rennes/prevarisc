@@ -12,9 +12,7 @@ class Api_Service_Etablissement
     public function get($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $etablissement = $service_etablissement->get($id);
-
-        return $etablissement;
+        return $service_etablissement->get($id);
     }
 
     /**
@@ -27,9 +25,7 @@ class Api_Service_Etablissement
     public function getHistorique($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $historique = $service_etablissement->getHistorique($id);
-
-        return $historique;
+        return $service_etablissement->getHistorique($id);
     }
 
     /**
@@ -42,9 +38,7 @@ class Api_Service_Etablissement
     public function getDescriptifs($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $descriptifs = $service_etablissement->getDescriptifs($id);
-
-        return $descriptifs;
+        return $service_etablissement->getDescriptifs($id);
     }
 
     /**
@@ -57,9 +51,7 @@ class Api_Service_Etablissement
     public function getTextesApplicables($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $textes_applicables = $service_etablissement->getAllTextesApplicables($id);
-
-        return $textes_applicables;
+        return $service_etablissement->getAllTextesApplicables($id);
     }
 
     /**
@@ -72,9 +64,7 @@ class Api_Service_Etablissement
     public function getPiecesJointes($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $pieces_jointes = $service_etablissement->getAllPJ($id);
-
-        return $pieces_jointes;
+        return $service_etablissement->getAllPJ($id);
     }
 
     /**
@@ -115,9 +105,7 @@ class Api_Service_Etablissement
     public function getContacts($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $contacts = $service_etablissement->getAllContacts($id);
-
-        return $contacts;
+        return $service_etablissement->getAllContacts($id);
     }
 
     /**
@@ -130,9 +118,7 @@ class Api_Service_Etablissement
     public function getDossiers($id)
     {
         $service_etablissement = new Service_Etablissement();
-        $dossiers = $service_etablissement->getDossiers($id);
-
-        return $dossiers;
+        return $service_etablissement->getDossiers($id);
     }
 
     /**
@@ -152,8 +138,6 @@ class Api_Service_Etablissement
     public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
     {
         $service_etablissement = new Service_Etablissement();
-        $defaults_values = $service_etablissement->getDefaultValues($genre, $numinsee, $type, $categorie, $local_sommeil, $classe, $id_etablissement_pere, $ids_etablissements_enfants);
-
-        return $defaults_values;
+        return $service_etablissement->getDefaultValues($genre, $numinsee, $type, $categorie, $local_sommeil, $classe, $id_etablissement_pere, $ids_etablissements_enfants);
     }
 }
