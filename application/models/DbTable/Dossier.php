@@ -25,7 +25,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     //Fonction qui récupére tous les établissements concernés par le dossier
-    //PAS CERTAIN QU4ELLE SOIT ENCORE UTILIS2E
+    //PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
     /**
      * @param string|int $id_etablissement
      *
@@ -224,8 +224,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
             FROM etablissementinformations,genre
-            WHERE genre.ID_GENRE = etablissementinformations.ID_GENRE
-            AND LIBELLE_ETABLISSEMENTINFORMATIONS LIKE '%".$etablissementLibelle."%';
+            WHERE genre.ID_GENRE = etablissementinformations.ID_GENRE;
         ";
 
         return $this->getAdapter()->fetchAll($select);

@@ -36,7 +36,6 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
     public function getDossierAffect($idDateCom)
     {
         //retourne l'ensemble des dossiers programés à la date de comm passée en param et dont les horaires ONT été précisés
-
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(array('doss' => 'dossier'))
@@ -99,7 +98,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
             AND '.$this->_name.".ID_DOSSIER_AFFECT = '".$idDossier."'
             ORDER BY DATE_COMMISSION
         ";
-        //echo $select;
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -110,12 +109,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
      */
     public function deleteDateDossierAffect($idDossier)
     {
-        $delete = 'DELETE
-            FROM '.$this->_name."
-            WHERE  ID_DOSSIER_AFFECT = '".$idDossier."'
-        ";
-
-        return $this->delete("ID_DOSSIER_AFFECT = '".$idDossier."'");
+        $this->delete("ID_DOSSIER_AFFECT = '".$idDossier."'");
     }
 
     public function deleteDateDossierModifDateAffect($idDossier, $idDateComm)

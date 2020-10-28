@@ -19,7 +19,6 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
             ->where('pda.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier)
             ->order('pda.NUM_PRESCRIPTION_DOSSIERASSOC');
 
-        //echo $select->__toString();
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -37,10 +36,8 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
             ->join(array('pd' => 'prescriptiondossier'), 'pd.ID_PRESCRIPTION_TYPE = pt.ID_PRESCRIPTIONTYPE')
             ->where('pt.ID_PRESCRIPTIONTYPE = ?', $idPrescriptionType)
             ->where('pd.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier)
-            //->group("pta.NUM_PRESCRIPTIONASSOC")
             ->order('pta.NUM_PRESCRIPTIONASSOC');
 
-        //echo $select->__toString();
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -51,7 +48,6 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
             ->from(array('pd' => 'prescriptiondossierassoc'))
             ->where('pda.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier);
 
-        //echo $select->__toString();
         return $this->getAdapter()->fetchAll($select)->delete();
     }
 }

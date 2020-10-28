@@ -3,14 +3,14 @@
 class Model_DbTable_PrescriptionTexte extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptiontexte'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTIONTEXTE'; // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTIONTEXTE'; // ClÃ© primaire
 
     /**
      * @return array
      */
     public function recupPrescriptionTexte($idCategorie)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('pt' => 'prescriptiontexte'))
@@ -22,7 +22,7 @@ class Model_DbTable_PrescriptionTexte extends Zend_Db_Table_Abstract
 
     public function recupMaxNumTexte($idCategorie)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('pt' => 'prescriptiontexte'), 'max(pt.NUM_PRESCRIPTIONTEXTE) as maxnum')

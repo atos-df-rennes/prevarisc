@@ -3,7 +3,7 @@
 class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptiontype'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTIONTYPE'; // Cl� primaire
+    protected $_primary = 'ID_PRESCRIPTIONTYPE'; // Clé primaire
 
     /**
      * @return array
@@ -38,7 +38,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
             $select->orWhere('ptl.LIBELLE_TEXTE like ?', '%'.$ue.'%');
             $select->orWhere('pal.LIBELLE_ARTICLE like ?', '%'.$ue.'%');
         }
-        //echo $select->__toString();
+        
         return $this->getAdapter()->fetchAll($select);
     }
 

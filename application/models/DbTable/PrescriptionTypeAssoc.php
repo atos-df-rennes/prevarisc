@@ -3,7 +3,7 @@
 class Model_DbTable_PrescriptionTypeAssoc extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptiontypeassoc'; // Nom de la base
-    protected $_primary = array('ID_PRESCRIPTIONTYPE', 'NUM_PRESCRIPTIONASSOC'); // Clé primaire
+    protected $_primary = array('ID_PRESCRIPTIONTYPE', 'NUM_PRESCRIPTIONASSOC'); // ClÃ© primaire
 
     /**
      * @return array
@@ -19,7 +19,6 @@ class Model_DbTable_PrescriptionTypeAssoc extends Zend_Db_Table_Abstract
             ->where('pta.ID_PRESCRIPTIONTYPE = ?', $idPrescriptionType)
             ->order('pta.NUM_PRESCRIPTIONASSOC');
 
-        //echo $select->__toString();
         return $this->getAdapter()->fetchAll($select);
     }
 }
