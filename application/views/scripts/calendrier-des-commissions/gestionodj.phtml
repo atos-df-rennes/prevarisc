@@ -2,29 +2,29 @@
 <input type='hidden' name='idCommission' id='idCommission' value='<?php if($this->idComm){ echo $this->idComm; } ?>'/>
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li>
-        <a href="#" id='commissionPj'><i class="icon-share icon-black"></i> Pièces jointes</a>
+        <a href="#" id='commissionPj'><em class="icon-share icon-black"></em> Pièces jointes</a>
     </li>
     <li class="nav-header">Actions</li>
     <li>
-        <a id='exportCom'  href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><i class='icon-calendar'></i> Exporter pour Outlook</a>
+        <a id='exportCom'  href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><em class='icon-calendar'></em> Exporter pour Outlook</a>
     </li>
     <li>
-        <a href="#" id='createConvoc'><i class="icon-file"></i> Générer Convocations</a>
+        <a href="#" id='createConvoc'><em class="icon-file"></em> Générer Convocations</a>
     </li>
     <li>
-        <a href="#" id='createOdj'><i class="icon-list-alt"></i> Génerer l'ordre du jour</a>
+        <a href="#" id='createOdj'><em class="icon-list-alt"></em> Génerer l'ordre du jour</a>
     </li>
     <li>
-        <a href="#" id='createPv'><i class="icon-file"></i> Génerer PV</a>
+        <a href="#" id='createPv'><em class="icon-file"></em> Génerer PV</a>
     </li>
     <li>
-        <a href="#" id='creationCompteRendu'><i class="icon-book"></i> Génerer le compte rendu</a>
+        <a href="#" id='creationCompteRendu'><em class="icon-book"></em> Génerer le compte rendu</a>
     </li>
     <li>
         <?php if($this->infosDateComm['GESTION_HEURES'] == 1): ?>
-                <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><i class="icon-time"></i> Ne pas prendre en compte les heures</a>
+                <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><em class="icon-time"></em> Ne pas prendre en compte les heures</a>
         <?php else : ?>
-                <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><i class="icon-time"></i> Prendre en compte les heures</a>
+                <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><em class="icon-time"></em> Prendre en compte les heures</a>
         <?php endif ?>
     </li>
 </ul>
@@ -39,7 +39,6 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
 	$('#external-events div.external-event').each(function() {
 		// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
 		// it doesn't need to have a start or end
@@ -55,12 +54,10 @@ $(document).ready(function() {
 			revert: true,      // will cause the event to go back to its
 			revertDuration: 0  //  original position after the drag
 		});
-
 	});
 
 	( function($) {
 		$.fn.afficheCalendar = function(jour,mois,annee,hDeb,hFin) {
-			//alert(jour+" "+mois+" "+annee+" "+hDeb+" "+hFin);
 			var calendar = $('#calendar').fullCalendar( {
 				date:jour,
 				month:mois,
@@ -98,7 +95,6 @@ $(document).ready(function() {
 				defaultEventMinutes: 5,
 				events: function(start, end, callback) {
 					mois++;
-					//jour++;
 					var myDate = new Date(annee+"/"+mois+"/"+jour);
 
 					$.ajax({
@@ -110,7 +106,6 @@ $(document).ready(function() {
 						success: function( result ) {
 							var events = [];
 							for( var x in result["items"] ) {
-								//alert(result["items"][x]["start"]);
 								events.push({
 									id: result["items"][x]["id"],
 									title: result["items"][x]["title"],
@@ -131,13 +126,6 @@ $(document).ready(function() {
 					$(this).fullCalendar('refetchEvents');
 
 				},
-				eventClick: function( event, jsEvent, view ) {
-					/*
-					// Boite de dialogue
-					my_dialog("/calendrier-des-commissions/dialogcomm", "idComm="+$("#commissionId").val()+"&idDateComm="+event.id+"&do=edit");
-					return false;
-					*/
-				},
 				eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
 					var heureDeb = event.start;
 					var heureFin = event.end;
@@ -145,7 +133,6 @@ $(document).ready(function() {
 					var hrefTab = $(this).attr('href').split("/");
 					var tailleTab = hrefTab.length;
 					var idDossier = hrefTab[tailleTab-1];
-					//alert('event drop');
 					$.ajax({
 						url: "/calendrier-des-commissions/dropodj?heureDebut="+heureDeb+"&heureFin="+heureFin,
 						data: {
@@ -154,7 +141,6 @@ $(document).ready(function() {
 							idDossier : idDossier,
 						},
 						success: function( result ) {
-
 						}
 					});
 
@@ -180,7 +166,7 @@ $(document).ready(function() {
 					var copiedEventObject = $.extend({}, originalEventObject);
 					// assign it the date that was reported
 					copiedEventObject.start = date;
-                                        copiedEventObject.end = new Date(date.getTime() + 5*60000);
+					copiedEventObject.end = new Date(date.getTime() + 5*60000);
 					copiedEventObject.url = "/dossier/index/id/"+idDossier;
 					copiedEventObject.allDay = allDay;
 					if(verrou == 1){
@@ -200,7 +186,6 @@ $(document).ready(function() {
 				//eventResize: function( event, jsEvent, ui, view ) {
 				eventResize: function( event,dayDelta,minuteDelta,revertFunc) {
 					var dateFin = event.end;
-					//var idDossier = $(this).attr('id');
 
 					var hrefTab = $(this).attr('href').split("/");
 					var tailleTab = hrefTab.length;
@@ -213,10 +198,8 @@ $(document).ready(function() {
 							format: 'json',
 							dateCommId: $("#dateCommId").val(),
 							idDossier : idDossier,
-							//dateFin: dateFin,
 						},
 						success: function( result ) {
-							//alert(result);
 						}
 					});
 				}
@@ -226,9 +209,6 @@ $(document).ready(function() {
 
 	var date;
 	var myDate = new Date($("#dateOdj").val());
-
-	//alert($("#heureDeb").val());
-	//alert(myDate.getMonth());
 
 	$("#calendar").afficheCalendar(myDate.getUTCDate(),myDate.getUTCMonth(),myDate.getUTCFullYear(),$("#heureDeb").val(),$("#heureFin").val());
 
@@ -254,7 +234,6 @@ $(document).ready(function() {
 			}
 		},
 		close: function(event, ui){
-
 		}
 	});
 
@@ -268,7 +247,6 @@ $(document).ready(function() {
 				dialogDateCommission.dialog("open");
 			}
 		});
-
 	});
 
 	$("#createConvoc").click(function(){
@@ -277,7 +255,6 @@ $(document).ready(function() {
 				url: "/calendrier-des-commissions/generationconvoc",
 				data: "dateCommId="+$("#dateCommId").val(),
 				type:"POST",
-				//async: false,
 				beforeSend: function(){
 					$("#infoGeneration").html("Création en cours, veuillez patienter   <img src='/images/load.gif' />");
 				},
@@ -300,7 +277,6 @@ $(document).ready(function() {
 				url: "/calendrier-des-commissions/generationodj",
 				data: "dateCommId="+$("#dateCommId").val(),
 				type:"POST",
-				//async: false,
 				beforeSend: function(){
 					$("#infoGeneration").html("Création en cours, veuillez patienter   <img src='/images/load.gif' />");
 				},
@@ -323,7 +299,6 @@ $(document).ready(function() {
 				url: "/calendrier-des-commissions/generationpv",
 				data: "dateCommId="+$("#dateCommId").val(),
 				type:"POST",
-				//async: false,
 				beforeSend: function(){
 					$("#infoGeneration").html("Création en cours, veuillez patienter   <img src='/images/load.gif' />");
 				},
@@ -346,7 +321,6 @@ $(document).ready(function() {
 				url: "/calendrier-des-commissions/generationcompterendu",
 				data: "dateCommId="+$("#dateCommId").val(),
 				type:"POST",
-				//async: false,
 				beforeSend: function(){
 					$("#infoGeneration").html("Création en cours, veuillez patienter   <img src='/images/load.gif' />");
 				},
@@ -370,17 +344,14 @@ $(document).ready(function() {
 			data: "dateCommId="+$("#dateCommId").val()+"&gestionHeure="+gestionHeures,
 			type:"POST",
 			beforeSend: function(){
-
 			},
 			success: function(affichageResultat){
-				//alert(affichageResultat);
 				window.location.reload();
 			},
 			error: function(){
 				return false;
 			}
 		});
-
 	});
 
 	$( ".sortable" ).sortable({
@@ -396,16 +367,13 @@ $(document).ready(function() {
 
 				num = num + 1;
 			});
-			//alert(listeDossierUpdate);
 			$.ajax({
 				url: "/calendrier-des-commissions/changementordre",
 				data: "dateCommId="+$("#dateCommId").val()+"&ordreDossier="+listeDossierUpdate,
 				type:"POST",
 				beforeSend: function(){
-
 				},
 				success: function(affichageResultat){
-					//alert(affichageResultat);
 					return false;
 				},
 				error: function(){
@@ -414,7 +382,6 @@ $(document).ready(function() {
 			});
 		}
 	});
-
 });
 
 </script>
@@ -438,13 +405,11 @@ $(document).ready(function() {
 	echo "	<input type='hidden' name='dateCommId' id='dateCommId' value='".$this->infosDateComm['ID_DATECOMMISSION']."' />
 		";
 
-
 	if(count($this->recupCommLiees) > 1){
 		echo "<h4 style='margin:0px;'>Autres dates de la commission</h4>";
 		$i = 0;
 		echo "<br/><table><tr>";
 		foreach($this->recupCommLiees as $commLiees){
-			// && $this->infosDateComm['DATECOMMISSION_LIEES']
 			if($commLiees['ID_DATECOMMISSION'] != $this->infosDateComm['ID_DATECOMMISSION']){
 				$dateLiees =  new Zend_Date($commLiees['DATE_COMMISSION'],'yyyy-MM-dd');
 				echo "<td style='width:200px;text-align:center;' ><a href='/calendrier-des-commissions/gestionodj/dateCommId/".$commLiees['ID_DATECOMMISSION']."' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</a></td>";
@@ -453,7 +418,6 @@ $(document).ready(function() {
 				echo "<td style='width:200px;text-align:center;' >".$dateLiees->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr')."</td>";
 			}
 			if($i<5){
-
 				$i++;
 			}else{
 				echo "</td></tr>";
@@ -512,8 +476,9 @@ $(document).ready(function() {
 								echo " (";
 								foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
 									echo $commune['LIBELLE_COMMUNE'];
-									if($nbAdresse != 1)
+									if($nbAdresse != 1) {
 										echo ", ";
+									}
 									$nbAdresse--;
 								}
 								echo ") ";
@@ -521,7 +486,6 @@ $(document).ready(function() {
 						}else{
 							echo " ( adresse non renseignée )";
 						}
-
 
 						if(isset($dossierNonAffect['infosEtab']['parents']) && isset($dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
 							echo " - ".$dossierNonAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'];
@@ -551,8 +515,9 @@ $(document).ready(function() {
 								echo "<br/><span style='font-size:10px'>";
 								foreach($dossierNonAffect['preventionnistes'] as $prev){
 									echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-									if($nbPrev > 1)
+									if($nbPrev > 1) {
 										echo ", ";
+									}
 									$nbPrev--;
 								}
 								echo "</span>";
@@ -588,7 +553,6 @@ $(document).ready(function() {
 		echo "
 			<ul class='unstyled sortable' id='listeDossierNoHours'>
 		";
-		//Zend_Debug::dump($this->listeDossierNonAffect);
 		if( count($this->listeDossierNonAffect) != 0 ){
 			foreach ($this->listeDossierNonAffect as $dossierNonAffect){
 				if($dossierNonAffect['VERROU_DOSSIER'] == 1){
@@ -607,8 +571,9 @@ $(document).ready(function() {
 					echo " (";
 					foreach($dossierNonAffect['infosEtab']['adresses'] as $commune){
 						echo $commune['LIBELLE_COMMUNE'];
-						if($nbAdresse != 1)
+						if($nbAdresse != 1) {
 							echo ", ";
+						}
 						$nbAdresse--;
 					}
 					echo ") ";
@@ -639,8 +604,9 @@ $(document).ready(function() {
 					echo "<span style='font-size:10px'>";
 					foreach($dossierNonAffect['preventionnistes'] as $prev){
 						echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-						if($nbPrev > 1)
+						if($nbPrev > 1) {
 							echo ", ";
+						}
 						$nbPrev--;
 					}
 					echo "</span>";
@@ -657,5 +623,4 @@ $(document).ready(function() {
 		echo "
 			</ul>
 		";
-
 	}
