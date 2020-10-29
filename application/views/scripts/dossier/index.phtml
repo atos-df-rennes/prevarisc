@@ -938,22 +938,21 @@
 					$("#ANOMALIE").show();
 				}
 
-
-				if($("#selectNature").val() == 1 || $("#selectNature").val() == 2){
+				var listeDoc = {
+					1: "PC", 
+					2: "AT", 
+					14: "PA", 
+					30: "DP",
+					62: "CU"
+				};
+				if(listeDoc[$("#selectNature").val()]){
 					$("#docurbaVal").html('');
-					var docurbaVal;
-					switch($("#selectNature").val()){
-						case '1':
-							docurbaVal = "PC";
-						break;
-						case '2':
-							docurbaVal = "AT";
-						break;
-					}
+					var docurbaVal = listeDoc[$("#selectNature").val()];
+
 					$("#docurbaVal").prepend(docurbaVal);
 				}else{
 					$("#docurbaVal").html('');
-				}
+				}  
 				$("#chargement").html('');
 
 				$('#loading').hide();
