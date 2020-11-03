@@ -3,7 +3,7 @@
 class Service_Dossier
 {
     /**
-     * Récupération de l'ensemble des types
+     * Récupération de l'ensemble des types.
      *
      * @return array
      */
@@ -15,7 +15,7 @@ class Service_Dossier
     }
 
     /**
-     * Récupération de l'ensemble des natures
+     * Récupération de l'ensemble des natures.
      *
      * @return array
      */
@@ -27,20 +27,21 @@ class Service_Dossier
     }
 
     /**
-     * Récupération des pièces jointes d'un dossier
+     * Récupération des pièces jointes d'un dossier.
      *
-     * @param  int   $id_dossier
+     * @param int $id_dossier
+     *
      * @return array
      */
     public function getAllPJ($id_dossier)
     {
         $DBused = new Model_DbTable_PieceJointe();
 
-        return $DBused->affichagePieceJointe("dossierpj", "dossierpj.ID_DOSSIER", $id_dossier);
+        return $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $id_dossier);
     }
 
     /**
-     * Ajout d'une pièce jointe pour un dossier
+     * Ajout d'une pièce jointe pour un dossier.
      *
      * @param int    $id_dossier
      * @param array  $file
@@ -49,7 +50,7 @@ class Service_Dossier
      */
     public function addPJ($id_dossier, $file, $name = '', $description = '')
     {
-        $extension = strtolower(strrchr($file['name'], "."));
+        $extension = strtolower(strrchr($file['name'], '.'));
 
         $DBpieceJointe = new Model_DbTable_PieceJointe();
 
@@ -70,8 +71,8 @@ class Service_Dossier
 
             // log some debug information
             error_log($msg);
-            error_log("is_dir ".dirname($file_path).": ".is_dir(dirname($file_path)));
-            error_log("is_writable ".dirname($file_path).":".is_writable(dirname($file_path)));
+            error_log('is_dir '.dirname($file_path).': '.is_dir(dirname($file_path)));
+            error_log('is_writable '.dirname($file_path).':'.is_writable(dirname($file_path)));
             $cmd = 'ls -all '.dirname($file_path);
             error_log($cmd);
             $rslt = explode("\n", shell_exec($cmd));
@@ -103,7 +104,7 @@ class Service_Dossier
     }
 
     /**
-     * Suppression d'une pièce jointe d'un dossier
+     * Suppression d'une pièce jointe d'un dossier.
      *
      * @param int $id_dossier
      * @param int $id_pj
@@ -125,15 +126,16 @@ class Service_Dossier
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
-            $DBitem->delete("ID_PIECEJOINTE = ".(int) $id_pj);
+            $DBitem->delete('ID_PIECEJOINTE = '.(int) $id_pj);
             $pj->delete();
         }
     }
 
     /**
-     * Récupération des contacts d'un dossier
+     * Récupération des contacts d'un dossier.
      *
-     * @param  int   $id_dossier
+     * @param int $id_dossier
+     *
      * @return array
      */
     public function getAllContacts($id_dossier)
@@ -144,12 +146,15 @@ class Service_Dossier
     }
 
     /**
-     * Récupération des textes applicables d'un dossier
+     * Récupération des textes applicables d'un dossier.
      *
-     * @param  int   $id_dossier
-     * @return array
+     * @param int $id_dossier
+     *
+     * @return array[][]
+     *
+     * @psalm-return array<mixed, array<mixed, array{ID_TEXTESAPPL:mixed, LIBELLE_TEXTESAPPL:mixed}>>
      */
-    public function getAllTextesApplicables($id_dossier)
+    public function getAllTextesApplicables($id_dossier): array
     {
         $dossierTextesAppl = new Model_DbTable_DossierTextesAppl();
 
@@ -179,11 +184,10 @@ class Service_Dossier
     }
 
     /**
-     * Sauvegarde des textes applicables d'un dossier
+     * Sauvegarde des textes applicables d'un dossier.
      *
-     * @param  int   $id_dossier
-     * @param  array $textes_applicables
-     * @return array
+     * @param int   $id_dossier
+     * @param array $textes_applicables
      */
     public function saveTextesApplicables($id_dossier, array $textes_applicables)
     {
@@ -195,6 +199,7 @@ class Service_Dossier
         $type = $typeDossier['TYPE_DOSSIER'];
 
         //On récupère le premier établissements afin de mettre à jour ses textes applicables lorsque l'on est dans une visite
+        $id_etablissement = null;
         if (2 == $type || 3 == $type) {
             $tabEtablissement = $dbDossier->getEtablissementDossier($id_dossier);
             $id_etablissement = isset($tabEtablissement[0]) ? $tabEtablissement[0]['ID_ETABLISSEMENT'] : null;
@@ -208,8 +213,8 @@ class Service_Dossier
                     if ((2 == $type || 3 == $type) && $id_etablissement) {
                         $texte_applicable = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
                         if ($texte_applicable !== null) {
-				$texte_applicable->delete();
-			}
+                            $texte_applicable->delete();
+                        }
                     }
                 }
             } else {
@@ -219,8 +224,8 @@ class Service_Dossier
                     $row->ID_DOSSIER = $id_dossier;
                     $row->save();
                     if ((2 == $type || 3 == $type) && $id_etablissement) {
-                        $exist = $etsTexteApplicable->find($id_texte_applicable,$id_etablissement)->current();
-                        if (! $exist) {
+                        $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
+                        if (!$exist) {
                             $row = $etsTexteApplicable->createRow();
                             $row->ID_TEXTESAPPL = $id_texte_applicable;
                             $row->ID_ETABLISSEMENT = $id_etablissement;
@@ -233,7 +238,7 @@ class Service_Dossier
     }
 
     /**
-     * Ajout d'un contact à un dossier
+     * Ajout d'un contact à un dossier.
      *
      * @param int    $id_dossier
      * @param string $nom
@@ -268,7 +273,7 @@ class Service_Dossier
     }
 
     /**
-     * Ajout d'un contact existant à un dossier
+     * Ajout d'un contact existant à un dossier.
      *
      * @param int $id_dossier
      * @param int $id_contact
@@ -284,7 +289,7 @@ class Service_Dossier
     }
 
     /**
-     * Suppression d'un contact
+     * Suppression d'un contact.
      *
      * @param int $id_dossier
      * @param int $id_contact
@@ -303,27 +308,30 @@ class Service_Dossier
         // Appartient à d'autre dossier / ets ?
         $exist = false;
         foreach ($DB_contact as $key => $model) {
-            if (count($model->fetchAll("ID_UTILISATEURINFORMATIONS = ".$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
+            if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                 $exist = true;
             }
         }
 
         // Est ce que le contact n'appartient pas à d'autre etablissement ?
         if (!$exist) {
-            $DB_current->delete("ID_UTILISATEURINFORMATIONS = ".$id_contact); // Porteuse
-            $DB_informations->delete("ID_UTILISATEURINFORMATIONS = ".$id_contact); // Contact
+            $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$id_contact); // Porteuse
+            $DB_informations->delete('ID_UTILISATEURINFORMATIONS = '.$id_contact); // Contact
         } else {
-            $DB_current->delete("ID_UTILISATEURINFORMATIONS = ".$id_contact." AND ID_DOSSIER = ".$id_dossier); // Porteuse
+            $DB_current->delete('ID_UTILISATEURINFORMATIONS = '.$id_contact.' AND ID_DOSSIER = '.$id_dossier); // Porteuse
         }
     }
 
     /**
-     * Retourne les prescriptions d'un dossier
+     * Retourne les prescriptions d'un dossier.
      *
-     * @param  int   $id_dossier
+     * @param int $id_dossier
+     *
      * @return array
+     *
+     * @psalm-return array<int, mixed>
      */
-    public function getPrescriptions($id_dossier,$type)
+    public function getPrescriptions($id_dossier, $type): array
     {
         /*
             suivant la valeur de $type
@@ -332,21 +340,21 @@ class Service_Dossier
             2 = a l'amélioration
         */
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
-        $listePrescDossier = $dbPrescDossier->recupPrescDossier($id_dossier,$type);
+        $listePrescDossier = $dbPrescDossier->recupPrescDossier($id_dossier, $type);
 
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $prescriptionArray = array();
         foreach ($listePrescDossier as $val => $ue) {
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
-                $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'],$ue['ID_PRESCRIPTION_DOSSIER']);
-                if(sizeof($assoc)>0){
+                $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
+                if (sizeof($assoc) > 0) {
                     array_push($prescriptionArray, $assoc);
                 }
             } else {
                 //cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue['ID_PRESCRIPTION_DOSSIER']);
-                if(sizeof($assoc)>0){
+                if (sizeof($assoc) > 0) {
                     array_push($prescriptionArray, $assoc);
                 }
             }
@@ -356,9 +364,10 @@ class Service_Dossier
     }
 
     /**
-     * Retourne les détails d'une prescription
+     * Retourne les détails d'une prescription.
      *
-     * @param  int   $id_prescription
+     * @param int $id_prescription
+     *
      * @return array
      */
     public function getDetailPrescription($id_prescription)
@@ -368,7 +377,7 @@ class Service_Dossier
         $infos_prescription = $db_prescription_dossier->recupPrescInfos($id_prescription);
 
         //On va chercher les textes et articles associés à cette prescription
-        if (NULL == $infos_prescription['ID_PRESCRIPTION_TYPE']) {
+        if (null == $infos_prescription['ID_PRESCRIPTION_TYPE']) {
             $db_prescription_assoc = new Model_DbTable_PrescriptionDossierAssoc();
             $liste_assoc = $db_prescription_assoc->getPrescriptionDossierAssoc($id_prescription);
             $infos_prescription['assoc'] = $liste_assoc;
@@ -384,10 +393,9 @@ class Service_Dossier
     }
 
     /**
-     * Sauvegarde une prescription
+     * Sauvegarde une prescription.
      *
      * @param array $post
-     *
      */
     public function savePrescription($post)
     {
@@ -397,14 +405,14 @@ class Service_Dossier
         if ('edit' == $post['action']) {
             $prescEdit = $dbPrescDossier->find($post['id_prescription'])->current();
 
-            if( $prescEdit->TYPE_PRESCRIPTION_DOSSIER != $post['TYPE_PRESCRIPTION_DOSSIER'] ){
-                $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'],$post['TYPE_PRESCRIPTION_DOSSIER']);
+            if ($prescEdit->TYPE_PRESCRIPTION_DOSSIER != $post['TYPE_PRESCRIPTION_DOSSIER']) {
+                $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'], $post['TYPE_PRESCRIPTION_DOSSIER']);
                 $numPrescription = $nbPrescription['maxnum'];
-                $numPrescription++;
+                ++$numPrescription;
 
                 $oldType = $prescEdit->TYPE_PRESCRIPTION_DOSSIER;
                 $newCount = true;
-            }else{
+            } else {
                 $numPrescription = $prescEdit->NUM_PRESCRIPTION_DOSSIER;
                 $newCount = false;
             }
@@ -414,32 +422,32 @@ class Service_Dossier
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = $post['TYPE_PRESCRIPTION_DOSSIER'];
             $prescEdit->save();
 
-            if($newCount == true){
+            if ($newCount == true) {
                 //il faut effectuer une nouvelle numérotation des prescriptions du type que l'on abandonne
                 $nbPresc = 1;
                 $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
-                foreach($listeExploit as $prescDossier){
+                foreach ($listeExploit as $prescDossier) {
                     $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                     $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                     $prescCount->save();
-                    $nbPresc++;
+                    ++$nbPresc;
                 }
 
                 $nbPresc = 1;
                 $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
-                foreach($listeExploit as $prescDossier){
+                foreach ($listeExploit as $prescDossier) {
                     $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                     $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                     $prescCount->save();
-                    $nbPresc++;
+                    ++$nbPresc;
                 }
 
                 $listeAmelio = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
-                foreach($listeAmelio as $prescDossier){
+                foreach ($listeAmelio as $prescDossier) {
                     $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                     $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                     $prescCount->save();
-                    $nbPresc++;
+                    ++$nbPresc;
                 }
             }
 
@@ -447,18 +455,18 @@ class Service_Dossier
             $dbPrescDossierAssoc->delete($prescAssocDelete);
 
             $nombreAssoc = count($post['texte']);
-            for ($i = 0; $i< $nombreAssoc; $i ++) {
+            for ($i = 0; $i < $nombreAssoc; ++$i) {
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $post['id_prescription'];
-                if($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0){
+                if ($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0) {
                     $newAssoc->ID_TEXTE = $post['texte'][$i];
-                }else{
+                } else {
                     $newAssoc->ID_TEXTE = 1;
                 }
-                if($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0){
+                if ($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0) {
                     $newAssoc->ID_ARTICLE = $post['article'][$i];
-                }else{
+                } else {
                     $newAssoc->ID_ARTICLE = 1;
                 }
                 $newAssoc->save();
@@ -466,11 +474,11 @@ class Service_Dossier
         } elseif ('edit-type' == $post['action']) {
             $prescEdit = $dbPrescDossier->find($post['id_prescription'])->current();
 
-            if($prescEdit->TYPE_PRESCRIPTION_DOSSIER != $post['TYPE_PRESCRIPTION_DOSSIER']){
-                $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'],$post['TYPE_PRESCRIPTION_DOSSIER']);
+            if ($prescEdit->TYPE_PRESCRIPTION_DOSSIER != $post['TYPE_PRESCRIPTION_DOSSIER']) {
+                $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'], $post['TYPE_PRESCRIPTION_DOSSIER']);
                 $numPrescription = $nbPrescription['maxnum'];
-                $numPrescription++;
-            }else{
+                ++$numPrescription;
+            } else {
                 $numPrescription = $prescEdit->NUM_PRESCRIPTION_DOSSIER;
             }
 
@@ -481,7 +489,7 @@ class Service_Dossier
             $prescEdit->save();
 
             $nombreAssoc = count($post['texte']);
-            for ($i = 0; $i< $nombreAssoc; $i ++) {
+            for ($i = 0; $i < $nombreAssoc; ++$i) {
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $post['id_prescription'];
@@ -492,26 +500,24 @@ class Service_Dossier
 
             $nbPresc = 1;
             $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
-            foreach($listeExploit as $prescDossier){
+            foreach ($listeExploit as $prescDossier) {
                 $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                 $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                 $prescCount->save();
-                $nbPresc++;
+                ++$nbPresc;
             }
 
             $listeAmelio = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
-            foreach($listeAmelio as $prescDossier){
+            foreach ($listeAmelio as $prescDossier) {
                 $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                 $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                 $prescCount->save();
-                $nbPresc++;
+                ++$nbPresc;
             }
-
         } elseif ('presc-add' == $post['action']) {
-
-            $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'],$post['TYPE_PRESCRIPTION_DOSSIER']);
+            $nbPrescription = $dbPrescDossier->recupMaxNumPrescDossier($post['id_dossier'], $post['TYPE_PRESCRIPTION_DOSSIER']);
             $numPrescription = $nbPrescription['maxnum'];
-            $numPrescription++;
+            ++$numPrescription;
 
             $prescEdit = $dbPrescDossier->createRow();
             $prescEdit->ID_DOSSIER = $post['id_dossier'];
@@ -521,19 +527,19 @@ class Service_Dossier
             $prescEdit->save();
 
             $nombreAssoc = count($post['texte']);
-            for ($i = 0; $i< $nombreAssoc; $i ++) {
+            for ($i = 0; $i < $nombreAssoc; ++$i) {
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $prescEdit->ID_PRESCRIPTION_DOSSIER;
-                if($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0){
+                if ($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0) {
                     $newAssoc->ID_TEXTE = $post['texte'][$i];
-                }else{
+                } else {
                     $newAssoc->ID_TEXTE = 1;
                 }
 
-                if($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0){
+                if ($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0) {
                     $newAssoc->ID_ARTICLE = $post['article'][$i];
-                }else{
+                } else {
                     $newAssoc->ID_ARTICLE = 1;
                 }
                 $newAssoc->save();
@@ -541,34 +547,33 @@ class Service_Dossier
 
             $nbPresc = 1;
             $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
-            foreach($listeExploit as $prescDossier){
+            foreach ($listeExploit as $prescDossier) {
                 $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                 $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                 $prescCount->save();
-                $nbPresc++;
+                ++$nbPresc;
             }
 
             $listeAmelio = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
-            foreach($listeAmelio as $prescDossier){
+            foreach ($listeAmelio as $prescDossier) {
                 $prescCount = $dbPrescDossier->find($prescDossier['ID_PRESCRIPTION_DOSSIER'])->current();
                 $prescCount->NUM_PRESCRIPTION_DOSSIER = $nbPresc;
                 $prescCount->save();
-                $nbPresc++;
+                ++$nbPresc;
             }
         }
         $id_dossier = $post['id_dossier'];
     }
 
-
-    public function copyPrescriptionDossier($listePrescription,$idDossier)
+    public function copyPrescriptionDossier($listePrescription, $idDossier)
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
-            if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && $ue[0]['ID_PRESCRIPTION_TYPE'] != NULL) {
+            if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && $ue[0]['ID_PRESCRIPTION_TYPE'] != null) {
                 //cas d'une prescription type
-                $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'],$ue[0]['ID_PRESCRIPTION_DOSSIER']);
+                $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
             } else {
                 //cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue[0]['ID_PRESCRIPTION_DOSSIER']);
@@ -576,32 +581,29 @@ class Service_Dossier
 
             $newPresc = $dbPrescDossier->createRow();
             $newPresc->ID_DOSSIER = $idDossier;
-            $newPresc->NUM_PRESCRIPTION_DOSSIER = $ue[0]["NUM_PRESCRIPTION_DOSSIER"];
-            $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]["ID_PRESCRIPTION_TYPE"];
-            $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]["LIBELLE_PRESCRIPTION_DOSSIER"];
-            $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]["TYPE_PRESCRIPTION_DOSSIER"];
+            $newPresc->NUM_PRESCRIPTION_DOSSIER = $ue[0]['NUM_PRESCRIPTION_DOSSIER'];
+            $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
+            $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
+            $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
             $newPresc->save();
 
             foreach ($assoc as $val) {
-                if ($val["ID_PRESCRIPTION_TYPE"] == NULL) {
+                if ($val['ID_PRESCRIPTION_TYPE'] == null) {
                     $newAssoc = $dbPrescDossierAssoc->createRow();
-                    $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $val["NUM_PRESCRIPTION_DOSSIERASSOC"];
+                    $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $val['NUM_PRESCRIPTION_DOSSIERASSOC'];
                     $newAssoc->ID_PRESCRIPTION_DOSSIER = $newPresc->ID_PRESCRIPTION_DOSSIER;
-                    $newAssoc->ID_TEXTE = $val["ID_TEXTE"];
-                    $newAssoc->ID_ARTICLE = $val["ID_ARTICLE"];
+                    $newAssoc->ID_TEXTE = $val['ID_TEXTE'];
+                    $newAssoc->ID_ARTICLE = $val['ID_ARTICLE'];
                     $newAssoc->save();
                 }
             }
-
         }
-
     }
 
     /**
-     * Supprime une prescription
+     * Supprime une prescription.
      *
      * @param array $post
-     *
      */
     public function deletePrescription($post)
     {
@@ -614,30 +616,30 @@ class Service_Dossier
         $dbPrescDossierAssoc->delete($prescAssocDelete);
         $prescToDelete->delete();
 
-        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'],0);
+        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
         $num = 1;
         foreach ($prescriptionDossier as $val => $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
-            $num++;
+            ++$num;
         }
 
-        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'],1);
+        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
         $num = 1;
         foreach ($prescriptionDossier as $val => $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
-            $num++;
+            ++$num;
         }
 
-        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'],2);
+        $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
         foreach ($prescriptionDossier as $val => $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
-            $num++;
+            ++$num;
         }
     }
 
@@ -646,7 +648,7 @@ class Service_Dossier
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $j = 0;
-        foreach($prescriptionRegl as $val => $ue){
+        foreach ($prescriptionRegl as $val => $ue) {
             $prescEdit = $dbPrescDossier->createRow();
             $prescEdit->ID_DOSSIER = $idDossier;
             if (array_key_exists(0, $ue) && array_key_exists('PRESCRIPTIONREGL_LIBELLE', $ue[0])) {
@@ -657,7 +659,7 @@ class Service_Dossier
             $prescEdit->save();
 
             $nombreAssoc = count($ue);
-            for ($i = 0; $i < $nombreAssoc; $i++) {
+            for ($i = 0; $i < $nombreAssoc; ++$i) {
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $prescEdit->ID_PRESCRIPTION_DOSSIER;
@@ -668,7 +670,8 @@ class Service_Dossier
         }
     }
 
-    public function changePosPrescription($tabId){
+    public function changePosPrescription($tabId)
+    {
         $DBprescDossier = new Model_DbTable_PrescriptionDossier();
 
         $numPresc = 1;
@@ -677,16 +680,19 @@ class Service_Dossier
                 $updatePrescDossier = $DBprescDossier->find($idPrescDoss)->current();
                 $updatePrescDossier->NUM_PRESCRIPTION_DOSSIER = $numPresc;
                 $updatePrescDossier->save();
-                $numPresc++;
+                ++$numPresc;
             }
         }
     }
 
-    public function getEtabInfos($id_dossier = null, $id_etablissement = null){
+    /**
+     * @param int $id_etablissement
+     */
+    public function getEtabInfos($id_dossier = null, $id_etablissement = null)
+    {
         $DBdossier = new Model_DbTable_Dossier();
 
         if ($id_etablissement != null) {
-
             $DBetab = new Model_DbTable_Etablissement();
             $etabTab = $DBetab->getInformations($id_etablissement);
 
@@ -694,8 +700,6 @@ class Service_Dossier
 
             $DbAdresse = new Model_DbTable_EtablissementAdresse();
             $this->etablissement['adresses'] = $DbAdresse->get($id_etablissement);
-
-
 
             $service_etablissement = new Service_Etablissement();
             $etablissementInfos = $service_etablissement->get($id_etablissement);
@@ -712,8 +716,7 @@ class Service_Dossier
             }
 
             return $this->etablissement;
-
-        } elseif ($id_dossier != null){
+        } elseif ($id_dossier != null) {
             $tabEtablissement = $DBdossier->getEtablissementDossier((int) $id_dossier);
             $this->listeEtablissement = $tabEtablissement;
 
@@ -728,11 +731,10 @@ class Service_Dossier
 
             return $this->listeEtablissement;
         }
-
     }
 
-    public function isDossierDonnantAvis($dossier, $idNature) {
-
+    public function isDossierDonnantAvis($dossier, $idNature): bool
+    {
         return
             //Cas d'une étude uniquement dans le cas d'une levée de reserve
             in_array($idNature, array(19, 7, 17, 16)) && $dossier->DATECOMM_DOSSIER
@@ -742,16 +744,15 @@ class Service_Dossier
             || in_array($idNature, array(26, 28, 29, 48)) && $dossier->DATECOMM_DOSSIER;
     }
 
-    public function getDateDossier($dossier) {
+    public function getDateDossier($dossier): Zend_Date
+    {
         $date = $dossier->DATEINSERT_DOSSIER;
-        if($dossier->TYPE_DOSSIER == 1 || $dossier->TYPE_DOSSIER == 3){
-
-            if($dossier->DATECOMM_DOSSIER != NULL && $dossier->DATECOMM_DOSSIER != ''){
+        if ($dossier->TYPE_DOSSIER == 1 || $dossier->TYPE_DOSSIER == 3) {
+            if ($dossier->DATECOMM_DOSSIER != null && $dossier->DATECOMM_DOSSIER != '') {
                 $date = $dossier->DATECOMM_DOSSIER;
             }
-
-        } else if($dossier->TYPE_DOSSIER == 2) {
-            if($dossier->DATEVISITE_DOSSIER != NULL && $dossier->DATEVISITE_DOSSIER != ''){
+        } elseif ($dossier->TYPE_DOSSIER == 2) {
+            if ($dossier->DATEVISITE_DOSSIER != null && $dossier->DATEVISITE_DOSSIER != '') {
                 $date = $dossier->DATEVISITE_DOSSIER;
             }
         }
@@ -760,7 +761,8 @@ class Service_Dossier
     }
 
     // Retrouve l'avis du dernier dossier donnant avis pour l'établissement courant uniquement
-    public function saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache) {
+    public function saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
+    {
         $dbEtab = new Model_DbTable_Etablissement();
         $etab = $dbEtab->find($etab['ID_ETABLISSEMENT'])->current();
 
@@ -772,7 +774,13 @@ class Service_Dossier
         return $etab;
     }
 
-    public function saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $repercuterAvis = false) {
+    /**
+     * @return Zend_Db_Table_Row_Abstract[]
+     *
+     * @psalm-return array<int, Zend_Db_Table_Row_Abstract>
+     */
+    public function saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $repercuterAvis = false): array
+    {
         $dbEtab = new Model_DbTable_Etablissement();
         $DBdossier = new Model_DbTable_Dossier();
         $service_etablissement = new Service_Etablissement();
@@ -783,19 +791,18 @@ class Service_Dossier
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
             $MAJEtab = 0;
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
-            if(isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && $etabToEdit->ID_DOSSIER_DONNANT_AVIS != NULL) {
+            if (isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && $etabToEdit->ID_DOSSIER_DONNANT_AVIS != null) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
                 $dateAncienAvis = $this->getDateDossier($dossierAncienAvis);
                 $dateNewAvis = $this->getDateDossier($nouveauDossier);
 
-                if($dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis){
+                if ($dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis) {
                     $MAJEtab = 1;
-                }else{
+                } else {
                     $MAJEtab = 0;
                 }
-
-            }else{
+            } else {
                 $MAJEtab = 1;
             }
 
@@ -806,9 +813,9 @@ class Service_Dossier
 
                 if ($repercuterAvis) {
                     $etablissementInfos = $service_etablissement->get($ue['ID_ETABLISSEMENT']);
-                    foreach ($etablissementInfos["etablissement_lies"] as $etabEnfant) {
-                        if($etabEnfant['ID_STATUT'] == "2"){
-                            $etabToEdit = $dbEtab->find($etabEnfant["ID_ETABLISSEMENT"])->current();
+                    foreach ($etablissementInfos['etablissement_lies'] as $etabEnfant) {
+                        if ($etabEnfant['ID_STATUT'] == '2') {
+                            $etabToEdit = $dbEtab->find($etabEnfant['ID_ETABLISSEMENT'])->current();
                             $etabToEdit->ID_DOSSIER_DONNANT_AVIS = $nouveauDossier->ID_DOSSIER;
                             $etabToEdit->save();
                             $updatedEtab[] = $etabToEdit;
@@ -818,7 +825,7 @@ class Service_Dossier
             }
         }
 
-        foreach($updatedEtab as $etablissement) {
+        foreach ($updatedEtab as $etablissement) {
             $cache->remove(sprintf('etablissement_id_%d', $etablissement['ID_ETABLISSEMENT']));
             if ($parent = $dbEtab->getParent($etablissement['ID_ETABLISSEMENT'])) {
                 $cache->remove(sprintf('etablissement_id_%d', $parent['ID_ETABLISSEMENT']));
@@ -828,16 +835,17 @@ class Service_Dossier
         return $updatedEtab;
     }
 
-    public function getCommission($idDossier) {
-       $dbDossier = new Model_DbTable_Dossier;
-       return $dbDossier->getCommissionV2($idDossier);
-    }
+    public function getCommission($idDossier)
+    {
+        $dbDossier = new Model_DbTable_Dossier();
 
+        return $dbDossier->getCommissionV2($idDossier);
+    }
 
     public function delete($idDossier, $date = null, $uniqueEtab = false)
     {
         if (!$date) {
-           $date = new DateTime();
+            $date = new DateTime();
         }
         $DB_dossier = new Model_DbTable_Dossier();
 
@@ -869,10 +877,11 @@ class Service_Dossier
             $this->delete($dossier['ID_DOSSIER'], $date, true);
         }
     }
-    
-    public function getPreventionniste($idDossier) {
-        $DB_prev = new Model_DbTable_DossierPreventionniste;
-        
+
+    public function getPreventionniste($idDossier)
+    {
+        $DB_prev = new Model_DbTable_DossierPreventionniste();
+
         return $DB_prev->getPrevDossier($idDossier);
     }
 }

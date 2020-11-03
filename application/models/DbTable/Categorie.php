@@ -1,35 +1,38 @@
 <?php
     class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
     {
-        protected $_name="categorie"; // Nom de la base
-        protected $_primary = "ID_CATEGORIE"; // Clé primaire
+        protected $_name = 'categorie'; // Nom de la base
+        protected $_primary = 'ID_CATEGORIE'; // Clé primaire
 
         // Donne la liste des catégories
-        public function getCategories( $id = null )
+        /**
+         * @param string|int|float $id
+         *
+         * @return array
+         */
+        public function getCategories($id = null)
         {
             $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from("categorie");
+                ->from('categorie');
 
             if ($id != null) {
                 $select->where("ID_CATEGORIE = $id");
 
                 return $this->fetchRow($select)->toArray();
-            } else
-
+            } else {
                 return $this->fetchAll($select)->toArray();
-
+            }
         }
 
-        public function fetchAllPK()
+        public function fetchAllPK(): array
         {
             $all = $this->fetchAll()->toArray();
             $result = array();
             foreach ($all as $row) {
-                $result[$row["ID_CATEGORIE"]] = $row;
+                $result[$row['ID_CATEGORIE']] = $row;
             }
 
             return $result;
         }
-
     }

@@ -2,8 +2,8 @@
 
 class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
 {
-    protected $_name="dossiernature"; // Nom de la base
-    protected $_primary = "ID_DOSSIERNATURE"; // Clé primaire
+    protected $_name = 'dossiernature'; // Nom de la base
+    protected $_primary = 'ID_DOSSIERNATURE'; // Clé primaire
 
     /*
 
@@ -20,6 +20,11 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
     }
 
     */
+    /**
+     * @param string|int $idDossierType
+     *
+     * @return array
+     */
     public function getDossierNaturesLibelle($idDossierType)
     {
         $select = "SELECT dossiernatureliste.LIBELLE_DOSSIERNATURE as LIBELLE_DOSSIERNATURE, dossiernature.ID_DOSSIERNATURE as ID_DOSSIERNATURE, dossiernature.ID_NATURE as ID_NATURE
@@ -31,6 +36,9 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
+    /**
+     * @param string|int $idDossier
+     */
     public function getDossierNaturesId($idDossier)
     {
         $select = "SELECT ID_DOSSIERNATURE,ID_NATURE
@@ -41,7 +49,10 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
-	public function getDossierNatureLibelle($idDossier)
+    /**
+     * @param string|int $idDossier
+     */
+    public function getDossierNatureLibelle($idDossier)
     {
         $select = "SELECT dossiernatureliste.LIBELLE_DOSSIERNATURE
             FROM dossiernature, dossiernatureliste
@@ -51,5 +62,4 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
         //echo $select;
         return $this->getAdapter()->fetchRow($select);
     }
-
 }

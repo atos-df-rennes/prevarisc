@@ -25,17 +25,17 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
 
         $result = array();
 
-        for ($i=0; $i < count($tableau); $i++) {
+        for ($i = 0; $i < count($tableau); ++$i) {
             // Sans local sommeil
-            $result[$tableau[$i]["ID_CATEGORIE"]][$tableau[$i]["ID_TYPE"]][$tableau[$i]["LOCALSOMMEIL_PERIODICITE"]] = $tableau[$i]["PERIODICITE_PERIODICITE"];
+            $result[$tableau[$i]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $tableau[$i]['PERIODICITE_PERIODICITE'];
 
             // Avec local (on exclu igh == categ à 0)
-            if($tableau[$i]["ID_CATEGORIE"] != 0)
-                $result[$tableau[$i++]["ID_CATEGORIE"]][$tableau[$i]["ID_TYPE"]][$tableau[$i]["LOCALSOMMEIL_PERIODICITE"]] = $tableau[$i]["PERIODICITE_PERIODICITE"];
+            if ($tableau[$i]['ID_CATEGORIE'] != 0) {
+                $result[$tableau[$i++]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $tableau[$i]['PERIODICITE_PERIODICITE'];
+            }
         }
 
         $this->view->tableau = $result;
-
     }
 
     public function saveAction()
@@ -47,13 +47,14 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             // Requests
             $request = $this->getRequest();
 
-            foreach ( $request->getPost() as $key => $value ) {
-                $result = explode("_", $key);
+            foreach ($request->getPost() as $key => $value) {
+                $result = explode('_', $key);
 
-                if(  $item = $perio_model->find($result[0], $result[1], $result[2])->current() == null )
+                if ($item = $perio_model->find($result[0], $result[1], $result[2])->current() == null) {
                     $item = $perio_model->createRow();
-                else
+                } else {
                     $item = $perio_model->find($result[0], $result[1], $result[2])->current();
+                }
 
                 $item->ID_CATEGORIE = $result[0];
                 $item->ID_TYPE = $result[1];
@@ -64,14 +65,14 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                     'context' => 'success',
                     'title' => 'Le tableau des périodicités a bien été sauvegardé',
-                    'message' => ''
+                    'message' => '',
                 ));
             }
         } catch (Exception $e) {
             $this->_helper->flashMessenger(array(
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du tableau des périodicités',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ));
         }
 
@@ -89,13 +90,13 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             $this->_helper->flashMessenger(array(
                 'context' => 'success',
                 'title' => 'OKAY!',
-                'message' => 'Le tableau des périodicités a bien été appliqué'
+                'message' => 'Le tableau des périodicités a bien été appliqué',
             ));
         } catch (Exception $e) {
             $this->_helper->flashMessenger(array(
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du tableau des périodicités',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ));
         }
 

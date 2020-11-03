@@ -1,15 +1,15 @@
 <?php
     class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     {
-        protected $_name="datecommission"; // Nom de la base
-        protected $_primary = "ID_DATECOMMISSION"; // Cl� primaire
+        protected $_name = 'datecommission'; // Nom de la base
+        protected $_primary = 'ID_DATECOMMISSION'; // Cl� primaire
 
-        public function addDateComm($date,$heureD,$heureF,$idComm,$type,$libelle)
+        public function addDateComm($date, $heureD, $heureF, $idComm, $type, $libelle)
         {
             $new = $this->createRow();
-            $new->DATE_COMMISSION= $date;
-            $new->HEUREDEB_COMMISSION= $heureD;
-            $new->HEUREFIN_COMMISSION= $heureF;
+            $new->DATE_COMMISSION = $date;
+            $new->HEUREDEB_COMMISSION = $heureD;
+            $new->HEUREFIN_COMMISSION = $heureF;
             $new->COMMISSION_CONCERNE = $idComm;
             $new->ID_COMMISSIONTYPEEVENEMENT = $type;
             $new->LIBELLE_DATECOMMISSION = $libelle;
@@ -18,12 +18,12 @@
             return $new->ID_DATECOMMISSION;
         }
 
-        public function addDateCommLiee($date,$heureD,$heureF,$idCommOrigine,$type,$idComm,$libelle)
+        public function addDateCommLiee($date, $heureD, $heureF, $idCommOrigine, $type, $idComm, $libelle)
         {
             $new = $this->createRow();
-            $new->DATE_COMMISSION= $date;
-            $new->HEUREDEB_COMMISSION= $heureD;
-            $new->HEUREFIN_COMMISSION= $heureF;
+            $new->DATE_COMMISSION = $date;
+            $new->HEUREDEB_COMMISSION = $heureD;
+            $new->HEUREFIN_COMMISSION = $heureF;
             $new->DATECOMMISSION_LIEES = $idCommOrigine;
             $new->ID_COMMISSIONTYPEEVENEMENT = $type;
             $new->COMMISSION_CONCERNE = $idComm;
@@ -33,7 +33,14 @@
             return $new->ID_DATECOMMISSION;
         }
 
-        public function getFirstCommission($idCommission,$debut,$fin)
+        /**
+         * @param string|int $idCommission
+         * @param string|int $debut
+         * @param string|int $fin
+         *
+         * @return array
+         */
+        public function getFirstCommission($idCommission, $debut, $fin)
         {
             $select = "SELECT *
                 FROM datecommission
@@ -44,6 +51,12 @@
 
             return $this->getAdapter()->fetchAll($select);
         }
+        /**
+         * @param int $date
+         * @param int $next_date
+         *
+         * @return array
+         */
         public function getNextCommission($idsCommission, $date, $next_date)
         {
             $ids = (array) $idsCommission;
@@ -51,21 +64,37 @@
                 FROM datecommission d
                 LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
                 WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-                ".(count($ids) > 0 ? "AND d.COMMISSION_CONCERNE IN (".implode(',', $ids).")" : "")."
-                ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION";
+                ".(count($ids) > 0 ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
+                ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
+
             return $this->getAdapter()->fetchAll($select);
         }
 
-        public function getMonthCommission($mois,$annee,$idcom)
+        /**
+         * @param string|int $mois
+         * @param string|int $annee
+         * @param string|int $idcom
+         *
+         * @return array
+         */
+        public function getMonthCommission($mois, $annee, $idcom)
         {
             $select = "SELECT *
                 FROM datecommission
                 WHERE MONTH(DATE_COMMISSION) = '".$mois."'  AND   YEAR(DATE_COMMISSION) = '".$annee."'
                 AND COMMISSION_CONCERNE = '".$idcom."'";
+
             return $this->getAdapter()->fetchAll($select);
         }
 
-        public function getCommissionsLiees($idCommissionOrigine,$debut,$fin)
+        /**
+         * @param string|int $idCommissionOrigine
+         * @param string|int $debut
+         * @param string|int $fin
+         *
+         * @return array
+         */
+        public function getCommissionsLiees($idCommissionOrigine, $debut, $fin)
         {
             $select = "SELECT *
                 FROM datecommission
@@ -76,6 +105,11 @@
             return $this->getAdapter()->fetchAll($select);
         }
 
+        /**
+         * @param string|int $idComm
+         *
+         * @return array
+         */
         public function getCommissionsQtypListing($idComm)
         {
             $select = "SELECT *
@@ -89,6 +123,12 @@
             return $this->getAdapter()->fetchAll($select);
         }
 
+        /**
+         * @param string|int $idComm
+         * @param string|int $libelle
+         *
+         * @return Zend_Db_Statement_Interface
+         */
         public function dateCommUpdateLibelle($idComm, $libelle)
         {
             $select = "UPDATE datecommission
@@ -99,6 +139,12 @@
             return $this->getAdapter()->query($select);
         }
 
+        /**
+         * @param string|int $idComm
+         * @param string|int $idNewType
+         *
+         * @return Zend_Db_Statement_Interface
+         */
         public function dateCommUpdateType($idComm, $idNewType)
         {
             $select = "UPDATE datecommission
@@ -109,6 +155,12 @@
             return $this->getAdapter()->query($select);
         }
 
+        /**
+         * @param string|int $oldComm
+         * @param string|int $newComm
+         *
+         * @return Zend_Db_Statement_Interface
+         */
         public function changeMasterDateComm($oldComm, $newComm)
         {
             $select = "UPDATE datecommission
@@ -120,6 +172,11 @@
         }
 
         //pour la gestion des ordres du jour r�cup des date li�es
+        /**
+         * @param string|int $idComm
+         *
+         * @return array
+         */
         public function getCommissionsDateLieesMaster($idComm)
         {
             $select = "SELECT *
@@ -131,32 +188,35 @@
             //echo $select;
             return $this->getAdapter()->fetchAll($select);
         }
-		
-		public function getInfosVisite($idDossier)
-		{
-			//retourne la liste des catégories de prescriptions par ordre
-			$select = $this->select()
-				 ->setIntegrityCheck(false)
-				 ->from(array('da' => 'dossieraffectation'))
-				 ->join(array("dc" => "datecommission") , "da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION")
-				 ->where("da.ID_DOSSIER_AFFECT = ?",$idDossier)
-				 ->where("dc.ID_COMMISSIONTYPEEVENEMENT = 2 OR dc.ID_COMMISSIONTYPEEVENEMENT = 3");
-				 
-			return $this->getAdapter()->fetchRow($select);
-		}
-		
-		public function getDateLieesv2($idDateComm)
-		{
-			//retourne la liste des catégories de prescriptions par ordre
-			$select = $this->select()
-				 ->setIntegrityCheck(false)
-				 ->from(array('dc' => 'datecommission'))
-				 ->where("dc.ID_DATECOMMISSION = ?",$idDateComm)
-				 ->orWhere("dc.DATECOMMISSION_LIEES = ?",$idDateComm)
-				 ->order("DATE_COMMISSION");
 
-			return $this->getAdapter()->fetchAll($select);
-		}
+        public function getInfosVisite($idDossier)
+        {
+            //retourne la liste des catégories de prescriptions par ordre
+            $select = $this->select()
+                 ->setIntegrityCheck(false)
+                 ->from(array('da' => 'dossieraffectation'))
+                 ->join(array('dc' => 'datecommission'), 'da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION')
+                 ->where('da.ID_DOSSIER_AFFECT = ?', $idDossier)
+                 ->where('dc.ID_COMMISSIONTYPEEVENEMENT = 2 OR dc.ID_COMMISSIONTYPEEVENEMENT = 3');
+
+            return $this->getAdapter()->fetchRow($select);
+        }
+
+        /**
+         * @return array
+         */
+        public function getDateLieesv2($idDateComm)
+        {
+            //retourne la liste des catégories de prescriptions par ordre
+            $select = $this->select()
+                 ->setIntegrityCheck(false)
+                 ->from(array('dc' => 'datecommission'))
+                 ->where('dc.ID_DATECOMMISSION = ?', $idDateComm)
+                 ->orWhere('dc.DATECOMMISSION_LIEES = ?', $idDateComm)
+                 ->order('DATE_COMMISSION');
+
+            return $this->getAdapter()->fetchAll($select);
+        }
 
         public function updateDependingDossierDates($datecommission)
         {
@@ -166,7 +226,7 @@
             // on récupère les dossiers liés à la commission
             $dossiersAffecte = $dbAffectDossier->fetchAll('ID_DATECOMMISSION_AFFECT = '.$datecommission->ID_DATECOMMISSION);
             $dossiersAffecteIds = array();
-            foreach($dossiersAffecte as $dossierAffecte) {
+            foreach ($dossiersAffecte as $dossierAffecte) {
                 $dossiersAffecteIds[] = $dossierAffecte['ID_DOSSIER_AFFECT'];
             }
 
@@ -177,20 +237,23 @@
                 if (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, array(1))) {
                     //COMMISSION EN SALLE
                     $dbDossier->update(array('DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION), 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
-                }
-                else if (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, array(2,3))) {
+                } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, array(2, 3))) {
                     //VISITE OU GROUPE DE VISITE
                     $dbDossier->update(array('DATEVISITE_DOSSIER' => $datecommission->DATE_COMMISSION), 'ID_DOSSIER IN ('.implode(',', $dossiersAffecteIds).')');
                 }
             }
         }
 
+        /**
+         * @return array
+         */
         public function getEventInCommission(
             $idUtilisateur = null,
             $idCommission = null,
             $start = null,
             $end = null,
-            $ignoreEts = false) {
+            $ignoreEts = false)
+        {
             $select = $this->select()
                            ->setIntegrityCheck(false)
                            ->from(array('d' => 'dossier'))
@@ -222,5 +285,4 @@
 
             return $this->getAdapter()->fetchAll($select);
         }
-
     }

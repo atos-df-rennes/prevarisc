@@ -3,61 +3,65 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
         // Chargement des plugins de base
-        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_View);
-        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_ACL);
-        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_XmlHttpRequest);
+        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_View());
+        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_ACL());
+        Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_XmlHttpRequest());
         //Zend_Controller_Front::getInstance()->registerPlugin(new Plugin_Security);
 
         // Chargement des plugins tiers
         if (getenv('PREVARISC_THIRDPARTY_PLUGINS')) {
             $thirdparty_plugins = explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'));
-            foreach($thirdparty_plugins as $thirdparty_plugin) {
-                Zend_Controller_Front::getInstance()->registerPlugin(new $thirdparty_plugin);
+            foreach ($thirdparty_plugins as $thirdparty_plugin) {
+                Zend_Controller_Front::getInstance()->registerPlugin(new $thirdparty_plugin());
             }
         }
 
         return parent::run();
     }
-    
+
     /**
-     * Initialisation de l'auto-loader
+     * Initialisation de l'auto-loader.
+     *
+     * @return Zend_Loader_Autoloader
      */
-    protected function _initAutoLoader()
+    protected function _initAutoLoader(): Zend_Loader_Autoloader
     {
         $autoloader = Zend_Loader_Autoloader::getInstance();
 
-        $autoloader_application = new Zend_Application_Module_Autoloader(array('basePath' => APPLICATION_PATH, 'namespace'  => null));
-        
+        $autoloader_application = new Zend_Application_Module_Autoloader(array('basePath' => APPLICATION_PATH, 'namespace' => null));
+
         $autoloader_application->addResourceType('cache', 'cache/', 'Cache');
-        
+
         $autoloader->pushAutoloader($autoloader_application);
 
         return $autoloader;
     }
-    
+
     /**
-     * Initialisation d'un cache standard
+     * Initialisation d'un cache standard.
+     *
      * @param array $frontendOptions surcharge des options de configuration du front
-     * @param array $backendOptions surcharge des options de configuration du back
-     * @return Cache une instance de cache
+     * @param array $backendOptions  surcharge des options de configuration du back
+     *
+     * @return Zend_Cache_Core|Zend_Cache_Frontend une instance de cache
      */
-    protected function getCache(array $frontendOptions = array(), array $backendOptions = array()) {
-        
+    protected function getCache(array $frontendOptions = array(), array $backendOptions = array())
+    {
         $options = $this->getOption('cache');
-        
+
         return Zend_Cache::factory(
                 // front adapter
                 'Core',
                 // back adapter
-                $options['adapter'], 
+                $options['adapter'],
                 // frontend options
                 array_merge(array(
-                    'caching'  => $options['enabled'],
+                    'caching' => $options['enabled'],
                     'lifetime' => $options['lifetime'],
                     'cache_id_prefix' => 'prevarisc_'.md5(getenv('PREVARISC_DB_DBNAME')).'_',
                     'write_control' => $options['write_control'],
@@ -66,7 +70,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 array_merge(array(
                     'servers' => array(
                         array(
-                            'host' => $options['host'], 
+                            'host' => $options['host'],
                             'port' => $options['port'],
                         ),
                     ),
@@ -85,7 +89,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
-     * Initialisation du cache objet de l'application
+     * Initialisation du cache objet de l'application.
+     *
+     * @return Cache
      */
     protected function _initCache()
     {
@@ -93,19 +99,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
-     * Initialisation du cache spécial recherches
+     * Initialisation du cache spécial recherches.
+     *
+     * @return Cache
      */
     protected function _initCacheSearch()
     {
         return $this->getCache();
     }
 
-    
-
     /**
-     * Initialisation de la vue
+     * Initialisation de la vue.
+     *
+     * @return Zend_View
      */
-    protected function _initView()
+    protected function _initView(): Zend_View
     {
         $view = new Zend_View();
 
@@ -115,21 +123,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->appendName('description', 'Logiciel de gestion du service Prévention')
             ->appendName('author', 'SDIS62 - Service Recherche et Développement');
 
-        $view->addHelperPath(APPLICATION_PATH . "/views/helpers");
+        $view->addHelperPath(APPLICATION_PATH.'/views/helpers');
 
         return $view;
     }
 
     /**
-     * Initialisation du layout
+     * Initialisation du layout.
+     *
+     * @return Zend_Layout
      */
     protected function _initLayout()
     {
-        return Zend_Layout::startMvc(array('layoutPath' => APPLICATION_PATH . DS . 'layouts'));
+        return Zend_Layout::startMvc(array('layoutPath' => APPLICATION_PATH.DS.'layouts'));
     }
 
     /**
-     * Initialisation du data store à utiliser
+     * Initialisation du data store à utiliser.
+     *
+     * @return object
      */
     public function _initDataStore()
     {
@@ -139,32 +151,35 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         return new $className($options);
     }
-    
-    public function _initTranslator() {
+
+    public function _initTranslator()
+    {
         $translator = new Zend_Translate(
             array(
                 'adapter' => 'array',
                 'content' => implode(DS, array(
                     APPLICATION_PATH,
-                    "..",
-                    "vendor",
-                    "zendframework",
+                    '..',
+                    'vendor',
+                    'zendframework',
                     'zendframework1',
                     'resources',
                     'languages',
                 )),
-                'locale'  => "fr",
-                'scan' => Zend_Translate::LOCALE_DIRECTORY
+                'locale' => 'fr',
+                'scan' => Zend_Translate::LOCALE_DIRECTORY,
             )
         );
         Zend_Validate_Abstract::setDefaultTranslator($translator);
     }
-    
-    public function _initAuth() {
+
+    public function _initAuth(): Zend_Session_Namespace
+    {
         $options = $this->getOption('cache');
         $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
         $namespace = new Zend_Session_Namespace('Zend_Auth');
         $namespace->setExpirationSeconds($max_lifetime);
+
         return $namespace;
     }
 

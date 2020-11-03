@@ -2,10 +2,15 @@
 
 class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
 {
-    protected $_name="listedocajout"; // Nom de la base
-    protected $_primary = "ID_DOCAJOUT"; // Clé primaire
+    protected $_name = 'listedocajout'; // Nom de la base
+    protected $_primary = 'ID_DOCAJOUT'; // Clé primaire
 
     //récupere les éventuels documents qui auraient été ajoutés
+    /**
+     * @param string|int $id_dossier
+     *
+     * @return array
+     */
     public function getDocAjout($id_dossier)
     {
         $select = "SELECT *
@@ -16,6 +21,12 @@ class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
+    /**
+     * @param string|int $id_dossier
+     * @param string|int $id_nature
+     *
+     * @return array
+     */
     public function getDocToDelete($id_dossier, $id_nature)
     {
         $select = "SELECT *
@@ -29,10 +40,9 @@ class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
 
     public function getLastId()
     {
-        $select = "SELECT MAX(ID_DOCAJOUT)
-        FROM listedocajout;";
+        $select = 'SELECT MAX(ID_DOCAJOUT)
+        FROM listedocajout;';
 
         return $this->getAdapter()->fetchRow($select);
     }
-
 }
