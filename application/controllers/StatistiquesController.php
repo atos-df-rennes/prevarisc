@@ -23,7 +23,6 @@
         }
 
         // Accueil
-
         public function indexAction()
         {
             $this->view->title = 'Statistiques';
@@ -32,7 +31,6 @@
 
         public function extractionProcess($champs_supplementaires, $noms_des_colonnes_a_afficher, Model_DbTable_Statistiques $requete)
         {
-
             // Si on interroge l'action en json, on demande les champs supplémentaires
             if ($this->_getParam('format') == 'json') {
                 $this->view->result = $champs_supplementaires;
@@ -48,7 +46,6 @@
         }
 
         // Extraction 1 : CCDSA Liste ERP en exploitation connus soumis à contrôle
-
         public function ccdsaListeErpEnExploitationConnusSoumisAControleAction()
         {
             $model_stat = new Model_DbTable_Statistiques();
@@ -78,8 +75,8 @@
                 $this->render('extraction');
             }
         }
-        // Extraction 2 : Liste des ERP sous avis défavorable
 
+        // Extraction 2 : Liste des ERP sous avis défavorable
         public function listeDesErpSousAvisDefavorableAction()
         {
             $model_stat = new Model_DbTable_Statistiques();
@@ -126,7 +123,6 @@
         }
 
         // Extraction 3 : Prochaines visites de contrôle périodique à faire sur une commune
-
         public function prochainesVisitesDeControlePeriodiqueAFaireSurUneCommuneAction()
         {
             $model_stat = new Model_DbTable_Statistiques();
@@ -181,8 +177,7 @@
             }
         }
 
-         // Extraction 4 : Liste ERP liées au commission de visite periodique dans une année
-
+        // Extraction 4 : Liste ERP liées au commission de visite periodique dans une année
         public function listeErpAvecVisitePeriodiqueSurUnAnAction()
         {
             $model_stat = new Model_DbTable_Statistiques();
@@ -238,19 +233,19 @@
                     if ($row['DATEVISITE_DOSSIER'] == null) {
                         $results[$key]['DATEVISITE_DOSSIER'] = "<a href='/dossier/add/id_etablissement/".$row['ID_ETABLISSEMENT']."'>Programmer une visite</a>";
                     }
+
                     if ($row['NOM_UTILISATEURINFORMATIONS'] == null) {
                         $results[$key]['NOM_UTILISATEURINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Ajouter un préventionniste</a>";
                     }
 
                     if ($row['PERIODICITE_ETABLISSEMENTINFORMATIONS'] != 0) {
+                        $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = '';
                         if ($row['DATEVISITE_DOSSIER'] != null) {
                             $date = $row['DATEVISITE_DOSSIER'];
                             $d = new DateTime($date);
                             $i = new DateInterval('P'.$row['PERIODICITE_ETABLISSEMENTINFORMATIONS'].'M');
                             $d->add($i);
                             $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = $d->format('Y-m-d');
-                        } else {
-                            $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = '';
                         }
                     } else {
                         $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Modifier la periodicité</a>";

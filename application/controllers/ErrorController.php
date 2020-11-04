@@ -8,7 +8,10 @@ class ErrorController extends Zend_Controller_Action
 
         $errors = $this->_getParam('error_handler');
 
-        if (!$errors || !$errors instanceof ArrayObject) {
+        if (
+            !$errors
+            || !$errors instanceof ArrayObject
+        ) {
             $this->view->message = 'Vous avez atteint la page d\'erreur';
 
             return;
@@ -24,17 +27,14 @@ class ErrorController extends Zend_Controller_Action
                 $priority = Zend_Log::NOTICE;
                 $this->view->message = 'Page introuvable';
                 break;
-
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER:
+                $priority = Zend_Log::ERR;
                 if ($errors->exception->getCode() == 401) {
                     $this->getResponse()->setHttpResponseCode(401);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
-                } else {
-                    $priority = Zend_Log::ERR;
                 }
                 break;
-
             default:
                 // Type de l'erreur : application error
                 $this->getResponse()->setHttpResponseCode(500);

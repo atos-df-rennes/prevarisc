@@ -33,7 +33,10 @@ class GestionDesCommunesController extends Zend_Controller_Action
     public function saveAction()
     {
         try {
-            if (isset($_POST['ID_UTILISATEURCIVILITE']) && $_POST['ID_UTILISATEURCIVILITE'] == 'null') {
+            if (
+                isset($_POST['ID_UTILISATEURCIVILITE'])
+                && $_POST['ID_UTILISATEURCIVILITE'] == 'null'
+            ) {
                 unset($_POST['ID_UTILISATEURCIVILITE']);
             }
 
@@ -65,13 +68,15 @@ class GestionDesCommunesController extends Zend_Controller_Action
                     'context' => 'success',
                     'title' => 'Sauvegarde réussie !',
                     'message' => 'La commune '.$commune->LIBELLE_COMMUNE.' a été enregistrée.',
-                ));
+                )
+            );
         } catch (Exception $ex) {
             $this->_helper->flashMessenger(array(
                     'context' => 'error',
                     'title' => 'Aie',
                     'message' => $ex->getMessage(),
-                ));
+                )
+            );
         }
 
         // Redirection

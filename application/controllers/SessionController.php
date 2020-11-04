@@ -17,9 +17,7 @@ class SessionController extends Zend_Controller_Action
             // Adaptateur CAS
             if (getenv('PREVARISC_CAS_ENABLED') == 1) {
                 $username = phpCAS::getUser();
-
-            // Adapter NTLM
-            } elseif (getenv('PREVARISC_NTLM_ENABLED') == 1) {
+            } elseif (getenv('PREVARISC_NTLM_ENABLED') == 1) { // Adapter NTLM
                 if (!isset($_SERVER['REMOTE_USER'])) {
                     error_log('ntlm auth with no REMOTE_USER set in server variables');
                 } else {
@@ -29,9 +27,7 @@ class SessionController extends Zend_Controller_Action
                     }
                     list($domain, $username) = $cred;
                 }
-
-            // Cas par défaut
-            } elseif ($this->_request->isPost()) {
+            } elseif ($this->_request->isPost()) { // Cas par défaut
                 if (!$form->isValid($this->_request->getPost())) {
                     error_log('Auth: formulaire classique invalide');
                     throw new Zend_Auth_Exception('Authentification invalide.');
@@ -43,12 +39,14 @@ class SessionController extends Zend_Controller_Action
             }
 
             if ($username) {
-
                 // Récupération de l'utilisateur
                 $user = $service_user->findByUsername($username);
 
                 // Si l'utilisateur n'est pas actif, on renvoie false
-                if ($user === null || ($user !== null && !$user['ACTIF_UTILISATEUR'])) {
+                if (
+                    $user === null
+                    || ($user !== null && !$user['ACTIF_UTILISATEUR'])
+                ) {
                     error_log("Auth: utilisateur inexistant ou inactif '$username'");
                     throw new Zend_Auth_Exception('Authentification invalide.');
                 }
@@ -57,17 +55,20 @@ class SessionController extends Zend_Controller_Action
                 $adapters = array();
 
                 // Adaptateur SSO noauth
-                if (getenv('PREVARISC_CAS_ENABLED') == 1 || getenv('PREVARISC_NTLM_ENABLED') == 1) {
+                if (
+                    getenv('PREVARISC_CAS_ENABLED') == 1
+                    || getenv('PREVARISC_NTLM_ENABLED') == 1
+                ) {
                     $adapters['sso'] = new Service_PassAuthAdapater($username);
-
-                // Cas classique s'il y a déjà eu des login infructueux
-                // Système anti-dos, anti-bruteforce : si pas l'ip habituelle, on drop la requête
-                } elseif (getenv('PREVARISC_ENFORCE_SECURITY') == 1
-                        && isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
-                        && $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] >= 2
-                        && isset($user['IP_UTILISATEUR'])
-                        && $user['IP_UTILISATEUR']
-                    ) {
+                } elseif (
+                    getenv('PREVARISC_ENFORCE_SECURITY') == 1
+                    && isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
+                    && $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] >= 2
+                    && isset($user['IP_UTILISATEUR'])
+                    && $user['IP_UTILISATEUR']
+                ) {
+                    // Cas classique s'il y a déjà eu des login infructueux
+                    // Système anti-dos, anti-bruteforce : si pas l'ip habituelle, on drop la requête
                     if ($user['IP_UTILISATEUR'] != $_SERVER['REMOTE_ADDR']) {
                         error_log("Auth: trop d'essais infructeurs, denying IP ".$_SERVER['REMOTE_ADDR'].' which does not match last login IP '.$user['IP_UTILISATEUR']);
                         throw new Zend_Auth_Exception('Authentification invalide.');
@@ -126,8 +127,11 @@ class SessionController extends Zend_Controller_Action
 
         if (getenv('PREVARISC_CAS_ENABLED') == 1) {
             phpCAS::logout();
-        // On test si l'utilisateur est connecté en NTLM
-        } elseif (getenv('PREVARISC_NTLM_ENABLED') == 1 && $user && $user['PASSWD_UTILISATEUR'] == null) {
+        } elseif (
+            getenv('PREVARISC_NTLM_ENABLED') == 1
+            && $user
+            && $user['PASSWD_UTILISATEUR'] == null
+        ) { // On test si l'utilisateur est connecté en NTLM
             $this->_helper->layout->setLayout('error');
         } else {
             $this->_helper->redirector->gotoUrl($this->view->url(array('controller' => null, 'action' => null)));

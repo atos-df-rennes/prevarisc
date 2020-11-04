@@ -86,17 +86,26 @@ class GestionDesCommissionsController extends Zend_Controller_Action
             $DB_commission = new Model_DbTable_Commission();
 
             // Si on sauvegarde, on désactive le rendu
-            if (isset($_GET['action']) && $_GET['action'] == 'save') {
+            if (
+                isset($_GET['action'])
+                && $_GET['action'] == 'save'
+            ) {
                 $this->_helper->viewRenderer->setNoRender(true);
             }
 
             if (!empty($this->_request->cid)) {
                 $this->view->commission = $DB_commission->find($this->_request->cid)->current();
 
-                if (isset($_GET['action']) && $_GET['action'] == 'save') {
+                if (
+                    isset($_GET['action'])
+                    && $_GET['action'] == 'save'
+                ) {
                     $this->view->commission->setFromArray(array_intersect_key($_POST, $DB_commission->info('metadata')))->save();
                 }
-            } elseif (isset($_GET['action']) && $_GET['action'] == 'save') {
+            } elseif (
+                isset($_GET['action'])
+                && $_GET['action'] == 'save'
+            ) {
                 $DB_commission->insert(array_intersect_key($_POST, $DB_commission->info('metadata')));
             }
 

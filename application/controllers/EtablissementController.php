@@ -85,7 +85,10 @@ class EtablissementController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $options = '';
-                if (getenv('PREVARISC_MAIL_ENABLED') && getenv('PREVARISC_MAIL_ENABLED') == 1) {
+                if (
+                    getenv('PREVARISC_MAIL_ENABLED')
+                    && getenv('PREVARISC_MAIL_ENABLED') == 1
+                ) {
                     $typeAlerte = $service_etablissement->checkAlerte($etablissement, $post);
 
                     if (unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_statut', 'alerte_classement')) {
@@ -152,7 +155,10 @@ class EtablissementController extends Zend_Controller_Action
                 $id_etablissement = $service_etablissement->save($post['ID_GENRE'], $post);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'L\'établissement a bien été ajouté.'));
 
-                if ($post['ID_GENRE'] == 1 && count($post['ID_FILS_ETABLISSEMENT']) == 1) {
+                if (
+                    $post['ID_GENRE'] == 1
+                    && count($post['ID_FILS_ETABLISSEMENT']) == 1
+                ) {
                     $this->_helper->flashMessenger(array('context' => 'warning', 'title' => 'Ajout des établissements enfants', 'message' => "Les droits d'accès au site sont déterminés par les droits d'accès aux établissements qui le compose. Veillez à ajouter des établissements afin de garantir l'accès au site dans Prevarisc."));
                     $this->_helper->redirector('edit', null, null, array('id' => $id_etablissement));
                 } else {

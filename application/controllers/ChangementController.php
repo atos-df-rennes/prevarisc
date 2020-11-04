@@ -23,8 +23,7 @@ class ChangementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array(
                     'context' => 'error',
                     'title' => '',
-                    'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('
-                                    .$e->getMessage().')',
+                    'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
                 ));
             }
         }
@@ -39,12 +38,13 @@ class ChangementController extends Zend_Controller_Action
         $serviceUser = new Service_User();
 
         $etablissement = $serviceEtablissement->get(
-            $this->_getParam('id_etablissement'));
+        $this->_getParam('id_etablissement'));
 
         $changement = $serviceChangement->get($this->_getParam('changement'));
 
         $users = $serviceUser->getUtilisateursForAlterte(
-            $changement['ID_CHANGEMENT'], $etablissement);
+            $changement['ID_CHANGEMENT'], $etablissement
+        );
 
         $mails = array();
         $tos = array();
@@ -62,10 +62,12 @@ class ChangementController extends Zend_Controller_Action
         $this->view->mails = implode(';', $mails);
 
         $this->view->objet = $serviceChangement->getObjet(
-            $changement['ID_CHANGEMENT'], $etablissement);
+            $changement['ID_CHANGEMENT'], $etablissement
+        );
 
         $this->view->message = $serviceChangement->convertMessage(
-            $changement['MESSAGE_CHANGEMENT'], $etablissement);
+            $changement['MESSAGE_CHANGEMENT'], $etablissement
+        );
     }
 
     public function balisesAction()

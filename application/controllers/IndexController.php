@@ -14,8 +14,12 @@ class IndexController extends Zend_Controller_Action
         $acl = unserialize($cache->load('acl'));
         $profil = $user['group']['LIBELLE_GROUPE'];
         $blocs = array();
+
         foreach ($blocsConfig as $blocId => $blocConfig) {
-            if (!$blocConfig['acl'] || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))) {
+            if (
+                !$blocConfig['acl']
+                || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))
+            ) {
                 $method = $blocConfig['method'];
                 $blocs[$blocId] = array(
                     'type' => $blocConfig['type'],
@@ -28,9 +32,10 @@ class IndexController extends Zend_Controller_Action
 
         // determine the bloc order
         // user preferences
-        if (isset($user['preferences']['DASHBOARD_BLOCS'])
-        && $user['preferences']['DASHBOARD_BLOCS']
-        && $blocsOrder = json_decode($user['preferences']['DASHBOARD_BLOCS'])
+        if (
+            isset($user['preferences']['DASHBOARD_BLOCS'])
+            && $user['preferences']['DASHBOARD_BLOCS']
+            && $blocsOrder = json_decode($user['preferences']['DASHBOARD_BLOCS'])
         ) {
             // treat the case where there will be new bloc added
             foreach (array_keys($blocsConfig) as $defaultBloc) {

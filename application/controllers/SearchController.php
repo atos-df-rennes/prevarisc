@@ -29,7 +29,10 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_typeactivite = $service_typeactivite->getAllWithTypes();
         $this->view->DB_famille = $service_famille->getAll();
 
-        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if (
+            $this->_request->isGet()
+            && count($this->_request->getQuery()) > 0
+        ) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
@@ -83,7 +86,10 @@ class SearchController extends Zend_Controller_Action
             return checkdate($dateArgs[1], $dateArgs[0], $dateArgs[2]);
         };
 
-        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if (
+            $this->_request->isGet()
+            && count($this->_request->getQuery()) > 0
+        ) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
@@ -125,7 +131,10 @@ class SearchController extends Zend_Controller_Action
 
         $this->view->DB_fonction = $service_user->getAllFonctions();
 
-        if ($this->_request->isGet() && count($this->_request->getQuery()) > 0) {
+        if (
+            $this->_request->isGet()
+            && count($this->_request->getQuery()) > 0
+        ) {
             try {
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
