@@ -3,7 +3,7 @@
 class Model_DbTable_GroupementCommune extends Zend_Db_Table_Abstract
 {
     protected $_name = 'groupementcommune'; // Nom de la base
-    protected $_primary = 'ID_GROUPEMENT'; // Clé primaire
+    protected $_primary = 'ID_GROUPEMENT'; // ClÃ© primaire
     protected $_referenceMap = array(
                 'groupement' => array(
                     'columns' => 'ID_GROUPEMENT',

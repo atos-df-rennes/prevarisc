@@ -52,8 +52,6 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
                     INNER JOIN groupementtype ON groupement.ID_GROUPEMENTTYPE = groupementtype.ID_GROUPEMENTTYPE
                     LEFT JOIN utilisateurinformations ON utilisateurinformations.ID_UTILISATEURINFORMATIONS = groupement.ID_UTILISATEURINFORMATIONS
                     WHERE (groupement.LIBELLE_GROUPEMENT = ' .$expLibelle.');';
-        //echo $select;
-        //Zend_Debug::dump($DB_information->fetchRow($select));
 
         return $this->getAdapter()->fetchAll($select);
     }

@@ -239,18 +239,19 @@ class CommissionController extends Zend_Controller_Action
                 // On récupère la commission
                 foreach ($regles as $regle) {
                     if (
-                        $row['ID_GENRE'] == 2
-                        && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
-                        && $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] == $regle['LOCALSOMMEIL']
-                        && $row['ID_TYPE'] == $regle['ID_TYPE']
-                        && $row['ID_CATEGORIE'] == $regle['ID_CATEGORIE']
-                    ) {
-                        $ets_to_update[] = $row['ID_ETABLISSEMENTINFORMATIONS'];
-                        break;
-                    } elseif (
-                        $row['ID_GENRE'] == 5
-                        && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
-                        && $row['ID_CLASSE'] == $regle['ID_CLASSE']
+                        (
+                            $row['ID_GENRE'] == 2
+                            && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
+                            && $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] == $regle['LOCALSOMMEIL']
+                            && $row['ID_TYPE'] == $regle['ID_TYPE']
+                            && $row['ID_CATEGORIE'] == $regle['ID_CATEGORIE']
+                        )
+                        ||
+                        (
+                            $row['ID_GENRE'] == 5
+                            && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
+                            && $row['ID_CLASSE'] == $regle['ID_CLASSE']
+                        )
                     ) {
                         $ets_to_update[] = $row['ID_ETABLISSEMENTINFORMATIONS'];
                         break;

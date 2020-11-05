@@ -12,9 +12,7 @@ class Api_Service_Dossier
     public function get($id)
     {
         $service_dossier = new Service_Dossier();
-        $dossier = $service_dossier->get($id);
-
-        return $dossier;
+        return $service_dossier->get($id);
     }
 
     /**
@@ -27,9 +25,7 @@ class Api_Service_Dossier
     public function getDescriptifs($id)
     {
         $service_dossier = new Service_Dossier();
-        $descriptifs = $service_dossier->getDescriptifs($id);
-
-        return $descriptifs;
+        return $service_dossier->getDescriptifs($id);
     }
 
     /**
@@ -42,9 +38,7 @@ class Api_Service_Dossier
     public function getPiecesJointes($id)
     {
         $service_dossier = new Service_Dossier();
-        $pieces_jointes = $service_dossier->getAllPJ($id);
-
-        return $pieces_jointes;
+        return $service_dossier->getAllPJ($id);
     }
 
     /**
@@ -85,8 +79,6 @@ class Api_Service_Dossier
     public function getContacts($id)
     {
         $service_dossier = new Service_Dossier();
-        $contacts = $service_dossier->getAllContacts($id);
-
-        return $contacts;
+        return $service_dossier->getAllContacts($id);
     }
 }

@@ -3,9 +3,9 @@
 class Model_DbTable_CommissionTypeEvenement extends Zend_Db_Table_Abstract
 {
     protected $_name = 'commissiontypeevenement'; // Nom de la base
-    protected $_primary = 'ID_COMMISSIONTYPEEVENEMENT'; // Clé primaire
+    protected $_primary = 'ID_COMMISSIONTYPEEVENEMENT'; // ClÃ© primaire
 
-    //Fonction qui récupère toutes les infos générales d'un dossier
+    //Fonction qui rÃ©cupÃ¨re toutes les infos gÃ©nÃ©rales d'un dossier
     /**
      * @return array
      */
@@ -14,7 +14,7 @@ class Model_DbTable_CommissionTypeEvenement extends Zend_Db_Table_Abstract
         $select = 'SELECT *
             FROM '.$this->_name.';
         ';
-        //echo $select;
+
         return $this->getAdapter()->fetchAll($select);
     }
 }

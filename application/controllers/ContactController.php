@@ -101,6 +101,8 @@ class ContactController extends Zend_Controller_Action
                     $DB_contact = new Model_DbTable_CommissionContact();
                     $key = 'ID_COMMISSION';
                     break;
+                default:
+                    break;
             }
 
             $id_item = $this->_request->id;
@@ -208,6 +210,8 @@ class ContactController extends Zend_Controller_Action
                 case 'commission':
                     $DB_current = $DB_contact[3];
                     $primary = 'ID_COMMISSION';
+                    break;
+                default:
                     break;
             }
 

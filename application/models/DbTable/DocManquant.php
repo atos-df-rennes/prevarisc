@@ -3,14 +3,14 @@
 class Model_DbTable_DocManquant extends Zend_Db_Table_Abstract
 {
     protected $_name = 'docmanquant'; // Nom de la base
-    protected $_primary = 'ID_DOCMANQUANT'; // Clé primaire
+    protected $_primary = 'ID_DOCMANQUANT'; // ClÃ© primaire
 
     /**
      * @return array
      */
     public function getDocManquant()
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('dm' => 'docmanquant'));

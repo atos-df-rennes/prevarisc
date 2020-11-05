@@ -8,7 +8,7 @@ class Service_Carto
     public function __construct()
     {
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-        $this->repository = $model_couchecarto = new Model_DbTable_CoucheCarto();
+        $this->repository = new Model_DbTable_CoucheCarto();
     }
 
     /**

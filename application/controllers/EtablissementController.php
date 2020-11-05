@@ -91,11 +91,12 @@ class EtablissementController extends Zend_Controller_Action
                 ) {
                     $typeAlerte = $service_etablissement->checkAlerte($etablissement, $post);
 
-                    if (unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_statut', 'alerte_classement')) {
-                        if ($typeAlerte !== false) {
-                            $service_alerte = new Service_Alerte();
-                            $options = $service_alerte->getLink($typeAlerte);
-                        }
+                    if (
+                        unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_statut', 'alerte_classement')
+                        && $typeAlerte !== false
+                    ) {
+                        $service_alerte = new Service_Alerte();
+                        $options = $service_alerte->getLink($typeAlerte);
                     }
                 }
 
@@ -313,7 +314,6 @@ class EtablissementController extends Zend_Controller_Action
 
         if ($this->_request->isGet()) {
             try {
-                $post = $this->_request->getPost();
                 $service_etablissement->deletePJ($this->_request->id, $this->_request->id_pj);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La pièce jointe a bien été supprimée.'));
             } catch (Exception $e) {
@@ -383,11 +383,9 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
 
         $service_etablissement = new Service_Etablissement();
-        $service_contact = new Service_Contact();
 
         if ($this->_request->isPost()) {
             try {
-                $post = $this->_request->getPost();
                 $service_etablissement->addContactExistant($this->_request->id, $this->_request->id_contact);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le contact a bien été ajouté.'));
             } catch (Exception $e) {
@@ -407,7 +405,6 @@ class EtablissementController extends Zend_Controller_Action
 
         if ($this->_request->isGet()) {
             try {
-                $post = $this->_request->getPost();
                 $service_etablissement->deleteContact($this->_request->id, $this->_request->id_contact);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le contact a bien été supprimé de la fiche établissement.'));
             } catch (Exception $e) {

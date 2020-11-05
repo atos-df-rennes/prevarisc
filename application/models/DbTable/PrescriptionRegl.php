@@ -3,14 +3,14 @@
 class Model_DbTable_PrescriptionRegl extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptionregl'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTIONREGL'; // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTIONREGL'; // ClÃ© primaire
 
     /**
      * @return array
      */
     public function recupPrescRegl($type, $mode = null)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $typePresc = null;
         if ($type == 'etude') {
             $typePresc = 1;

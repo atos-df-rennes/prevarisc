@@ -143,11 +143,13 @@ class Service_User
             $user->ID_UTILISATEURINFORMATIONS = $informations->ID_UTILISATEURINFORMATIONS;
 
             if (array_key_exists('PASSWD_INPUT', $data)) {
-                if (getenv('PREVARISC_ENFORCE_SECURITY') == 1 && $data['PASSWD_INPUT'] != '') {
-                    if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/', $data['PASSWD_INPUT'])) {
-                        throw new Exception('Votre mot de passe doit contenir au moins 8 caractères '
-                            .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.');
-                    }
+                if (
+                    getenv('PREVARISC_ENFORCE_SECURITY') == 1
+                    && $data['PASSWD_INPUT'] != ''
+                    && !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/', $data['PASSWD_INPUT'])
+                ) {
+                    throw new Exception('Votre mot de passe doit contenir au moins 8 caractères '
+                        .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.');
                 }
                 $user->PASSWD_UTILISATEUR = $data['PASSWD_INPUT'] == '' ? null : md5($user->USERNAME_UTILISATEUR.getenv('PREVARISC_SECURITY_SALT').$data['PASSWD_INPUT']);
             }
@@ -189,7 +191,6 @@ class Service_User
             // Gestion de l'avatar
             if ($avatar !== null && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
                 $path = REAL_DATA_PATH.DS.'uploads'.DS.'avatars'.DS;
-                $extension = strtolower(strrchr($avatar['name'], '.'));
 
                 GD_Resize::run($avatar['tmp_name'], $path.'small'.DS.$user->ID_UTILISATEUR.'.jpg', 25, 25);
                 GD_Resize::run($avatar['tmp_name'], $path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg', 150);
@@ -225,13 +226,10 @@ class Service_User
         }
 
         foreach ($preferences as $name => $preference) {
-            switch ($name) {
-                case 'DASHBOARD_BLOCS':
-                    $DB_preferences->DASHBOARD_BLOCS = json_encode($preference);
-                    break;
-                default:
-                    $DB_preferences->$name = $preference;
-                    break;
+            if ($name == 'DASHBOARD_BLOCS') {
+                $DB_preferences->DASHBOARD_BLOCS = json_encode($preference);
+            } else {
+                $DB_preferences->$name = $preference;
             }
         }
 
@@ -347,9 +345,7 @@ class Service_User
     public function getGroupPrivileges($user)
     {
         $model_user = new Model_DbTable_Utilisateur();
-        $privileges = $model_user->getGroupPrivileges($user);
-
-        return $privileges;
+        return $model_user->getGroupPrivileges($user);
     }
 
     /**
@@ -398,8 +394,8 @@ class Service_User
     public function resetFailedLogin($user)
     {
         if (!$user
-                || !isset($user['ID_UTILISATEUR'])
-                || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
+            || !isset($user['ID_UTILISATEUR'])
+            || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
         ) {
             return;
         }

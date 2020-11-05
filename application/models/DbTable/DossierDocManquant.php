@@ -3,14 +3,14 @@
 class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossierdocmanquant'; // Nom de la base
-    protected $_primary = 'ID_DOCMANQUANT'; // Clé primaire
+    protected $_primary = 'ID_DOCMANQUANT'; // ClÃ© primaire
 
     /**
      * @return array
      */
     public function getDocManquantDoss($idDossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('ddm' => 'dossierdocmanquant'))
@@ -22,7 +22,7 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
 
     public function getDocManquantDossLast($idDossier)
     {
-        //retourne la liste des documents manquant (uniquement les derniers pour la génération de document)
+        //retourne la liste des documents manquant (uniquement les derniers pour la gÃ©nÃ©ration de document)
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('ddm' => 'dossierdocmanquant'))
@@ -34,7 +34,7 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
 
     public function getDocManquantDossNum($idDossier, $num)
     {
-        //retourne la liste des documents manquant (uniquement les derniers pour la génération de document)
+        //retourne la liste des documents manquant (uniquement les derniers pour la gÃ©nÃ©ration de document)
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('ddm' => 'dossierdocmanquant'))

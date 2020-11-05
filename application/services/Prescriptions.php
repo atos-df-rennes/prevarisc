@@ -92,17 +92,13 @@ class Service_Prescriptions
     public function getTextesListe()
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        $liste_textes = $dbPrescTextes->getAllTextes();
-
-        return $liste_textes;
+        return $dbPrescTextes->getAllTextes();
     } //FIN getTextesListe
 
     public function getTexte($id_texte)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        $texteInfo = $dbPrescTextes->getTexte($id_texte);
-
-        return $texteInfo;
+        return $dbPrescTextes->getTexte($id_texte);
     } //FIN getTexte
 
     public function saveTexte($post, $idTexte = null)
@@ -133,17 +129,13 @@ class Service_Prescriptions
     public function getArticlesListe()
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        $liste_articles = $dbPrescArticles->getAllArticles();
-
-        return $liste_articles;
+        return $dbPrescArticles->getAllArticles();
     } //FIN getArticlesListe
 
     public function getArticle($id_article)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        $articleInfo = $dbPrescArticles->getArticle($id_article);
-
-        return $articleInfo;
+        return $dbPrescArticles->getArticle($id_article);
     } //FIN getArticle
 
     public function saveArticle($post, $idArticle = null)
@@ -171,7 +163,6 @@ class Service_Prescriptions
     }
 
     /* GESTION DES PRESCRIPTIONS */
-
     public function savePrescription($post, $idPrescription = null)
     {
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
@@ -223,10 +214,8 @@ class Service_Prescriptions
     {
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
         $listePrescDossier = $dbPrescRegl->recupPrescRegl($type, $mode);
-        //Zend_Debug::dump($listePrescDossier);
 
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
-        //Zend_Debug::dump($listePrescDossier);
 
         $prescriptionArray = array();
         foreach ($listePrescDossier as $val => $ue) {
@@ -254,7 +243,6 @@ class Service_Prescriptions
         if ($type == 'prescriptionType') {
             $dbPrescType = new Model_DbTable_PrescriptionType();
             foreach ($data as $num => $presc) {
-                //echo $num." - ".$presc."<br/>";
                 $prescType = $dbPrescType->find($presc)->current();
                 $prescType->PRESCRIPTIONTYPE_NUM = $num;
                 $prescType->save();

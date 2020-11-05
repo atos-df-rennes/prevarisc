@@ -3,14 +3,14 @@
 class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptioncat'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTION_CAT'; // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTION_CAT'; // ClÃ© primaire
 
     /**
      * @return array
      */
     public function recupPrescriptionCat()
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('pc' => 'prescriptioncat'))
@@ -21,7 +21,7 @@ class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
 
     public function recupMaxNumCat()
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        //retourne la liste des catÃ©gories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('pc' => 'prescriptioncat'), 'max(pc.NUM_PRESCRIPTION_CAT) as maxnum');

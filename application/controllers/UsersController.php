@@ -199,7 +199,6 @@ class UsersController extends Zend_Controller_Action
         $this->view->add = true;
 
         try {
-            $post = $this->_request->getPost();
             $service_user->deleteGroup($this->_request->gid);
             $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le groupe a été supprimé.'));
         } catch (Exception $e) {
@@ -438,12 +437,13 @@ class UsersController extends Zend_Controller_Action
                                 $text .= ($this->_request->commune == 0 ? 'Ignorer la commune' : 'Sur la commune de l\'utilisateur');
                                 $text .= ')';
                                 break;
+                            default:
+                                break;
                         }
 
                         $id_resource = $model_resource->createRow(array('name' => $name, 'text' => $this->_request->text == '' ? $text : $this->_request->text))->save();
                         $model_privilege->createRow(array('name' => 'view_ets', 'text' => 'Lecture', 'id_resource' => $id_resource))->save();
                         $model_privilege->createRow(array('name' => 'edit_ets', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
-
                         break;
                     case 'dossier':
                         $name = 'dossier_';
@@ -470,6 +470,8 @@ class UsersController extends Zend_Controller_Action
                         $model_privilege->createRow(array('name' => 'view_doss', 'text' => 'Lecture', 'id_resource' => $id_resource))->save();
                         $model_privilege->createRow(array('name' => 'edit_doss', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
                         $model_privilege->createRow(array('name' => 'verrouillage_dossier', 'text' => 'Verrouillage d\'un dossier', 'id_resource' => $id_resource))->save();
+                        break;
+                    default:
                         break;
                 }
 

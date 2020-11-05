@@ -68,8 +68,7 @@ class ErrorController extends Zend_Controller_Action
         if (!$bootstrap->hasResource('Log')) {
             return false;
         }
-        $log = $bootstrap->getResource('Log');
 
-        return $log;
+        return $bootstrap->getResource('Log');
     }
 }

@@ -13,13 +13,6 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
     protected $_minifyLocation = '/min/';
 
     /**
-     * Registry key for placeholder.
-     *
-     * @var string
-     */
-//	protected $_regKey = 'RC_View_Helper_MinifyHeadScript';
-
-    /**
      * Return headScript object.
      *
      * Returns headScript helper object; optionally, allows specifying a script
@@ -75,7 +68,6 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
         $escapeEnd = ($useCdata) ? '//]]>' : '//-->';
 
         $this->getContainer()->ksort();
-        $groupIndex = 0;
         foreach ($this as $i => $item) {
             if ($this->_isNeedToMinify($item)) {
                 if (!empty($item->attributes['minify_split_before']) || !empty($item->attributes['minify_split'])) {

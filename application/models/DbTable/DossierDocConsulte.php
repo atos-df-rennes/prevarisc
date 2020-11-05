@@ -21,7 +21,6 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
      */
     public function getDocRenseigne($idDossier)
     {
-
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
@@ -30,8 +29,6 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
              ->where('ddc.ID_DOSSIER = ?', $idDossier);
 
         return $this->getAdapter()->fetchAll($select);
-
-        return $this->getAdapter()->fetchRow($select);
     }
 
      /**
@@ -60,7 +57,6 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
              ->where('ldc.'.$column1.' = 1')
              ->where('ldc.'.$column2.' = 0');
 
-        //echo $select;
         return $this->getAdapter()->fetchAll($select);
      }
 }

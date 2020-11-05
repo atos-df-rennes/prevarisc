@@ -6,7 +6,7 @@
         
         <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
             <a 
-               href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><i class="icon-info-sign icon-black"></i> Informations générales</a>
+               href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
         </li>
         
 	<?php		
@@ -41,7 +41,7 @@
 		
         <li class='<?php echo ( $this->action == "liees" ) ? "active" : "read" ?>'>
             <a  
-                href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'><i class="icon-folder-open icon-black"></i> Établissements et dossiers liés</a>
+                href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'><em class="icon-folder-open icon-black"></em> Établissements et dossiers liés</a>
         </li>
 		
 	<?php
@@ -55,7 +55,7 @@
         
         <li class='<?php echo ( $this->action == "piece-jointe" ) ? "active" : "read" ?>'>
             <a 
-               href='<?php echo $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'><i class="icon-share icon-black"></i> Pièces jointes</a>
+               href='<?php echo $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'><em class="icon-share icon-black"></em> Pièces jointes</a>
         </li> 
         <li class="nav-header">Actions</li>
         <?php
@@ -70,7 +70,7 @@
                 }
         ?>
         <li>
-            <a class="sep" id="<?php echo $idLink; ?>" style='cursor:pointer;'><i class="icon-lock icon-black"></i> <?php echo $label; ?></a>
+            <a class="sep" id="<?php echo $idLink; ?>" style='cursor:pointer;'><em class="icon-lock icon-black"></em> <?php echo $label; ?></a>
         </li>
         <?php
             echo "
@@ -82,19 +82,19 @@
         ?>
         <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
         <li>
-            <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><i class='icon-calendar icon-black'></i> Afficher ordre du jour</a>
+            <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><em class='icon-calendar icon-black'></em> Afficher ordre du jour</a>
         </li>
         <?php endif; ?>
         <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
         <li>
-            <a id="suppressionDossier" href="#"><i class="icon-remove icon-black"></i>Supprimer le dossier</a>
+            <a id="suppressionDossier" href="#"><em class="icon-remove icon-black"></em>Supprimer le dossier</a>
         </li>
         <?php endif; ?>
     </ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd();
 endif; ?>
 
-<?php $this->placeholder('page_header')->captureStart();  //$this->placeholder('before_content')->captureStart() // Capture du 'before_content' ?>
+<?php $this->placeholder('page_header')->captureStart();  // Capture du 'before_content' ?>
 
 <?php 
     if($this->action == "add" || $this->do == "new" ){
@@ -182,7 +182,7 @@ endif; ?>
                 $i = 0;
                 $idEtabEnCour = null;
                 $compteur = 0;
-                //Zend_Debug::dump($this->listeEtablissement);
+
                 foreach($this->enteteEtab as $etab => $value){
                     if($value['ID_ETABLISSEMENTDOSSIER'] != $idEtabEnCour){
                         $compteur++;
@@ -224,18 +224,19 @@ endif; ?>
                         }
                         //affichage preventionniste(s)
                         $nbPrev = count($value['infosEtab']['preventionnistes']);
-                        if($nbPrev >0){
+                        if ($nbPrev > 0) {
                             echo "<span style='font-size:10px'>(";
-                            foreach($value['infosEtab']['preventionnistes'] as $prev){
+                            foreach ($value['infosEtab']['preventionnistes'] as $prev) {
                                 echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-                                if($nbPrev > 1)
+                                if ($nbPrev > 1) {
                                     echo ", ";
+                                }
                                 $nbPrev--;
                             }
                             echo ")</span>";
                         }
                         
-                                        echo " <span style='font-size:10px'>#".$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']."</span>";
+                        echo " <span style='font-size:10px'>#".$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']."</span>";
                                         
                         $i++;
                     }
@@ -276,17 +277,12 @@ endif; ?>
 		</div>
 	</div>
 <script>
-
-
-	
     $(document).ready(function(){
-
 		$("#VERROU").live('click',function(){
 			$.ajax({
 					url: "/dossier/verrou",
 					data: "idDossier="+$("#idDossier").val()+"&ID_CREATEUR="+$("#ID_CREATEUR").val(),
 					type:"POST",
-					//async: false,
 					beforeSend: function(){
 						$("#chargement").html("<img src='/images/load.gif' />");
 					},
@@ -311,7 +307,6 @@ endif; ?>
 					url: "/dossier/deverrou",
 					data: "idDossier="+$("#idDossier").val(),
 					type:"POST",
-					//async: false,
 					beforeSend: function(){
 						$("#chargement").html("<img src='/images/load.gif' />");
 					},

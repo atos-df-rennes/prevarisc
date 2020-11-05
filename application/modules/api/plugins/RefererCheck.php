@@ -13,9 +13,7 @@ class Api_Plugin_RefererCheck extends Zend_Controller_Plugin_Abstract
         $whitelist = new Zend_Config_Ini(APPLICATION_PATH.DS.'modules'.DS.'api'.DS.'configs'.DS.'whitelist.ini');
 
         // Contrôle de l'IP de celui qui fait la requête à notre whitelist
-        if (in_array($_SERVER['REMOTE_ADDR'], $whitelist->toArray())) {
-            return;
-        } else {
+        if (!in_array($_SERVER['REMOTE_ADDR'], $whitelist->toArray())) {
             // Repoint the request to the default error handler
             $request->setModuleName('default')->setControllerName('error')->setActionName('error');
 

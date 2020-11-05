@@ -31,13 +31,12 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if (
                 $elementVer != '.'
                 && $elementVer != '..'
+                && $elementVer != '.gitignore'
             ) {
-                if ($elementVer != '.gitignore') {
-                    if (!is_dir($pathVer.DS.$elementVer)) {
-                        $fichierVer[] = $elementVer;
-                    } else {
-                        $dossierVer[] = $elementVer;
-                    }
+                if (!is_dir($pathVer.DS.$elementVer)) {
+                    $fichierVer[] = $elementVer;
+                } else {
+                    $dossierVer[] = $elementVer;
                 }
             }
         }
@@ -57,13 +56,12 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                 if (
                     $element != '.'
                     && $element != '..'
+                    && $element != '.gitignore'
                 ) {
-                    if ($element != '.gitignore') {
-                        if (!is_dir($path.DS.$element)) {
-                            $fichier[] = $element;
-                        } else {
-                            $dossier[] = $element;
-                        }
+                    if (!is_dir($path.DS.$element)) {
+                        $fichier[] = $element;
+                    } else {
+                        $dossier[] = $element;
                     }
                 }
             }

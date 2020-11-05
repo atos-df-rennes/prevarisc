@@ -231,9 +231,7 @@ class Service_Dashboard
                 $dbDossierAffectation->getDossierNonAffect($commission['ID_DATECOMMISSION']),
                 $dbDossierAffectation->getDossierAffect($commission['ID_DATECOMMISSION'])
         );
-        $odj = array_unique($odj, SORT_REGULAR);
-
-        return $odj;
+        return array_unique($odj, SORT_REGULAR);
     }
 
     /**
@@ -366,9 +364,7 @@ class Service_Dashboard
         $search->setCriteria('etablissementinformations.ID_GENRE', array('6', '5', '4', '7', '8', '9', '10'));
         $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
-        $etablissements = array_unique($etablissements, SORT_REGULAR);
-
-        return $etablissements;
+        return array_unique($etablissements, SORT_REGULAR);
     }
 
     public function getDossierAvecAvisDiffere($user)
@@ -397,9 +393,7 @@ class Service_Dashboard
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
         $search->setCriteria('d.VERROU_DOSSIER', 0);
         $search->order('IFNULL(d.DATEVISITE_DOSSIER, d.DATEINSERT_DOSSIER) desc');
-        $dossiers = $search->run(false, null, false)->toArray();
-
-        return $dossiers;
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getDossiersSuivisSansAvis($user)
@@ -420,9 +414,7 @@ class Service_Dashboard
 
         $search->order('d.DATEINSERT_DOSSIER desc');
 
-        $dossiers = $search->run(false, null, false)->toArray();
-
-        return $dossiers;
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getLeveePresc()

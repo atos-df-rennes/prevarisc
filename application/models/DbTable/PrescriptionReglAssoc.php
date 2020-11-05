@@ -3,7 +3,7 @@
 class Model_DbTable_PrescriptionReglAssoc extends Zend_Db_Table_Abstract
 {
     protected $_name = 'prescriptionreglassoc'; // Nom de la base
-    protected $_primary = array('ID_PRESCRIPTIONREGL', 'NUM_PRESCRIPTIONASSOC'); // Clé primaire
+    protected $_primary = array('ID_PRESCRIPTIONREGL', 'NUM_PRESCRIPTIONASSOC'); // ClÃ© primaire
 
     /**
      * @return array

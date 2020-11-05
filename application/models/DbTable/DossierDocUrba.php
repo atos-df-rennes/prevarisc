@@ -17,7 +17,7 @@ class Model_DbTable_DossierDocUrba extends Zend_Db_Table_Abstract
             FROM dossierdocurba
             WHERE ID_DOSSIER = '".$idDossier."'
         ;";
-        //echo $select;
+        
         return $this->getAdapter()->fetchAll($select);
     }
 }

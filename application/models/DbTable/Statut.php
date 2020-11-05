@@ -1,35 +1,35 @@
 <?php
 
-    /*
-        Statut
+/*
+    Statut
 
-        Cette classe sert pour récupérer les Statuts, et les administrer
+    Cette classe sert pour rÃ©cupÃ©rer les Statuts, et les administrer
 
-    */
+*/
 
-    class Model_DbTable_Statut extends Zend_Db_Table_Abstract
+class Model_DbTable_Statut extends Zend_Db_Table_Abstract
+{
+    protected $_name = 'statut'; // Nom de la base
+    protected $_primary = 'ID_STATUT'; // ClÃ© primaire
+
+    // Donne la liste des catÃ©gories
+    /**
+     * @param string|int|float $id
+     *
+     * @return array
+     */
+    public function getStatuts($id = null)
     {
-        protected $_name = 'statut'; // Nom de la base
-        protected $_primary = 'ID_STATUT'; // Clé primaire
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('statut');
 
-        // Donne la liste des catégories
-        /**
-         * @param string|int|float $id
-         *
-         * @return array
-         */
-        public function getStatuts($id = null)
-        {
-            $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from('statut');
+        if ($id != null) {
+            $select->where("ID_STATUT = $id");
 
-            if ($id != null) {
-                $select->where("ID_STATUT = $id");
-
-                return $this->fetchRow($select)->toArray();
-            } else {
-                return $this->fetchAll($select)->toArray();
-            }
+            return $this->fetchRow($select)->toArray();
+        } else {
+            return $this->fetchAll($select)->toArray();
         }
     }
+}

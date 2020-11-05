@@ -1,19 +1,20 @@
 <?php
-    class Model_DbTable_EtablissementLie extends Zend_Db_Table_Abstract
+
+class Model_DbTable_EtablissementLie extends Zend_Db_Table_Abstract
+{
+    protected $_name = 'etablissementlie';
+    protected $_primary = array('ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT');
+
+    /**
+     * @return array
+     */
+    public function recupEtabCellule($idCellule)
     {
-        protected $_name = 'etablissementlie';
-        protected $_primary = array('ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT');
+        //retourne le/les Ã©tablissements qui sont pÃ¨re de la cellule
+        $select = $this->select()
+            ->from(array('etabLie' => 'etablissementlie'))
+            ->where('ID_FILS_ETABLISSEMENT = ?', $idCellule);
 
-        /**
-         * @return array
-         */
-        public function recupEtabCellule($idCellule)
-        {
-            //retourne le/les établissements qui sont père de la cellule
-            $select = $this->select()
-                ->from(array('etabLie' => 'etablissementlie'))
-                ->where('ID_FILS_ETABLISSEMENT = ?', $idCellule);
-
-            return $this->getAdapter()->fetchAll($select);
-        }
+        return $this->getAdapter()->fetchAll($select);
     }
+}
