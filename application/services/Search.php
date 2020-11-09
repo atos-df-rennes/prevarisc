@@ -750,6 +750,7 @@ class Service_Search
                         ->joinLeft(array("ea" => "etablissementadresse"),"ea.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT",null)
                         ->joinLeft("adressecommune", "ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE", array("CODEPOSTAL_COMMUNE","LIBELLE_COMMUNE"))
                         ->joinLeft("dossierpj", "dossierpj.ID_DOSSIER = d.ID_DOSSIER", "ID_PIECEJOINTE")
+                        ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                         ->group("d.ID_DOSSIER")
                         ;
             
