@@ -1030,9 +1030,6 @@ class Service_Search
                 ->join('utilisateurinformations', 'u.ID_UTILISATEURINFORMATIONS = utilisateurinformations.ID_UTILISATEURINFORMATIONS')
                 ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION', 'LIBELLE_FONCTION')
                 ->join('groupe', 'u.ID_GROUPE = groupe.ID_GROUPE', 'LIBELLE_GROUPE')
-                ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_UTILISATEUR = u.ID_UTILISATEUR')
-                ->joinLeft('etablissementinformations', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
-                ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(infos.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations as infos WHERE etablissementinformations.ID_ETABLISSEMENT = infos.ID_ETABLISSEMENT ) OR etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
                 ->group('u.ID_UTILISATEUR')
                 ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS');
 
