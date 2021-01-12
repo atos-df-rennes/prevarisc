@@ -52,33 +52,55 @@
 
     <div id='filterContainer' class='well span12' style="margin-left: 0;">
         <div class='row-fluid'>
-            <select name='types[]' class="span3 chosen" data-placeholder='Types' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_type as $type ) : ?>
-                    <option value='<?php echo $type["ID_DOSSIERTYPE"] ?>' <?php if(isset($_GET["types"]) && in_array($type["ID_DOSSIERTYPE"], (array) $_GET["types"])) echo 'selected' ?>><?php echo $type["LIBELLE_DOSSIERTYPE"] ?></option>
-                <?php endforeach ?>
-            </select>
-            <select name='commissions[]' class="span3 chosen" data-placeholder='Commissions' multiple onchange="masquerBoutonExportCalc()">
-                <?php
-                    foreach($this->array_commissions as $array_commission){
-                        echo "<optgroup label='".htmlspecialchars($array_commission["LIBELLE"], ENT_QUOTES)."' >";
-                        foreach($array_commission["ARRAY"] as $item){
-                            echo "<option value='".$item["ID_COMMISSION"]."'";
-                            if(isset($_GET["commissions"]) && in_array($item["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected';
-                            echo " >".htmlspecialchars($item["LIBELLE_COMMISSION"], ENT_QUOTES)."</option>";
+            <div>
+                <select name='types[]' class="span3 chosen" data-placeholder='Types' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_type as $type ) : ?>
+                        <option value='<?php echo $type["ID_DOSSIERTYPE"] ?>' <?php if(isset($_GET["types"]) && in_array($type["ID_DOSSIERTYPE"], (array) $_GET["types"])) echo 'selected' ?>><?php echo $type["LIBELLE_DOSSIERTYPE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+                <select name='commissions[]' class="span3 chosen" data-placeholder='Commissions' multiple onchange="masquerBoutonExportCalc()">
+                    <?php
+                        foreach($this->array_commissions as $array_commission){
+                            echo "<optgroup label='".htmlspecialchars($array_commission["LIBELLE"], ENT_QUOTES)."' >";
+                            foreach($array_commission["ARRAY"] as $item){
+                                echo "<option value='".$item["ID_COMMISSION"]."'";
+                                if(isset($_GET["commissions"]) && in_array($item["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected';
+                                echo " >".htmlspecialchars($item["LIBELLE_COMMISSION"], ENT_QUOTES)."</option>";
+                            }
+                            echo "</optgroup>";
                         }
-                        echo "</optgroup>";
-                    }
 
-                ?>
-            </select>
-            <select name='avisCommission[]' class="span3 chosen" data-placeholder='Avis de la commission' multiple onchange="masquerBoutonExportCalc()">
-                <option value='1' <?php if(isset($_GET["avisCommission"]) && in_array(1, (array) $_GET["avisCommission"])) echo 'selected' ?>>Favorable</option>
-                <option value='2' <?php if(isset($_GET["avisCommission"]) && in_array(2, (array) $_GET["avisCommission"])) echo 'selected' ?>>Défavorable</option>
-            </select>
-            <select name='avisRapporteur[]' class="span3 chosen" data-placeholder='Avis du rapporteur' multiple onchange="masquerBoutonExportCalc()">
-                <option value='1' <?php if(isset($_GET["avisRapporteur"]) && in_array(1, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Favorable</option>
-                <option value='2' <?php if(isset($_GET["avisRapporteur"]) && in_array(2, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Défavorable</option>
-            </select>
+                    ?>
+                </select>
+                <select name='groupements_territoriaux[]' class="span3 chosen" data-placeholder='Groupements territoriaux' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
+                        <?php $selected = false; ?>
+                        <?php if ($this->user['groupements'] != null): ?>
+                            <?php foreach($this->user['groupements'] as $user_groupement): ?>
+                                <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
+                                    <?php $selected = true; ?>
+                                    <?php break; ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                        <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
+                            <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+                <select name='avisCommission[]' class="span3 chosen" data-placeholder='Avis de la commission' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='1' <?php if(isset($_GET["avisCommission"]) && in_array(1, (array) $_GET["avisCommission"])) echo 'selected' ?>>Favorable</option>
+                    <option value='2' <?php if(isset($_GET["avisCommission"]) && in_array(2, (array) $_GET["avisCommission"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+            </div>
+
+            <!-- On met une div pour ne pas coller les select de la 1ère ligne avec ceux de la seconde ligne -->
+            <div style="margin-top: 4px;">
+                <select name='avisRapporteur[]' class="span3 chosen" data-placeholder='Avis du rapporteur' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='1' <?php if(isset($_GET["avisRapporteur"]) && in_array(1, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Favorable</option>
+                    <option value='2' <?php if(isset($_GET["avisRapporteur"]) && in_array(2, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+            </div>
         </div>
         <div class='row-fluid span12'>
         </div>

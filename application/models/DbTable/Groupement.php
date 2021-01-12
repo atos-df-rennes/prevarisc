@@ -183,4 +183,14 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
+    public function getByGroupementType(array $types_groupement = array())
+    {
+        $select = $this ->select()
+                        ->setIntegrityCheck(false)
+                        ->from("groupement")
+                        ->where("groupement.ID_GROUPEMENTTYPE IN(?)", $types_groupement);
+
+        return $this->fetchAll($select)->toArray();
+    }
 }
