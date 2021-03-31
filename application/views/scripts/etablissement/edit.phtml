@@ -688,6 +688,9 @@
                 // Établissement
                 case '2':
                     $('.champ_categorie, .champ_periodicite, .champ_types, .champ_effectifs, .champ_plans, .champ_adresse, .champ_commission, .champ_localsommeil, .champ_donnees_pratiques, .champ_droitpublic').show();
+                    if (!$("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS']:checked").val()) {
+                        $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', 'checked');
+                    }
                     break;
 
                 // Cellule
