@@ -679,6 +679,7 @@
         $("select[name='ID_GENRE']").change(function() {
             $('.champs').hide();
             $('.etablissement_pere, .etablissements_enfants, .etablissements_lies').show();
+            $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', false).change();
             switch($(this).find('option:selected').val()) {
                 // Site
                 case '1':
@@ -689,7 +690,7 @@
                 case '2':
                     $('.champ_categorie, .champ_periodicite, .champ_types, .champ_effectifs, .champ_plans, .champ_adresse, .champ_commission, .champ_localsommeil, .champ_donnees_pratiques, .champ_droitpublic').show();
                     if (!$("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS']:checked").val()) {
-                        $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', 'checked');
+                        $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', true);
                     }
                     break;
 
