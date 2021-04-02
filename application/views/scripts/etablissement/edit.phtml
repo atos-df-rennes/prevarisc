@@ -679,6 +679,7 @@
         $("select[name='ID_GENRE']").change(function() {
             $('.champs').hide();
             $('.etablissement_pere, .etablissements_enfants, .etablissements_lies').show();
+            $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', false).change();
             switch($(this).find('option:selected').val()) {
                 // Site
                 case '1':
@@ -688,6 +689,9 @@
                 // Établissement
                 case '2':
                     $('.champ_categorie, .champ_periodicite, .champ_types, .champ_effectifs, .champ_plans, .champ_adresse, .champ_commission, .champ_localsommeil, .champ_donnees_pratiques, .champ_droitpublic').show();
+                    if (!$("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS']:checked").val()) {
+                        $("input[name='LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'][value='0']").attr('checked', true);
+                    }
                     break;
 
                 // Cellule
@@ -1056,6 +1060,19 @@
                         if (numero) {
                             adresse += numero + ", ";
                         }
+
+                        // On regarde si la voie contient une commune entre parenthèses
+                        var regExp = /\(([^)]+)\)/;
+                        var matches = regExp.exec(voie);
+
+                        if (matches) {
+                            // matches[1] contient la valeur entre parenthèses
+                            commune = matches[1];
+
+                            // On retire la commune de la voie
+                            voie = voie.split(regExp)[0].trim();
+                        }
+
                         adresse += voie + ", " + codepostal +  ", " + commune;
 
                         $("span.result").text("Géolocalisation en cours...");
