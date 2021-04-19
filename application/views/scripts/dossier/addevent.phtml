@@ -8,7 +8,6 @@
 			type:"POST",
 			async: false,	
 			beforeSend: function(){
-
 			},
 			success: function(affichageResultat){
 				if($("#FormAddEvent").valid()){
@@ -23,13 +22,11 @@
 		return false;
 	});	
 	
-	
 	(function($) {
 		$.fn.majAgendaMois = function(test) {
 			alert(test);
 		};
 	})(jQuery);
-	
 	
 	$("[name=annulation]").click(function(){
 		$("#divFormEvent").hide();

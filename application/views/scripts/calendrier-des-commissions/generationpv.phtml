@@ -3,7 +3,6 @@
 function addChamp($odf,$nomOdf, $variable){
   try{
     $odf->setVars($nomOdf,$variable, true,'UTF8');
-    #$segment->$nomOdf(utf8_decode($variable));
   } catch (Exception $e) {
 
   }
@@ -34,16 +33,13 @@ function addPrescription($listePrescription,$type,$odf){
 
     $nbPrescDossier = count($listePrescription);
 
-    if( isset($prescription) ){
-
+    if(isset($prescription) ){
         if($nbPrescDossier)
         {
             for($i=0; $i < $nbPrescDossier; $i++)
             {
                 $nbAssoc = count($listePrescription[$i]);
                 $cpt = true;
-                $article = '';
-                $texte = '';
                 $textearticle = '';
                 $nbCpt = $nbAssoc;
                 for($j=0; $j < $nbAssoc; $j++)
@@ -93,12 +89,8 @@ function addPrescription($listePrescription,$type,$odf){
             addChamp($prescription, 'textearticle', "");
             $prescription->merge();
         }
-        
     }
-
 }
-
-
 
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
 if(count($this->membresFiles) == 0){
@@ -149,53 +141,56 @@ foreach($this->membresFiles as $val => $membre){
 						}
 
 						//DEBUT Adresse
-						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]))
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"])) {
 							addChamp($dossInfos,'libelleRue', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]);
-						else
+						} else {
 							addChamp($dossInfos,'libelleRue', '');
+						}
 
-						if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]))
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"])) {
 							addChamp($dossInfos,'codePostal', $dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]);
-						else
+						} else {
 							addChamp($dossInfos,'codePostal', '');
+						}
 
-						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"]))
+						if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"])) {
 							addChamp($dossInfos,'libelleCommune', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"]);
-						else
+						} else {
 							addChamp($dossInfos,'libelleCommune','');
+						}
 						//FIN Adresse
 
 						//DEBUT Effectif total
 						$effectifTotal = $dossierInfos['infosEtab']['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] + $dossierInfos['infosEtab']['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"];
 
-						if($effectifTotal == 0)
+						if($effectifTotal == 0) {
 							addChamp($dossInfos,'effectifTotal', "non renseigné");
-						else
+						} else {
 							addChamp($dossInfos,'effectifTotal', $effectifTotal);
+						}
 						//FIN Effectif total
 
 						switch($dossierInfos['TYPE_DOSSIER']){
 							case 1:
 								$type = "Étude";
-							break;
+							    break;
 							case 2:
 								$type = "Visite de commission";
-							break;
+							    break;
 							case 3:
 								$type = "Groupe de visite";
-							break;
+							    break;
 							default:
 								$type = "";
-							break;
+							    break;
 						}
 						addChamp($dossInfos,'typeDossier', $type);
 
-						if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]))
+						if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"])) {
 							addChamp($dossInfos,'nomPereEtab', $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
-						else
+						} else {
 							addChamp($dossInfos,'nomPereEtab', '');
-
-
+						}
 
 						if(isset($dossierInfos['infosEtab']['informations'])){
 							addChamp($dossInfos,'nomEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
@@ -207,30 +202,29 @@ foreach($this->membresFiles as $val => $membre){
 							addChamp($dossInfos,'typeEtab', '');
 						}
 
-
 						switch($dossierInfos['AVIS_DOSSIER']){
 							case 1:
 								$avis = "Favorable";
-							break;
+							    break;
 							case 2:
 								$avis = "Défavorable";
-							break;
+							    break;
 							default:
 								$avis = "";
-							break;
+							    break;
 						}
 						addChamp($dossInfos,'avisDossier', $avis);
                                                 
-                                                switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
+						switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
 							case 1:
 								$avis = "Favorable";
-							break;
+							    break;
 							case 2:
 								$avis = "Défavorable";
-							break;
+							    break;
 							default:
 								$avis = "";
-							break;
+							    break;
 						}
 						addChamp($dossInfos,'avisDossierCommission', $avis);
 
@@ -246,17 +240,13 @@ foreach($this->membresFiles as $val => $membre){
 
 						$dossInfos->merge();
 					}
-				}else{
-					//dossier sans adresse indiquer le dossier en question
 				}
-
 			}
 			$odf->mergeSegment($dossInfos);
 			$nouvellePJ = savePj($this->idComm,"Le pv a bien été généré");
             $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
             $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 			$odf->saveToDisk($path);
-			//$odf->mergeSegment($dossierLoop);
 			echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le PV a été généré avec succes</span><br/><br/><br/>";
 		}else{
 			echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre->LIBELLE_COMMISSIONMEMBRE." n'a pas été renseigné</span><br/><br/><br/>";
@@ -265,7 +255,6 @@ foreach($this->membresFiles as $val => $membre){
 		echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre->LIBELLE_COMMISSIONMEMBRE." n'a pas été renseigné</span><br/><br/><br/>";
 	}
 }
-
 
 function savePj($dateCommId,$libelleDocument){
 	//ENREGISTEMENT DANS PIECE JOINTES
@@ -286,5 +275,3 @@ function savePj($dateCommId,$libelleDocument){
 
 	return $nouvellePJ;
 }
-
-?>

@@ -1,7 +1,5 @@
 <script type="text/javascript">
-
 	$(document).ready(function() {
-
 		$('.time').live('focus', function() {
 			$(this).timeEntry($.timeEntry.regional['fr']);
 		});
@@ -106,18 +104,12 @@
 		$("#dialogComm").reapeatHide();
 	});
 
-	$("#valid_periodicite").live('click',function(){
-		//alert('');
-	});
-
 	//Fonction que devra être utlisée si l'on veux pourvoir afficher une periodicitée sur 1 seule date de départ
 	(function($){
 		//permet de vérifier le nombre de date selectionnées.. Si 1 date alors on peux utiliser la périodicité
 		$.fn.countLigne = function(action,type){
-			//alert(action+" - "+type+" - "+$("#listeDates ul").length);
 			if(action == 'add'){
 				$("#addReapeat").hide();
-				//$("#repeat").attr('checked',false);
 				$("#planification").hide();
 			}else if(action == 'supp'){
 				if(type == 'edit'){
@@ -130,14 +122,12 @@
 			}
 		};
 		$.fn.buttonHide = function(){
-			//alert('');
 			$(".edition").hide();
 			$(".suppression").hide();
 			$(".dateDefaut").hide();
 			$(".addDate").hide();
 		};
 		$.fn.buttonShow = function(){
-			//alert('');
 			$(".edition").show();
 			$(".suppression").show();
 			$(".dateDefaut").show();
@@ -242,8 +232,9 @@ if(isset($this->do) && $this->do == 'edit'){
 						<li class='span2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
 						<li class='span2'>
 		";
-		if($paspremier != 0)
+		if($paspremier != 0) {
 			echo "<button class='suppression btn'><i class='icon-trash'></i>&nbsp;</button>";
+		}
 		echo "
 						</li>
 					</ul>
@@ -272,41 +263,43 @@ if(isset($this->do) && $this->do == 'edit'){
 						<button class='suppression btn' ><i class='icon-trash'></i>&nbsp;</button>
 					</li>
 			";
-		break;
+		    break;
 		case 'libelleCom':
 			echo "
 				Saisissez le libellé de la commission <input type='text' name='value_libelleCom' id='value_libelleCom' value='".htmlentities($this->libelleDateComm, ENT_QUOTES)."' />
 				<button class='validation btn' id='valid_libelleCom'><i class='icon-ok'></i>&nbsp;</button>
 				<button class='annulation btn' id='annule_libelleCom'><i class='icon-remove'></i>&nbsp;</button>
 			";
-		break;
+		    break;
 		case 'valid_libelleCom':
 			echo afficheLibelleDateComm($this->libelleDateComm);
-		break;
+		    break;
 		case 'annule_libelleCom':
 			echo afficheLibelleDateComm($this->libelleDateComm);
-		break;
+		    break;
 		case "typeCom":
 			echo modifTypeComm($this->listeCommType,$this->typeComSelect);
-		break;
+		    break;
 		case "valid_typeCom":
 			echo afficheTypeDateComm($this->libelleType);
-		break;
+		    break;
 		case "annule_typeCom":
 			echo afficheTypeDateComm($this->libelleType);
-		break;
+		    break;
 		case 'dateComm':
 			echo afficheDateEdit($this->dateCommDetail,$this->first);
-		break;
+		    break;
 		case 'valid_dateCom':
 			echo afficheDateValid($this->updateDateComm,$this->first);
-		break;
+		    break;
 		case 'annule_dateCom':
 			echo afficheDateValid($this->dateCommDetail,$this->first);
-		break;
+		    break;
 		case 'addDateS':
 			echo ajoutDateLiee($this->TabNouvelleDate,$this->nouvelleDate);
-		break;
+		    break;
+		default:
+		    break;
 	}
 }//FIN DU IF $POST
 
@@ -325,12 +318,11 @@ function afficheLibelleDateComm($libelle){
 
 function afficheTypeDateComm($libelleCom){
 	//affiche le type de la commission en mode lecture d'infos
-	$affiche = "
+	return "
 		Le type de commission est :
 	".$libelleCom."
 		<button id='edit_typeCom' class='edition btn'><i class='icon-pencil'></i>&nbsp;</button>
 	";
-	return $affiche;
 }
 
 function modifTypeComm($listeCommType, $idSelect){
@@ -347,12 +339,11 @@ function modifTypeComm($listeCommType, $idSelect){
 		}
 		$affiche .= "<option value='".$value['ID_COMMISSIONTYPEEVENEMENT']."' ".$select.">".$value['LIBELLE_COMMISSIONTYPEEVENEMENT']."</option>";
 	}
-	$affiche .= "
+	return $affiche .= "
 		</select>
 		<button class='validation btn' id='valid_typeCom'><i class='icon-ok'></i>&nbsp;</button>
 		<button class='annulation btn' id='annule_typeCom'><i class='icon-remove'></i>&nbsp;</button>
 	";
-	return $affiche;
 }
 
 function afficheTabListeDates($listeDates){
@@ -370,8 +361,8 @@ function afficheTabListeDates($listeDates){
 	";
 	$paspremier = 0;
 	foreach($listeDates as $dates){
-		$heureDebut = $chaine=substr($dates['HEUREDEB_COMMISSION'],0,5);
-		$heureFin = $chaine=substr($dates['HEUREFIN_COMMISSION'],0,5);
+		$heureDebut = substr($dates['HEUREDEB_COMMISSION'],0,5);
+		$heureFin =substr($dates['HEUREFIN_COMMISSION'],0,5);
 		$date = new Zend_Date($dates['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 		$dateLibelle = $date->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 		$affiche .= "
@@ -394,19 +385,18 @@ function afficheTabListeDates($listeDates){
 		";
 		$paspremier++;
 	}
-	$affiche .= "
+	return $affiche .= "
 				</div>
 	";
-	return $affiche;
 }
 
 function afficheDateEdit($dateInfos,$first=null){
 	//affiche la partie formulaire affichée lors de l'ajout d'une date à une commission
-	$heureDebut = $chaine=substr($dateInfos['HEUREDEB_COMMISSION'],0,5);
-	$heureFin = $chaine=substr($dateInfos['HEUREFIN_COMMISSION'],0,5);
+	$heureDebut =substr($dateInfos['HEUREDEB_COMMISSION'],0,5);
+	$heureFin =substr($dateInfos['HEUREFIN_COMMISSION'],0,5);
 	$date = new Zend_Date($dateInfos['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 	$date = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
-	$affiche = "
+	return "
 		<li class='span6'>
 			<input type='text' class='date' value='".$date."' id='date_".$dateInfos['ID_DATECOMMISSION']."' />
 		</li>
@@ -422,13 +412,12 @@ function afficheDateEdit($dateInfos,$first=null){
 			<input type='hidden' name='first' id='first' value='".$first."' />
 		</li>
 	";
-	return $affiche;
 }
 
 function afficheDateValid($date,$first=null){
 	//affiche la date après l'avoir inseree dans la base de données cas édition
-	$heureDebut = $chaine=substr($date['HEUREDEB_COMMISSION'],0,5);
-	$heureFin = $chaine=substr($date['HEUREFIN_COMMISSION'],0,5);
+	$heureDebut =substr($date['HEUREDEB_COMMISSION'],0,5);
+	$heureFin = substr($date['HEUREFIN_COMMISSION'],0,5);
 	$dateE = new Zend_Date($date['DATE_COMMISSION'],'yyyy.MM.dd','en');
 	$dateLibelle = $dateE->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 	$buttonEdition = $date['ID_DATECOMMISSION'];
@@ -444,18 +433,17 @@ function afficheDateValid($date,$first=null){
 		$affiche.= "<button class='suppression btn' id='supp_dateComm_".$buttonEdition."'><i class='icon-trash'></i>&nbsp;</button>";
 		$affiche .= "<button style='float:right;' class='dateDefaut btn' id='defaut_dateComm_".$date['ID_DATECOMMISSION']."'><i class='icon-check'></i>&nbsp;</button>";
 	}
-	$affiche .= "
+	return $affiche .= "
 				</li>
 			</ul>
 	";
-	return $affiche;
 }
 
 function ajoutDateLiee($tabDate,$date){
 	//ajoute une date à une comm dans le cas d'une édition
-	$heureDebut = $chaine=substr($tabDate['HEUREDEB_COMMISSION'],0,5);
-	$heureFin = $chaine=substr($tabDate['HEUREFIN_COMMISSION'],0,5);
-	$affiche = "
+	$heureDebut =substr($tabDate['HEUREDEB_COMMISSION'],0,5);
+	$heureFin =substr($tabDate['HEUREFIN_COMMISSION'],0,5);
+	return "
 		<ul class='unstyled row-fluid' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
 			<li class='span6'>".$date."</li>
 			<li class='span2'>".$heureDebut."</li>
@@ -467,7 +455,6 @@ function ajoutDateLiee($tabDate,$date){
 			</li>
 		</ul>
 	";
-	return $affiche;
 }
 
 function afficheDivPeriodicite($countLigne,$doVal){
@@ -476,10 +463,11 @@ function afficheDivPeriodicite($countLigne,$doVal){
 	for($i = 1; $i <=4; $i++){
 		array_push($periodicite, $i);
 	}
-	if($countLigne > 1)
+	if($countLigne > 1) {
 		$disp = "none";
-	else
+	} else {
 		$disp = "block";
+	}
 	$affiche = "
 			<p id='addReapeat' style='float:left;display:".$disp."'; >
 				Souhaitez vous planifier cette commission sur une période donnée ?<input type='checkbox' name='repeat' id='repeat'/>
@@ -500,18 +488,18 @@ function afficheDivPeriodicite($countLigne,$doVal){
 					</select>&nbsp;semaines
 	";
 	
-	if($doVal == 'edit')
-		$affiche . "<button class='validPeriodicite btn'><i class='icon-plus'></i>&nbsp;</button>";
+	if($doVal == 'edit') {
+		$affiche .= "<button class='validPeriodicite btn'><i class='icon-plus'></i>&nbsp;</button>";
+	}
 		
-	$affiche . "
+	return $affiche .= "
 			</div>
 	";
-	return $affiche;
 }
 
 function divAddDate(){
 	//fonction affichant la div permettant d'ajouter une ligne 'date'
-	$affiche = "
+	return "
 		<div id='divAddDate'  style='display:none;'>
 			&nbsp;&nbsp;
 			<ul class='unstyled row-fluid' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
@@ -525,5 +513,4 @@ function divAddDate(){
 			</ul>
 		</div>
 	";
-	return $affiche;
 }
