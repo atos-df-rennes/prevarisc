@@ -62,9 +62,13 @@ foreach($this->informationsMembre as $val => $membre){
                         count($dossierInfos['infosEtab']['adresses']) > 0
                         && $dossierInfos['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'] == $commune[0]
                         && (
+                            (
                             $membre['categories'][ $dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
                             && $membre['types'][ $dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
                             && $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
+                            )
+                            ||
+                            $membre['classes'][ $dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
                         )
                     ){
                         retrieveInfoDoss($membreLoop, $dossierInfos);
