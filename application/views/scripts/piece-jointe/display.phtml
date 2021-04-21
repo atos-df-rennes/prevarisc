@@ -1,6 +1,6 @@
 <?php foreach ($this->listePj as $pj) : ?>
 <tr>   
-    <?php /* Lien de la pièce jointe */ ?>
+    <?php  /* Lien de la pièce jointe */ ?>
     <td>
         <a 
             class="file <?php echo substr(strtolower($pj['EXTENSION_PIECEJOINTE']), 1, 3) ?>"
@@ -17,6 +17,16 @@
             echo $date->get( Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR );
         ?>
     </td>
+    <td>
+        <?php if(($this->verrou != 1) && ($pj['SIGNE_PIECEJOINTE'] != 1)): ?>
+            <a class='sign' href='/dossier/sign?fileName=<?php echo $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'] ?>'>
+                 <i class="icon-pencil"></i>
+            </a>
+        <?php endif ?>
+    </td>
+    <td>
+          <i class="<?php echo  $this->translateStatus;?>" title="<?php echo $this->infoStatus;?>"></i>
+    </td>
     <?php /* Action*/ ?>
     <td>
         <?php if($this->verrou != 1): ?>
@@ -25,5 +35,8 @@
             </a>
         <?php endif ?>
     </td>
-</tr>
+</tr>            
 <?php endforeach ?>
+
+
+

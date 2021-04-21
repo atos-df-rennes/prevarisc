@@ -25,6 +25,7 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->identifiant = $this->_request->id;
             $this->view->pjcomm = $this->_request->pjcomm;
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
+            $listePjSigne = $DBused->affichagePieceJointeSigne('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             $this->view->verrou = $this->_request->verrou;
         } elseif ($this->_request->type == 'etablissement') { // Cas établissement
             $this->view->type = 'etablissement';
@@ -40,6 +41,18 @@ class PieceJointeController extends Zend_Controller_Action
 
         // On envoi la liste des PJ dans la vue
         $this->view->listePj = $listePj;
+        $this->view->listePjSigne = $listePjSigne;
+
+        // Status
+        $this->view->status = $this->_request->status;
+        $this->view->idStatus = $this->_request->idStatus;
+        $this->view->translateStatus = $this->_request->translateStatus;
+        $this->view->infoStatus = $this->_request->infoStatus;
+
+        $this->view->idsignatureRequest = $this->_request->idsignatureRequest;
+        $this->view->fileName = $this->_request->fileName;
+        $this->view->fileSigned = $this->_request->fileSigned;
+        
     }
 
     public function getAction()
@@ -137,6 +150,7 @@ class PieceJointeController extends Zend_Controller_Action
             $nouvellePJ->EXTENSION_PIECEJOINTE = $extension;
             $nouvellePJ->NOM_PIECEJOINTE = $this->_getParam('nomFichier') == '' ? substr($_FILES['fichier']['name'], 0, -4) : $this->_getParam('nomFichier');
             $nouvellePJ->DESCRIPTION_PIECEJOINTE = $this->_getParam('descriptionFichier');
+            $nouvellePJ->SIGNE_PIECEJOINTE = $this->_getParam('signatureFichier');
             $nouvellePJ->DATE_PIECEJOINTE = $dateNow->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY.' '.Zend_Date::HOUR.':'.Zend_Date::MINUTE.':'.Zend_Date::SECOND);
 
             // Sauvegarde de la BDD

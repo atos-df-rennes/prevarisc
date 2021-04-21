@@ -709,6 +709,18 @@
                     <action>index</action>
                     <privilege>view_doss</privilege>
                 </index>
+                <sign>
+                    <controller>dossier</controller>
+                    <action>sign</action>
+                </sign>
+                <data>
+                    <controller>dossier</controller>
+                    <action>data</action>
+                </data>
+                <download>
+                    <controller>dossier</controller>
+                    <action>download</action>
+                </download>
                  <delete>
                     <controller>dossier</controller>
                     <action>delete</action>

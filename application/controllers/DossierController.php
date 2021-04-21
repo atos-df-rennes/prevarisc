@@ -188,6 +188,9 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
+        
+        $data = $this->dataAction();
+
         if ($this->_getParam('id')) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
         }
@@ -196,6 +199,11 @@ class DossierController extends Zend_Controller_Action
             'type' => 'dossier',
             'id' => $this->_request->id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
+            'idsignatureRequest' => $data[0],
+            'idStatus' => $data[1],
+            'fileName'=> $data[2],
+            'translateStatus' => $this->translateAction($data[1]),
+            'infoStatus' => $this->iconeAction($data[1]),   
         ));
     }
 
@@ -3024,4 +3032,100 @@ class DossierController extends Zend_Controller_Action
             ));
         }
     }
+    public function signAction(){
+        //$fileName = 'Document';
+        //$extension = '.docx';
+        $fileName = $this->_getParam('fileName');
+        $path = './'.$fileName;
+        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $request = new HelloSign\SignatureRequest;
+        $request->enableTestMode();
+        $request->setTitle($fileName);
+        $request->setSubject('Prevarisc Signatureélectronique');
+        $request->setMessage($fileName);
+        $request->addSigner('jahoui.hajar@gmail.com', 'Me');
+        $request->addFile($path);
+        $response = $client->sendSignatureRequest($request);
+        /*$type_tab_response = (array)$response ;
+        $tab_response_val = array_values($type_tab_response);
+        $type_tab_infoStatus = (array)$tab_response_val [12];
+        $tab_infoStatus_val = array_values($type_tab_infoStatus);
+        $tab_status = $tab_infoStatus_val[1];
+        $type_tab_status = (array)$tab_status[0] ;
+        $tab_status_val = array_values($type_tab_status);
+        $status = $tab_status_val[4];
+        echo "<pre>\n";
+        echo "Using \n";
+        print_r ( $status );*/
+        
+    }
+    public function downloadAction(){
+      /*-----------------------Dowlond-------------------------------------- */
+        $signature_request_id = $this->_getParam('signature_request_id');
+        $dest_file_name = $this->_getParam('dest_file_name');
+
+        $extension = '.pdf';
+        $dest_file_path = './'.$dest_file_name.'_signé'.$extension;
+        
+        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $client->getFiles($signature_request_id, $dest_file_path, HelloSign\SignatureRequest::FILE_TYPE_PDF);
+        /*echo "<pre>\n";
+        print_r ("param 1:".$signature_request_id."\n" );
+        print_r ( "param 2:".$dest_file_name ); */
+       
+    }
+    public function dataAction()
+    {
+        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $signature_requests = $client->getSignatureRequests(1);
+        $Arr = (array)$signature_requests ;
+        //echo "<pre>\n";
+        //echo "Using \n";
+        //print_r ( $Arr );
+
+        
+        /*------------------------------ */
+
+        $ArrValue = array_values($Arr );
+        $valuesArrV = array_values($ArrValue[7]);
+        //echo gettype($ArrValue[7])."\n";
+        //echo count($ArrValue[7]);
+
+        $newArrV = (array)$valuesArrV[0];
+        $valuesOfArr = array_values($newArrV);
+        //print_r ( $valuesArrV );
+        /*Id Signature*/
+        $signature_request_id = $valuesOfArr[1];
+        /*nameFile*/
+        $fileName = $valuesOfArr[27] ;
+        //print_r ( $valuesOfArr[1] );
+        /*Status*/
+        $ArrStat = (array)$valuesOfArr[12] ;
+        $valuesOfArrStat = array_values($ArrStat);
+        //print_r ( $valuesOfArrStat );
+        $getSta = $valuesOfArrStat[1];
+        $newArrSt = (array)$getSta[0] ;
+        $valuesOfnewArrSt = array_values($newArrSt);
+        //print_r ($valuesOfnewArrSt);
+        $status = $valuesOfnewArrSt[4];
+        $data = [$signature_request_id,$status,$fileName];
+        //print_r ( $data[2] );
+
+        //return $status;
+        return $data;
+
+
+    }
+    public function translateAction($key){
+        $tabStatus = ['awaiting_signature' => 'icon-question-sign', 'signed' => 'icon-ok-sign'];
+        //echo $key;
+        return $tabStatus[$key];
+
+    }
+    public function iconeAction($key){
+        $infoStatus = ['awaiting_signature' => 'En attente de signature', 'signed' => 'Signé'];
+        return $infoStatus[$key];
+
+    }
+
 }

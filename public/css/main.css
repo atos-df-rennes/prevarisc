@@ -1157,6 +1157,47 @@ a.list-group-item-danger.active:focus {
     background: url('../images/msg.png') no-repeat;  
 }
 
+
+#tabPieceJointeSigne .file {
+    padding: 0 0 3px 22px;
+}
+
+#tabPieceJointeSigne .pdf{  
+    background: url('../images/pdf.png') no-repeat;  
+}  
+
+#tabPieceJointeSigne .doc, #tabPieceJointeSigne .docx{  
+    background: url('../images/word.png') no-repeat;  
+}  
+
+#tabPieceJointeSigne .odt{  
+    background: url('../images/libreoffice.png') no-repeat;  
+}  
+
+#tabPieceJointeSigne .png,
+#tabPieceJointeSigne .jpg,
+#tabPieceJointeSigne .jpeg,
+#tabPieceJointeSigne .gif,
+#tabPieceJointeSigne .bmp
+{  
+    background: url('../images/image.png') no-repeat;  
+}
+
+#tabPieceJointeSigne .zip,
+#tabPieceJointeSigne .rar
+{  
+    background: url('../images/zip.png') no-repeat;  
+}  
+
+#tabPieceJointeSigne .txt{  
+    background: url('../images/text.png') no-repeat;  
+}
+
+#tabPieceJointeSigne .msg{  
+    background: url('../images/msg.png') no-repeat;  
+}
+
+
 /* Fix provenant d'un problème IE11 / bootstrap*/
 #geoportail-container img, #geoconcept-container img {
     max-width: none;

@@ -20,12 +20,51 @@
 				<th>Nom</th> 
 				<th>Description</th>
 				<th>Date d'ajout</th>
+				<th>Signer</th>
+				<th>Statut</th>
 				<th></th>
 			</tr> 
 		</thead> 
 		<tbody>
 		<?php 
-			echo $this->partial("piece-jointe/display.phtml", array("path" => $this->path, "listePj" => $this->listePj, "type" => $this->type, "id" => $this->identifiant, "verrou" => $this->verrou)) 
+			echo $this->partial("piece-jointe/display.phtml", array(
+				"path" => $this->path, 
+				"listePj" => $this->listePj,
+				"type" => $this->type,
+				"id" => $this->identifiant, 
+				"verrou" => $this->verrou, 
+				"idStatus" => $this->idStatus, 
+				"translateStatus" => $this->translateStatus, 
+			    "infoStatus" => $this->infoStatus, 
+				"idsignatureRequest" => $this->idsignatureRequest, 
+				"fileName" => $this->fileName, 
+				"fileSigned" => $this->fileSigned,
+				"status" => $this->status, 
+				)) 
+		?>
+		</tbody> 
+	</table>
+</div>
+<div id='listePieceJointeSigne' class='<?php if(count($this->listePjSigne)==0) echo "ui-helper-hidden"?>' >
+	<table id='tabPieceJointeSigne' class='table table-striped'> 
+		<thead> 
+		<h4>Pièces jointes signés</h4>
+			<tr>
+				<th>Nom</th> 
+				<th>Description</th>
+				<th>Date d'ajout</th>
+				<th></th>
+			</tr> 
+		</thead> 
+		<tbody>
+		<?php 
+			echo $this->partial("piece-jointe/display.phtml", array(
+				"path" => $this->path, 
+				"listePj" => $this->listePjSigne,
+				"type" => $this->type,
+				"id" => $this->identifiant, 
+				"verrou" => $this->verrou, 
+				)) 
 		?>
 		</tbody>
 	</table>
@@ -210,6 +249,7 @@
 					
 					// Ajout d'une ligne
 					$("#tabPieceJointe tbody").prepend(result.html);
+					$("#tabPieceJointeSigne tbody").prepend(result.html);
 					
 					// Mise à jour
 					$("#listePieceJointe table").trigger("update");
