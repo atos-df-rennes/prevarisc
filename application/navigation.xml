@@ -777,6 +777,10 @@
                             <action>check</action>
                             <privilege>edit_doss</privilege>
                         </check>
+                        <file>
+                            <controller>piece-jointe</controller>
+                            <action>file</action>
+                        </file>
                     </pages>
                 </piece-jointe>
                 <add>

@@ -138,9 +138,11 @@ class DossierController extends Zend_Controller_Action
         //Courrier - OK
         '45' => array('DATEINSERT', 'OBJET', 'DATESIGN', 'DATEREP', 'PREVENTIONNISTE', 'OBSERVATION'),
     );
+    public $store;
 
     public function init()
     {
+        $this->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
 
@@ -203,7 +205,7 @@ class DossierController extends Zend_Controller_Action
             'idStatus' => $data[1],
             'fileName'=> $data[2],
             'translateStatus' => $this->translateAction($data[1]),
-            'infoStatus' => $this->iconeAction($data[1]),   
+            'infoStatus' => $this->iconeAction($data[1]), 
         ));
     }
 
@@ -3033,18 +3035,21 @@ class DossierController extends Zend_Controller_Action
         }
     }
     public function signAction(){
+
+        $service_dossier = new Service_Dossier();
+        $filepath_pj = $service_dossier->getFilePath($this->_request->id, $this->_request->id_pj);
         //$fileName = 'Document';
         //$extension = '.docx';
         $fileName = $this->_getParam('fileName');
-        $path = './'.$fileName;
+        //$path = $this->_getParam('path');
         $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
         $request = new HelloSign\SignatureRequest;
         $request->enableTestMode();
-        $request->setTitle($fileName);
+        $request->setTitle(''.$fileName.'_signé');
         $request->setSubject('Prevarisc Signatureélectronique');
-        $request->setMessage($fileName);
+        $request->setMessage("Signé fichier");
         $request->addSigner('jahoui.hajar@gmail.com', 'Me');
-        $request->addFile($path);
+        $request->addFile($filepath_pj);
         $response = $client->sendSignatureRequest($request);
         /*$type_tab_response = (array)$response ;
         $tab_response_val = array_values($type_tab_response);

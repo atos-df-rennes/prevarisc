@@ -2,6 +2,9 @@
 
 class Service_Dossier
 {
+
+    public $store;
+
     /**
      * Récupération de l'ensemble des types.
      *
@@ -867,5 +870,38 @@ class Service_Dossier
         $DB_prev = new Model_DbTable_DossierPreventionniste();
 
         return $DB_prev->getPrevDossier($idDossier);
+    }
+
+    /**
+     * Récupération du chemin d'une pièce jointe d'un dossier.
+     *
+     *  @param int $id_dossier
+     *  @param int $id_pj
+     * 
+     * @return string
+     */
+    public function getFilePath($id_dossier,$id_pj)
+    {
+        $this->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+
+        // Modèles
+        $DBused = new Model_DbTable_PieceJointe();
+
+        $piece_jointe = null;
+
+        // Cas dossier
+        $type = 'dossier';
+        $piece_jointe = $DBused->affichagePieceJointe('dossierpj', 'piecejointe.ID_PIECEJOINTE',$id_pj);
+        
+        if (
+            !$piece_jointe
+            || empty($piece_jointe)
+        ) {
+            throw new Zend_Controller_Action_Exception('Cannot find piece jointe for id '. $id_pj, 404);
+        }
+
+        $piece_jointe = $piece_jointe[0];
+        $filepath = $this->store->getFilePath($piece_jointe, $type, $id_dossier);
+        return $filepath;
     }
 }
