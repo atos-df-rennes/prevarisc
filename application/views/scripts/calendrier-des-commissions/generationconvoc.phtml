@@ -37,11 +37,11 @@ foreach($this->informationsMembre as $val => $membre){
 					(
 					$membre['categories'][ $dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
 					&& $membre['types'][ $dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
-					&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 					)
 					||
 					$membre['classes'][ $dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 				)
+				&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 			){
 				$cptConcerne ++;
 			}
@@ -87,11 +87,11 @@ foreach($this->informationsMembre as $val => $membre){
 							(
 							$membre['categories'][ $dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
 							&& $membre['types'][ $dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 							)
 							||
 							$membre['classes'][ $dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
+						&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						&& isset($dossierInfos["HEURE_DEB_AFFECT"])
 					){
 						$heureDebutTab = explode(":",$dossierInfos["HEURE_DEB_AFFECT"]);
@@ -112,11 +112,11 @@ foreach($this->informationsMembre as $val => $membre){
 							(
 							$membre['categories'][ $dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
 							&& $membre['types'][ $dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 							)
 							||
 							$membre['classes'][ $dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
+						&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 					){
 						retrieveInfoDossier($infosDoss, $dossierInfos);
 						$villeODF->infosDoss->merge();
@@ -169,11 +169,11 @@ foreach($this->informationsMembre as $val => $membre){
 							(
 							$membre['categories'][ $dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
 							&& $membre['types'][ $dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 							)
 							||
 							$membre['classes'][ $dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
+						&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 					){
 						retrieveInfoDossier($grpLoop, $dossierInfos);
 						setVars($odf, 'nomEtab',$dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
