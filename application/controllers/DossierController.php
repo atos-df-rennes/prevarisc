@@ -164,7 +164,7 @@ class DossierController extends Zend_Controller_Action
             $idDossier = $this->_getParam('idDossier');
         }
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
-
+        
         if ($idDossier != null) {
             //Si on à l'id d'un dossier, on récupére tous les établissements liés à ce dossier
             $DBdossier = new Model_DbTable_Dossier();
@@ -190,8 +190,14 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
-        
+        $DB_user = new Model_DbTable_Utilisateur();        
+        $model_userinformations = new Model_DbTable_UtilisateurInformations();
+
         $data = $this->dataAction();
+
+        $idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+        $user = $DB_user->find($idUser)->current()->toArray();
+        $user_info = $model_userinformations->find($user['ID_UTILISATEURINFORMATIONS'])->current();
 
         if ($this->_getParam('id')) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
@@ -206,6 +212,7 @@ class DossierController extends Zend_Controller_Action
             'fileName'=> $data[2],
             'translateStatus' => $this->translateAction($data[1]),
             'infoStatus' => $this->iconeAction($data[1]), 
+            'mail_user' =>  $user_info ['MAIL_UTILISATEURINFORMATIONS'],
         ));
     }
 
@@ -3041,14 +3048,14 @@ class DossierController extends Zend_Controller_Action
         //$fileName = 'Document';
         //$extension = '.docx';
         $fileName = $this->_getParam('fileName');
-        //$path = $this->_getParam('path');
+        $email_address = $this->_getParam('email_address');
         $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
         $request = new HelloSign\SignatureRequest;
         $request->enableTestMode();
         $request->setTitle(''.$fileName.'_signé');
         $request->setSubject('Prevarisc Signatureélectronique');
         $request->setMessage("Signé fichier");
-        $request->addSigner('jahoui.hajar@gmail.com', 'Me');
+        $request->addSigner($email_address, 'Me');
         $request->addFile($filepath_pj);
         $response = $client->sendSignatureRequest($request);
         /*$type_tab_response = (array)$response ;

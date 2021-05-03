@@ -52,7 +52,8 @@ class PieceJointeController extends Zend_Controller_Action
         $this->view->idsignatureRequest = $this->_request->idsignatureRequest;
         $this->view->fileName = $this->_request->fileName;
         $this->view->fileSigned = $this->_request->fileSigned;
-        
+
+        $this->view->mail_user = $this->_request->mail_user;
     }
 
     public function getAction()

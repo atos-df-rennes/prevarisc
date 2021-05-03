@@ -19,7 +19,7 @@
     </td>
     <td>
         <?php if(($this->verrou != 1) && ($pj['SIGNE_PIECEJOINTE'] != 1)): ?>
-            <a class='sign' href='/dossier/sign?id=<?php echo  $this->id?>&id_pj= <?php echo $pj['ID_PIECEJOINTE']?>&fileName= <?php echo $pj['NOM_PIECEJOINTE']?>'>
+            <a class='sign' href='/dossier/sign?id=<?php echo  $this->id?>&id_pj= <?php echo $pj['ID_PIECEJOINTE']?>&fileName=<?php echo $pj['NOM_PIECEJOINTE']?>&email_address=<?php echo $this->mail_user?>'>
                  <i class="icon-pencil"></i>
             </a>
         <?php endif ?>
@@ -27,7 +27,6 @@
     <td>
           <i class="<?php echo  $this->translateStatus;?>" title="<?php echo $this->infoStatus;?>"></i>
     </td>
-
     <?php /* Action*/ ?>
     <td>
         <?php if($this->verrou != 1): ?>
