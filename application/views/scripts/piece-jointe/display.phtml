@@ -29,6 +29,12 @@
     </td>
     <?php /* Action*/ ?>
     <td>
+    <button class='addPJSigne' value='<?php echo $pj["ID_PIECEJOINTE"] ?>'><i class="icon-plus-sign"></i></button>
+    </td>
+    <td>
+    <div class='showPJSigne' value='<?php echo $pj["ID_PIECEJOINTE"] ?>'><i class="icon-zoom-in"></i></div>
+    </td>
+    <td>
         <?php if($this->verrou != 1): ?>
             <a class='delete' href='/piece-jointe/delete?id_pj=<?php echo $pj["ID_PIECEJOINTE"] ?>&type=<?php echo $this->type ?>&id=<?php echo $this->id ?>'>
                 <i class="icon-trash"></i>

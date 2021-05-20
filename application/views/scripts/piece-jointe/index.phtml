@@ -9,9 +9,12 @@
 		<button id='addPJQuick' class='btn' >Ajout rapide</button>
 	";
 ?>
+
     <div id='dropzone' class='dropzone' style='display:none'></div>
 </h3>
 <div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
+<div id='formSigneAddPJ' title='Ajouter une pièce jointe Signé' class='ui-helper-hidden' ></div>
+
 
 <div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
 	<table id='tabPieceJointe' class='table table-striped'> 
@@ -22,6 +25,15 @@
 				<th>Date d'ajout</th>
 				<th>Signer</th>
 				<th>Statut</th>
+				<th>Ajouter pièce jointe signé</th>
+				<th>Pièce jointe signé</th>
+				<th></th>
+			</tr> 
+			<tr id="lien">
+				<th>Nom</th> 
+				<th>Description</th>
+				<th>Date d'ajout</th>
+				<th>Pièce jointe signé</th>
 				<th></th>
 			</tr> 
 		</thead> 
@@ -45,6 +57,32 @@
 		?>
 		</tbody> 
 	</table>
+</div>
+<div id="lien">
+	<div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
+		<table id='tabPieceJointe' class='table table-striped'> 
+			<thead> 
+				<tr>
+					<th>Nom</th> 
+					<th>Description</th>
+					<th>Date d'ajout</th>
+					<th>Pièce jointe signé</th>
+					<th></th>
+				</tr> 
+			</thead> 
+			<tbody>
+			<?php 
+				echo $this->partial("piece-jointe/display.phtml", array(
+					"path" => $this->path, 
+					"listePj" => $this->listePjSigne,
+					"type" => $this->type,
+					"id" => $this->identifiant, 
+					"verrou" => $this->verrou, 
+					)) 
+			?>
+			</tbody> 
+		</table>
+	</div>
 </div>
 <div id='listePieceJointeSigne' class='<?php if(count($this->listePjSigne)==0) echo "ui-helper-hidden"?>' >
 	<table id='tabPieceJointeSigne' class='table table-striped'> 
@@ -78,7 +116,9 @@
 	$(document).ready(function() {
 
 		$("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' >");
-
+		$(".showPJSigne").click(function(){
+			$("#lien").slideToggle("slow");
+  		});
 		// Bouton de la pièce jointe
 		$("#addPJ").button({
 		
@@ -129,6 +169,41 @@
                 $("#addPJQuick").click(function() {
                     $('#dropzone').toggle();
                 });
+				// Bouton de la pièce jointe signé
+				$(".addPJSigne").click(function(){
+				// Dialogue du formulaire
+				$.ajax({
+					url: "/piece-jointe/form-signe",
+					data: "id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
+					type: "post",
+					success: function(result) {
+						$("#formSigneAddPJ").html(result).dialog({
+							resizable: false,
+							height: 500,
+							width: 580,
+							modal: true,
+							buttons: {
+								'Ajouter la pièce jointe signé': function() {
+									// Envoi du formulaire dans formSigne
+									$("#formSigneUpload").submit();
+
+									// On ferme la boite de dialogue
+									$(this).dialog('close');
+
+									// On ouvre la barre de chargement 
+									$("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
+										resizable: false,
+										height: 45,
+										width: 250,
+										modal: true,
+										dialogClass: 'noTitleStuff'
+									});
+								}
+							}
+						});
+					}
+				});
+			});
                 
                 var myDropzone = new Dropzone("#dropzone", { 
                     url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
@@ -269,3 +344,9 @@
 	}
 
 </script>
+<style> 
+#lien {
+  padding: 10px;
+  display: none;
+}
+</style>

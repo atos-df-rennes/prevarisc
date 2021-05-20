@@ -678,11 +678,20 @@
                             <action>form</action>
                             <privilege>modification_odj</privilege>
                         </form>
+                        <form-signe>
+                            <controller>piece-jointe</controller>
+                            <action>form-signe</action>
+                        </form-signe>
                         <add>
                             <controller>piece-jointe</controller>
                             <action>add</action>
                             <privilege>modification_odj</privilege>
                         </add>
+                        <addlie>
+                            <controller>piece-jointe</controller>
+                            <action>addlie</action>
+                            <privilege>modification_odj</privilege>
+                        </addlie>
                         <delete>
                             <controller>piece-jointe</controller>
                             <action>delete</action>
