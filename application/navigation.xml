@@ -691,7 +691,12 @@
                             <controller>piece-jointe</controller>
                             <action>addlie</action>
                             <privilege>modification_odj</privilege>
-                        </addlie>
+                        </addlie>  
+                        <getid>
+                            <controller>piece-jointe</controller>
+                            <action>getid</action>
+                            <privilege>modification_odj</privilege>
+                        </getid>
                         <delete>
                             <controller>piece-jointe</controller>
                             <action>delete</action>
@@ -703,6 +708,11 @@
                             <action>check</action>
                             <privilege>modification_odj</privilege>
                         </check>
+                        <displayAjaxPj>
+                            <controller>piece-jointe</controller>
+                            <action>display-ajax-pj</action>
+                            <privilege>search_dossiers</privilege>
+                        </displayAjaxPj>
                     </pages>
                 </piece-jointe>
             </pages>

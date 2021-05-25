@@ -29,13 +29,6 @@
 				<th>Pièce jointe signé</th>
 				<th></th>
 			</tr> 
-			<tr id="lien">
-				<th>Nom</th> 
-				<th>Description</th>
-				<th>Date d'ajout</th>
-				<th>Pièce jointe signé</th>
-				<th></th>
-			</tr> 
 		</thead> 
 		<tbody>
 		<?php 
@@ -52,7 +45,7 @@
 				"fileName" => $this->fileName, 
 				"fileSigned" => $this->fileSigned,
 				"status" => $this->status, 
-				"mail_user" => $this->mail_user, 
+				"mail_user" => $this->mail_user,
 				)) 
 		?>
 		</tbody> 
@@ -61,15 +54,6 @@
 <div id="lien">
 	<div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
 		<table id='tabPieceJointe' class='table table-striped'> 
-			<thead> 
-				<tr>
-					<th>Nom</th> 
-					<th>Description</th>
-					<th>Date d'ajout</th>
-					<th>Pièce jointe signé</th>
-					<th></th>
-				</tr> 
-			</thead> 
 			<tbody>
 			<?php 
 				echo $this->partial("piece-jointe/display.phtml", array(
@@ -84,30 +68,7 @@
 		</table>
 	</div>
 </div>
-<div id='listePieceJointeSigne' class='<?php if(count($this->listePjSigne)==0) echo "ui-helper-hidden"?>' >
-	<table id='tabPieceJointeSigne' class='table table-striped'> 
-		<thead> 
-		<h4>Pièces jointes signés</h4>
-			<tr>
-				<th>Nom</th> 
-				<th>Description</th>
-				<th>Date d'ajout</th>
-				<th></th>
-			</tr> 
-		</thead> 
-		<tbody>
-		<?php 
-			echo $this->partial("piece-jointe/display.phtml", array(
-				"path" => $this->path, 
-				"listePj" => $this->listePjSigne,
-				"type" => $this->type,
-				"id" => $this->identifiant, 
-				"verrou" => $this->verrou, 
-				)) 
-		?>
-		</tbody>
-	</table>
-</div>
+
 
 <script type="text/javascript">
         
@@ -116,9 +77,9 @@
 	$(document).ready(function() {
 
 		$("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' >");
-		$(".showPJSigne").click(function(){
+		/* $(".table_liste").click(function(){
 			$("#lien").slideToggle("slow");
-  		});
+  		});	*/	  
 		// Bouton de la pièce jointe
 		$("#addPJ").button({
 		
@@ -296,6 +257,27 @@
         
         }
         disabledTest();
+
+
+		 // Affichage des dossiers enfants
+		 $(".table_liste").live("click", function() {
+          var container = this;
+          if( $(this).hasClass("active") ) {
+              $(this).next().slideUp(400, function() {$(container).next().remove()});
+              $(this).toggleClass("active");
+          }
+          /*else {
+              $(container).find(".load").show();
+			  $(container).toggleClass("active").find(".load").hide();
+			 // $("#lien").slideToggle("slow");
+
+			 // $(container).after("<tr class='table_liste' value='test' style='overflow: auto; height: auto;' >" + "</tr>").next().slideDown();
+             /* $.post("/piece-jointe/display-ajax-pj", {parent: $(this).attr("id")}, function(html) {
+                  $(container).toggleClass("active").find(".load").hide();
+                  $(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
+              });*/
+          }*/
+         });
 		
 	});
 	
@@ -344,6 +326,7 @@
 	}
 
 </script>
+
 <style> 
 #lien {
   padding: 10px;

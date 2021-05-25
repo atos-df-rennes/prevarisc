@@ -1,5 +1,5 @@
 <?php foreach ($this->listePj as $pj) : ?>
-<tr>   
+<tr class= 'table_liste'>    
     <?php  /* Lien de la pièce jointe */ ?>
     <td>
         <a 
@@ -29,10 +29,9 @@
     </td>
     <?php /* Action*/ ?>
     <td>
-    <button class='addPJSigne' value='<?php echo $pj["ID_PIECEJOINTE"] ?>'><i class="icon-plus-sign"></i></button>
-    </td>
-    <td>
-    <div class='showPJSigne' value='<?php echo $pj["ID_PIECEJOINTE"] ?>'><i class="icon-zoom-in"></i></div>
+    <button class='addPJSigne' value = '/piece-jointe/addlie?id_pj=<?php echo $pj["ID_PIECEJOINTE"] ?>'>
+        <i class="icon-plus-sign"></i></a>
+    </button>
     </td>
     <td>
         <?php if($this->verrou != 1): ?>
@@ -41,7 +40,7 @@
             </a>
         <?php endif ?>
     </td>
-</tr>            
+</tr>  
 <?php endforeach ?>
 
 

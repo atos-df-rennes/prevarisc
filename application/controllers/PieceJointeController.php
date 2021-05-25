@@ -379,7 +379,7 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function addlieAction()
     {
-        $id_pj = $this->_getParam('id_pj');
+       $id_pj = $this->_getParam('id_pj');
 
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -490,8 +490,9 @@ class PieceJointeController extends Zend_Controller_Action
 
                 // On sauvegarde le tout
                 $linkPj->save();
-
-                $nouvellePJL->ID_PIECEJOINTE = $id_pj;
+                
+                $nouvellePJL->ID_PIECEJOINTE = $id_pj; 
+               // $nouvellePJL->ID_PIECEJOINTE = $this->getidAction(); 
                 $nouvellePJL->ID_FILS_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
                 $nouvellePJL->save();
 
@@ -515,5 +516,28 @@ class PieceJointeController extends Zend_Controller_Action
             echo "<script type='text/javascript'>window.top.window.location.reload();</script>";
         }
     }
+    public function getidAction()
+    {        
+        $id_pj = $this->_getParam('id_pj');
+        echo $id_pj;
+        return $id_pj;
+    }
 
+    public function displayAjaxPjAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $service_search = new Service_Search();
+
+        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null);
+
+        $data = $data['results'];
+
+        $html = "<ul class='recherche_liste'>";
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/etablissement.phtml', (array) $data);
+        $html .= '</ul>';
+
+        echo $html;
+    }
 }

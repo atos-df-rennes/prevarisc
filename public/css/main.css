@@ -1118,6 +1118,9 @@ a.list-group-item-danger.active:focus {
     overflow-y: scroll;
 }
 
+.table_liste{
+    border-left: 3px dotted #aaa;
+}
 #tabPieceJointe .file {
     padding: 0 0 3px 22px;
 }
