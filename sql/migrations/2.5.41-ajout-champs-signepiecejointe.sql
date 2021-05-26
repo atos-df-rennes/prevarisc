@@ -1,0 +1,3 @@
+SET NAMES 'utf8';
+
+ALTER TABLE `piecejointe` ADD `SIGNE_PIECEJOINTE` tinyint(4) DEFAULT '0' ;
