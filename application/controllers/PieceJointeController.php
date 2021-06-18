@@ -147,6 +147,7 @@ class PieceJointeController extends Zend_Controller_Action
         // Placement
         $this->view->type = $this->_getParam('type');
         $this->view->identifiant = $this->_getParam('id');
+        $this->view->idPj = $this->_getParam('idPj');
 
         // Ici suivant le type on change toutes les infos nécessaires pour lier aux différents établissements, dossiers
         if ($this->view->type == 'dossier') {
@@ -417,6 +418,8 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Sauvegarde de la BDD
             $nouvellePJ->save();
+
+            ### A DECOMMENTER ET IMPLEMENTER ###
             /*$post = $this->_request->getPost();
             if ($post['do'] == 'savePJLink') {
                 foreach ($post['ID_FILS_PIECEJOINTE'] as $id_pj_enfant) {

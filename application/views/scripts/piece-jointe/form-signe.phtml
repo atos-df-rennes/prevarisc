@@ -1,4 +1,4 @@
-<form method='post' id='formSigneUpload' name='formSigneUpload' enctype='multipart/form-data' action='' target='hiddeniframe' >
+<form method='post' id='formSigneUpload' name='formSigneUpload' enctype='multipart/form-data' action='/piece-jointe/addlie' target='hiddeniframe' >
 
 	<dl class='dl-horizontal'>
 	
@@ -36,22 +36,4 @@
 	<input type='hidden' name='type' id='typeUpload' value='<?php echo $this->type ?>' />
 	<input type='hidden' name='id' id='identifiant' value='<?php echo $this->identifiant ?>' />
 
-	<p>Click on this paragraph.</p>
-
 </form>
-
-<script>
-  var str1 = "/piece-jointe/addlie?id_pj=";
-  var str2 =  $(".addPJSigne").val();
-  var res = str1.concat(str2);
-  $("form").prop('action', str2);
-
-  $(document).ready(function(){
-  $("p").click(function(){
-    alert(str2);
-  });
-});
- // document.getElementById("demo").innerHTML = res;
-
-</script>
-
