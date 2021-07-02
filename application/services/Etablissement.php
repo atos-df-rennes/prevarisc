@@ -648,9 +648,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $result = false;
 
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {
-            if (!array_key_exists($typesASecondaires[
+            if (!array_key_exists(
+                $typesASecondaires[
                 'ID_ETABLISSEMENTINFORMATIONSTYPESACTIVITESSECONDAIRES'],
-                $postData['TYPES_ACTIVITES_SECONDAIRES'])) {
+                $postData['TYPES_ACTIVITES_SECONDAIRES']
+            )) {
                 $result = true;
                 break;
             }

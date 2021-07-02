@@ -33,20 +33,20 @@ class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-        /**
-         * @return array
-        */
-        public function recupTextes($idDossier): array
-        {
-            $select = $this->select()
+    /**
+     * @return array
+    */
+    public function recupTextes($idDossier): array
+    {
+        $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(array('dta' => 'dossiertextesappl'))
             ->join(array('ta' => 'textesappl'), 'dta.ID_TEXTESAPPL = ta.ID_TEXTESAPPL')
             ->join(array('tta' => 'typetextesappl'), 'tta.ID_TYPETEXTEAPPL = ta.ID_TYPETEXTEAPPL')
             ->where('dta.ID_DOSSIER = ?', $idDossier);
 
-            $results = $this->fetchAll($select);
+        $results = $this->fetchAll($select);
 
-            return $results !== null ? $results->toArray() : array();
-        }
+        return $results !== null ? $results->toArray() : array();
+    }
 }

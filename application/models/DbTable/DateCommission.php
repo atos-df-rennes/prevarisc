@@ -251,8 +251,8 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         $idCommission = null,
         $start = null,
         $end = null,
-        $ignoreEts = false)
-    {
+        $ignoreEts = false
+    ) {
         $select = $this->select()
                         ->setIntegrityCheck(false)
                         ->from(array('d' => 'dossier'))

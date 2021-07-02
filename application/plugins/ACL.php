@@ -298,7 +298,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                     $i = 0;
                                     foreach ($resources as $resource) {
                                         if (explode('_', $resource)[0] == 'etablissement') {
-                                            if ($acl->has($resource) && $acl->isAllowed($role, $resource,  'view_ets')) {
+                                            if ($acl->has($resource) && $acl->isAllowed($role, $resource, 'view_ets')) {
                                                 $access_granted_ets = true;
                                                 break;
                                             }
@@ -321,7 +321,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                             } else {
                                 foreach ($resources as $resource) {
                                     if ($acl->has($resource)) {
-                                        if ($acl->isAllowed($role, $resource,  $privilege)) {
+                                        if ($acl->isAllowed($role, $resource, $privilege)) {
                                             $access_granted = true;
                                             break;
                                         }
@@ -442,6 +442,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 foreach ($etablissement['etablissement_lies'] as $etablissements_enfant) {
                     $etablissements[$etablissements_enfant['ID_ETABLISSEMENT']]['informations'] = $etablissements_enfant;
                 }
+                // no break
             default:
                 break;
         }

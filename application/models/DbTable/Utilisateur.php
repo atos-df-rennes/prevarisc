@@ -326,10 +326,12 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         $selectCommune = $this->select()->setIntegrityCheck(false)
                                 ->from(array('u' => 'utilisateur'), array('ID_UTILISATEUR'))
-                                ->join(array('ui' => 'utilisateurinformations'),
+                                ->join(
+                                    array('ui' => 'utilisateurinformations'),
                                         'ui.ID_UTILISATEURINFORMATIONS = u.ID_UTILISATEURINFORMATIONS',
                                         array('ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
-                                            'ui.MAIL_UTILISATEURINFORMATIONS', ))
+                                            'ui.MAIL_UTILISATEURINFORMATIONS', )
+                                )
                                 ->join(array('g' => 'groupe'), 'g.ID_GROUPE = u.ID_GROUPE', null)
                                 ->join(array('gp' => 'groupe-privileges'), 'gp.ID_GROUPE = g.ID_GROUPE', null)
                                 ->where('ui.MAIL_UTILISATEURINFORMATIONS IS NOT NULL')
@@ -340,10 +342,12 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         $selectGroupement = $this->select()->setIntegrityCheck(false)
                                     ->from(array('u' => 'utilisateur'), array('ID_UTILISATEUR'))
-                                    ->join(array('ui' => 'utilisateurinformations'),
+                                    ->join(
+                                        array('ui' => 'utilisateurinformations'),
                                         'ui.ID_UTILISATEURINFORMATIONS = u.ID_UTILISATEURINFORMATIONS',
                                         array('ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
-                                                'ui.MAIL_UTILISATEURINFORMATIONS', ))
+                                                'ui.MAIL_UTILISATEURINFORMATIONS', )
+                                    )
                                     ->join(array('g' => 'groupe'), 'g.ID_GROUPE = u.ID_GROUPE', null)
                                     ->join(array('gp' => 'groupe-privileges'), 'gp.ID_GROUPE = g.ID_GROUPE', null)
                                     ->join(array('ug' => 'utilisateurgroupement'), 'ug.ID_UTILISATEUR = u.ID_UTILISATEUR', null)

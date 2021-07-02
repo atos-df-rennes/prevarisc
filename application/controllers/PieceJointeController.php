@@ -98,9 +98,9 @@ class PieceJointeController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        if(empty($piece_jointe)){
+        if (empty($piece_jointe)) {
             $filepath = null;
-        } elseif (empty($piece_jointe_signe)){
+        } elseif (empty($piece_jointe_signe)) {
             $filepath_signe = null;
         }
        
@@ -347,15 +347,15 @@ class PieceJointeController extends Zend_Controller_Action
         $DBused = new Model_DbTable_PieceJointe();
 
         // Cas dossier
-       if ($this->_request->type == 'dossier') {
-           $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } elseif ($this->_request->type == 'etablissement') { // Cas établissement
-           $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
-           $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } else { // Cas par défaut
-           $listePj = array();
-       }
+        if ($this->_request->type == 'dossier') {
+            $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } elseif ($this->_request->type == 'etablissement') { // Cas établissement
+            $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
+            $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } else { // Cas par défaut
+            $listePj = array();
+        }
 
         $pj = !empty($listePj) ? $listePj[0] : null;
 
@@ -380,7 +380,7 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function addlieAction()
     {
-       $id_pj = $this->_getParam('id_pj');
+        $id_pj = $this->_getParam('id_pj');
 
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -494,8 +494,8 @@ class PieceJointeController extends Zend_Controller_Action
                 // On sauvegarde le tout
                 $linkPj->save();
                 
-                $nouvellePJL->ID_PIECEJOINTE = $id_pj; 
-               // $nouvellePJL->ID_PIECEJOINTE = $this->getidAction(); 
+                $nouvellePJL->ID_PIECEJOINTE = $id_pj;
+                // $nouvellePJL->ID_PIECEJOINTE = $this->getidAction();
                 $nouvellePJL->ID_FILS_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
                 $nouvellePJL->save();
 
@@ -520,7 +520,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
     }
     public function getidAction()
-    {        
+    {
         $id_pj = $this->_getParam('id_pj');
         echo $id_pj;
         return $id_pj;

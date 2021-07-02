@@ -112,18 +112,23 @@ class Service_Changement
     {
         switch ($idChangement) {
             case '1':
-                $objet = sprintf('Passage au statut "%s"',
-                            $ets['informations']['LIBELLE_STATUT']);
+                $objet = sprintf(
+                    'Passage au statut "%s"',
+                    $ets['informations']['LIBELLE_STATUT']
+                );
                 break;
             case '2':
-                $objet = sprintf('Passage en avis "%s"',
-                            $this->getAvis($ets));
+                $objet = sprintf(
+                    'Passage en avis "%s"',
+                    $this->getAvis($ets)
+                );
                 break;
             case '3':
-                $objet = sprintf('Changement de classement "%s - %s %s"',
-                            $ets['informations']['LIBELLE_CATEGORIE'],
-                            $ets['informations']['LIBELLE_TYPE_PRINCIPAL'],
-                            $ets['informations']['LIBELLE_TYPEACTIVITE_PRINCIPAL']
+                $objet = sprintf(
+                    'Changement de classement "%s - %s %s"',
+                    $ets['informations']['LIBELLE_CATEGORIE'],
+                    $ets['informations']['LIBELLE_TYPE_PRINCIPAL'],
+                    $ets['informations']['LIBELLE_TYPEACTIVITE_PRINCIPAL']
                 );
                 break;
             default:
@@ -137,16 +142,19 @@ class Service_Changement
 
         $libelleInfos = $ets['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'];
         if (count($ets['parents']) > 0) {
-            $libelleInfos = sprintf('%s %s',
+            $libelleInfos = sprintf(
+                '%s %s',
                 $ets['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'],
                 $libelleInfos
             );
         }
 
-        return sprintf('%s (%s) - %s',
+        return sprintf(
+            '%s (%s) - %s',
             $libelleInfos,
             $commune,
-            $objet);
+            $objet
+        );
     }
 
     /**
@@ -185,7 +193,9 @@ class Service_Changement
         $avis = '';
         $serviceEts = new Service_Etablissement();
         $avisType = $serviceEts->getAvisEtablissement(
-            $ets['general']['ID_ETABLISSEMENT'], $ets['general']['ID_DOSSIER_DONNANT_AVIS']);
+            $ets['general']['ID_ETABLISSEMENT'],
+            $ets['general']['ID_DOSSIER_DONNANT_AVIS']
+        );
 
         if ($ets['presence_avis_differe'] == true && $avisType == 'avisDiff') {
             $avis = "Présence d'un dossier avec avis differé";

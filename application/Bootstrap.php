@@ -84,7 +84,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 // use a custom name for back
                 $options['customAdapter'],
                 // use application's autoload if an adapter is not loaded
-                true);
+                true
+        );
     }
 
     /**

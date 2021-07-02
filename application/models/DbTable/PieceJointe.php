@@ -18,7 +18,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('piecejointe')
             ->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE")
-            ->where($champ.' = '.$identifiant )
+            ->where($champ.' = '.$identifiant)
             ->where('piecejointe.SIGNE_PIECEJOINTE IS NULL')
             ->order('piecejointe.ID_PIECEJOINTE DESC');
 
@@ -38,7 +38,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('piecejointe')
             ->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE")
-            ->where($champ.' = '.$identifiant )
+            ->where($champ.' = '.$identifiant)
             ->where('piecejointe.SIGNE_PIECEJOINTE = 1')
             ->order('piecejointe.ID_PIECEJOINTE DESC');
 

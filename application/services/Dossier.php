@@ -2,7 +2,6 @@
 
 class Service_Dossier
 {
-
     public $store;
 
     /**
@@ -877,10 +876,10 @@ class Service_Dossier
      *
      *  @param int $id_dossier
      *  @param int $id_pj
-     * 
+     *
      * @return string
      */
-    public function getFilePath($id_dossier,$id_pj)
+    public function getFilePath($id_dossier, $id_pj)
     {
         $this->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
 
@@ -891,7 +890,7 @@ class Service_Dossier
 
         // Cas dossier
         $type = 'dossier';
-        $piece_jointe = $DBused->affichagePieceJointe('dossierpj', 'piecejointe.ID_PIECEJOINTE',$id_pj);
+        $piece_jointe = $DBused->affichagePieceJointe('dossierpj', 'piecejointe.ID_PIECEJOINTE', $id_pj);
         
         if (
             !$piece_jointe

@@ -31,25 +31,25 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-     /**
-      * @return array
-      */
-     public function getDocOtheNature($idDossier, $idNature)
-     {
-         $arrayVR = array(20, 25);
-         $arrayVAO = array(47, 48);
+    /**
+     * @return array
+     */
+    public function getDocOtheNature($idDossier, $idNature)
+    {
+        $arrayVR = array(20, 25);
+        $arrayVAO = array(47, 48);
 
-         $column1 = null;
-         $column2 = null;
-         if (in_array($idNature, $arrayVR)) {
-             $column1 = 'VISITERT_DOC';
-             $column2 = 'VISITEVAO_DOC';
-         } elseif (in_array($idNature, $arrayVAO)) {
-             $column1 = 'VISITEVAO_DOC';
-             $column2 = 'VISITERT_DOC';
-         }
+        $column1 = null;
+        $column2 = null;
+        if (in_array($idNature, $arrayVR)) {
+            $column1 = 'VISITERT_DOC';
+            $column2 = 'VISITEVAO_DOC';
+        } elseif (in_array($idNature, $arrayVAO)) {
+            $column1 = 'VISITEVAO_DOC';
+            $column2 = 'VISITERT_DOC';
+        }
 
-         $select = $this->select()
+        $select = $this->select()
              ->setIntegrityCheck(false)
              ->from(array('ddc' => 'dossierdocconsulte'))
              ->join(array('ldc' => 'listedocconsulte'), 'ddc.ID_DOC = ldc.ID_DOC')
@@ -58,5 +58,5 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
              ->where('ldc.'.$column2.' = 0');
 
         return $this->getAdapter()->fetchAll($select);
-     }
+    }
 }
