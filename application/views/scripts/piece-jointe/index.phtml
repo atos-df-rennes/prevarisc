@@ -1,20 +1,15 @@
 <input type='hidden' name='typePJ' id='typePJ' value='<?php echo $this->type ?>' />
 <input type='hidden' name='idLinkPJ' id='idLinkPJ' value='<?php echo $this->identifiant ?>' />
 
-
 <h3>Liste de pièces jointes
-<?php
-	echo "
-		<button id='addPJ' class='btn' >Ajouter une piece jointe</button>
-		<button id='addPJQuick' class='btn' >Ajout rapide</button>
-	";
-?>
+	<button id='addPJ' class='btn' >Ajouter une piece jointe</button>
+	<button id='addPJQuick' class='btn' >Ajout rapide</button>
 
     <div id='dropzone' class='dropzone' style='display:none'></div>
 </h3>
-<div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
-<div id='formSigneAddPJ' title='Ajouter une pièce jointe Signé' class='ui-helper-hidden' ></div>
 
+<div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
+<div id='formSigneAddPJ' title='Ajouter une pièce jointe signée' class='ui-helper-hidden' ></div>
 
 <div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
 	<table id='tabPieceJointe' class='table table-striped'> 
@@ -25,9 +20,8 @@
 				<th>Date d'ajout</th>
 				<th>Signer</th>
 				<th>Statut</th>
-				<th>Ajouter pièce jointe signé</th>
-				<th>Pièce jointe signé</th>
-				<th></th>
+				<th>Ajouter une pièce jointe signée</th>
+				<th>Supprimer</th>
 			</tr> 
 		</thead> 
 		<tbody>
@@ -46,7 +40,7 @@
 				"fileSigned" => $this->fileSigned,
 				"status" => $this->status, 
 				"mail_user" => $this->mail_user,
-				)) 
+			))
 		?>
 		</tbody> 
 	</table>
@@ -62,7 +56,7 @@
 					"type" => $this->type,
 					"id" => $this->identifiant, 
 					"verrou" => $this->verrou, 
-					)) 
+				))
 			?>
 			</tbody> 
 		</table>
@@ -96,7 +90,6 @@
 				data: "id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
 				type: "post",
 				success: function(result) {
-					
 					$("#formAddPJ").html(result).dialog({
 						resizable: false,
 						height: 500,
@@ -146,7 +139,7 @@
 						width: 580,
 						modal: true,
 						buttons: {
-							'Ajouter la pièce jointe signé': function() {
+							'Ajouter la pièce jointe signée': function() {
 								// Envoi du formulaire dans formSigne
 								$("#formSigneUpload").submit();
 
@@ -168,38 +161,38 @@
 			});
 		});
                 
-                var myDropzone = new Dropzone("#dropzone", { 
-                    url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
-                    paramName: "fichier"
-                });
-                myDropzone.on("success", function(file, responseText) {
-                    if (responseText !== undefined) {
-                        $('body').append(responseText);
-                        if (file.previewElement !== undefined) {
-                            file.previewElement.remove();
-                        }
-                        $('#dropzone').removeClass("dz-started").hide();
-                    } else
-                    {
-                        document.location.reload();
-                    }
-                });
+		var myDropzone = new Dropzone("#dropzone", { 
+			url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
+			paramName: "fichier"
+		});
+		myDropzone.on("success", function(file, responseText) {
+			if (responseText !== undefined) {
+				$('body').append(responseText);
+				if (file.previewElement !== undefined) {
+					file.previewElement.remove();
+				}
+				$('#dropzone').removeClass("dz-started").hide();
+			} else
+			{
+				document.location.reload();
+			}
+		});
 
 		// Supp. d'une pièce jointe
 		$("a.delete").live("click", function(e) {
-                    e.preventDefault();
-                    if (confirm('Etes-vous sûr de vouloir supprimer cette pièce jointe ?')){
-			var a = this;
-			$.ajax({
-				url: a.href,
-				data: "&type=<?php echo $this->type ?>",
-				type: "post",
-				success: function(result) {
-					$(a).parent().parent().remove();
-				}
-			});
-			return false;
-                    } 
+			e.preventDefault();
+			if (confirm('Etes-vous sûr de vouloir supprimer cette pièce jointe ?')){
+				var a = this;
+				$.ajax({
+					url: a.href,
+					data: "&type=<?php echo $this->type ?>",
+					type: "post",
+					success: function(result) {
+						$(a).parent().parent().remove();
+					}
+				});
+				return false;
+			}
 		});
 		
         $('a[href$=png], a[href$=jpg], a[href$=jpeg]').fancybox({
@@ -328,10 +321,3 @@
 	}
 
 </script>
-
-<style> 
-#lien {
-  padding: 10px;
-  display: none;
-}
-</style>
