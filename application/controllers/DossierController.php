@@ -3049,7 +3049,7 @@ class DossierController extends Zend_Controller_Action
         $filepath_pj = $service_dossier->getFilePath($this->_request->id, $this->_request->id_pj);
         $fileName = $this->_getParam('fileName');
         $email_address = $this->_getParam('email_address');
-        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $client = new HelloSign\Client(getenv('PREVARISC_HELLOSIGN_ID'));
         $request = new HelloSign\SignatureRequest;
         $request->enableTestMode();
         $request->setTitle(''.$fileName.'_signé');
@@ -3069,13 +3069,13 @@ class DossierController extends Zend_Controller_Action
         $extension = '.pdf';
         $dest_file_path = './'.$dest_file_name.'_signé'.$extension;
         
-        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $client = new HelloSign\Client(getenv('PREVARISC_HELLOSIGN_ID'));
         $client->getFiles($signature_request_id, $dest_file_path, HelloSign\SignatureRequest::FILE_TYPE_PDF);
     }
 
     public function dataAction()
     {
-        $client = new HelloSign\Client('7270c7e02d5401991f0ca8a107625c97527686d559a03e187fd94821e8a4b194');
+        $client = new HelloSign\Client(getenv('PREVARISC_HELLOSIGN_ID'));
         $signature_requests = $client->getSignatureRequests(1);
         $Arr = (array)$signature_requests ;
         
