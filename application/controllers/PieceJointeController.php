@@ -380,7 +380,7 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function addlieAction()
     {
-        $id_pj = $this->_getParam('id_pj');
+        $id_pj = $this->_getParam('idPj');
 
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -407,8 +407,6 @@ class PieceJointeController extends Zend_Controller_Action
             // Création d'une nouvelle ligne dans la base de données
             $nouvellePJ = $DBpieceJointe->createRow();
 
-            $nouvellePJL = $DBpieceJointeLie->createRow();
-
             // Données de la pièce jointe
             $nouvellePJ->EXTENSION_PIECEJOINTE = $extension;
             $nouvellePJ->NOM_PIECEJOINTE = $this->_getParam('nomFichier') == '' ? substr($_FILES['fichier']['name'], 0, -4) : $this->_getParam('nomFichier');
@@ -419,18 +417,14 @@ class PieceJointeController extends Zend_Controller_Action
             // Sauvegarde de la BDD
             $nouvellePJ->save();
 
-            ### A DECOMMENTER ET IMPLEMENTER ###
-            /*$post = $this->_request->getPost();
-            if ($post['do'] == 'savePJLink') {
-                foreach ($post['ID_FILS_PIECEJOINTE'] as $id_pj_enfant) {
-                    $newLink = $DBpieceJointeLie->createRow();
-                    $newLink->ID_PIECEJOINTE = $nouvellePJL->ID_PIECEJOINTE;
-                    $newLink->ID_FILS_ETABLISSEMENT = $id_pj_enfant;
-                    $newLink->save();
-                }
-            }*/
-            $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+            ### Ajout de la liaison des PJs
+            $nouvellePJL = $DBpieceJointeLie->createRow();
 
+            $nouvellePJL->ID_PIECEJOINTE = $id_pj;
+            $nouvellePJL->ID_FILS_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
+            $nouvellePJL->save();
+
+            $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
 
             // On check si l'upload est okay
             $linkPj = null;
@@ -493,11 +487,6 @@ class PieceJointeController extends Zend_Controller_Action
 
                 // On sauvegarde le tout
                 $linkPj->save();
-                
-                $nouvellePJL->ID_PIECEJOINTE = $id_pj;
-                // $nouvellePJL->ID_PIECEJOINTE = $this->getidAction();
-                $nouvellePJL->ID_FILS_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
-                $nouvellePJL->save();
 
                 $this->_helper->flashMessenger(array(
                     'context' => 'success',

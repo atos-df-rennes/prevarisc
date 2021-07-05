@@ -690,12 +690,10 @@
                         <addlie>
                             <controller>piece-jointe</controller>
                             <action>addlie</action>
-                            <privilege>modification_odj</privilege>
                         </addlie>  
                         <getid>
                             <controller>piece-jointe</controller>
                             <action>getid</action>
-                            <privilege>modification_odj</privilege>
                         </getid>
                         <delete>
                             <controller>piece-jointe</controller>
