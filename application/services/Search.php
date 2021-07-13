@@ -534,9 +534,6 @@ class Service_Search
                 ->group('d.ID_DOSSIER')
                 ;
 
-            // Gestion des groupements territoriaux liés aux établissements et des établissements sans adresse (et donc sans groupement territorial lié)
-            $select->where('groupement.ID_GROUPEMENTTYPE = 5 or groupement.ID_GROUPEMENTTYPE IS NULL');
-
             // Critères : numéro de doc urba
             if ($num_doc_urba !== null) {
                 $select->having('NB_URBA like ?', "%$num_doc_urba%");
@@ -780,9 +777,6 @@ class Service_Search
                         ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                         ->group("d.ID_DOSSIER")
                         ;
-
-            // Gestion des groupements territoriaux liés aux établissements et des établissements sans adresse (et donc sans groupement territorial lié)
-            $select->where('groupement.ID_GROUPEMENTTYPE = 5 or groupement.ID_GROUPEMENTTYPE IS NULL');
             
             // Critères : numéro de doc urba
             if($num_doc_urba !== null) {
