@@ -54,37 +54,38 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $options = $this->getOption('cache');
 
         return Zend_Cache::factory(
-                // front adapter
-                'Core',
-                // back adapter
-                $options['adapter'],
-                // frontend options
-                array_merge(array(
-                    'caching' => $options['enabled'],
-                    'lifetime' => $options['lifetime'],
-                    'cache_id_prefix' => 'prevarisc_'.md5(getenv('PREVARISC_DB_DBNAME')).'_',
-                    'write_control' => $options['write_control'],
-                ), $frontendOptions),
-                // backend options
-                array_merge(array(
-                    'servers' => array(
-                        array(
-                            'host' => $options['host'],
-                            'port' => $options['port'],
-                        ),
+            // front adapter
+            'Core',
+            // back adapter
+            $options['adapter'],
+            // frontend options
+            array_merge(array(
+                'caching' => $options['enabled'],
+                'lifetime' => $options['lifetime'],
+                'cache_id_prefix' => 'prevarisc_'.md5(getenv('PREVARISC_DB_DBNAME')).'_',
+                'write_control' => $options['write_control'],
+            ), $frontendOptions),
+            // backend options
+            array_merge(array(
+                'servers' => array(
+                    array(
+                        'host' => $options['host'],
+                        'port' => $options['port'],
                     ),
-                    'compression' => $options['compression'],
-                    'read_control' => $options['read_control'],
-                    'cache_dir' => $options['cache_dir'],
-                    'cache_file_perm' => 0666,
-                    'hashed_directory_perm' => 0777,
-                ), $backendOptions),
-                // use a custom name for front
-                false,
-                // use a custom name for back
-                $options['customAdapter'],
-                // use application's autoload if an adapter is not loaded
-                true);
+                ),
+                'compression' => $options['compression'],
+                'read_control' => $options['read_control'],
+                'cache_dir' => $options['cache_dir'],
+                'cache_file_perm' => 0666,
+                'hashed_directory_perm' => 0777,
+            ), $backendOptions),
+            // use a custom name for front
+            false,
+            // use a custom name for back
+            $options['customAdapter'],
+            // use application's autoload if an adapter is not loaded
+            true
+        );
     }
 
     /**

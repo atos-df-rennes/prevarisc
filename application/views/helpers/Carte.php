@@ -3,7 +3,8 @@
 class View_Helper_Carte
 {
     private $zoom;
-    private $lat, $lon;
+    private $lat;
+    private $lon;
     private $overlays = array();
     private $markers = array();
     private $key_ign;

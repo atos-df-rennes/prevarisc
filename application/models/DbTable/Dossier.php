@@ -192,7 +192,6 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ";
 
         return $this->getAdapter()->fetchRow($select);
-        
     }
 
     // Retourne la liste de tout les dossiers (études et/ou visite) d'un établissement

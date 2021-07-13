@@ -46,10 +46,12 @@ class AdminController extends Zend_Controller_Action
         } elseif (getenv('PREVARISC_NTLM_ENABLED')) {
             $this->view->authentification = 'NTLM + BDD';
         } elseif (getenv('PREVARISC_LDAP_ENABLED')) {
-            $this->view->authentification = sprintf('LDAP + BDD : %s:%d/%s',
+            $this->view->authentification = sprintf(
+                'LDAP + BDD : %s:%d/%s',
                 getenv('PREVARISC_LDAP_HOST'),
                 getenv('PREVARISC_LDAP_PORT') ?: '389',
-                getenv('PREVARISC_LDAP_BASEDN'));
+                getenv('PREVARISC_LDAP_BASEDN')
+            );
         } else {
             $this->view->authentification = 'BDD';
         }
