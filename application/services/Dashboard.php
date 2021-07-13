@@ -244,8 +244,9 @@ class Service_Dashboard
         $dbDateCommission = new Model_DbTable_DateCommission();
 
         $prochainesCommission = $dbDateCommission->getNextCommission(
-                $this->getCommissionUser($user),
-                time(), time() + 3600 * 24 * $this->options['next_commissions_days']
+            $this->getCommissionUser($user),
+            time(),
+            time() + 3600 * 24 * $this->options['next_commissions_days']
         );
 
         // on récupère pour chaque prochaine commission le nombre de dossiers affectés

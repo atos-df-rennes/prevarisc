@@ -297,15 +297,15 @@ class PieceJointeController extends Zend_Controller_Action
         $DBused = new Model_DbTable_PieceJointe();
 
         // Cas dossier
-       if ($this->_request->type == 'dossier') {
-           $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } elseif ($this->_request->type == 'etablissement') { // Cas établissement
-           $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
-           $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE', $this->_request->idpj);
-       } else { // Cas par défaut
-           $listePj = array();
-       }
+        if ($this->_request->type == 'dossier') {
+            $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } elseif ($this->_request->type == 'etablissement') { // Cas établissement
+            $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
+            $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE', $this->_request->idpj);
+        } else { // Cas par défaut
+            $listePj = array();
+        }
 
         $pj = !empty($listePj) ? $listePj[0] : null;
 

@@ -20,12 +20,16 @@ class Service_Mail
             switch (getenv('PREVARISC_MAIL_TRANSPORT')) {
                 case 'smtp':
                     $transport = new Zend_Mail_Transport_Smtp(
-                        getenv('PREVARISC_MAIL_HOST'), $config);
+                        getenv('PREVARISC_MAIL_HOST'),
+                        $config
+                    );
                     break;
                 case 'sendmail':
                 case 'mail':
                     $transport = new Zend_Mail_Transport_Sendmail(
-                        getenv('PREVARISC_MAIL_HOST'), $config);
+                        getenv('PREVARISC_MAIL_HOST'),
+                        $config
+                    );
                     break;
 
                 default:
@@ -38,8 +42,10 @@ class Service_Mail
 
             if (getenv('PREVARISC_MAIL_SENDER') !== ''
                 && getenv('PREVARISC_MAIL_SENDER_NAME') !== '') {
-                Zend_Mail::setDefaultFrom(getenv('PREVARISC_MAIL_SENDER'),
-                    getenv('PREVARISC_MAIL_SENDER_NAME'));
+                Zend_Mail::setDefaultFrom(
+                    getenv('PREVARISC_MAIL_SENDER'),
+                    getenv('PREVARISC_MAIL_SENDER_NAME')
+                );
             } elseif (getenv('PREVARISC_MAIL_SENDER') !== '') {
                 Zend_Mail::setDefaultFrom(getenv('PREVARISC_MAIL_SENDER'));
             }
