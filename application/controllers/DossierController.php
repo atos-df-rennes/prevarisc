@@ -1154,7 +1154,7 @@ class DossierController extends Zend_Controller_Action
             //lorsque je crée un nouveau dossier de VP pour un ERP qui a déjà été visité, il faudrait que les « éléments consultés » de base soient les mêmes
             //Sauvegarde des numéro de document d'urbanisme du dossier
             $DBdossierDocUrba = new Model_DbTable_DossierDocUrba();
-            $where = $DBdossierDocUrba->getAdapter()->quoteInto('ID_DOSSIER = ?',  $idDossier);
+            $where = $DBdossierDocUrba->getAdapter()->quoteInto('ID_DOSSIER = ?', $idDossier);
             $DBdossierDocUrba->delete($where);
 
             if (isset($_POST['docUrba'])) {
@@ -2533,7 +2533,8 @@ class DossierController extends Zend_Controller_Action
         $nouvellePJ->ID_PIECEJOINTE = $this->view->idPieceJointe;
         $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 3);
         $nouvellePJ->EXTENSION_PIECEJOINTE = '.odt';
-        $nouvellePJ->DESCRIPTION_PIECEJOINTE = sprintf("Rapport de l'établissement %s (%s) généré le %s à %s",
+        $nouvellePJ->DESCRIPTION_PIECEJOINTE = sprintf(
+            "Rapport de l'établissement %s (%s) généré le %s à %s",
             $object_informations['LIBELLE_ETABLISSEMENTINFORMATIONS'],
             $etablissement['NUMEROID_ETABLISSEMENT'],
             $dateDuJour->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR),

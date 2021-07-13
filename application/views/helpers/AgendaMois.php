@@ -77,43 +77,43 @@ class View_Helper_AgendaMois
             $result .= '<tr class="semaine_agenda" id="semaine_agenda_'.$i.'">';
             for ($j = 0; $j < 7; ++$j) {
                 //Cette condition permet de définir si le jour fait parti du mois en cours ou pas.
-                    //Si le jour ne fait pas parti du mois il est affiché en gris clair sinon en noir.
-                    if (strpos($tab_cal[$i][$j], '*') !== false) {
-                        $val = '<font color="#aaaaaa">'.str_replace('*', '', $tab_cal[$i][$j]).'</font>';
-                        $id = 0;
-                    } else {
-                        $val = $tab_cal[$i][$j];
-                        $id = $val;
-                    }
+                //Si le jour ne fait pas parti du mois il est affiché en gris clair sinon en noir.
+                if (strpos($tab_cal[$i][$j], '*') !== false) {
+                    $val = '<font color="#aaaaaa">'.str_replace('*', '', $tab_cal[$i][$j]).'</font>';
+                    $id = 0;
+                } else {
+                    $val = $tab_cal[$i][$j];
+                    $id = $val;
+                }
                 $type = '';
                 $img = '';
-                    //Permet d'afficher le jour d'aujourd'hui en gris clair
-                    if ($num_mois == date('n') && $num_an == date('Y') && $tab_cal[$i][$j] == date('j')) {
-                        $type = ' today';
-                        foreach ($donnees as $boucle1 => $boucle2) {
-                            foreach ($boucle2 as $libelle => $value) {
-                                if ($libelle == 'DATE_COMMISSION') {
-                                    $date = new Zend_Date($value, Zend_Date::DATES);
-                                    if ($date->get(Zend_Date::DAY) == $val) {
-                                        //Si un évenement du tableau correspond à la date alors on affiche qqch.
-                                        $type .= ' commission';
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        foreach ($donnees as $boucle1 => $boucle2) {
-                            foreach ($boucle2 as $libelle => $value) {
-                                if ($libelle == 'DATE_COMMISSION') {
-                                    $date = new Zend_Date($value, Zend_Date::DATES);
-                                    if ($date->get(Zend_Date::DAY) == $val) {
-                                        //Si un évenement du tableau correspond à la date alors on affiche qqch.
-                                        $type = ' commission';
-                                    }
+                //Permet d'afficher le jour d'aujourd'hui en gris clair
+                if ($num_mois == date('n') && $num_an == date('Y') && $tab_cal[$i][$j] == date('j')) {
+                    $type = ' today';
+                    foreach ($donnees as $boucle1 => $boucle2) {
+                        foreach ($boucle2 as $libelle => $value) {
+                            if ($libelle == 'DATE_COMMISSION') {
+                                $date = new Zend_Date($value, Zend_Date::DATES);
+                                if ($date->get(Zend_Date::DAY) == $val) {
+                                    //Si un évenement du tableau correspond à la date alors on affiche qqch.
+                                    $type .= ' commission';
                                 }
                             }
                         }
                     }
+                } else {
+                    foreach ($donnees as $boucle1 => $boucle2) {
+                        foreach ($boucle2 as $libelle => $value) {
+                            if ($libelle == 'DATE_COMMISSION') {
+                                $date = new Zend_Date($value, Zend_Date::DATES);
+                                if ($date->get(Zend_Date::DAY) == $val) {
+                                    //Si un évenement du tableau correspond à la date alors on affiche qqch.
+                                    $type = ' commission';
+                                }
+                            }
+                        }
+                    }
+                }
                 $result .= "<td class='case_agenda ".$type."'  id='".$id."'>".$val.'<br/>'.$img.'</td>';
             }
             $result .= '</tr>';

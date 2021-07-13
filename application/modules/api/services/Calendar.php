@@ -14,9 +14,11 @@ class Api_Service_Calendar
             'commission',
             'calendar_view_all'
         );
-        $dossierEvent = $this->createRequestForWebcalEvent($userid,
-                                                           $commission,
-                                                           $isAllowedToViewAll);
+        $dossierEvent = $this->createRequestForWebcalEvent(
+            $userid,
+            $commission,
+            $isAllowedToViewAll
+        );
         $calendrierNom = 'Prévarisc';
         if ($commission) {
             $dbCommission = new Model_DbTable_Commission();
@@ -132,24 +134,28 @@ class Api_Service_Calendar
                 } else {
                     $libelleSum = $commissionEvent['OBJET_DOSSIER'];
                 }
-                $summary = sprintf('#%s %s (%s) : %s %s - %s',
-                                $ets ? $ets['general']['NUMEROID_ETABLISSEMENT'] : '',
-                                $etsLibelle,
-                                $commune,
-                                $commissionEvent['LIBELLE_DOSSIERTYPE'],
-                                $commissionEvent['LIBELLE_DOSSIERNATURE'],
-                                trim($libelleSum));
+                $summary = sprintf(
+                    '#%s %s (%s) : %s %s - %s',
+                    $ets ? $ets['general']['NUMEROID_ETABLISSEMENT'] : '',
+                    $etsLibelle,
+                    $commune,
+                    $commissionEvent['LIBELLE_DOSSIERTYPE'],
+                    $commissionEvent['LIBELLE_DOSSIERNATURE'],
+                    trim($libelleSum)
+                );
                 $geo = sprintf('Commission en salle de %s', $commissionEvent['LIBELLE_COMMISSION']);
             // Cas d'une visite d'une commission ou d'un groupe de visite
             } else {
-                $summary = sprintf('#%s %s : %s',
-                        $ets ? $ets['general']['NUMEROID_ETABLISSEMENT'] : '',
-                        $etsLibelle,
-                        $commissionEvent['LIBELLE_DATECOMMISSION']
+                $summary = sprintf(
+                    '#%s %s : %s',
+                    $ets ? $ets['general']['NUMEROID_ETABLISSEMENT'] : '',
+                    $etsLibelle,
+                    $commissionEvent['LIBELLE_DATECOMMISSION']
                 );
                 $adresse = $ets && count($ets['adresses']) > 0 ? $ets['adresses'][0] : null;
                 if ($adresse) {
-                    $geo = sprintf('%s %s %s, %s %s',
+                    $geo = sprintf(
+                        '%s %s %s, %s %s',
                         $adresse['NUMERO_ADRESSE'],
                         $adresse['LIBELLE_RUETYPE'],
                         $adresse['LIBELLE_RUE'],
@@ -164,15 +170,23 @@ class Api_Service_Calendar
                                 'HEURE_DEB_AFFECT' : 'HEUREDEB_COMMISSION';
             $dateEndHour = $commissionEvent['HEURE_FIN_AFFECT'] ?
                                 'HEURE_FIN_AFFECT' : 'HEUREFIN_COMMISSION';
-            $dtStart = new \DateTime(sprintf('%s %s',
-                        $commissionEvent['DATE_COMMISSION'],
-                        $commissionEvent[$dateStartHour]),
-                        new DateTimeZone(date_default_timezone_get()));
+            $dtStart = new \DateTime(
+                sprintf(
+                    '%s %s',
+                    $commissionEvent['DATE_COMMISSION'],
+                    $commissionEvent[$dateStartHour]
+                ),
+                new DateTimeZone(date_default_timezone_get())
+            );
 
-            $dtEnd = new \DateTime(sprintf('%s %s',
-                        $commissionEvent['DATE_COMMISSION'],
-                        $commissionEvent[$dateEndHour]),
-                        new DateTimeZone(date_default_timezone_get()));
+            $dtEnd = new \DateTime(
+                sprintf(
+                    '%s %s',
+                    $commissionEvent['DATE_COMMISSION'],
+                    $commissionEvent[$dateEndHour]
+                ),
+                new DateTimeZone(date_default_timezone_get())
+            );
 
             $event = array(
                 'SUMMARY' => substr($summary, 0, 255),
@@ -224,7 +238,8 @@ class Api_Service_Calendar
             $servEtab = new Service_Etablissement();
             $dossierService = new Service_Dossier();
             $contactsDossier = $dossierService->getAllContacts(
-                $commissionEvent['ID_DOSSIER']);
+                $commissionEvent['ID_DOSSIER']
+            );
             $contactsEts = $servEtab->getAllContacts($ets['general']['ID_ETABLISSEMENT']);
             $contacts = array_merge($contactsDossier, $contactsEts);
             if (count($contacts) > 0) {
@@ -243,11 +258,12 @@ class Api_Service_Calendar
         $adresseService = new Service_Adresse();
         $maire = $adresseService->getMaire($commissionEvent['NUMINSEE_COMMUNE']);
         if ($maire && count($maire) > 0) {
-            $corpus .= sprintf('Coordonnées de la mairie :%s%s%s',
-                    self::LF,
-                    $this->formatUtilisateurInformations($maire),
-                    self::LF.self::LF
-                    );
+            $corpus .= sprintf(
+                'Coordonnées de la mairie :%s%s%s',
+                self::LF,
+                $this->formatUtilisateurInformations($maire),
+                self::LF.self::LF
+            );
         } else {
             $corpus .= 'Aucune coordonées pour la mairie.'.self::LF.self::LF;
         }
@@ -258,30 +274,35 @@ class Api_Service_Calendar
             } else {
                 $dbGroupement = new Model_DbTable_Groupement();
                 $serviceInstruct = $dbGroupement->getByLibelle(
-                            $commissionEvent['SERVICEINSTRUC_DOSSIER']);
+                    $commissionEvent['SERVICEINSTRUC_DOSSIER']
+                );
                 $serviceInstruct = !empty($serviceInstruct) ?
                                     $serviceInstruct[0] : null;
             }
             if ($maire && count($maire) > 0) {
-                $corpus .= sprintf('Coordonnées du service instructeur :%s%s%s',
-                        self::LF,
-                        $this->formatUtilisateurInformations($serviceInstruct)
-                        .self::LF.self::LF
-                        );
+                $corpus .= sprintf(
+                    'Coordonnées du service instructeur :%s%s%s',
+                    self::LF,
+                    $this->formatUtilisateurInformations($serviceInstruct)
+                    .self::LF.self::LF
+                );
             } else {
                 $corpus .= 'Aucune coordonées pour le service instructeur.'.self::LF.self::LF;
             }
         }
 
         $lastVisitestr = $ets && $ets['last_visite'] ? $ets['last_visite'] : 'Aucune date.';
-        $corpus .= sprintf('Date de la dernière visite périodique : %s%s',
-           $lastVisitestr,
-           self::LF.self::LF
+        $corpus .= sprintf(
+            'Date de la dernière visite périodique : %s%s',
+            $lastVisitestr,
+            self::LF.self::LF
         );
 
-        $corpus .= sprintf("Avis d'exploitation de l'établissement : %s%s",
-                            $this->getAvisEtablissement($commissionEvent, $ets),
-                            self::LF.self::LF.self::LF);
+        $corpus .= sprintf(
+            "Avis d'exploitation de l'établissement : %s%s",
+            $this->getAvisEtablissement($commissionEvent, $ets),
+            self::LF.self::LF.self::LF
+        );
 
         /* Ajout Grade, prenom, nom préventionniste dans calendrier dossier detail */
         $dossierService = new Service_Dossier();
@@ -290,10 +311,11 @@ class Api_Service_Calendar
         $preventionniste = $this->formatPrevisionniste($preventionnistes);
 
         $corpus .= 'Préventionniste(s) du dossier : '.self::LF;
-        $corpus .= sprintf('%s%s',
-                            $preventionniste,
-                            self::LF.self::LF
-                            );
+        $corpus .= sprintf(
+            '%s%s',
+            $preventionniste,
+            self::LF.self::LF
+        );
 
         return $corpus;
     }
@@ -305,32 +327,36 @@ class Api_Service_Calendar
         if (count($preventionnistes) > 1) {
             for ($i = 0; $i < count($preventionnistes); ++$i) {
                 if ($this->isPreventionnisteExist($preventionnistes, $i)) {
-                    $result .= sprintf('- %s%s%s%s',
-                                    $preventionnistes[$i]['GRADE_UTILISATEURINFORMATIONS'],
-                                    $preventionnistes[$i]['PRENOM_UTILISATEURINFORMATIONS'],
-                                    $preventionnistes[$i]['NOM_UTILISATEURINFORMATIONS'],
-                                    self::LF.self::LF
-                                    );
+                    $result .= sprintf(
+                        '- %s%s%s%s',
+                        $preventionnistes[$i]['GRADE_UTILISATEURINFORMATIONS'],
+                        $preventionnistes[$i]['PRENOM_UTILISATEURINFORMATIONS'],
+                        $preventionnistes[$i]['NOM_UTILISATEURINFORMATIONS'],
+                        self::LF.self::LF
+                    );
                 } else {
-                    $result .= sprintf('- %s%s',
-                            ' Informations du prévisionniste incomplètes ou absentes',
-                            self::LF.self::LF
-                            );
+                    $result .= sprintf(
+                        '- %s%s',
+                        ' Informations du prévisionniste incomplètes ou absentes',
+                        self::LF.self::LF
+                    );
                 }
             }
         } else {
             if ($this->isPreventionnisteExist($preventionnistes, 0)) {
-                $result = sprintf('- %s%s%s%s',
-                                $preventionnistes[0]['GRADE_UTILISATEURINFORMATIONS'].' ',
-                                $preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].' ',
-                                $preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'],
-                                self::LF.self::LF.self::LF
-                                );
+                $result = sprintf(
+                    '- %s%s%s%s',
+                    $preventionnistes[0]['GRADE_UTILISATEURINFORMATIONS'].' ',
+                    $preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].' ',
+                    $preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'],
+                    self::LF.self::LF.self::LF
+                );
             } else {
-                $result .= sprintf('- %s%s',
-                                '- Informations du prévisionniste incomplètes ou absentes',
-                                self::LF.self::LF
-                                );
+                $result .= sprintf(
+                    '- %s%s',
+                    '- Informations du prévisionniste incomplètes ou absentes',
+                    self::LF.self::LF
+                );
             }
         }
 
@@ -353,33 +379,43 @@ class Api_Service_Calendar
     {
         $str = '';
         if ($user && is_array($user) && $user['NOM_UTILISATEURINFORMATIONS']) {
-            $str .= sprintf('- %s : %s %s',
-                    $user['LIBELLE_FONCTION'],
-                    $user['NOM_UTILISATEURINFORMATIONS'],
-                    $user['PRENOM_UTILISATEURINFORMATIONS']);
+            $str .= sprintf(
+                '- %s : %s %s',
+                $user['LIBELLE_FONCTION'],
+                $user['NOM_UTILISATEURINFORMATIONS'],
+                $user['PRENOM_UTILISATEURINFORMATIONS']
+            );
             if ($user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
-                    && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
-                    && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
-                    && $user['CPADRESSE_UTILISATEURINFORMATIONS']
-                    && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']) {
-                $str .= sprintf(', %s %s, %s %s',
-                            $user['NUMEROADRESSE_UTILISATEURINFORMATIONS'],
-                            $user['RUEADRESSE_UTILISATEURINFORMATIONS'],
-                            $user['CPADRESSE_UTILISATEURINFORMATIONS'],
-                            $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
-                        );
+                && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
+                && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
+                && $user['CPADRESSE_UTILISATEURINFORMATIONS']
+                && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
+            ) {
+                $str .= sprintf(
+                    ', %s %s, %s %s',
+                    $user['NUMEROADRESSE_UTILISATEURINFORMATIONS'],
+                    $user['RUEADRESSE_UTILISATEURINFORMATIONS'],
+                    $user['CPADRESSE_UTILISATEURINFORMATIONS'],
+                    $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
+                );
             }
             if ($user['TELFIXE_UTILISATEURINFORMATIONS']) {
-                $str .= sprintf(', %s',
-                    $user['TELFIXE_UTILISATEURINFORMATIONS']);
+                $str .= sprintf(
+                    ', %s',
+                    $user['TELFIXE_UTILISATEURINFORMATIONS']
+                );
             }
             if ($user['TELFAX_UTILISATEURINFORMATIONS']) {
-                $str .= sprintf(', %s',
-                    $user['TELFAX_UTILISATEURINFORMATIONS']);
+                $str .= sprintf(
+                    ', %s',
+                    $user['TELFAX_UTILISATEURINFORMATIONS']
+                );
             }
             if ($user['MAIL_UTILISATEURINFORMATIONS']) {
-                $str .= sprintf(', %s',
-                    $user['MAIL_UTILISATEURINFORMATIONS']);
+                $str .= sprintf(
+                    ', %s',
+                    $user['MAIL_UTILISATEURINFORMATIONS']
+                );
             }
             $str .= "\n";
         }
