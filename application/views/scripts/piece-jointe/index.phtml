@@ -71,9 +71,6 @@
 	$(document).ready(function() {
 
 		$("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' >");
-		/* $(".table_liste").click(function(){
-			$("#lien").slideToggle("slow");
-  		}); */ 
 		// Bouton de la pièce jointe
 		$("#addPJ").button({
 		
@@ -123,10 +120,24 @@
 		$("#addPJQuick").click(function() {
 			$('#dropzone').toggle();
 		});
+		// Affichage des dossiers enfants
+		$(".table_liste").live("click", function() {
+				var container = this;
+				if( $(this).hasClass("active") ) {
+					$(this).next().slideUp(400, function() {$(container).next().remove()});
+					$(this).toggleClass("active");
+				}
+				else {
+					$(container).find(".load").show();
+					$.post("/piece-jointe/display-ajax-piecejointe", {parent: $(this).val()}, function(html) {
+						$(container).toggleClass("active").find(".load").hide();
+						$(container).after(html).next().slideDown();
+					});
+				}
+		});
 		// Bouton de la pièce jointe signé
 		$(".addPJSigne").click(function(){
 			idPjParente = $(this).val();
-			
 			// Dialogue du formulaire
 			$.ajax({
 				url: "/piece-jointe/form-signe",
@@ -253,26 +264,6 @@
         }
         disabledTest();
 
-
-		 // Affichage des dossiers enfants
-		 $(".table_liste").live("click", function() {
-			var container = this;
-			if( $(this).hasClass("active") ) {
-				$(this).next().slideUp(400, function() {$(container).next().remove()});
-				$(this).toggleClass("active");
-			}
-			/* else {
-				$(container).find(".load").show();
-				$(container).toggleClass("active").find(".load").hide();
-				$("#lien").slideToggle("slow");
-
-				$(container).after("<tr class='table_liste' value='test' style='overflow: auto; height: auto;' >" + "</tr>").next().slideDown();
-				$.post("/piece-jointe/display-ajax-pj", {parent: $(this).attr("id")}, function(html) {
-					$(container).toggleClass("active").find(".load").hide();
-					$(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
-				});
-			} */
-         });
 		
 	});
 	

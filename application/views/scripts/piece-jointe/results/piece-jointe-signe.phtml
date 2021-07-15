@@ -1,0 +1,26 @@
+<li class="piecejointe <?php /*if($this->NB_ENFANTS > 0)*/ echo "slide" ?>" id="<?php echo $this->ID_PIECEJOINTE ?>">
+<?php echo $this->NB_ENFANTS ?>
+    <?php /* Icone représentant le dropdown des fils */ ?>
+    <?php if($this->NB_ENFANTS > 0) : ?>
+    <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
+    <?php endif ?>
+
+    <div class="pull-left">
+
+        <span class="doss-nom">
+            <?php if ($this->VERROU_DOSSIER == 1): ?>
+                <i class="icon-lock"></i>
+            <?php endif ?>
+        </span>
+
+        <?php /* Icone de chargement des enfants (si il y'en a, et si on est en mode niveau */ ?>
+        <?php if($this->NB_ENFANTS > 0) : ?>
+            <span class='load ui-helper-hidden' ><img src='/images/load.gif' alt='Chargement ...' /></span>
+        <?php endif ?>
+
+    </div>
+
+
+    <div style='clear: both'></div>
+
+</li>

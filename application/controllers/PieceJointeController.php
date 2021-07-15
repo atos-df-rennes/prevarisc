@@ -515,19 +515,19 @@ class PieceJointeController extends Zend_Controller_Action
         return $id_pj;
     }
 
-    public function displayAjaxPjAction()
+    public function displayAjaxPiecejointeAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $service_search = new Service_Search();
+        $service_pieceJointe = new Service_Piecejointe();
 
-        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null);
+        $data = $service_pieceJointe->piecejointe($this->_request->parent);
 
         $data = $data['results'];
 
         $html = "<ul class='recherche_liste'>";
-        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/etablissement.phtml', (array) $data);
+         $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/results/piece-jointe-signe.phtml', (array) $data);
         $html .= '</ul>';
 
         echo $html;
