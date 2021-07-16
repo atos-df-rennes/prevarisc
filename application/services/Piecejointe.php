@@ -30,11 +30,7 @@ class Service_PieceJointe
                         FROM piecejointe
                         INNER JOIN piecejointelie ON piecejointe.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE
                         WHERE piecejointe.ID_PIECEJOINTE = p.ID_PIECEJOINTE)')
-                        ))
-                ->join('piecejointelie', "p.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE")
-                ->where('piecejointe.SIGNE_PIECEJOINTE = 1')
-                ->order('piecejointe.ID_PIECEJOINTE DESC')
-                ;
+                        ));
             // Critères : parent
             if ($parent !== null) {
                 $select->where($parent == 0 ? 'piecejointelie.ID_PIECEJOINTE IS NULL' : 'piecejointelie.ID_PIECEJOINTE = ?', $parent);
@@ -53,7 +49,6 @@ class Service_PieceJointe
                 ),
             );
 
-            $cache->save(serialize($results));
         }
 
         return $results;
