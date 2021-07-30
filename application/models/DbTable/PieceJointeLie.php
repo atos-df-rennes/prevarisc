@@ -17,4 +17,17 @@ class Model_DbTable_PieceJointeLie extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchAll($select);
     }
+
+    /**
+     * @return array
+     */
+    public function recupPieceJointeFille($id)
+    {
+        //retourne le/les pj fille/s
+        $select = $this->select()
+            ->from(array('pjl' => 'piecejointelie'), array('ID_FILS_PIECEJOINTE'))
+            ->where("pjl.ID_PIECEJOINTE =  $id");
+
+        return $this->getAdapter()->fetchAll($select);
+    }
 }

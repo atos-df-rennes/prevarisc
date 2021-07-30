@@ -375,7 +375,8 @@ ul.recherche_liste li {
     padding: 6px;
 }
 
-ul.recherche_liste li.slide {
+ul.recherche_liste li.slide,
+table#tabPieceJointe tr.slide {
     border-left: 3px dotted #aaa;
 }
 
@@ -390,7 +391,8 @@ ul.recherche_liste li:hover {
     /*cursor: pointer;*/
 }
 
-ul.recherche_liste li.slide:hover {
+ul.recherche_liste li.slide:hover,
+table#tabPieceJointe tr.slide:hover {
     cursor: pointer;
 }
 
@@ -1118,9 +1120,6 @@ a.list-group-item-danger.active:focus {
     overflow-y: scroll;
 }
 
-.table_liste{
-    border-left: 3px dotted #aaa;
-}
 #tabPieceJointe .file {
     padding: 0 0 3px 22px;
 }

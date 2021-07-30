@@ -284,10 +284,13 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Modèle
             $DBpieceJointe = new Model_DbTable_PieceJointe();
+            $DBpieceJointeLie = new Model_DbTable_PieceJointeLie();
             $DBitem = null;
 
             // On récupère la pièce jointe
             $pj = $DBpieceJointe->find($this->_request->id_pj)->current();
+            // On récupère la pièce jointe fille
+            $pj_f = $DBpieceJointeLie->recupPieceJointeFille($this->_request->id_pj);
 
             // Selon le type, on fixe le modèle à utiliser
             switch ($this->_request->type) {
@@ -322,7 +325,16 @@ class PieceJointeController extends Zend_Controller_Action
                 }
                 $DBitem->delete('ID_PIECEJOINTE = '.(int) $this->_request->id_pj);
                 $pj->delete();
+
+                if(!empty($pj_f)){
+                    foreach ($pj_f as $pj){
+                        $id_fils = $pj['ID_FILS_PIECEJOINTE'];
+                        $pj_lie = $DBpieceJointe->find($id_fils)->current();
+                        $pj_lie->delete();
+                    }
+                }
             }
+            
 
             $this->_helper->flashMessenger(array(
                 'context' => 'success',
@@ -526,6 +538,22 @@ class PieceJointeController extends Zend_Controller_Action
 
         $data = $data['results'];
 
+        $html = "<table id = 'tabPieceJointe'>";
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/results/piece-jointe-signe.phtml', (array) $data);
+        $html .= '</table>';
+
+        echo $html;
+    }
+
+    public function filsAction()
+    {
+        $parent = $this->_getParam('parent');
+
+        $service_pieceJointe = new Service_Piecejointe();
+
+        $data = $service_pieceJointe->piecejointe($this->_request->parent);
+        $data = $data['results'];
+        
         $html = "<ul class='recherche_liste'>";
          $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/results/piece-jointe-signe.phtml', (array) $data);
         $html .= '</ul>';

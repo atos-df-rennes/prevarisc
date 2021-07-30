@@ -45,24 +45,6 @@
 		</tbody> 
 	</table>
 </div>
-<div id="lien">
-	<div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
-		<table id='tabPieceJointe' class='table table-striped'> 
-			<tbody>
-			<?php 
-				echo $this->partial("piece-jointe/display.phtml", array(
-					"path" => $this->path, 
-					"listePj" => $this->listePjSigne,
-					"type" => $this->type,
-					"id" => $this->identifiant, 
-					"verrou" => $this->verrou, 
-				))
-			?>
-			</tbody> 
-		</table>
-	</div>
-</div>
-
 
 <script type="text/javascript">
         
@@ -121,7 +103,7 @@
 			$('#dropzone').toggle();
 		});
 		// Affichage des dossiers enfants
-		$(".table_liste").live("click", function() {
+		$("table#tabPieceJointe tr.slide").live("click", function() {
 				var container = this;
 				if( $(this).hasClass("active") ) {
 					$(this).next().slideUp(400, function() {$(container).next().remove()});
@@ -129,9 +111,9 @@
 				}
 				else {
 					$(container).find(".load").show();
-					$.post("/piece-jointe/display-ajax-piecejointe", {parent: 25897}, function(html) {
+					$.post("/piece-jointe/display-ajax-piecejointe", {parent: $(this).attr("id")}, function(html) {
 						$(container).toggleClass("active").find(".load").hide();
-						$(container).after(html).next().slideDown();
+						$(container).after("<tr class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</tr>").next().slideDown();				
 					});
 				}
 		});

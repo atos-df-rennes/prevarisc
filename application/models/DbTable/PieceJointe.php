@@ -14,13 +14,24 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
      */
     public function affichagePieceJointe($table, $champ, $identifiant)
     {
+        // Création de l'objet recherche
+        $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
+        
+        // Requête principale
         $select = $this->select()
+            ->from(array('p' => 'piecejointe'))
+            ->columns(array(
+                'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(piecejointelie.ID_FILS_PIECEJOINTE)
+                    FROM piecejointe
+                    INNER JOIN piecejointelie ON piecejointe.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE
+                    WHERE piecejointe.ID_PIECEJOINTE = p.ID_PIECEJOINTE)') ))
             ->setIntegrityCheck(false)
-            ->from('piecejointe')
-            ->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE")
             ->where($champ.' = '.$identifiant)
-            ->where('piecejointe.SIGNE_PIECEJOINTE IS NULL')
-            ->order('piecejointe.ID_PIECEJOINTE DESC');
+            ->where('p.SIGNE_PIECEJOINTE IS NULL')
+            ->order('p.ID_PIECEJOINTE DESC');
+            if ($table != null) {
+                $select->join($table, "p.ID_PIECEJOINTE = $table.ID_PIECEJOINTE");
+            };
 
         return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
     }

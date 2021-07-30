@@ -712,7 +712,10 @@
                             <controller>piece-jointe</controller>
                             <action>display-ajax-piecejointe</action>
                         </displayAjaxPiecejointe>
-            
+                        <fils>
+                            <controller>piece-jointe</controller>
+                            <action>fils</action>
+                        </fils>
                     </pages>
                 </piece-jointe>
             </pages>
@@ -1220,6 +1223,17 @@
                 </logout>
             </pages>
         </session>
+
+        <!-- Test -->
+        <test>
+             <controller>test</controller>
+             <pages>
+                <index>
+                    <controller>test</controller>
+                    <action>index</action>
+                </index>
+             </pages>
+        </test>
 
         <!-- A propos -->
         <about>

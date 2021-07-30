@@ -10,7 +10,7 @@ class Service_PieceJointe
      *
      * @return array
      */
-    public function piecejointe($parent = null)
+    public function piecejointe($parent)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -25,26 +25,15 @@ class Service_PieceJointe
 
             // Requête principale
             $select->from(array('p' => 'piecejointe'))
-                ->columns(array(
-                    'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(piecejointelie.ID_FILS_PIECEJOINTE)
-                        FROM piecejointe
-                        INNER JOIN piecejointelie ON piecejointe.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE
-                        WHERE piecejointe.ID_PIECEJOINTE = p.ID_PIECEJOINTE)')
-                        ));
-            // Critères : parent
-            if ($parent !== null) {
-                $select->where($parent == 0 ? 'piecejointelie.ID_PIECEJOINTE IS NULL' : 'piecejointelie.ID_PIECEJOINTE = ?', $parent);
-            }
-            // Gestion des pages et du count
-            $select->limitPage($page, $count > 100 ? 100 : $count);
-
+                ->join('piecejointelie', 'p.ID_PIECEJOINTE = piecejointelie.ID_FILS_PIECEJOINTE')
+                ->where('piecejointelie.ID_PIECEJOINTE = ?', $parent)
+                ;
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
             $results = array(
             'results' => $select->query()->fetchAll(),
             'search_metadata' => array(
                 'search_id' => $search_id,
-                'current_page' => $page,
                 'count' => count($rows_counter),
                 ),
             );
