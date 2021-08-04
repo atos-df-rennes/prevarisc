@@ -3058,6 +3058,7 @@ class DossierController extends Zend_Controller_Action
         $request->addSigner($email_address, 'Me');
         $request->addFile($filepath_pj);
         $response = $client->sendSignatureRequest($request);
+        $this->_helper->flashMessenger(array('context' => 'success', 'title' => '', 'message' => 'Veuillez vérifier votre courriel.'.$options));
     }
 
     public function downloadAction()

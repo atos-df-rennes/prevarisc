@@ -19,18 +19,19 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
         
         // Requête principale
         $select = $this->select()
-            ->from(array('p' => 'piecejointe'))
+            // ->from(array('p' => 'piecejointe'))
+            ->from('piecejointe')
             ->columns(array(
                 'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(piecejointelie.ID_FILS_PIECEJOINTE)
-                    FROM piecejointe
-                    INNER JOIN piecejointelie ON piecejointe.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE
-                    WHERE piecejointe.ID_PIECEJOINTE = p.ID_PIECEJOINTE)') ))
+                    FROM piecejointe p
+                    INNER JOIN piecejointelie ON p.ID_PIECEJOINTE = piecejointelie.ID_PIECEJOINTE
+                    WHERE p.ID_PIECEJOINTE = piecejointe.ID_PIECEJOINTE)') ))
             ->setIntegrityCheck(false)
             ->where($champ.' = '.$identifiant)
-            ->where('p.SIGNE_PIECEJOINTE IS NULL')
-            ->order('p.ID_PIECEJOINTE DESC');
+            ->where('piecejointe.SIGNE_PIECEJOINTE IS NULL')
+            ->order('piecejointe.ID_PIECEJOINTE DESC');
             if ($table != null) {
-                $select->join($table, "p.ID_PIECEJOINTE = $table.ID_PIECEJOINTE");
+                $select->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE");
             };
 
         return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;

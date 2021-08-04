@@ -539,24 +539,8 @@ class PieceJointeController extends Zend_Controller_Action
         $data = $data['results'];
 
         $html = "<table id = 'tabPieceJointe'>";
-        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/results/piece-jointe-signe.phtml', (array) $data);
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/piece-jointe-signe.phtml', (array) $data);
         $html .= '</table>';
-
-        echo $html;
-    }
-
-    public function filsAction()
-    {
-        $parent = $this->_getParam('parent');
-
-        $service_pieceJointe = new Service_Piecejointe();
-
-        $data = $service_pieceJointe->piecejointe($this->_request->parent);
-        $data = $data['results'];
-        
-        $html = "<ul class='recherche_liste'>";
-         $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/results/piece-jointe-signe.phtml', (array) $data);
-        $html .= '</ul>';
 
         echo $html;
     }

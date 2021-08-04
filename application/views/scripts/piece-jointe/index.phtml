@@ -117,6 +117,25 @@
 					});
 				}
 		});
+		//Signe PJ
+		$(".signe").click(function(){
+			idPj = $(this).val();
+			fileName = this.getAttribute("data-fileName");
+			$.ajax({
+                url: "/dossier/sign", 
+                data: {
+					"id" : $("#idLinkPJ").val(),
+					"id_pj" : idPj ,
+					"fileName" : fileName,
+					"email_address" : "<?php echo $this->mail_user ?>"
+					},
+				type: "post",
+				success: function() {
+					console.log("param 1:"+ idPj + " param 2: "+ idPj +  " param 3:"+ fileName + " param 4:"+ "<?php echo $this->mail_user ?>" )
+				}
+
+            });
+		});
 		// Bouton de la pièce jointe signé
 		$(".addPJSigne").click(function(){
 			idPjParente = $(this).val();
