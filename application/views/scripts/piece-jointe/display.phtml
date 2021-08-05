@@ -25,6 +25,9 @@
         <i class="icon-pencil"></i>
     </button>
     </td>
+    <div id='alert' class='ui-state-highlight ui-helper-hidden ' style='padding: .3em;'>
+            Veuillez vérifier votre courriel.
+    </div>
     <td>
         <i class="<?php echo  $this->translateStatus;?>" title="<?php echo $this->infoStatus;?>"></i>
     </td>
@@ -41,7 +44,7 @@
             </a>
         <?php endif ?>
     </td>
-    
+
 </tr>  
 <?php endforeach ?>
 
