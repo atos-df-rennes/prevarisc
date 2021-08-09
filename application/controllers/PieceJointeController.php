@@ -135,6 +135,10 @@ class PieceJointeController extends Zend_Controller_Action
         // Placement
         $this->view->type = $this->_getParam('type');
         $this->view->identifiant = $this->_getParam('id');
+        // FIXME Faire fonctionner avec ça
+        // if (null !== ($idPj = $this->_getParam('idPj'))) {
+        //     $this->view->idPj = $idPj;
+        // }
 
         // Ici suivant le type on change toutes les infos nécessaires pour lier aux différents établissements, dossiers
         if ($this->view->type == 'dossier') {
@@ -326,8 +330,8 @@ class PieceJointeController extends Zend_Controller_Action
                 $DBitem->delete('ID_PIECEJOINTE = '.(int) $this->_request->id_pj);
                 $pj->delete();
 
-                if(!empty($pj_f)){
-                    foreach ($pj_f as $pj){
+                if (!empty($pj_f)) {
+                    foreach ($pj_f as $pj) {
                         $id_fils = $pj['ID_FILS_PIECEJOINTE'];
                         $pj_lie = $DBpieceJointe->find($id_fils)->current();
                         $pj_lie->delete();
@@ -536,12 +540,19 @@ class PieceJointeController extends Zend_Controller_Action
 
         $service_pieceJointe = new Service_Piecejointe();
 
-        $data = $service_pieceJointe->piecejointe($this->_request->parent);
+        // FIXME Faire ça plus propre
+        $pj_data = $service_pieceJointe->piecejointe($this->_request->parent);
+        $pj_data = $pj_data['results'][0];
 
-        $data = $data['results'];
+        $dossier_data = array(
+            'type' => $this->_request->type,
+            'idDossier' => $this->_request->idDossier,
+        );
+
+        $data[0] = array_merge($pj_data, $dossier_data);
 
         $html = "<table id = 'tabPieceJointe'>";
-        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/piece-jointe-signe.phtml', (array) $data);
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('piece-jointe/piece-jointe-signe.phtml', $data);
         $html .= '</table>';
 
         echo $html;

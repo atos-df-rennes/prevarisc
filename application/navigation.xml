@@ -678,10 +678,6 @@
                             <action>form</action>
                             <privilege>modification_odj</privilege>
                         </form>
-                        <form-signe>
-                            <controller>piece-jointe</controller>
-                            <action>form-signe</action>
-                        </form-signe>
                         <add>
                             <controller>piece-jointe</controller>
                             <action>add</action>
@@ -691,12 +687,7 @@
                             <controller>piece-jointe</controller>
                             <action>addlie</action>
                             <privilege>modification_odj</privilege>
-                        </addlie>  
-                        <getid>
-                            <controller>piece-jointe</controller>
-                            <action>getid</action>
-                            <privilege>modification_odj</privilege>
-                        </getid>
+                        </addlie>
                         <delete>
                             <controller>piece-jointe</controller>
                             <action>delete</action>
@@ -712,10 +703,6 @@
                             <controller>piece-jointe</controller>
                             <action>display-ajax-piecejointe</action>
                         </displayAjaxPiecejointe>
-                        <fils>
-                            <controller>piece-jointe</controller>
-                            <action>fils</action>
-                        </fils>
                     </pages>
                 </piece-jointe>
             </pages>

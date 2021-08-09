@@ -111,7 +111,11 @@
 				}
 				else {
 					$(container).find(".load").show();
-					$.post("/piece-jointe/display-ajax-piecejointe", {parent: $(this).attr("id")}, function(html) {
+					$.post("/piece-jointe/display-ajax-piecejointe", {
+						parent: $(this).attr("id"),
+						type: $("#typePJ").val(),
+						idDossier: $("#idDossier").val()
+					}, function(html) {
 						$(container).toggleClass("active").find(".load").hide();
 						$(container).after("<tr class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</tr>").next().slideDown();				
 					});
@@ -131,10 +135,9 @@
 					},
 				type: "post",
 				success: function() {
-				$("#alert").show();
-				setTimeout( function() { $("#alert").fadeOut(); }, 5500);
-			}
-
+					$("#alert").show();
+					setTimeout( function() { $("#alert").fadeOut(); }, 5500);
+				}
             });
 		});
 		// Bouton de la pièce jointe signé

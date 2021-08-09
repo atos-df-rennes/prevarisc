@@ -30,9 +30,9 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
             ->where($champ.' = '.$identifiant)
             ->where('piecejointe.SIGNE_PIECEJOINTE IS NULL')
             ->order('piecejointe.ID_PIECEJOINTE DESC');
-            if ($table != null) {
-                $select->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE");
-            };
+        if ($table != null) {
+            $select->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE");
+        };
 
         return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
     }
