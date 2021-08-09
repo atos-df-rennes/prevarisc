@@ -437,7 +437,9 @@ class PieceJointeController extends Zend_Controller_Action
             $nouvellePJL->save();
 
             $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
-
+            
+            $this->view->file_path = $file_path;
+            
             // On check si l'upload est okay
             $linkPj = null;
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $file_path)) {
