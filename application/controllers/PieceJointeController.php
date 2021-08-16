@@ -25,7 +25,6 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->identifiant = $this->_request->id;
             $this->view->pjcomm = $this->_request->pjcomm;
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
-            $listePjSigne = $DBused->affichagePieceJointeSigne('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             $this->view->verrou = $this->_request->verrou;
         } elseif ($this->_request->type == 'etablissement') { // Cas établissement
             $this->view->type = 'etablissement';
@@ -41,7 +40,6 @@ class PieceJointeController extends Zend_Controller_Action
 
         // On envoi la liste des PJ dans la vue
         $this->view->listePj = $listePj;
-        $this->view->listePjSigne = $listePjSigne;
 
         // Status
         $this->view->status = $this->_request->status;
@@ -63,12 +61,10 @@ class PieceJointeController extends Zend_Controller_Action
 
         // Cas dossier
         $piece_jointe = null;
-        $piece_jointe_signe = null;
         if ($this->_request->type == 'dossier') {
             $type = 'dossier';
             $identifiant = $this->_request->id;
             $piece_jointe = $DBused->affichagePieceJointe('dossierpj', 'piecejointe.ID_PIECEJOINTE', $this->_request->idpj);
-            $piece_jointe_signe = $DBused->affichagePieceJointeSigne('dossierpj', 'piecejointe.ID_PIECEJOINTE', $this->_request->idpj);
         } elseif ($this->_request->type == 'etablissement') { // Cas établissement
             $type = 'etablissement';
             $identifiant = $this->_request->id;
@@ -80,31 +76,25 @@ class PieceJointeController extends Zend_Controller_Action
         }
         
         if (
-            (!$piece_jointe && !$piece_jointe_signe)
-            || (empty($piece_jointe) && empty($piece_jointe_signe))
+            (!$piece_jointe)
+            || (empty($piece_jointe) )
         ) {
             throw new Zend_Controller_Action_Exception('Cannot find piece jointe for id '.$this->_request->idpj, 404);
         }
 
         $piece_jointe = $piece_jointe[0];
-        $piece_jointe_signe = $piece_jointe_signe[0];
 
         $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
         $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
-
-        $filepath_signe = $this->store->getFilePath($piece_jointe_signe, $type, $identifiant);
-        $filename_signe = $this->store->getFormattedFilename($piece_jointe_signe, $type, $identifiant);
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
         if (empty($piece_jointe)) {
             $filepath = null;
-        } elseif (empty($piece_jointe_signe)) {
-            $filepath_signe = null;
-        }
+        } 
        
-        if (!is_readable($filepath) && !is_readable($filepath_signe)) {
+        if (!is_readable($filepath)) {
             throw new Zend_Controller_Action_Exception('Cannot read file '.$filepath.'<br/>'.$filepath_signe, 404);
         }
 
@@ -117,16 +107,6 @@ class PieceJointeController extends Zend_Controller_Action
         header('Content-Type: application/octet-stream');
 
         readfile($filepath);
-
-        ob_get_clean();
-
-        header('Pragma: public');
-        header('Expires: -1');
-        header('Cache-Control: public, must-revalidate, post-check=0, pre-check=0');
-        header('Content-Disposition: attachment; filename="'.$filename_signe.'"');
-        header('Content-Type: application/octet-stream');
-
-        readfile($filename_signe);
         exit();
     }
 
