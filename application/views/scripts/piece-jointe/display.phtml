@@ -1,4 +1,5 @@
 <?php foreach ($this->listePj as $pj) : ?>
+    <?php /* Condition PJ non signé */ ?>
     <?php if (null === $pj['SIGNE_PIECEJOINTE']) : ?>
         <tr class= 'table_liste_pj <?php if($pj['NB_ENFANTS']  > 0) echo "slide" ?>' id="<?php echo $pj['ID_PIECEJOINTE'] ?>">
             <?php  /* Lien de la pièce jointe */ ?>
