@@ -3055,7 +3055,7 @@ class DossierController extends Zend_Controller_Action
         $request->setTitle(''.$fileName.'_signé');
         $request->setSubject('Prevarisc Signatureélectronique');
         $request->setMessage("Signé fichier");
-        $request->addSigner($email_address, 'Me');
+        $request->addSigner($email_address, ':');
         $request->addFile($filepath_pj);
         $response = $client->sendSignatureRequest($request);
     }
