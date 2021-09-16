@@ -4,6 +4,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     const STATUT_CHANGE = 1;
     const CLASSEMENT_CHANGE = 3;
+    const nbDossierAAfficher = 5;
+
+
     /**
      * Récupération d'un établissement.
      *
@@ -408,6 +411,156 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         return $results;
     }
+
+    /**
+     * @param int $idEtablissement
+     * @param int $nbDossierAAfficher \\$nbDossierAAfficher (default 5)
+     * @return array retourne la liste des N dernier dossier ou N = $nbDossierAAfficher
+     * 
+     */
+    public function getNLastDossiers($idEtablissement,$nbDossierAAfficher = self::nbDossierAAfficher){
+
+         // Création de l'objet recherche
+         $search = new Model_DbTable_Search();
+
+         // récupération des types de dossier autre
+         $dossier_types = new Model_DbTable_DossierType();
+         $dossier_types = $dossier_types->fetchAll()->toArray();
+         $i = 0;
+         $types_autre = array();
+         foreach ($dossier_types as $key => $type) {
+             if ($type['ID_DOSSIERTYPE'] != 1 && $type['ID_DOSSIERTYPE'] != 2 && $type['ID_DOSSIERTYPE'] != 3) {
+                 $types_autre[$i] = (int) $type['ID_DOSSIERTYPE'];
+                 ++$i;
+             }
+         }
+ 
+         // On balance le résultat sur la vue
+         $results = array();
+         $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+         $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+         $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+ 
+         return $results;
+    }
+
+
+    /**
+     * @param int $idEtablissement 
+     * @param int/[] $idDossierType -> 1=>Etude 2=>Visite 3=> groupe de visite 4=> Reunion 5=> courrier 6=> Intervention 7=> Arrete
+     */
+    public function getNbDossierTypeEtablissement($idEtablissement,$idDossierType){
+
+        $select = "";
+
+
+        //Tableau regrioupant les differents type de dossier 
+        $listTypeDossier = ["etudes","autres","visites"];
+
+
+        //Hashmap permettant de regrouper les differents type de dossier
+        $listValueByTypeDossier = [];
+        $listValueByTypeDossier["etudes"] = 1;
+        $listValueByTypeDossier["visites"] = [2,3];
+        $listValueByTypeDossier["autres"] = [4,5,6,7];
+
+        if(in_array($idDossierType,$listTypeDossier)){
+            $idDossierType  = $listValueByTypeDossier[$idDossierType];
+        }
+
+
+        if(is_array($idDossierType)){
+            $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
+            .'FROM etablissementdossier ' 
+            .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
+            .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
+            .'WHERE '
+            .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement
+            .' AND '
+            .'dossiertype.ID_DOSSIERTYPE IN ('.  implode(',',$idDossierType).');';
+
+            //Pour la partie implode voir site suivant : https://stackoverflow.com/questions/9618277/how-to-use-php-array-with-sql-in-operator
+
+        }else{
+            if(is_int($idDossierType)){
+                $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
+                .'FROM etablissementdossier ' 
+                .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
+                .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
+                .'WHERE '
+                .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement
+                ." AND "
+                .'dossiertype.ID_DOSSIERTYPE = '.$idDossierType.";";
+            }else{
+                $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
+                .'FROM etablissementdossier ' 
+                .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
+                .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
+                .'WHERE '
+                .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement.';';
+            }
+
+        }
+
+
+
+
+        $modelDb = new Model_DbTable_EtablissementDossier();
+        $result = $modelDb->getAdapter()->fetchAll($select);
+        if (empty($result)) {
+            $result = null;
+        }
+
+        return($result);
+
+    }
+
+    
+    /**
+     * @param int $idEtablissement
+     * @param int $nbDossierAAfficher \\$nbDossierAAfficher (default 5)
+     * @return array retourne la liste des dossiers apres N  ou N = $nbDossierAAfficher
+     * 
+     */
+    public function getAfterNDossiers($idEtablissement,$typeDossier= null,$nbDossierAAfficher = self::nbDossierAAfficher){
+         // Création de l'objet recherche
+         $search = new Model_DbTable_Search();
+
+         // récupération des types de dossier autre
+         $dossier_types = new Model_DbTable_DossierType();
+         $dossier_types = $dossier_types->fetchAll()->toArray();
+         $i = 0;
+         $types_autre = array();
+         foreach ($dossier_types as $key => $type) {
+             if ($type['ID_DOSSIERTYPE'] != 1 && $type['ID_DOSSIERTYPE'] != 2 && $type['ID_DOSSIERTYPE'] != 3) {
+                 $types_autre[$i] = (int) $type['ID_DOSSIERTYPE'];
+                 ++$i;
+             }
+         }
+ 
+         // On balance le résultat sur la vue
+         $results = array();
+         switch ($typeDossier) {
+            case "etudes":
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray(); 
+                break;
+            case "visites":
+                $results =  $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray();
+                break;
+           case "autres":
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray();
+                break;
+            default:
+                $results["etudes"] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray(); 
+                $results["visites"] =  $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray();
+                $results["autres"] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT',$idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher,999999)->toArray();
+                break;
+
+        }
+        return $results;
+
+    }
+
 
     /**
      * Récupération des descriptifs d'un établissement.

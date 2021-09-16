@@ -1240,3 +1240,18 @@ dl.champ_effectif_camping dt {
 dl.champ_effectif_camping dd input {
     width: 139px;
 }
+
+
+.flexCol{
+    display: flex;
+    flex-flow: column;
+}
+
+.buttonOpenClose{
+    margin: auto;
+    width: fit-content;
+}
+
+.margTop3px{
+    margin-top:3px;
+}

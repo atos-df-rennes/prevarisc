@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configdata>
     <nav>
+        <test-partial-loop>
+            <label>testPartialLoop</label>
+            <controller>test-partial-loop</controller>
+            <action>index</action>
+        </test-partial-loop>
+
         <!-- Page d'accueil -->
         <index>
             <label>Accueil</label>
@@ -1002,6 +1008,11 @@
                     <resource>creations</resource>
                     <privilege>add_etablissement</privilege>
                 </add>
+                <get-dossiers-after-n>
+                    <label>GetAfterNDossiers</label>
+                    <controller>etablissement</controller>
+                    <action>getAfterDossiersN</action>
+                </get-dossiers-after-n>
                 <descriptif>
                     <label>Descriptifs</label>
                     <controller>etablissement</controller>

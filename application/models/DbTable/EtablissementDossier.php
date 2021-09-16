@@ -19,4 +19,8 @@ class Model_DbTable_EtablissementDossier extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchAll($select);
     }
+
+
+
+    
 }
