@@ -285,11 +285,11 @@ echo "
 								&nbsp;&nbsp;
 								<span>
 						";
-						if($this->infosDossier['VERROU_DOSSIER'] == 0){
+						
 							echo "
 								<button class='deleteChoix btn' >Supprimer la liaison</button>
 							";
-						}
+						
 						echo "
 								</span>
 								<span style='display:none;' >
@@ -421,13 +421,12 @@ echo "
 			</div>
 			<br/>
 		";
-			if($this->infosDossier['VERROU_DOSSIER'] == 0){
 				echo "
 					<div class='grid_14 alpha form'>
 						<a class='btn' href='/dossier/liees-doss/id/".$this->infosDossier['ID_DOSSIER']."' >Lier à un dossier</a>
 					</div>
 				";
-			}
+			
 			echo "
 			<hr class='clear'/>
 		</div>
