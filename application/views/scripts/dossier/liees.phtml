@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 	$(document).ready(function(){
 				
 		$('#listeEtab :input[name=idEtablissement]').each(function(){
@@ -262,6 +261,7 @@
 			$(".cancelAdd").show();
         });
 
+		$('.icone_enfants').remove();
 	});
 </script>
 
@@ -285,11 +285,11 @@ echo "
 								&nbsp;&nbsp;
 								<span>
 						";
-						
-							echo "
+                        if ($this->infosDossier['VERROU_DOSSIER'] == 0) {
+                            echo "
 								<button class='deleteChoix btn' >Supprimer la liaison</button>
 							";
-						
+                        }
 						echo "
 								</span>
 								<span style='display:none;' >
@@ -396,46 +396,29 @@ echo "
                 }
                 $date_text = "créé le";
             }
-            echo "<small class='muted'>" . $date_text . " " . $date . "</small>";
-
-			if($this->infosDossier['VERROU_DOSSIER'] == 0){
-				echo "
-					<input type='hidden' value='".$dossier['ID_DOSSIERLIE']."' name='idDossierLie'>
-				</div>
-				<div class='span2'>
-                    <span>
-                        <button class='btn deleteLienDossier' ><i class='icon-trash'></i>&nbsp;Supprimer la liaison</button>
-                    </span>
-                    <span style='display:none;' >
-                        <button class='btn confirmDeleteLienDossier btn-warning' >Confirmer la suppression</button>
-                        <button class='btn cancelDeleteLienDossier' >Annuler</button>
-                    </span>
-				";
-			}
-			echo "
-				</div>
-				</div>
+            echo "<small class='muted'>" . $date_text . " " . $date . "</small>
+				<input type='hidden' value='".$dossier['ID_DOSSIERLIE']."' name='idDossierLie'>
+			</div>
+			<div class='span2'>
+				<span>
+					<button class='btn deleteLienDossier' ><i class='icon-trash'></i>&nbsp;Supprimer la liaison</button>
+				</span>
+				<span style='display:none;' >
+					<button class='btn confirmDeleteLienDossier btn-warning' >Confirmer la suppression</button>
+					<button class='btn cancelDeleteLienDossier' >Annuler</button>
+				</span>
+			</div>
+			</div>
 			";
 		}
 		echo "	
 			</div>
 			<br/>
-		";
-				echo "
-					<div class='grid_14 alpha form'>
-						<a class='btn' href='/dossier/liees-doss/id/".$this->infosDossier['ID_DOSSIER']."' >Lier à un dossier</a>
-					</div>
-				";
-			
-			echo "
+			<div class='grid_14 alpha form'>
+				<a class='btn' href='/dossier/liees-doss/id/".$this->infosDossier['ID_DOSSIER']."' >Lier à un dossier</a>
+			</div>
 			<hr class='clear'/>
 		</div>
 	</div>
 ";
 ?>
-
-<script>
-	$(document).ready(function(){
-		$('.icone_enfants').remove();
-	});
-</script>
