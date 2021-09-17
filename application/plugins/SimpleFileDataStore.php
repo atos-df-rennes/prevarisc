@@ -10,7 +10,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      *
      * @var string
      */
-    protected $format = '%ID_PIECEJOINTE%%EXTENSION_PIECEJOINTE%';
+    protected $format = '%NOM_PIECEJOINTE%%EXTENSION_PIECEJOINTE%';
 
     /**
      * Mapping entre les types de pièces jointes et les
