@@ -9,13 +9,28 @@
                href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
         </li>
         
-	<?php		
+	    <?php		
             if($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
                 echo "<li class='".(( $this->action == "descriptif") ? "active" : "read" )."'>
                         <a "
                         . "href='".$this->url(array("controller" => "dossier", "action"=>"descriptif", "id" => $this->idDossier), false, true)."'><i class=\"icon-book icon-black\"></i> Descriptif ".(( $this->natureDossier == 1 || $this->natureDossier == 2 ) ? " des travaux" : "")."</a>
                     </li>";
             }
+
+            ?>
+            
+            <?php if ($this->idTypeDossier == 1) :?>
+            <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
+                <a class='sep' href='/dossier/effectifs-et-degagements/id/<?php echo $this->idDossier ?>' >    
+                    <em class="icon-th-list icon-black"></em>
+                    Effectifs et dégagements
+                </a>
+            </li>
+            <?php endif;?>
+            
+            
+            <?php
+
 
             if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3 ) {
                 echo "<li class='".( ( $this->action == "textes-applicables" ) ? "active" : "read" )."'>
@@ -89,6 +104,10 @@
         <li>
             <a id="suppressionDossier" href="#"><em class="icon-remove icon-black"></em>Supprimer le dossier</a>
         </li>
+
+
+        
+        
         <?php endif; ?>
     </ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd();

@@ -3025,4 +3025,19 @@ class DossierController extends Zend_Controller_Action
             ));
         }
     }
+
+
+    public function effectifsEtDegagementsAction(){
+        $this->_helper->layout->setLayout('dossier');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        //        $this->view->etablissement = $service_etablissement->get($this->_request->id);
+
+        //$this->view->idDossier = $this->_getParam($this->_request->id);
+
+        if ($this->_getParam('id')) {
+            $this->view->do = 'edit';
+            $this->view->idDossier = ($this->_getParam('id'));
+        }
+
+    }
 }

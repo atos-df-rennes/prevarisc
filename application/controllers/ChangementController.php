@@ -78,7 +78,6 @@ class ChangementController extends Zend_Controller_Action
     public function balisesAction()
     {
         $serviceChangement = new Service_Changement();
-
         $this->view->balises = $serviceChangement->getBalises();
     }
 

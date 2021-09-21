@@ -962,6 +962,14 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
+                <effectifs-et-degagements>
+                     <label>effectifs-et-degagements</label>
+                    <action>effectifs-et-degagements</action>
+                    <resource>alerte_email</resource>
+                    <privilege>alerte_statut</privilege>
+                    <privilege>alerte_avis</privilege>
+                    <privilege>alerte_classement</privilege>
+                </effectifs-et-degagements>
             </pages>
         </dossier>
 
@@ -1104,6 +1112,16 @@
                     <action>alerteform</action>
                     <privilege>view_ets</privilege>
                 </alerteform>
+
+                <effectifs-et-degagements>
+                    <label>effectifs-et-degagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-et-degagements</action>
+                    <resource>alerte_email</resource>
+                    <privilege>alerte_statut</privilege>
+                    <privilege>alerte_avis</privilege>
+                    <privilege>alerte_classement</privilege>
+                </effectifs-et-degagements>
             </pages>
         </etablissement>
 

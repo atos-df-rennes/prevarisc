@@ -6,6 +6,11 @@
             <li class="<?php echo $action_name == 'textes-applicables' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"textes-applicables")) ?>'><em class="icon-align-center icon-black"></em> Textes applicables</a></li>
             <li class="<?php echo $action_name == 'descriptif' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"descriptif")) ?>'><em class="icon-book icon-black"></em> Descriptif</a></li>
         <?php endif ?>
+        <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
+            <a class='sep' href='<?php echo $this->url(array("action"=>"effectifs-et-degagements")) ?>'>    
+            <em class="icon-th-list icon-black"></em>
+             Effectifs et dégagements</a>
+        </li>
         <li class="<?php echo $action_name == 'pieces-jointes' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"pieces-jointes")) ?>'><em class="icon-share icon-black"></em> Pièces jointes</a></li>
         <li class="<?php echo $action_name == 'contacts' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"contacts")) ?>'><em class="icon-user icon-black"></em> Contacts</a></li>
         <li class="<?php echo $action_name == 'dossiers' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"dossiers")) ?>'><em class="icon-folder-open icon-black"></em> Dossiers</a></li>
@@ -16,6 +21,11 @@
         <li>
             <a id="suppressionEtablissement" href="#"><em class="icon-remove icon-black"></em>Supprimer l'établissement</a>
         </li>
+
+       
+
+
+
         <?php endif ?>
 	</ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
