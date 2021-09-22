@@ -471,21 +471,26 @@ class EtablissementController extends Zend_Controller_Action
 
     public function effectifsEtDegagementsAction(){
 
-
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-            
-            /**
-             * Faire sauvegarde changement 
-             */
+        
             $serviceEffectifdegagement = new Service_Effectifdegagement();
-            
-        }else{
-
-            /**
-             * afficher donnee 
-             */
-
+                try {
+                    //Recuperation des variables de formulaire via la requete post
+                    $post = $this->_request->getPost();
+                    $serviceEffectifdegagement->save($post);
+                    $this->_helper->flashMessenger(array(
+                        'context' => 'success',
+                        'title' => 'Mise à jour réussie !',
+                        'message' => 'Les messages d\'alerte ont bien été mis à jour.',
+                    ));
+                } catch (Exception $e) {
+                    $this->_helper->flashMessenger(array(
+                        'context' => 'error',
+                        'title' => '',
+                        'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
+                    ));
+                }
         }
 
 

@@ -68,12 +68,52 @@ class Service_Effectifdegagement
     public function save($data)
     {
         if (is_array($data)) {
+            var_dump($data);
+
+            /*
+            
+            */
+            echo("<br>################");
+            //echo(explode('_',$data));
+
+            foreach ($data as $key => $message) {
+                //echo(explode('_',$key)[1]);
+                $newValue = $this->get(explode('_',$key)[0]);
+
+
+                /* 
+                echo "<br>".$newValue->EFFECTIF;
+                echo "<br>".$newValue->DEGAGEMENT;
+                */
+                switch (explode('_',$key)[1]){
+                    case "EFFECTIF": 
+                        $newValue->EFFECTIF = $message;
+                        break;
+                    case "DEGAGEMENT": 
+                        $newValue->DEGAGEMENT = $message;
+                        break;
+                }
+
+                /*echo "<br>".$newValue->EFFECTIF;
+                echo "<br>".$newValue->DEGAGEMENT;
+                */ 
+                $newValue->save();
+
+                /*
+                $idChangement = explode('_', $key)[0];
+                $changement = $this->get($idChangement);
+                $changement->MESSAGE_CHANGEMENT = $message;
+                $changement->save();
+                */
+            }
+            /*
             foreach ($data as $key => $message) {
                 $idChangement = explode('_', $key)[0];
                 $changement = $this->get($idChangement);
                 $changement->MESSAGE_CHANGEMENT = $message;
                 $changement->save();
             }
+            */
         }
     }
 

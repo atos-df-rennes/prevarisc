@@ -3,21 +3,18 @@
         <input type='button' class="btn see-balises" value="Voir les balises disponibles">
         <input type='submit' class="btn btn-success" value="Modifier effectifs">
     </div>
-        <h1>IS Post : <?php echo($this->toto)   ?></h1>
+        <?php foreach($this->EffectifDegagement as $label) : ?>
         <h3>
-            Message de 
+            Message de <?php echo strtolower($label["ID_EFFECTIF_DEGAGEMENT"]); ?>
         </h3>
-        <textarea id="textEffectif" class="tinyarea">
-        <?php echo($this->EffectifDegagement[0]["EFFECTIF"])?>
-        </textarea>
+        <textarea class="tinyarea" 
+            name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_EFFECTIF'
+        ><?php if ($label["EFFECTIF"]) { echo $label["EFFECTIF"]; } ?></textarea>
+        <textarea class="tinyarea" 
+            name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_DEGAGEMENT'
+        ><?php if ($label["DEGAGEMENT"]) { echo $label["DEGAGEMENT"]; } ?></textarea>
+    <?php endforeach ?>
 
-    
-        <h3>
-            Message de 
-        </h3>
-        <textarea id="textDegagement" class="tinyarea">
-            <?php echo($this->EffectifDegagement[0]["DEGAGEMENT"])?>
-        </textarea>
     
 </form>
 
