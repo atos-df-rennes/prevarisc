@@ -10,14 +10,7 @@
         <textarea id="textEffectif" class="tinyarea">
         <?php echo($this->EffectifDegagement[0]["EFFECTIF"])?>
         </textarea>
-    
-</form>
 
-<form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->etablissement['general']['ID_ETABLISSEMENT']?> method="post">
-    <div class='pull-right' >
-        <input type='button' class="btn see-balises" value="Voir les balises disponibles">
-        <input type='submit' class="btn btn-success" value="Modifier dégagments">
-    </div>
     
         <h3>
             Message de 
@@ -27,6 +20,8 @@
         </textarea>
     
 </form>
+
+<button id="btnTest">Click here </button>
 
 <script type='text/javascript'>
     
@@ -55,8 +50,18 @@
             event.preventDefault()
             console.log("Value pass : ",$("#textDegagement").val())
             console.log("Value pass : ",$("#textEffectif").val())
+        })
 
-
+        $('#btnTest').click(function(){
+            console.log('effectif',$("#textEffectif").val(),'degagement',$("#textDegagement").val())
+            $.ajax({
+                type: "POST",
+                url: "/etablissement/set-effectif-degagement",
+                data: { "id_etablissement": 1,'effectif':$("#textEffectif").val(),'degagement':$("#textDegagement").val(),},
+                success: function(msg){
+                    console.log("Message : ",msg)
+                },
+            });
         })
 
         $(".see-balises").click(function() {

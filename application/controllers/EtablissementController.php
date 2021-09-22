@@ -482,4 +482,15 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
         $this->view->historique = $service_etablissement->getHistorique($this->_request->id);
     }
+
+
+    public function setEffectifDegagementAction()
+    {
+
+        $modelEffectifDegagement = new Model_DbTable_EffectifEtDegagement();
+        $modelEffectifDegagement->setEffectifDegagement($this->_getParam("id_etablissement"),$this->_getParam("effectif"),$this->_getParam("degagement"));
+        $this->view->value = $modelEffectifDegagement->getEffectifEtDegagement($this->_getParam("id_etablissement"));
+
+
+    }
 }

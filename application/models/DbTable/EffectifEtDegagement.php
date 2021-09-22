@@ -34,4 +34,17 @@ class Model_DbTable_EffectifEtDegagement extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchAll($select);
     }
+
+    /**
+     * 
+     */
+    public function setEffectifDegagement($idInput,$effectifInput,$degagementInput){
+        $setSql = 
+        'UPDATE EffectifDegagement '.
+        'SET EFFECTIF = '.$effectifInput.', '.
+        'SET EFFECTIF = '.$degagementInput.' '.
+        'WHERE ID_EFFECTIF_DEGAGEMENT  = '.$idInput." ;";
+
+       // return $this->getAdapter()->fetchAll($select);
+    }
 }
