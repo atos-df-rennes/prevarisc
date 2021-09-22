@@ -470,11 +470,29 @@ class EtablissementController extends Zend_Controller_Action
     }
 
     public function effectifsEtDegagementsAction(){
+
+
+        if ($this->_request->isPost()) {
+            //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
+            
+            /**
+             * Faire sauvegarde changement 
+             */
+        
+        }else{
+
+            /**
+             * afficher donnee 
+             */
+
+        }
+
+
         $this->_helper->layout->setLayout('etablissement');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
         $service_etablissement = new Service_Etablissement();
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifEtDegagement();
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagement(1);
         
         
@@ -487,7 +505,9 @@ class EtablissementController extends Zend_Controller_Action
     public function setEffectifDegagementAction()
     {
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifEtDegagement();
+
+        $this->view->headScript()->appendFile('js/tinymce.min.js');
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $modelEffectifDegagement->setEffectifDegagement($this->_getParam("id_etablissement"),$this->_getParam("effectif"),$this->_getParam("degagement"));
         $this->view->value = $modelEffectifDegagement->getEffectifEtDegagement($this->_getParam("id_etablissement"));
 

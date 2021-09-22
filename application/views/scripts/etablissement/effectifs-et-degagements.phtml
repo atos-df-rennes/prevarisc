@@ -3,7 +3,7 @@
         <input type='button' class="btn see-balises" value="Voir les balises disponibles">
         <input type='submit' class="btn btn-success" value="Modifier effectifs">
     </div>
-    
+        <h1>IS Post : <?php echo($this->toto)   ?></h1>
         <h3>
             Message de 
         </h3>
@@ -46,11 +46,6 @@
     
     $(document).ready(function() {
 
-        $(".btn-success").click(function(event){
-            event.preventDefault()
-            console.log("Value pass : ",$("#textDegagement").val())
-            console.log("Value pass : ",$("#textEffectif").val())
-        })
 
         $('#btnTest').click(function(){
             console.log('effectif',$("#textEffectif").val(),'degagement',$("#textDegagement").val())
