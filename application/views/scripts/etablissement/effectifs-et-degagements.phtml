@@ -1,13 +1,30 @@
 <form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->etablissement['general']['ID_ETABLISSEMENT']?> method="post">
     <div class='pull-right' >
         <input type='button' class="btn see-balises" value="Voir les balises disponibles">
-        <input type='submit' class="btn btn-success" value="Modifier les messages">
+        <input type='submit' class="btn btn-success" value="Modifier effectifs">
     </div>
     
         <h3>
             Message de 
         </h3>
-        <textarea class="tinyarea"></textarea>
+        <textarea id="textEffectif" class="tinyarea">
+        <?php echo($this->EffectifDegagement[0]["EFFECTIF"])?>
+        </textarea>
+    
+</form>
+
+<form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->etablissement['general']['ID_ETABLISSEMENT']?> method="post">
+    <div class='pull-right' >
+        <input type='button' class="btn see-balises" value="Voir les balises disponibles">
+        <input type='submit' class="btn btn-success" value="Modifier dégagments">
+    </div>
+    
+        <h3>
+            Message de 
+        </h3>
+        <textarea id="textDegagement" class="tinyarea">
+            <?php echo($this->EffectifDegagement[0]["DEGAGEMENT"])?>
+        </textarea>
     
 </form>
 
@@ -33,6 +50,15 @@
 
     
     $(document).ready(function() {
+
+        $(".btn-success").click(function(event){
+            event.preventDefault()
+            console.log("Value pass : ",$("#textDegagement").val())
+            console.log("Value pass : ",$("#textEffectif").val())
+
+
+        })
+
         $(".see-balises").click(function() {
             var idEts = "<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>";
             var changement = $(this).attr("data-value");
