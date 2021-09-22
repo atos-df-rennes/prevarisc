@@ -478,7 +478,8 @@ class EtablissementController extends Zend_Controller_Action
             /**
              * Faire sauvegarde changement 
              */
-        
+            $serviceEffectifdegagement = new Service_Effectifdegagement();
+            
         }else{
 
             /**
