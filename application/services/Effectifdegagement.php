@@ -68,12 +68,6 @@ class Service_Effectifdegagement
     public function save($data)
     {
         if (is_array($data)) {
-            var_dump($data);
-
-            /*
-            
-            */
-            echo("<br>################");
             //echo(explode('_',$data));
 
             foreach ($data as $key => $message) {

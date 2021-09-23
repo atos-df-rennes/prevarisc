@@ -5,11 +5,15 @@
     </div>
         <?php foreach($this->EffectifDegagement as $label) : ?>
         <h3>
-            Message de <?php echo strtolower($label["ID_EFFECTIF_DEGAGEMENT"]); ?>
+            Effectifs
         </h3>
         <textarea class="tinyarea" 
             name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_EFFECTIF'
         ><?php if ($label["EFFECTIF"]) { echo $label["EFFECTIF"]; } ?></textarea>
+
+        <h3>
+            Dégagements
+        </h3>
         <textarea class="tinyarea" 
             name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_DEGAGEMENT'
         ><?php if ($label["DEGAGEMENT"]) { echo $label["DEGAGEMENT"]; } ?></textarea>
@@ -18,7 +22,6 @@
     
 </form>
 
-<button id="btnTest">Click here </button>
 
 <script type='text/javascript'>
     

@@ -1,29 +1,27 @@
-<form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->idDossier?> method="post">
+<form action=/dossier/effectifs-et-degagements/id/<?php echo $this->idDossier?> method="post">
     <div class='pull-right' >
         <input type='button' class="btn see-balises" value="Voir les balises disponibles">
-        <input type='submit' class="btn btn-success" value="Modifier les messages">
+        <input type='submit' class="btn btn-success" value="Modifier effectifs">
     </div>
-    
+        <?php foreach($this->EffectifDegagement as $label) : ?>
         <h3>
             Effectifs
         </h3>
-        <textarea class="tinyarea"></textarea>
-    
-</form>
+        <textarea class="tinyarea" 
+            name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_EFFECTIF'
+        ><?php if ($label["EFFECTIF"]) { echo $label["EFFECTIF"]; } ?></textarea>
 
-
-<form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->idDossier?> method="post">
-    <div class='pull-right' >
-        <input type='button' class="btn see-balises" value="Voir les balises disponibles">
-        <input type='submit' class="btn btn-success" value="Modifier les messages">
-    </div>
-    
         <h3>
             Dégagements
         </h3>
-        <textarea class="tinyarea"></textarea>
+        <textarea class="tinyarea" 
+            name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_DEGAGEMENT'
+        ><?php if ($label["DEGAGEMENT"]) { echo $label["DEGAGEMENT"]; } ?></textarea>
+    <?php endforeach ?>
+
     
 </form>
+
 
 <script type='text/javascript'>
     
@@ -47,6 +45,20 @@
 
     
     $(document).ready(function() {
+
+
+        $('#btnTest').click(function(){
+            console.log('effectif',$("#textEffectif").val(),'degagement',$("#textDegagement").val())
+            $.ajax({
+                type: "POST",
+                url: "/etablissement/set-effectif-degagement",
+                data: { "id_etablissement": 1,'effectif':$("#textEffectif").val(),'degagement':$("#textDegagement").val(),},
+                success: function(msg){
+                    console.log("Message : ",msg)
+                },
+            });
+        })
+
         $(".see-balises").click(function() {
             var idEts = "<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>";
             var changement = $(this).attr("data-value");

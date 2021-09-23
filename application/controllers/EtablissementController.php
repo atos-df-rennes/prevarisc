@@ -499,8 +499,8 @@ class EtablissementController extends Zend_Controller_Action
         $service_etablissement = new Service_Etablissement();
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagement(1);
-        
+        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_request->id);
+        var_dump($this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_request->id)); 
         
         $this->view->etablissement = $service_etablissement->get($this->_request->id);
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
