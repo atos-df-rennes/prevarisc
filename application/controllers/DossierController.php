@@ -3057,7 +3057,7 @@ class DossierController extends Zend_Controller_Action
         }
 
 
-        $this->_helper->layout->setLayout('etablissement');
+        $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
         $service_etablissement = new Service_Etablissement();
 
@@ -3070,5 +3070,28 @@ class DossierController extends Zend_Controller_Action
         //$this->view->idDossier = $this->_getParam($this->_request->id);
 
 
+    }
+
+    /**
+     * Affiche la version lecture des effectifs et degagement
+     */
+    public function visuEffectifDegagementAction(){
+        $this->_helper->layout->setLayout('dossier');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $service_etablissement = new Service_Etablissement();
+
+
+        $DBdossier = new Model_DbTable_Dossier();
+        $dossier = $DBdossier->find($this->_getParam('id'))->current();
+        $this->view->objetDossier = $dossier->OBJET_DOSSIER;
+        $this->view->idTypeDossier = $dossier->TYPE_DOSSIER;
+        $this->view->verrouDossier = $dossier['VERROU_DOSSIER'];
+        $this->view->idDossier = ($this->_getParam('id'));
+
+        $this->view->verrou = $dossier->VERROU_DOSSIER;
+
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_getParam('id'));
+        $this->view->idDossier = $this->_getParam('id');
     }
 }

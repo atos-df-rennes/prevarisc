@@ -963,7 +963,7 @@
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
                 <effectifs-et-degagements>
-                     <label>effectifs-et-degagements</label>
+                    <label>effectifs-et-degagements</label>
                     <action>effectifs-et-degagements</action>
                     <resource>alerte_email</resource>
                     <privilege>alerte_statut</privilege>

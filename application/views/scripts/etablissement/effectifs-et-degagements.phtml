@@ -1,7 +1,6 @@
 <form action=/etablissement/effectifs-et-degagements/id/<?php echo $this->etablissement['general']['ID_ETABLISSEMENT']?> method="post">
     <div class='pull-right' >
-        <input type='button' class="btn see-balises" value="Voir les balises disponibles">
-        <input type='submit' class="btn btn-success" value="Modifier effectifs">
+        <input type='submit' class="btn btn-success" value="Modifier effectifs dégagements">
     </div>
         <?php foreach($this->EffectifDegagement as $label) : ?>
         <h3>

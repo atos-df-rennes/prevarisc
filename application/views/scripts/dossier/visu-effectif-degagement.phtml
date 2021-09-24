@@ -1,0 +1,17 @@
+<?php if ($this->verrouDossier == 0):?>
+    <div class='pull-right' >
+    <a class='btn' href="<?php echo $this->url(array('action' => 'effectifs-et-degagements')) ?>">Modifier effectifs degagements</a>
+</div>
+<?php endif?>
+
+<?php foreach($this->EffectifDegagement as $label) : ?>
+    <h3>
+        Effectifs
+    </h3>
+    <p name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_EFFECTIF'>
+    <?php if ($label["EFFECTIF"]) { echo $label["EFFECTIF"]; } ?></p>
+    <h3>
+        Dégagements
+    </h3>
+    <p name='<?php echo $label["ID_EFFECTIF_DEGAGEMENT"]; ?>_DEGAGEMENT'><?php if ($label["DEGAGEMENT"]) { echo $label["DEGAGEMENT"]; } ?></p>
+<?php endforeach ?>

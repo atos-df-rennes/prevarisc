@@ -500,7 +500,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_request->id);
-        var_dump($this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_request->id)); 
         
         $this->view->etablissement = $service_etablissement->get($this->_request->id);
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
@@ -514,9 +513,25 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->headScript()->appendFile('js/tinymce.min.js');
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelEtablissement = new Model_DbTable_Etablissement();
         $modelEffectifDegagement->setEffectifDegagement($this->_getParam("id_etablissement"),$this->_getParam("effectif"),$this->_getParam("degagement"));
         $this->view->value = $modelEffectifDegagement->getEffectifEtDegagement($this->_getParam("id_etablissement"));
 
 
+    }
+
+
+
+     /**
+     * Affiche la version lecture des effectifs et degagement
+     */
+    public function visuEffectifDegagementAction(){
+        $this->_helper->layout->setLayout('etablissement');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $service_etablissement = new Service_Etablissement();
+
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_getParam('id'));
+        $this->view->idDossier = $this->_getParam('id');
     }
 }
