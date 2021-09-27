@@ -3092,6 +3092,7 @@ class DossierController extends Zend_Controller_Action
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_getParam('id'));
+
         $this->view->idDossier = $this->_getParam('id');
     }
 }

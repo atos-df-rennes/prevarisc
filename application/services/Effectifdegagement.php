@@ -2,48 +2,7 @@
 
 class Service_Effectifdegagement
 {
-    /**
-     * Définition des balises.
-     */
-    const BALISES = array(
-        '{activitePrincipaleEtablissement}' => array(
-            'description' => "L'activité principale de l'établissement",
-            'model' => 'informations',
-            'champ' => 'LIBELLE_TYPEACTIVITE_PRINCIPAL',
-        ),
-        '{categorieEtablissement}' => array(
-            'description' => "La catégorie de l'etablissement",
-            'model' => 'informations',
-            'champ' => 'LIBELLE_CATEGORIE',
-        ),
-        '{etablissementAvis}' => array(
-            'description' => "L'avis de l'établissement",
-            'model' => 'avis',
-            'champ' => '',
-        ),
-        '{etablissementLibelle}' => array(
-            'description' => "Le libelle de l'établissement",
-            'model' => 'informations',
-            'champ' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-        ),
-        '{etablissementNumeroId}' => array(
-            'description' => "Le numéro Id de l'établissement",
-            'model' => 'general',
-            'champ' => 'NUMEROID_ETABLISSEMENT',
-        ),
-        '{etablissementStatut}' => array(
-            'description' => "Le statut (Ouvert ou Fermé) de l'établissement",
-            'model' => 'informations',
-            'champ' => 'LIBELLE_STATUT',
-        ),
-        '{typePrincipalEtablissement}' => array(
-            'description' => "Le type principal de l'établissement",
-            'model' => 'informations',
-            'champ' => 'LIBELLE_TYPE_PRINCIPAL',
-        ),
-
-    );
-
+    
 
     /**
      *  Retourne un changement via son Id précisé en argument.
