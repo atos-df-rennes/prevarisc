@@ -169,6 +169,17 @@ class Service_Dashboard
             'height' => 'small',
             'width' => 'small',
         ),
+
+        // bloc npsp
+        'test' => array(
+            'service' => 'Service_Dashboard',
+            'method' => 'getDossierAvecAvisDiffere',
+            'acl' => null,
+            'title' => 'Dossiers Plat\'AU',
+            'type' => 'test',
+            'height' => 'small',
+            'width' => 'small',
+        ),
     );
 
     /**
@@ -478,6 +489,7 @@ class Service_Dashboard
 
         return $dossiers;
     }
+
 
     public function getNpsp()
     {
