@@ -484,4 +484,15 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchRow($select);
     }
+
+    /**
+     * Retourne la listedes dossiers provenant de platau 
+     */
+    public function getAllDossierPlatAU(){
+        $select = "SELECT *
+            from dossier
+            where dossier.ID_PLATAU != 0;
+        ";
+        return $this->getAdapter()->fetchAll($select);
+    }
 }

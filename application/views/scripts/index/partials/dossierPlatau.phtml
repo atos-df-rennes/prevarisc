@@ -1,7 +1,6 @@
-<h1>Content of test.phtml</h1>
 <?php if (count($this->data) > 0): ?>
    <ul class='recherche_liste unstyled no_slide scroll-bloc-medium'>
-     <?php echo $this->partialLoop('search/results/dossier.phtml', $this->data) ?>
+    <?php echo $this->partialLoop('search/results/dossier.phtml', $this->data)?>
    </ul>
 <?php else: ?>
    <small class='muted'>Aucun dossier.</small>

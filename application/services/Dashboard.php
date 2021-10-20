@@ -171,12 +171,13 @@ class Service_Dashboard
         ),
 
         // bloc npsp
-        'test' => array(
+        'dossierPlatau' => array(
             'service' => 'Service_Dashboard',
-            'method' => 'getDossierAvecAvisDiffere',
+            //'method' => 'getDossierAvecAvisDiffere',
+            'method' => 'getDossiersPlatAUSansEtablissement', 
             'acl' => null,
             'title' => 'Dossiers Plat\'AU',
-            'type' => 'test',
+            'type' => 'dossierPlatau',
             'height' => 'small',
             'width' => 'small',
         ),
@@ -427,6 +428,18 @@ class Service_Dashboard
         $search->order('d.DATEINSERT_DOSSIER desc');
 
         return $search->run(false, null, false)->toArray();
+    }
+
+    /**
+     * Retourne la liste des dossiers Plat'AU non associé à un etablissement
+     */
+    public function getDossiersPlatAUSansEtablissement(){
+
+        $dbDossier = new Model_DbTable_Dossier();
+        //$dbDossier->getAllDossierPlatAU();
+        //var_dump($dbDossier->getAllDossierPlatAU());
+        //exit();
+       return $dbDossier->getAllDossierPlatAU();
     }
 
     public function getLeveePresc()
