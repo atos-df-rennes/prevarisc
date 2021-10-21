@@ -486,12 +486,11 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la listedes dossiers provenant de platau 
+     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement 
      */
     public function getAllDossierPlatAU(){
-        $select = "SELECT *
-            from dossier
-            where dossier.ID_PLATAU != 0;
+        $select = "
+        SELECT dossier.* FROM dossier WHERE dossier.ID_DOSSIER NOT IN  (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier) AND dossier.ID_PLATAU IS NOT NULL;
         ";
         return $this->getAdapter()->fetchAll($select);
     }
