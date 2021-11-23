@@ -1,6 +1,6 @@
 <li class="dossier <?php if($this->NB_DOSS_LIES > 0) echo "slide" ?>" id="<?php echo $this->ID_DOSSIER ?>">
 
-    <?php /* Icone représentant le dropdown des fils */ ?>
+    <!-- Icone représentant le dropdown des fils -->
     <?php if($this->NB_DOSS_LIES > 0) : ?>
     <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
     <?php endif ?>
@@ -61,7 +61,7 @@
             echo "<small class='muted'>" . $date_text . " " . $date . "</small>";
         ?>
 
-        <?php /* Icone de chargement des enfants (si il y'en a, et si on est en mode niveau */ ?>
+        <!-- Icone de chargement des enfants (si il y'en a, et si on est en mode niveau -->
         <?php if($this->NB_DOSS_LIES > 0) : ?>
             <span class='load ui-helper-hidden' ><img src='/images/load.gif' alt='Chargement ...' /></span>
         <?php endif ?>
@@ -69,8 +69,10 @@
     </div>
 
     <div class="pull-right">
+        <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+        <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
-        <?php /* Avis du dossier */ ?>
+        <!-- Avis du dossier -->
         <?php if($this->INCOMPLET_DOSSIER == 1) : ?>
         <span class='avis' style='background-color: #f89406;'>Dossier incomplet</span>
         <?php elseif($this->DIFFEREAVIS_DOSSIER == 1) : ?>
@@ -91,12 +93,12 @@
         <span class="avis">Avis indisponible</span>
         <?php endif ?>
 
-        <?php /* Alerte sur la reception de travaux */ ?>
+        <!-- Alerte sur la reception de travaux -->
         <?php if($this->ALERTE_RECEPTION_TRAVAUX > 0) : ?>
         <span class='avis' style='background-color: #3a87ad'>Présence d'un dossier de reception de travaux</span>
         <?php endif ?>
 
-        <?php /* Alerte sur le fait que la visite fait partie d'un échéancier de travaux */ ?>
+        <!-- Alerte sur le fait que la visite fait partie d'un échéancier de travaux -->
         <?php if($this->ECHEANCIER_TRAVAUX > 0) : ?>
         <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
         <?php endif ?>
