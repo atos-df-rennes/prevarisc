@@ -402,10 +402,6 @@ ul.no_slide li.slide {
     border-left: none;
 }
 
-ul.recherche_liste li .avis {
-    float: right
-}
-
 ul.recherche_liste li + li {
     margin-top: 3px;
 }
