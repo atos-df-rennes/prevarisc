@@ -507,6 +507,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->where('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)')
             ->where('d.ID_PLATAU IS NOT NULL')
         ;
+
         return $this->getAdapter()->fetchAll($select);
     }
 }
