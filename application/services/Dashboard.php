@@ -173,7 +173,6 @@ class Service_Dashboard
         // bloc npsp
         'dossierPlatau' => array(
             'service' => 'Service_Dashboard',
-            //'method' => 'getDossierAvecAvisDiffere',
             'method' => 'getDossiersPlatAUSansEtablissement', 
             'acl' => array('dashboard','view_doss_platau_sans_etab'),
             'title' => 'Dossiers Plat\'AU à traiter',
