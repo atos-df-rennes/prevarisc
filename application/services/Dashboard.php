@@ -499,7 +499,6 @@ class Service_Dashboard
         return $dossiers;
     }
 
-
     public function getNpsp()
     {
         $search = new Model_DbTable_Search();
