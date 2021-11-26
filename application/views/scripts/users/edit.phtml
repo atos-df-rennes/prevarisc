@@ -93,12 +93,12 @@
     <dl class='dl-horizontal'>
     	<dt>Prénom</dt>
 		<dd>
-			<input type='text' name='PRENOM_UTILISATEURINFORMATIONS' value='<?php echo $this->user['infos']["PRENOM_UTILISATEURINFORMATIONS"] ?>' />
+			<input type='text' name='PRENOM_UTILISATEURINFORMATIONS' value='<?php echo htmlspecialchars($this->user['infos']["PRENOM_UTILISATEURINFORMATIONS"], ENT_QUOTES) ?>' />
 		</dd>
 
 		<dt>Nom</dt>
 		<dd>
-			<input type='text' name='NOM_UTILISATEURINFORMATIONS' value='<?php echo $this->user['infos']["NOM_UTILISATEURINFORMATIONS"] ?>' />
+			<input type='text' name='NOM_UTILISATEURINFORMATIONS' value='<?php echo htmlspecialchars($this->user['infos']["NOM_UTILISATEURINFORMATIONS"], ENT_QUOTES) ?>' />
 		</dd>
 
     	<dt>Fonction</dt>
