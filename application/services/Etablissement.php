@@ -452,23 +452,16 @@ class Service_Etablissement implements Service_Interface_Etablissement
     public function getNbDossierTypeEtablissement($idEtablissement, $idDossierType)
     {
         $select = "";
-
-
         //Tableau regrioupant les differents type de dossier
         $listTypeDossier = ["etudes","autres","visites"];
-
-
         //Hashmap permettant de regrouper les differents type de dossier
         $listValueByTypeDossier = [];
         $listValueByTypeDossier["etudes"] = 1;
         $listValueByTypeDossier["visites"] = [2,3];
         $listValueByTypeDossier["autres"] = [4,5,6,7];
-
         if (in_array($idDossierType, $listTypeDossier)) {
             $idDossierType  = $listValueByTypeDossier[$idDossierType];
         }
-
-
         if (is_array($idDossierType)) {
             $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
             .'FROM etablissementdossier '
@@ -499,13 +492,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement.';';
             }
         }
-
         $modelDb = new Model_DbTable_EtablissementDossier();
         $result = $modelDb->getAdapter()->fetchAll($select);
         if (empty($result)) {
             $result = null;
         }
-
         return($result);
     }
     
@@ -549,7 +540,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $results["visites"] =  $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
                 $results["autres"] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
                 break;
-
         }
         return $results;
     }
@@ -745,7 +735,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $search->setCriteria('etablissementinformations.ID_GENRE', 3);
             }
         }
-
         return $search->run()->getAdapter()->getItems(0, 99999999999)->toArray();
     }
 
@@ -947,9 +936,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             $etablissement->save();
-
             $etablissement->NUMEROID_ETABLISSEMENT = $data['NUMEROID_ETABLISSEMENT'] != null ? $data['NUMEROID_ETABLISSEMENT'] : $etablissement->ID_ETABLISSEMENT;
-
             $etablissement->save();
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];
