@@ -418,14 +418,9 @@ class EtablissementController extends Zend_Controller_Action
     public function dossiersAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-
         $service_etablissement = new Service_Etablissement();
-
         $this->view->etablissement = $service_etablissement->get($this->_request->id);
-
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
-
-        //$dossiers = $service_etablissement->getDossiers($this->_request->id);
         $dossiers = $service_etablissement->getNLastDossiers($this->_request->id);
 
         $this->view->etudes =   $dossiers['etudes'];
@@ -433,29 +428,23 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->autres =   $dossiers['autres'];
 
         $this->view->nbElemMax = Service_Etablissement::nbDossierAAfficher;
-        $this->view->nbEtudes = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id,"etudes")[0]["nbdossier"];
-        $this->view->nbVisites = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id,"visites")[0]["nbdossier"];
-        $this->view->nbAutres = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id,"autres")[0]["nbdossier"];
-        
+        $this->view->nbEtudes = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "etudes")[0]["nbdossier"];
+        $this->view->nbVisites = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "visites")[0]["nbdossier"];
+        $this->view->nbAutres = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "autres")[0]["nbdossier"];
     }
 
 
-    public function getDossiersAfterNAction(){
-
+    public function getDossiersAfterNAction()
+    {
         $service_etablissement = new Service_Etablissement();
-
         $this->view->etablissement = $service_etablissement->get($this->_request->id);
-
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
-
-        //$dossiers = $service_etablissement->getDossiers($this->_request->id);
-        $dossiers = $service_etablissement->getAfterNDossiers($this->_request->id,$this->_request->typeDossier);
-
+        $dossiers = $service_etablissement->getAfterNDossiers($this->_request->id, $this->_request->typeDossier);
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
         $html = "<ul class='recherche_liste'>";
-            $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $dossiers);
+        $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $dossiers);
         $html .= '</ul>';
 
         echo $html;

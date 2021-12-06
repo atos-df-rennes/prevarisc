@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configdata>
     <nav>
-        <test-partial-loop>
-            <label>testPartialLoop</label>
-            <controller>test-partial-loop</controller>
-            <action>index</action>
-        </test-partial-loop>
-
         <!-- Page d'accueil -->
         <index>
             <label>Accueil</label>
