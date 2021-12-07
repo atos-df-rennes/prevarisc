@@ -3030,13 +3030,9 @@ class DossierController extends Zend_Controller_Action
     public function effectifsEtDegagementsAction(){
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
-
-
-
-
+        
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-        
             $serviceEffectifdegagement = new Service_Effectifdegagement();
                 try {
                     //Recuperation des variables de formulaire via la requete post
@@ -3091,7 +3087,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->verrou = $dossier->VERROU_DOSSIER;
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_getParam('id'));
+        $this->view->EffectifDegagement =$modelsement->getEffectifEtDegagementByRef($this->_getParam('id'));
 
         $this->view->idDossier = $this->_getParam('id');
     }
