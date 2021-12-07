@@ -78,24 +78,35 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $facteur_dangerosite = $dossier_donnant_avis->FACTDANGE_DOSSIER;
             }
 
-            $last_visite = $search->setItem('dossier')
-                    // Dossier correspondant à l'établissement dont l'ID est donné
+            $search->setItem('dossier')
+                // Dossier correspondant à l'établissement dont l'ID est donné
                 ->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)
-                    // Dossier type "Visite de commission" et "Groupe de visite"
+                // Dossier type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('d.TYPE_DOSSIER', array(2, 3))
-                        // Dossier ayant un avis de commission rendu
+                // Dossier ayant un avis de commission rendu
                 ->setCriteria('d.AVIS_DOSSIER_COMMISSION > 0')
-                    // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
-                ->setCriteria('ID_NATURE', array(21, 26, 47, 48))
-                ->order('DATEVISITE_DOSSIER DESC')
+                // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
+                ->setCriteria('ID_NATURE', array(21, 26, 47, 48));
+
+            $use_date_commission_for_periodicity = getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE');
+
+            $use_date_commission_for_periodicity ? $search->order('DATECOMM_DOSSIER DESC') : $search->order('DATEVISITE_DOSSIER DESC');
+            $last_visite = $search
                 ->limit(1)
                 ->run(false, null, false)->toArray();
 
             $next_visite = null;
 
             if ($last_visite !== null && !empty($last_visite)) {
-                if ($last_visite[0]['DATEVISITE_DOSSIER'] !== null) {
+                if (
+                    (!$use_date_commission_for_periodicity && $last_visite[0]['DATEVISITE_DOSSIER'] !== null) ||
+                    ($use_date_commission_for_periodicity && $last_visite[0]['DATECOMM_DOSSIER'] !== null)
+                ) {
                     $tmp_date = new Zend_Date($last_visite[0]['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                    if ($use_date_commission_for_periodicity) {
+                        $tmp_date = new Zend_Date($last_visite[0]['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                    }
+
                     $last_visite = $tmp_date->get(Zend_date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
 
                     if ($informations->PERIODICITE_ETABLISSEMENTINFORMATIONS != 0) {
