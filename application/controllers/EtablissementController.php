@@ -435,12 +435,11 @@ class EtablissementController extends Zend_Controller_Action
 
     public function getDossiersAfterNAction()
     {
-        $service_etablissement = new Service_Etablissement();
-        $this->view->etablissement = $service_etablissement->get($this->_request->id);
-        $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
-        $dossiers = $service_etablissement->getAfterNDossiers($this->_request->id, $this->_request->typeDossier);
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
+        
+        $service_etablissement = new Service_Etablissement();
+        $dossiers = $service_etablissement->getDossiersAfterN($this->_request->id, $this->_request->typeDossier);
 
         $html = "<ul class='recherche_liste'>";
         $html .= Zend_Layout::getMvcInstance()->getView()->partialLoop('search/results/dossier.phtml', (array) $dossiers);

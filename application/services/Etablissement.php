@@ -451,7 +451,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @return array retourne la liste des dossiers apres N  ou N = $nbDossierAAfficher
      *
      */
-    public function getAfterNDossiers($idEtablissement, $typeDossier= null, $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER)
+    public function getDossiersAfterN($idEtablissement, $typeDossier= null, $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER)
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
