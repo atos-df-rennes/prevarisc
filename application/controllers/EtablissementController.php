@@ -428,9 +428,9 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->autres =   $dossiers['autres'];
 
         $this->view->nbElemMax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
-        $this->view->nbEtudes = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "etudes")[0]["nbdossier"];
-        $this->view->nbVisites = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "visites")[0]["nbdossier"];
-        $this->view->nbAutres = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, "autres")[0]["nbdossier"];
+        $this->view->nbEtudes = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes');
+        $this->view->nbVisites = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, 'visites');
+        $this->view->nbAutres = $service_etablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres');
     }
 
     public function getDossiersAfterNAction()

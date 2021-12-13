@@ -411,16 +411,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $results;
     }
 
-    /**
-     * @param int $idEtablissement
-     * @param int $nbDossierAAfficher \\$nbDossierAAfficher (default 5)
-     * @return array retourne la liste des N dernier dossier ou N = $nbDossierAAfficher
-     *
-     */
-    public function getNLastDossiers($idEtablissement, $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER)
+    public function getNLastDossiers(int $idEtablissement, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
     {
-
-         // Création de l'objet recherche
+        // Création de l'objet recherche
         $search = new Model_DbTable_Search();
 
         // récupération des types de dossier autre
@@ -444,60 +437,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $results;
     }
 
-
-    /**
-     * @param int $idEtablissement
-     * @param int/[] $idDossierType -> 1=>Etude 2=>Visite 3=> groupe de visite 4=> Reunion 5=> courrier 6=> Intervention 7=> Arrete
-     */
-    public function getNbDossierTypeEtablissement($idEtablissement, $idDossierType)
+    public function getNbDossierTypeEtablissement(int $idEtablissement, string $type): int
     {
-        $select = "";
-        //Tableau regrioupant les differents type de dossier
-        $listTypeDossier = ["etudes","autres","visites"];
-        //Hashmap permettant de regrouper les differents type de dossier
-        $listValueByTypeDossier = [];
-        $listValueByTypeDossier["etudes"] = 1;
-        $listValueByTypeDossier["visites"] = [2,3];
-        $listValueByTypeDossier["autres"] = [4,5,6,7];
-        if (in_array($idDossierType, $listTypeDossier)) {
-            $idDossierType  = $listValueByTypeDossier[$idDossierType];
-        }
-        if (is_array($idDossierType)) {
-            $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
-            .'FROM etablissementdossier '
-            .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
-            .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
-            .'WHERE '
-            .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement
-            .' AND '
-            .'dossiertype.ID_DOSSIERTYPE IN ('.  implode(',', $idDossierType).');';
+        $modelDossier = new Model_DbTable_Dossier();
+        $result = $modelDossier->getDossiersEtablissementByType($idEtablissement, $type);
 
-        //Pour la partie implode voir site suivant : https://stackoverflow.com/questions/9618277/how-to-use-php-array-with-sql-in-operator
-        } else {
-            if (is_int($idDossierType)) {
-                $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
-                .'FROM etablissementdossier '
-                .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
-                .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
-                .'WHERE '
-                .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement
-                ." AND "
-                .'dossiertype.ID_DOSSIERTYPE = '.$idDossierType.";";
-            } else {
-                $select = 'SELECT count(dossiertype.ID_DOSSIERTYPE) as nbdossier '
-                .'FROM etablissementdossier '
-                .'inner join dossier on dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER '
-                .'inner join dossiertype on dossiertype.ID_DOSSIERTYPE = dossier.TYPE_DOSSIER  '
-                .'WHERE '
-                .'etablissementdossier.ID_ETABLISSEMENT = '.$idEtablissement.';';
-            }
-        }
-        $modelDb = new Model_DbTable_EtablissementDossier();
-        $result = $modelDb->getAdapter()->fetchAll($select);
-        if (empty($result)) {
-            $result = null;
-        }
-        return($result);
+        return(count($result));
     }
     
     /**
