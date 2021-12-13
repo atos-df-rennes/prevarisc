@@ -402,7 +402,7 @@ ul.no_slide li.slide {
     border-left: none;
 }
 
-ul.recherche_liste li + li {
+ul.recherche_liste li + li, .voir-plus {
     margin-top: 3px;
 }
 
@@ -1245,10 +1245,7 @@ dl.champ_effectif_camping dd input {
 .buttonOpenClose {
     margin: auto;
     width: fit-content;
-}
-
-.margTop3px {
-    margin-top: 3px;
+    margin-bottom: 1rem;
 }
 
 #dossierInfos form .btn {

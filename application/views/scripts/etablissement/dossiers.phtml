@@ -18,7 +18,7 @@
     <h4>Visites</h4>
     <ul class='recherche_liste'>
     <?php echo $this->partialLoop('search/results/dossier.phtml', $this->visites); ?>
-    <div class="margTop3px" id="divcompleteListeVisite"></div>
+    <div class="voir-plus" id="divcompleteListeVisite"></div>
     </ul>
     
     <?php if (($this->nbEtudes) > $this->nbElemMax) : ?>
@@ -35,7 +35,7 @@
     <h4>Études</h4>
         <ul class='recherche_liste'>
             <?php echo $this->partialLoop('search/results/dossier.phtml', $this->etudes);  ?>
-            <div class="margTop3px" id='divcompleteListeEtude'></div>
+            <div class="voir-plus" id='divcompleteListeEtude'></div>
         </ul>
     <?php if (($this->nbEtudes) > $this->nbElemMax) : ?>
     <button class="buttonOpenClose" id="completeListeEtude">Voir plus</button>
@@ -46,21 +46,19 @@
 <div class="flexCol" id="content_autres_ets">
 <?php if (count($this->autres) > 0) : ?>
     <?php if (count($this->visites) > 0 || count($this->etudes) > 0) {
-    echo "<hr />";
-} ?>
+        echo "<hr />";
+    } ?>
         <h4>Autres</h4>
         <ul class='recherche_liste'>
             <?php echo $this->partialLoop('search/results/dossier.phtml', $this->autres);  ?>
-            <div class='margTop3px' id='divcompleteListeAutres'></div>
+            <div class='voir-plus' id='divcompleteListeAutres'></div>
         </ul>
 
         <?php if (($this->nbAutres) > $this->nbElemMax) : ?>
-            <button class="buttonOpenClose" id="completeListeAutres">Voir plus</button>
+            <button class="btn buttonOpenClose" id="completeListeAutres">Voir plus</button>
         <?php endif ?>
     <?php endif ?>
 <?php endif ?>
-
-
 </div>
 
 <script>
