@@ -3,15 +3,14 @@
 <h3 float='left' >
     Descriptif
     <?php
-        if(isset($this->natureConcerne[0]['ID_NATURE']) && $this->natureConcerne[0]['ID_NATURE'] != 19)
+        if(isset($this->natureConcerne[0]['ID_NATURE']) && $this->natureConcerne[0]['ID_NATURE'] != 19) {
             echo "des travaux";
+        }
      ?>
 </h3>
 
 <!-- Boutons -->
 <div float='right' >
-
-
     <?php    
     $action = $this->do;
     echo "  
@@ -21,32 +20,29 @@
             <button id='validModification' class='save btn btn-success' style='".( ($action == 'new' || $action == 'edit')? "display:none;" : "" )." z-index:150;'><i class='icon-ok icon-white'></i>&nbsp;Sauvegarder</button>
             <div id='chargement'></div>
     </div>"
- ?>
-
+    ?>
 </div>
 
 <br class='clear' />
-
     <div class="lecture">
-            <p><?php echo empty($this->infosDossier['DESCRIPTIF_DOSSIER']) ? "Aucun descriptif disponible pour ce dossier." : nl2br($this->infosDossier['DESCRIPTIF_DOSSIER']) ?></p>
+        <p><?php echo empty($this->infosDossier['DESCRIPTIF_DOSSIER']) ? "Aucun descriptif disponible pour ce dossier." : nl2br($this->infosDossier['DESCRIPTIF_DOSSIER']) ?></p>
     </div>
 
     <form class="edit" id="descriptif" action="" method="POST" >
             <textarea name='DESCRIPTIF_DOSSIER' id='descriptif_general' cols='' rows='' style='width: 100%; height: 500px;' ><?php echo $this->infosDossier['DESCRIPTIF_DOSSIER'] ?></textarea>
     </form>
-    
-    
 </div>
+
 <script type="text/javascript">
     $(document).ready(function(){
 	$("#descriptif_general").elastic();
 	
 	$("#modificationDossier").button().click(function() {
-                $(".lecture").hide();
-                $("#modificationDossier").hide();
+        $(".lecture").hide();
+        $("#modificationDossier").hide();
 		$(".edit").show();
-                $("#annulModification").show();
-                $("#validModification").show();
+        $("#annulModification").show();
+        $("#validModification").show();
 	});
 	
 	$("#annulModification").button().click(function() {

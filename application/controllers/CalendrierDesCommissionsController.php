@@ -53,9 +53,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $userId = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
 
-        $url = sprintf('/api/1.0/calendar?userid=%s&key=%s',
-                        $userId,
-                        getenv('PREVARISC_SECURITY_KEY'));
+        $url = sprintf(
+            '/api/1.0/calendar?userid=%s&key=%s',
+            $userId,
+            getenv('PREVARISC_SECURITY_KEY')
+        );
 
         if ($this->_getParam('idComm')) {
             $url .= sprintf('&commission=%s', $this->_getParam('idComm'));
@@ -467,7 +469,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $commEdit = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
                     if ($commEdit->DATECOMMISSION_LIEES == null) {
                         //On est sur la date maitre
-                        $dbDateCommission->dateCommUpdateLibelle($this->_getParam('idDateComm'),  addslashes($this->_getParam('data')));
+                        $dbDateCommission->dateCommUpdateLibelle($this->_getParam('idDateComm'), addslashes($this->_getParam('data')));
                     } else {
                         //Cas d'une comm liée
                         $dbDateCommission->dateCommUpdateLibelle($commEdit->DATECOMMISSION_LIEES, addslashes($this->_getParam('data')));

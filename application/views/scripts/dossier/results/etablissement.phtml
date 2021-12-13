@@ -1,7 +1,7 @@
 <li class="etablissement <?php if($this->NB_ENFANTS > 0) echo "slide" ?>" id="<?php echo $this->ID_ETABLISSEMENT ?>">
     <!-- Icone représentant le dropdown des fils -->
     <?php if($this->NB_ENFANTS > 0) : ?>
-    <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
+    <span class="icone_enfants" ><em class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></em></span>
     <?php endif ?>
     
     <!-- Affichage du libellé du type -->
@@ -31,16 +31,17 @@
                             if(!empty($this->LIBELLE_COMMUNE_ADRESSE_SITE)) {
                                echo " - " . $this->LIBELLE_COMMUNE_ADRESSE_SITE;
                             }
-						break;
+						    break;
                         case 3:
                             if(!empty($this->LIBELLE_COMMUNE_ADRESSE_CELLULE)) {
                                echo " - " . $this->LIBELLE_COMMUNE_ADRESSE_CELLULE;
                             }
-						break;
+						    break;
                         default:
-                            if(!empty($this->LIBELLE_COMMUNE_ADRESSE_DEFAULT))
+                            if(!empty($this->LIBELLE_COMMUNE_ADRESSE_DEFAULT)) {
                                 echo " - " . $this->LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-						break;
+                            }
+						    break;
                     }
                 ?>
             </small>
@@ -53,39 +54,35 @@
     <?php endif ?>
     
     <?php
-        if($this->DATEVISITE_DOSSIER != null)
-        {
+        if($this->DATEVISITE_DOSSIER != null) {
             $date = substr($this->DATEVISITE_DOSSIER, 0, 10);
-            if($date != '0000-00-00'){
+            if ($date != '0000-00-00') {
                 $date = new DateTime(substr($this->DATEVISITE_DOSSIER,0,10));
                 $date = date_format($date, 'd/m/Y');
-            }else{
+            } else {
                 $date = "00/00/0000";
             }
             $date = "Date de l'avis : " . $date . '&nbsp;';
-        }
-        elseif($this->DATECOMM_DOSSIER != null)
-        {
+        } elseif ($this->DATECOMM_DOSSIER != null) {
             $date = substr($this->DATEINSERT_DOSSIER, 0, 10);
-            if($date != '0000-00-00'){
+            if ($date != '0000-00-00') {
                 $date = new DateTime(substr($this->DATEINSERT_DOSSIER,0,10));
                 $date = date_format($date, 'd/m/Y');
-            }else{
+            } else {
                 $date = "00/00/0000";
             }
             $date = "Date de l'avis : " . $date . '&nbsp;';
-        }
-        else {
+        } else {
             $date = "Pas de date";
         }
     ?>
 
     <!-- Avis -->
     <?php if($this->ID_AVIS == 1) : ?>
-    <span class="avis F">Favorable <small>(<?php echo $date ?>)</small></span>
+        <span class="avis F">Favorable <small>(<?php echo $date ?>)</small></span>
     <?php elseif($this->ID_AVIS == 2) : ?>
-    <span class="avis D">Défavorable <small>(<?php echo $date ?>)</small></span>
+        <span class="avis D">Défavorable <small>(<?php echo $date ?>)</small></span>
     <?php else : ?>
-    <span class="avis">Avis d'exploitation indisponible</span>
+        <span class="avis">Avis d'exploitation indisponible</span>
     <?php endif ?>
 </li>

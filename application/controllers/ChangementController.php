@@ -38,19 +38,22 @@ class ChangementController extends Zend_Controller_Action
         $serviceUser = new Service_User();
 
         $etablissement = $serviceEtablissement->get(
-        $this->_getParam('id_etablissement'));
+            $this->_getParam('id_etablissement')
+        );
 
         $changement = $serviceChangement->get($this->_getParam('changement'));
 
         $users = $serviceUser->getUtilisateursForAlterte(
-            $changement['ID_CHANGEMENT'], $etablissement
+            $changement['ID_CHANGEMENT'],
+            $etablissement
         );
 
         $mails = array();
         $tos = array();
         foreach ($users as $user) {
             $mails[] = $user['MAIL_UTILISATEURINFORMATIONS'];
-            $tos[] = sprintf('<span id="dst_%s">%s, %s <a class="remove-dst" href="%s/%s">Retirer</a></span>',
+            $tos[] = sprintf(
+                '<span id="dst_%s">%s, %s <a class="remove-dst" href="%s/%s">Retirer</a></span>',
                 $user['ID_UTILISATEUR'],
                 $user['NOM_UTILISATEURINFORMATIONS'],
                 $user['PRENOM_UTILISATEURINFORMATIONS'],
@@ -62,11 +65,13 @@ class ChangementController extends Zend_Controller_Action
         $this->view->mails = implode(';', $mails);
 
         $this->view->objet = $serviceChangement->getObjet(
-            $changement['ID_CHANGEMENT'], $etablissement
+            $changement['ID_CHANGEMENT'],
+            $etablissement
         );
 
         $this->view->message = $serviceChangement->convertMessage(
-            $changement['MESSAGE_CHANGEMENT'], $etablissement
+            $changement['MESSAGE_CHANGEMENT'],
+            $etablissement
         );
     }
 

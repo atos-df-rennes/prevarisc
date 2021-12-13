@@ -102,11 +102,6 @@
         </div>
 
         <div style='margin-top: 4px;'>
-            <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_commission as $commission ) : ?>
-                        <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
-                <?php endforeach ?>
-            </select>
             <select name='groupements_territoriaux[]' multiple onchange="masquerBoutonExportCalc()">
                 <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
                     <?php $selected = false; ?>                    

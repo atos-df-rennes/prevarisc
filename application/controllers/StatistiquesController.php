@@ -59,7 +59,8 @@
                     'date' => array(
                         'label' => 'Soumis à un contrôle périodique obligatoire à la date du', 'type' => 'date', 'data' => date('d/m/Y', time()),
                     ),
-                ), array(
+                ),
+                array(
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Arrondissement' => 'ARRONDISSEMENT',
@@ -68,7 +69,8 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     //"Date prochaine visite de contrôle" => "DATEVISITE_DOSSIER",
                     'Commission' => 'LIBELLE_COMMISSION',
-                ), $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()
+                ),
+                $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()
             );
             if ($this->_getParam('format') != 'json') {
                 $this->render('extraction');
@@ -105,7 +107,8 @@
                         'type' => 'date',
                         'data' => date('d/m/Y', time()),
                     ),
-                ), array(
+                ),
+                array(
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Arrondissement' => 'ARRONDISSEMENT',
@@ -114,7 +117,8 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     'Commission' => 'LIBELLE_COMMISSION',
                     'Nombre de jours écoulés sous avis défavorable par rapport à la date renseignée' => 'NBJOURS_DEFAVORABLE',
-                ), $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->_getParam('tri'))
+                ),
+                $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->_getParam('tri'))
             );
             if ($this->_getParam('format') != 'json') {
                 $this->render('extraction');
@@ -161,7 +165,8 @@
                             'Avis de la dernière visite' => 'LIBELLE_AVIS',
                         ),
                     ),
-                ), array(
+                ),
+                array(
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Type' => 'ID_TYPE',
@@ -169,7 +174,8 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     'Avis de la dernière visite' => 'LIBELLE_AVIS',
                     'Commission' => 'LIBELLE_COMMISSION',
-                ), $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->_getParam('commune'))->trierPar($this->_getParam('tri'))
+                ),
+                $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->_getParam('commune'))->trierPar($this->_getParam('tri'))
             );
             if ($this->_getParam('format') != 'json') {
                 $this->render('extraction');

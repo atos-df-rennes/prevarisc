@@ -402,10 +402,6 @@ ul.no_slide li.slide {
     border-left: none;
 }
 
-ul.recherche_liste li .avis {
-    float: right
-}
-
 ul.recherche_liste li + li {
     margin-top: 3px;
 }
@@ -1241,14 +1237,20 @@ dl.champ_effectif_camping dd input {
     width: 139px;
 }
 
-.flexCol{
+.flexCol {
     display: flex;
     flex-flow: column;
 }
-.buttonOpenClose{
+
+.buttonOpenClose {
     margin: auto;
     width: fit-content;
 }
-.margTop3px{
-    margin-top:3px;
+
+.margTop3px {
+    margin-top: 3px;
+}
+
+#dossierInfos form .btn {
+    margin-bottom: 10px;
 }

@@ -1,9 +1,7 @@
 <?php
-if(!isset($_POST['do']))
-{
+if(!isset($_POST['do'])) {
 ?>
 	<script type='text/javascript'>
-		
 		$(document).ready(function(){
 			//appel la fonction qui charge l'agenda
 			$("#agendaMois").chargementAgendaMois();
@@ -30,9 +28,8 @@ if(!isset($_POST['do']))
 					return false;
 				}
 			});
-	
 		});
-	
+
 		//fonction qui charge automatiquement l'agenda du mois
 		(function($) {
 			$.fn.chargementAgendaMois = function() {
@@ -53,7 +50,7 @@ if(!isset($_POST['do']))
 				});
 			};
 		})(jQuery);
-	
+
 		$("#ajoutEvenement").live('click',function(){
 			var idJour = $("#idJour").val();
 			$.ajax({
@@ -83,13 +80,11 @@ if(!isset($_POST['do']))
 		});
 	</script>
 
-<?php
-		//div appelant des helper en ajax
-		echo "
-			<div id='agendaMois' class='agenda'></div>
-			<div id='agendaJour' class='agenda'></div>
-		";
-}else{
+	<!-- div appelant des helper en ajax -->
+	<div id='agendaMois' class='agenda'></div>
+	<div id='agendaJour' class='agenda'></div>
+<?php 
+} else {
 	switch($_POST['do'])
 	{
 		case "agendaMois":
@@ -98,7 +93,7 @@ if(!isset($_POST['do']))
 			}else{
 				echo $this->agendaMois($this->evenement);
 			}
-		break;
+		    break;
 		case "afficherJour":
 			$tab_mois = array("","Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre");
 			if(isset($_GET['mois']) && $_GET['mois'] <= 12 && $_GET['mois'] >= 1){
@@ -130,17 +125,20 @@ if(!isset($_POST['do']))
 							{
 								case "1":
 									$img = "<img src='/images/template/icons/house_go.png'>&nbsp;";
-								break;
+								    break;
 								case "2":
 									$img = "<img src='/images/template/icons/book.png'>&nbsp;";
-								break;
+									break;
+								default:
+									break;
 							}								
 							echo "<div class='evenement' id='".$boucle2['ID_AGENDA']."'>".$img."(".$boucle2['LIBELLE_EVENEMENT'].") <br/>".$boucle2['COMMENTAIRE']."</div>";
 						}
 					}
 				}
 			}
-		break;
+			break;
+		default:
+			break;
 	}		
 }
-?>

@@ -3,7 +3,6 @@
 function addChamp($odf,$nomOdf, $variable){
   try{
     $odf->setVars($nomOdf,$variable, true,'UTF8');
-    #$segment->$nomOdf(utf8_decode($variable));
   } catch (Exception $e) {
 
   }
@@ -57,35 +56,39 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 
 				//DEBUT Adresse
-				if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]))
+				if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"])) {
 					addChamp($dossInfos,'libelleRue', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_RUE"]);
-				else
+				} else {
 					addChamp($dossInfos,'libelleRue', '');
+				}
 
-				if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]))
+				if(isset($dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"])) {
 					addChamp($dossInfos,'codePostal', $dossierInfos['infosEtab']['adresses'][0]["CODEPOSTAL_COMMUNE"]);
-				else
+				} else {
 					addChamp($dossInfos,'codePostal', '');
+				}
 
-                                try{
+				try{
 					$dossInfos->setVars('numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT'], true, 'UTF-8');
 				} catch (Exception $e){
 
 				}
 
-				if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"]))
+				if(isset($dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"])) {
 					addChamp($dossInfos,'libelleCommune', $dossierInfos['infosEtab']['adresses'][0]["LIBELLE_COMMUNE"]);
-				else
+				} else {
 					addChamp($dossInfos,'libelleCommune','');
+				}
 				//FIN Adresse
 
 				//DEBUT Effectif total
 				$effectifTotal = $dossierInfos['infosEtab']['informations']["EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"] + $dossierInfos['infosEtab']['informations']["EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"];
 
-				if($effectifTotal == 0)
+				if($effectifTotal == 0) {
 					addChamp($dossInfos,'effectifTotal', "non renseigné");
-				else
+				} else {
 					addChamp($dossInfos,'effectifTotal', $effectifTotal);
+				}
 				//FIN Effectif total
 
 				switch($dossierInfos['TYPE_DOSSIER']){
@@ -104,11 +107,11 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				addChamp($dossInfos,'typeDossier', $type);
 
-				if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]))
+				if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"])) {
 					addChamp($dossInfos,'nomPereEtab', $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
-				else
+				} else {
 					addChamp($dossInfos,'nomPereEtab', '');
-
+				}
 
 				if(isset($dossierInfos['infosEtab']['informations'])){
 					addChamp($dossInfos,'nomEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
@@ -163,7 +166,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 	$odf->saveToDisk($path);
-	//$odf->mergeSegment($dossierLoop);
 	echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le compte rendu a été généré avec succes</span><br/><br/><br/>";
 }else{
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier de compte rendu pour la commission n'existe pas</span><br/><br/><br/>";
@@ -189,5 +191,3 @@ function savePj($dateCommId,$libelleDocument){
 
 	return $nouvellePJ;
 }
-
-?>

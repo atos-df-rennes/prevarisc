@@ -169,6 +169,17 @@ class Service_Dashboard
             'height' => 'small',
             'width' => 'small',
         ),
+
+        // bloc npsp
+        'dossierPlatau' => array(
+            'service' => 'Service_Dashboard',
+            'method' => 'getDossiersPlatAUSansEtablissement', 
+            'acl' => array('dashboard','view_doss_platau_sans_etab'),
+            'title' => 'Dossiers Plat\'AU à traiter',
+            'type' => 'dossierPlatau',
+            'height' => 'small',
+            'width' => 'small',
+        ),
     );
 
     /**
@@ -244,8 +255,9 @@ class Service_Dashboard
         $dbDateCommission = new Model_DbTable_DateCommission();
 
         $prochainesCommission = $dbDateCommission->getNextCommission(
-                $this->getCommissionUser($user),
-                time(), time() + 3600 * 24 * $this->options['next_commissions_days']
+            $this->getCommissionUser($user),
+            time(),
+            time() + 3600 * 24 * $this->options['next_commissions_days']
         );
 
         // on récupère pour chaque prochaine commission le nombre de dossiers affectés
@@ -415,6 +427,15 @@ class Service_Dashboard
         $search->order('d.DATEINSERT_DOSSIER desc');
 
         return $search->run(false, null, false)->toArray();
+    }
+
+    /**
+     * Retourne la liste des dossiers Plat'AU non associé à un etablissement
+     */
+    public function getDossiersPlatAUSansEtablissement(){
+
+        $dbDossier = new Model_DbTable_Dossier();
+       return $dbDossier->getAllDossierPlatAU();
     }
 
     public function getLeveePresc()

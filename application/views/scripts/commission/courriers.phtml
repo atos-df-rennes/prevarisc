@@ -43,12 +43,13 @@
 						"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
 					));
 					//PV
-					if($row_membre["ID_GROUPEMENT"] == NULL)
+					if($row_membre["ID_GROUPEMENT"] == NULL) {
 						echo $this->partial("commission/partials/partial-ligne-regle-courrier.phtml", array(
 							"type" => "PV",
 							"name_courrier" => $row_membre->COURRIER_PV,
 							"id_membre" => $row_membre->ID_COMMISSIONMEMBRE
 						));
+					}
 				?>
 			
 			</tr>
@@ -63,19 +64,14 @@
 <?php endif ?>
 
 <script type="text/javascript">
-
 	// Callback
 	function callback(error) {
-	
 		if(error != 'null') {
-			
 			alert(error);
-		}
-		else {
-			
+		} else {
 			// On recharge l'onglet
 			var current_index = $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs("option","active");
-                $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
+			$("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
 		}
 	}
 	
@@ -86,13 +82,11 @@
 	
 	// Gestion de la suppression d'un courrier
 	$("a.delete-courrier").click(function() {
-	
 		var a = this;
 		
 		$.ajax({
 			url: a.href,
 			success: function(result) {
-			
 				var current_index = $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs("option","active");
                 $("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
 			}
@@ -100,5 +94,4 @@
 
 		return false;
 	});
-	
 </script>

@@ -1,16 +1,10 @@
 <?php if(count($this->array_membres) == 0 ) : ?>
-
 	<br />
 	<p><strong>Pas de membres définis pour cette commission. <a class='add-membre' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Vous pouvez en ajouter un ici.</a></strong></p>
-
 <?php else : ?>
-
 	<p style='text-align: right' ><a class='add-membre btn' href='/commission/add-membre?id_commission=<?php echo $_GET["id_commission"] ?>'>Ajouter un membre</a></p>
 
 	<form method='post' action='/commission/saveMembres?id_commission=<?php echo $_GET["id_commission"] ?>' >
-
-
-
 		<!-- Tableau contenant les membres -->
 		<table class='table table-condensed'>
 			<thead>
@@ -31,26 +25,21 @@
 			<tbody>
 				<?php echo $this->partialLoop("commission/partials/partial-ligne-membre-commission.phtml", $this->array_membres); ?>
 			</tbody>
-
 		</table>
-
 	</form>
 
 	<div id="save_div" style="text-align: center" >
+		<button class='save-membres save btn btn-success' >Sauvegarder les membres</button>
 
-			<button class='save-membres save btn btn-success' >Sauvegarder les membres</button>
-
-			<span id='<?php echo $_GET["id_commission"] ?>_membres_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
-				Les membres de la commission ont bien été sauvegardés.
-			</span>
+		<span id='<?php echo $_GET["id_commission"] ?>_membres_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+			Les membres de la commission ont bien été sauvegardés.
+		</span>
 	</div>
-
 <?php endif ?>
 
 <div id="document"></div>
 
 <script type="text/javascript">
-
 	// Bouton de sauvegarde
 	$("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button({
 		icons: { primary: "ui-icon-disk" }

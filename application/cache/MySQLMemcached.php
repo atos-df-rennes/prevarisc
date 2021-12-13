@@ -49,16 +49,23 @@ class Cache_MySQLMemcached extends Zend_Cache_Backend_Memcached
             if ($this->_options['compatibility']) {
                 // No status for compatibility mode (#ZF-5887)
                 $this->_memcache->addServer(
-                    $server['host'], $server['port'], $server['persistent'],
-                    $server['weight'], $server['timeout'],
+                    $server['host'],
+                    $server['port'],
+                    $server['persistent'],
+                    $server['weight'],
+                    $server['timeout'],
                     $server['retry_interval']
                 );
             } else {
                 $this->_memcache->addServer(
-                    $server['host'], $server['port'], $server['persistent'],
-                    $server['weight'], $server['timeout'],
+                    $server['host'],
+                    $server['port'],
+                    $server['persistent'],
+                    $server['weight'],
+                    $server['timeout'],
                     $server['retry_interval'],
-                    $server['status'], $server['failure_callback']
+                    $server['status'],
+                    $server['failure_callback']
                 );
             }
         }

@@ -11,7 +11,7 @@
 	<h3>Contacts des établissements parents</h3>
 	<?php
             foreach($this->contacts_parent as $contacts){
-                    echo $this->partialLoop("contact/partial_fiche_read.phtml", $contacts);
+				echo $this->partialLoop("contact/partial_fiche_read.phtml", $contacts);
             }
 	?>
 	<hr />
@@ -23,10 +23,11 @@
 	<?php endif ?>
 	
 	<?php
-		if( count($this->contacts) != 0 )
+		if( count($this->contacts) != 0 ) {
 			echo $this->partialLoop("contact/partial_fiche.phtml", $this->contacts);
-		else
+		} else {
 			echo "<p><strong>Aucun contact.</strong></p>";
+		}
 	?>
     
     <div style='clear: both'></div>
@@ -51,7 +52,6 @@
 	</div>
 
 	<script type="text/javascript">
-
 		// Suppression d'un contact
 		$("a.contact-delete").live("click", function() {
 			var a = this; 
@@ -88,7 +88,6 @@
 			$.ajax({
 				url: a.href + "&format=html",
 				success: function(result) {
-				
 					$("#dialog-add-contact").html('').append(result).dialog({
 						title: "Ajout d'un contact",
 						height: 350,
@@ -109,7 +108,7 @@
 								});
 							},
 							"Annuler": function() {
-                                                                $("#dialog-add-contact").dialog( "destroy" );
+								$("#dialog-add-contact").dialog( "destroy" );
 								$('#dialog-add-contact').html('');
 							}
 						}
@@ -178,7 +177,7 @@
 		
 		$("#nom_contact_existant").autocomplete("/contact/get?format=json", {
 			minChars: 3,
-                        cacheLength: 0,
+			cacheLength: 0,
 			max: 100,
 			parse: function(data) {
 				return $.map(data["resultats"], function(row) {
@@ -209,6 +208,5 @@
 				}
 			});
 		});
-	
 	</script>
 <?php endif ?>

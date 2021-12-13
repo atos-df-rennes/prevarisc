@@ -2,12 +2,10 @@
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
 <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?php echo $this->idUser; ?>' />	
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
-    <?php /*class="nav nav-tabs nav-stacked menu_dashboard"  */ ?>
-        
-        <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
-            <a 
-               href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
-        </li>
+    <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
+        <a 
+            href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
+    </li>
         
 	<?php		
             if($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
@@ -161,8 +159,12 @@ endif; ?>
                 <small><br/>".nl2br($this->objetDossier)."</small>
         ";
 
+	    if($this->id_platau !== null) {
+            echo "<p style='font-size: medium;' class='label label-info'><strong>CONSULTATION PLATAU : " . $this->id_platau . "</strong></p>";
+        }
+
         echo "
-                <div style='margin:10px;' id='infosEtabs'>
+            <div style='margin:10px;' id='infosEtabs'>
         ";
 
         $nbEtab = count($this->enteteEtab);

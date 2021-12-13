@@ -13,18 +13,19 @@
     div[id^=GPelevationPathPanel-] {top:-75px;}
     </style>
     <script type="text/javascript">
-
         <?php
             $public_dir = $_SERVER['DOCUMENT_ROOT'];
             $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
             $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
         ?>
 
-        viewer = initViewer('geoportail-container',
-                            '<?php echo $this->key_ign ?>',
-                            [<?php echo $this->default_lon ?>, <?php echo $this->default_lat ?>],
-                            "<b>Centre par défaut</b>",
-                            '<?php echo $autoconf_path ?>');
+        viewer = initViewer(
+            'geoportail-container',
+            '<?php echo $this->key_ign ?>',
+            [<?php echo $this->default_lon ?>, <?php echo $this->default_lat ?>],
+            "<b>Centre par défaut</b>",
+            '<?php echo $autoconf_path ?>'
+        );
 
         viewer.listen('mapLoaded', afterInitMap);
         viewer.listen('azimuthChanged', onRotation);            
@@ -33,9 +34,11 @@
             var fsControl = new ol.control.FullScreen({});
             viewer.getLibMap().addControl(fsControl);
 
-            viewer = addUserLayers(viewer,
-                                   '<?php echo $this->key_ign ?>',
-                                   <?php echo json_encode($this->couches_cartographiques) ?>);
+            viewer = addUserLayers(
+                viewer,
+                '<?php echo $this->key_ign ?>',
+                <?php echo json_encode($this->couches_cartographiques) ?>
+            );
             $('.ol-rotate').css('display', 'none');
         };
         function onRotation () {
@@ -45,7 +48,6 @@
         var infoDiv = document.getElementById("info");
         infoDiv.innerHTML = "<h6><p><b><i> SDK version " + Gp.sdkVersion + " (" + Gp.sdkDate + ")</b></i></p></h6>";
     </script>
-    
 <?php elseif ($this->geoconcept_url != null) : ?>
     <div id='geoconcept-container'  style="height: 350px; max-height: 350px;width: 100%"></div>
     <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
@@ -68,7 +70,8 @@
                 description: "Centre par défaut"
             });
             
-            map = initGeoConceptViewer('geoconcept-container', 
+            map = initGeoConceptViewer(
+                'geoconcept-container', 
                 "<?php echo $this->geoconcept_url ?>",
                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                 points,
@@ -76,8 +79,6 @@
             );
         });
     </script>
-    
-    
 <?php elseif ($this->key_googlemap != null) : ?>
     <div id='googlemap-container' style="height: 350px; max-height: 350px;"></div>
     <script type="text/javascript"
@@ -100,9 +101,7 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
      </script>
-     
 <?php else: ?>
-
     <div class='well well-large text-center'>
         <p class='lead'>Aucun player cartographique configuré.</p>
         <p>Vous devez configurer comme ceci : </p>
@@ -110,19 +109,14 @@
         <pre>SetEnv PREVARISC_PLUGIN_GOOGLEMAPKEY XXXXXXXXXXXX</pre>
         <pre>SetEnv PREVARISC_PLUGIN_GEOCONCEPT_URL XXXXXXXXXXXX</pre>
     </div>
-
-    
 <?php endif ?>
 
 <?php if(count($this->couches_cartographiques) == 0) : ?>
-
     <div class='well well-large text-center'>
         <p class='lead'>Il n'y a pas de couche cartographique.</p>
         <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-large'>Ajouter une couche cartographique</a></p>
     </div>
-
 <?php else : ?>
-
     <p class='text-right'><a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche</a></p>
 
     <table class="table">
@@ -146,5 +140,4 @@
             <?php endforeach ?>
         </tbody>
     </table>
-
 <?php endif ?>
