@@ -4,7 +4,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     const STATUT_CHANGE = 1;
     const CLASSEMENT_CHANGE = 3;
-    const nbDossierAAfficher = 5;
+    const NB_DOSSIERS_A_AFFICHER = 5;
 
     /**
      * Récupération d'un établissement.
@@ -417,7 +417,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @return array retourne la liste des N dernier dossier ou N = $nbDossierAAfficher
      *
      */
-    public function getNLastDossiers($idEtablissement, $nbDossierAAfficher = self::nbDossierAAfficher)
+    public function getNLastDossiers($idEtablissement, $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER)
     {
 
          // Création de l'objet recherche
@@ -506,7 +506,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @return array retourne la liste des dossiers apres N  ou N = $nbDossierAAfficher
      *
      */
-    public function getAfterNDossiers($idEtablissement, $typeDossier= null, $nbDossierAAfficher = self::nbDossierAAfficher)
+    public function getAfterNDossiers($idEtablissement, $typeDossier= null, $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER)
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
