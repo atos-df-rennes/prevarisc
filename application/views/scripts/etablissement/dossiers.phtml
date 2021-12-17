@@ -20,7 +20,7 @@
             </ul>
 
             <?php if (($this->nbVisites) > $this->nbElemMax) : ?>
-                <button class="buttonOpenClose" id="completeListeVisite">Voir plus</button>
+                <button class="btn buttonOpenClose" id="completeListeVisite">Voir plus</button>
             <?php endif;
         endif ?>
     </div>
@@ -38,7 +38,7 @@
             </ul>
 
             <?php if (($this->nbEtudes) > $this->nbElemMax) : ?>
-                <button class="buttonOpenClose" id="completeListeEtude">Voir plus</button>
+                <button class="btn buttonOpenClose" id="completeListeEtude">Voir plus</button>
             <?php endif;
         endif ?>
     </div>
@@ -64,28 +64,25 @@
 
 <script>
     $(document).ready(function() {
-
         let tableDisplay = new Map()
-        tableDisplay.set("divcompleteListeEtude",{isDeploy : false, isLoad : false, typeDossier:"etudes"})
-        tableDisplay.set("divcompleteListeVisite",{isDeploy : false, isLoad : false, typeDossier:"visites"})
-        tableDisplay.set("divcompleteListeAutres",{isDeploy : false, isLoad : false, typeDossier:"autres"})
+        tableDisplay.set("divcompleteListeEtude", {isDeployed : false, isLoaded : false, typeDossier: "etudes"})
+        tableDisplay.set("divcompleteListeVisite", {isDeployed : false, isLoaded : false, typeDossier: "visites"})
+        tableDisplay.set("divcompleteListeAutres", {isDeployed : false, isLoaded : false, typeDossier: "autres"})
 
         const loadData = (idelement) => {
-            console.log(tableDisplay.get(idelement).isLoad)
-            if(!tableDisplay.get(idelement).isLoad){
+            if(!tableDisplay.get(idelement).isLoaded){
                 let newObjValue = tableDisplay.get(idelement)
-                newObjValue.isLoad = !newObjValue.isLoad
+                newObjValue.isLoaded = !newObjValue.isLoaded
                 tableDisplay.set(idelement, newObjValue)
+
                 $.ajax({
                     url: "/etablissement/get-dossiers-after-n",
                     type: 'post',
                     data: {
-                        id:document.getElementsByName("idEtablissement")[0].value,
-                        typeDossier:tableDisplay.get(idelement).typeDossier
+                        id: document.getElementsByName("idEtablissement")[0].value,
+                        typeDossier: tableDisplay.get(idelement).typeDossier
                     },
                     success: function (html) {
-                        console.log("idelement : ",idelement)
-                        console.log("HTML : ",html)
                         $('#'+idelement).append(html)
                     }
                 });
@@ -93,16 +90,18 @@
         }
      
         Array.from(document.getElementsByClassName('buttonOpenClose')).forEach(function(element) {
-            tableDisplay.get("div"+element.id).isDeploy ? $("#div"+element.id).show() : $("#div"+element.id).hide()   
+            tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()   
             
-            element.addEventListener('click', () => {
-                loadData("div"+element.id)
-                let newObjValue = tableDisplay.get("div"+element.id)
-                newObjValue.isDeploy = !newObjValue.isDeploy
-                tableDisplay.set("div"+element.id, newObjValue)
-                tableDisplay.get("div"+element.id).isDeploy ? $("#div"+element.id).show() : $("#div"+element.id).hide()
-                tableDisplay.get("div"+element.id).isDeploy ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus" 
-            }
+            element.addEventListener(
+                'click',
+                () => {
+                    loadData("div"+element.id)
+                    let newObjValue = tableDisplay.get("div"+element.id)
+                    newObjValue.isDeployed = !newObjValue.isDeployed
+                    tableDisplay.set("div"+element.id, newObjValue)
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus" 
+                }
             );
         });
 
