@@ -1003,9 +1003,8 @@
                     <privilege>add_etablissement</privilege>
                 </add>
                 <get-dossiers-after-n>
-                    <label>GetAfterNDossiers</label>
                     <controller>etablissement</controller>
-                    <action>getAfterDossiersN</action>
+                    <action>getDossiersAfterN</action>
                 </get-dossiers-after-n>
                 <descriptif>
                     <label>Descriptifs</label>

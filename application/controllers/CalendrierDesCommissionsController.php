@@ -1080,7 +1080,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 ++$numCommune;
             }
         }
-        
+
         $listeMembres = $model_membres->get($listeDossiers[0]['COMMISSION_DOSSIER']);
         foreach ($listeMembres as $var => $membre) {
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);

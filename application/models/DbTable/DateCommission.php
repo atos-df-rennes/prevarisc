@@ -184,7 +184,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
             OR DATECOMMISSION_LIEES = '".$idComm."' )
             ORDER BY DATE_COMMISSION
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
