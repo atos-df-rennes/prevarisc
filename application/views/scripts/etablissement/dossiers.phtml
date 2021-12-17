@@ -1,48 +1,110 @@
+<input name = "idEtablissement" type="hidden" value=<?php echo($this->etablissement['general']['ID_ETABLISSEMENT'])?> />
 <div class='pull-right' >
     <a class='btn' href="<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>">Ajouter un dossier</a>
 </div>
 
 <h3>Liste des dossiers</h3>
 
-<?php if(count($this->visites) == 0 && count($this->etudes) == 0 && count($this->autres) == 0) : ?>
+<?php if (count($this->visites) == 0 && count($this->etudes) == 0 && count($this->autres) == 0) : ?>
     <div class='well well-large text-center'>
         <p class='lead'>Il n'y a pas de dossier.</p>
         <p><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-large'>Ajouter un dossier</a></p>
     </div>
 <?php else : ?>
+    <div class="flexCol" id="content_visites_ets">
+        <?php if (count($this->visites) > 0) : ?>
+            <h4>Visites</h4>
+            <ul class='recherche_liste'>
+                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->visites); ?>
+                <div class="voir-plus" id="divcompleteListeVisite"></div>
+            </ul>
 
-<div id="content_visites_ets">
-<?php if( count($this->visites) > 0 ) : ?>
-    <h4>Visites</h4>
-    <ul class='recherche_liste'>
-    <?php echo $this->partialLoop('search/results/dossier.phtml', $this->visites); ?>
-    </ul>
-<?php endif ?>
-</div>
+            <?php if (($this->nbVisites) > $this->nbElemMax) : ?>
+                <button class="btn buttonOpenClose" id="completeListeVisite">Voir plus</button>
+            <?php endif;
+        endif ?>
+    </div>
 
-<div id="content_etudes_ets">
-<?php if( count($this->etudes) > 0 ) : ?>
-    <?php if( count($this->visites) > 0 ) echo "<hr />"; ?>
-    <h4>Études</h4>
-    <ul class='recherche_liste'>
-    <?php echo $this->partialLoop('search/results/dossier.phtml', $this->etudes);  ?>
-    </ul>
-<?php endif ?>
-</div>
+    <div class="flexCol" id="content_etudes_ets">
+        <?php if (count($this->etudes) > 0) :
+            if (count($this->visites) > 0) : ?>
+                <hr />
+            <?php endif ?>
 
-<div id="content_autres_ets">
-<?php if( count($this->autres) > 0 ) : ?>
-    <?php if( count($this->visites) > 0 || count($this->etudes) > 0) echo "<hr />"; ?>
-    <h4>Autres</h4>
-    <ul class='recherche_liste'>
-    <?php echo $this->partialLoop('search/results/dossier.phtml', $this->autres);  ?>
-    </ul>
-<?php endif ?>
-</div>
-<?php endif ?>
+            <h4>Études</h4>
+            <ul class='recherche_liste'>
+                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->etudes);  ?>
+                <div class="voir-plus" id='divcompleteListeEtude'></div>
+            </ul>
+
+            <?php if (($this->nbEtudes) > $this->nbElemMax) : ?>
+                <button class="btn buttonOpenClose" id="completeListeEtude">Voir plus</button>
+            <?php endif;
+        endif ?>
+    </div>
+
+    <div class="flexCol" id="content_autres_ets">
+        <?php if (count($this->autres) > 0) :
+            if (count($this->visites) > 0 || count($this->etudes) > 0) : ?>
+                <hr />
+            <?php endif ?>
+
+            <h4>Autres</h4>
+            <ul class='recherche_liste'>
+                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->autres);  ?>
+                <div class='voir-plus' id='divcompleteListeAutres'></div>
+            </ul>
+
+            <?php if (($this->nbAutres) > $this->nbElemMax) : ?>
+                <button class="btn buttonOpenClose" id="completeListeAutres">Voir plus</button>
+            <?php endif;
+        endif ?>
+    </div>
+<?php endif; ?>
 
 <script>
     $(document).ready(function() {
+        let tableDisplay = new Map()
+        tableDisplay.set("divcompleteListeEtude", {isDeployed : false, isLoaded : false, typeDossier: "etudes"})
+        tableDisplay.set("divcompleteListeVisite", {isDeployed : false, isLoaded : false, typeDossier: "visites"})
+        tableDisplay.set("divcompleteListeAutres", {isDeployed : false, isLoaded : false, typeDossier: "autres"})
+
+        const loadData = (idelement) => {
+            if(!tableDisplay.get(idelement).isLoaded){
+                let newObjValue = tableDisplay.get(idelement)
+                newObjValue.isLoaded = !newObjValue.isLoaded
+                tableDisplay.set(idelement, newObjValue)
+
+                $.ajax({
+                    url: "/etablissement/get-dossiers-after-n",
+                    type: 'post',
+                    data: {
+                        id: document.getElementsByName("idEtablissement")[0].value,
+                        typeDossier: tableDisplay.get(idelement).typeDossier
+                    },
+                    success: function (html) {
+                        $('#'+idelement).append(html)
+                    }
+                });
+            }
+        }
+     
+        Array.from(document.getElementsByClassName('buttonOpenClose')).forEach(function(element) {
+            tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()   
+            
+            element.addEventListener(
+                'click',
+                () => {
+                    loadData("div"+element.id)
+                    let newObjValue = tableDisplay.get("div"+element.id)
+                    newObjValue.isDeployed = !newObjValue.isDeployed
+                    tableDisplay.set("div"+element.id, newObjValue)
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus" 
+                }
+            );
+        });
+
         // Affichage des dossiers enfants
         $("ul.recherche_liste li.slide").live("click", function() {
             var container = this;

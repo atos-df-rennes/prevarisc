@@ -4,7 +4,7 @@ use Sabre\VObject;
 
 class Api_Service_Calendar
 {
-    const LF = "\r\n";
+    public const LF = "\r\n";
 
     public function sync($userid, $commission = null)
     {

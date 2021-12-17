@@ -20,7 +20,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             where d.ID_DOSSIER = '$id'
             and d.DATESUPPRESSION_DOSSIER IS NULL;
         ";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -69,7 +69,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             )
 			GROUP BY ID_ETABLISSEMENT;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -256,7 +256,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossier.DATESUPPRESSION_DOSSIER IS NULL
             ORDER BY dossier.DATEINSERT_DOSSIER;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -274,7 +274,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE
             AND dossier.id_dossier = '".$idDossier."';
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -308,7 +308,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 ->where('d.DATEVISITE_DOSSIER < ?', $dateVisite)
                 ->order('d.DATEVISITE_DOSSIER desc')
                 ->limit(1);
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -319,7 +319,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from(array('a' => 'avis'), 'LIBELLE_AVIS')
             ->join(array('d' => 'dossier'), 'd.AVIS_DOSSIER_COMMISSION = a.ID_AVIS')
             ->where('d.ID_DOSSIER = ?', $id_dossier);
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -343,7 +343,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             GROUP BY ID_ETABLISSEMENT;
         ";
 
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -426,7 +426,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossierpreventionniste.ID_DOSSIER = '".$id_dossier."'
 	        GROUP BY usr.ID_UTILISATEUR;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -486,7 +486,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement 
+     * Retourne la liste des dossiers provenant de Plat'au et n'étant liés à aucun établissement
      */
     public function getAllDossierPlatAU()
     {
@@ -507,6 +507,35 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->where('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)')
             ->where('d.ID_PLATAU IS NOT NULL')
         ;
+
+        return $this->getAdapter()->fetchAll($select);
+    }
+
+    /* Récupère les dossiers d'un établissement par type */
+    public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement);
+
+        switch ($type) {
+            case "etudes":
+                $select->where('dt.ID_DOSSIERTYPE = 1');
+                break;
+            case "visites":
+                $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+                break;
+            case "autres":
+                $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+                break;
+            default:
+                throw new Exception(sprintf('Type %s non supporté', $type));
+                break;
+        }
 
         return $this->getAdapter()->fetchAll($select);
     }
