@@ -17,17 +17,7 @@
                     </li>";
             }
 
-            ?>
-            
-            <?php if ($this->idTypeDossier == 1) :?>
-            <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
-                <a class='sep' href='/dossier/visu-effectif-degagement/id/<?php echo $this->idDossier ?>' >    
-                    <em class="icon-th-list icon-black"></em>
-                    Effectifs et dégagements
-                </a>
-            </li>
-            <?php endif;?>
-            
+            ?>           
             
             <?php
 
@@ -38,14 +28,25 @@
                         . "href='".$this->url(array("controller" => "dossier", "action"=>"textes-applicables", "id" => $this->idDossier), false, true)."'><i class=\"icon-align-center icon-black\"></i> Textes applicables</a>
                     </li>";
             }
+            ?>
 
-            if ($this->idTypeDossier != 5) {
-                echo "<li class='".( ( $this->action == "docconsulte" ) ? "active" : "read" )."'>
-                        <a  "
-                            . "href='".$this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true)."'><i class=\"icon-file icon-black\"></i> Documents consultés</a>
-                    </li>";
-            }
 
+            <?php if($this->idTypeDossier != 5)?>
+                <li class = <?php echo $this->action == "docconsulte" ? "active" : "read" ?>>
+                            <a href= <?php echo $this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true) ?>>
+                        <i class="icon-file icon-black"></i> Documents consultés</a>
+                    </li>
+            <?php endif; ?>
+            
+     
+              <?php if ($this->idTypeDossier == 1) :?>
+                <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
+                    <a class='sep' href='/dossier/effectifs-degagements-dossier/id/<?php echo $this->idDossier ?>' >    
+                        <em class="icon-th-list icon-black"></em>
+                        Effectifs et dégagements
+                    </a>
+                </li>
+            <?php
             if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
                 echo "<li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
                         <a  "

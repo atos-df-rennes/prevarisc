@@ -484,4 +484,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchRow($select);
     }
+
+    //Retourne une row comprennant les description effectifs et degagement en passant en param l id du dossier
+    public function getEffectifEtDegagement($idDossier)
+    {
+        $select = 
+        'SELECT effectifDegagement.DESCRIPTION_EFFECTIF, effectifDegagement.DESCRIPTION_DEGAGEMENT  from dossier INNER JOIN dossierEffectifDegagement ON dossier.ID_DOSSIER = dossierEffectifDegagement.ID_REF_DOSSIER 
+         INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = dossierEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT
+         WHERE dossier.ID_DOSSIER = '.$idDossier.' ;';
+        return $this->getAdapter()->fetchRow($select);
+    }
 }

@@ -2,7 +2,7 @@
 
 class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'EffectifDegagement'; // Nom de la base
+    protected $_name = 'effectifDegagement'; // Nom de la base
     protected $_primary = 'ID_EFFECTIF_DEGAGEMENT'; // Clé primaire
 
     /**
@@ -13,28 +13,27 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
     public function getEffectifEtDegagement($idInput)
     {
         $select = 'SELECT *
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
+            FROM effectifDegagement 
+            WHERE effectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     public function getEffectif($idInput){
         $select = 'SELECT EFFECTIF
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
+            FROM effectifDegagement 
+            WHERE effectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     public function getDegagement($idInput){
         $select = 'SELECT DEGAGEMENT
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
+            FROM effectifDegagement 
+            WHERE effectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
 
         return $this->getAdapter()->fetchAll($select);
     }
-
   
     /**
      * 
@@ -44,25 +43,32 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
     public function getEffectifEtDegagementByRef($idInput)
     {
         $select = 'SELECT *
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_REF =' .$idInput.';';
+            FROM effectifDegagement 
+            WHERE effectifDegagement.ID_REF_DOSSIER =' .$idInput.';';
 
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function getEffectifByRef($idInput){
-        $select = 'SELECT EFFECTIF
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_REF =' .$idInput.';';
-
+    public function getEffectifDegagementByDossier($idInput)
+    {
+        $select = 'SELECT * FROM 
+                    effectifDegagement INNER JOIN dossierEffectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = dossierEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT 
+                    WHERE dossierEffectifDegagement.ID_REF_DOSSIER = '.$idInput.';';
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function getDegagementByRef($idInput){
-        $select = 'SELECT DEGAGEMENT
-            FROM EffectifDegagement 
-            WHERE EffectifDegagement.ID_REF =' .$idInput.';';
-
+    public function getIDEffectifDegagementByIDDossier($idInput)
+    {
+        $select = 'SELECT ID_REF_EFFECTIF_DEGAGEMENT FROM dossierEffectifDegagement WHERE dossierEffectifDegagement.ID_REF_DOSSIER = '.$idInput.";";
         return $this->getAdapter()->fetchAll($select);
     }
+
+    
+
+    public function getEffectifDegagementByIDEtablissement($idInput)
+    {
+        $select = 'SELECT * FROM etablissementEffectifDegagement INNER JOIN effectifDegagement ON etablissementEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT = effectifDegagement.ID_EFFECTIF_DEGAGEMENT WHERE etablissementEffectifDegagement.ID_REF_ETABLISSEMENT = '.$idInput.";";
+        return $this->getAdapter()->fetchAll($select);
+    }
+
 }

@@ -962,14 +962,25 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
-                <effectifs-et-degagements>
-                    <label>effectifs-et-degagements</label>
-                    <action>effectifs-et-degagements</action>
+                
+                
+                <effectifs-degagements-dossier-edit>
+                    <label>effectifs-degagements-dossier-edit</label>
+                    <action>effectifs-degagements-dossier-edit</action>
                     <resource>alerte_email</resource>
                     <privilege>alerte_statut</privilege>
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
-                </effectifs-et-degagements>
+                </effectifs-degagements-dossier-edit>
+
+                <effectifs-degagements-dossier>
+                    <label>effectifs-degagements-dossier</label>
+                    <action>effectifs-degagements-dossier</action>
+                    <resource>alerte_email</resource>
+                    <privilege>alerte_statut</privilege>
+                    <privilege>alerte_avis</privilege>
+                    <privilege>alerte_classement</privilege>
+                </effectifs-degagements-dossier>
             </pages>
         </dossier>
 
@@ -1113,15 +1124,23 @@
                     <privilege>view_ets</privilege>
                 </alerteform>
 
-                <effectifs-et-degagements>
-                    <label>effectifs-et-degagements</label>
-                    <controller>etablissement</controller>
-                    <action>effectifs-et-degagements</action>
+                <effectifs-degagements-etablissement-edit>
+                    <label>effectifs-degagements-etablissement-edit</label>
+                    <action>effectifs-degagements-etablissement-edit</action>
                     <resource>alerte_email</resource>
                     <privilege>alerte_statut</privilege>
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
-                </effectifs-et-degagements>
+                </effectifs-degagements-etablissement-edit>
+
+                <effectifs-degagements-etablissement>
+                    <label>effectifs-degagements-etablissement</label>
+                    <action>effectifs-degagements-etablissement</action>
+                    <resource>alerte_email</resource>
+                    <privilege>alerte_statut</privilege>
+                    <privilege>alerte_avis</privilege>
+                    <privilege>alerte_classement</privilege>
+                </effectifs-degagements-etablissement>
             </pages>
         </etablissement>
 

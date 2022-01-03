@@ -7,7 +7,7 @@
             <li class="<?php echo $action_name == 'descriptif' ? 'active' : '' ?>"><a href='<?php echo $this->url(array("action"=>"descriptif")) ?>'><em class="icon-book icon-black"></em> Descriptif</a></li>
         <?php endif ?>
         <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
-            <a class='sep' href='<?php echo $this->url(array("action"=>"visu-effectif-degagement")) ?>'>    
+            <a class='sep' href='<?php echo $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>    
             <em class="icon-th-list icon-black"></em>
              Effectifs et dégagements</a>
         </li>
@@ -21,11 +21,6 @@
         <li>
             <a id="suppressionEtablissement" href="#"><em class="icon-remove icon-black"></em>Supprimer l'établissement</a>
         </li>
-
-       
-
-
-
         <?php endif ?>
 	</ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>

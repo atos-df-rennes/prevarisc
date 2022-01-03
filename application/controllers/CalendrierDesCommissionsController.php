@@ -1120,9 +1120,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
+
+
+        
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
+
 
             //on recupere la liste des infos des établissement
             if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
@@ -1132,12 +1137,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-
+            
             $service_dossier = new Service_Dossier();
             $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+            $listeDossiers[$val]['effectifEtDegagement'] = ($dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"]);
+
         }
+
         $this->view->dossierComm = $listeDossiers;
     }
 

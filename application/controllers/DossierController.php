@@ -3026,8 +3026,7 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-
-    public function effectifsEtDegagementsAction(){
+    public function effectifsDegagementsDossierAction(){
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
         
@@ -3052,43 +3051,42 @@ class DossierController extends Zend_Controller_Action
                 }
         }
 
-
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
         $service_etablissement = new Service_Etablissement();
-
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_getParam('id'));
+        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
-        
-        //        $this->view->etablissement = $service_etablissement->get($this->_request->id);
-
-        //$this->view->idDossier = $this->_getParam($this->_request->id);
-
-
     }
 
-    /**
-     * Affiche la version lecture des effectifs et degagement
-     */
-    public function visuEffectifDegagementAction(){
+    public function effectifsDegagementsDossierEditAction(){
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
-        $service_etablissement = new Service_Etablissement();
-
-
-        $DBdossier = new Model_DbTable_Dossier();
-        $dossier = $DBdossier->find($this->_getParam('id'))->current();
-        $this->view->objetDossier = $dossier->OBJET_DOSSIER;
-        $this->view->idTypeDossier = $dossier->TYPE_DOSSIER;
-        $this->view->verrouDossier = $dossier['VERROU_DOSSIER'];
-        $this->view->idDossier = ($this->_getParam('id'));
-
-        $this->view->verrou = $dossier->VERROU_DOSSIER;
-
+        $serviceEffectifdegagement = new Service_Effectifdegagement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $this->view->EffectifDegagement =$modelsement->getEffectifEtDegagementByRef($this->_getParam('id'));
-
-        $this->view->idDossier = $this->_getParam('id');
+        if ($this->_request->isPost()) {
+            try{
+                //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
+                $arrData = [];
+                $arrData["DESCRIPTION_EFFECTIF"] = $this->_request->getParam("DESCRIPTION_EFFECTIF");
+                $arrData["DESCRIPTION_DEGAGEMENT"] = $this->_request->getParam("DESCRIPTION_DEGAGEMENT");
+                $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'),$arrData);
+                header('Location:/dossier/effectifs-degagements-dossier/id/'.$this->_getParam('id'));
+                $this->_helper->flashMessenger(array(
+                    'context' => 'success',
+                    'title' => 'Mise à jour effectifs dégagements ok',
+                    'message' => ""
+                ));
+                }catch (Exception $e) {
+                $this->_helper->flashMessenger(array(
+                    'context' => 'error',
+                    'title' => 'Erreur lors de la mise à jour',
+                    'message' => $e->getMessage(),
+                ));
+            }
+            }else{
+                $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
+                $this->view->idDossier = $this->_getParam('id');
+            }
     }
 }

@@ -117,13 +117,14 @@ foreach($this->membresFiles as $val => $membre){
 				if($nbAdresse != 0){
 					foreach($dossierInfos['infosEtab']['adresses'] as $commune){
 						addChamp($dossInfos,'commissionNom', $this->commissionInfos[0]['LIBELLE_COMMISSION']);
-
 						if(isset($commune["LIBELLE_COMMUNE"])){
 							addChamp($dossInfos,'communeDossier', $commune["LIBELLE_COMMUNE"]);
 						}
 
 						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
+						addChamp($dossInfos,'effectifEtDegagement',$dossierInfos["effectifEtDegagement"]);
+
 
 						$dateComm = new Zend_Date($this->dateComm);
 						addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
@@ -233,7 +234,7 @@ foreach($this->membresFiles as $val => $membre){
 							$listeDocUrba .= $docurb['NUM_DOCURBA']."    ";
 						}
 						addChamp($dossInfos,'numDocUrba', $listeDocUrba);
-
+						
 						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos);
 						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos);
 						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos);
