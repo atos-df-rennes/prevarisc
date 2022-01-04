@@ -1,6 +1,7 @@
 <?php
 
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
+//echo '<pre>',print_r($this->dossierComm[0]["infosEtab"]),'</pre>';
 
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
@@ -237,8 +238,10 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
-	setVars($segment,"descriptionEffectif",$dossierInfos["DESCRIPTION_EFFECTIF"]);
-	setVars($segment,"descriptionDegagement",$dossierInfos["DESCRIPTION_DEGAGEMENT"]);
+	setVars($segment,"descriptionEffectifDossier",$dossierInfos["DESCRIPTION_EFFECTIF_DOSSIER"]);
+	setVars($segment,"descriptionDegagementDossier",$dossierInfos["DESCRIPTION_DEGAGEMENT_DOSSIER"]);
+	setVars($segment,"descriptionEffectifEtablissement",$dossierInfos["DESCRIPTION_EFFECTIF_ETABLISSEMENT"]);
+	setVars($segment,"descriptionDegagementEtablissement",$dossierInfos["DESCRIPTION_DEGAGEMENT_ETABLISSEMENT"]);
 
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";

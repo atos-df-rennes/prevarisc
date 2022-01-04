@@ -44,8 +44,10 @@ foreach($this->informationsMembre as $val => $membre){
                     }
                 }
 
-                addChamp($membreLoop,'descriptionEffectif',$this->dossierComm[0]['DESCRIPTION_EFFECTIF']);
-                addChamp($membreLoop,'descriptionDegagement',$this->dossierComm[0]['DESCRIPTION_DEGAGEMENT']);
+                addChamp($membreLoop,'descriptionEffectifDossier',$this->dossierComm[0]['DESCRIPTION_EFFECTIF_DOSSIER']);
+                addChamp($membreLoop,'descriptionDegagementDossier',$this->dossierComm[0]['DESCRIPTION_DEGAGEMENT_DOSSIER']);
+                addChamp($membreLoop,'descriptionEffectifEtablissement',$this->dossierComm[0]['DESCRIPTION_EFFECTIF_ETABLISSEMENT']);
+                addChamp($membreLoop,'descriptionDegagementEtablissement',$this->dossierComm[0]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT']);
 
                 addChamp($membreLoop,'commissionNom',$this->commissionInfos[0]['LIBELLE_COMMISSION']);
                 
