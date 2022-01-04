@@ -11,6 +11,7 @@ foreach($this->informationsMembre as $val => $membre){
 		//génération du document par commune pour les maires par exemple		
 		//si le document concernant ce membre existe alors on rentre dans la boucle
         $nomFichier = $membre['infosFiles'][0]['ID_COMMISSIONMEMBRE']."ODJ_".$membre['infosFiles'][0]['COURRIER_ODJ'];
+
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
             //Generation du segment membres
@@ -43,6 +44,9 @@ foreach($this->informationsMembre as $val => $membre){
                     }
                 }
 
+                addChamp($membreLoop,'descriptionEffectif',$this->dossierComm[0]['DESCRIPTION_EFFECTIF']);
+                addChamp($membreLoop,'descriptionDegagement',$this->dossierComm[0]['DESCRIPTION_DEGAGEMENT']);
+
                 addChamp($membreLoop,'commissionNom',$this->commissionInfos[0]['LIBELLE_COMMISSION']);
                 
                 $dateDuJour = new Zend_Date();
@@ -54,6 +58,7 @@ foreach($this->informationsMembre as $val => $membre){
                 $heureCommTab = explode(":",$this->heureDeb);
                 $heureComm = $heureCommTab[0].":".$heureCommTab[1];
                 addChamp($membreLoop,'heureDebutComm',$heureComm);
+
 
                 //ICI FOREACH SUR LES DOSSIERS DE LA COMMUNE
                 //Generation du segment pour l'affichage des différentes infos du dossier	
@@ -110,6 +115,7 @@ foreach($this->informationsMembre as $val => $membre){
             addChamp($grpLoop,'dateCommission',$dateComm->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR));
             addChamp($grpLoop,'heureDebutComm',$this->heureDeb);
 
+
             //On commence par parcourir les dossier pour récuperer la ville concernée
             foreach($this->dossierComm as $val => $dossierInfos){
                 //On parcourt la liste des ville du groupement concerné pour comparer avec la ville du dossier
@@ -128,6 +134,8 @@ foreach($this->informationsMembre as $val => $membre){
             echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." n'a pas été renseigné</span><br/><br/><br/>";
         }
 	}
+
+
 }
 
 function addChamp($odfName, $nomOdf, $variable){
@@ -156,6 +164,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'avisDossier', getAvis($dossierInfos["AVIS_DOSSIER"]));
     addChamp($segment->infosDoss, 'nomEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
     addChamp($segment->infosDoss, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
+        
     if(isset($dossierInfos['infosEtab']['parents'][0]) && $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"] != NULL) {
         addChamp($segment->infosDoss, 'nomPereEtab', $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
     }

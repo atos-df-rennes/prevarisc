@@ -49,6 +49,8 @@ foreach($this->informationsMembre as $val => $membre){
 		if($membre['infosFiles'][0]['ID_GROUPEMENT'] == NULL){
 			//génération du document par commune pour les maires par exemple
 			//si le document concernant ce membre existe alors on rentre dans la boucle
+			//var_dump((REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier));
+			//exit();
 			$odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
 
 			//Generation du segment villeDoss
@@ -174,6 +176,9 @@ foreach($this->informationsMembre as $val => $membre){
 				}
 			}
 
+
+
+
 			$odf->mergeSegment($grpLoop);
 
 			$nouvellePJ = savePj($this->idComm ,$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']);
@@ -232,7 +237,9 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
-	
+	setVars($segment,"descriptionEffectif",$dossierInfos["DESCRIPTION_EFFECTIF"]);
+	setVars($segment,"descriptionDegagement",$dossierInfos["DESCRIPTION_DEGAGEMENT"]);
+
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["CODEPOSTAL_COMMUNE"]." ";

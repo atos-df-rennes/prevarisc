@@ -123,8 +123,9 @@ foreach($this->membresFiles as $val => $membre){
 
 						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
-						addChamp($dossInfos,'effectifEtDegagement',$dossierInfos["effectifEtDegagement"]);
-
+						//addChamp($dossInfos,'effectifEtDegagement',$dossierInfos["effectifEtDegagement"]);
+						addChamp($dossInfos,'descriptionEffectif',$dossierInfos["descriptionEffectif"]);
+						addChamp($dossInfos,'descriptionDegagement',$dossierInfos["descriptionDegagement"]);
 
 						$dateComm = new Zend_Date($this->dateComm);
 						addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));

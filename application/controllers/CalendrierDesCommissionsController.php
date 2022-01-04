@@ -961,6 +961,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     ++$numCommune;
                 }
             }
+
+            $listeDossiers[0]["DESCRIPTION_EFFECTIF"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"];
+            $listeDossiers[0]["DESCRIPTION_DEGAGEMENT"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];
+            
             $this->view->listeCommunes = $tabCommune;
             $this->view->dossierComm = $listeDossiers;
 
@@ -1086,6 +1090,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
         }
 
+        $dbDossier = new Model_DbTable_Dossier();
+        $listeDossiers[0]['DESCRIPTION_EFFECTIF'] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"];
+        $listeDossiers[0]['DESCRIPTION_DEGAGEMENT'] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];
+        
         $this->view->informationsMembre = $listeMembres;
         $this->view->listeCommunes = $tabCommune;
         $this->view->dossierComm = $listeDossiers;
@@ -1121,9 +1129,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
 
-
-        
-
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1142,7 +1147,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
-            $listeDossiers[$val]['effectifEtDegagement'] = ($dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"]);
+            $listeDossiers[$val]['descriptionEffectif'] = ($dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"]);
+            $listeDossiers[$val]['descriptionDegagement'] = ($dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"]);
 
         }
 
