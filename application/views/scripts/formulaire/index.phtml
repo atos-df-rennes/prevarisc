@@ -1,0 +1,8 @@
+<?php foreach($this->formulaires as $formulaire) : ?>
+    <form action="/formulaire" method="post">
+        <h3>
+            <?php echo $formulaire['NOM']; ?>
+        </h3>
+        <a href='' id='rubrique_<?php echo $formulaire['NOM_INTERNE'] ?>'>Ajouter une rubrique</a>
+    </form>
+<?php endforeach ?>

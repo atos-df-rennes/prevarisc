@@ -526,6 +526,13 @@
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
                 </changement>
+                <formulaire>
+                    <label>Formulaires</label>
+                    <controller>formulaire</controller>
+                    <action>index</action>
+                    <!-- <resource>gestion_parametrages</resource>
+                    <privilege>formulaires</privilege> -->
+                </formulaire>
             </pages>
         </admin>
 
