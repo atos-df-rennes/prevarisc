@@ -1,8 +1,16 @@
-<?php foreach($this->formulaires as $formulaire) : ?>
-    <form action="/formulaire" method="post">
+<link rel="stylesheet" href="/css/formulaire.css" />
+<div id="form-container">
+    <?php foreach($this->formulaires as $formulaire) : ?>
         <h3>
             <?php echo $formulaire['NOM']; ?>
         </h3>
-        <a href='' id='rubrique_<?php echo $formulaire['NOM_INTERNE'] ?>'>Ajouter une rubrique</a>
-    </form>
-<?php endforeach ?>
+
+        <div id="saved-rubriques-<?php echo $formulaire['NOM_INTERNE'] ?>">
+            <?php echo $this->test[$formulaire['NOM_INTERNE']]; ?>
+        </div>
+
+        <div id="<?php echo $formulaire['NOM_INTERNE'] ?>">
+            <?php echo $this->form; ?>
+        </div>
+    <?php endforeach ?>
+</div>
