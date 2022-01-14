@@ -44,4 +44,15 @@ class FormulaireController extends Zend_Controller_Action
             }
         }
     }
+
+    public function deleteAction(): void
+    {
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $rubriqueId = intval($this->getParam('rubrique'));
+
+        $rubrique = $modelRubrique->find($rubriqueId)->current();
+        $rubrique->delete();
+
+        $this->_helper->redirector('index');
+    }
 }

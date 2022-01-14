@@ -1,40 +1,54 @@
 <link rel="stylesheet" href="/css/formulaire.css" />
 <div id="form-container">
-    <?php foreach($this->formulaires as $formulaire) : ?>
+    <?php
+        $arrayKeys = array_keys($this->formulaires);
+        $lastKey = end($arrayKeys);
+    ?>
+    <?php foreach($this->formulaires as $key => $formulaire) : ?>
         <div class="row-fluid">
             <h3>
                 <?php echo $formulaire['NOM']; ?>
             </h3>
 
             <div id="saved-rubriques-<?php echo $formulaire['NOM_INTERNE'] ?>" class="span6">
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Nom de la rubrique</th>
-                            <th>Afficher la rubrique par défaut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
+                <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
                             <tr>
-                                <td><?php echo $rubrique['NOM']; ?></td>
-                                <td>
-                                    <?php if($rubrique['DEFAULT_DISPLAY']): ?>
-                                        <p class="text-center">
-                                            <i class="icon-ok"></i>
-                                        </p>
-                                    <?php endif ?>
-                                </td>
+                                <th>Nom de la rubrique</th>
+                                <th>Afficher la rubrique par défaut</th>
+                                <th id="actions"></th>
                             </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-                <!-- TODO Ajouter un lien modifier et supprimer -->
+                        </thead>
+                        <tbody>
+                            <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
+                                <tr>
+                                    <td><?php echo $rubrique['NOM']; ?></td>
+                                    <td>
+                                        <?php if($rubrique['DEFAULT_DISPLAY']): ?>
+                                            <p class="text-center">
+                                                <i class="icon-ok"></i>
+                                            </p>
+                                        <?php endif ?>
+                                    </td>
+                                    <td>
+                                        <a href="/formulaire/edit/rubrique/<?php echo $rubrique['ID_RUBRIQUE']; ?>">Modifier</a>
+                                        <a href="/formulaire/delete/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Supprimer</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                <?php endif ?>
             </div>
 
             <div id="<?php echo $formulaire['NOM_INTERNE'] ?>" class="span4 offset1">
                 <?php echo $this->form; ?>
             </div>
         </div>
-    <?php endforeach ?>
+
+        <?php if($key !== $lastKey): ?>
+            <hr>
+        <?php endif;
+    endforeach ?>
 </div>

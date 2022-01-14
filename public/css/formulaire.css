@@ -6,3 +6,7 @@ label.optional {
     margin-bottom: 0;
     vertical-align: middle;
 }
+
+div[id^='saved-rubriques-'] a {
+    display: block;
+}

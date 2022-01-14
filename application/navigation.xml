@@ -529,9 +529,21 @@
                 <formulaire>
                     <label>Formulaires</label>
                     <controller>formulaire</controller>
-                    <action>index</action>
+                    <!-- TODO Ajouter les privilèges -->
                     <!-- <resource>gestion_parametrages</resource>
                     <privilege>formulaires</privilege> -->
+                    <pages>
+                        <index>
+                            <label>Index</label>
+                            <controller>formulaire</controller>
+                            <action>index</action>
+                        </index>
+                        <delete>
+                            <label>Suppression</label>
+                            <controller>formulaire</controller>
+                            <action>delete</action>
+                        </delete>
+                    </pages>
                 </formulaire>
             </pages>
         </admin>
@@ -719,10 +731,6 @@
                  <delete>
                     <controller>dossier</controller>
                     <action>delete</action>
-                    <!--
-                    <resource>suppression</resource>
-                    <privilege>delete_dossier</privilege>
-                    -->
                 </delete>
                 <verrou>
                     <controller>dossier</controller>
