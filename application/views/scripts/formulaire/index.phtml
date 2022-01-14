@@ -1,16 +1,40 @@
 <link rel="stylesheet" href="/css/formulaire.css" />
 <div id="form-container">
     <?php foreach($this->formulaires as $formulaire) : ?>
-        <h3>
-            <?php echo $formulaire['NOM']; ?>
-        </h3>
+        <div class="row-fluid">
+            <h3>
+                <?php echo $formulaire['NOM']; ?>
+            </h3>
 
-        <div id="saved-rubriques-<?php echo $formulaire['NOM_INTERNE'] ?>">
-            <?php echo $this->test[$formulaire['NOM_INTERNE']]; ?>
-        </div>
+            <div id="saved-rubriques-<?php echo $formulaire['NOM_INTERNE'] ?>" class="span6">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Nom de la rubrique</th>
+                            <th>Afficher la rubrique par défaut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
+                            <tr>
+                                <td><?php echo $rubrique['NOM']; ?></td>
+                                <td>
+                                    <?php if($rubrique['DEFAULT_DISPLAY']): ?>
+                                        <p class="text-center">
+                                            <i class="icon-ok"></i>
+                                        </p>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+                <!-- TODO Ajouter un lien modifier et supprimer -->
+            </div>
 
-        <div id="<?php echo $formulaire['NOM_INTERNE'] ?>">
-            <?php echo $this->form; ?>
+            <div id="<?php echo $formulaire['NOM_INTERNE'] ?>" class="span4 offset1">
+                <?php echo $this->form; ?>
+            </div>
         </div>
     <?php endforeach ?>
 </div>

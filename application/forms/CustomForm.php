@@ -8,6 +8,7 @@ class Form_CustomForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
+        $this->setAttrib('class', 'form-inline');
 
         $this->addElement('text', 'nom_rubrique', array(
             'label' => 'Nom de la rubrique',
@@ -17,13 +18,13 @@ class Form_CustomForm extends Zend_Form
         ));
 
         $this->addElement('checkbox', 'afficher_rubrique', array(
-            'label' => 'Afficher la rubrique par défaut'
+            'label' => 'Afficher la rubrique par défaut',
         ));
 
         $submit = new Zend_Form_Element_Button('save');
-        $submit->class = "btn btn-success";
+        $submit->class = 'btn btn-success pull-right';
         $submit->setLabel('Ajouter la rubrique');
-        $this->addElement($submit, 'save');
+        $this->addElement($submit);
 
         $this->setDecorators(array(
             'FormElements',
@@ -36,7 +37,7 @@ class Form_CustomForm extends Zend_Form
                 'Label',
             ),
             array(
-                'save'
+                'save',
             ),
             false
         );

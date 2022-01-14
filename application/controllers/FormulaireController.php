@@ -4,17 +4,29 @@ class FormulaireController extends Zend_Controller_Action
 {
     public function indexAction(): void
     {
+        // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
 
+        // Définition des forms, models et services
         $form = new Form_CustomForm();
-        $serviceFormulaire = new Service_Formulaire();
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $modelRubrique = new Model_DbTable_Rubrique();
+        $serviceFormulaire = new Service_Formulaire();
 
+        $capsulesRubriques = $serviceFormulaire->getAllCapsulesRubrique();
+
+        // Récupération des rubriques pour chaque objet global
+        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+        foreach ($capsulesRubriques as &$capsuleRubrique) {
+            $capsuleRubrique['RUBRIQUES'] = $modelRubrique->getRubriquesByCapsuleRubrique($capsuleRubrique['NOM_INTERNE']);
+        }
+
+        // Assignation des variables à la vue
         $this->view->assign('form', $form);
-        $this->view->assign('formulaires', $serviceFormulaire->getAllCapsulesRubrique());
+        $this->view->assign('formulaires', $capsulesRubriques);
 
+        // Sauvegarde des rubriques ajoutées
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
