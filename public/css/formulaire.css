@@ -10,3 +10,9 @@ label.optional {
 div[id^='saved-rubriques-'] a {
     display: block;
 }
+
+.infos-rubrique {
+	border: 1px dotted #818183;
+	padding: 20px 20px 20px 20px;
+	margin-bottom: 20px;
+}

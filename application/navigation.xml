@@ -538,6 +538,11 @@
                             <controller>formulaire</controller>
                             <action>index</action>
                         </index>
+                        <edit>
+                            <label>Édition</label>
+                            <controller>formulaire</controller>
+                            <action>edit</action>
+                        </edit>
                         <delete>
                             <label>Suppression</label>
                             <controller>formulaire</controller>

@@ -6,7 +6,7 @@ class FormulaireController extends Zend_Controller_Action
     {
         // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
 
         // Définition des forms, models et services
         $form = new Form_CustomForm();
@@ -30,6 +30,7 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
+                // FIXME Voir pour faire un $form->getValues() ?
                 $post = $request->getPost();
                 $capsuleRubriqueIdArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
                 $capsuleRubriqueId = $capsuleRubriqueIdArray['ID_CAPSULERUBRIQUE'];
@@ -41,6 +42,32 @@ class FormulaireController extends Zend_Controller_Action
                 ));
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'Les rubriques n\'ont pas été ajoutées. Veuillez rééssayez. ('.$e->getMessage().')'));
+            }
+        }
+    }
+
+    public function editAction(): void
+    {
+        $this->_helper->layout->setLayout('menu_admin');
+
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $rubriqueId = intval($this->getParam('rubrique'));
+        $rubrique = $modelRubrique->find($rubriqueId)->current();
+
+        $this->view->assign('rubrique', $rubrique);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getPost();
+
+                $rubrique->NOM = $post['nom_rubrique'];
+                $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
+                $rubrique->save();
+
+                $this->_helper->redirector('index');
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
         }
     }

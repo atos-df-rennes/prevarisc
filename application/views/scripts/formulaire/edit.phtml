@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/css/formulaire.css" />
+<div class="row-fluid">
+    <div class="span4 infos-rubrique">
+        <form action class="form-inline" method="post">
+            <label for="nom_rubrique">Nom de la rubrique</label>
+            <input type="text" name="nom_rubrique" id="nom_rubrique" value="<?php echo $this->rubrique['NOM']; ?>">
+            <label for="afficher_rubrique">Afficher la rubrique par défaut</label>
+            <input
+                type="hidden"
+                name="afficher_rubrique"
+                value="0"
+            >
+            <input
+                type="checkbox"
+                name="afficher_rubrique"
+                value="1"
+                <?php echo $this->rubrique['DEFAULT_DISPLAY'] ? 'checked' : ''; ?>
+            >
+
+            <div class="pull-right">
+                <a href='/formulaire' type="button" class="btn">Annuler</a>
+                <button type="submit" class="btn btn-success">Sauvegarder la rubrique</button>
+            </div>
+        </form>
+    </div>
+</div>
