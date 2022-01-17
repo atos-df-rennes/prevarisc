@@ -2,6 +2,10 @@ form #save-element {
     margin: 0;
 }
 
+.form-inline input {
+    margin-bottom: 10px;
+}
+
 label.optional {
     margin-bottom: 0;
     vertical-align: middle;

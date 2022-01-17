@@ -1,18 +1,19 @@
 $(document).ready(function(){
-    $("button").on('click', function() {
-        buttonForm = this.closest("form")
-        capsuleRubrique = buttonForm.closest("div").id
+    $(".rubrique-form button").on('click', function() {
+        const form = this.closest("form")
+        const capsuleRubrique = form.closest("div").id
+        const table = document.getElementById('table-'+capsuleRubrique)
 
-        buttonFormData = $(buttonForm).serialize()
+        const formData = $(form).serialize()
 
         $.ajax({
-            url: "/formulaire",
-            data: buttonFormData+'&capsule_rubrique='+capsuleRubrique,
+            url: window.location.href,
+            data: formData+'&capsule_rubrique='+capsuleRubrique,
             type:"POST",
-            success: function(){
-                window.location.href = '/formulaire'
+            success: function() {
+                location.reload()
             },
-            error: function(){
+            error: function() {
                 return false;
             }
         });

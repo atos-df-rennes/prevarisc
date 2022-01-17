@@ -20,7 +20,7 @@
                         <tr>
                             <th>Nom de la rubrique</th>
                             <th>Afficher la rubrique par défaut</th>
-                            <th id="actions"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,8 +35,8 @@
                                     <?php endif ?>
                                 </td>
                                 <td>
-                                    <a href="/formulaire/edit/rubrique/<?php echo $rubrique['ID_RUBRIQUE']; ?>">Modifier</a>
-                                    <a href="/formulaire/delete/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Supprimer</a>
+                                    <div><a href="/formulaire/edit/rubrique/<?php echo $rubrique['ID_RUBRIQUE']; ?>">Modifier</a></div>
+                                    <div><a href="/formulaire/delete/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Supprimer</a></div>
                                 </td>
                             </tr>
                         <?php endforeach ?>

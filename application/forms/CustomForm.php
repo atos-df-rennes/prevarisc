@@ -8,7 +8,7 @@ class Form_CustomForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-        $this->setAttrib('class', 'form-inline');
+        $this->setAttrib('class', 'form-inline rubrique-form');
 
         $this->addElement('text', 'nom_rubrique', array(
             'label' => 'Nom de la rubrique',

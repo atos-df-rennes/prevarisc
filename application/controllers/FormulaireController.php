@@ -2,6 +2,7 @@
 
 class FormulaireController extends Zend_Controller_Action
 {
+    /// Gestion des rubriques ///
     public function indexAction(): void
     {
         // Définition des layouts et scripts
@@ -14,7 +15,7 @@ class FormulaireController extends Zend_Controller_Action
         $modelRubrique = new Model_DbTable_Rubrique();
         $serviceFormulaire = new Service_Formulaire();
 
-        $capsulesRubriques = $serviceFormulaire->getAllCapsulesRubrique();
+        $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
 
         // Récupération des rubriques pour chaque objet global
         // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
@@ -30,8 +31,8 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
-                // FIXME Voir pour faire un $form->getValues() ?
                 $post = $request->getPost();
+
                 $capsuleRubriqueIdArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
                 $capsuleRubriqueId = $capsuleRubriqueIdArray['ID_CAPSULERUBRIQUE'];
 
@@ -49,23 +50,44 @@ class FormulaireController extends Zend_Controller_Action
     public function editAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
+        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
 
+        $fieldForm = new Form_CustomFormField();
         $modelRubrique = new Model_DbTable_Rubrique();
+        $modelChamp = new Model_DbTable_Champ();
+        $serviceFormulaire = new Service_Formulaire();
+
         $rubriqueId = intval($this->getParam('rubrique'));
         $rubrique = $modelRubrique->find($rubriqueId)->current();
 
+        $listeTypeChampRubrique = $serviceFormulaire->getAllListeTypeChampRubrique();
+        $champs = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
+
+        $this->view->assign('fieldForm', $fieldForm);
         $this->view->assign('rubrique', $rubrique);
+        $this->view->assign('champs', $champs);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
 
-                $rubrique->NOM = $post['nom_rubrique'];
-                $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
-                $rubrique->save();
+                // FIXME Voir pour séparer les actions et faire une action spécifique pour l'ajout de champ
+                // Cas de l'ajout d'un champ à la rubrique
+                if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    $modelChamp->insert(array(
+                        'NOM' => $post['nom_champ'],
+                        'ID_TYPECHAMP' => intval($post['type_champ']),
+                        'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
+                    ));
+                } else {
+                    // Cas de modification des informations de la rubrique
+                    $rubrique->NOM = $post['nom_rubrique'];
+                    $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
+                    $rubrique->save();
 
-                $this->_helper->redirector('index');
+                    $this->_helper->redirector('index');
+                }
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
             }

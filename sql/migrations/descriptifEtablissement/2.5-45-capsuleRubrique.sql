@@ -7,9 +7,9 @@ CREATE TABLE `capsulerubrique` (
     PRIMARY KEY (`ID_CAPSULERUBRIQUE`)
 );
 
-INSERT INTO `capsulerubrique`(`NOM_INTERNE`,`NOM`) VALUES
-('descriptifEtablissement', 'Descriptif de l''établissement'),
-('verificationsTechniquesDossier', 'Vérifications techniques des visites');
+INSERT INTO `capsulerubrique` VALUES
+(1, 'descriptifEtablissement', 'Descriptif de l''établissement'),
+(2, 'verificationsTechniquesDossier', 'Vérifications techniques des visites');
 
 CREATE TABLE `capsulerubriqueetablissement` (
     `ID_ETABLISSEMENT` bigint(20) unsigned NOT NULL,
