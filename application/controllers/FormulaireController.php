@@ -132,4 +132,16 @@ class FormulaireController extends Zend_Controller_Action
 
         $this->_helper->redirector('index');
     }
+
+    public function deleteChampAction(): void
+    {
+        $modelChamp = new Model_DbTable_Champ();
+        $champId = intval($this->getParam('champ'));
+        
+        $champ = $modelChamp->find($champId)->current();
+        $rubriqueId = $champ['ID_RUBRIQUE'];
+        $champ->delete();
+
+        $this->_helper->redirector('edit', null, null, array('rubrique' => $rubriqueId));
+    }
 }

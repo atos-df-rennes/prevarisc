@@ -549,10 +549,15 @@
                             <action>delete</action>
                         </delete>
                         <edit-champ>
-                            <label>Édition champ</label>
+                            <label>Édition d'un champ</label>
                             <controller>formulaire</controller>
                             <action>edit-champ</action>
                         </edit-champ>
+                        <delete-champ>
+                            <label>Suppression d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>delete-champ</action>
+                        </delete-champ>
                     </pages>
                 </formulaire>
             </pages>
