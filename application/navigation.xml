@@ -529,9 +529,8 @@
                 <formulaire>
                     <label>Formulaires</label>
                     <controller>formulaire</controller>
-                    <!-- TODO Ajouter les privilèges -->
-                    <!-- <resource>gestion_parametrages</resource>
-                    <privilege>formulaires</privilege> -->
+                    <resource>gestion_parametrages</resource>
+                    <privilege>gestion_formulaires</privilege>
                     <pages>
                         <index>
                             <label>Index</label>
