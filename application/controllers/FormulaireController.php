@@ -60,7 +60,6 @@ class FormulaireController extends Zend_Controller_Action
         $rubriqueId = intval($this->getParam('rubrique'));
         $rubrique = $modelRubrique->find($rubriqueId)->current();
 
-        $listeTypeChampRubrique = $serviceFormulaire->getAllListeTypeChampRubrique();
         $champs = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
 
         $this->view->assign('fieldForm', $fieldForm);
@@ -91,6 +90,35 @@ class FormulaireController extends Zend_Controller_Action
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
+        }
+    }
+
+    public function editChampAction(): void
+    {
+        $this->_helper->layout->setLayout('menu_admin');
+
+        $modelChamp = new Model_DbTable_Champ();
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $serviceFormulaire = new Service_Formulaire();
+
+        $champId = intval($this->getParam('champ'));
+        $champ = $modelChamp->find($champId)->current();
+
+        $rubrique = $modelRubrique->find($champ['ID_RUBRIQUE'])->current();
+
+        $listeTypeChampRubrique = $serviceFormulaire->getAllListeTypeChampRubrique();
+
+        $this->view->assign('champ', $champ);
+        $this->view->assign('rubrique', $rubrique);
+        $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            
+            $champ->NOM = $post['nom_champ'];
+            $champ->save();
+            $this->_helper->redirector('edit', null, null, array('rubrique' => $rubrique['ID_RUBRIQUE']));
         }
     }
 

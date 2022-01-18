@@ -2,7 +2,6 @@ $(document).ready(function(){
     $(".rubrique-form button").on('click', function() {
         const form = this.closest("form")
         const capsuleRubrique = form.closest("div").id
-        const table = document.getElementById('table-'+capsuleRubrique)
 
         const formData = $(form).serialize()
 

@@ -548,6 +548,11 @@
                             <controller>formulaire</controller>
                             <action>delete</action>
                         </delete>
+                        <edit-champ>
+                            <label>Édition champ</label>
+                            <controller>formulaire</controller>
+                            <action>edit-champ</action>
+                        </edit-champ>
                     </pages>
                 </formulaire>
             </pages>
