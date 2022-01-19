@@ -2,7 +2,6 @@
 
 class FormulaireController extends Zend_Controller_Action
 {
-    /// Gestion des rubriques ///
     public function indexAction(): void
     {
         // Définition des layouts et scripts
@@ -11,8 +10,10 @@ class FormulaireController extends Zend_Controller_Action
 
         // Définition des forms, models et services
         $form = new Form_CustomForm();
+
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $modelRubrique = new Model_DbTable_Rubrique();
+
         $serviceFormulaire = new Service_Formulaire();
 
         $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
@@ -33,13 +34,13 @@ class FormulaireController extends Zend_Controller_Action
             try {
                 $post = $request->getPost();
 
-                $capsuleRubriqueIdArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
-                $capsuleRubriqueId = $capsuleRubriqueIdArray['ID_CAPSULERUBRIQUE'];
+                $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
+                $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
 
                 $modelRubrique->insert(array(
                     'NOM' => $post['nom_rubrique'],
                     'DEFAULT_DISPLAY' => intval($post['afficher_rubrique']),
-                    'ID_CAPSULERUBRIQUE' => $capsuleRubriqueId
+                    'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
                 ));
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'Les rubriques n\'ont pas été ajoutées. Veuillez rééssayez. ('.$e->getMessage().')'));
@@ -53,14 +54,23 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
 
         $fieldForm = new Form_CustomFormField();
+
         $modelRubrique = new Model_DbTable_Rubrique();
         $modelChamp = new Model_DbTable_Champ();
+        $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
         $serviceFormulaire = new Service_Formulaire();
 
-        $rubriqueId = intval($this->getParam('rubrique'));
-        $rubrique = $modelRubrique->find($rubriqueId)->current();
+        $idRubrique = intval($this->getParam('rubrique'));
+        $rubrique = $modelRubrique->find($idRubrique)->current();
 
         $champs = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
+        foreach ($champs as &$champ) {
+            if ($champ['TYPE'] === 'Liste') {
+                $champ['VALEURS'] = $modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
+            }
+        }
 
         $this->view->assign('fieldForm', $fieldForm);
         $this->view->assign('rubrique', $rubrique);
@@ -70,15 +80,31 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
+                $idTypeChamp = intval($post['type_champ']);
+                $listeId = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
                 // FIXME Voir pour séparer les actions et faire une action spécifique pour l'ajout de champ
                 // Cas de l'ajout d'un champ à la rubrique
                 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-                    $modelChamp->insert(array(
+                    $idChamp = $modelChamp->insert(array(
                         'NOM' => $post['nom_champ'],
-                        'ID_TYPECHAMP' => intval($post['type_champ']),
+                        'ID_TYPECHAMP' => $idTypeChamp,
                         'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
                     ));
+                    
+                    if ($idTypeChamp === $listeId) {
+                        // On récupère les valeurs de la liste séparément des autres champs
+                        $listValueArray = array_filter($post, function($key) {
+                            return strpos($key, 'valeur-') === 0;
+                        }, ARRAY_FILTER_USE_KEY);
+
+                        foreach ($listValueArray as $listValue) {
+                            $modelChampValeurListe->insert(array(
+                                'VALEUR' => $listValue,
+                                'ID_CHAMP' => $idChamp
+                            ));
+                        }
+                    }
                 } else {
                     // Cas de modification des informations de la rubrique
                     $rubrique->NOM = $post['nom_rubrique'];
@@ -96,13 +122,23 @@ class FormulaireController extends Zend_Controller_Action
     public function editChampAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
+        $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
 
         $modelChamp = new Model_DbTable_Champ();
         $modelRubrique = new Model_DbTable_Rubrique();
+        $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
         $serviceFormulaire = new Service_Formulaire();
 
         $champId = intval($this->getParam('champ'));
         $champ = $modelChamp->find($champId)->current();
+        
+        $listeId = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+        if ($champ['ID_TYPECHAMP'] === $listeId) {
+            $valeursChamp = $modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
+            $this->view->assign('valeursChamp', $valeursChamp);
+        }
 
         $rubrique = $modelRubrique->find($champ['ID_RUBRIQUE'])->current();
 
@@ -115,6 +151,34 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
+
+            // Modification de valeur
+            // On récupère les valeurs de la liste séparément des autres champs
+            $listValueArray = array_filter($post, function($key) {
+                return strpos($key, 'valeur-champ-') === 0;
+            }, ARRAY_FILTER_USE_KEY);
+            
+            foreach ($listValueArray as $key => $value) {
+                $explodedKey = explode('-', $key);
+                $idValue = intval(end($explodedKey));
+
+                $valueField = $modelChampValeurListe->find($idValue)->current();
+                $valueField->VALEUR = $value;
+                $valueField->save();
+            }
+
+            // Ajout de valeur
+            // On récupère les valeurs de la liste séparément des autres champs
+            $listValueArray = array_filter($post, function($key) {
+                return strpos($key, 'valeur-') === 0;
+            }, ARRAY_FILTER_USE_KEY);
+
+            foreach ($listValueArray as $listValue) {
+                $modelChampValeurListe->insert(array(
+                    'VALEUR' => $listValue,
+                    'ID_CHAMP' => $champ['ID_CHAMP']
+                ));
+            }
             
             $champ->NOM = $post['nom_champ'];
             $champ->save();
@@ -136,12 +200,21 @@ class FormulaireController extends Zend_Controller_Action
     public function deleteChampAction(): void
     {
         $modelChamp = new Model_DbTable_Champ();
-        $champId = intval($this->getParam('champ'));
+        $idChamp = intval($this->getParam('champ'));
         
-        $champ = $modelChamp->find($champId)->current();
-        $rubriqueId = $champ['ID_RUBRIQUE'];
+        $champ = $modelChamp->find($idChamp)->current();
+        $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
 
-        $this->_helper->redirector('edit', null, null, array('rubrique' => $rubriqueId));
+        $this->_helper->redirector('edit', null, null, array('rubrique' => $idRubrique));
+    }
+
+    public function deleteValeurListeAction(): void
+    {
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
+        $idValeurListe = $this->getParam('id');
+        $valeurListe = $modelChampValeurListe->find($idValeurListe)->current();
+        $valeurListe->delete();
     }
 }

@@ -22,3 +22,7 @@ div[id^='saved-rubriques-'] a {
 	padding: 20px 20px 20px 20px;
 	margin-bottom: 20px;
 }
+
+#edit-rubrique #div-valeurs-liste {
+    display: none;
+}

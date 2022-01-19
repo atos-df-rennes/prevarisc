@@ -14,7 +14,8 @@
         <h2>Informations sur le champ</h2>
     </div>
 </div>
-<div class="row-fluid">
+
+<div id="edit-champ" class="row-fluid">
     <div class="span5 infos-rubrique">
         <h3>
             <?php echo $this->rubrique['NOM'] ?>
@@ -39,6 +40,26 @@
                     </option>
                 <?php endforeach ?>
             </select>
+
+            <div class="row-fluid">
+                <h3>Valeurs de la liste</h3>
+                <?php foreach($this->valeursChamp as $valeur): ?>
+                    <div>
+                        <input type="text" name="valeur-champ-<?php echo $valeur['ID_VALEURLISTE'] ?>" value="<?php echo $valeur['VALEUR'] ?>">
+                        <a href='#' data-id="<?php echo $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
+                    </div>
+                <?php endforeach ?>
+
+                <div id="div-valeurs-liste">
+                    <div class="row-fluid">
+                        <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                    </div>
+                    <div class="row-fluid">
+                        <div id="valeurs-liste" class="span10">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="pull-right">
                 <a href="/formulaire/edit/rubrique/<?php echo $this->champ['ID_RUBRIQUE'] ?>" type="button" class="btn">Annuler</a>

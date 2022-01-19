@@ -557,6 +557,11 @@
                             <controller>formulaire</controller>
                             <action>delete-champ</action>
                         </delete-champ>
+                        <delete-valeur-liste>
+                            <label>Suppression d'une valeur d'une liste</label>
+                            <controller>formulaire</controller>
+                            <action>delete-valeur-liste</action>
+                        </delete-valeur-liste>
                     </pages>
                 </formulaire>
             </pages>

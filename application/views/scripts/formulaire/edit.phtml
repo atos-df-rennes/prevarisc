@@ -43,9 +43,25 @@
     </div>
 </div>
 
-<div class="row-fluid">
+<div id="edit-rubrique" class="row-fluid">
     <div class="span4 infos-champ">
-        <?php echo $this->fieldForm; ?>
+        <form id="field-form" enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
+            <?php echo $this->fieldForm->nom_champ ?>
+            <?php echo $this->fieldForm->type_champ ?>
+
+            <div id="div-valeurs-liste">
+                <h5>Définition des valeurs de la liste</h5>
+                <div class="row-fluid">
+                    <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                </div>
+                <div class="row-fluid">
+                    <div id="valeurs-liste" class="span10">
+                    </div>
+                </div>
+            </div>
+
+            <?php echo $this->fieldForm->save ?>
+        </form>
     </div>
 
     <div id="saved-fields" class="span7 offset1">
@@ -62,9 +78,19 @@
                     <?php foreach($this->champs as $champ): ?>
                         <tr>
                             <td><?php echo $champ['NOM'] ?></td>
-                            <td><?php echo $champ['TYPE'] ?></td>
+                            <td>
+                                <?php echo $champ['TYPE'] ?>
+                                <?php if($champ['TYPE'] === 'Liste'): ?>
+                                    <ul>
+                                        <?php foreach($champ['VALEURS'] as $valeur): ?>
+                                            <li><?php echo $valeur['VALEUR'] ?></li>
+                                        <?php endforeach ?>
+                                    </ul>
+                                <?php endif ?>
+                            </td>
                             <td>
                                 <div><a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Modifier</a></div>
+                                <!-- Faire un appel AJAX sur le supprimer pour ne pas avoir à recharger la page -->
                                 <div><a href="/formulaire/delete-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Supprimer</a></div>
                             </td>
                         </tr>
