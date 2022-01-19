@@ -88,10 +88,10 @@
                                     </ul>
                                 <?php endif ?>
                             </td>
-                            <td>
-                                <div><a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Modifier</a></div>
+                            <td id="actions">
+                                <a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Modifier</a>
                                 <!-- Faire un appel AJAX sur le supprimer pour ne pas avoir à recharger la page -->
-                                <div><a href="/formulaire/delete-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Supprimer</a></div>
+                                <a href="/formulaire/delete-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Supprimer</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

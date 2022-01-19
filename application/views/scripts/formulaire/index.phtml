@@ -49,9 +49,9 @@
                                         </p>
                                     <?php endif ?>
                                 </td>
-                                <td>
-                                    <div><a href="/formulaire/edit/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Modifier</a></div>
-                                    <div><a href="/formulaire/delete/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Supprimer</a></div>
+                                <td id="actions">
+                                    <a href="/formulaire/edit-rubrique/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Modifier</a>
+                                    <a href="#" data-id="<?php echo $rubrique['ID_RUBRIQUE'] ?>" class="delete-rubrique">Supprimer</a>
                                 </td>
                             </tr>
                         <?php endforeach ?>

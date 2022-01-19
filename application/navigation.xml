@@ -537,16 +537,16 @@
                             <controller>formulaire</controller>
                             <action>index</action>
                         </index>
-                        <edit>
-                            <label>Édition</label>
+                        <edit-rubrique>
+                            <label>Édition d'une rubrique</label>
                             <controller>formulaire</controller>
-                            <action>edit</action>
-                        </edit>
-                        <delete>
-                            <label>Suppression</label>
+                            <action>edit-rubrique</action>
+                        </edit-rubrique>
+                        <delete-rubrique>
+                            <label>Suppression d'une rubrique</label>
                             <controller>formulaire</controller>
-                            <action>delete</action>
-                        </delete>
+                            <action>delete-rubrique</action>
+                        </delete-rubrique>
                         <edit-champ>
                             <label>Édition d'un champ</label>
                             <controller>formulaire</controller>
@@ -1247,6 +1247,5 @@
                 </dev>
             </pages>
         </about>
-
     </nav>
 </configdata>

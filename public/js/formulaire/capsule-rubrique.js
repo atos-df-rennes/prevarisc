@@ -18,4 +18,21 @@ $(document).ready(function() {
         })
         return false
     })
+
+    $('.delete-rubrique').on('click', function() {
+        const id = this.getAttribute('data-id')
+        const parentDiv = $(this).parent().parent()
+
+        $.ajax({
+            url: '/formulaire/delete-rubrique/rubrique/'+id,
+            type: 'POST',
+            success: function() {
+                parentDiv.remove()
+            },
+            error: function() {
+                return false
+            }
+        })
+        return false
+    })
 })

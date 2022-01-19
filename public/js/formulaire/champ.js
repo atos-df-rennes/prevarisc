@@ -17,7 +17,7 @@ $(document).ready(function() {
         const parentDiv = $(this).parent()
 
         $.ajax({
-            url: '/formulaire/delete-valeur-liste/id/'+id,
+            url: '/formulaire/delete-valeur-liste/liste/'+id,
             type: 'POST',
             success: function() {
                 parentDiv.remove()

@@ -48,7 +48,7 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
-    public function editAction(): void
+    public function editRubriqueAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
@@ -81,7 +81,7 @@ class FormulaireController extends Zend_Controller_Action
             try {
                 $post = $request->getPost();
                 $idTypeChamp = intval($post['type_champ']);
-                $listeId = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+                $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
                 // FIXME Voir pour séparer les actions et faire une action spécifique pour l'ajout de champ
                 // Cas de l'ajout d'un champ à la rubrique
@@ -92,7 +92,7 @@ class FormulaireController extends Zend_Controller_Action
                         'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
                     ));
                     
-                    if ($idTypeChamp === $listeId) {
+                    if ($idTypeChamp === $idListe) {
                         // On récupère les valeurs de la liste séparément des autres champs
                         $listValueArray = array_filter($post, function($key) {
                             return strpos($key, 'valeur-') === 0;
@@ -131,11 +131,11 @@ class FormulaireController extends Zend_Controller_Action
 
         $serviceFormulaire = new Service_Formulaire();
 
-        $champId = intval($this->getParam('champ'));
-        $champ = $modelChamp->find($champId)->current();
+        $idChamp = intval($this->getParam('champ'));
+        $champ = $modelChamp->find($idChamp)->current();
         
-        $listeId = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
-        if ($champ['ID_TYPECHAMP'] === $listeId) {
+        $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+        if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             $this->view->assign('valeursChamp', $valeursChamp);
         }
@@ -182,16 +182,16 @@ class FormulaireController extends Zend_Controller_Action
             
             $champ->NOM = $post['nom_champ'];
             $champ->save();
-            $this->_helper->redirector('edit', null, null, array('rubrique' => $rubrique['ID_RUBRIQUE']));
+            $this->_helper->redirector('edit-rubrique', null, null, array('rubrique' => $rubrique['ID_RUBRIQUE']));
         }
     }
 
-    public function deleteAction(): void
+    public function deleteRubriqueAction(): void
     {
         $modelRubrique = new Model_DbTable_Rubrique();
-        $rubriqueId = intval($this->getParam('rubrique'));
+        $idRubrique = intval($this->getParam('rubrique'));
 
-        $rubrique = $modelRubrique->find($rubriqueId)->current();
+        $rubrique = $modelRubrique->find($idRubrique)->current();
         $rubrique->delete();
 
         $this->_helper->redirector('index');
@@ -206,14 +206,14 @@ class FormulaireController extends Zend_Controller_Action
         $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
 
-        $this->_helper->redirector('edit', null, null, array('rubrique' => $idRubrique));
+        $this->_helper->redirector('edit-rubrique', null, null, array('rubrique' => $idRubrique));
     }
 
     public function deleteValeurListeAction(): void
     {
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
 
-        $idValeurListe = $this->getParam('id');
+        $idValeurListe = $this->getParam('liste');
         $valeurListe = $modelChampValeurListe->find($idValeurListe)->current();
         $valeurListe->delete();
     }

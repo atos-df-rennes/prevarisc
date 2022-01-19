@@ -26,3 +26,7 @@ div[id^='saved-rubriques-'] a {
 #edit-rubrique #div-valeurs-liste {
     display: none;
 }
+
+#actions a {
+    display: block;
+}
