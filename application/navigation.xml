@@ -537,6 +537,11 @@
                             <controller>formulaire</controller>
                             <action>index</action>
                         </index>
+                        <add-rubrique>
+                            <label>Ajout d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>add-rubrique</action>
+                        </add-rubrique>
                         <edit-rubrique>
                             <label>Édition d'une rubrique</label>
                             <controller>formulaire</controller>

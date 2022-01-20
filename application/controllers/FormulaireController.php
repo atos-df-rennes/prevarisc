@@ -10,10 +10,7 @@ class FormulaireController extends Zend_Controller_Action
 
         // Définition des forms, models et services
         $form = new Form_CustomForm();
-
-        $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $modelRubrique = new Model_DbTable_Rubrique();
-
         $serviceFormulaire = new Service_Formulaire();
 
         $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
@@ -27,24 +24,28 @@ class FormulaireController extends Zend_Controller_Action
         // Assignation des variables à la vue
         $this->view->assign('form', $form);
         $this->view->assign('formulaires', $capsulesRubriques);
+    }
+
+    public function addRubriqueAction(): void
+    {
+        $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+        $modelRubrique = new Model_DbTable_Rubrique();
 
         // Sauvegarde des rubriques ajoutées
         $request = $this->getRequest();
         if ($request->isPost()) {
-            try {
-                $post = $request->getPost();
+            $post = $request->getPost();
 
-                $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
-                $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
+            $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
+            $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
 
-                $modelRubrique->insert(array(
-                    'NOM' => $post['nom_rubrique'],
-                    'DEFAULT_DISPLAY' => intval($post['afficher_rubrique']),
-                    'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
-                ));
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'Les rubriques n\'ont pas été ajoutées. Veuillez rééssayez. ('.$e->getMessage().')'));
-            }
+            $idRubrique = $modelRubrique->insert(array(
+                'NOM' => $post['nom_rubrique'],
+                'DEFAULT_DISPLAY' => intval($post['afficher_rubrique']),
+                'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
+            ));
+
+            echo intval($idRubrique);
         }
     }
 
