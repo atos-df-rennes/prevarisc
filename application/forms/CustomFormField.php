@@ -9,7 +9,6 @@ class Form_CustomFormField extends Zend_Form
     {
         $this->setMethod('post');
         $this->setAttrib('class', 'form-inline');
-        $this->setAttrib('id', 'field-form');
 
         $this->addElement('text', 'nom_champ', array(
             'label' => 'Nom du champ',
@@ -26,6 +25,7 @@ class Form_CustomFormField extends Zend_Form
 
         $submit = new Zend_Form_Element_Button('save');
         $submit->class = 'btn btn-success pull-right';
+        $submit->id = 'add-champ';
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
 

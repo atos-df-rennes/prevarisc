@@ -8,7 +8,7 @@ class Form_CustomForm extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-        $this->setAttrib('class', 'form-inline rubrique-form');
+        $this->setAttrib('class', 'form-inline');
 
         $this->addElement('text', 'nom_rubrique', array(
             'label' => 'Nom de la rubrique',
@@ -22,7 +22,7 @@ class Form_CustomForm extends Zend_Form
         ));
 
         $submit = new Zend_Form_Element_Button('save');
-        $submit->class = 'btn btn-success pull-right';
+        $submit->class = 'btn btn-success pull-right add-rubrique';
         $submit->setLabel('Ajouter la rubrique');
         $this->addElement($submit);
 
