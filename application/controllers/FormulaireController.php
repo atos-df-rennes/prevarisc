@@ -29,23 +29,15 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addRubriqueAction(): void
     {
-        $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
         $modelRubrique = new Model_DbTable_Rubrique();
+        $serviceFormulaire = new Service_Formulaire();
 
         // Sauvegarde des rubriques ajoutées
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
 
-            $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($post['capsule_rubrique']);
-            $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
-
-            $idRubrique = $modelRubrique->insert(array(
-                'NOM' => $post['nom_rubrique'],
-                'DEFAULT_DISPLAY' => intval($post['afficher_rubrique']),
-                'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
-            ));
-
+            $idRubrique = $serviceFormulaire->insertRubrique($post);
             $insertedRowAsArray = $modelRubrique->find($idRubrique)->current()->toArray();
 
             echo json_encode($insertedRowAsArray);
@@ -110,44 +102,25 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addChampAction(): void
     {
-        $modelRubrique = new Model_DbTable_Rubrique();
         $modelChamp = new Model_DbTable_Champ();
+        $modelRubrique = new Model_DbTable_Rubrique();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
-        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
+        $serviceFormulaire = new Service_Formulaire();
 
         $idRubrique = intval($this->getParam('rubrique'));
-        $rubrique = $modelRubrique->find($idRubrique)->current();
+        $rubrique = $modelRubrique->find($idRubrique)->current()->toArray();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-
-            $idTypeChamp = intval($post['type_champ']);
             $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-            $idChamp = $modelChamp->insert(array(
-                'NOM' => $post['nom_champ'],
-                'ID_TYPECHAMP' => $idTypeChamp,
-                'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
-            ));
-
-            $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp);
+            $champ = $serviceFormulaire->insertChamp($post, $rubrique);
+            $idChamp = intval($champ['ID_CHAMP']);
+            $idTypeChamp = intval($champ['ID_TYPECHAMP']);
             
-            if ($idTypeChamp === $idListe) {
-                // On récupère les valeurs de la liste séparément des autres champs
-                $listValueArray = array_filter($post, function($key) {
-                    return strpos($key, 'valeur-') === 0;
-                }, ARRAY_FILTER_USE_KEY);
-
-                foreach ($listValueArray as $listValue) {
-                    $modelChampValeurListe->insert(array(
-                        'VALEUR' => $listValue,
-                        'ID_CHAMP' => $idChamp
-                    ));
-                }
-
-                $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp, true);
-            }
+            $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp, ($idTypeChamp === $idListe));
 
             echo json_encode($insertedRowAsArray);
         }
