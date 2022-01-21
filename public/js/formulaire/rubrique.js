@@ -22,6 +22,8 @@ $(document).ready(function() {
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
             success: function(data) {
+                const parsedData = JSON.parse(data)
+
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
                     savedFieldsDiv.append(getTableElement())
@@ -30,7 +32,6 @@ $(document).ready(function() {
                     </div>`)
                 }
 
-                const parsedData = JSON.parse(data)
                 const table = savedFieldsDiv.children('table')
                 table.append(getRowElement(parsedData))
 

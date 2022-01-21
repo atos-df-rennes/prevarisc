@@ -45,7 +45,9 @@ class FormulaireController extends Zend_Controller_Action
                 'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
             ));
 
-            echo intval($idRubrique);
+            $insertedRowAsArray = $modelRubrique->find($idRubrique)->current()->toArray();
+
+            echo json_encode($insertedRowAsArray);
         }
     }
 

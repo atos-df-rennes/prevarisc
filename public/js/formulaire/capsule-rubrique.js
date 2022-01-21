@@ -5,17 +5,15 @@ $(document).ready(function() {
         const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
         const savedRubriquesTitlesDiv = $('#'+capsuleRubrique+' .titles')
 
-        // FIXME Faire comme pour les champs
-        // Pour le controller
         const formData = $(form).serialize()
-        // Pour l'affichage via Ajax
-        const formDataArray = $(form).serializeArray()
 
         $.ajax({
             url: '/formulaire/add-rubrique',
             data: formData+'&capsule_rubrique='+capsuleRubrique,
             type: 'POST',
-            success: function(id) {
+            success: function(data) {
+                const parsedData = JSON.parse(data)
+
                 // On crée la table uniquement si elle n'existe pas
                 if (savedRubriquesDiv.children().length === 0) {
                     savedRubriquesTitlesDiv.append(`<div class="span7 offset1">
@@ -25,7 +23,7 @@ $(document).ready(function() {
                 }
 
                 const table = savedRubriquesDiv.children('table')
-                table.append(getRowElement(formDataArray, id))
+                table.append(getRowElement(parsedData))
 
                 form.reset()
             },
@@ -84,10 +82,9 @@ function getTableElement() {
     </table>`
 }
 
-function getRowElement(data, id) {
-    const afficherRubrique = data.length === 3 ? data[2].value : data[1].value
+function getRowElement(parsedData) {
     let defaultDisplay = ``;
-    if (parseInt(afficherRubrique) === 1) {
+    if (parsedData.DEFAULT_DISPLAY === 1) {
         defaultDisplay =
             `<p class='text-center'>
                 <i class='icon-ok'></i>
@@ -96,14 +93,14 @@ function getRowElement(data, id) {
 
     return `<tr>
         <td>`
-        +data[0].value+
+        +parsedData.NOM+
         `</td>
         <td>`
         +defaultDisplay+
         `</td>
         <td id='actions'>
-            <a href='/formulaire/edit-rubrique/rubrique/`+id+`'>Modifier</a>
-            <a href='#' data-id='`+id+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>Supprimer</a>
+            <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>Modifier</a>
+            <a href='#' data-id='`+parsedData.ID_RUBRIQUE+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>Supprimer</a>
         </td>
     </tr>`
 }
