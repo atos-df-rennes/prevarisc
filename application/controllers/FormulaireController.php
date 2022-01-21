@@ -7,6 +7,7 @@ class FormulaireController extends Zend_Controller_Action
         // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
 
         // Définition des forms, models et services
         $form = new Form_CustomForm();
@@ -55,6 +56,7 @@ class FormulaireController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
 
         $fieldForm = new Form_CustomFormField();
 
@@ -93,6 +95,17 @@ class FormulaireController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
         }
+    }
+
+    public function deleteRubriqueAction(): void
+    {
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $idRubrique = intval($this->getParam('rubrique'));
+
+        $rubrique = $modelRubrique->find($idRubrique)->current();
+        $rubrique->delete();
+
+        $this->_helper->redirector('index');
     }
 
     public function addChampAction(): void
@@ -144,6 +157,7 @@ class FormulaireController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
 
         $modelChamp = new Model_DbTable_Champ();
         $modelRubrique = new Model_DbTable_Rubrique();
@@ -205,17 +219,6 @@ class FormulaireController extends Zend_Controller_Action
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, array('rubrique' => $rubrique['ID_RUBRIQUE']));
         }
-    }
-
-    public function deleteRubriqueAction(): void
-    {
-        $modelRubrique = new Model_DbTable_Rubrique();
-        $idRubrique = intval($this->getParam('rubrique'));
-
-        $rubrique = $modelRubrique->find($idRubrique)->current();
-        $rubrique->delete();
-
-        $this->_helper->redirector('index');
     }
 
     public function deleteChampAction(): void
