@@ -115,6 +115,8 @@ class FormulaireController extends Zend_Controller_Action
                 'ID_TYPECHAMP' => $idTypeChamp,
                 'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
             ));
+
+            $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp);
             
             if ($idTypeChamp === $idListe) {
                 // On récupère les valeurs de la liste séparément des autres champs
@@ -128,9 +130,10 @@ class FormulaireController extends Zend_Controller_Action
                         'ID_CHAMP' => $idChamp
                     ));
                 }
+
+                $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp, true);
             }
 
-            $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp);
             echo json_encode($insertedRowAsArray);
         }
     }

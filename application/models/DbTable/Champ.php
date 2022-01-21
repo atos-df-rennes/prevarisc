@@ -17,7 +17,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getChampAndJoins(int $idChamp): array
+    public function getChampAndJoins(int $idChamp, bool $hasList = false): array
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
@@ -26,6 +26,10 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE',array('ID_RUBRIQUE'))
             ->where('c.ID_CHAMP = ?', $idChamp);
 
-        return $this->fetchRow($select)->toArray();
+        if ($hasList) {
+            $select->joinLeft(array('cvl' => 'champvaleurliste'), 'c.ID_CHAMP = cvl.ID_CHAMP', array('VALEUR'));
+        }
+
+        return $this->fetchAll($select)->toArray();
     }
 }
