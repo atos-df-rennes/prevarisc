@@ -1,3 +1,4 @@
+<!-- FIXME A faire dans le controller ? -->
 <link rel="stylesheet" href="/css/formulaire.css" />
 
 <?php
@@ -5,59 +6,61 @@
     $lastKey = end($arrayKeys);
 ?>
 <?php foreach($this->formulaires as $key => $formulaire) : ?>
-    <div class="row-fluid">
-        <h2>
-            <?php echo $formulaire['NOM'] ?>
-        </h2>
-    </div>
+    <div id="<?php echo $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+        <div class="span12">
+            <h2>
+                <?php echo $formulaire['NOM'] ?>
+            </h2>
 
-    <div class="row-fluid">
-        <div class="span4">
-            <h3>Informations sur la rubrique</h3>
-        </div>
+            <div class="row-fluid titles">
+                <div class="span4">
+                    <h3>Informations sur la rubrique</h3>
+                </div>
 
-        <div class="span7 offset1">
-            <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
-                <h3>Liste des rubriques</h3>
-            <?php endif ?>
-        </div>
-    </div>
+                <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
+                    <div class="span7 offset1">
+                        <h3>Liste des rubriques</h3>
+                    </div>
+                <?php endif ?>
+            </div>
 
-    <div class="row-fluid">
-        <div id="<?php echo $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
-            <?php echo $this->form ?>
-        </div>
+            <div class="row-fluid">
+                <div id="<?php echo $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
+                    <?php echo $this->form ?>
+                </div>
 
-        <div id="saved-rubriques-<?php echo $formulaire['NOM_INTERNE'] ?>" class="span7 offset1">
-            <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Nom de la rubrique</th>
-                            <th>Afficher la rubrique par défaut</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
-                            <tr>
-                                <td><?php echo $rubrique['NOM'] ?></td>
-                                <td>
-                                    <?php if($rubrique['DEFAULT_DISPLAY']): ?>
-                                        <p class="text-center">
-                                            <i class="icon-ok"></i>
-                                        </p>
-                                    <?php endif ?>
-                                </td>
-                                <td id="actions">
-                                    <a href="/formulaire/edit-rubrique/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Modifier</a>
-                                    <a href="#" data-id="<?php echo $rubrique['ID_RUBRIQUE'] ?>" class="delete-rubrique">Supprimer</a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            <?php endif ?>
+                <div class="span7 offset1 saved-rubriques">
+                    <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Nom de la rubrique</th>
+                                    <th>Afficher la rubrique par défaut</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
+                                    <tr>
+                                        <td><?php echo $rubrique['NOM'] ?></td>
+                                        <td>
+                                            <?php if($rubrique['DEFAULT_DISPLAY']): ?>
+                                                <p class="text-center">
+                                                    <i class="icon-ok"></i>
+                                                </p>
+                                            <?php endif ?>
+                                        </td>
+                                        <td id="actions">
+                                            <a href="/formulaire/edit-rubrique/rubrique/<?php echo $rubrique['ID_RUBRIQUE'] ?>">Modifier</a>
+                                            <a href="#" data-id="<?php echo $rubrique['ID_RUBRIQUE'] ?>" class="delete-rubrique">Supprimer</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    <?php endif ?>
+                </div>
+            </div>
         </div>
     </div>
 

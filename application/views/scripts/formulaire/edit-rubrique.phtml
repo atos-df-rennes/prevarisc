@@ -33,15 +33,16 @@
     </div>
 </div>
 
-<div class="row-fluid">
+<div class="row-fluid titles">
     <div class="span4">
         <h3>Informations sur le champ</h3>
     </div>
-    <div class="span7 offset1">
-        <?php if(count($this->champs) > 0): ?>
+
+    <?php if(count($this->champs) > 0): ?>
+        <div class="span7 offset1">
             <h3>Liste des champs</h3>
-        <?php endif ?>
-    </div>
+        </div>
+    <?php endif ?>
 </div>
 
 <div id="edit-rubrique" class="row-fluid">

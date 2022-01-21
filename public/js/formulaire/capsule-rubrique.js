@@ -1,9 +1,11 @@
 $(document).ready(function() {
     $('.add-rubrique').on('click', function() {
         const form = this.closest('form')
-        const capsuleRubrique = form.closest('div').id
-        const savedRubriquesDiv = $('#saved-rubriques-'+capsuleRubrique)
+        const capsuleRubrique = form.closest('.objet').id
+        const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
+        const savedRubriquesTitlesDiv = $('#'+capsuleRubrique+' .titles')
 
+        // FIXME Faire comme pour les champs
         // Pour le controller
         const formData = $(form).serialize()
         // Pour l'affichage via Ajax
@@ -16,6 +18,9 @@ $(document).ready(function() {
             success: function(id) {
                 // On crée la table uniquement si elle n'existe pas
                 if (savedRubriquesDiv.children().length === 0) {
+                    savedRubriquesTitlesDiv.append(`<div class="span7 offset1">
+                        <h3>Liste des rubriques</h3>
+                    </div>`)
                     savedRubriquesDiv.append(getTableElement())
                 }
 
@@ -44,15 +49,8 @@ function deleteRubrique(element) {
     const parentTable = $(element).closest('table')
     const nbOfRows = parentTable.children('tbody').children('tr').length
 
-    const parentTableDiv = $(element).closest('.row-fluid')
-    const parentDivTitlesDiv = parentTableDiv.prev().children()
-    let parentDivTitleDiv = null
-
-    for (let i = 0; i < parentDivTitlesDiv.length; i++) {
-        if (parentDivTitlesDiv[i].className === 'span7 offset1') {
-            parentDivTitleDiv = parentDivTitlesDiv[i]
-        }
-    }
+    const parentObject = element.closest('.objet').id
+    let parentDivTitleDiv = $('#'+parentObject+' .titles .span7.offset1')
 
     $.ajax({
         url: '/formulaire/delete-rubrique/rubrique/'+id,
@@ -60,9 +58,7 @@ function deleteRubrique(element) {
         success: function() {
             if (nbOfRows === 1) {
                 parentTable.remove()
-                if (parentDivTitleDiv !== null) {
-                    parentDivTitleDiv.remove()
-                }
+                parentDivTitleDiv.remove()
             } else {
                 parentDiv.remove()
             }

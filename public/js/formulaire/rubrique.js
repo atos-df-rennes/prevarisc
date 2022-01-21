@@ -11,8 +11,9 @@ $(document).ready(function() {
 
     $('#add-champ').on('click', function() {
         const form = this.closest('form')
-        const savedRubriquesDiv = $('#saved-fields')
+        const savedFieldsDiv = $('#saved-fields')
         const idRubrique = $('#rubrique-id').val()
+        const savedFieldsTitlesDiv = $('.titles')
 
         const formData = $(form).serialize()
 
@@ -22,12 +23,15 @@ $(document).ready(function() {
             type: 'POST',
             success: function(data) {
                 // On crée la table uniquement si elle n'existe pas
-                if (savedRubriquesDiv.children().length === 0) {
-                    savedRubriquesDiv.append(getTableElement())
+                if (savedFieldsDiv.children().length === 0) {
+                    savedFieldsDiv.append(getTableElement())
+                    savedFieldsTitlesDiv.append(`<div class="span7 offset1">
+                        <h3>Liste des champs</h3>
+                    </div>`)
                 }
 
                 const parsedData = JSON.parse(data)
-                const table = savedRubriquesDiv.children('table')
+                const table = savedFieldsDiv.children('table')
                 table.append(getRowElement(parsedData))
 
                 if (parsedData[0].TYPE === 'Liste') {
@@ -81,15 +85,7 @@ function deleteChamp(element) {
     const parentTable = $(element).closest('table')
     const nbOfRows = parentTable.children('tbody').children('tr').length
 
-    const parentTableDiv = $(element).closest('.row-fluid')
-    const parentDivTitlesDiv = parentTableDiv.prev().children()
-    let parentDivTitleDiv = null
-
-    for (let i = 0; i < parentDivTitlesDiv.length; i++) {
-        if (parentDivTitlesDiv[i].className === 'span7 offset1') {
-            parentDivTitleDiv = parentDivTitlesDiv[i]
-        }
-    }
+    const parentDivTitleDiv = $('.titles .span7.offset1')
 
     $.ajax({
         url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
@@ -97,9 +93,7 @@ function deleteChamp(element) {
         success: function() {
             if (nbOfRows === 1) {
                 parentTable.remove()
-                if (parentDivTitleDiv !== null) {
-                    parentDivTitleDiv.remove()
-                }
+                parentDivTitleDiv.remove()
             } else {
                 parentDiv.remove()
             }
@@ -126,8 +120,6 @@ function getTableElement() {
 }
 
 function getRowElement(parsedData) {
-    console.log(parsedData)
-
     return `<tr>
         <td>`
         +parsedData[0].NOM+
