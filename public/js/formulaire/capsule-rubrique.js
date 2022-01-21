@@ -31,7 +31,8 @@ $(document).ready(function() {
         return false
     })
 
-    $('.delete-rubrique').on('click', function() {
+    $('.delete-rubrique').on('click', function(e) {
+        e.preventDefault()
         deleteRubrique(this)
     })
 })
@@ -106,7 +107,7 @@ function getRowElement(data, id) {
         `</td>
         <td id='actions'>
             <a href='/formulaire/edit-rubrique/rubrique/`+id+`'>Modifier</a>
-            <a href='#' data-id='`+id+`' class='delete-rubrique' onclick='deleteRubrique(this)'>Supprimer</a>
+            <a href='#' data-id='`+id+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>Supprimer</a>
         </td>
     </tr>`
 }

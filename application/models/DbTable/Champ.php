@@ -16,4 +16,16 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
+    public function getChampAndJoins(int $idChamp): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(array('c' => 'champ'), array('ID_CHAMP', 'NOM'))
+            ->join(array('ltcr' => 'listetypechamprubrique'), 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP',array('TYPE'))
+            ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE',array('ID_RUBRIQUE'))
+            ->where('c.ID_CHAMP = ?', $idChamp);
+
+        return $this->fetchRow($select)->toArray();
+    }
 }

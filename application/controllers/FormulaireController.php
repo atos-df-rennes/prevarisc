@@ -81,42 +81,57 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
-                $idTypeChamp = intval($post['type_champ']);
-                $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-                // FIXME Voir pour séparer les actions et faire une action spécifique pour l'ajout de champ
-                // Cas de l'ajout d'un champ à la rubrique
-                if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-                    $idChamp = $modelChamp->insert(array(
-                        'NOM' => $post['nom_champ'],
-                        'ID_TYPECHAMP' => $idTypeChamp,
-                        'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
-                    ));
-                    
-                    if ($idTypeChamp === $idListe) {
-                        // On récupère les valeurs de la liste séparément des autres champs
-                        $listValueArray = array_filter($post, function($key) {
-                            return strpos($key, 'valeur-') === 0;
-                        }, ARRAY_FILTER_USE_KEY);
+                $rubrique->NOM = $post['nom_rubrique'];
+                $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
+                $rubrique->save();
 
-                        foreach ($listValueArray as $listValue) {
-                            $modelChampValeurListe->insert(array(
-                                'VALEUR' => $listValue,
-                                'ID_CHAMP' => $idChamp
-                            ));
-                        }
-                    }
-                } else {
-                    // Cas de modification des informations de la rubrique
-                    $rubrique->NOM = $post['nom_rubrique'];
-                    $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
-                    $rubrique->save();
-
-                    $this->_helper->redirector('index');
-                }
+                $this->_helper->redirector('index');
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
             }
+        }
+    }
+
+    public function addChampAction(): void
+    {
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $modelChamp = new Model_DbTable_Champ();
+        $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
+        $idRubrique = intval($this->getParam('rubrique'));
+        $rubrique = $modelRubrique->find($idRubrique)->current();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+
+            $idTypeChamp = intval($post['type_champ']);
+            $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+
+            $idChamp = $modelChamp->insert(array(
+                'NOM' => $post['nom_champ'],
+                'ID_TYPECHAMP' => $idTypeChamp,
+                'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
+            ));
+            
+            if ($idTypeChamp === $idListe) {
+                // On récupère les valeurs de la liste séparément des autres champs
+                $listValueArray = array_filter($post, function($key) {
+                    return strpos($key, 'valeur-') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                foreach ($listValueArray as $listValue) {
+                    $modelChampValeurListe->insert(array(
+                        'VALEUR' => $listValue,
+                        'ID_CHAMP' => $idChamp
+                    ));
+                }
+            }
+
+            $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp);
+            echo json_encode($insertedRowAsArray);
         }
     }
 

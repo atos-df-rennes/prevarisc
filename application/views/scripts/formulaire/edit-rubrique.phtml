@@ -9,6 +9,7 @@
     <h3>Informations sur la rubrique</h3>
     <div class="span4 infos-rubrique">
         <form action class="form-inline" method="post">
+            <input type="hidden" id="rubrique-id" value="<?php echo $this->rubrique['ID_RUBRIQUE'] ?>">
             <label for="nom_rubrique">Nom de la rubrique</label>
             <input type="text" name="nom_rubrique" id="nom_rubrique" value="<?php echo $this->rubrique['NOM'] ?>" required>
             <label for="afficher_rubrique">Afficher la rubrique par défaut</label>

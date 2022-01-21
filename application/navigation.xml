@@ -552,6 +552,11 @@
                             <controller>formulaire</controller>
                             <action>delete-rubrique</action>
                         </delete-rubrique>
+                        <add-champ>
+                            <label>Ajout d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>add-champ</action>
+                        </add-champ>
                         <edit-champ>
                             <label>Édition d'un champ</label>
                             <controller>formulaire</controller>
