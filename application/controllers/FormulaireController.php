@@ -7,7 +7,7 @@ class FormulaireController extends Zend_Controller_Action
         // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         // Définition des forms, models et services
         $form = new Form_CustomForm();
@@ -48,7 +48,7 @@ class FormulaireController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         $fieldForm = new Form_CustomFormField();
 
@@ -130,7 +130,7 @@ class FormulaireController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         $modelChamp = new Model_DbTable_Champ();
         $modelRubrique = new Model_DbTable_Rubrique();

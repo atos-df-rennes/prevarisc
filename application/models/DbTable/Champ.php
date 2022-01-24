@@ -5,6 +5,15 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     protected $_name = 'champ'; // Nom de la base
     protected $_primary = 'ID_CHAMP'; // Clé primaire
 
+    public function findAll(): array
+    {
+        $select = $this->select()
+                ->setIntegrityCheck(false)
+                ->from('champ');
+
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function getChampsByRubrique(int $idRubrique): array
     {
         $select = $this->select()
@@ -26,7 +35,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE',array('ID_RUBRIQUE'))
             ->where('c.ID_CHAMP = ?', $idChamp);
 
-        if ($hasList) {
+        if ($hasList === true) {
             $select->joinLeft(array('cvl' => 'champvaleurliste'), 'c.ID_CHAMP = cvl.ID_CHAMP', array('VALEUR'));
         }
 

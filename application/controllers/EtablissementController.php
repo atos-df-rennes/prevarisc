@@ -2,6 +2,8 @@
 
 class EtablissementController extends Zend_Controller_Action
 {
+    const CAPSULE_RUBRIQUE = 'descriptifEtablissement';
+
     public function indexAction()
     {
         $this->_helper->layout->setLayout('etablissement');
@@ -175,39 +177,82 @@ class EtablissementController extends Zend_Controller_Action
 
     public function descriptifAction()
     {
+        if (intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) === 1) {
+            $this->descriptifPersonnaliseAction();
+        } else {
+            $this->_helper->layout->setLayout('etablissement');
+
+            $service_etablissement = new Service_Etablissement();
+
+            $this->view->etablissement = $service_etablissement->get($this->_request->id);
+
+            $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
+
+            $descriptifs = $service_etablissement->getDescriptifs($this->_request->id);
+
+            $this->view->descriptif = $descriptifs['descriptif'];
+            $this->view->historique = $descriptifs['historique'];
+            $this->view->derogations = $descriptifs['derogations'];
+            $this->view->champs_descriptif_technique = $descriptifs['descriptifs_techniques'];
+        }
+    }
+
+    public function descriptifPersonnaliseAction(): void
+    {
         $this->_helper->layout->setLayout('etablissement');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+
+        $modelRubrique = new Model_DbTable_Rubrique();
+        $modelChamp = new Model_DbTable_Champ();
 
         $service_etablissement = new Service_Etablissement();
 
-        $this->view->etablissement = $service_etablissement->get($this->_request->id);
+        $champs = $modelChamp->findAll();
+        $sortedChamps =  [];
+        foreach ($champs as $champ) {
+            $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
+        }
 
-        $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
-
-        $descriptifs = $service_etablissement->getDescriptifs($this->_request->id);
-
-        $this->view->descriptif = $descriptifs['descriptif'];
-        $this->view->historique = $descriptifs['historique'];
-        $this->view->derogations = $descriptifs['derogations'];
-        $this->view->champs_descriptif_technique = $descriptifs['descriptifs_techniques'];
+        $this->view->assign('etablissement', $service_etablissement->get($this->_request->id));
+        $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
+        
+        // TODO Récupérer toutes les informations nécessaires
+        $this->view->assign('rubriques', $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE));
+        $this->view->assign('champs', $sortedChamps);
+        // Valeurs
     }
 
     public function editDescriptifAction()
     {
+        if (intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) === 1) {
+            $this->editDescriptifPersonnaliseAction();
+        } else {
+            $service_etablissement = new Service_Etablissement();
+
+            $this->descriptifAction();
+
+            if ($this->_request->isPost()) {
+                try {
+                    $post = $this->_request->getPost();
+                    $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
+                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));
+                } catch (Exception $e) {
+                    $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));
+                }
+
+                $this->_helper->redirector('descriptif', null, null, array('id' => $this->_request->id));
+            }
+        }
+    }
+
+    public function editDescriptifPersonnaliseAction(): void
+    {
         $service_etablissement = new Service_Etablissement();
 
-        $this->descriptifAction();
+        $this->descriptifPersonnaliseAction();
 
-        if ($this->_request->isPost()) {
-            try {
-                $post = $this->_request->getPost();
-                $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));
-            }
-
-            $this->_helper->redirector('descriptif', null, null, array('id' => $this->_request->id));
-        }
+        // TODO Faire le formulaire de modification
+        // TODO Envoyer les réponses
     }
 
     public function textesApplicablesAction()

@@ -1,0 +1,49 @@
+<div class='pull-right' >
+    <a class='btn' href="<?php echo $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
+</div>
+
+<div id='descriptif-personnalise'>
+    <h3>Descriptifs</h3>
+
+    <h4 class='h4_subtitle'>Descriptif technique</h4>
+    <?php foreach($this->rubriques as $rubrique): ?>
+        <a href='#<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></a>
+    <?php endforeach ?>
+
+    <?php foreach($this->rubriques as $rubrique): ?>
+        <h4 class='h4_subtitle' id='<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></h4>
+        <!-- TODO
+        Si texte ou nombre => p
+        Si texte long ou texte avec mise en page => textarea
+        Si liste => ul/li
+        Si case à cocher => p avec Oui/Non ? -->
+        <?php foreach($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
+            switch ($champ['ID_TYPECHAMP']) {
+                // Texte
+                case 1:
+                // Nombre
+                case 5: ?>
+                    <p><?php echo $champ['NOM'] ?> : Valeur ICI</p>
+                <?php break;
+                // Texte long
+                case 2:
+                // WYSIWYG => TODO A voir comment faire l'affichage
+                case 3: ?>
+                    <?php echo $champ['NOM'] ?>
+                    <textarea readonly>Valeur du textarea</textarea>
+                <?php break;
+                // Liste
+                case 4: ?>
+                    <ul>
+                        <!-- TODO foreach valeur => <li>$valeur</li> -->
+                    </ul>
+                <?php break;
+                // Case à cocher
+                case 6: ?>
+                <?php break;       
+                default:
+                    break;
+            }
+        endforeach ?>
+    <?php endforeach ?>
+</div>
