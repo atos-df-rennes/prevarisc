@@ -4,57 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5924ccca52dd5c661f28efb61fd75be",
+    "content-hash": "e077e1e76447f5f766ed4ba66a6e8d3f",
     "packages": [
-        {
-            "name": "catoth/html2opendocument",
-            "version": "0.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CatoTH/html2opendocument.git",
-                "reference": "17e6cef0f4368696acd34811bd349ee9895fccc2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CatoTH/html2opendocument/zipball/17e6cef0f4368696acd34811bd349ee9895fccc2",
-                "reference": "17e6cef0f4368696acd34811bd349ee9895fccc2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-zip": "*",
-                "ezyang/htmlpurifier": "*",
-                "php": ">=7.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CatoTH\\HTML2OpenDocument\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tobias Hößl",
-                    "email": "tobias@hoessl.eu"
-                }
-            ],
-            "description": "Converting simple HTML to Opendocument Text (ODT) or Spreadsheets (ODS)",
-            "keywords": [
-                "OpenDocument",
-                "html",
-                "ods",
-                "odt"
-            ],
-            "support": {
-                "issues": "https://github.com/CatoTH/html2opendocument/issues",
-                "source": "https://github.com/CatoTH/html2opendocument/tree/0.15"
-            },
-            "time": "2021-05-22T06:17:15+00:00"
-        },
         {
             "name": "cybermonde/odtphp",
             "version": "v1.7",
@@ -93,57 +44,6 @@
                 "source": "https://github.com/cybermonde/odtphp/tree/v1.7"
             },
             "time": "2015-06-02T07:28:25+00:00"
-        },
-        {
-            "name": "ezyang/htmlpurifier",
-            "version": "v4.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
-                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "HTMLPurifier": "library/"
-                },
-                "files": [
-                    "library/HTMLPurifier.composer.php"
-                ],
-                "exclude-from-classmap": [
-                    "/library/HTMLPurifier/Language/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Edward Z. Yang",
-                    "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com"
-                }
-            ],
-            "description": "Standards compliant HTML filter written in PHP",
-            "homepage": "http://htmlpurifier.org/",
-            "keywords": [
-                "html"
-            ],
-            "support": {
-                "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.14.0"
-            },
-            "time": "2021-12-25T01:21:49+00:00"
         },
         {
             "name": "jasig/phpcas",
@@ -258,6 +158,50 @@
             },
             "abandoned": true,
             "time": "2014-06-30T12:26:10+00:00"
+        },
+        {
+            "name": "kranemora/html2text",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kranemora/html2text.git",
+                "reference": "da3b9163c72a8f1b03fd5f2abc22b9c9e1e59de4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kranemora/html2text/zipball/da3b9163c72a8f1b03fd5f2abc22b9c9e1e59de4",
+                "reference": "da3b9163c72a8f1b03fd5f2abc22b9c9e1e59de4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5|^6",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "kranemora\\Html2Text\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fernando Pita",
+                    "email": "kranemora@gmail.com"
+                }
+            ],
+            "description": "Html to text converter",
+            "support": {
+                "issues": "https://github.com/kranemora/html2text/issues",
+                "source": "https://github.com/kranemora/html2text/tree/v1.0.0"
+            },
+            "time": "2019-08-28T17:59:11+00:00"
         },
         {
             "name": "michelf/php-markdown",

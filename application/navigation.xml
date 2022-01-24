@@ -1161,12 +1161,12 @@
                     <controller>search</controller>
                     <action>dossier</action>
                     <privilege>search_dossiers</privilege>
+                    <displayAjaxSearchEtablissement>
+                        <controller>search</controller>
+                        <action>display-ajax-search-etablissement</action>
+                        <privilege>search_ets</privilege>
+                    </displayAjaxSearchEtablissement>
                 </dossier>
-                <displayAjaxSearchEtablissement>
-                    <controller>search</controller>
-                    <action>display-ajax-search-etablissement</action>
-                    <privilege>search_ets</privilege>
-                </displayAjaxSearchEtablissement>
                 <displayAjaxSearchDossier>
                     <controller>search</controller>
                     <action>display-ajax-search-dossier</action>
@@ -1250,6 +1250,5 @@
                 </dev>
             </pages>
         </about>
-
     </nav>
 </configdata>
