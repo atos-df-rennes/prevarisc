@@ -247,12 +247,35 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifPersonnaliseAction(): void
     {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+        
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $service_etablissement = new Service_Etablissement();
 
+        $champsValeurListe = $modelChampValeurListe->findAll();
+        $sortedChampValeurListe =  [];
+        foreach ($champsValeurListe as $champValeurListe) {
+            $sortedChampValeurListe[$champValeurListe['ID_CHAMP']][] = $champValeurListe;
+        }
+
         $this->descriptifPersonnaliseAction();
+        $this->view->assign('champsvaleurliste', $sortedChampValeurListe);
 
         // TODO Faire le formulaire de modification
-        // TODO Envoyer les réponses
+        if ($this->_request->isPost()) {
+            try {
+                $post = $this->_request->getPost();
+                // TODO Modifier pour mettre la fonction qui sauvegarde toutes les informations du nouveau descriptif
+                $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
+                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));
+            }
+
+            $this->_helper->redirector('descriptif', null, null, array('id' => $this->_request->id));
+        }
     }
 
     public function textesApplicablesAction()

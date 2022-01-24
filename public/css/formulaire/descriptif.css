@@ -3,3 +3,7 @@
     text-decoration: underline;
     margin-left: 1rem;
 }
+
+.form-horizontal .control-group {
+    margin-bottom: 25px;
+}

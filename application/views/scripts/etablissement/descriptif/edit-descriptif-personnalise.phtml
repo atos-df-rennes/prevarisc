@@ -1,1 +1,115 @@
-<div>Modification</div>
+<form action='<?php echo $this->url(array('action' => 'edit-descriptif')) ?>' method='post' class='form-horizontal'>
+    <div class='pull-right' >
+        <div class="btn-group">
+            <a class='btn' href="<?php echo $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
+            <input type='submit' class="btn btn-success" value='Sauvegarder'>
+        </div>
+    </div>
+
+    <h3>Modification des descriptifs</h3>
+    <!-- TODO Mettre la partie Historique ? -->
+    <h4 class='h4_subtitle'>Descriptif</h4>
+    <div class='row-fluid'>
+        <div class='span10'>
+            <?php foreach($this->rubriques as $key => $rubrique):
+                if (($key % 4) === 0): ?>
+                    <div class='row-fluid'>
+                <?php endif ?>
+                    <div class='span3 control-group'>
+                        <label for="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>" class='control-label'><?php echo $rubrique['NOM'] ?></label>
+                        <div class='controls'>
+                            <input
+                                type="hidden"
+                                name="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>"
+                                value="0"
+                            >
+                            <input
+                                type="checkbox"
+                                name="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>"
+                                value="1"
+                                <?php echo $rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
+                            >
+                        </div>
+                    </div>
+                <?php if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
+                    </div>
+                <?php endif;
+            endforeach ?>
+        </div>
+    </div>
+
+    <?php foreach($this->rubriques as $rubrique): ?>
+        <div id='afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>' class="<?php echo $rubrique['DEFAULT_DISPLAY'] === 0 ? 'hide' : '' ?>">
+            <h4 class='h4_subtitle'><?php echo $rubrique['NOM'] ?></h4>
+
+            <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
+                foreach($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
+                    <div class='control-group'>
+                        <label for='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>' class='control-label'>
+                            <strong><?php echo $champ['NOM'] ?></strong>
+                        </label>
+                        <div class='controls'>
+                            <?php switch ($champ['ID_TYPECHAMP']) {
+                                // Texte
+                                case 1: ?>
+                                    <!-- TODO Ajouter les valeurs renseignées par l'utilisateur -->
+                                    <input
+                                        type='text'
+                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                    >
+                                <?php break;
+                                // Texte long
+                                case 2: ?>
+                                    <textarea name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'></textarea>
+                                <?php break;
+                                // WYSIWYG
+                                case 3: ?>
+                                    <div class='tinyarea'></div>
+                                <?php break;
+                                // Liste
+                                case 4: ?>
+                                    <select name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'>
+                                        <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
+                                            <option
+                                                value="<?php echo $champvaleurliste['ID_VALEURLISTE'] ?>"
+                                                <?php $champvaleurliste['ID_VALEURLISTE'] === $champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
+                                            >
+                                                <?php echo $champvaleurliste['VALEUR'] ?>
+                                            </option>
+                                        <?php endforeach ?>
+                                    </select>
+                                <?php break;
+                                // Nombre
+                                case 5: ?>
+                                    <input type='number' name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>' min='0'>
+                                <?php break;
+                                // Case à cocher
+                                case 6: ?>
+                                    <input
+                                        type="hidden"
+                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        value="0"
+                                    >
+                                    <!-- TODO Ajouter la vérification du 'checked' avec la valeur du champ -->
+                                    <input
+                                        type="checkbox"
+                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        value="1"
+                                    >
+                                <?php break;       
+                                default:
+                                    break;
+                            } ?>
+                        </div>
+                    </div>
+                <?php endforeach;
+            else: ?>
+                <div class='row-fluid'>
+                    <div class='span6 offset3'>
+                        <div class="alert">Aucun champ renseigné. Contactez un administrateur Prevarisc.</div>
+                    </div>
+                </div>
+            <?php endif ?>
+        </div>
+    <?php endforeach ?>
+</form>

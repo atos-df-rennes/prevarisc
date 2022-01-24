@@ -5,6 +5,15 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
     protected $_name = 'champvaleurliste'; // Nom de la base
     protected $_primary = 'ID_VALEURLISTE'; // Clé primaire
 
+    public function findAll(): array
+    {
+        $select = $this->select()
+                ->setIntegrityCheck(false)
+                ->from('champvaleurliste');
+
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function getValeurListeByChamp(int $idChamp): array
     {
         $select = $this->select()

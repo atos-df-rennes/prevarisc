@@ -2,7 +2,7 @@ form #save-element {
     margin: 0;
 }
 
-.form-inline input,
+.form-inline input:not([type="submit"]),
 .form-inline select {
     margin-bottom: 10px;
 }
