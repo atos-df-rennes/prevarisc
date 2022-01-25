@@ -16,6 +16,7 @@ class Service_Formulaire
         return $modelListeTypeChampRubrique->fetchAll()->toArray();
     }
 
+    // TODO A déplacer dans le Service Rubrique
     public function insertRubrique(array $rubrique): int
     {
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
@@ -33,6 +34,7 @@ class Service_Formulaire
         return intval($idRubrique);
     }
 
+    // TODO A déplacer dans le Service Champ
     public function insertChamp(array $champ, array $rubrique): array
     {
         $modelChamp = new Model_DbTable_Champ();

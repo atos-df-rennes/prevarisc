@@ -206,6 +206,9 @@ class EtablissementController extends Zend_Controller_Action
         $modelChamp = new Model_DbTable_Champ();
 
         $service_etablissement = new Service_Etablissement();
+        $service_rubrique = new Service_Rubrique();
+
+        $idEtablissement = $this->getParam('id');
 
         $champs = $modelChamp->findAll();
         $sortedChamps =  [];
@@ -213,11 +216,16 @@ class EtablissementController extends Zend_Controller_Action
             $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
         }
 
-        $this->view->assign('etablissement', $service_etablissement->get($this->_request->id));
+        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
+        foreach ($rubriques as &$rubrique) {
+            $rubrique['DISPLAY'] = $service_rubrique->getRubriqueDisplay($rubrique['ID_RUBRIQUE'], $idEtablissement);
+        }
+
+        $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
         
         // TODO Récupérer toutes les informations nécessaires
-        $this->view->assign('rubriques', $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE));
+        $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champs', $sortedChamps);
         // Valeurs
     }
@@ -252,7 +260,11 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
         
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+
         $service_etablissement = new Service_Etablissement();
+        $service_rubrique = new Service_Rubrique();
+
+        $idEtablissement = $this->getParam('id');
 
         $champsValeurListe = $modelChampValeurListe->findAll();
         $sortedChampValeurListe =  [];
@@ -267,8 +279,18 @@ class EtablissementController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             try {
                 $post = $this->_request->getPost();
+
+                foreach ($post as $rubrique => $value) {
+                    if (strpos($rubrique, 'afficher_rubrique-') === 0) {
+                        $explodedRubrique = explode('-', $rubrique);
+                        $idRubrique = end($explodedRubrique);
+
+                        $service_rubrique->updateRubriqueDisplay($idRubrique, $idEtablissement, intval($value));
+                    }
+                }
+
                 // TODO Modifier pour mettre la fonction qui sauvegarde toutes les informations du nouveau descriptif
-                $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
+                // $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));

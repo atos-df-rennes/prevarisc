@@ -11,7 +11,7 @@
     <h4 class='h4_subtitle'>Descriptif</h4>
     <div class='row-fluid'>
         <div class='span10'>
-            <?php foreach($this->rubriques as $key => $rubrique):
+            <?php foreach ($this->rubriques as $key => $rubrique):
                 if (($key % 4) === 0): ?>
                     <div class='row-fluid'>
                 <?php endif ?>
@@ -27,7 +27,7 @@
                                 type="checkbox"
                                 name="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>"
                                 value="1"
-                                <?php echo $rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
+                                <?php echo $rubrique['DISPLAY'] === true ? 'checked' : '' ?>
                             >
                         </div>
                     </div>
@@ -38,12 +38,12 @@
         </div>
     </div>
 
-    <?php foreach($this->rubriques as $rubrique): ?>
-        <div id='afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>' class="<?php echo $rubrique['DEFAULT_DISPLAY'] === 0 ? 'hide' : '' ?>">
+    <?php foreach ($this->rubriques as $rubrique): ?>
+        <div id='afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>' class="<?php echo $rubrique['DISPLAY'] === false ? 'hide' : '' ?>">
             <h4 class='h4_subtitle'><?php echo $rubrique['NOM'] ?></h4>
 
             <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
-                foreach($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
+                foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
                     <div class='control-group'>
                         <label for='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>' class='control-label'>
                             <strong><?php echo $champ['NOM'] ?></strong>
@@ -70,8 +70,9 @@
                                 case 4: ?>
                                     <select name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
+                                            <!-- Modifier la condition PHP pour qu'elle soit correcte -->
                                             <option
-                                                value="<?php echo $champvaleurliste['ID_VALEURLISTE'] ?>"
+                                                value="<?php echo $champvaleurliste['VALEUR'] ?>"
                                                 <?php $champvaleurliste['ID_VALEURLISTE'] === $champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
                                             >
                                                 <?php echo $champvaleurliste['VALEUR'] ?>
