@@ -5,6 +5,7 @@
 <div id='descriptif-personnalise'>
     <h3>Descriptifs</h3>
 
+    <!-- TODO Faire la même avec des partials loops -->
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?php foreach ($this->rubriques as $rubrique):
         if ($rubrique['DISPLAY'] === true): ?>
@@ -15,40 +16,38 @@
     <?php foreach ($this->rubriques as $rubrique):
         if ($rubrique['DISPLAY'] === true): ?>
             <h4 class='h4_subtitle' id='<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></h4>
-            <!-- TODO
-            Si texte ou nombre => p
-            Si texte long ou texte avec mise en page => textarea
-            Si liste => ul/li
-            Si case à cocher => p avec Oui/Non ? -->
+
             <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
-                foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
-                    switch ($champ['ID_TYPECHAMP']) {
-                        // Texte
-                        case 1:
-                        // Nombre
-                        case 5: ?>
-                            <p><?php echo $champ['NOM'] ?> : Valeur ICI</p>
-                        <?php break;
-                        // Texte long
-                        case 2:
-                        // WYSIWYG => TODO A voir comment faire l'affichage
-                        case 3: ?>
-                            <?php echo $champ['NOM'] ?>
-                            <textarea readonly>Valeur du textarea</textarea>
-                        <?php break;
-                        // Liste
-                        case 4: ?>
-                            <ul>
-                                <!-- TODO foreach valeur => <li>$valeur</li> -->
-                            </ul>
-                        <?php break;
-                        // Case à cocher
-                        case 6: ?>
-                        <?php break;
-                        default:
-                            break;
-                    }
-                endforeach;
+                foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
+                    <p><?php echo $champ['NOM'];
+                        switch ($champ['ID_TYPECHAMP']) {
+                            // Texte
+                            case 1:
+                            // Nombre
+                            case 5: ?>
+                                : <?php echo $champ['VALEUR'];
+                                break;
+                            // Texte long
+                            case 2:
+                            // WYSIWYG => TODO A voir comment faire l'affichage
+                            case 3: ?>
+                                <textarea readonly>Valeur du textarea</textarea>
+                            <?php break;
+                            // Liste
+                            case 4: ?>
+                                <select>
+                                    <!-- TODO Avoir la liste de toutes les options en readonly avec l'option sélectionnée renseignée -->
+                                </select>
+                            <?php break;
+                            // Case à cocher
+                            case 6: ?>
+                                <input type='checkbox' readonly>
+                            <?php break;
+                            default:
+                                break;
+                        } ?>
+                    </p>
+                <?php endforeach;
             else: ?>
                 <div class='row-fluid'>
                     <div class='span6 offset3'>

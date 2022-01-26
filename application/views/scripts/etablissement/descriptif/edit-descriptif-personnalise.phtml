@@ -6,6 +6,7 @@
         </div>
     </div>
 
+    <!-- TODO Faire la même avec des partials loops -->
     <h3>Modification des descriptifs</h3>
     <!-- TODO Mettre la partie Historique ? -->
     <h4 class='h4_subtitle'>Descriptif</h4>
@@ -45,7 +46,7 @@
             <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
                 foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
                     <div class='control-group'>
-                        <label for='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>' class='control-label'>
+                        <label for='champ-<?php echo $champ["ID_CHAMP"] ?>' class='control-label'>
                             <strong><?php echo $champ['NOM'] ?></strong>
                         </label>
                         <div class='controls'>
@@ -55,12 +56,12 @@
                                     <!-- TODO Ajouter les valeurs renseignées par l'utilisateur -->
                                     <input
                                         type='text'
-                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
                                     >
                                 <?php break;
                                 // Texte long
                                 case 2: ?>
-                                    <textarea name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'></textarea>
+                                    <textarea name='champ-<?php echo $champ["ID_CHAMP"] ?>'></textarea>
                                 <?php break;
                                 // WYSIWYG
                                 case 3: ?>
@@ -68,7 +69,7 @@
                                 <?php break;
                                 // Liste
                                 case 4: ?>
-                                    <select name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'>
+                                    <select name='champ-<?php echo $champ["ID_CHAMP"] ?>'>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
                                             <!-- Modifier la condition PHP pour qu'elle soit correcte -->
                                             <option
@@ -82,19 +83,19 @@
                                 <?php break;
                                 // Nombre
                                 case 5: ?>
-                                    <input type='number' name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>' min='0'>
+                                    <input type='number' name='champ-<?php echo $champ["ID_CHAMP"] ?>' min='0'>
                                 <?php break;
                                 // Case à cocher
                                 case 6: ?>
                                     <input
                                         type="hidden"
-                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
                                         value="0"
                                     >
                                     <!-- TODO Ajouter la vérification du 'checked' avec la valeur du champ -->
                                     <input
                                         type="checkbox"
-                                        name='rubrique-<?php echo $rubrique["ID_RUBRIQUE"] ?>-champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
                                         value="1"
                                     >
                                 <?php break;       

@@ -207,14 +207,24 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_etablissement = new Service_Etablissement();
         $service_rubrique = new Service_Rubrique();
+        $service_valeur = new Service_Valeur();
 
         $idEtablissement = $this->getParam('id');
 
         $champs = $modelChamp->findAll();
+        foreach ($champs as &$champ) {
+            $champ['VALEUR'] = $service_valeur->get($champ['ID_CHAMP'], $idEtablissement);
+        }
+
         $sortedChamps =  [];
+        var_dump($champs[5]);
+        var_dump('<br>');
         foreach ($champs as $champ) {
+            var_dump($champ);
             $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
         }
+
+        exit();
 
         $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
         foreach ($rubriques as &$rubrique) {
@@ -263,6 +273,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_etablissement = new Service_Etablissement();
         $service_rubrique = new Service_Rubrique();
+        $service_valeur = new Service_Valeur();
 
         $idEtablissement = $this->getParam('id');
 
@@ -275,22 +286,32 @@ class EtablissementController extends Zend_Controller_Action
         $this->descriptifPersonnaliseAction();
         $this->view->assign('champsvaleurliste', $sortedChampValeurListe);
 
-        // TODO Faire le formulaire de modification
-        if ($this->_request->isPost()) {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $request->getPost();
 
-                foreach ($post as $rubrique => $value) {
-                    if (strpos($rubrique, 'afficher_rubrique-') === 0) {
-                        $explodedRubrique = explode('-', $rubrique);
-                        $idRubrique = end($explodedRubrique);
+                // TODO Mettre tout ça dans des fonctions d'un service
+                foreach ($post as $key => $value) {
+                    if ($value !== '') {
+                        // Informations concernant l'affichage des rubriques
+                        if (strpos($key, 'afficher_rubrique-') === 0) {
+                            $explodedRubrique = explode('-', $key);
+                            $idRubrique = end($explodedRubrique);
 
-                        $service_rubrique->updateRubriqueDisplay($idRubrique, $idEtablissement, intval($value));
+                            $service_rubrique->updateRubriqueDisplay($idRubrique, $idEtablissement, intval($value));
+                        }
+
+                        // Informations concernant les valeurs des champs
+                        if (strpos($key, 'champ-') === 0) {
+                            $explodedChamp = explode('-', $key);
+                            $idChamp = end($explodedChamp);
+
+                            $service_valeur->insert($idChamp, $idEtablissement, $value);
+                        }
                     }
                 }
 
-                // TODO Modifier pour mettre la fonction qui sauvegarde toutes les informations du nouveau descriptif
-                // $service_etablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));

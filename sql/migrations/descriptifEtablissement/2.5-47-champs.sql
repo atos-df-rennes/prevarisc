@@ -24,7 +24,6 @@ CREATE TABLE `champ` (
     CONSTRAINT `fk_champ_rubrique` FOREIGN KEY (`ID_RUBRIQUE`) REFERENCES `rubrique` (`ID_RUBRIQUE`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- FIXME Modifier cette table pour faire la table valeur => Modifier le code actuel en conséquence
 CREATE TABLE `champvaleurliste` (
     `ID_VALEURLISTE` bigint(20) NOT NULL AUTO_INCREMENT,
     `VALEUR` varchar(255) NOT NULL,
