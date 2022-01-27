@@ -53,28 +53,28 @@
                             <?php switch ($champ['ID_TYPECHAMP']) {
                                 // Texte
                                 case 1: ?>
-                                    <!-- TODO Ajouter les valeurs renseignées par l'utilisateur -->
                                     <input
                                         type='text'
                                         name='champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        value='<?php echo $champ["VALEUR"] ?>'
                                     >
                                 <?php break;
                                 // Texte long
                                 case 2: ?>
-                                    <textarea name='champ-<?php echo $champ["ID_CHAMP"] ?>'></textarea>
+                                    <textarea name='champ-<?php echo $champ["ID_CHAMP"] ?>'><?php echo $champ["VALEUR"] ?></textarea>
                                 <?php break;
                                 // WYSIWYG
                                 case 3: ?>
-                                    <div class='tinyarea'></div>
+                                    <!-- FIXME A voir comment faire ici -->
+                                    <div class='tinyarea' name='champ-<?php echo $champ["ID_CHAMP"] ?>'><?php echo $champ["VALEUR"] ?></div>
                                 <?php break;
                                 // Liste
                                 case 4: ?>
                                     <select name='champ-<?php echo $champ["ID_CHAMP"] ?>'>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
-                                            <!-- Modifier la condition PHP pour qu'elle soit correcte -->
                                             <option
                                                 value="<?php echo $champvaleurliste['VALEUR'] ?>"
-                                                <?php $champvaleurliste['ID_VALEURLISTE'] === $champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
+                                                <?php echo $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
                                             >
                                                 <?php echo $champvaleurliste['VALEUR'] ?>
                                             </option>
@@ -83,7 +83,7 @@
                                 <?php break;
                                 // Nombre
                                 case 5: ?>
-                                    <input type='number' name='champ-<?php echo $champ["ID_CHAMP"] ?>' min='0'>
+                                    <input type='number' name='champ-<?php echo $champ["ID_CHAMP"] ?>' min='0' value='<?php echo $champ["VALEUR"] ?>'>
                                 <?php break;
                                 // Case à cocher
                                 case 6: ?>
@@ -92,11 +92,11 @@
                                         name='champ-<?php echo $champ["ID_CHAMP"] ?>'
                                         value="0"
                                     >
-                                    <!-- TODO Ajouter la vérification du 'checked' avec la valeur du champ -->
                                     <input
                                         type="checkbox"
                                         name='champ-<?php echo $champ["ID_CHAMP"] ?>'
                                         value="1"
+                                        <?php echo $champ['VALEUR'] ? 'checked' : '' ?>
                                     >
                                 <?php break;       
                                 default:

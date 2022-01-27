@@ -7,3 +7,7 @@
 .form-horizontal .control-group {
     margin-bottom: 25px;
 }
+
+#affichage-informations .text-control {
+    padding-top: 5px;
+}

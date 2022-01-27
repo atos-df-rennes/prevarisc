@@ -17,44 +17,59 @@
         if ($rubrique['DISPLAY'] === true): ?>
             <h4 class='h4_subtitle' id='<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></h4>
 
-            <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
-                foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
-                    <p><?php echo $champ['NOM'];
-                        switch ($champ['ID_TYPECHAMP']) {
-                            // Texte
-                            case 1:
-                            // Nombre
-                            case 5: ?>
-                                : <?php echo $champ['VALEUR'];
-                                break;
-                            // Texte long
-                            case 2:
-                            // WYSIWYG => TODO A voir comment faire l'affichage
-                            case 3: ?>
-                                <textarea readonly>Valeur du textarea</textarea>
-                            <?php break;
-                            // Liste
-                            case 4: ?>
-                                <select>
-                                    <!-- TODO Avoir la liste de toutes les options en readonly avec l'option sélectionnée renseignée -->
-                                </select>
-                            <?php break;
-                            // Case à cocher
-                            case 6: ?>
-                                <input type='checkbox' disabled>
-                            <?php break;
-                            default:
-                                break;
-                        } ?>
-                    </p>
-                <?php endforeach;
-            else: ?>
-                <div class='row-fluid'>
-                    <div class='span6 offset3'>
-                        <div class="alert">Aucun champ renseigné. Contactez un administrateur Prevarisc.</div>
+            <div id='affichage-informations' class='form-horizontal'>
+                <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
+                    foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
+                        if ($champ['VALEUR'] !== null): ?>
+                            <div class='control-group'>
+                                <p class='control-label'><?php echo $champ['NOM'] ?></p>
+                                <div class='controls'>
+                                    <?php switch ($champ['ID_TYPECHAMP']) {
+                                        // Texte
+                                        case 1:
+                                        // Nombre
+                                        case 5: ?>
+                                            <div class='text-control'>: <?php echo $champ['VALEUR'] ?></div>
+                                            <?php break;
+                                        // Texte long
+                                        case 2:
+                                        // WYSIWYG => TODO A voir comment faire l'affichage
+                                        case 3: ?>
+                                            <textarea readonly><?php echo $champ['VALEUR'] ?></textarea>
+                                        <?php break;
+                                        // Liste
+                                        // FIXME Mettre une option vide par défaut
+                                        case 4: ?>
+                                            <select disabled>
+                                                <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
+                                                    <option
+                                                        value="<?php echo $champvaleurliste['VALEUR'] ?>"
+                                                        <?php echo $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
+                                                    >
+                                                        <?php echo $champvaleurliste['VALEUR'] ?>
+                                                    </option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        <?php break;
+                                        // Case à cocher
+                                        case 6: ?>
+                                            <input type='checkbox' disabled <?php echo $champ['VALEUR'] ? 'checked' : '' ?>>
+                                        <?php break;
+                                        default:
+                                            break;
+                                    } ?>
+                                </div>
+                            </div>
+                        <?php endif;
+                    endforeach;
+                else: ?>
+                    <div class='row-fluid'>
+                        <div class='span6 offset3'>
+                            <div class="alert">Aucun champ renseigné. Contactez un administrateur Prevarisc.</div>
+                        </div>
                     </div>
-                </div>
-            <?php endif;
-        endif;
+                <?php endif ?>
+            </div>
+        <?php endif;
     endforeach ?>
 </div>

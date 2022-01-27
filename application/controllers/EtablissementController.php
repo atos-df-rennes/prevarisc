@@ -204,12 +204,18 @@ class EtablissementController extends Zend_Controller_Action
 
         $modelRubrique = new Model_DbTable_Rubrique();
         $modelChamp = new Model_DbTable_Champ();
+        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
 
         $service_etablissement = new Service_Etablissement();
         $service_rubrique = new Service_Rubrique();
         $service_valeur = new Service_Valeur();
 
         $idEtablissement = $this->getParam('id');
+
+        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
+        foreach ($rubriques as &$rubrique) {
+            $rubrique['DISPLAY'] = $service_rubrique->getRubriqueDisplay($rubrique['ID_RUBRIQUE'], $idEtablissement);
+        }
 
         $champs = $modelChamp->findAll();
         foreach ($champs as &$champ) {
@@ -221,9 +227,10 @@ class EtablissementController extends Zend_Controller_Action
             $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
         }
 
-        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
-        foreach ($rubriques as &$rubrique) {
-            $rubrique['DISPLAY'] = $service_rubrique->getRubriqueDisplay($rubrique['ID_RUBRIQUE'], $idEtablissement);
+        $champsValeurListe = $modelChampValeurListe->findAll();
+        $sortedChampValeurListe =  [];
+        foreach ($champsValeurListe as $champValeurListe) {
+            $sortedChampValeurListe[$champValeurListe['ID_CHAMP']][] = $champValeurListe;
         }
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
@@ -232,7 +239,7 @@ class EtablissementController extends Zend_Controller_Action
         // TODO Récupérer toutes les informations nécessaires
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champs', $sortedChamps);
-        // Valeurs
+        $this->view->assign('champsvaleurliste', $sortedChampValeurListe);
     }
 
     public function editDescriptifAction()
@@ -263,8 +270,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-        
-        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
 
         $service_etablissement = new Service_Etablissement();
         $service_rubrique = new Service_Rubrique();
@@ -272,14 +277,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $idEtablissement = $this->getParam('id');
 
-        $champsValeurListe = $modelChampValeurListe->findAll();
-        $sortedChampValeurListe =  [];
-        foreach ($champsValeurListe as $champValeurListe) {
-            $sortedChampValeurListe[$champValeurListe['ID_CHAMP']][] = $champValeurListe;
-        }
-
         $this->descriptifPersonnaliseAction();
-        $this->view->assign('champsvaleurliste', $sortedChampValeurListe);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -298,6 +296,7 @@ class EtablissementController extends Zend_Controller_Action
                         }
 
                         // Informations concernant les valeurs des champs
+                        // TODO Faire la partie update
                         if (strpos($key, 'champ-') === 0) {
                             $explodedChamp = explode('-', $key);
                             $idChamp = end($explodedChamp);
