@@ -217,14 +217,9 @@ class EtablissementController extends Zend_Controller_Action
         }
 
         $sortedChamps =  [];
-        var_dump($champs[5]);
-        var_dump('<br>');
-        foreach ($champs as $champ) {
-            var_dump($champ);
+        foreach ($champs as &$champ) {
             $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
         }
-
-        exit();
 
         $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
         foreach ($rubriques as &$rubrique) {
