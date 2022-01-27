@@ -20,7 +20,10 @@
             <div id='affichage-informations' class='form-horizontal'>
                 <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
                     foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
-                        if ($champ['VALEUR'] !== null): ?>
+                        if (
+                            ($champ['ID_TYPECHAMP'] !== 6 && $champ['VALEUR'] !== null)
+                            || ($champ['ID_TYPECHAMP'] === 6 && $champ['VALEUR'] !== 0)
+                        ): ?>
                             <div class='control-group'>
                                 <p class='control-label'><?php echo $champ['NOM'] ?></p>
                                 <div class='controls'>
@@ -37,7 +40,7 @@
                                             <?php break;
                                         // WYSIWYG
                                         case 3: ?>
-                                            <div class='tinyarea' readonly><?php echo $champ['VALEUR'] ?></div>
+                                            <div class='tinyarea text-control' readonly><?php echo $champ['VALEUR'] ?></div>
                                         <?php break;
                                         // Liste
                                         // FIXME Mettre une option vide par défaut
