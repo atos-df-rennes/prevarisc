@@ -236,7 +236,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
         
-        // TODO Récupérer toutes les informations nécessaires
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champs', $sortedChamps);
         $this->view->assign('champsvaleurliste', $sortedChampValeurListe);
@@ -283,6 +282,7 @@ class EtablissementController extends Zend_Controller_Action
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
+                $lastKey = null;
 
                 // TODO Mettre tout ça dans des fonctions d'un service
                 foreach ($post as $key => $value) {
@@ -303,7 +303,17 @@ class EtablissementController extends Zend_Controller_Action
 
                             $service_valeur->insert($idChamp, $idEtablissement, $value);
                         }
+
+                        // Permet de récupérer l'id du champ WYSIWYG (non passé en paramètre)
+                        if (strpos($key, 'mce_') === 0) {
+                            $explodedChamp = explode('-', $lastKey);
+                            $idChamp = intval(end($explodedChamp)) + 1;
+
+                            $service_valeur->insert($idChamp, $idEtablissement, $value);
+                        }
                     }
+
+                    $lastKey = $key;
                 }
 
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.'));

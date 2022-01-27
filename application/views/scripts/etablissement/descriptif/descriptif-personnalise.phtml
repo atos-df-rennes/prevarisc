@@ -32,10 +32,12 @@
                                             <div class='text-control'>: <?php echo $champ['VALEUR'] ?></div>
                                             <?php break;
                                         // Texte long
-                                        case 2:
-                                        // WYSIWYG => TODO A voir comment faire l'affichage
-                                        case 3: ?>
+                                        case 2: ?>
                                             <textarea readonly><?php echo $champ['VALEUR'] ?></textarea>
+                                            <?php break;
+                                        // WYSIWYG
+                                        case 3: ?>
+                                            <div class='tinyarea' readonly><?php echo $champ['VALEUR'] ?></div>
                                         <?php break;
                                         // Liste
                                         // FIXME Mettre une option vide par défaut
