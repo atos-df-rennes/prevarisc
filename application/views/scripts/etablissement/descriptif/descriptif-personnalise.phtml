@@ -22,17 +22,17 @@
                     foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
                         if (
                             ($champ['ID_TYPECHAMP'] !== 6 && $champ['VALEUR'] !== null)
-                            || ($champ['ID_TYPECHAMP'] === 6 && $champ['VALEUR'] !== 0)
+                            || ($champ['ID_TYPECHAMP'] === 6 && $champ['VALEUR'] !== null && $champ['VALEUR'] !== 0)
                         ): ?>
                             <div class='control-group'>
-                                <p class='control-label'><?php echo $champ['NOM'] ?></p>
+                                <strong class='control-label'><?php echo $champ['NOM'] ?></strong>
                                 <div class='controls'>
                                     <?php switch ($champ['ID_TYPECHAMP']) {
                                         // Texte
                                         case 1:
                                         // Nombre
                                         case 5: ?>
-                                            <div class='text-control'>: <?php echo $champ['VALEUR'] ?></div>
+                                            <div class='text-control'><?php echo $champ['VALEUR'] ?></div>
                                             <?php break;
                                         // Texte long
                                         case 2: ?>
@@ -43,7 +43,6 @@
                                             <div class='tinyarea text-control' readonly><?php echo $champ['VALEUR'] ?></div>
                                         <?php break;
                                         // Liste
-                                        // FIXME Mettre une option vide par défaut
                                         case 4: ?>
                                             <select disabled>
                                                 <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
