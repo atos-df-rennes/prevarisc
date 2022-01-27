@@ -2,7 +2,7 @@
 
 class Service_Rubrique
 {
-    // Récupérer le display utilisateur
+    // Récupère le display utilisateur
     // Ou le default display si pas de display utilisateur
     public function getRubriqueDisplay(int $idRubrique, int $idEtablissement): bool
     {
@@ -31,8 +31,8 @@ class Service_Rubrique
         // Aucun intérêt de renseigner l'information si les valeurs sont les mêmes et que l'utilisateur n'a pas modifié
         // Si l'utilisateur a déjà modifié, et qu'il remodifie, on supprime la ligne pour revenir à l'état d'origine
         if (
-            ($rubriqueDefaultDisplay !== $userDisplay) &&
-            ($userModified === null)
+            ($rubriqueDefaultDisplay !== $userDisplay)
+            && ($userModified === null)
         ) {
             $modelDisplayRubriqueEtablissement->insert(array(
                     'ID_ETABLISSEMENT' => $idEtablissement,
@@ -41,8 +41,8 @@ class Service_Rubrique
                 )
             );
         } else if (
-            ($rubriqueDefaultDisplay === $userDisplay) &&
-            ($userModified !== null)
+            ($rubriqueDefaultDisplay === $userDisplay)
+            && ($userModified !== null)
         ) {
             $userModified->delete();
         }

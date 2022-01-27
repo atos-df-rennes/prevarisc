@@ -5,7 +5,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     protected $_name = 'valeur'; // Nom de la base
     protected $_primary = 'ID_VALEUR'; // Clé primaire
 
-    public function getByChampAndEtablissement(int $idChamp, int $idEtablissement): ?array
+    public function getByChampAndEtablissement(int $idChamp, int $idEtablissement)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
@@ -20,6 +20,6 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
             return $result;
         }
 
-        return $result->toArray();
+        return $result;
     }
 }

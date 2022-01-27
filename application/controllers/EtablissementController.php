@@ -270,9 +270,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        $service_etablissement = new Service_Etablissement();
-        $service_rubrique = new Service_Rubrique();
-        $service_valeur = new Service_Valeur();
+        $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $idEtablissement = $this->getParam('id');
 
@@ -289,27 +287,18 @@ class EtablissementController extends Zend_Controller_Action
                     if ($value !== '') {
                         // Informations concernant l'affichage des rubriques
                         if (strpos($key, 'afficher_rubrique-') === 0) {
-                            $explodedRubrique = explode('-', $key);
-                            $idRubrique = end($explodedRubrique);
-
-                            $service_rubrique->updateRubriqueDisplay($idRubrique, $idEtablissement, intval($value));
+                            $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
                         }
 
                         // Informations concernant les valeurs des champs
                         // TODO Faire la partie update
                         if (strpos($key, 'champ-') === 0) {
-                            $explodedChamp = explode('-', $key);
-                            $idChamp = end($explodedChamp);
-
-                            $service_valeur->insert($idChamp, $idEtablissement, $value);
+                            $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, $value);
                         }
 
                         // Permet de récupérer l'id du champ WYSIWYG (non passé en paramètre)
                         if (strpos($key, 'mce_') === 0) {
-                            $explodedChamp = explode('-', $lastKey);
-                            $idChamp = intval(end($explodedChamp)) + 1;
-
-                            $service_valeur->insert($idChamp, $idEtablissement, $value);
+                            $serviceEtablissementDescriptif->saveValeurWYSIWYG($lastKey, $idEtablissement, $value);
                         }
                     }
 
