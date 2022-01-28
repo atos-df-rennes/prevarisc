@@ -72,8 +72,19 @@ class PieceJointeController extends Zend_Controller_Action
 
         $piece_jointe = $piece_jointe[0];
 
-        $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
-        $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
+        // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+        // Nécessite de modifier la configuration Plat'AU
+        // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
+        $modelDossier = new Model_DbTable_Dossier();
+        $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
+        
+        if ($dossier['ID_PLATAU'] !== null) {
+            $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+            $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+        } else {
+            $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
+            $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
+        }
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
