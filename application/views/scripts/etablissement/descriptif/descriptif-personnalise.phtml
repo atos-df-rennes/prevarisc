@@ -17,6 +17,7 @@
             <div id='affichage-informations' class='form-horizontal'>
                 <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
                     $numberOfFilledField = 0;
+                    
                     foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
                         if (
                             ($champ['ID_TYPECHAMP'] !== 6 && $champ['VALEUR'] !== null)
@@ -65,6 +66,7 @@
                             </div>
                         <?php endif;
                     endforeach;
+
                     if ($numberOfFilledField === 0):
                         echo $this->partial('formulaire/partials/partial-information-manquante.phtml', [
                             'message' => 'Aucune valeur renseignée.'

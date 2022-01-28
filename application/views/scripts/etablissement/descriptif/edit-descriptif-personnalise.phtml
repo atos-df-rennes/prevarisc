@@ -6,39 +6,27 @@
         </div>
     </div>
 
-    <!-- TODO Faire la même avec des partials loops -->
     <h3>Modification des descriptifs</h3>
     <!-- TODO Mettre la partie Historique ? -->
     <h4 class='h4_subtitle'>Descriptif</h4>
+    
     <div class='row-fluid'>
         <div class='span10'>
             <?php foreach ($this->rubriques as $key => $rubrique):
                 if (($key % 4) === 0): ?>
                     <div class='row-fluid'>
-                <?php endif ?>
-                    <div class='span3 control-group'>
-                        <label for="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>" class='control-label'><?= $rubrique['NOM'] ?></label>
-                        <div class='controls'>
-                            <input
-                                type="hidden"
-                                name="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>"
-                                value="0"
-                            >
-                            <input
-                                type="checkbox"
-                                name="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>"
-                                value="1"
-                                <?= $rubrique['DISPLAY'] === true ? 'checked' : '' ?>
-                            >
-                        </div>
-                    </div>
-                <?php if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
+                <?php endif;
+
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);   
+                
+                if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
                     </div>
                 <?php endif;
             endforeach ?>
         </div>
     </div>
 
+    <!-- TODO Faire la même avec des partials loops -->
     <?php foreach ($this->rubriques as $rubrique): ?>
         <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= $rubrique['DISPLAY'] === false ? 'hide' : '' ?>">
             <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
