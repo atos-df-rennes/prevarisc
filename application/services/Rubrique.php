@@ -34,13 +34,14 @@ class Service_Rubrique
             ($rubriqueDefaultDisplay !== $userDisplay)
             && ($userModified === null)
         ) {
-            $modelDisplayRubriqueEtablissement->insert(array(
+            $modelDisplayRubriqueEtablissement->insert(
+                array(
                     'ID_ETABLISSEMENT' => $idEtablissement,
                     'ID_RUBRIQUE' => $idRubrique,
                     'USER_DISPLAY' => $userDisplay
                 )
             );
-        } else if (
+        } elseif (
             ($rubriqueDefaultDisplay === $userDisplay)
             && ($userModified !== null)
         ) {

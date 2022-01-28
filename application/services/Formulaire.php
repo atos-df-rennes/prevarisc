@@ -52,7 +52,7 @@ class Service_Formulaire
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
-            $listValueArray = array_filter($champ, function($key) {
+            $listValueArray = array_filter($champ, function ($key) {
                 return strpos($key, 'valeur-') === 0;
             }, ARRAY_FILTER_USE_KEY);
 

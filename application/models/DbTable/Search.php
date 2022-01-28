@@ -131,7 +131,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                             END),
                             (SELECT MIN(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)
                         )',
-                        'LIBELLE_ETABLISSEMENTINFORMATIONS'
+                            'LIBELLE_ETABLISSEMENTINFORMATIONS'
                         )
                         ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                         ->group('d.ID_DOSSIER');

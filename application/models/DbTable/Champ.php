@@ -31,8 +31,8 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(array('c' => 'champ'), array('ID_CHAMP', 'NOM'))
-            ->join(array('ltcr' => 'listetypechamprubrique'), 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP',array('TYPE'))
-            ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE',array('ID_RUBRIQUE'))
+            ->join(array('ltcr' => 'listetypechamprubrique'), 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', array('TYPE'))
+            ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', array('ID_RUBRIQUE'))
             ->where('c.ID_CHAMP = ?', $idChamp);
 
         if ($hasList === true) {
