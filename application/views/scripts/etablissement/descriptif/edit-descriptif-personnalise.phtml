@@ -1,7 +1,7 @@
-<form action='<?php echo $this->url(array('action' => 'edit-descriptif')) ?>' method='post' class='form-horizontal'>
+<form action='<?= $this->url(array('action' => 'edit-descriptif')) ?>' method='post' class='form-horizontal'>
     <div class='pull-right' >
         <div class="btn-group">
-            <a class='btn' href="<?php echo $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
+            <a class='btn' href="<?= $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
             <input type='submit' class="btn btn-success" value='Sauvegarder'>
         </div>
     </div>
@@ -17,18 +17,18 @@
                     <div class='row-fluid'>
                 <?php endif ?>
                     <div class='span3 control-group'>
-                        <label for="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>" class='control-label'><?php echo $rubrique['NOM'] ?></label>
+                        <label for="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>" class='control-label'><?= $rubrique['NOM'] ?></label>
                         <div class='controls'>
                             <input
                                 type="hidden"
-                                name="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>"
+                                name="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>"
                                 value="0"
                             >
                             <input
                                 type="checkbox"
-                                name="afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>"
+                                name="afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>"
                                 value="1"
-                                <?php echo $rubrique['DISPLAY'] === true ? 'checked' : '' ?>
+                                <?= $rubrique['DISPLAY'] === true ? 'checked' : '' ?>
                             >
                         </div>
                     </div>
@@ -40,14 +40,14 @@
     </div>
 
     <?php foreach ($this->rubriques as $rubrique): ?>
-        <div id='afficher_rubrique-<?php echo $rubrique['ID_RUBRIQUE'] ?>' class="<?php echo $rubrique['DISPLAY'] === false ? 'hide' : '' ?>">
-            <h4 class='h4_subtitle'><?php echo $rubrique['NOM'] ?></h4>
+        <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= $rubrique['DISPLAY'] === false ? 'hide' : '' ?>">
+            <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
 
             <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
                 foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ): ?>
                     <div class='control-group'>
-                        <label for='champ-<?php echo $champ["ID_CHAMP"] ?>' class='control-label'>
-                            <strong><?php echo $champ['NOM'] ?></strong>
+                        <label for='champ-<?= $champ["ID_CHAMP"] ?>' class='control-label'>
+                            <strong><?= $champ['NOM'] ?></strong>
                         </label>
                         <div class='controls'>
                             <?php switch ($champ['ID_TYPECHAMP']) {
@@ -55,48 +55,48 @@
                                 case 1: ?>
                                     <input
                                         type='text'
-                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
-                                        value='<?php echo $champ["VALEUR"] ?>'
+                                        name='champ-<?= $champ["ID_CHAMP"] ?>'
+                                        value='<?= $champ["VALEUR"] ?>'
                                     >
                                 <?php break;
                                 // Texte long
                                 case 2: ?>
-                                    <textarea name='champ-<?php echo $champ["ID_CHAMP"] ?>'><?php echo $champ["VALEUR"] ?></textarea>
+                                    <textarea name='champ-<?= $champ["ID_CHAMP"] ?>'><?= $champ["VALEUR"] ?></textarea>
                                 <?php break;
                                 // WYSIWYG
                                 case 3: ?>
-                                    <div class='tinyarea' name='champ-<?php echo $champ["ID_CHAMP"] ?>'><?php echo $champ["VALEUR"] ?></div>
+                                    <div class='tinyarea' name='champ-<?= $champ["ID_CHAMP"] ?>'><?= $champ["VALEUR"] ?></div>
                                 <?php break;
                                 // Liste
                                 case 4: ?>
-                                    <select name='champ-<?php echo $champ["ID_CHAMP"] ?>'>
+                                    <select name='champ-<?= $champ["ID_CHAMP"] ?>'>
                                         <option selected value>Sélectionnez un élément</option>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
                                             <option
-                                                value="<?php echo $champvaleurliste['VALEUR'] ?>"
-                                                <?php echo $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
+                                                value="<?= $champvaleurliste['VALEUR'] ?>"
+                                                <?= $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
                                             >
-                                                <?php echo $champvaleurliste['VALEUR'] ?>
+                                                <?= $champvaleurliste['VALEUR'] ?>
                                             </option>
                                         <?php endforeach ?>
                                     </select>
                                 <?php break;
                                 // Nombre
                                 case 5: ?>
-                                    <input type='number' name='champ-<?php echo $champ["ID_CHAMP"] ?>' min='0' value='<?php echo $champ["VALEUR"] ?>'>
+                                    <input type='number' name='champ-<?= $champ["ID_CHAMP"] ?>' min='0' value='<?= $champ["VALEUR"] ?>'>
                                 <?php break;
                                 // Case à cocher
                                 case 6: ?>
                                     <input
                                         type="hidden"
-                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        name='champ-<?= $champ["ID_CHAMP"] ?>'
                                         value="0"
                                     >
                                     <input
                                         type="checkbox"
-                                        name='champ-<?php echo $champ["ID_CHAMP"] ?>'
+                                        name='champ-<?= $champ["ID_CHAMP"] ?>'
                                         value="1"
-                                        <?php echo $champ['VALEUR'] ? 'checked' : '' ?>
+                                        <?= $champ['VALEUR'] ? 'checked' : '' ?>
                                     >
                                 <?php break;       
                                 default:
@@ -105,13 +105,11 @@
                         </div>
                     </div>
                 <?php endforeach;
-            else: ?>
-                <div class='row-fluid'>
-                    <div class='span6 offset3'>
-                        <div class="alert">Aucun champ renseigné. Contactez un administrateur Prevarisc.</div>
-                    </div>
-                </div>
-            <?php endif ?>
+            else:
+                echo $this->partial('formulaire/partials/partial-information-manquante.phtml', [
+                    'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
+                ]);
+            endif ?>
         </div>
     <?php endforeach ?>
 </form>
