@@ -59,30 +59,24 @@ class Service_EtablissementDescriptif
 
     public function saveValeurChamp(string $key, int $idEtablissement, $value): void
     {
-        $modelValeur = new Model_DbTable_Valeur();
-        $serviceValeur = new Service_Valeur();
-
         $explodedChamp = explode('-', $key);
         $idChamp = end($explodedChamp);
 
-        $valueInDB = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
-        
-        if ($valueInDB === null) {
-            if ($value !== '') { 
-                $serviceValeur->insert($idChamp, $idEtablissement, $value);
-            }
-        } else {
-            $serviceValeur->update($idChamp, $valueInDB, $value);
-        }
+        $this->saveValeur($idChamp, $idEtablissement, $value);
     }
 
     public function saveValeurWYSIWYG(string $lastKey, int $idEtablissement, $value): void
     {
-        $modelValeur = new Model_DbTable_Valeur();
-        $serviceValeur = new Service_Valeur();
-
         $explodedChamp = explode('-', $lastKey);
         $idChamp = intval(end($explodedChamp)) + 1;
+
+        $this->saveValeur($idChamp, $idEtablissement, $value);
+    }
+
+    private function saveValeur(int $idChamp, int $idEtablissement, $value): void
+    {
+        $modelValeur = new Model_DbTable_Valeur();
+        $serviceValeur = new Service_Valeur();
 
         $valueInDB = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
         
