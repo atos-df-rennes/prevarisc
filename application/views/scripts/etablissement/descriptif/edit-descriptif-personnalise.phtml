@@ -70,7 +70,7 @@
                                 // Liste
                                 case 4: ?>
                                     <select name='champ-<?php echo $champ["ID_CHAMP"] ?>'>
-                                        <option disabled selected value>Sélectionnez un élément</option>
+                                        <option selected value>Sélectionnez un élément</option>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
                                             <option
                                                 value="<?php echo $champvaleurliste['VALEUR'] ?>"

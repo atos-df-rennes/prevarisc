@@ -257,21 +257,19 @@ class EtablissementController extends Zend_Controller_Action
                 $lastKey = null;
 
                 foreach ($post as $key => $value) {
-                    if ($value !== '') {
-                        // Informations concernant l'affichage des rubriques
-                        if (strpos($key, 'afficher_rubrique-') === 0) {
-                            $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
-                        }
+                    // Informations concernant l'affichage des rubriques
+                    if (strpos($key, 'afficher_rubrique-') === 0) {
+                        $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
+                    }
 
-                        // Informations concernant les valeurs des champs
-                        if (strpos($key, 'champ-') === 0) {
-                            $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, $value);
-                        }
+                    // Informations concernant les valeurs des champs
+                    if (strpos($key, 'champ-') === 0) {
+                        $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, $value);
+                    }
 
-                        // Permet de récupérer l'id du champ WYSIWYG (non passé en paramètre)
-                        if (strpos($key, 'mce_') === 0) {
-                            $serviceEtablissementDescriptif->saveValeurWYSIWYG($lastKey, $idEtablissement, $value);
-                        }
+                    // Permet de récupérer l'id du champ WYSIWYG (non passé en paramètre)
+                    if (strpos($key, 'mce_') === 0) {
+                        $serviceEtablissementDescriptif->saveValeurWYSIWYG($lastKey, $idEtablissement, $value);
                     }
 
                     $lastKey = $key;

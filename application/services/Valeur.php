@@ -72,32 +72,36 @@ class Service_Valeur
 
     public function update(int $idChamp, $valueInDB, $newValue): void
     {
-        $modelChamp = new Model_DbTable_Champ();
+        if ($newValue === '') {
+            $valueInDB->delete();
+        } else {
+            $modelChamp = new Model_DbTable_Champ();
 
-        $champ = $modelChamp->find($idChamp)->current();
-        $typeValeur = '';
+            $champ = $modelChamp->find($idChamp)->current();
+            $typeValeur = '';
 
-        switch ($champ['ID_TYPECHAMP']) {
-            case 1:
-            case 4:
-                $typeValeur = 'VALEUR_STR';
-                break;
-            case 2:
-            case 3:
-                $typeValeur = 'VALEUR_LONG_STR';
-                break;
-            case 5:
-                $typeValeur = 'VALEUR_INT';
-                break;
-            case 6:
-                $typeValeur = 'VALEUR_CHECKBOX';
-                break;
-            default:
-                throw new Exception('Type de champ non supporté.');
-                break;
+            switch ($champ['ID_TYPECHAMP']) {
+                case 1:
+                case 4:
+                    $typeValeur = 'VALEUR_STR';
+                    break;
+                case 2:
+                case 3:
+                    $typeValeur = 'VALEUR_LONG_STR';
+                    break;
+                case 5:
+                    $typeValeur = 'VALEUR_INT';
+                    break;
+                case 6:
+                    $typeValeur = 'VALEUR_CHECKBOX';
+                    break;
+                default:
+                    throw new Exception('Type de champ non supporté.');
+                    break;
+            }
+
+            $valueInDB->$typeValeur = $newValue;
+            $valueInDB->save();
         }
-
-        $valueInDB->$typeValeur = $newValue;
-        $valueInDB->save();
     }
 }

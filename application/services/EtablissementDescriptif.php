@@ -68,7 +68,9 @@ class Service_EtablissementDescriptif
         $valueInDB = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
         
         if ($valueInDB === null) {
-            $serviceValeur->insert($idChamp, $idEtablissement, $value);
+            if ($value !== '') { 
+                $serviceValeur->insert($idChamp, $idEtablissement, $value);
+            }
         } else {
             $serviceValeur->update($idChamp, $valueInDB, $value);
         }
