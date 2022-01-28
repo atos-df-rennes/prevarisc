@@ -7,11 +7,7 @@
 
     <!-- TODO Faire la même avec des partials loops -->
     <h4 class='h4_subtitle'>Descriptif technique</h4>
-    <?php foreach ($this->rubriques as $rubrique):
-        if ($rubrique['DISPLAY'] === true): ?>
-            <a href='#<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></a>
-        <?php endif;
-    endforeach ?>
+    <?php echo $this->partialLoop('etablissement/partials/descriptif/partial-rubrique-display.phtml', $this->rubriques) ?>
 
     <?php foreach ($this->rubriques as $rubrique):
         if ($rubrique['DISPLAY'] === true): ?>
@@ -66,13 +62,9 @@
                             </div>
                         <?php endif;
                     endforeach;
-                else: ?>
-                    <div class='row-fluid'>
-                        <div class='span6 offset3'>
-                            <div class="alert">Aucun champ renseigné. Contactez un administrateur Prevarisc.</div>
-                        </div>
-                    </div>
-                <?php endif ?>
+                else: 
+                    echo $this->partial('etablissement/partials/descriptif/partial-aucun-champ.phtml');
+                endif ?>
             </div>
         <?php endif;
     endforeach ?>

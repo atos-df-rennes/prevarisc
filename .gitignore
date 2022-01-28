@@ -13,3 +13,4 @@ composer.lock
 /public/ign/*
 /public/data/uploads/commission
 HashedFileDataStore.php
+.php_cs.cache

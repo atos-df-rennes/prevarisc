@@ -1,0 +1,57 @@
+<?php if ($rubrique['DISPLAY'] === true): ?>
+    <h4 class='h4_subtitle' id='<?php echo strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?php echo $rubrique['NOM'] ?></h4>
+
+    <div id='affichage-informations' class='form-horizontal'>
+        <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):
+            foreach ($this->champs[$rubrique['ID_RUBRIQUE']] as $champ):
+                if (
+                    ($champ['ID_TYPECHAMP'] !== 6 && $champ['VALEUR'] !== null)
+                    || ($champ['ID_TYPECHAMP'] === 6 && $champ['VALEUR'] !== null && $champ['VALEUR'] !== 0)
+                ): ?>
+                    <div class='control-group'>
+                        <strong class='control-label'><?php echo $champ['NOM'] ?></strong>
+                        <div class='controls'>
+                            <?php switch ($champ['ID_TYPECHAMP']) {
+                                // Texte
+                                case 1:
+                                // Nombre
+                                case 5: ?>
+                                    <div class='text-control'><?php echo $champ['VALEUR'] ?></div>
+                                    <?php break;
+                                // Texte long
+                                case 2: ?>
+                                    <textarea readonly><?php echo $champ['VALEUR'] ?></textarea>
+                                    <?php break;
+                                // WYSIWYG
+                                case 3: ?>
+                                    <div class='tinyarea text-control' readonly><?php echo $champ['VALEUR'] ?></div>
+                                <?php break;
+                                // Liste
+                                case 4: ?>
+                                    <select disabled>
+                                        <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
+                                            <option
+                                                value="<?php echo $champvaleurliste['VALEUR'] ?>"
+                                                <?php echo $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
+                                            >
+                                                <?php echo $champvaleurliste['VALEUR'] ?>
+                                            </option>
+                                        <?php endforeach ?>
+                                    </select>
+                                <?php break;
+                                // Case à cocher
+                                case 6: ?>
+                                    <input type='checkbox' disabled <?php echo $champ['VALEUR'] ? 'checked' : '' ?>>
+                                <?php break;
+                                default:
+                                    break;
+                            } ?>
+                        </div>
+                    </div>
+                <?php endif;
+            endforeach;
+        else: 
+            echo $this->partial('etablissement/partials/descriptif/partial-aucun-champ.phtml');
+        endif ?>
+    </div>
+<?php endif;
