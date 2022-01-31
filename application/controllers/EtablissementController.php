@@ -2,8 +2,6 @@
 
 class EtablissementController extends Zend_Controller_Action
 {
-    const CAPSULE_RUBRIQUE = 'descriptifEtablissement';
-
     public function indexAction()
     {
         $this->_helper->layout->setLayout('etablissement');

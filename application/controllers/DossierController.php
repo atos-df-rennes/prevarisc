@@ -2529,6 +2529,39 @@ class DossierController extends Zend_Controller_Action
             $this->view->dateDelaipresc = $dateComm->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
 
+        //PARTIE TEXTES APPLICABLES
+        //on recupere tout les textes applicables qui ont été cochés dans le dossier
+        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
+        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
+
+        //DATE DE LA DERNIERE VISITE PERIODIQUE
+        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
+        if (
+            $dateVisite != ''
+            && isset($dateVisite)
+        ) {
+            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
+            
+            $this->view->dateLastVP = null;
+            if ($dateLastVP) {
+                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
+                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
+                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
+            }
+        }
+
+        /* Gestion des rubriques/champs personnalisés */
+        // TODO A déplacer dans un service ?
+        $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+
+        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
+        $champs = $serviceEtablissementDescriptif->getChamps($idEtab);
+
+        var_dump($rubriques);
+        exit();
+
+        // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $nouvellePJ = $DBpieceJointe->createRow();
@@ -2558,27 +2591,6 @@ class DossierController extends Zend_Controller_Action
         $linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
         $linkPj->save();
 
-        //PARTIE TEXTES APPLICABLES
-        //on recupere tout les textes applicables qui ont été cochés dans le dossier
-        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
-        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
-
-        //DATE DE LA DERNIERE VISITE PERIODIQUE
-        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
-        if (
-            $dateVisite != ''
-            && isset($dateVisite)
-        ) {
-            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-            
-            $this->view->dateLastVP = null;
-            if ($dateLastVP) {
-                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
-                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
-                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
-            }
-        }
         $this->render('creationdoc');
     }
 
