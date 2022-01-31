@@ -126,6 +126,7 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Modèles
             $DBpieceJointe = new Model_DbTable_PieceJointe();
+            $modelDossier = new Model_DbTable_Dossier();
 
             // Un fichier est-il envoyé ?
             if (!isset($_FILES['fichier'])) {
@@ -151,9 +152,21 @@ class PieceJointeController extends Zend_Controller_Action
             $nouvellePJ->DATE_PIECEJOINTE = $dateNow->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY.' '.Zend_Date::HOUR.':'.Zend_Date::MINUTE.':'.Zend_Date::SECOND);
 
             // Sauvegarde de la BDD
-            $nouvellePJ->save();
+            $idNouvellePJ = $nouvellePJ->save();
 
-            $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+            // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+            $dossier = $modelDossier->find($this->_getParam('id'))->current();
+
+            if ($dossier['ID_PLATAU'] !== null) {
+                $file_path = implode(DS, array(
+                    REAL_DATA_PATH,
+                    'uploads',
+                    'pieces-jointes',
+                    $idNouvellePJ.$nouvellePJ->EXTENSION_PIECEJOINTE
+                ));
+            } else {
+                $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+            }
 
             // On check si l'upload est okay
             $linkPj = null;

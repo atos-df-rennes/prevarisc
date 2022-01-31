@@ -36,26 +36,21 @@
         Dropzone.autoDiscover = false;
         
 	$(document).ready(function() {
-
 		$("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' >");
 
 		// Bouton de la pièce jointe
 		$("#addPJ").button({
-		
 			icons: {
 				primary: 'ui-icon-pin-s'
 			},
 			text: true
-			
 		}).click(function() {
-
 			// Dialogue du formulaire
 			$.ajax({
 				url: "/piece-jointe/form",
 				data: "id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
 				type: "post",
 				success: function(result) {
-					
 					$("#formAddPJ").html(result).dialog({
 						resizable: false,
 						height: 500,
@@ -63,7 +58,6 @@
 						modal: true,
 						buttons: {
 							'Ajouter la pièce jointe': function() {
-								
 								// Envoi du formulaire dans form
 								$("#formUpload").submit();
 								
@@ -85,43 +79,47 @@
 			});
 		});
                 
-                /* GESTION DU GLISSEZ DEPOSER */
-                $("#addPJQuick").click(function() {
-                    $('#dropzone').toggle();
-                });
-                
-                var myDropzone = new Dropzone("#dropzone", { 
-                    url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
-                    paramName: "fichier"
-                });
-                myDropzone.on("success", function(file, responseText) {
-                    if (responseText !== undefined) {
-                        $('body').append(responseText);
-                        if (file.previewElement !== undefined) {
-                            file.previewElement.remove();
-                        }
-                        $('#dropzone').removeClass("dz-started").hide();
-                    } else
-                    {
-                        document.location.reload();
-                    }
-                });
+		/* GESTION DU GLISSEZ DEPOSER */
+		$("#addPJQuick").click(function() {
+			$('#dropzone').toggle();
+		});
+		
+		var myDropzone = new Dropzone("#dropzone", { 
+			url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
+			paramName: "fichier"
+		});
+		
+		myDropzone.on("success", function(file, responseText) {
+			if (responseText !== undefined) {
+				$('body').append(responseText);
+
+				if (file.previewElement !== undefined) {
+					file.previewElement.remove();
+				}
+
+				$('#dropzone').removeClass("dz-started").hide();
+			} else {
+				document.location.reload();
+			}
+		});
 
 		// Supp. d'une pièce jointe
 		$("a.delete").live("click", function(e) {
-                    e.preventDefault();
-                    if (confirm('Etes-vous sûr de vouloir supprimer cette pièce jointe ?')){
-			var a = this;
-			$.ajax({
-				url: a.href,
-				data: "&type=<?php echo $this->type ?>",
-				type: "post",
-				success: function(result) {
-					$(a).parent().parent().remove();
-				}
-			});
-			return false;
-                    } 
+			e.preventDefault();
+			if (confirm('Etes-vous sûr de vouloir supprimer cette pièce jointe ?')){
+				var a = this;
+
+				$.ajax({
+					url: a.href,
+					data: "&type=<?php echo $this->type ?>",
+					type: "post",
+					success: function(result) {
+						$(a).parent().parent().remove();
+					}
+				});
+
+				return false;
+			}
 		});
 		
         $('a[href$=png], a[href$=jpg], a[href$=jpeg]').fancybox({
