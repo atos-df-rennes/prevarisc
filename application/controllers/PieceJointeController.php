@@ -126,7 +126,6 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Modèles
             $DBpieceJointe = new Model_DbTable_PieceJointe();
-            $modelDossier = new Model_DbTable_Dossier();
 
             // Un fichier est-il envoyé ?
             if (!isset($_FILES['fichier'])) {
@@ -152,9 +151,10 @@ class PieceJointeController extends Zend_Controller_Action
             $nouvellePJ->DATE_PIECEJOINTE = $dateNow->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY.' '.Zend_Date::HOUR.':'.Zend_Date::MINUTE.':'.Zend_Date::SECOND);
 
             // Sauvegarde de la BDD
-            $idNouvellePJ = $nouvellePJ->save();
+            $nouvellePJ->save();
 
             // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+            $modelDossier = new Model_DbTable_Dossier();
             $dossier = $modelDossier->find($this->_getParam('id'))->current();
 
             if ($dossier['ID_PLATAU'] !== null) {
@@ -162,7 +162,7 @@ class PieceJointeController extends Zend_Controller_Action
                     REAL_DATA_PATH,
                     'uploads',
                     'pieces-jointes',
-                    $idNouvellePJ.$nouvellePJ->EXTENSION_PIECEJOINTE
+                    $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE
                 ));
             } else {
                 $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
@@ -283,7 +283,22 @@ class PieceJointeController extends Zend_Controller_Action
                 $pj != null
                 && $DBitem != null
             ) {
-                $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+                // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+                $modelDossier = new Model_DbTable_Dossier();
+
+                $dossier = $modelDossier->find($this->_request->id)->current();
+
+                if ($dossier['ID_PLATAU'] !== null) {
+                    $file_path = implode(DS, array(
+                        REAL_DATA_PATH,
+                        'uploads',
+                        'pieces-jointes',
+                        $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE
+                    ));
+                } else {
+                    $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+                }
+
                 $miniature_pj = $pj;
                 $miniature_pj['EXTENSION_PIECEJOINTE'] = '.jpg';
                 $miniature_path = $this->store->getFilePath($miniature_pj, 'etablissement_miniature', $this->_request->id);
