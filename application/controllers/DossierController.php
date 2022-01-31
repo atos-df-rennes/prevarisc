@@ -3027,4 +3027,36 @@ class DossierController extends Zend_Controller_Action
             ));
         }
     }
+
+
+
+    //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
+    public function avisEtDerogationsAction(){
+        $this->_helper->layout->setLayout('dossier');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js');
+        $dbAvisDerogation = new Model_DbTable_AvisDerogations();
+         $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdEtablissement(3993);
+    }
+
+    /**
+     * Retourne les informations d'une liste d avis et derogations selon l id d une etude
+     * +
+     * retourne vers la page d edition de ces avis + derogations
+     */
+    public function avisEtDerogationsEditAction(){
+        if ($this->_request->isPost()) {
+            var_dump($this->_request); 
+            /**
+             * appelle du service pour set les nouvelles valeurs
+             */
+            header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
+        }else{
+            $this->_helper->layout->setLayout('dossier');
+            $this->view->headScript()->appendFile('/js/tinymce.min.js');
+            $dbAvisDerogation = new Model_DbTable_AvisDerogations();
+            $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdEtablissement(3993);
+        }   
+
+    }
 }
+

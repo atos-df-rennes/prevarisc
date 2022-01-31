@@ -28,7 +28,29 @@
                             . "href='".$this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true)."'><i class=\"icon-file icon-black\"></i> Documents consultés</a>
                     </li>";
             }
+    ?>
 
+    <?php if($this->idTypeDossier === 1) :?>
+        <li class="avisEtDerogation" style="position:relative">
+            <a>
+                <i class="icon-file icon-black">
+                </i> 
+                    Avis et dérogation
+                
+            </a>
+            <div style="
+                height:25px;
+                width:25px;
+                background:lightgreen;
+                border-radius:15px;
+                position:absolute;
+                right:0;top:calc(50% - 13px)
+                "></div>
+        </li>
+    <?php endif ?>
+
+
+    <?php
             if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
                 echo "<li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
                         <a  "

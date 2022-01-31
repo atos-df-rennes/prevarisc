@@ -1,0 +1,44 @@
+<br>
+<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this ->ID_BLOCK?></strong></h4>
+<div  class="container-fluid">
+    <div class="row">
+        <p class="span2">Type</p>
+        <!--Generation liste des avis-->
+        <?= $this->idAvisCheck === 1 ? "Avis":"Dérogations" ?>        
+    </div>
+    <div class="row">
+        <p class="span2">Titre</p>
+        <strong>
+            <p class="span4" type="text" placeholder="votre titre" >
+                <?= $this->TITRE ? $this->TITRE : "Non renseigné" ?>
+            </p>
+        </strong>
+    </div>
+    <div class="row">
+        <h3>Informations : </h3>
+        <div class='tinyarea' readonly>
+            <?= $this->INFORMATIONS ?>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <p class="span2">Avis</p>
+        <div class="span4">       
+            <?php echo $this->IS_FAVORABLE === 1 ? 'Favorable':'Défavoralbe'?>
+        </div>
+    </div>
+    <div class="row">
+        <h2 class="h4_subtitle span3">Avis/Dérogation levé(e):</h2><a  class="span6" href="monUrl.comAvecLaDate">monUrl.comAvecLaDate</a>
+    </div> 
+    <div class="row" style="display:flex">
+        <input  type="checkbox" 
+                id="scales" 
+                name="scales" 
+                disabled
+                <?php echo ($this->afficherHistorique == true ? 'checked' : '')?> 
+        >
+        <label for="scales">Afficher l'historique de l'établissement</label>
+    </div>
+
+</div>

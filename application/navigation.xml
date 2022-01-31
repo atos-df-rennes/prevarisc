@@ -962,7 +962,18 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
+                <avis-et-derogations>
+                    <label>avis-et-derogations</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations</action>
+                </avis-et-derogations>
+                <avis-et-derogations-edit>
+                    <label>avis-et-derogations-edit</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-edit</action>
+                </avis-et-derogations-edit>                
             </pages>
+
         </dossier>
 
         <!-- Gestion des erreurs -->

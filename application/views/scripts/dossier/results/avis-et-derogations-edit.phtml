@@ -1,0 +1,69 @@
+<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this ->ID_BLOCK?></strong></h4>
+<form  class="container-fluid" method="post">
+    <input type="submit" value='save changes' class="btn btn-success">
+    <div class="row">
+        <p class="span2">Type</p>
+        <!--Generation liste des avis-->
+        <select>
+            <option value=<?= 1 ?> <?= 1 === $this->idAvisCheck ? 'selected' : '' ?> >
+                Avis
+            </option>
+            <option value=<?= 2 ?> <?= 2 === $this->idAvisCheck ? 'selected' : '' ?> >
+                Dérogations
+            </option>
+        </select>
+    </div>
+    <div class="row">
+        <p class="span2">Titre</p>
+        <input class="span4" type="text" placeholder="votre titre" value='<?= $this->TITRE ?>' >
+    </div>
+    <div class="row">
+        <p>Informations</p>
+        <textarea class="tinyarea"><?= $this->INFORMATIONS ?></textarea>
+    
+    </div>
+    <div class="row">
+        <p class="span2">Avis</p>
+        <select class="span4">       
+            <option <?php echo $this->IS_FAVORABLE === 1 ? 'selected':''  ?>>Favorable</option>
+            <option <?php echo  $this->IS_FAVORABLE === 0 ? 'selected':''?>>Défavorable</option>
+        </select>
+    </div>
+    <div class="row">
+        <h2 class="h4_subtitle span3">Avis/Dérogation levé(e):</h2><a  class="span6" href="monUrl.comAvecLaDate">monUrl.comAvecLaDate</a>
+    </div>   
+    <div class="row">
+        <button>Lier un dossier</button>
+    </div>
+    <div class="row" style="display:flex">
+        <input  type="checkbox" 
+                id="scales" 
+                name="scales" 
+                <?php echo ($this->afficherHistorique == true ? 'checked' : '')?> 
+        >
+        <label for="scales">Afficher l'historique de l'établissement</label>
+    </div>
+
+</form>
+
+
+<script type='text/javascript'>
+    tinymce.init({
+        selector: '.tinyarea',
+        height: 200,
+        menubar: true,
+        statusbar: false,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+        content_css: [
+            '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+            '//www.tinymce.com/css/codepen.min.css'
+        ]
+    });
+
+
+</script>
