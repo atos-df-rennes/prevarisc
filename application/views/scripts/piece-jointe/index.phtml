@@ -88,7 +88,7 @@
 			url: "/piece-jointe/add?id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
 			paramName: "fichier"
 		});
-		
+
 		myDropzone.on("success", function(file, responseText) {
 			if (responseText !== undefined) {
 				$('body').append(responseText);
@@ -184,7 +184,6 @@
 	
 	// Si un fichier est bien uploadé, on l'ajoute à la liste
 	function callback(id, ext) {
-
 		$.ajax({
 			url: "/piece-jointe/check",
 			data: {
@@ -196,16 +195,10 @@
 			},
 			type: "post",
 			success: function(result) {
-			
 				// On détruit la fenetre de load
-				//$("#load").dialog('destroy');
 				$("#load").remove();
 			
-				if( result.exists ) {
-					// Message d'info
-					$("#uploadSucces").show();
-					setTimeout( function() { $(".message").fadeOut(); }, 2500);
-					
+				if (result.exists) {
 					// Ajout d'une ligne
 					$("#tabPieceJointe tbody").prepend(result.html);
 					
@@ -213,16 +206,10 @@
 					$("#listePieceJointe table").trigger("update");
 					$("#listePieceJointe table").trigger("sorton", [[3,1]]);
 				}
-				else {
-					// Message d'information
-					$("#uploadError").show();
-					setTimeout( function() { $(".message").fadeOut(); }, 2500);
-				}
 				
 				$("#listePieceJointe").show();
 				$("#listePieceJointe-no").hide();
 			}
 		});
 	}
-
 </script>
