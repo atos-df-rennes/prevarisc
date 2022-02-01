@@ -9,28 +9,20 @@ class Service_EtablissementDescriptif
     public function getRubriques(int $idEtablissement): array
     {
         $modelRubrique = new Model_DbTable_Rubrique();
-
-        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);;
-
-        return $rubriques;
-    }
-
-    public function getChamps(int $idEtablissement): array
-    {
         $modelChamp = new Model_DbTable_Champ();
+
         $serviceValeur = new Service_Valeur();
 
-        $champs = $modelChamp->findAll();
-        foreach ($champs as &$champ) {
-            $champ['VALEUR'] = $serviceValeur->get($champ['ID_CHAMP'], $idEtablissement);
+        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
+        foreach ($rubriques as &$rubrique) {
+            $rubrique['CHAMPS'] = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
+
+            foreach ($rubrique['CHAMPS'] as &$champ) {
+                $champ['VALEUR'] = $serviceValeur->get($champ['ID_CHAMP'], $idEtablissement);
+            }
         }
 
-        $sortedChamps =  [];
-        foreach ($champs as &$champ) {
-            $sortedChamps[$champ['ID_RUBRIQUE']][] = $champ;
-        }
-
-        return $sortedChamps;
+        return $rubriques;
     }
 
     public function getValeursListe(): array

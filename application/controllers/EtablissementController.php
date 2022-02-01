@@ -209,7 +209,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
         
         $this->view->assign('rubriques', $serviceEtablissementDescriptif->getRubriques($idEtablissement));
-        $this->view->assign('champs', $serviceEtablissementDescriptif->getChamps($idEtablissement));
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
     }
 
