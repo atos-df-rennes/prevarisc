@@ -2552,7 +2552,6 @@ class DossierController extends Zend_Controller_Action
         }
 
         /* Gestion des rubriques/champs personnalisés */
-        // TODO A déplacer dans un service ?
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);

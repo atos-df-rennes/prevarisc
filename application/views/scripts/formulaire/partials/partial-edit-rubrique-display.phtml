@@ -10,7 +10,7 @@
             type="checkbox"
             name="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>"
             value="1"
-            <?= $this->DISPLAY === true ? 'checked' : '' ?>
+            <?= boolval($this->DISPLAY) === true ? 'checked' : '' ?>
         >
     </div>
 </div>

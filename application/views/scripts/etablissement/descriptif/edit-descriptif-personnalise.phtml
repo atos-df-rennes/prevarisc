@@ -28,7 +28,7 @@
 
     <!-- TODO Faire la même avec des partials loops -->
     <?php foreach ($this->rubriques as $rubrique): ?>
-        <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= $rubrique['DISPLAY'] === false ? 'hide' : '' ?>">
+        <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
             <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
 
             <?php if (isset($this->champs[$rubrique['ID_RUBRIQUE']])):

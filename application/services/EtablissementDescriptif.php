@@ -6,27 +6,16 @@ class Service_EtablissementDescriptif
 {
     const CAPSULE_RUBRIQUE = 'descriptifEtablissement';
 
-    // FIXME Faire le getChamps ici
-    // Pour avoir une arborescence $rubrique[$champ[$valeur]]
     public function getRubriques(int $idEtablissement): array
     {
         $modelRubrique = new Model_DbTable_Rubrique();
-        $serviceRubrique = new Service_Rubrique();
 
-        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);
-        foreach ($rubriques as &$rubrique) {
-            $rubrique['DISPLAY'] = $serviceRubrique->getRubriqueDisplay($rubrique['ID_RUBRIQUE'], $idEtablissement);
-        }
+        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique(self::CAPSULE_RUBRIQUE);;
 
         return $rubriques;
     }
 
-    public function getAllCapsuleRubriqueInformationBytEtablissement(int $idEtablissement): array
-    {
-
-    }
-
-    public function getChamps($idEtablissement): array
+    public function getChamps(int $idEtablissement): array
     {
         $modelChamp = new Model_DbTable_Champ();
         $serviceValeur = new Service_Valeur();

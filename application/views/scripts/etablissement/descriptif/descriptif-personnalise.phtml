@@ -10,7 +10,7 @@
     
     <!-- TODO Faire la même avec des partials loops -->
     <?php foreach ($this->rubriques as $rubrique):
-        if ($rubrique['DISPLAY'] === true): ?>
+        if (boolval($rubrique['DISPLAY']) === true): ?>
             <h4 class='h4_subtitle' id='<?= strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?= $rubrique['NOM'] ?></h4>
 
             <!-- TODO Si rubrique affichée et aucun champ renseigné, afficher un message -->

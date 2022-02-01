@@ -2,24 +2,6 @@
 
 class Service_Rubrique
 {
-    // Récupère le display utilisateur
-    // Ou le default display si pas de display utilisateur
-    public function getRubriqueDisplay(int $idRubrique, int $idEtablissement): bool
-    {
-        $modelRubrique = new Model_DbTable_Rubrique();
-        $modelDisplayRubriqueEtablissement = new Model_DbTable_DisplayRubriqueEtablissement();
-
-        $rubrique = $modelRubrique->find($idRubrique)->current();
-        $result = $rubrique['DEFAULT_DISPLAY'];
-
-        $userModified = $modelDisplayRubriqueEtablissement->find($idEtablissement, $idRubrique)->current();
-        if ($userModified !== null) {
-            $result = $userModified['USER_DISPLAY'];
-        }
-        
-        return boolval($result);
-    }
-
     public function updateRubriqueDisplay(int $idRubrique, int $idEtablissement, int $userDisplay): void
     {
         $modelRubrique = new Model_DbTable_Rubrique();
