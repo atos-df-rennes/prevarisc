@@ -505,10 +505,29 @@ addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE
 addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
 addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
 
-// TODO Tester
-// TODO Faire fonctionner pour le cas d'une liste
 $serviceUtils = new Service_Utils();
 
+// Permet d'avoir tout le descriptif d'un coup
+try{
+    $rubriques = $odf->setSegment('rubriques');
+
+    foreach($this->rubriques as $rubrique) {
+        if (boolval($rubrique['DISPLAY']) === true) {
+            addChamp(
+                $rubriques,
+                'rubrique',
+                $rubrique['NOM']
+            );
+        }
+
+    	$rubriques->merge();
+    }
+    $odf->mergeSegment($rubriques);
+} catch (OdfException $e) {
+
+}
+
+// Permet d'avoir les informations unitairement
 foreach ($this->rubriques as $rubrique) {
     addChamp(
         $odf,
