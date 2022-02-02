@@ -499,10 +499,42 @@ addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEUR
 addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS']);
 addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS']);
 
+// FIXME Mettre une variable dans la vue pour indiquer si on affiche les informations de l'ancien ou du nouveau descriptif
 //Descriptif de l'établissement
 addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
 addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
 addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
+
+// TODO Tester
+// TODO Faire fonctionner pour le cas d'une liste
+$serviceUtils = new Service_Utils();
+
+foreach ($this->rubriques as $rubrique) {
+    addChamp(
+        $odf,
+        $serviceUtils->getFullFusionName(
+            'descriptif_etablissement',
+            [
+                $rubrique['NOM']
+            ]
+        ),
+        $rubrique['NOM']
+    );
+
+    foreach ($rubrique['CHAMPS'] as $champ) {
+        addChamp(
+            $odf,
+            $serviceUtils->getFullFusionName(
+                'descriptif_etablissement',
+                [
+                    $rubrique['NOM'],
+                    $champ['NOM']
+                ]
+            ),
+            $champ['VALEUR']
+        );
+    }
+}
 
 //Implantation
 addChamp($odf, 'surfaceEmpriseSol',$this->etabDesc['DESCTECH_IMPLANTATION_SURFACE_ETABLISSEMENT']);

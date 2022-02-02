@@ -2555,10 +2555,7 @@ class DossierController extends Zend_Controller_Action
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
-        $champs = $serviceEtablissementDescriptif->getChamps($idEtab);
-
-        var_dump($rubriques);
-        exit();
+        $this->view->assign('rubriques', $rubriques);
 
         // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
