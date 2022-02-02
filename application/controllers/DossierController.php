@@ -2562,7 +2562,7 @@ class DossierController extends Zend_Controller_Action
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $nouvellePJ = $DBpieceJointe->createRow();
         $nouvellePJ->ID_PIECEJOINTE = $this->view->idPieceJointe;
-        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 3);
+        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 4);
         $nouvellePJ->EXTENSION_PIECEJOINTE = '.odt';
         $nouvellePJ->DESCRIPTION_PIECEJOINTE = sprintf(
             "Rapport de l'établissement %s (%s) généré le %s à %s",
