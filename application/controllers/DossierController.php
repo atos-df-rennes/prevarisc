@@ -2556,6 +2556,7 @@ class DossierController extends Zend_Controller_Action
 
         $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
         $this->view->assign('rubriques', $rubriques);
+        $this->view->assign('isDescriptifPersonnalise', intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) === 1);
 
         // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();

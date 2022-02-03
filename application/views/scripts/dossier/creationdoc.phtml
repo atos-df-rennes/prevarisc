@@ -499,60 +499,42 @@ addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEUR
 addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS']);
 addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS']);
 
-// FIXME Mettre une variable dans la vue pour indiquer si on affiche les informations de l'ancien ou du nouveau descriptif
-//Descriptif de l'établissement
-addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
-addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
-addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
+if ($this->isDescriptifPersonnalise === true) {
+    // Descriptif personnalisé de l'établissement
+    $serviceUtils = new Service_Utils();
 
-$serviceUtils = new Service_Utils();
-
-// Permet d'avoir tout le descriptif d'un coup
-try{
-    $rubriques = $odf->setSegment('rubriques');
-
-    foreach($this->rubriques as $rubrique) {
-        if (boolval($rubrique['DISPLAY']) === true) {
-            addChamp(
-                $rubriques,
-                'rubrique',
-                $rubrique['NOM']
-            );
-        }
-
-    	$rubriques->merge();
-    }
-    $odf->mergeSegment($rubriques);
-} catch (OdfException $e) {
-
-}
-
-// Permet d'avoir les informations unitairement
-foreach ($this->rubriques as $rubrique) {
-    addChamp(
-        $odf,
-        $serviceUtils->getFullFusionName(
-            'descriptif_etablissement',
-            [
-                $rubrique['NOM']
-            ]
-        ),
-        $rubrique['NOM']
-    );
-
-    foreach ($rubrique['CHAMPS'] as $champ) {
+    // Permet d'avoir les informations unitairement
+    foreach ($this->rubriques as $rubrique) {
         addChamp(
             $odf,
             $serviceUtils->getFullFusionName(
                 'descriptif_etablissement',
                 [
-                    $rubrique['NOM'],
-                    $champ['NOM']
+                    $rubrique['NOM']
                 ]
             ),
-            $champ['VALEUR']
+            $rubrique['NOM']
         );
+
+        foreach ($rubrique['CHAMPS'] as $champ) {
+            addChamp(
+                $odf,
+                $serviceUtils->getFullFusionName(
+                    'descriptif_etablissement',
+                    [
+                        $rubrique['NOM'],
+                        $champ['NOM']
+                    ]
+                ),
+                $champ['VALEUR']
+            );
+        }
     }
+} else {
+    // Descriptif standard de l'établissement
+    addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
+    addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
+    addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
 }
 
 //Implantation
