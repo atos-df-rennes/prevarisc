@@ -72,8 +72,19 @@ class PieceJointeController extends Zend_Controller_Action
 
         $piece_jointe = $piece_jointe[0];
 
-        $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
-        $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
+        // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+        // Nécessite de modifier la configuration Plat'AU
+        // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
+        $modelDossier = new Model_DbTable_Dossier();
+        $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
+        
+        if ($dossier['ID_PLATAU'] !== null) {
+            $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+            $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+        } else {
+            $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
+            $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
+        }
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -142,7 +153,20 @@ class PieceJointeController extends Zend_Controller_Action
             // Sauvegarde de la BDD
             $nouvellePJ->save();
 
-            $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+            // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+            $modelDossier = new Model_DbTable_Dossier();
+            $dossier = $modelDossier->find($this->_getParam('id'))->current();
+
+            if ($dossier['ID_PLATAU'] !== null) {
+                $file_path = implode(DS, array(
+                    REAL_DATA_PATH,
+                    'uploads',
+                    'pieces-jointes',
+                    $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE
+                ));
+            } else {
+                $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+            }
 
             // On check si l'upload est okay
             $linkPj = null;
@@ -259,7 +283,22 @@ class PieceJointeController extends Zend_Controller_Action
                 $pj != null
                 && $DBitem != null
             ) {
-                $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+                // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+                $modelDossier = new Model_DbTable_Dossier();
+
+                $dossier = $modelDossier->find($this->_request->id)->current();
+
+                if ($dossier['ID_PLATAU'] !== null) {
+                    $file_path = implode(DS, array(
+                        REAL_DATA_PATH,
+                        'uploads',
+                        'pieces-jointes',
+                        $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE
+                    ));
+                } else {
+                    $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+                }
+
                 $miniature_pj = $pj;
                 $miniature_pj['EXTENSION_PIECEJOINTE'] = '.jpg';
                 $miniature_path = $this->store->getFilePath($miniature_pj, 'etablissement_miniature', $this->_request->id);
@@ -296,6 +335,7 @@ class PieceJointeController extends Zend_Controller_Action
         // Modèle
         $DBused = new Model_DbTable_PieceJointe();
 
+        // FIXME Pourquoi on a une liste alors qu'on a tout le temps maximum 1 résultat ????
         // Cas dossier
         if ($this->_request->type == 'dossier') {
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
@@ -313,7 +353,22 @@ class PieceJointeController extends Zend_Controller_Action
             return;
         }
 
-        $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+        // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $dossier = $modelDossier->find($this->_request->id)->current();
+
+        if ($dossier['ID_PLATAU'] !== null) {
+            $file_path = implode(DS, array(
+                REAL_DATA_PATH,
+                'uploads',
+                'pieces-jointes',
+                $pj['ID_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE']
+            ));
+        } else {
+            $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+        }
+
         $this->view->exists = file_exists($file_path);
 
         if ($this->view->exists) {
