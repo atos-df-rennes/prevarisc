@@ -162,11 +162,11 @@ class FormulaireController extends Zend_Controller_Action
 
             // Modification de valeur
             // On récupère les valeurs de la liste séparément des autres champs
-            $listValueArray = array_filter($post, function ($key) {
+            $listFieldValueArray = array_filter($post, function ($key) {
                 return strpos($key, 'valeur-champ-') === 0;
             }, ARRAY_FILTER_USE_KEY);
             
-            foreach ($listValueArray as $key => $value) {
+            foreach ($listFieldValueArray as $key => $value) {
                 $explodedKey = explode('-', $key);
                 $idValue = intval(end($explodedKey));
 
@@ -178,7 +178,7 @@ class FormulaireController extends Zend_Controller_Action
             // Ajout de valeur
             // On récupère les valeurs de la liste séparément des autres champs
             $listValueArray = array_filter($post, function ($key) {
-                return strpos($key, 'valeur-') === 0;
+                return strpos($key, 'valeur-ajout-') === 0;
             }, ARRAY_FILTER_USE_KEY);
 
             foreach ($listValueArray as $listValue) {

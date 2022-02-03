@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('#add-list-value').on('click', function(e) {
         e.preventDefault()
         const date = Date.now()
-        const html = "<div><input type='text' name='valeur-"+date+"' id='valeur-"+date+"'></input><a href='#' class='delete-list-value pull-right'>Retirer</a></div>"
+        const html = "<div><input type='text' name='valeur-ajout-"+date+"' id='valeur-ajout-"+date+"'></input><a href='#' class='delete-list-value pull-right'>Retirer</a></div>"
 
         $('#valeurs-liste').append(html)
 
