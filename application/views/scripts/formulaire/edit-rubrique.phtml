@@ -37,7 +37,7 @@
     </div>
 
     <?php if(count($this->champs) > 0): ?>
-        <div class="span7 offset1">
+        <div class="span6 offset2">
             <h3>Liste des champs</h3>
         </div>
     <?php endif ?>
@@ -64,7 +64,7 @@
         </form>
     </div>
 
-    <div id="saved-fields" class="span7 offset1">
+    <div id="saved-fields" class="span6 offset2">
         <?php if(count($this->champs) > 0): ?>
             <table class="table table-bordered table-condensed">
                 <thead>
@@ -95,9 +95,15 @@
                                     </ul>
                                 <?php endif ?>
                             </td>
-                            <td id="actions">
-                                <a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">Modifier</a>
-                                <a href="#" data-id="<?php echo $champ['ID_CHAMP'] ?>" data-rubrique-id="<?php echo $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">Supprimer</a>
+                            <td id='actions'>
+                                <div class='text-center'>
+                                    <a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">
+                                        <i title='Modifier' class='icon-pencil'></i>
+                                    </a>
+                                    <a href="" data-id="<?php echo $champ['ID_CHAMP'] ?>" data-rubrique-id="<?php echo $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">
+                                        <i title='Supprimer' class='icon-trash'></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach ?>

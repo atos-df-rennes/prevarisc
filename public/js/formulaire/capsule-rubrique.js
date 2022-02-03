@@ -16,7 +16,7 @@ $(document).ready(function() {
 
                 // On crée la table uniquement si elle n'existe pas
                 if (savedRubriquesDiv.children().length === 0) {
-                    savedRubriquesTitlesDiv.append(`<div class="span7 offset1">
+                    savedRubriquesTitlesDiv.append(`<div class="span6 offset2">
                         <h3>Liste des rubriques</h3>
                     </div>`)
                     savedRubriquesDiv.append(getTableElement())
@@ -43,12 +43,12 @@ $(document).ready(function() {
 function deleteRubrique(element) {
     const id = element.getAttribute('data-id')
 
-    const parentDiv = $(element).parent().parent()
+    const parentDiv = $(element).parent().parent().parent()
     const parentTable = $(element).closest('table')
     const nbOfRows = parentTable.children('tbody').children('tr').length
 
     const parentObject = element.closest('.objet').id
-    let parentDivTitleDiv = $('#'+parentObject+' .titles .span7.offset1')
+    let parentDivTitleDiv = $('#'+parentObject+' .titles .span6.offset2')
 
     $.ajax({
         url: '/formulaire/delete-rubrique/rubrique/'+id,
@@ -86,21 +86,27 @@ function getRowElement(parsedData) {
     let defaultDisplay = ``;
     if (parsedData.DEFAULT_DISPLAY === 1) {
         defaultDisplay =
-            `<p class='text-center'>
+            `<div class='text-center'>
                 <i class='icon-ok'></i>
-            </p>`
+            </div>`
     }
 
     return `<tr>
         <td>`
         +parsedData.NOM+
         `</td>
-        <td>`
+        <td id='default-display'>`
         +defaultDisplay+
         `</td>
         <td id='actions'>
-            <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>Modifier</a>
-            <a href='#' data-id='`+parsedData.ID_RUBRIQUE+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>Supprimer</a>
+            <div class='text-center'>
+                <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>
+                    <i title='Modifier' class='icon-pencil'></i>
+                </a>
+                <a href='' data-id='`+parsedData.ID_RUBRIQUE+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>
+                    <i title='Supprimer' class='icon-trash'></i>
+                </a>
+            </div>
         </td>
     </tr>`
 }

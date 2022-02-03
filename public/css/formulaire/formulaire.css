@@ -27,6 +27,11 @@ div[id^='saved-rubriques-'] a {
     display: none;
 }
 
+#default-display, #actions {
+    vertical-align: middle;
+}
+
 #actions a {
-    display: block;
+    padding: 0.5rem;
+    text-decoration: none;
 }

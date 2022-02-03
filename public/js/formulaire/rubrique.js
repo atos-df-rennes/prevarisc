@@ -27,7 +27,7 @@ $(document).ready(function() {
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
                     savedFieldsDiv.append(getTableElement())
-                    savedFieldsTitlesDiv.append(`<div class="span7 offset1">
+                    savedFieldsTitlesDiv.append(`<div class="span6 offset2">
                         <h3>Liste des champs</h3>
                     </div>`)
                 }
@@ -82,11 +82,11 @@ function deleteChamp(element) {
     const idChamp = element.getAttribute('data-id')
     const idRubrique = element.getAttribute('data-id')
 
-    const parentDiv = $(element).parent().parent()
+    const parentDiv = $(element).parent().parent().parent()
     const parentTable = $(element).closest('table')
     const nbOfRows = parentTable.children('tbody').children('tr').length
 
-    const parentDivTitleDiv = $('.titles .span7.offset1')
+    const parentDivTitleDiv = $('.titles .span6.offset2')
 
     $.ajax({
         url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
@@ -129,8 +129,14 @@ function getRowElement(parsedData) {
         +parsedData[0].TYPE+
         `</td>
         <td id='actions'>
-            <a href='/formulaire/edit-champ/rubrique/`+parsedData[0].ID_RUBRIQUE+`/champ/`+parsedData[0].ID_CHAMP+`'>Modifier</a>
-            <a href='#' data-id='`+parsedData[0].ID_CHAMP+`' data-rubrique-id='`+parsedData[0].ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>Supprimer</a>
+            <div class='text-center'>
+                <a href='/formulaire/edit-champ/rubrique/`+parsedData[0].ID_RUBRIQUE+`/champ/`+parsedData[0].ID_CHAMP+`'>
+                    <i title='Modifier' class='icon-pencil'></i>
+                </a>
+                <a href='' data-id='`+parsedData[0].ID_CHAMP+`' data-rubrique-id='`+parsedData[0].ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
+                    <i title='Supprimer' class='icon-trash'></i>
+                </a>
+            </div>
         </td>
     </tr>`
 }
