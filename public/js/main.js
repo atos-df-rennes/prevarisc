@@ -195,6 +195,7 @@ function initViewer(divId, ignKey, center, description, autoconfPath) {
     return viewer;
 }
 
+// FIXME Ajouter les couches au format WFS & WMTS
 function addUserLayers(viewer, ignKey, wmsLayers) {
     // Ajout des couches wms
     if(wmsLayers && wmsLayers.length > 0) {

@@ -13,6 +13,7 @@
 			<select name="TYPE_COUCHECARTO">
 				<option value="WMS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMS') echo "selected" ?> >WMS</option>
 				<option value="WFS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WFS') echo "selected" ?> >WFS</option>
+				<option value="WMTS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMTS') echo "selected" ?> >WMTS</option>
 			</select>
 		</dd>
                 
@@ -94,17 +95,3 @@
 		</dd>
 	</dl>
 </form>
-
-<script>
-	$(document).ready(function() {
-		$("select[name='TYPE_COUCHECARTO']").change(function() {
-			if($(this).find('option:selected').val() == "WMS") {
-				$('.format_couche').show();
-			}
-			else {
-				$('.format_couche').hide();
-				$('.format_couche').find('input').val(null);
-			}
-		}).change();
-	});
-</script>
