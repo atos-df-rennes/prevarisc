@@ -189,13 +189,9 @@ function initViewer(divId, ignKey, center, description, autoconfPath) {
     return viewer;
 }
 
-// FIXME Ajouter les couches au format WFS & WMTS
 function addUserLayers(viewer, ignKey, layers) {
     const wmsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMS'))
     addWmsLayers(viewer, ignKey, wmsLayers)
-
-    const wfsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WFS'))
-    // TODO addWfsLayers
 
     const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
     addWmtsLayers(viewer, ignKey, wmtsLayers)
@@ -386,7 +382,7 @@ function geocodeWithJsAutoconf(apiKey, adresse, filterOptionsType, projection, v
             var newCenter = {
                 x: t.locations[0].position.y,
                 y: t.locations[0].position.x,
-                projection: "EPSG:4326"
+                projection: projection
             };
             viewer.setCenter(newCenter);
             $("span.result").text("Géolocalisée IGN");
