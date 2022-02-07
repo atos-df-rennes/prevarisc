@@ -290,7 +290,20 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
 }
 
 function getCapabilities(ignKey, format) {
-    const parser = new ol.format.WMTSCapabilities()
+    let parser = null
+    
+    switch (format) {
+        case 'wms':
+            parser = new ol.format.WMSCapabilities()
+            break
+        case 'wmts':
+            parser = new ol.format.WMTSCapabilities()
+            break
+        default:
+            console.error('Format non supporté: ' + format + '\nLes formats supportés sont: wms / wmts')
+            break
+    }
+
     let layersToReturn = null
 
     $.ajax({
