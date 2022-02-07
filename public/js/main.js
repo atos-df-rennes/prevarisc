@@ -231,7 +231,7 @@ function addWmsLayers(viewer, ignKey, wmsLayers) {
 }
 
 function addWmtsLayers(viewer, ignKey, wmtsLayers) {
-    const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
+    const wmtsCapabilities = getCapabilities(ignKey)
 
     // Projection EPSG:3857
     const resolutions = [
@@ -289,25 +289,12 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
     }
 }
 
-function getCapabilities(ignKey, format) {
-    let parser = null
-    
-    switch (format) {
-        case 'wms':
-            parser = new ol.format.WMSCapabilities()
-            break
-        case 'wmts':
-            parser = new ol.format.WMTSCapabilities()
-            break
-        default:
-            console.error('Format non supporté: ' + format + '\nLes formats supportés sont: wms / wmts')
-            break
-    }
-
+function getCapabilities(ignKey) {
+    let parser = new ol.format.WMTSCapabilities() 
     let layersToReturn = null
 
     $.ajax({
-        url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/' + format + '?SERVICE=' + format + '&REQUEST=GetCapabilities',
+        url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/wmts?SERVICE=wmts&REQUEST=GetCapabilities',
         type: 'get',
         async: false,
         success: function (result) {
