@@ -248,15 +248,15 @@ class Service_Search
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
-    
+
         // Identifiant de la recherche
         $search_id = 'extract_etablissements_' . md5(serialize(func_get_args()));
-    
+
         if (($results = unserialize($cache->load($search_id))) === false) {
-    
+
             // Création de l'objet recherche
             $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-    
+
             // Requête principale
             $select->from(array("e" => "etablissement"), array("NUMEROID_ETABLISSEMENT"))
                 ->columns(array(
@@ -319,65 +319,65 @@ class Service_Search
                 ->order("etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC")
                 ->group("e.ID_ETABLISSEMENT")
             ;
-    
+
             // Critères : nom de l'établissement
             if ($label !== null) {
                 $cleanLabel = trim($label);
-    
+
                 // recherche par id
                 if (substr($cleanLabel, 0, 1) == "#") {
                     $this->setCriteria($select, "e.NUMEROID_ETABLISSEMENT", substr($cleanLabel, 1), false);
-    
+
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel) === 1) {
                     $this->setCriteria($select, "e.NUMEROID_ETABLISSEMENT", $cleanLabel, false);
-    
+
                 // cas par défaut
                 } else {
                     $this->setCriteria($select, "etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS", $cleanLabel, false);
                 }
             }
-    
+
             // Critères : identifiant
             if ($identifiant !== null) {
                 $this->setCriteria($select, "e.NUMEROID_ETABLISSEMENT", $identifiant);
             }
-    
+
             // Critères : genre
             if ($genres !== null) {
                 $this->setCriteria($select, "genre.ID_GENRE", $genres);
             }
-    
+
             // Critères : catégorie
             if ($categories !== null) {
                 $this->setCriteria($select, "categorie.ID_CATEGORIE", $categories);
             }
-    
+
             // Critères : classe
             if ($classes !== null) {
                 $this->setCriteria($select, "etablissementinformations.ID_CLASSE", $classes);
             }
-    
+
             // Critères : famille
             if ($familles !== null) {
                 $this->setCriteria($select, "etablissementinformations.ID_FAMILLE", $familles);
             }
-    
+
             // Critères : type
             if ($types_activites !== null) {
                 $this->setCriteria($select, "typeactivite.ID_TYPEACTIVITE", $types_activites);
             }
-    
+
             // Critères : avis favorable
             if ($avis_favorable !== null) {
                 $this->setCriteria($select, "avis.ID_AVIS", $avis_favorable ? 1 : 2);
             }
-    
+
             // Critères : statuts
             if ($statuts !== null) {
                 $this->setCriteria($select, "etablissementinformations.ID_STATUT", $statuts);
             }
-    
+
             // Critères : statuts
             if ($local_sommeil !== null) {
                 $this->setCriteria($select, "etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS", $local_sommeil);
@@ -395,7 +395,7 @@ class Service_Search
                 }
                 $select->where('('.implode(' OR ', $clauses).')');
             }
-    
+
             // Critère : commune et rue
             if ($street_id !== null) {
                 $clauses = array();
@@ -418,7 +418,7 @@ class Service_Search
                 }
                 $select->where('('.implode(' OR ', $clauses).')');
             }
-        
+
             // Critère : commission
             if ($commissions !== null) {
                 $this->setCriteria($select, "commission.ID_COMMISSION", $commissions);
@@ -428,24 +428,24 @@ class Service_Search
             if ($groupements_territoriaux !== null) {
                 $this->setCriteria($select, "groupement.ID_GROUPEMENT", $groupements_territoriaux);
             }
-    
+
             // Critères : géolocalisation
             if ($lon !== null && $lat !== null) {
                 $this->setCriteria($select, "etablissementadresse.LON_ETABLISSEMENTADRESSE", $lon);
                 $this->setCriteria($select, "etablissementadresse.LAT_ETABLISSEMENTADRESSE", $lat);
             }
-    
+
             // Critères : parent
             if ($parent !== null) {
                 $select->where($parent == 0 ? "etablissementlie.ID_ETABLISSEMENT IS NULL" : "etablissementlie.ID_ETABLISSEMENT = ?", $parent);
             }
-    
+
             // Performance optimisation : avoid sorting on big queries, and sort only if
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 0) {
                 $select->order("etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC");
             }
-    
+
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
             $results = array(
@@ -455,10 +455,10 @@ class Service_Search
                     'count' => count($rows_counter)
                 )
             );
-    
+
             $cache->save(serialize($results));
         }
-    
+
         return $results;
     }
 
@@ -715,15 +715,15 @@ class Service_Search
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
-        
+
         // Identifiant de la recherche
         $search_id = 'search_dossiers_' . md5(serialize(func_get_args()));
-        
+
         if (($results = unserialize($cache->load($search_id))) === false) {
-            
+
             // Création de l'objet recherche
             $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-            
+
             // Requête principale
             $select->from(array("d" => "dossier"))
             ->columns(array(
@@ -775,16 +775,16 @@ class Service_Search
                         ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                         ->group("d.ID_DOSSIER")
                         ;
-            
+
             // Critères : numéro de doc urba
             if ($num_doc_urba !== null) {
                 $select->having("NB_URBA like ?", "%$num_doc_urba%");
             }
-            
+
             // Critères : objet
             if ($objet !== null) {
                 $cleanObjet = trim($objet);
-                
+
                 // recherche par id
                 if (substr($cleanObjet, 0, 1) == "#") {
                     $select->having("NB_URBA like ?", "%".substr($cleanObjet, 1)."%");
@@ -796,61 +796,61 @@ class Service_Search
                     $this->setCriteria($select, "OBJET_DOSSIER", $cleanObjet, false);
                 }
             }
-            
+
             // Critères : parent
             if ($parent !== null) {
                 $select->where($parent == 0 ? "dossierlie.ID_DOSSIER1 IS NULL" : "dossierlie.ID_DOSSIER1 = ?", $parent);
             }
-            
+
             // Critères : type
             if ($types !== null) {
                 $this->setCriteria($select, "dossiertype.ID_DOSSIERTYPE", $types);
             }
-            
+
             // Critères : avis différé
             if ($avis_differe !== null) {
                 $this->setCriteria($select, "d.DIFFEREAVIS_DOSSIER", $avis_differe);
             }
-            
+
             // Critères : commissions
             if (isset($criterias['commissions']) && $criterias['commissions'] !== null) {
                 $this->setCriteria($select, "datecommission.COMMISSION_CONCERNE", $criterias['commissions']);
             }
-            
+
             // Critères : avis commission
             if (isset($criterias['avisCommission']) && $criterias['avisCommission'] !== null) {
                 $this->setCriteria($select, "d.AVIS_DOSSIER_COMMISSION", $criterias['avisCommission']);
             }
-            
+
             // Critères : avis rapporteur
             if (isset($criterias['avisRapporteur']) && $criterias['avisRapporteur'] !== null) {
                 $this->setCriteria($select, "d.AVIS_DOSSIER", $criterias['avisRapporteur']);
             }
-            
+
             // Critères : avis différé
             if (isset($criterias['avisDiffere']) && $criterias['avisDiffere'] !== null) {
                 $this->setCriteria($select, "d.DIFFEREAVIS_DOSSIER", $criterias['avisDiffere']);
             }
-            
+
             // Critères : permis
             if (isset($criterias['permis']) && $criterias['permis'] !== null) {
                 $this->setCriteria($select, "dossierdocurba.NUM_DOCURBA", $criterias['permis']);
             }
-            
+
             // Critères : courrier
             if (isset($criterias['courrier']) && $criterias['courrier'] !== null) {
                 $this->setCriteria($select, "d.REFCOURRIER_DOSSIER", $criterias['courrier'], false);
             }
-            
+
             // Critères : preventionniste
             if (isset($criterias['preventionniste']) && $criterias['preventionniste'] !== null) {
                 $this->setCriteria($select, "dossierpreventionniste.ID_PREVENTIONNISTE", $criterias['preventionniste']);
             }
-            
+
             if (isset($criterias['commune']) && $criterias['commune'] !== null) {
                 $this->setCriteria($select, "ea.NUMINSEE_COMMUNE", $criterias['commune']);
             }
-            
+
             if (isset($criterias['voie']) && $criterias['voie'] !== null) {
                 $this->setCriteria($select, "ea.ID_RUE", $criterias['voie']);
             }
@@ -859,30 +859,30 @@ class Service_Search
             if (isset($criterias['groupements_territoriaux']) && $criterias['groupements_territoriaux'] !== null) {
                 $this->setCriteria($select, "groupement.ID_GROUPEMENT", $criterias['groupements_territoriaux']);
             }
-            
+
             // Critères : nom de l'établissement
             if (isset($criterias['label']) && $criterias['label'] !== null) {
                 $cleanLabel = trim($criterias['label']);
-                
+
                 // recherche par id
                 if (substr($cleanLabel, 0, 1) == "#") {
                     $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", substr($cleanLabel, 1), false);
-                    
+
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel) === 1) {
                     $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", $cleanLabel, false);
-                    
+
                 // cas par défaut
                 } else {
                     $this->setCriteria($select, "LIBELLE_ETABLISSEMENTINFORMATIONS", $cleanLabel, false);
                 }
             }
-            
+
             // Critères : identifiant
             if (isset($criterias['identifiant']) && $criterias['identifiant'] !== null) {
                 $this->setCriteria($select, "NUMEROID_ETABLISSEMENT", $criterias['identifiant']);
             }
-            
+
             if (isset($criterias['dateCreationStart']) && $criterias['dateCreationStart'] !== null) {
                 $select->where("d.DATEINSERT_DOSSIER >= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateCreationStart']);
             }
@@ -913,14 +913,14 @@ class Service_Search
             if (isset($criterias['dateVisiteEnd']) && $criterias['dateVisiteEnd'] !== null) {
                 $select->where("d.DATEVISITE_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateVisiteEnd']);
             }
-            
+
             $select->order("adressecommune.LIBELLE_COMMUNE ASC")
                 ->order("categorie.LIBELLE_CATEGORIE ASC")
                 ->order("type.LIBELLE_TYPE ASC")
                 ->order("ei.LIBELLE_ETABLISSEMENTINFORMATIONS ASC")
                 ->order("d.DATEINSERT_DOSSIER DESC")
             ;
-            
+
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
             $results = array(
@@ -930,10 +930,10 @@ class Service_Search
                     'count' => count($rows_counter)
                 )
             );
-            
+
             $cache->save(serialize($results));
         }
-        
+
         return $results;
     }
 

@@ -1046,6 +1046,10 @@
                     <resource>creations</resource>
                     <privilege>add_etablissement</privilege>
                 </add>
+                <get-dossiers-after-n>
+                    <controller>etablissement</controller>
+                    <action>getDossiersAfterN</action>
+                </get-dossiers-after-n>
                 <descriptif>
                     <label>Descriptifs</label>
                     <controller>etablissement</controller>

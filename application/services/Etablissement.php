@@ -2,8 +2,10 @@
 
 class Service_Etablissement implements Service_Interface_Etablissement
 {
-    const STATUT_CHANGE = 1;
-    const CLASSEMENT_CHANGE = 3;
+    public const STATUT_CHANGE = 1;
+    public const CLASSEMENT_CHANGE = 3;
+    public const NB_DOSSIERS_A_AFFICHER = 5;
+
     /**
      * Récupération d'un établissement.
      *
@@ -78,24 +80,35 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $facteur_dangerosite = $dossier_donnant_avis->FACTDANGE_DOSSIER;
             }
 
-            $last_visite = $search->setItem('dossier')
-                    // Dossier correspondant à l'établissement dont l'ID est donné
+            $search->setItem('dossier')
+                // Dossier correspondant à l'établissement dont l'ID est donné
                 ->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)
-                    // Dossier type "Visite de commission" et "Groupe de visite"
+                // Dossier type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('d.TYPE_DOSSIER', array(2, 3))
-                        // Dossier ayant un avis de commission rendu
+                // Dossier ayant un avis de commission rendu
                 ->setCriteria('d.AVIS_DOSSIER_COMMISSION > 0')
-                    // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
-                ->setCriteria('ID_NATURE', array(21, 26, 47, 48))
-                ->order('DATEVISITE_DOSSIER DESC')
+                // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
+                ->setCriteria('ID_NATURE', array(21, 26, 47, 48));
+
+            $use_date_commission_for_periodicity = getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE');
+
+            $use_date_commission_for_periodicity ? $search->order('DATECOMM_DOSSIER DESC') : $search->order('DATEVISITE_DOSSIER DESC');
+            $last_visite = $search
                 ->limit(1)
                 ->run(false, null, false)->toArray();
 
             $next_visite = null;
 
             if ($last_visite !== null && !empty($last_visite)) {
-                if ($last_visite[0]['DATEVISITE_DOSSIER'] !== null) {
+                if (
+                    (!$use_date_commission_for_periodicity && $last_visite[0]['DATEVISITE_DOSSIER'] !== null) ||
+                    ($use_date_commission_for_periodicity && $last_visite[0]['DATECOMM_DOSSIER'] !== null)
+                ) {
                     $tmp_date = new Zend_Date($last_visite[0]['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                    if ($use_date_commission_for_periodicity) {
+                        $tmp_date = new Zend_Date($last_visite[0]['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                    }
+
                     $last_visite = $tmp_date->get(Zend_date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
 
                     if ($informations->PERIODICITE_ETABLISSEMENTINFORMATIONS != 0) {
@@ -409,6 +422,83 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $results;
     }
 
+    public function getNbDossierTypeEtablissement(int $idEtablissement, string $type): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+        $result = $modelDossier->getDossiersEtablissementByType($idEtablissement, $type);
+
+        return(count($result));
+    }
+
+    public function getNLastDossiers(int $idEtablissement, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = array();
+
+        foreach ($dossier_types as $key => $type) {
+            if ($type['ID_DOSSIERTYPE'] !== 1 && $type['ID_DOSSIERTYPE'] !== 2 && $type['ID_DOSSIERTYPE'] !== 3) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = array();
+        $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+
+        return $results;
+    }
+
+    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = array();
+
+        foreach ($dossier_types as $key => $type) {
+            if ($type['ID_DOSSIERTYPE'] !== 1 && $type['ID_DOSSIERTYPE'] !== 2 && $type['ID_DOSSIERTYPE'] !== 3) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = array();
+        switch ($typeDossier) {
+            case "etudes":
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                break;
+            case "visites":
+                $results =  $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                break;
+           case "autres":
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                break;
+            default:
+                $results["etudes"] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results["visites"] =  $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', array(2, 3))->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results["autres"] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                break;
+        }
+
+        return $results;
+    }
+
     /**
      * Récupération des descriptifs d'un établissement.
      *
@@ -600,7 +690,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $search->setCriteria('etablissementinformations.ID_GENRE', 3);
             }
         }
-
         return $search->run()->getAdapter()->getItems(0, 99999999999)->toArray();
     }
 
@@ -802,9 +891,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             $etablissement->save();
-
             $etablissement->NUMEROID_ETABLISSEMENT = $data['NUMEROID_ETABLISSEMENT'] != null ? $data['NUMEROID_ETABLISSEMENT'] : $etablissement->ID_ETABLISSEMENT;
-
             $etablissement->save();
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];

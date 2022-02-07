@@ -14,7 +14,7 @@ class SearchController extends Zend_Controller_Action
         // Gestion droit export Calc
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $this->view->is_allowed_export_calc = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], "export", "export_ets");
-        
+
         $service_search = new Service_Search();
         $service_genre = new Service_Genre();
         $service_statut = new Service_Statut();
@@ -48,7 +48,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
                     $label = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] != '#' ? $parameters['label'] : null;
-                    $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#'? substr($parameters['label'], 1) : null;
+                    $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#' ? substr($parameters['label'], 1) : null;
                     $genres = array_key_exists('genres', $parameters) ? $parameters['genres'] : null;
                     $categories = array_key_exists('categories', $parameters) ? $parameters['categories'] : null;
                     $classes = array_key_exists('classes', $parameters) ? $parameters['classes'] : null;
@@ -69,10 +69,10 @@ class SearchController extends Zend_Controller_Action
                     $objPHPExcel->setActiveSheetIndex(0);
                     $sheet = $objPHPExcel->getActiveSheet();
                     $sheet->setTitle('Liste des établissements');
-                        
+
                     $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10)->setBold(false);
                     $sheet->getDefaultRowDimension()->setRowHeight(-1);
-                        
+
                     // Formattage des titres de colonnes
                     $styleArray = array(
                         'borders' => array(
@@ -85,11 +85,11 @@ class SearchController extends Zend_Controller_Action
                     unset($styleArray);
                     $sheet->getStyle('A1:W1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $sheet->getStyle('A1:W1')->getFont()->setSize(11)->setBold(true);
-                        
+
                     foreach (range('A', 'W') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
-                        
+
                     $sheet->setCellValueByColumnAndRow(0, 1, "Commune");
                     $sheet->setCellValueByColumnAndRow(1, 1, "Catégorie");
                     $sheet->setCellValueByColumnAndRow(2, 1, "Type");
@@ -113,7 +113,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(20, 1, "Libellé du père/site");
                     $sheet->setCellValueByColumnAndRow(21, 1, "Genre");
                     $sheet->setCellValueByColumnAndRow(22, 1, "Préventionniste");
-                        
+
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
                         $sheet->setCellValueByColumnAndRow(0, $ligne, $row ['LIBELLE_COMMUNE']);
@@ -125,7 +125,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(6, $ligne, $row ['LIBELLE_ETABLISSEMENTINFORMATIONS']);
                         $sheet->setCellValueByColumnAndRow(7, $ligne, $row ['LIBELLE_STATUT']);
                         $sheet->setCellValueByColumnAndRow(8, $ligne, $row ['LIBELLE_AVIS']);
-                            
+
                         if ($row ['DATE_DERNIER_AVIS'] != '') {
                             $dateDernierAvis = preg_split("/-|\//", $row['DATE_DERNIER_AVIS']);
                             if (!is_numeric($dateDernierAvis[2])) {
@@ -146,7 +146,7 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow(10, $ligne, $datePremierAvisFavorable);
                             $sheet->getStyleByColumnAndRow(10, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
-                            
+
                         if ($row ['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF'] != '') {
                             $datePremierAvisDefavorableConsecutif = preg_split("/-|\//", $row['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']);
                             if (!is_numeric($datePremierAvisDefavorableConsecutif[2])) {
@@ -156,11 +156,11 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow(11, $ligne, $datetimePremierAvisDefavorableConsecutif);
                             $sheet->getStyleByColumnAndRow(11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
-                            
+
                         $sheet->setCellValueByColumnAndRow(12, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
                         $sheet->setCellValueByColumnAndRow(13, $ligne, $row ['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS']);
                         $sheet->setCellValueByColumnAndRow(14, $ligne, $row ['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
-                            
+
                         if ($row ['DATE_DERNIERE_VISITE'] != '') {
                             $dateDerniereVisite = preg_split("/-|\//", $row['DATE_DERNIERE_VISITE']);
                             if (!is_numeric($dateDerniereVisite[2])) {
@@ -169,7 +169,7 @@ class SearchController extends Zend_Controller_Action
                             $datetimeDerniereVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDerniereVisite[0], $dateDerniereVisite[1], $dateDerniereVisite[2]);
                             $sheet->setCellValueByColumnAndRow(15, $ligne, $datetimeDerniereVisite);
                             $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
-                                
+
                             if ($row ['PERIODICITE_ETABLISSEMENTINFORMATIONS'] != 0) {
                                 $dateProchaineVisite = date('Y-m-j', strtotime("+".$row ['PERIODICITE_ETABLISSEMENTINFORMATIONS']." months", strtotime($row ['DATE_DERNIERE_VISITE'])));
                                 $dateProchaineVisite = preg_split("/-|\//", $dateProchaineVisite);
@@ -181,7 +181,7 @@ class SearchController extends Zend_Controller_Action
                                 $sheet->getStyleByColumnAndRow(16, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                             }
                         }
-            
+
                         if ($row ['DATE_VISITE_PREVUE'] != '') {
                             $dateVisitePrevue = preg_split("/-|\//", $row['DATE_VISITE_PREVUE']);
                             if (!is_numeric($dateVisitePrevue[2])) {
@@ -191,21 +191,21 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow(17, $ligne, $datetimeVisitePrevue);
                             $sheet->getStyleByColumnAndRow(17, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
-                        
+
                         $sheet->setCellValueByColumnAndRow(18, $ligne, $row ['NUMERO_ADRESSE'] . " " . $row ['LIBELLE_RUE'] . " " . $row ['COMPLEMENT_ADRESSE'] . " " . $row ['CODEPOSTAL_COMMUNE']);
                         $sheet->setCellValueByColumnAndRow(19, $ligne, $row ['LIBELLE_GROUPEMENT']);
                         $sheet->setCellValueByColumnAndRow(20, $ligne, $row ['LIBELLE_ETABLISSEMENT_PERE']);
                         $sheet->setCellValueByColumnAndRow(21, $ligne, $row ['LIBELLE_GENRE']);
                         $sheet->setCellValueByColumnAndRow(22, $ligne, $row ['PRENOM_UTILISATEURINFORMATIONS'] . " " . $row ['NOM_UTILISATEURINFORMATIONS']);
-                            
+
                         $ligne ++;
                     }
-                        
+
                     $this->view->writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                        
+
                     // Ensuite j'ai choisi de désactiver mon layout
                     $this->_helper->layout()->disableLayout();
-                        
+
                     header("Content-Type: application/vnd.oasis.opendocument.spreadsheet");
                     header("Content-Disposition: attachment; filename=\"Export_Etablissements_".date('Y-m-d_H-i-s').".ods\"");
                     $this->view->writer->save('php://output');
@@ -222,7 +222,7 @@ class SearchController extends Zend_Controller_Action
                 // Si premier affichage de la page
                 if (!isset($_GET['Rechercher'])) {
                     // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
-                    $service_user = new Service_User;
+                    $service_user = new Service_User();
                     $this->view->user = $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
                 }
 
@@ -230,7 +230,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
                     $label = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] != '#' ? $parameters['label'] : null;
-                    $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#'? substr($parameters['label'], 1) : null;
+                    $identifiant = array_key_exists('label', $parameters) && $parameters['label'] != '' && (string) $parameters['label'][0] == '#' ? substr($parameters['label'], 1) : null;
                     $genres = array_key_exists('genres', $parameters) ? $parameters['genres'] : null;
                     $categories = array_key_exists('categories', $parameters) ? $parameters['categories'] : null;
                     $classes = array_key_exists('classes', $parameters) ? $parameters['classes'] : null;
@@ -293,7 +293,7 @@ class SearchController extends Zend_Controller_Action
         $typeGroupementTerritorial = array(5);
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
-        $checkDateFormat = function ($date) : bool {
+        $checkDateFormat = function ($date): bool {
             if (!$date) {
                 return false;
             }
@@ -313,7 +313,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
-                    $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
+                    $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#' ? $parameters['objet'] : null;
                     $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
                     $criteresRecherche = array();
                     $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
@@ -337,17 +337,17 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['groupements_territoriaux'] = array_key_exists('groupements_territoriaux', $parameters) && $parameters ['groupements_territoriaux'] != '' ? $parameters ['groupements_territoriaux'] : null;
                     $criteresRecherche['label'] = array_key_exists('label', $parameters) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] != '#' ? $parameters ['label'] : null;
                     $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && $parameters ['label'] != '' && ( string ) $parameters ['label'] [0] == '#' ? substr($parameters ['label'], 1) : null;
-                    
+
                     $search = $service_search->extractionDossiers($types, $objet, $num_doc_urba, null, null, $criteresRecherche);
-                    
+
                     $objPHPExcel = new PHPExcel();
                     $objPHPExcel->setActiveSheetIndex(0);
                     $sheet = $objPHPExcel->getActiveSheet();
                     $sheet->setTitle('Liste des dossiers');
-                    
+
                     $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10)->setBold(false);
                     $sheet->getDefaultRowDimension()->setRowHeight(- 1);
-                    
+
                     // Formattage des titres de colonnes
                     $styleArray = array(
                         'borders' => array(
@@ -360,11 +360,11 @@ class SearchController extends Zend_Controller_Action
                     unset($styleArray);
                     $sheet->getStyle('A1:U1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $sheet->getStyle('A1:U1')->getFont()->setSize(11)->setBold(true);
-                    
+
                     foreach (range('A', 'U') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
-                    
+
                     $sheet->setCellValueByColumnAndRow(0, 1, "Groupement");
                     $sheet->setCellValueByColumnAndRow(1, 1, "Commune");
                     $sheet->setCellValueByColumnAndRow(2, 1, "Catégorie");
@@ -386,7 +386,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(18, 1, "Avis commission");
                     $sheet->setCellValueByColumnAndRow(19, 1, "Préventionniste en charge du dossier");
                     $sheet->setCellValueByColumnAndRow(20, 1, "Pièces jointes ?");
-                    
+
                     $ligne = 2;
                     foreach ($search ['results'] as $row) {
                         $sheet->setCellValueByColumnAndRow(0, $ligne, $row ['LIBELLE_GROUPEMENT']);
@@ -438,15 +438,15 @@ class SearchController extends Zend_Controller_Action
                         } else {
                             $sheet->setCellValueByColumnAndRow(20, $ligne, "Non");
                         }
-                        
+
                         $ligne ++;
                     }
-                    
+
                     $this->view->writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                    
+
                     // Ensuite j'ai choisi de désactiver mon layout
                     $this->_helper->layout()->disableLayout();
-                    
+
                     header("Content-Type: application/vnd.oasis.opendocument.spreadsheet");
                     $filename = "Export_Dossiers_".date('Y-m-d_H-i-s').".ods";
                     header("Content-Disposition: attachment; filename=".$filename."");
@@ -473,7 +473,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
-                    $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#'? $parameters['objet'] : null;
+                    $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#' ? $parameters['objet'] : null;
                     $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
                     $criteresRecherche = array();
                     $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
@@ -512,10 +512,10 @@ class SearchController extends Zend_Controller_Action
                     }
 
                     $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page, $criteresRecherche);
-                    
+
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
-                    
+
                     $this->view->results = $paginator;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
