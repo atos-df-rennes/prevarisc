@@ -191,38 +191,40 @@ function initViewer(divId, ignKey, center, description, autoconfPath) {
 
 function addUserLayers(viewer, ignKey, layers) {
     const wmsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMS'))
-    addWmsLayers(viewer, ignKey, wmsLayers)
+    if (wmsLayers && wmsLayers.length > 0) {
+        addWmsLayers(viewer, ignKey, wmsLayers)
+    }
 
     const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
-    addWmtsLayers(viewer, ignKey, wmtsLayers)
+    if (wmtsLayers && wmtsLayers.length > 0) {
+        addWmtsLayers(viewer, ignKey, wmtsLayers)
+    }
 
     return viewer;
 }
 
 function addWmsLayers(viewer, ignKey, wmsLayers) {
     // Ajout des couches WMS
-    if (wmsLayers && wmsLayers.length > 0) {
-        for (let i = 0; i < wmsLayers.length; i++) {
-            const source = new ol.source.TileWMS({
-                url: wmsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
-                params: {
-                    'LAYERS': wmsLayers[i].LAYERS_COUCHECARTO,
-                    'FORMAT': wmsLayers[i].FORMAT_COUCHECARTO,
-                    'TILED': true
-                }
-            })
+    for (let i = 0; i < wmsLayers.length; i++) {
+        const source = new ol.source.TileWMS({
+            url: wmsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            params: {
+                'LAYERS': wmsLayers[i].LAYERS_COUCHECARTO,
+                'FORMAT': wmsLayers[i].FORMAT_COUCHECARTO,
+                'TILED': true
+            }
+        })
 
-            const layer = new ol.layer.Tile({
-                source: source,
-                visible: wmsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
-            })
+        const layer = new ol.layer.Tile({
+            source: source,
+            visible: wmsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
+        })
 
-            viewer.getLibMap().addLayer(layer);
+        viewer.getLibMap().addLayer(layer);
 
-            // On renomme les couches utilisateurs
-            $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmsLayers[i].NOM_COUCHECARTO)
-            .attr('title', wmsLayers[i].NOM_COUCHECARTO)
-        }
+        // On renomme les couches utilisateurs
+        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmsLayers[i].NOM_COUCHECARTO)
+        .attr('title', wmsLayers[i].NOM_COUCHECARTO)
     }
 }
 
@@ -255,33 +257,31 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
             0.07464553543474241
     ];
 
-    // // Ajout des couches WMTS
-    if (wmtsLayers && wmtsLayers.length > 0) {
-        for (let i = 0; i < wmtsLayers.length; i++) {
-            const source = new ol.source.WMTS({
-                url: wmtsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
-                layer: wmtsLayers[i].LAYERS_COUCHECARTO,
-                matrixSet: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixSet,
-                format: wmtsLayers[i].FORMAT_COUCHECARTO,
-                tileGrid: new ol.tilegrid.WMTS({
-                    origin: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].origin,
-                    resolutions: resolutions,
-                    matrixIds: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixIds,
-                }),
-                style: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].style
-            })
+    // Ajout des couches WMTS
+    for (let i = 0; i < wmtsLayers.length; i++) {
+        const source = new ol.source.WMTS({
+            url: wmtsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            layer: wmtsLayers[i].LAYERS_COUCHECARTO,
+            matrixSet: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixSet,
+            format: wmtsLayers[i].FORMAT_COUCHECARTO,
+            tileGrid: new ol.tilegrid.WMTS({
+                origin: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].origin,
+                resolutions: resolutions,
+                matrixIds: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixIds,
+            }),
+            style: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].style
+        })
 
-            const layer = new ol.layer.Tile({
-                source: source,
-                visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
-            })
+        const layer = new ol.layer.Tile({
+            source: source,
+            visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
+        })
 
-            viewer.getLibMap().addLayer(layer);
+        viewer.getLibMap().addLayer(layer);
 
-            // On renomme les couches utilisateurs
-            $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmtsLayers[i].NOM_COUCHECARTO)
-            .attr('title', wmtsLayers[i].NOM_COUCHECARTO)
-        }
+        // On renomme les couches utilisateurs
+        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmtsLayers[i].NOM_COUCHECARTO)
+        .attr('title', wmtsLayers[i].NOM_COUCHECARTO)
     }
 }
 
