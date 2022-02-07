@@ -232,8 +232,9 @@ function addWmsLayers(viewer, ignKey, wmsLayers) {
 }
 
 function addWmtsLayers(viewer, ignKey, wmtsLayers) {
-    getCapabilities(ignKey, 'wmts')
+    const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
+    // Projection EPSG:3857
     var resolutions = [
             156543.03392804103,
             78271.5169640205,
@@ -257,23 +258,22 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
             0.29858214173896974,
             0.14929107086948493,
             0.07464553543474241
-    ] ;
+    ];
 
     // // Ajout des couches WMTS
     if (wmtsLayers && wmtsLayers.length > 0) {
         for (let i = 0; i < wmtsLayers.length; i++) {
-            // FIXME Remplacer les valeurs en dur par le retour du GetCapabilities ?
             const source = new ol.source.WMTS({
                 url: wmtsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
-                layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2',
-                matrixSet: 'PM',
+                layer: wmtsLayers[i].LAYERS_COUCHECARTO,
+                matrixSet: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixSet,
                 format: wmtsLayers[i].FORMAT_COUCHECARTO,
                 tileGrid: new ol.tilegrid.WMTS({
-                    origin: [-20037508,20037508],
+                    origin: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].origin,
                     resolutions: resolutions,
-                    matrixIds:["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"],
+                    matrixIds: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixIds,
                 }),
-                style: 'normal'
+                style: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].style
             })
 
             const layer = new ol.layer.Tile({
@@ -291,52 +291,64 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
 }
 
 function getCapabilities(ignKey, format) {
-    $.get('https://wxs.ign.fr/' + ignKey + '/geoportail/' + format + '?SERVICE=' + format + '&REQUEST=GetCapabilities', {}, function (result) {
-        var result = $(result)
-        var layers = []
+    var layersToReturn = null
 
-        result.find('Layer').each(function (index, layer) {
-            var layer = $(layer)
+    $.ajax({
+        url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/' + format + '?SERVICE=' + format + '&REQUEST=GetCapabilities',
+        type: 'get',
+        async: false,
+        success: function (result) {
+            var result = $(result)
+            var layers = []
 
-            var layerFormat = null
-            var layerName = null
-            var layerStyle = null
-
-            layer.children().each(function (index, child) {
-                if (child.localName === 'Format') {
-                    layerFormat = child.innerHTML
-                    
-                    if (layerFormat !== 'image/png' && layerFormat !== 'image/jpeg') {
-                        layerName = null
-                        layerStyle = null
-                        return
-                    }
+            result.find('Layer').each(function (index, layer) {
+                var layer = $(layer)
+                var layerFormat = layer.find('Format').text()
+                
+                if (layerFormat !== 'image/png' && layerFormat !== 'image/jpeg') {
+                    return
                 }
+                
+                var layerName = layer.find('ows\\:Identifier:first').text()
+                var layerStyle = layer.find('Style:first').find('ows\\:Identifier').text()
+                var layerMatrixSet = layer.find('TileMatrixSet').text()
+                var layerOrigins = null
+                var layerMatrixIds = []
 
-                if (child.localName === 'Identifier') {
-                    layerName = child.innerHTML
-                }
+                result.find('TileMatrixSet').each(function (index, tileMatrixSet) {
+                    var tileMatrixSet = $(tileMatrixSet)
+                    var projectionIdentifier = tileMatrixSet.find('ows\\:Identifier:first').text()
+                    var projection = tileMatrixSet.find('ows\\:SupportedCRS').text()
+    
+                    // FIXME Passer la couche en paramètre ?
+                    if (projection === 'EPSG:3857' && projectionIdentifier === 'PM') {
+                        layerOrigins = tileMatrixSet.find('TileMatrix:first').find('TopLeftCorner').text()
+                        layerOrigins = layerOrigins.split(' ')
 
-                if (child.localName === 'Style') {
-                    $(child).children().each(function (index, ch) {
-                        if (ch.localName === 'Identifier') {
-                            layerStyle = ch.innerHTML
+                        layerOrigins.forEach(function (part, index) {
+                            this[index] = Math.trunc(part)
+                        }, layerOrigins)
+
+                        var nbLayerMatrixIds = tileMatrixSet.find('TileMatrix').length
+                        for (var i = 0; i < nbLayerMatrixIds; i++) {
+                            layerMatrixIds.push(i)
                         }
-                    })
+                    }
+                })
+
+                layers[layerName] = {
+                    style: layerStyle,
+                    matrixSet: layerMatrixSet,
+                    origin: layerOrigins,
+                    matrixIds: layerMatrixIds
                 }
             })
 
-            // TODO Ajouter les options dans le tableau
-            if (layerName !== null) {
-                layers[layerName] = {
-                    format: layerFormat,
-                    style: layerStyle
-                }
-            }
-        })
-
-        console.log(layers)
+            layersToReturn = layers
+        }
     })
+
+    return layersToReturn
 }
 
 function putMarkerAt(viewer, center, nbCouches) {
