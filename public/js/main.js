@@ -198,7 +198,6 @@ function addUserLayers(viewer, ignKey, layers) {
     // TODO addWfsLayers
 
     const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
-    // TODO addWmtsLayers
     addWmtsLayers(viewer, ignKey, wmtsLayers)
 
     return viewer;
@@ -235,7 +234,7 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
     const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
     // Projection EPSG:3857
-    var resolutions = [
+    const resolutions = [
             156543.03392804103,
             78271.5169640205,
             39135.75848201024,
@@ -291,56 +290,42 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
 }
 
 function getCapabilities(ignKey, format) {
-    var layersToReturn = null
+    const parser = new ol.format.WMTSCapabilities()
+    let layersToReturn = null
 
     $.ajax({
         url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/' + format + '?SERVICE=' + format + '&REQUEST=GetCapabilities',
         type: 'get',
         async: false,
         success: function (result) {
-            var result = $(result)
-            var layers = []
+            const parsedResult = parser.read(result).Contents
 
-            result.find('Layer').each(function (index, layer) {
-                var layer = $(layer)
-                var layerFormat = layer.find('Format').text()
-                
-                if (layerFormat !== 'image/png' && layerFormat !== 'image/jpeg') {
+            let layers = []
+
+            const contentLayers = parsedResult.Layer
+            const contentMatrixSet = parsedResult.TileMatrixSet
+            const matrixSetToUse = contentMatrixSet.find(matrixSet => matrixSet.Identifier === 'PM')
+            const layerOrigins = matrixSetToUse.TileMatrix[0].TopLeftCorner
+            let contentMatrixSetIds =  []
+
+            for (let i = 0; i < matrixSetToUse.TileMatrix.length; i++) {
+                contentMatrixSetIds.push(i)
+            }
+
+            layerOrigins.forEach(function (part, index) {
+                this[index] = Math.trunc(part)
+            }, layerOrigins)
+
+            contentLayers.forEach(function (layer) {
+                if (layer.Style === undefined) {
                     return
                 }
-                
-                var layerName = layer.find('ows\\:Identifier:first').text()
-                var layerStyle = layer.find('Style:first').find('ows\\:Identifier').text()
-                var layerMatrixSet = layer.find('TileMatrixSet').text()
-                var layerOrigins = null
-                var layerMatrixIds = []
 
-                result.find('TileMatrixSet').each(function (index, tileMatrixSet) {
-                    var tileMatrixSet = $(tileMatrixSet)
-                    var projectionIdentifier = tileMatrixSet.find('ows\\:Identifier:first').text()
-                    var projection = tileMatrixSet.find('ows\\:SupportedCRS').text()
-    
-                    // FIXME Passer la couche en paramètre ?
-                    if (projection === 'EPSG:3857' && projectionIdentifier === 'PM') {
-                        layerOrigins = tileMatrixSet.find('TileMatrix:first').find('TopLeftCorner').text()
-                        layerOrigins = layerOrigins.split(' ')
-
-                        layerOrigins.forEach(function (part, index) {
-                            this[index] = Math.trunc(part)
-                        }, layerOrigins)
-
-                        var nbLayerMatrixIds = tileMatrixSet.find('TileMatrix').length
-                        for (var i = 0; i < nbLayerMatrixIds; i++) {
-                            layerMatrixIds.push(i)
-                        }
-                    }
-                })
-
-                layers[layerName] = {
-                    style: layerStyle,
-                    matrixSet: layerMatrixSet,
+                layers[layer.Identifier] = {
+                    style: layer.Style[0].Identifier,
+                    matrixSet: layer.TileMatrixSetLink[0].TileMatrixSet,
                     origin: layerOrigins,
-                    matrixIds: layerMatrixIds
+                    matrixIds: contentMatrixSetIds
                 }
             })
 
