@@ -1,44 +1,37 @@
-<br>
-<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this ->ID_BLOCK?></strong></h4>
-<div  class="container-fluid">
-    <div class="row">
-        <p class="span2">Type</p>
-        <!--Generation liste des avis-->
-        <?= $this->idAvisCheck === 1 ? "Avis":"Dérogations" ?>        
-    </div>
-    <div class="row">
-        <p class="span2">Titre</p>
-        <strong>
-            <p class="span4" type="text" placeholder="votre titre" >
-                <?= $this->TITRE ? $this->TITRE : "Non renseigné" ?>
-            </p>
-        </strong>
-    </div>
-    <div class="row">
-        <h3>Informations : </h3>
-        <div class='tinyarea' readonly>
-            <?= $this->INFORMATIONS ?>
+<div class="span5" style="
+                    background: #eaeaea;
+                    box-shadow: 1px 0px 10px 2px rgb(37 40 37 / 75%);
+                    margin: 1em;
+                    border-radius: 15px;
+                    padding: 1em;
+                        ">
+    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?= $this->ID_BLOCK ?>' >&times;</a>
+    <h1 style="text-align:center"><?=$this->TITRE?></h1>    
+    <div class="row-fluid">
+        <div class="span6">
+            <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis":"Dérogations" ?></p>
+            <p>Informations : <?= $this->INFORMATIONS?>
+            <p>Avis : <?= $this->IS_FAVORABLE === 1 ? 'Favorable':'Défavorable'?></p>
         </div>
-
-
-    </div>
-    <div class="row">
-        <p class="span2">Avis</p>
-        <div class="span4">       
-            <?php echo $this->IS_FAVORABLE === 1 ? 'Favorable':'Défavoralbe'?>
+        <div class="span6">
+            <p>Avis/Dérogation levé(e): <a href="monUrl.comAvecLaDate">monUrl.comAvecLaDate</a></p>
+            
+            <div style="display:flex">
+                <label for="affHistorique">Afficher l'historique de l'établissement</label>
+                <input  type="checkbox" 
+                    id="scales" 
+                    name="affHistorique" 
+                    disabled
+                    <?= ($this->afficherHistorique == true ? 'checked' : '')?> 
+                >
+            </div>
         </div>
     </div>
-    <div class="row">
-        <h2 class="h4_subtitle span3">Avis/Dérogation levé(e):</h2><a  class="span6" href="monUrl.comAvecLaDate">monUrl.comAvecLaDate</a>
-    </div> 
-    <div class="row" style="display:flex">
-        <input  type="checkbox" 
-                id="scales" 
-                name="scales" 
-                disabled
-                <?php echo ($this->afficherHistorique == true ? 'checked' : '')?> 
-        >
-        <label for="scales">Afficher l'historique de l'établissement</label>
+   
+    <div class="pull-right btn-group">
+        <a href=<?= "/dossier/avis-et-derogations-edit/id/".$this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?> class="icon-pencil icon-black"></a>
     </div>
 
 </div>
+
+

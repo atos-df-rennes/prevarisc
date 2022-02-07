@@ -3,7 +3,7 @@
 class Model_DbTable_AvisDerogations extends Zend_Db_Table_Abstract
 {
     protected $_name = 'avisderogations'; // Nom de la base
-    protected $_primary = 'ID_AVIS_DEROGATIONS'; // Clé primaire
+    protected $_primary = 'ID_AVIS_DEROGATION'; // Clé primaire
 
 
     /**
@@ -12,7 +12,7 @@ class Model_DbTable_AvisDerogations extends Zend_Db_Table_Abstract
    public function getByIdEtablissement($idEtablissement){
         $select =   $this->select()
                     ->from('avisderogations')
-                    ->where("ID_DOSSIER_LIE = $idEtablissement");
+                    ->where("ID_DOSSIER = $idEtablissement");
         return $this->fetchAll($select)->toArray();
    }
 
@@ -21,10 +21,10 @@ class Model_DbTable_AvisDerogations extends Zend_Db_Table_Abstract
      /**
      * Retourne les avis avis derogation sous forme d un tableau etant lie par l etablissement
      */
-    public function getByIdDossier($idEtablissement){
+    public function getByIdDossier($idDossier){
      $select =   $this->select()
                  ->from('avisderogations')
-                 ->where("ID_DOSSIER_LIE = $idEtablissement");
+                 ->where("ID_DOSSIER = $idDossier");
      return $this->fetchAll($select)->toArray();
 }
 }

@@ -1,5 +1,40 @@
-<div class="btn-group pull-right">
-    <a class="btn" href=<?php echo ("/dossier/avis-et-derogations-edit/id/". $this->idDossier)?>>Modifier</a>
-</div>
+<form class="form-horizontal span8">
+<input class="btn btn-success pull-right" type='submit' value='ajouter avis/dérogations'/>
+  <div class="control-group">
+    <label class="control-label" for="inputTitre">Titre</label>
+    <div class="controls">
+      <input type="text" id="inputTitre" placeholder="Titre" required="required">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputType">Type</label>
+    <select class="controls" name="inputType" required="required">
+            <option class="controls" value=<?= 1 ?>>
+                Avis
+            </option>
+            <option class="controls" value=<?= 2 ?>>
+                Dérogations
+            </option>
+        </select>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputInformations">Informations</label>
+    <div class="controls">
+      <input type="text" id="inputInformations" placeholder="Informations" required="required">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputAvis">Avis</label>
+    <div class="controls">
+      <input type="text" id="inputAvis" placeholder="Avis" required="required">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputAvisDerogation">AvisDerogation</label>
+    <div class="controls">
+      <input type="text" id="inputAvisDerogation" placeholder="Tire" required="required">
+    </div>
+  </div>
+</form>
+
 <?php echo $this->partialLoop("dossier/results/avis-et-derogations.phtml", $this->arrayAvisDerogations); ?>
-<h4><a href=""> + Ajouter un avis de dérogation</a></h4>

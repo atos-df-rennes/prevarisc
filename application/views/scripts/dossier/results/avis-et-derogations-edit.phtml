@@ -1,32 +1,35 @@
-<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this ->ID_BLOCK?></strong></h4>
+<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this ->ID_AVIS_DEROGATIONS?></strong></h4>
 <form  class="container-fluid" method="post">
-    <input type="submit" value='save changes' class="btn btn-success">
+    <div class="btn-group pull-right">
+        <a class="btn" href=<?php echo ("/dossier/avis-et-derogations/id/". $this->ID_DOSSIER)?>>Annuler modification</a>
+        <input type="submit" class="btn btn-success" href=<?php echo ("/dossier/avis-et-derogations/id/". $this->ID_DOSSIER)?>>Sauvegarder</input>
+    </div>
     <div class="row">
         <p class="span2">Type</p>
         <!--Generation liste des avis-->
-        <select>
-            <option value=<?= 1 ?> <?= 1 === $this->idAvisCheck ? 'selected' : '' ?> >
+        <select name="TYPE_AVIS_DEROGATIONS">
+            <option value="1" <?= 1 === $this->TYPE_AVIS_DEROGATIONS ? 'selected' : '' ?> >
                 Avis
             </option>
-            <option value=<?= 2 ?> <?= 2 === $this->idAvisCheck ? 'selected' : '' ?> >
+            <option value="2" <?= 2 === $this->TYPE_AVIS_DEROGATIONS ? 'selected' : '' ?> >
                 Dérogations
             </option>
         </select>
     </div>
     <div class="row">
         <p class="span2">Titre</p>
-        <input class="span4" type="text" placeholder="votre titre" value='<?= $this->TITRE ?>' >
+        <input name="TITRE" class="span4" type="text" placeholder="votre titre" value='<?= $this->TITRE ?>' >
     </div>
     <div class="row">
         <p>Informations</p>
-        <textarea class="tinyarea"><?= $this->INFORMATIONS ?></textarea>
+        <textarea name="INFORMATIONS" class="tinyarea"><?= $this->INFORMATIONS ?></textarea>
     
     </div>
     <div class="row">
         <p class="span2">Avis</p>
-        <select class="span4">       
-            <option <?php echo $this->IS_FAVORABLE === 1 ? 'selected':''  ?>>Favorable</option>
-            <option <?php echo  $this->IS_FAVORABLE === 0 ? 'selected':''?>>Défavorable</option>
+        <select name="IS_FAVORABLE" class="span4">       
+            <option value="1" <?php echo $this->IS_FAVORABLE === 1 ? 'selected':''  ?>  >Favorable</option>
+            <option  value="0" <?php echo  $this->IS_FAVORABLE === 0 ? 'selected':''?> >Défavorable</option>
         </select>
     </div>
     <div class="row">

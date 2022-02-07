@@ -3035,7 +3035,7 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
-         $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdEtablissement(3993);
+        $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($this->_getParam('id'));
     }
 
     /**
@@ -3045,14 +3045,25 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction(){
         if ($this->_request->isPost()) {
-            var_dump($this->_request); 
-            /**
-             * appelle du service pour set les nouvelles valeurs
-             */
+            //Instanciation model db
+            $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+            //Recuperation de l entite via son ID_AVIS_DEROGATIONS
+            $updateEntity = $dbAvisDerogations->find($this->_getParam('avis-derogation'))->current();
+
+            //UPDATE DES ATTRIBUTS
+            $updateEntity->TYPE_AVIS_DEROGATIONS = $this->_request->getParam("TYPE_AVIS_DEROGATIONS");
+            $updateEntity->TITRE = $this->_request->getParam("TITRE");
+            $updateEntity->INFORMATIONS = $this->_request->getParam("INFORMATIONS");
+            $updateEntity->IS_FAVORABLE = $this->_request->getParam("IS_FAVORABLE");
+
+            //Sauvegarde des changements
+            $updateEntity->save();
+          
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }else{
             $this->_helper->layout->setLayout('dossier');
             $this->view->headScript()->appendFile('/js/tinymce.min.js');
+
             $dbAvisDerogation = new Model_DbTable_AvisDerogations();
             $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdEtablissement(3993);
         }   
