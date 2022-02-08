@@ -217,7 +217,7 @@ function addWmsLayers(viewer, ignKey, wmsLayers) {
 
         const layer = new ol.layer.Tile({
             source: source,
-            visible: wmsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
+            visible: wmsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
         })
 
         viewer.getLibMap().addLayer(layer);
@@ -274,7 +274,7 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
 
         const layer = new ol.layer.Tile({
             source: source,
-            visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO == 0 ? false : true
+            visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
         })
 
         viewer.getLibMap().addLayer(layer);
