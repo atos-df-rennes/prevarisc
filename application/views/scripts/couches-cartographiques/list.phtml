@@ -120,7 +120,8 @@
 <?php if (count($this->couches_cartographiques) == 0) : ?>
     <div class='well well-large text-center'>
         <p class='lead'>Il n'y a pas de couche cartographique.</p>
-        <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-large'>Ajouter une couche cartographique</a></p>
+        <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-large'>Ajouter une couche cartographique personnalisée</a></p>
+        <p><a href='<?php echo $this->url(array('action' => 'add-couche-ign')) ?>' class='btn btn-large'>Ajouter une couche cartographique IGN</a></p>
     </div>
 <?php else : ?>
     <p class='text-right'><a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a></p>
