@@ -1244,3 +1244,9 @@ dl.champ_effectif_camping dd input {
 span > i {
     cursor: pointer;
 }
+
+div[class^='span'] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

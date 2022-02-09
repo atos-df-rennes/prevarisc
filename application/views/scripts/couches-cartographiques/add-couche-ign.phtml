@@ -37,13 +37,13 @@
 
                     form.append('<input type="hidden" name="TYPE_COUCHECARTO" value="' + result[i].type + '">')
 
-                    form.append('<div class="span1 nom-couche">' + result[i].name + '</div>')
+                    form.append('<div class="span2 nom-couche" title="' + result[i].name + '">' + result[i].name + '</div>')
                     form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '">')
 
-                    form.append('<div class="span4 nom-interne-couche">' + result[i].internalName + '</div>')
+                    form.append('<div class="span3 nom-interne-couche" title="' + result[i].internalName + '">' + result[i].internalName + '</div>')
                     form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '">')
 
-                    form.append('<div class="span3 url-couche">' + result[i].url + '</div>')
+                    form.append('<div class="span3 url-couche" title="' + result[i].url + '">' + result[i].url + '</div>')
                     form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '">')
 
                     form.append('<div class="span1 format-couche">' + result[i].format + '</div>')
