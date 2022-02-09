@@ -2,13 +2,6 @@
     <div id='geoportail-container'  style="height: 350px; max-height: 350px;"></div>
     <div id="info"></div>
 
-    <!-- SDK Géoportail -->
-    <script src="/js/sdk-ol/GpSDK2D.js"></script>
-    <link rel="stylesheet" href="/js/sdk-ol/GpSDK2D.css" />
-    <!-- FIN SDK -->
-
-    <script src="/js/main.js"></script>
-
     <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches)
     et du panel Profil Altimétrique (sinon coupé en 2) -->
     <style>
@@ -130,7 +123,8 @@
         <p><a href='<?php echo $this->url(array('action' => 'add')) ?>' class='btn btn-large'>Ajouter une couche cartographique</a></p>
     </div>
 <?php else : ?>
-    <p class='text-right'><a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche</a></p>
+    <p class='text-right'><a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a></p>
+    <p class='text-right'><a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a></p>
 
     <table class="table">
         <thead>

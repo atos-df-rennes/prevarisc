@@ -1,0 +1,243 @@
+function initViewer(divId, ignKey, center, description, autoconfPath) {
+    viewer = Gp.Map.load(
+        divId, // identifiant du conteneur HTML
+        {
+            apiKey : ignKey,
+            configUrl : autoconfPath,
+            // chargement de la cartographie en 2D
+            viewMode : "2d",
+            // niveau de zoom de la carte (de 1 à 21)
+            zoom : 16,
+            // centrage de la carte
+            center : {
+                x : center[0],
+                y : center[1],
+                projection : "EPSG:4326"
+            },
+            // Outils additionnels à proposer sur la carte
+            controlsOptions : {
+                "layerSwitcher" : {},
+                "search" : {},
+                "orientation" : {},
+                "graphicscale" : {},
+                "graticule" : {},
+                "length" : {},
+                "area" : {},
+                "azimuth" : {}
+            },
+            markersOptions : [{
+                content : description
+            }]
+        }
+    );
+
+    return viewer;
+}
+
+function addUserLayers(viewer, ignKey, layers) {
+    const wmsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMS'))
+    if (wmsLayers && wmsLayers.length > 0) {
+        addWmsLayers(viewer, ignKey, wmsLayers)
+    }
+
+    const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
+    if (wmtsLayers && wmtsLayers.length > 0) {
+        addWmtsLayers(viewer, ignKey, wmtsLayers)
+    }
+
+    return viewer;
+}
+
+function addWmsLayers(viewer, ignKey, wmsLayers) {
+    // Ajout des couches WMS
+    for (let i = 0; i < wmsLayers.length; i++) {
+        const source = new ol.source.TileWMS({
+            url: wmsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            params: {
+                'LAYERS': wmsLayers[i].LAYERS_COUCHECARTO,
+                'FORMAT': wmsLayers[i].FORMAT_COUCHECARTO,
+                'TILED': true
+            }
+        })
+
+        const layer = new ol.layer.Tile({
+            source: source,
+            visible: wmsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
+        })
+
+        viewer.getLibMap().addLayer(layer);
+
+        // On renomme les couches utilisateurs
+        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmsLayers[i].NOM_COUCHECARTO)
+        .attr('title', wmsLayers[i].NOM_COUCHECARTO)
+    }
+}
+
+function addWmtsLayers(viewer, ignKey, wmtsLayers) {
+    const wmtsCapabilities = getCapabilities(ignKey)
+
+    // Projection EPSG:3857
+    const resolutions = [
+            156543.03392804103,
+            78271.5169640205,
+            39135.75848201024,
+            19567.879241005125,
+            9783.939620502562,
+            4891.969810251281,
+            2445.9849051256406,
+            1222.9924525628203,
+            611.4962262814101,
+            305.74811314070485,
+            152.87405657035254,
+            76.43702828517625,
+            38.218514142588134,
+            19.109257071294063,
+            9.554628535647034,
+            4.777314267823517,
+            2.3886571339117584,
+            1.1943285669558792,
+            0.5971642834779396,
+            0.29858214173896974,
+            0.14929107086948493,
+            0.07464553543474241
+    ];
+
+    // Ajout des couches WMTS
+    for (let i = 0; i < wmtsLayers.length; i++) {
+        const source = new ol.source.WMTS({
+            url: wmtsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            layer: wmtsLayers[i].LAYERS_COUCHECARTO,
+            matrixSet: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixSet,
+            format: wmtsLayers[i].FORMAT_COUCHECARTO,
+            tileGrid: new ol.tilegrid.WMTS({
+                origin: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].origin,
+                resolutions: resolutions,
+                matrixIds: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixIds,
+            }),
+            style: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].style
+        })
+
+        const layer = new ol.layer.Tile({
+            source: source,
+            visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
+        })
+
+        viewer.getLibMap().addLayer(layer);
+
+        // On renomme les couches utilisateurs
+        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmtsLayers[i].NOM_COUCHECARTO)
+        .attr('title', wmtsLayers[i].NOM_COUCHECARTO)
+    }
+}
+
+function getCapabilities(ignKey) {
+    let parser = new ol.format.WMTSCapabilities() 
+    let layersToReturn = null
+
+    $.ajax({
+        url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/wmts?SERVICE=wmts&REQUEST=GetCapabilities',
+        type: 'get',
+        async: false,
+        success: function (result) {
+            const parsedResult = parser.read(result).Contents
+
+            let layers = []
+
+            const contentLayers = parsedResult.Layer
+            const contentMatrixSet = parsedResult.TileMatrixSet
+            const matrixSetToUse = contentMatrixSet.find(matrixSet => matrixSet.Identifier === 'PM')
+            const layerOrigins = matrixSetToUse.TileMatrix[0].TopLeftCorner
+            let contentMatrixSetIds =  []
+
+            for (let i = 0; i < matrixSetToUse.TileMatrix.length; i++) {
+                contentMatrixSetIds.push(i)
+            }
+
+            layerOrigins.forEach(function (part, index) {
+                this[index] = Math.trunc(part)
+            }, layerOrigins)
+
+            contentLayers.forEach(function (layer) {
+                if (layer.Style === undefined) {
+                    return
+                }
+
+                layers[layer.Identifier] = {
+                    style: layer.Style[0].Identifier,
+                    matrixSet: layer.TileMatrixSetLink[0].TileMatrixSet,
+                    origin: layerOrigins,
+                    matrixIds: contentMatrixSetIds
+                }
+            })
+
+            layersToReturn = layers
+        }
+    })
+
+    return layersToReturn
+}
+
+function putMarkerAt(viewer, center, nbCouches) {
+    // Si on a déjà un marker, on le retire
+    if (viewer.getLayers().getLength() != nbCouches) {
+        var toRemove = viewer.getLayers().item(viewer.getLayers().getLength()-1);
+        viewer.removeLayer(toRemove);
+    }
+
+    var coordinates = ol.proj.fromLonLat([center[0],center[1]]);
+    var point = new ol.geom.Point(coordinates);
+    var marker = new ol.Feature(point);
+
+    // On crée le nouveau marker aux coordonnées indiquées
+    var vectorSource = new ol.source.Vector({
+        features: [marker]
+    });
+    var styleMarker = new ol.style.Style({
+        image: new ol.style.Icon({
+            src: "/images/red-dot.png"
+        })
+    });
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: styleMarker
+    });
+    viewer.addLayer(vectorLayer);
+
+    // On renomme la couche
+    $('.GPlayerName').eq(-(viewer.getLayers().getLength())).text('Position du marqueur');
+}
+
+function updateCoordinates(center, sourceProj, destProj) {
+    var lonlat = new ol.proj.transform(center, sourceProj, destProj);
+    $("input[name='lon']").val(lonlat[0]);
+    $("input[name='lat']").val(lonlat[1]);
+
+    return lonlat;
+}
+
+function geocodeWithJsAutoconf(apiKey, adresse, filterOptionsType, projection, viewer, nbCouches) {
+    Gp.Services.geocode({
+        apiKey: apiKey,
+        location: adresse,
+        filterOptions: [{
+            type: filterOptionsType
+        }],
+        srs: projection,
+        onSuccess: function(t) {
+            var newCenter = {
+                x: t.locations[0].position.y,
+                y: t.locations[0].position.x,
+                projection: projection
+            };
+            viewer.setCenter(newCenter);
+            $("span.result").text("Géolocalisée IGN");
+            $('#geoportail-container').css('visibility', 'visible');
+            // Changement des coordonnées et du marker 
+            lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');
+            putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
+        },
+        onFailure: function() {
+            console.log('Erreur du service de géocodage ! Veuillez réessayer');
+        }
+    });
+}
