@@ -1,0 +1,62 @@
+<div class="accordion" id="ignAccordion">
+    <?php foreach ($this->key_ign as $index => $ignKey): ?>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="ignAccordion" href="#<?= $ignKey ?>">
+                    <?= ucfirst($ignKey) ?>
+                </a>
+            </div>
+            <div id="<?= $ignKey ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
+                <div class="accordion-inner">
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+    let result = null
+    let contentDiv = null
+    // const formats = ['wmts', 'wms-r', 'wms-v']
+    const formats = ['wmts']
+
+    <?php foreach ($this->key_ign as $key): ?>
+        formats.forEach(format => {
+            result = getCapabilities('<?= $key ?>', format)
+
+            if (result.length > 0) {
+                contentDiv = $('#<?= $key ?> .accordion-inner')
+
+                contentDiv.append('<div class="row-fluid"><div class="span12"><strong>' + format.toUpperCase() + '</strong></div></div>')
+                for (let i = 0; i < result.length; i++) {
+                    contentDiv.append('<div id="<?= $key ?>-' + result[i].internalName + '" class="row-fluid">')
+                    let row = $('#<?= $key ?>-' + result[i].internalName.replace(/\./g, '\\.'))
+                    row.append('<form action="/couches-cartographiques/add-couche-ign" method="post">')
+
+                    let form = $(row.selector + ' > form')
+
+                    form.append('<input type="hidden" name="TYPE_COUCHECARTO" value="' + result[i].type + '">')
+
+                    form.append('<div class="span1 nom-couche">' + result[i].name + '</div>')
+                    form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '">')
+
+                    form.append('<div class="span4 nom-interne-couche">' + result[i].internalName + '</div>')
+                    form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '">')
+
+                    form.append('<div class="span3 url-couche">' + result[i].url + '</div>')
+                    form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '">')
+
+                    form.append('<div class="span1 format-couche">' + result[i].format + '</div>')
+                    form.append('<input type="hidden" name="FORMAT_COUCHECARTO" value="' + result[i].format + '">')
+
+                    form.append('<div class="span1 visibilite-couche"><span><i class="icon-eye-open" title="Couche visible"></i></span></div>')
+                    form.append('<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0">')
+
+                    form.append('<div class="span1"><input type="submit" value="Ajouter"></div>')
+
+                    contentDiv.append('</div>')
+                }
+            }
+        })
+    <?php endforeach ?>
+</script>

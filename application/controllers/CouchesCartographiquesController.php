@@ -9,6 +9,10 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
 
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('getCapabilities', 'json')
+                    ->initContext();
+
         $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
         $this->serviceCarto = new Service_Carto();
     }
@@ -27,7 +31,8 @@ class CouchesCartographiquesController extends Zend_Controller_Action
     // i.e. Pas de requête vers l'IGN ici
     public function addAction()
     {
-        $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        // FIXME Test
+        // $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'))[0];
 
         if ($this->_request->isPost()) {
             try {
@@ -44,19 +49,9 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function addCoucheIgnAction()
     {
-        $this->addAction();
+        $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'));
 
-        $client = new Zend_Http_Client(sprintf('https://wxs.ign.fr/%s/autoconf', $this->view->key_ign[0]));
-        
-        $response = $client->request();
-        $this->view->couchesIGN = [
-            "essentiels" => [
-                "name" => "Plan Ortho", "url" => "https://www.urlOrtho.com",
-            ],
-            "adresse" => [
-                "name" => "Plan Général", "url" => "https://www.urlPlan.com",
-            ],
-        ];
+        $this->addAction();
     }
 
     public function editAction()

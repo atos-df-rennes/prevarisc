@@ -1,8 +1,23 @@
-function initViewer(divId, ignKey, center, description, autoconfPath) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de l'affichage de l'icône de visibilité et de son titre
+    $('span > i').on('click', function() {
+        if ($(this).hasClass('icon-eye-open')) {
+            this.setAttribute('title', 'Couche non visible')
+            $(this).closest('div').next().val(1)
+        } else {
+            this.setAttribute('title', 'Couche visible')
+            $(this).closest('div').next().val(0)
+        }
+
+        $(this).toggleClass('icon-eye-close icon-eye-open')
+    })
+})
+
+function initViewer(divId, ignKeys, center, description, autoconfPath) {
     viewer = Gp.Map.load(
         divId, // identifiant du conteneur HTML
         {
-            apiKey : ignKey,
+            apiKey : ignKeys,
             configUrl : autoconfPath,
             // chargement de la cartographie en 2D
             viewMode : "2d",
@@ -74,7 +89,8 @@ function addWmsLayers(viewer, ignKey, wmsLayers) {
 }
 
 function addWmtsLayers(viewer, ignKey, wmtsLayers) {
-    const wmtsCapabilities = getCapabilities(ignKey)
+    // FIXME Corriger la récupération des infos suite au changement de type de l'objet
+    const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
     // Projection EPSG:3857
     const resolutions = [
@@ -101,20 +117,24 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
             0.14929107086948493,
             0.07464553543474241
     ];
-
-    // Ajout des couches WMTS
+    
+    // Ajout des couches WMTS avec les données utilisateurs renseignées en base
     for (let i = 0; i < wmtsLayers.length; i++) {
+        // Données issues du getCapabilities correspondant à la couche renseignée par l'utilisateur
+        // Permet d'avoir des informations complémentaires non renseignées par l'utilisateur pour l'ajout de la couche
+        const wmtsLayer = wmtsCapabilities.find(wmtsCapability => wmtsCapability.internalName === wmtsLayers[i].LAYERS_COUCHECARTO)
+
         const source = new ol.source.WMTS({
-            url: wmtsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            url: wmtsLayers[i].URL_COUCHECARTO,
             layer: wmtsLayers[i].LAYERS_COUCHECARTO,
-            matrixSet: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixSet,
+            matrixSet: wmtsLayer.matrixSet,
             format: wmtsLayers[i].FORMAT_COUCHECARTO,
             tileGrid: new ol.tilegrid.WMTS({
-                origin: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].origin,
+                origin: wmtsLayer.origin,
                 resolutions: resolutions,
-                matrixIds: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].matrixIds,
+                matrixIds: wmtsLayer.matrixIds,
             }),
-            style: wmtsCapabilities[wmtsLayers[i].LAYERS_COUCHECARTO].style
+            style: wmtsLayer.style
         })
 
         const layer = new ol.layer.Tile({
@@ -130,21 +150,48 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
     }
 }
 
-function getCapabilities(ignKey) {
-    let parser = new ol.format.WMTSCapabilities() 
-    let layersToReturn = null
+// TODO Faire le getCapabilities du WMS Raster et WMS Vecteur
+function getCapabilities(ignKey, format) {
+    let parser = null
+    const baseFormat = format.split('-')[0]
+    let urlToCall = 'https://wxs.ign.fr/' + ignKey + '/geoportail/{formatUrl}?SERVICE=' + baseFormat + '&REQUEST=GetCapabilities{options}'
+
+    switch (format) {
+        case 'wmts':
+            parser = new ol.format.WMTSCapabilities()
+            urlToCall = urlToCall.replace('{formatUrl}', 'wmts').replace('{options}', '')
+            break
+        case 'wms-r':
+            parser = new ol.format.WMSCapabilities()
+            urlToCall = urlToCall.replace('{formatUrl}', 'r/wms').replace('{options}', '&VERSION=1.3.0')
+            break
+        case 'wms-v':
+            parser = new ol.format.WMSCapabilities()
+            urlToCall = urlToCall.replace('{formatUrl}', 'v/wms').replace('{options}', '&VERSION=1.3.0')
+            break
+        default:
+            console.error('Format non supporté: ' + format + '\nLes formats supportés sont: WMTS / WMS Raster / WMS Vecteur')
+            break
+    }
+
+    let layersToReturn = []
 
     $.ajax({
-        url: 'https://wxs.ign.fr/' + ignKey + '/geoportail/wmts?SERVICE=wmts&REQUEST=GetCapabilities',
+        url: urlToCall,
         type: 'get',
         async: false,
         success: function (result) {
-            const parsedResult = parser.read(result).Contents
+            const parsedResult = parser.read(result)
+            const contents = parsedResult.Contents
 
+            const contentLayers = contents.Layer
             let layers = []
+            if (contentLayers === undefined) {
+                return
+            }
 
-            const contentLayers = parsedResult.Layer
-            const contentMatrixSet = parsedResult.TileMatrixSet
+            const layerUrl = parsedResult.OperationsMetadata.GetCapabilities.DCP.HTTP.Get[0].href.slice(0, -1)
+            const contentMatrixSet = contents.TileMatrixSet
             const matrixSetToUse = contentMatrixSet.find(matrixSet => matrixSet.Identifier === 'PM')
             const layerOrigins = matrixSetToUse.TileMatrix[0].TopLeftCorner
             let contentMatrixSetIds =  []
@@ -162,12 +209,24 @@ function getCapabilities(ignKey) {
                     return
                 }
 
-                layers[layer.Identifier] = {
+                layers.push({
+                    // LAYERS_COUCHECARTO
+                    internalName: layer.Identifier,
+                    // NOM_COUCHECARTO
+                    name: layer.Title,
+                    // SPECIFIQUE WMTS //
                     style: layer.Style[0].Identifier,
                     matrixSet: layer.TileMatrixSetLink[0].TileMatrixSet,
                     origin: layerOrigins,
-                    matrixIds: contentMatrixSetIds
-                }
+                    matrixIds: contentMatrixSetIds,
+                    // SPECIFIQUE WMTS //
+                    // TYPE_COUCHECARTO
+                    type: baseFormat.toUpperCase(),
+                    // URL_COUCHECARTO
+                    url: layerUrl,
+                    // FORMAT_COUCHECARTO
+                    format: layer.Format[0]
+                })
             })
 
             layersToReturn = layers
