@@ -28,8 +28,8 @@
 
                 contentDiv.append('<div class="row-fluid"><div class="span12"><strong>' + format.toUpperCase() + '</strong></div></div>')
                 for (let i = 0; i < result.length; i++) {
-                    contentDiv.append('<div id="<?= $key ?>-' + result[i].internalName + '" class="row-fluid">')
-                    let row = $('#<?= $key ?>-' + result[i].internalName.replace(/\./g, '\\.'))
+                    contentDiv.append('<div id="<?= $key ?>-' + result[i].internalName + '-' + format.replace(' ', '-') + '" class="row-fluid">')
+                    let row = $('#<?= $key ?>-' + result[i].internalName.replace(/\./g, '\\.') + '-' + format.replace(' ', '-'))
                     row.append('<form action="/couches-cartographiques/add-couche-ign" method="post">')
 
                     let form = $(row.selector + ' > form')
