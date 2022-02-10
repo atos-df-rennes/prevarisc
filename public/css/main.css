@@ -1241,11 +1241,11 @@ dl.champ_effectif_camping dd input {
     margin-bottom: 10px;
 }
 
-span > i {
+#ign-accordion span > i {
     cursor: pointer;
 }
 
-div[class^='span'] {
+#ign-accordion div[class^='span'] {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestion de l'affichage de l'icône de visibilité et de son titre
+    // Gestion de l'affichage de l'icône de visibilité
     $('span > i').on('click', function() {
         if ($(this).hasClass('icon-eye-open')) {
             this.setAttribute('title', 'Couche non visible')
@@ -52,22 +52,22 @@ function initViewer(divId, ignKeys, center, description, autoconfPath) {
 function addUserLayers(viewer, ignKey, layers) {
     const wmsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMS'))
     if (wmsLayers && wmsLayers.length > 0) {
-        addWmsLayers(viewer, ignKey, wmsLayers)
+        addWmsLayers(viewer, wmsLayers)
     }
 
     const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
     if (wmtsLayers && wmtsLayers.length > 0) {
-        addWmtsLayers(viewer, ignKey, wmtsLayers)
+        addWmtsLayers(viewer, wmtsLayers, ignKey)
     }
 
     return viewer;
 }
 
-function addWmsLayers(viewer, ignKey, wmsLayers) {
+function addWmsLayers(viewer, wmsLayers) {
     // Ajout des couches WMS
     for (let i = 0; i < wmsLayers.length; i++) {
         const source = new ol.source.TileWMS({
-            url: wmsLayers[i].URL_COUCHECARTO.replace('\{key\}', ignKey),
+            url: wmsLayers[i].URL_COUCHECARTO,
             params: {
                 'LAYERS': wmsLayers[i].LAYERS_COUCHECARTO,
                 'FORMAT': wmsLayers[i].FORMAT_COUCHECARTO,
@@ -88,8 +88,7 @@ function addWmsLayers(viewer, ignKey, wmsLayers) {
     }
 }
 
-function addWmtsLayers(viewer, ignKey, wmtsLayers) {
-    // FIXME Corriger la récupération des infos suite au changement de type de l'objet
+function addWmtsLayers(viewer, wmtsLayers, ignKey) {
     const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
     // Projection EPSG:3857
@@ -150,10 +149,9 @@ function addWmtsLayers(viewer, ignKey, wmtsLayers) {
     }
 }
 
-// TODO Faire le getCapabilities du WMS Raster et WMS Vecteur
 function getCapabilities(ignKey, format) {
     let parser = null
-    const baseFormat = format.split('-')[0]
+    const baseFormat = format.split(' ')[0]
     let urlToCall = 'https://wxs.ign.fr/' + ignKey + '/geoportail/{formatUrl}?SERVICE=' + baseFormat + '&REQUEST=GetCapabilities{options}'
 
     switch (format) {
@@ -161,17 +159,17 @@ function getCapabilities(ignKey, format) {
             parser = new ol.format.WMTSCapabilities()
             urlToCall = urlToCall.replace('{formatUrl}', 'wmts').replace('{options}', '')
             break
-        case 'wms-r':
+        case 'wms raster':
             parser = new ol.format.WMSCapabilities()
             urlToCall = urlToCall.replace('{formatUrl}', 'r/wms').replace('{options}', '&VERSION=1.3.0')
             break
-        case 'wms-v':
+        case 'wms vecteur':
             parser = new ol.format.WMSCapabilities()
             urlToCall = urlToCall.replace('{formatUrl}', 'v/wms').replace('{options}', '&VERSION=1.3.0')
             break
         default:
             console.error('Format non supporté: ' + format + '\nLes formats supportés sont: WMTS / WMS Raster / WMS Vecteur')
-            break
+            return
     }
 
     let layersToReturn = []
@@ -182,51 +180,72 @@ function getCapabilities(ignKey, format) {
         async: false,
         success: function (result) {
             const parsedResult = parser.read(result)
-            const contents = parsedResult.Contents
+
+            let contents = ''
+            let layerUrl = ''
+            let layerOrigins = ''
+            let contentMatrixSetIds =  []
+
+            if (format === 'wmts') {
+                contents = parsedResult.Contents
+                layerUrl = parsedResult.OperationsMetadata.GetCapabilities.DCP.HTTP.Get[0].href.slice(0, -1)
+
+                const contentMatrixSet = contents.TileMatrixSet
+                const matrixSetToUse = contentMatrixSet.find(matrixSet => matrixSet.Identifier === 'PM')
+                layerOrigins = matrixSetToUse.TileMatrix[0].TopLeftCorner
+
+                for (let i = 0; i < matrixSetToUse.TileMatrix.length; i++) {
+                    contentMatrixSetIds.push(i)
+                }
+
+                layerOrigins.forEach(function (part, index) {
+                    this[index] = Math.trunc(part)
+                }, layerOrigins)
+            } else {
+                contents = parsedResult.Capability.Layer
+                layerUrl = parsedResult.Capability.Request.GetCapabilities.DCPType[0].HTTP.Get.OnlineResource.slice(0, -1)
+            }
 
             const contentLayers = contents.Layer
-            let layers = []
             if (contentLayers === undefined) {
                 return
             }
 
-            const layerUrl = parsedResult.OperationsMetadata.GetCapabilities.DCP.HTTP.Get[0].href.slice(0, -1)
-            const contentMatrixSet = contents.TileMatrixSet
-            const matrixSetToUse = contentMatrixSet.find(matrixSet => matrixSet.Identifier === 'PM')
-            const layerOrigins = matrixSetToUse.TileMatrix[0].TopLeftCorner
-            let contentMatrixSetIds =  []
-
-            for (let i = 0; i < matrixSetToUse.TileMatrix.length; i++) {
-                contentMatrixSetIds.push(i)
-            }
-
-            layerOrigins.forEach(function (part, index) {
-                this[index] = Math.trunc(part)
-            }, layerOrigins)
-
+            let layers = []
+            let layerFormat = null
             contentLayers.forEach(function (layer) {
-                if (layer.Style === undefined) {
+                if (layer.Style === undefined && format !== 'wms vecteur') {
                     return
+                } else if (layer.Style === undefined && format === 'wms vecteur') {
+                    layerFormat = 'image/jpeg'
                 }
 
-                layers.push({
-                    // LAYERS_COUCHECARTO
-                    internalName: layer.Identifier,
+                let obj = {
                     // NOM_COUCHECARTO
                     name: layer.Title,
-                    // SPECIFIQUE WMTS //
-                    style: layer.Style[0].Identifier,
-                    matrixSet: layer.TileMatrixSetLink[0].TileMatrixSet,
-                    origin: layerOrigins,
-                    matrixIds: contentMatrixSetIds,
-                    // SPECIFIQUE WMTS //
                     // TYPE_COUCHECARTO
                     type: baseFormat.toUpperCase(),
                     // URL_COUCHECARTO
-                    url: layerUrl,
+                    url: layerUrl
+                }
+
+                if (format === 'wmts') {
+                    // LAYERS_COUCHECARTO
+                    obj.internalName = layer.Identifier
                     // FORMAT_COUCHECARTO
-                    format: layer.Format[0]
-                })
+                    obj.format = layer.Format[0]
+                    obj.style = layer.Style[0].Identifier
+                    obj.matrixSet = layer.TileMatrixSetLink[0].TileMatrixSet
+                    obj.origin = layerOrigins
+                    obj.matrixIds = contentMatrixSetIds
+                } else {
+                    // LAYERS_COUCHECARTO
+                    obj.internalName = layer.Name
+                    // FORMAT_COUCHECARTO
+                    obj.format = layerFormat !== null ? layerFormat : layer.Style[0].LegendURL[0].Format
+                }
+
+                layers.push(obj)
             })
 
             layersToReturn = layers

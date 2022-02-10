@@ -1,8 +1,8 @@
-<div class="accordion" id="ignAccordion">
+<div class="accordion" id="ign-accordion">
     <?php foreach ($this->key_ign as $index => $ignKey): ?>
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="ignAccordion" href="#<?= $ignKey ?>">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="ign-accordion" href="#<?= $ignKey ?>">
                     <?= ucfirst($ignKey) ?>
                 </a>
             </div>
@@ -17,8 +17,7 @@
 <script type="text/javascript">
     let result = null
     let contentDiv = null
-    // const formats = ['wmts', 'wms-r', 'wms-v']
-    const formats = ['wmts']
+    const formats = ['wmts', 'wms raster', 'wms vecteur']
 
     <?php foreach ($this->key_ign as $key): ?>
         formats.forEach(format => {
