@@ -1251,3 +1251,7 @@ dl.champ_effectif_camping dd input {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+#ign-accordion select[name='FORMAT_COUCHECARTO'] {
+    width: fit-content;
+}
