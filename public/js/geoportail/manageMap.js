@@ -217,7 +217,7 @@ function getCapabilities(ignKey, format) {
                 if (layer.Style === undefined && format !== 'wms vecteur') {
                     return
                 } else if (layer.Style === undefined && format === 'wms vecteur') {
-                    layerFormat = 'image/jpeg'
+                    layerFormat = 'image/png'
                 }
 
                 let obj = {

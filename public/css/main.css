@@ -1237,7 +1237,8 @@ dl.champ_effectif_camping dd input {
     width: 139px;
 }
 
-#dossierInfos form .btn {
+#dossierInfos form .btn,
+#ign-accordion .row-fluid {
     margin-bottom: 10px;
 }
 
