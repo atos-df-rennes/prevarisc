@@ -50,45 +50,50 @@ function initViewer(divId, ignKeys, center, description, autoconfPath) {
 }
 
 function addUserLayers(viewer, ignKey, layers) {
-    const wmsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMS'))
-    if (wmsLayers && wmsLayers.length > 0) {
-        addWmsLayers(viewer, wmsLayers)
-    }
-
-    const wmtsLayers = layers.filter(layer => (layer.TYPE_COUCHECARTO === 'WMTS'))
-    if (wmtsLayers && wmtsLayers.length > 0) {
-        addWmtsLayers(viewer, wmtsLayers, ignKey)
-    }
+    layers.forEach(function(layer) {
+        switch (layer.TYPE_COUCHECARTO) {
+            case 'WMS':
+                addWmsLayer(viewer, layer)
+                break
+            case 'WMTS':
+                addWmtsLayer(viewer, layer, ignKey)
+                break
+            default:
+                console.error('Type de couche non supporté: ' + layer.TYPE_COUCHECARTO)
+                return
+        }
+    })
 
     return viewer;
 }
 
-function addWmsLayers(viewer, wmsLayers) {
-    // Ajout des couches WMS
-    for (let i = 0; i < wmsLayers.length; i++) {
-        const source = new ol.source.TileWMS({
-            url: wmsLayers[i].URL_COUCHECARTO,
-            params: {
-                'LAYERS': wmsLayers[i].LAYERS_COUCHECARTO,
-                'FORMAT': wmsLayers[i].FORMAT_COUCHECARTO,
-                'TILED': true
-            }
-        })
+function addWmsLayer(viewer, wmsLayer) {
+    const source = new ol.source.TileWMS({
+        url: wmsLayer.URL_COUCHECARTO,
+        params: {
+            'LAYERS': wmsLayer.LAYERS_COUCHECARTO,
+            'FORMAT': wmsLayer.FORMAT_COUCHECARTO,
+            'TILED': true
+        }
+    })
 
-        const layer = new ol.layer.Tile({
-            source: source,
-            visible: wmsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
-        })
+    const layer = new ol.layer.Tile({
+        source: source,
+        visible: wmsLayer.TRANSPARENT_COUCHECARTO === 1 ? false : true
+    })
 
-        viewer.getLibMap().addLayer(layer);
-
-        // On renomme les couches utilisateurs
-        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmsLayers[i].NOM_COUCHECARTO)
-        .attr('title', wmsLayers[i].NOM_COUCHECARTO)
+    if (wmsLayer.ORDRE_COUCHECARTO !== null) {
+        layer.setZIndex(wmsLayer.ORDRE_COUCHECARTO)
     }
+
+    viewer.getLibMap().addLayer(layer);
+
+    // On renomme les couches utilisateurs
+    $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmsLayer.NOM_COUCHECARTO)
+    .attr('title', wmsLayer.NOM_COUCHECARTO)
 }
 
-function addWmtsLayers(viewer, wmtsLayers, ignKey) {
+function addWmtsLayer(viewer, wmtsLayer, ignKey) {
     const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
     // Projection EPSG:3857
@@ -117,36 +122,37 @@ function addWmtsLayers(viewer, wmtsLayers, ignKey) {
             0.07464553543474241
     ];
     
-    // Ajout des couches WMTS avec les données utilisateurs renseignées en base
-    for (let i = 0; i < wmtsLayers.length; i++) {
-        // Données issues du getCapabilities correspondant à la couche renseignée par l'utilisateur
-        // Permet d'avoir des informations complémentaires non renseignées par l'utilisateur pour l'ajout de la couche
-        const wmtsLayer = wmtsCapabilities.find(wmtsCapability => wmtsCapability.internalName === wmtsLayers[i].LAYERS_COUCHECARTO)
+    // Données issues du getCapabilities correspondant à la couche renseignée par l'utilisateur
+    // Permet d'avoir des informations complémentaires non renseignées par l'utilisateur pour l'ajout de la couche
+    const wmtsLayerCapability = wmtsCapabilities.find(wmtsCapability => wmtsCapability.internalName === wmtsLayer.LAYERS_COUCHECARTO)
 
-        const source = new ol.source.WMTS({
-            url: wmtsLayers[i].URL_COUCHECARTO,
-            layer: wmtsLayers[i].LAYERS_COUCHECARTO,
-            matrixSet: wmtsLayer.matrixSet,
-            format: wmtsLayers[i].FORMAT_COUCHECARTO,
-            tileGrid: new ol.tilegrid.WMTS({
-                origin: wmtsLayer.origin,
-                resolutions: resolutions,
-                matrixIds: wmtsLayer.matrixIds,
-            }),
-            style: wmtsLayer.style
-        })
+    const source = new ol.source.WMTS({
+        url: wmtsLayer.URL_COUCHECARTO,
+        layer: wmtsLayer.LAYERS_COUCHECARTO,
+        matrixSet: wmtsLayerCapability.matrixSet,
+        format: wmtsLayer.FORMAT_COUCHECARTO,
+        tileGrid: new ol.tilegrid.WMTS({
+            origin: wmtsLayerCapability.origin,
+            resolutions: resolutions,
+            matrixIds: wmtsLayerCapability.matrixIds,
+        }),
+        style: wmtsLayerCapability.style
+    })
 
-        const layer = new ol.layer.Tile({
-            source: source,
-            visible: wmtsLayers[i].TRANSPARENT_COUCHECARTO === 1 ? false : true
-        })
+    const layer = new ol.layer.Tile({
+        source: source,
+        visible: wmtsLayer.TRANSPARENT_COUCHECARTO === 1 ? false : true
+    })
 
-        viewer.getLibMap().addLayer(layer);
-
-        // On renomme les couches utilisateurs
-        $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmtsLayers[i].NOM_COUCHECARTO)
-        .attr('title', wmtsLayers[i].NOM_COUCHECARTO)
+    if (wmtsLayer.ORDRE_COUCHECARTO !== null) {
+        layer.setZIndex(wmtsLayer.ORDRE_COUCHECARTO)
     }
+
+    viewer.getLibMap().addLayer(layer);
+
+    // On renomme les couches utilisateurs
+    $('.GPlayerName').eq(-(viewer.getLibMap().getLayers().getLength())).text(wmtsLayer.NOM_COUCHECARTO)
+    .attr('title', wmtsLayer.NOM_COUCHECARTO)
 }
 
 function getCapabilities(ignKey, format) {
