@@ -1237,6 +1237,21 @@ dl.champ_effectif_camping dd input {
     width: 139px;
 }
 
-#dossierInfos form .btn {
+#dossierInfos form .btn,
+#ign-accordion .row-fluid {
     margin-bottom: 10px;
+}
+
+#ign-accordion span > i {
+    cursor: pointer;
+}
+
+#ign-accordion div[class^='span'] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#ign-accordion select[name='FORMAT_COUCHECARTO'] {
+    width: fit-content;
 }

@@ -229,7 +229,6 @@
                     'Commission' => 'LIBELLE_COMMISSION',
                 ),
                 $model_stat->listeDesERPVisitePeriodique($this->_getParam('date'), $this->_getParam('datefin'))->trierPar($this->_getParam('tri'))
-
             );
 
             if ($this->_getParam('format') != 'json') {
