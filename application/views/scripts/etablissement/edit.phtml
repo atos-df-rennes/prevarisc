@@ -1117,12 +1117,13 @@
                         adresse += voie + ", " + codepostal +  ", " + commune;
 
                         $("span.result").text("Géolocalisation en cours...");
-                        geocodeWithJsAutoconf('<?php echo $this->key_ign ?>',
-                                              adresse,
-                                              'StreetAddress',
-                                              'EPSG:4326',
-                                              viewer,
-                                              nbCouches);
+                        geocodeWithJsAutoconf(
+                            adresse,
+                            'StreetAddress',
+                            'EPSG:4326',
+                            viewer,
+                            nbCouches
+                        );
 
                         return false;
                     });

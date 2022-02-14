@@ -299,9 +299,9 @@ function updateCoordinates(center, sourceProj, destProj) {
     return lonlat;
 }
 
-function geocodeWithJsAutoconf(apiKey, adresse, filterOptionsType, projection, viewer, nbCouches) {
+function geocodeWithJsAutoconf(adresse, filterOptionsType, projection, viewer, nbCouches) {
     Gp.Services.geocode({
-        apiKey: apiKey,
+        apiKey: 'essentiels',
         location: adresse,
         filterOptions: [{
             type: filterOptionsType
@@ -321,7 +321,7 @@ function geocodeWithJsAutoconf(apiKey, adresse, filterOptionsType, projection, v
             putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
         },
         onFailure: function() {
-            console.log('Erreur du service de géocodage ! Veuillez réessayer');
+            console.error('Erreur du service de géocodage ! Veuillez réessayer');
         }
     });
 }
