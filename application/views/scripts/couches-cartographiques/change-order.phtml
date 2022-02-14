@@ -11,7 +11,7 @@
                 <tr>
                     <td><?= $coucheCarto['NOM_COUCHECARTO'] ?></td>
                     <td>
-                        <input type="number" name="ORDRE_COUCHECARTO-<?= $coucheCarto['ID_COUCHECARTO'] ?>" value="<?= $coucheCarto['ORDRE_COUCHECARTO'] ?>" min="1" />
+                        <input type="number" name="ORDRE_COUCHECARTO-<?= $coucheCarto['ID_COUCHECARTO'] ?>" required value="<?= $coucheCarto['ORDRE_COUCHECARTO'] ?>" min="1" />
                     </td>
                 </tr>
             <?php endforeach ?>
