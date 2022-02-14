@@ -486,7 +486,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement 
+     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement
      */
     public function getAllDossierPlatAU()
     {

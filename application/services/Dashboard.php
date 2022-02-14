@@ -173,7 +173,7 @@ class Service_Dashboard
         // bloc npsp
         'dossierPlatau' => array(
             'service' => 'Service_Dashboard',
-            'method' => 'getDossiersPlatAUSansEtablissement', 
+            'method' => 'getDossiersPlatAUSansEtablissement',
             'acl' => array('dashboard','view_doss_platau_sans_etab'),
             'title' => 'Dossiers Plat\'AU à traiter',
             'type' => 'dossierPlatau',
@@ -239,8 +239,8 @@ class Service_Dashboard
     {
         $dbDossierAffectation = new Model_DbTable_DossierAffectation();
         $odj = array_merge(
-                $dbDossierAffectation->getDossierNonAffect($commission['ID_DATECOMMISSION']),
-                $dbDossierAffectation->getDossierAffect($commission['ID_DATECOMMISSION'])
+            $dbDossierAffectation->getDossierNonAffect($commission['ID_DATECOMMISSION']),
+            $dbDossierAffectation->getDossierAffect($commission['ID_DATECOMMISSION'])
         );
         return array_unique($odj, SORT_REGULAR);
     }
@@ -432,10 +432,10 @@ class Service_Dashboard
     /**
      * Retourne la liste des dossiers Plat'AU non associé à un etablissement
      */
-    public function getDossiersPlatAUSansEtablissement(){
-
+    public function getDossiersPlatAUSansEtablissement()
+    {
         $dbDossier = new Model_DbTable_Dossier();
-       return $dbDossier->getAllDossierPlatAU();
+        return $dbDossier->getAllDossierPlatAU();
     }
 
     public function getLeveePresc()
