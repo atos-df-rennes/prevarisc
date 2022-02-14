@@ -12,6 +12,7 @@
 		<dd>
 			<select name="TYPE_COUCHECARTO">
 				<option value="WMS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMS') echo "selected" ?> >WMS</option>
+				<option value="WMTS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMTS') echo "selected" ?> >WMTS</option>
 			</select>
 		</dd>
                 
@@ -49,8 +50,15 @@
 
 		<dt>Couche transparente ?</dt>
 		<dd>
-            <input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />
-			<input type="checkbox" name="TRANSPARENT_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['TRANSPARENT_COUCHECARTO']) echo "checked" ?> />
+			<p>
+            	<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />
+				<input type="checkbox" name="TRANSPARENT_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['TRANSPARENT_COUCHECARTO']) echo "checked" ?> />
+			</p>
+		</dd>
+
+		<dt>Ordre de la couche</dt>
+		<dd>
+			<input type="number" name="ORDRE_COUCHECARTO" min="1" value="<?= $this->row ? $this->row['ORDRE_COUCHECARTO'] : '' ?>" />
 		</dd>
 	</dl>
 </form>

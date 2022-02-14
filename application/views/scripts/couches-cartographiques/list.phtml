@@ -140,12 +140,16 @@
             <strong>Attention !</strong> Le chargement de la page d'ajout d'une couche IGN peut prendre du temps si vous avez renseigné plusieurs clés.
         </div>
     </p>
+    <p class='text-right'>
+        <a class='btn' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>'>Changer l'ordre des couches</a>
+    </p>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Type</th>
                 <th>Nom de la couche</th>
+                <th>Ordre de la couche</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -154,6 +158,7 @@
             <tr>
                 <td><?php echo $couche_cartographique['TYPE_COUCHECARTO'] ?></td>
                 <td><?php echo $couche_cartographique['NOM_COUCHECARTO'].(($couche_cartographique['ISBASELAYER_COUCHECARTO']) ? " (couche de base)" : "") ?></td>
+                <td><?= $couche_cartographique['ORDRE_COUCHECARTO'] ?? 'Ordre non renseigné' ?></td>
                 <td>
                     <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Éditer la couche</a><br/>
                     <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Supprimer</a>

@@ -166,6 +166,11 @@
                             <controller>couches-cartographiques</controller>
                             <action>delete</action>
                         </delete-couche-cartographique>
+                        <change-order-couches>
+                            <label>Changer ordre Couches Cartographiques</label>
+                            <controller>couches-cartographiques</controller>
+                            <action>change-order</action>
+                        </change-order-couches>
                     </pages>
                 </couches-cartographiques>
                 <tableau-des-periodicites>

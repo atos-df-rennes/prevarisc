@@ -39,13 +39,13 @@
                     form.append('<input type="hidden" name="TYPE_COUCHECARTO" value="' + result[i].type + '">')
 
                     form.append('<div class="span2" title="' + result[i].name + '">' + result[i].name + '</div>')
-                    form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '">')
+                    form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '" />')
 
                     form.append('<div class="span3" title="' + result[i].internalName + '">' + result[i].internalName + '</div>')
-                    form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '">')
+                    form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '" />')
 
                     form.append('<div class="span2 " title="' + result[i].url + '">' + result[i].url + '</div>')
-                    form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '">')
+                    form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '" />')
 
                     if (baseFormat === 'wms') {
                         const pngChecked = result[i].format === 'image/png'
@@ -73,11 +73,11 @@
                         }
                     } else {
                         form.append('<div class="span2 text-center">' + result[i].format + '</div>')
-                        form.append('<input type="hidden" name="FORMAT_COUCHECARTO" value="' + result[i].format + '">')
+                        form.append('<input type="hidden" name="FORMAT_COUCHECARTO" value="' + result[i].format + '" />')
                     }
 
                     form.append('<div class="span1 visibilite-couche"><span><i class="icon-eye-open" title="Couche visible"></i></span></div>')
-                    form.append('<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0">')
+                    form.append('<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />')
 
                     form.append('<div class="span1"><input type="submit" class="btn btn-success" value="Ajouter"></div>')
 

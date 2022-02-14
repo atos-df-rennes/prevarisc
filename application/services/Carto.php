@@ -20,7 +20,7 @@ class Service_Carto
     {
         if (($couches_carto = unserialize($this->cache->load('couches_cartographiques'))) === false) {
             // On récupère l'ensemble des couches
-            $couches_carto = $this->repository->fetchAll()->toArray();
+            $couches_carto = $this->repository->getAll();
 
             // On stocke en cache
             $this->cache->save(serialize($couches_carto));
@@ -51,6 +51,7 @@ class Service_Carto
     {
         $couche_cartographique = $id_couche_cartographique == null ? $this->repository->createRow() : $this->repository->find($id_couche_cartographique)->current();
         $couche_cartographique->setFromArray(array_intersect_key($data, $this->repository->info('metadata')))->save();
+
         $this->cache->remove('couches_cartographiques');
     }
 
@@ -62,6 +63,7 @@ class Service_Carto
     public function delete($id_couche_cartographique)
     {
         $this->repository->delete('ID_COUCHECARTO = '.$id_couche_cartographique);
+        
         $this->cache->remove('couches_cartographiques');
     }
 }

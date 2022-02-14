@@ -2,7 +2,7 @@
 
 class CouchesCartographiquesController extends Zend_Controller_Action
 {
-    public function init()
+    public function init(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
@@ -27,13 +27,8 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->default_lat = getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818';
     }
 
-    // FIXME Corriger cette action pour qu'on ne puisse ajouter que des couches persos
-    // i.e. Pas de requête vers l'IGN ici
     public function addAction()
     {
-        // FIXME Test
-        // $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'))[0];
-
         if ($this->_request->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
@@ -47,7 +42,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         }
     }
 
-    public function addCoucheIgnAction()
+    public function addCoucheIgnAction(): void
     {
         $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'));
 
@@ -56,13 +51,14 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $this->view->row = $this->serviceCarto->findById($this->getRequest()->getParam('id'));
+        $id = $this->getRequest()->getParam('id');
+        $this->view->row = $this->serviceCarto->findById($id);
 
         if ($this->_request->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
-                $this->serviceCarto->save($data, $this->getRequest()->getParam('id'));
-
+                $this->serviceCarto->save($data, $id);
+                
                 $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.'));
                 $this->_helper->redirector('list');
             } catch (Exception $e) {
@@ -86,5 +82,24 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         }
 
         $this->_helper->redirector('list');
+    }
+
+    public function changeOrderAction(): void
+    {
+        $this->view->couches_cartographiques = $this->serviceCarto->getAll();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            foreach ($data as $key => $ordreCoucheCarto) {
+                $explodedKey = explode('-', $key);
+                $idCoucheCarto = end($explodedKey);
+
+                $this->serviceCarto->save(['ORDRE_COUCHECARTO' => $ordreCoucheCarto], intval($idCoucheCarto));
+            }
+
+            $this->redirect('/couches-cartographiques/list');
+        }
     }
 }

@@ -1,0 +1,22 @@
+<form action="<?= $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom de la couche</th>
+                <th>Ordre de la couche</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->couches_cartographiques as $coucheCarto): ?>
+                <tr>
+                    <td><?= $coucheCarto['NOM_COUCHECARTO'] ?></td>
+                    <td>
+                        <input type="number" name="ORDRE_COUCHECARTO-<?= $coucheCarto['ID_COUCHECARTO'] ?>" value="<?= $coucheCarto['ORDRE_COUCHECARTO'] ?>" min="1" />
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+
+    <button type='submit' class='btn btn-success pull-right'>Sauvegarder</button>
+</form>
