@@ -385,4 +385,21 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select);
     }
+
+
+    
+    /**
+     * Retourne la liste des avis et derogations d un etablissement
+     */
+    public function getListAvisDerogationsEtablissement($idEtablissement){
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('dossier')
+            ->join('etablissementdossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER')
+            ->join('etablissement', 'etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT')
+            ->join('avisderogations', 'avisderogations.ID_DOSSIER_LIE = dossier.ID_DOSSIER')
+            ->where('etablissement.ID_ETABLISSEMENT = ?', $idEtablissement)
+            ->where('avisderogations.DISPLAY_HISTORIQUE = (?)', 1);
+        return $this->fetchAll($select);
+    }
 }

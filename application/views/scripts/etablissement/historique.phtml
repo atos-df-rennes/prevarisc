@@ -57,3 +57,10 @@
         "array" => $this->historique["ID_TYPE"]
     ));
 ?>
+
+<h4>Avis et dérogations en vigueur :</h4>
+<?php
+    echo $this->partial("etablissement/partials/partial-historique-avisderogations.phtml", array(
+        "array" => $this->historique["AVIS_DEROGATIONS"]
+    ));
+?>

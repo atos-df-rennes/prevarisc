@@ -1,0 +1,22 @@
+<?php if(count($this->array) == 1 && empty($this->array[0]["valeur"])) : ?>
+<p class='muted'>Pas d'historique disponible.</p>
+<?php else : ?>
+<table class='table table-bordered table-hover'>
+	<thead>
+		<tr>
+			<th style='width: 250px' >Date</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($this->array as $item) : ?>
+		<tr>
+			<td>Du <?= $item["debut"] ?> </td>
+			<td>
+				<a href="<?= $item['url'] ?>"><?= $item["valeur"] ?></a>
+			</td>
+		</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+<?php endif ?>

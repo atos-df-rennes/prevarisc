@@ -371,6 +371,25 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
+
+        /**
+         * Ajout de la partie avis derogations 
+         */
+        $key = 'AVIS_DEROGATIONS';
+        $dbEtablissement = new Model_DbTable_Etablissement();
+        foreach ($dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement) as $elem => $value) {
+            $prefixe = $value['TYPE_AVIS_DEROGATIONS'] === 1 ? "Avis-" : "Dérogations-";
+            $valueDisplay = $prefixe.$value['TITRE'];
+            $historique[$key][$elem] = 
+            array( 
+                //"valeur" => $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement),
+                'valeur' => $valueDisplay,
+                'url' => "/dossier/avis-et-derogations/id/".$value['ID_DOSSIER'],
+                'debut'  => $value['DATECOMM_DOSSIER'],
+                "author" => null
+                );
+
+        }
         return $historique;
     }
 
@@ -1396,4 +1415,5 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
         $etablissement->save();
     }
+
 }

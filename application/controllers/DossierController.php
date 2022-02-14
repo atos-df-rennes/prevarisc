@@ -3034,8 +3034,33 @@ class DossierController extends Zend_Controller_Action
     public function avisEtDerogationsAction(){
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
+        
+        //Init de la db avis derogation
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
-        $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($this->_getParam('id'));
+        $dbDossier = new Model_DbTable_Dossier();
+
+        //Suppression de la ligne
+        if($this->_request->isDelete()){
+            $dbAvisDerogation->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
+        }
+
+        //Ajout d un avis/derogation dans la db
+        if ($this->_request->isPost()) {
+            $newAvisDerogation = $dbAvisDerogation->createRow();
+            $newAvisDerogation->TYPE_AVIS_DEROGATIONS = $this->_request->getParam("TYPE_AVIS_DEROGATIONS");
+            $newAvisDerogation->TITRE = $this->_request->getParam("TITRE");
+            $newAvisDerogation->INFORMATIONS = $this->_request->getParam("INFORMATIONS");
+            $newAvisDerogation->IS_FAVORABLE = $this->_request->getParam("IS_FAVORABLE");
+            $newAvisDerogation->ID_DOSSIER = $this->_request->getParam("id");
+            $newAvisDerogation->DISPLAY_HISTORIQUE = $this->_request->getParam("DISPLAY_HISTORIQUE") === "on" ? 1 : 0 ;
+            $newAvisDerogation->ID_DOSSIER_LIE = $this->_request->getParam("ID_DOSSIER_LIE");
+            $newAvisDerogation->save();
+            header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
+        }
+        if($this->_request->isGet()){
+            $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($this->_getParam('id'));
+            $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
+        }
     }
 
     /**
@@ -3044,9 +3069,13 @@ class DossierController extends Zend_Controller_Action
      * retourne vers la page d edition de ces avis + derogations
      */
     public function avisEtDerogationsEditAction(){
+        //Instanciation model db
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+        $dbDossier = new Model_DbTable_Dossier();
+
+
         if ($this->_request->isPost()) {
-            //Instanciation model db
-            $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+
             //Recuperation de l entite via son ID_AVIS_DEROGATIONS
             $updateEntity = $dbAvisDerogations->find($this->_getParam('avis-derogation'))->current();
 
@@ -3055,17 +3084,31 @@ class DossierController extends Zend_Controller_Action
             $updateEntity->TITRE = $this->_request->getParam("TITRE");
             $updateEntity->INFORMATIONS = $this->_request->getParam("INFORMATIONS");
             $updateEntity->IS_FAVORABLE = $this->_request->getParam("IS_FAVORABLE");
+            $updateEntity->DISPLAY_HISTORIQUE = $this->_request->getParam("DISPLAY_HISTORIQUE") === "on" ? 1 : 0 ;
+            $updateEntity->ID_DOSSIER_LIE = $this->_request->getParam("ID_DOSSIER_LIE");
 
             //Sauvegarde des changements
             $updateEntity->save();
           
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
-        }else{
+        }
+        if($this->_request->isGet()){
             $this->_helper->layout->setLayout('dossier');
             $this->view->headScript()->appendFile('/js/tinymce.min.js');
-
+            
             $dbAvisDerogation = new Model_DbTable_AvisDerogations();
-            $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdEtablissement(3993);
+            $arrayAvisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
+
+            $this->view->TITRE = $arrayAvisDerogations[0]['TITRE'];;
+            $this->view->ID_AVIS_DEROGATION = $arrayAvisDerogations[0]['ID_AVIS_DEROGATION'];
+            $this->view->ID_DOSSIER = $arrayAvisDerogations[0]['ID_DOSSIER'];
+            $this->view->TYPE_AVIS_DEROGATIONS = $arrayAvisDerogations[0]['TYPE_AVIS_DEROGATIONS'];
+            $this->view->INFORMATIONS = $arrayAvisDerogations[0]['INFORMATIONS'];
+            $this->view->IS_FAVORABLE = $arrayAvisDerogations[0]['IS_FAVORABLE'];
+            $this->view->DISPLAY_HISTORIQUE = $arrayAvisDerogations[0]['DISPLAY_HISTORIQUE'];
+            $this->view->ID_DOSSIER_LIE = $arrayAvisDerogations[0]['ID_DOSSIER_LIE'];
+
+            $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
         }   
 
     }

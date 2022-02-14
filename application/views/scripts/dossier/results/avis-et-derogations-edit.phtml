@@ -23,7 +23,6 @@
     <div class="row">
         <p>Informations</p>
         <textarea name="INFORMATIONS" class="tinyarea"><?= $this->INFORMATIONS ?></textarea>
-    
     </div>
     <div class="row">
         <p class="span2">Avis</p>
@@ -40,12 +39,14 @@
     </div>
     <div class="row" style="display:flex">
         <input  type="checkbox" 
-                id="scales" 
-                name="scales" 
-                <?php echo ($this->afficherHistorique == true ? 'checked' : '')?> 
+                id="DISPLAY_HISTORIQUE" 
+                name="DISPLAY_HISTORIQUE" 
+                <?php echo ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
         >
-        <label for="scales">Afficher l'historique de l'établissement</label>
+        <label for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     </div>
+
+    <?php var_dump($this->listDossierEtab); ?>
 
 </form>
 

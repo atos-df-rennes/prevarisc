@@ -443,6 +443,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
 
         $this->view->historique = $service_etablissement->getHistorique($this->_request->id);
+
     }
 
     public function deleteAction()
