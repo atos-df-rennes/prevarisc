@@ -1,8 +1,7 @@
 <form action="<?php echo $this->url(array('action' => $this->row ? "edit" : "add")) ?>" method="post">
-
-	<div class='pull-right btn-group' >
-            <a class='btn' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
-            <input type='submit' class="btn btn-success" value="<?php echo $this->row ? "Modifier" : "Ajouter" ?> la couche" />
+	<div class='pull-right btn-group'>
+		<a class='btn' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
+		<input type='submit' class="btn btn-success" value="<?php echo $this->row ? "Modifier" : "Ajouter" ?> la couche" />
 	</div>
 
 	<h3><?php echo $this->row ? "Modification d'une couche cartographique" : "Ajout d'une couche cartographique" ?></h3>
