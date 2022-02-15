@@ -21,18 +21,10 @@ CREATE TABLE `etablissementEffectifDegagement` (
    FOREIGN KEY(`ID_ETABLISSEMENT`) REFERENCES etablissement(`ID_ETABLISSEMENT`) 
 );
 
--- Ajout des privilèges dossiers
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 9);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 9);
+-- Ajout des ressources dossiers
+INSERT INTO `resources` (`name`, `text`) values ("effectifs_degagements", "Effectifs et Dégagements");
 
--- Ajout des privilèges établissements / cellules / habitations / IGH / EIC
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 4);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 4);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 5);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 5);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 6);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 6);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 7);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 7);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("view_effectifs_degagements", "Lecture des effectifs et dégagements", 8);
-INSERT INTO `privileges` (`name`, `text`, `id_resource`) values ("edit_effectifs_degagements", "Modification des effectifs et dégagements", 8);
+INSERT INTO `privileges` (`name`, `text`, `id_resource`)
+   values ("effectifs_degagements_ets", "Etablissements", (select id_resource from resources where name = 'effectifs_degagements'));
+INSERT INTO `privileges` (`name`, `text`, `id_resource`)
+   values ("effectifs_degagements_doss", "Dossiers", (select id_resource from resources where name = 'effectifs_degagements'));

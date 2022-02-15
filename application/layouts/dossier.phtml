@@ -34,9 +34,9 @@
             </li>
         <?php endif ?>
                 
-        <?php if ($this->idTypeDossier == 1): ?>
-            <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
-                <a class='sep' href='/dossier/effectifs-degagements-dossier/id/<?php echo $this->idDossier ?>' >    
+        <?php if ($this->idTypeDossier == 1 && $this->isAllowedEffectifsDegagements): ?>
+            <li class="<?php echo $action_name == 'effectifs-degagements-dossier' ? 'active' : '' ?>">
+                <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >    
                     <em class="icon-th-list icon-black"></em>
                     Effectifs et dégagements
                 </a>

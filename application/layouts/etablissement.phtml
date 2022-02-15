@@ -25,12 +25,15 @@
         </li>
     <?php endif ?>
     
-    <li class="<?php echo $action_name == 'historique' ? 'active' : '' ?>">
-        <a class='sep' href='<?php echo $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>    
-            <em class="icon-th-list icon-black"></em>
-            Effectifs et dégagements
-        </a>
-    </li>
+    <?php if ($this->isAllowedEffectifsDegagements): ?>
+        <li class="<?php echo $action_name == 'effectifs-degagements-etablissement' ? 'active' : '' ?>">
+            <a class='sep' href='<?php echo $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>
+                <em class="icon-th-list icon-black"></em>
+                Effectifs et dégagements
+            </a>
+        </li>
+    <?php endif ?>
+
     <li class="<?php echo $action_name == 'pieces-jointes' ? 'active' : '' ?>">
         <a href='<?php echo $this->url(array("action"=>"pieces-jointes")) ?>'>
             <em class="icon-share icon-black"></em>

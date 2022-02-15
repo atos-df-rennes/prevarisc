@@ -183,6 +183,9 @@ class DossierController extends Zend_Controller_Action
             $this->view->idDossier = ($this->_getParam('id'));
 
             $this->view->verrou = $dossier->VERROU_DOSSIER;
+
+            $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+            $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
         }
     }
 
@@ -3041,22 +3044,19 @@ class DossierController extends Zend_Controller_Action
                 $post = $this->_request->getPost();
                 $serviceEffectifdegagement->save($post);
                 $this->_helper->flashMessenger(array(
-                        'context' => 'success',
-                        'title' => 'Mise à jour réussie !',
-                        'message' => 'Les messages d\'alerte ont bien été mis à jour.',
-                    ));
+                    'context' => 'success',
+                    'title' => 'Mise à jour réussie !',
+                    'message' => 'Les effectifs et dégagements ont bien été mis à jour.',
+                ));
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(array(
-                        'context' => 'error',
-                        'title' => '',
-                        'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
-                    ));
+                    'context' => 'error',
+                    'title' => '',
+                    'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
+                ));
             }
         }
 
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
-        $service_etablissement = new Service_Etablissement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
@@ -3068,6 +3068,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $serviceEffectifdegagement = new Service_Effectifdegagement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+
         if ($this->_request->isPost()) {
             try {
                 //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
@@ -3075,7 +3076,10 @@ class DossierController extends Zend_Controller_Action
                 $arrData["DESCRIPTION_EFFECTIF"] = $this->_request->getParam("DESCRIPTION_EFFECTIF");
                 $arrData["DESCRIPTION_DEGAGEMENT"] = $this->_request->getParam("DESCRIPTION_DEGAGEMENT");
                 $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'), $arrData);
+
+                // FIXME $this->_helper->redirector('effectifsDegagementsDossier', null, null, array('id' => $this->getParam('id')));
                 header('Location:/dossier/effectifs-degagements-dossier/id/'.$this->_getParam('id'));
+
                 $this->_helper->flashMessenger(array(
                     'context' => 'success',
                     'title' => 'Mise à jour effectifs dégagements ok',
