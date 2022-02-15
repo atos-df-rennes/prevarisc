@@ -545,8 +545,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         // FIXME A faire avec le builder SQL Zend
         $select =
-        'SELECT effectifDegagement.DESCRIPTION_EFFECTIF, effectifDegagement.DESCRIPTION_DEGAGEMENT  from dossier INNER JOIN dossierEffectifDegagement ON dossier.ID_DOSSIER = dossierEffectifDegagement.ID_REF_DOSSIER 
-         INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = dossierEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT
+        'SELECT effectifDegagement.DESCRIPTION_EFFECTIF, effectifDegagement.DESCRIPTION_DEGAGEMENT  from dossier INNER JOIN dossierEffectifDegagement ON dossier.ID_DOSSIER = dossierEffectifDegagement.ID_DOSSIER 
+         INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = dossierEffectifDegagement.ID_EFFECTIF_DEGAGEMENT
          WHERE dossier.ID_DOSSIER = '.$idDossier.' ;';
 
         return $this->getAdapter()->fetchRow($select);

@@ -393,8 +393,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     public function getEffectifEtDegagement($idEtab)
     {
         $select =
-            'SELECT * from etablissement INNER JOIN etablissementEffectifDegagement ON etablissement.ID_ETABLISSEMENT = etablissementEffectifDegagement.ID_REF_ETABLISSEMENT 
-             INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = etablissementEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT
+            'SELECT * from etablissement INNER JOIN etablissementEffectifDegagement ON etablissement.ID_ETABLISSEMENT = etablissementEffectifDegagement.ID_ETABLISSEMENT 
+             INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = etablissementEffectifDegagement.ID_EFFECTIF_DEGAGEMENT
              WHERE etablissement.ID_ETABLISSEMENT = '.$idEtab.' ;';
         return $this->getAdapter()->fetchRow($select);
     }

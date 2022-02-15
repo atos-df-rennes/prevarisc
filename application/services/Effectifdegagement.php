@@ -30,7 +30,7 @@ class Service_Effectifdegagement
         $res = null;
         foreach ($dbEffectifDegagement->getIDEffectifDegagementByIDDossier($idDossier) as $row) {
             foreach ($row as $key => $value) {
-                if ($key == "ID_REF_EFFECTIF_DEGAGEMENT") {
+                if ($key == "ID_EFFECTIF_DEGAGEMENT") {
                     $res = $value;
                 }
             }
@@ -54,7 +54,7 @@ class Service_Effectifdegagement
         $res = null;
         foreach ($dbEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement) as $row) {
             foreach ($row as $key => $value) {
-                if ($key == "ID_REF_EFFECTIF_DEGAGEMENT") {
+                if ($key == "ID_EFFECTIF_DEGAGEMENT") {
                     $res = $value;
                 }
             }
@@ -79,8 +79,8 @@ class Service_Effectifdegagement
         $rowEffectifDegagement->save();
 
         $rowDossierEff = $modelDossierEffectifDegagement->createRow();
-        $rowDossierEff->ID_REF_DOSSIER = $idDossier;
-        $rowDossierEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        $rowDossierEff->ID_DOSSIER = $idDossier;
+        $rowDossierEff->ID_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
         $rowDossierEff->save();
 
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
@@ -100,8 +100,8 @@ class Service_Effectifdegagement
         $rowEffectifDegagement->save();
 
         $rowEtablissementEff = $modelEtablissementEffectifDegagement->createRow();
-        $rowEtablissementEff->ID_REF_ETABLISSEMENT = $idEtablissement;
-        $rowEtablissementEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        $rowEtablissementEff->ID_ETABLISSEMENT = $idEtablissement;
+        $rowEtablissementEff->ID_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
         $rowEtablissementEff->save();
 
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;

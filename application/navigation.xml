@@ -972,25 +972,18 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
-                
-                
-                <effectifs-degagements-dossier-edit>
-                    <label>effectifs-degagements-dossier-edit</label>
-                    <action>effectifs-degagements-dossier-edit</action>
-                    <resource>alerte_email</resource>
-                    <privilege>alerte_statut</privilege>
-                    <privilege>alerte_avis</privilege>
-                    <privilege>alerte_classement</privilege>
-                </effectifs-degagements-dossier-edit>
-
                 <effectifs-degagements-dossier>
-                    <label>effectifs-degagements-dossier</label>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
                     <action>effectifs-degagements-dossier</action>
-                    <resource>alerte_email</resource>
-                    <privilege>alerte_statut</privilege>
-                    <privilege>alerte_avis</privilege>
-                    <privilege>alerte_classement</privilege>
+                    <privilege>view_effectifs_degagements</privilege>
                 </effectifs-degagements-dossier>
+                <effectifs-degagements-dossier-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
+                    <action>effectifs-degagements-dossier-edit</action>
+                    <privilege>edit_effectifs_degagements</privilege>
+                </effectifs-degagements-dossier-edit>
             </pages>
         </dossier>
 
@@ -1014,7 +1007,7 @@
                 </index>
                 <delete>
                     <controller>etablissement</controller>
-                    <action>delete</action> 
+                    <action>delete</action>
                     <resource>suppression</resource>
                     <privilege>delete_etablissement</privilege>
                 </delete>
@@ -1137,24 +1130,18 @@
                     <action>alerteform</action>
                     <privilege>view_ets</privilege>
                 </alerteform>
-
-                <effectifs-degagements-etablissement-edit>
-                    <label>effectifs-degagements-etablissement-edit</label>
-                    <action>effectifs-degagements-etablissement-edit</action>
-                    <resource>alerte_email</resource>
-                    <privilege>alerte_statut</privilege>
-                    <privilege>alerte_avis</privilege>
-                    <privilege>alerte_classement</privilege>
-                </effectifs-degagements-etablissement-edit>
-
                 <effectifs-degagements-etablissement>
-                    <label>effectifs-degagements-etablissement</label>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
                     <action>effectifs-degagements-etablissement</action>
-                    <resource>alerte_email</resource>
-                    <privilege>alerte_statut</privilege>
-                    <privilege>alerte_avis</privilege>
-                    <privilege>alerte_classement</privilege>
+                    <privilege>view_effectifs_degagements</privilege>
                 </effectifs-degagements-etablissement>
+                <effectifs-degagements-etablissement-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-degagements-etablissement-edit</action>
+                    <privilege>edit_effectifs_degagements</privilege>
+                </effectifs-degagements-etablissement-edit>
             </pages>
         </etablissement>
 
