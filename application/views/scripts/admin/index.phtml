@@ -36,9 +36,15 @@
                 <?php endif ?>
                 </dd>
                 
-                <dt>Clé IGN</dt>
+                <dt>Clé(s) IGN</dt>
                 <dd>
-                <p><?php echo $this->key_ign != null ? $this->key_ign : 'Aucune clé' ?></p>
+                    <?php if (!empty($this->key_ign)):
+                        foreach (explode(',', $this->key_ign) as $ignKey): ?>
+                            <p><?= $ignKey ?></p>
+                        <?php endforeach;
+                    else: ?>
+                        <p>Aucune clé</p>
+                    <?php endif ?>
                 </dd>
 
                 <dt>Clé Google MAP</dt>

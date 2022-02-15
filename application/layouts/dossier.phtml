@@ -2,12 +2,10 @@
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
 <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?php echo $this->idUser; ?>' />	
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
-    <?php /*class="nav nav-tabs nav-stacked menu_dashboard"  */ ?>
-        
-        <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
-            <a 
-               href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
-        </li>
+    <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
+        <a 
+            href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'><em class="icon-info-sign icon-black"></em> Informations générales</a>
+    </li>
         
 	    <?php		
             if($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
@@ -181,8 +179,12 @@ endif; ?>
                 <small><br/>".nl2br($this->objetDossier)."</small>
         ";
 
+	    if($this->id_platau !== null) {
+            echo "<p style='font-size: medium;' class='label label-info'><strong>CONSULTATION PLATAU : " . $this->id_platau . "</strong></p>";
+        }
+
         echo "
-                <div style='margin:10px;' id='infosEtabs'>
+            <div style='margin:10px;' id='infosEtabs'>
         ";
 
         $nbEtab = count($this->enteteEtab);
@@ -310,13 +312,13 @@ endif; ?>
 						window.location= affichageResultat;
 					},
 					statusCode: {
-							401:function(){
-								alert("Vous n'êtes pas autorisé à effectuer cette action");
-								$("#chargement").html("");
-							},
+                        401:function(){
+                            alert("Vous n'êtes pas autorisé à effectuer cette action");
+                            $("#chargement").html("");
+                        },
 					},
 					error: function(){
-							return false;
+                        return false;
 					}
 			});
 			return false;
@@ -324,24 +326,24 @@ endif; ?>
 	
 		$("#DEVERROU").live('click',function(){
 			$.ajax({
-					url: "/dossier/deverrou",
-					data: "idDossier="+$("#idDossier").val(),
-					type:"POST",
-					beforeSend: function(){
-						$("#chargement").html("<img src='/images/load.gif' />");
-					},
-					success: function(affichageResultat){
-						window.location= affichageResultat;
-					},
-					statusCode: {
-						401:function(){
-							alert("Vous n'êtes pas autorisé à effectuer cette action");
-							$("#chargement").html("");
-						},
-					},
-					error: function(){
-							return false;
-					}
+                url: "/dossier/deverrou",
+                data: "idDossier="+$("#idDossier").val(),
+                type:"POST",
+                beforeSend: function(){
+                    $("#chargement").html("<img src='/images/load.gif' />");
+                },
+                success: function(affichageResultat){
+                    window.location= affichageResultat;
+                },
+                statusCode: {
+                    401:function(){
+                        alert("Vous n'êtes pas autorisé à effectuer cette action");
+                        $("#chargement").html("");
+                    },
+                },
+                error: function(){
+                    return false;
+                }
 			});
 			return false;
 		});

@@ -151,6 +151,11 @@
                             <controller>couches-cartographiques</controller>
                             <action>add</action>
                         </add-couche-cartographique>
+                        <add-couche-ign>
+                            <label>Ajouter Couche IGN</label>
+                            <controller>couches-cartographiques</controller>
+                            <action>add-couche-ign</action>
+                        </add-couche-ign>
                         <edit-couche-cartographique>
                             <label>Editer Couche Cartographique</label>
                             <controller>couches-cartographiques</controller>
@@ -161,6 +166,11 @@
                             <controller>couches-cartographiques</controller>
                             <action>delete</action>
                         </delete-couche-cartographique>
+                        <change-order-couches>
+                            <label>Changer ordre Couches Cartographiques</label>
+                            <controller>couches-cartographiques</controller>
+                            <action>change-order</action>
+                        </change-order-couches>
                     </pages>
                 </couches-cartographiques>
                 <tableau-des-periodicites>

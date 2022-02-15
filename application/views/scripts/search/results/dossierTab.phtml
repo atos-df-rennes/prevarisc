@@ -1,5 +1,4 @@
 <tr <?php if($this->NB_DOSS_LIES > 0) echo "class='slide'" ?> id="<?php echo "row".$this->ID_DOSSIER ?>">
-
     <?php
     // Date à afficher sous le nom de dossier
     $date_text="";
@@ -26,19 +25,15 @@
             }
             $date_text = "<br/>ayant pour date de visite le";
         }
-
     ?>
 
-    <?php /* Etablissement */ ?>
+    <!-- Etablissement -->
     <td class="doss-nom">
-
-
-
         <a href='/etablissement/index/id/<?php echo $this->ID_ETABLISSEMENT ?>' title='<?php echo htmlspecialchars($this->LIBELLE_ETABLISSEMENTINFORMATIONS , ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_ETABLISSEMENTINFORMATIONS  ?>
         </a>
         <br/>
-        <?php /* Affichage du libellé du type */ ?>
+        <!-- Affichage du libellé du type -->
         <small style='display: inline-block; width: 65px'>
             <strong>
             <?php
@@ -51,12 +46,12 @@
         </small>
     </td>
 
-    <?php /* Icone représentant le dropdown des fils */ ?>
+    <!-- Icone représentant le dropdown des fils -->
     <?php if($this->NB_DOSS_LIES > 0) : ?>
     <span class="icone_enfants" ><i class='ui-icon ui-icon-triangle-1-e' style='position: relative; left: -25px; float: left; margin-right: -25px;' ></i></span>
     <?php endif ?>
 
-    <?php /* Nom du dossier */ ?>
+    <!-- Nom du dossier -->
     <td class="doss-nom">
         <?php if ($this->VERROU_DOSSIER == 1): ?>
             <i class="icon-lock"></i>
@@ -86,21 +81,20 @@
         <span class="avis">Avis indisponible</span>
         <?php endif ?>
 
-        <?php /* Alerte sur la reception de travaux */ ?>
+        <!-- Alerte sur la reception de travaux -->
         <?php if($this->ALERTE_RECEPTION_TRAVAUX > 0) : ?>
         <span class='avis' style='background-color: #3a87ad'>Présence d'un dossier de reception de travaux</span>
         <?php endif ?>
-        <?php /* Alerte sur le fait que la visite fait partie d'un échéancier de travaux */ ?>
+        <!-- Alerte sur le fait que la visite fait partie d'un échéancier de travaux -->
         <?php if($this->ECHEANCIER_TRAVAUX > 0) : ?>
         <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
         <?php endif ?>
+
+	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+        <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
     </td>
 
-
-
-
-
-    <?php /* Dates du dossier */ ?>
+    <!-- Dates du dossier -->
     <td>
         <?php
         if($this->DATEINSERT_DOSSIER != null)
@@ -142,12 +136,12 @@
         }
         ?>
     </td>
-    <?php /* Icone de chargement des enfants (si il y'en a, et si on est en mode niveau */ ?>
+    <!-- Icone de chargement des enfants (si il y'en a, et si on est en mode niveau -->
     <?php if($this->NB_DOSS_LIES > 0) : ?>
         <span class='load ui-helper-hidden' ><img src='/images/load.gif' alt='Chargement ...' /></span>
     <?php endif ?>
 
-    <?php /* Préventionnistes */ ?>
+    <!-- Préventionnistes -->
     <td>
         <?php if($this->PREVENTIONNISTES != null) : ?>
         <?php foreach ($this->PREVENTIONNISTES as $preventionniste) : ?>
@@ -156,7 +150,7 @@
         <?php endif ?>
     </td>
 
-    <?php /* Pièces jointes */ ?>
+    <!-- Pièces jointes -->
     <td>
         <?php if($this->PIECESJOINTES != null) : ?>
         <a class="btn pj" href="#"><i class="icon-share icon-black" id="<?php echo "iconpj".$this->ID_DOSSIER ?>"></i></a>
