@@ -35,7 +35,7 @@
         <?php endif ?>
                 
         <?php if ($this->idTypeDossier == 1 && $this->isAllowedEffectifsDegagements): ?>
-            <li class="<?php echo $action_name == 'effectifs-degagements-dossier' ? 'active' : '' ?>">
+            <li class="<?php echo $this->action == 'effectifs-degagements-dossier' ? 'active' : '' ?>">
                 <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >    
                     <em class="icon-th-list icon-black"></em>
                     Effectifs et dégagements

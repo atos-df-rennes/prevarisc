@@ -972,15 +972,11 @@
                     <label>Effectifs et Dégagements</label>
                     <controller>dossier</controller>
                     <action>effectifs-degagements-dossier</action>
-                    <resource>effectifs_degagements</resource>
-                    <privilege>effectifs_degagements_doss</privilege>
                 </effectifs-degagements-dossier>
                 <effectifs-degagements-dossier-edit>
                     <label>Modification Effectifs et Dégagements</label>
                     <controller>dossier</controller>
                     <action>effectifs-degagements-dossier-edit</action>
-                    <resource>effectifs_degagements</resource>
-                    <privilege>effectifs_degagements_doss</privilege>
                 </effectifs-degagements-dossier-edit>
             </pages>
         </dossier>
