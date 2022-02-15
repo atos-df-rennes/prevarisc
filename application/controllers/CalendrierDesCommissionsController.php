@@ -961,6 +961,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     ++$numCommune;
                 }
             }
+            
             $dbEtablissement = new Model_DbTable_Etablissement();
             $listeDossiers[0]["DESCRIPTION_EFFECTIF_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"];
             $listeDossiers[0]["DESCRIPTION_DEGAGEMENT_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];

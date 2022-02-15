@@ -1,5 +1,4 @@
 <?php
-$odt = new \CatoTH\HTML2OpenDocument\Text();
 
 function addChamp($odf,$nomOdf, $variable){
   try{
@@ -60,7 +59,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				 * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
 				 */
 				foreach($tabEffDegKV as $k => $v){
-					var_dump($k,$v);
 					if(isset($v) && strlen($v) > 0 ){
 						addChamp($dossInfos,$k, $html2Text->convert($v));
 					}else{
@@ -190,11 +188,11 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 	}
 	$odf->mergeSegment($dossInfos);
 	$nouvellePJ = savePj($this->idComm,"Compte rendu du ");
-	
 
-        $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
+	$store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+	$path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 	$odf->saveToDisk($path);
+	
 	echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le compte rendu a été généré avec succes</span><br/><br/><br/>";
 }else{
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier de compte rendu pour la commission n'existe pas</span><br/><br/><br/>";
@@ -220,4 +218,3 @@ function savePj($dateCommId,$libelleDocument){
 
 	return $nouvellePJ;
 }
-?>

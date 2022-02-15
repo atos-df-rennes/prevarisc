@@ -1,7 +1,6 @@
 <?php
 
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
-//echo '<pre>',print_r($this->dossierComm[0]["infosEtab"]),'</pre>';
 
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
@@ -50,8 +49,6 @@ foreach($this->informationsMembre as $val => $membre){
 		if($membre['infosFiles'][0]['ID_GROUPEMENT'] == NULL){
 			//génération du document par commune pour les maires par exemple
 			//si le document concernant ce membre existe alors on rentre dans la boucle
-			//var_dump((REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier));
-			//exit();
 			$odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
 
 			//Generation du segment villeDoss
@@ -177,9 +174,6 @@ foreach($this->informationsMembre as $val => $membre){
 				}
 			}
 
-
-
-
 			$odf->mergeSegment($grpLoop);
 
 			$nouvellePJ = savePj($this->idComm ,$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']);
@@ -264,7 +258,6 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 			setVars($segment,$k, "");
 		}
 	}
-
 
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";

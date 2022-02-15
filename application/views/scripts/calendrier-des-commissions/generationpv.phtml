@@ -117,9 +117,11 @@ foreach($this->membresFiles as $val => $membre){
 				if($nbAdresse != 0){
 					foreach($dossierInfos['infosEtab']['adresses'] as $commune){
 						addChamp($dossInfos,'commissionNom', $this->commissionInfos[0]['LIBELLE_COMMISSION']);
+
 						if(isset($commune["LIBELLE_COMMUNE"])){
 							addChamp($dossInfos,'communeDossier', $commune["LIBELLE_COMMUNE"]);
 						}
+						
 						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
 
@@ -142,7 +144,6 @@ foreach($this->membresFiles as $val => $membre){
 						 * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
 						 */
 						foreach($tabEffDegKV as $k => $v){
-							var_dump($k,$v);
 							if(isset($v) && strlen($v) > 0 ){
 								addChamp($dossInfos,$k, $html2Text->convert($v));
 							}else{

@@ -31,7 +31,7 @@ foreach($this->informationsMembre as $val => $membre){
                     if(count($commune[1]) == 1){
                         foreach($commune[1] as $comm => $info){	
                             addChamp($membreLoop,'numMairie',$info["NUMEROADRESSE_UTILISATEURINFORMATIONS"]);
-                            addChamp($membreLoop,'rueMairie',$²nfo["RUEADRESSE_UTILISATEURINFORMATIONS"]);
+                            addChamp($membreLoop,'rueMairie',$info["RUEADRESSE_UTILISATEURINFORMATIONS"]);
                             addChamp($membreLoop,'cpMairie',$info["CPADRESSE_UTILISATEURINFORMATIONS"]);
                             addChamp($membreLoop,'communeMairie',$info["VILLEADRESSE_UTILISATEURINFORMATIONS"]);
                         }
@@ -80,7 +80,6 @@ foreach($this->informationsMembre as $val => $membre){
                 $heureCommTab = explode(":",$this->heureDeb);
                 $heureComm = $heureCommTab[0].":".$heureCommTab[1];
                 addChamp($membreLoop,'heureDebutComm',$heureComm);
-
 
                 //ICI FOREACH SUR LES DOSSIERS DE LA COMMUNE
                 //Generation du segment pour l'affichage des différentes infos du dossier	
@@ -137,7 +136,6 @@ foreach($this->informationsMembre as $val => $membre){
             addChamp($grpLoop,'dateCommission',$dateComm->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR));
             addChamp($grpLoop,'heureDebutComm',$this->heureDeb);
 
-
             //On commence par parcourir les dossier pour récuperer la ville concernée
             foreach($this->dossierComm as $val => $dossierInfos){
                 //On parcourt la liste des ville du groupement concerné pour comparer avec la ville du dossier
@@ -156,8 +154,6 @@ foreach($this->informationsMembre as $val => $membre){
             echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." n'a pas été renseigné</span><br/><br/><br/>";
         }
 	}
-
-
 }
 
 function addChamp($odfName, $nomOdf, $variable){
