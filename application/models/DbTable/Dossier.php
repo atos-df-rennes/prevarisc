@@ -550,6 +550,5 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
          WHERE dossier.ID_DOSSIER = '.$idDossier.' ;';
 
         return $this->getAdapter()->fetchRow($select);
-
     }
 }
