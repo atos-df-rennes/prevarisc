@@ -486,7 +486,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement
+     * Retourne la liste des dossiers provenant de Plat'au et n'étant liés à aucun établissement
      */
     public function getAllDossierPlatAU()
     {
@@ -511,6 +511,35 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
+    /* Récupère les dossiers d'un établissement par type */
+    public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement);
+
+        switch ($type) {
+            case "etudes":
+                $select->where('dt.ID_DOSSIERTYPE = 1');
+                break;
+            case "visites":
+                $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+                break;
+            case "autres":
+                $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+                break;
+            default:
+                throw new Exception(sprintf('Type %s non supporté', $type));
+                break;
+        }
+
+        return $this->getAdapter()->fetchAll($select);
+    }
+
     // Retourne les descriptions des effectifs et dégagements d'un dossier
     public function getEffectifEtDegagement(int $idDossier)
     {
@@ -521,5 +550,6 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
          WHERE dossier.ID_DOSSIER = '.$idDossier.' ;';
 
         return $this->getAdapter()->fetchRow($select);
+
     }
 }
