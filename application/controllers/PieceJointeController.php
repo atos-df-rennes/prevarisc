@@ -77,7 +77,7 @@ class PieceJointeController extends Zend_Controller_Action
         // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
         $modelDossier = new Model_DbTable_Dossier();
         $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
-        
+
         if ($dossier['ID_PLATAU'] !== null) {
             $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
             $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
