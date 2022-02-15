@@ -16,7 +16,7 @@ class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 			WHERE ID_DOSSIER = '".$idDossier."'
 			AND ID_PIECEJOINTE = '".$idPj."'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -30,7 +30,7 @@ class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 			WHERE ID_DOSSIER = '".$idDossier."'
 			AND PJ_COMMISSION = '1'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 }

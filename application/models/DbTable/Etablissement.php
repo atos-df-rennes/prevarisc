@@ -171,7 +171,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         if (null == ($row = $this->getAdapter()->fetchRow($select))) {
             return null;
         }
-        
+
         return $row['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
     }
 
@@ -363,7 +363,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
         }
         $search->having('nextvisiteyear <= YEAR(NOW())');
-        
+
         return $search->run(false, null, false)->toArray();
     }
 

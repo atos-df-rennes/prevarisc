@@ -63,7 +63,7 @@ class Service_Carto
     public function delete($id_couche_cartographique)
     {
         $this->repository->delete('ID_COUCHECARTO = '.$id_couche_cartographique);
-        
+
         $this->cache->remove('couches_cartographiques');
     }
 }

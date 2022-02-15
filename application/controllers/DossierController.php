@@ -2490,7 +2490,7 @@ class DossierController extends Zend_Controller_Action
             $date = new Zend_Date($this->view->infosDossier['DATEMAIRIE_DOSSIER'], Zend_Date::DATES);
             $this->view->DATEMAIRIE = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
-        
+
         //Conversion de la date de dépot en secrétariat pour l'afficher
         if ($this->view->infosDossier['DATESECRETARIAT_DOSSIER'] != '') {
             $date = new Zend_Date($this->view->infosDossier['DATESECRETARIAT_DOSSIER'], Zend_Date::DATES);
@@ -2570,7 +2570,7 @@ class DossierController extends Zend_Controller_Action
             && isset($dateVisite)
         ) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-            
+
             $this->view->dateLastVP = null;
             if ($dateLastVP) {
                 $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);

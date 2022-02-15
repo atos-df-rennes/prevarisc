@@ -137,7 +137,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     {
         if ($this->etablissements != null) {
             $this->etablissements->where('ID_STATUT = 2');
-            
+
             return $this;
         }
     }

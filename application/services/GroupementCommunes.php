@@ -42,7 +42,7 @@ class Service_GroupementCommunes
 
     public function findGroupementForGroupementType(array $types_groupement = array())
     {
-        $model_groupement = new Model_DbTable_Groupement;
+        $model_groupement = new Model_DbTable_Groupement();
 
         return $model_groupement->getByGroupementType($types_groupement);
     }
