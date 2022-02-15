@@ -171,7 +171,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         if (null == ($row = $this->getAdapter()->fetchRow($select))) {
             return null;
         }
-        
+
         return $row['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
     }
 
@@ -363,7 +363,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
         }
         $search->having('nextvisiteyear <= YEAR(NOW())');
-        
+
         return $search->run(false, null, false)->toArray();
     }
 
@@ -389,13 +389,13 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
 
 
-        //Retourne une row comprennant les description effectifs et degagement en passant en param l id du dossier
-        public function getEffectifEtDegagement($idEtab)
-        {
-            $select = 
+    //Retourne une row comprennant les description effectifs et degagement en passant en param l id du dossier
+    public function getEffectifEtDegagement($idEtab)
+    {
+        $select =
             'SELECT * from etablissement INNER JOIN etablissementEffectifDegagement ON etablissement.ID_ETABLISSEMENT = etablissementEffectifDegagement.ID_REF_ETABLISSEMENT 
              INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = etablissementEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT
              WHERE etablissement.ID_ETABLISSEMENT = '.$idEtab.' ;';
-            return $this->getAdapter()->fetchRow($select);
-        }
+        return $this->getAdapter()->fetchRow($select);
+    }
 }

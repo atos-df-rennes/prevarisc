@@ -2490,7 +2490,7 @@ class DossierController extends Zend_Controller_Action
             $date = new Zend_Date($this->view->infosDossier['DATEMAIRIE_DOSSIER'], Zend_Date::DATES);
             $this->view->DATEMAIRIE = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
-        
+
         //Conversion de la date de dépot en secrétariat pour l'afficher
         if ($this->view->infosDossier['DATESECRETARIAT_DOSSIER'] != '') {
             $date = new Zend_Date($this->view->infosDossier['DATESECRETARIAT_DOSSIER'], Zend_Date::DATES);
@@ -2570,7 +2570,7 @@ class DossierController extends Zend_Controller_Action
             && isset($dateVisite)
         ) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-            
+
             $this->view->dateLastVP = null;
             if ($dateLastVP) {
                 $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
@@ -3028,67 +3028,69 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function effectifsDegagementsDossierAction(){
+    public function effectifsDegagementsDossierAction()
+    {
         $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
-        
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
+
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
             $serviceEffectifdegagement = new Service_Effectifdegagement();
-                try {
-                    //Recuperation des variables de formulaire via la requete post
-                    $post = $this->_request->getPost();
-                    $serviceEffectifdegagement->save($post);
-                    $this->_helper->flashMessenger(array(
+            try {
+                //Recuperation des variables de formulaire via la requete post
+                $post = $this->_request->getPost();
+                $serviceEffectifdegagement->save($post);
+                $this->_helper->flashMessenger(array(
                         'context' => 'success',
                         'title' => 'Mise à jour réussie !',
                         'message' => 'Les messages d\'alerte ont bien été mis à jour.',
                     ));
-                } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array(
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array(
                         'context' => 'error',
                         'title' => '',
                         'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
                     ));
-                }
+            }
         }
 
         $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $service_etablissement = new Service_Etablissement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
     }
 
-    public function effectifsDegagementsDossierEditAction(){
+    public function effectifsDegagementsDossierEditAction()
+    {
         $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $serviceEffectifdegagement = new Service_Effectifdegagement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         if ($this->_request->isPost()) {
-            try{
+            try {
                 //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
                 $arrData = [];
                 $arrData["DESCRIPTION_EFFECTIF"] = $this->_request->getParam("DESCRIPTION_EFFECTIF");
                 $arrData["DESCRIPTION_DEGAGEMENT"] = $this->_request->getParam("DESCRIPTION_DEGAGEMENT");
-                $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'),$arrData);
+                $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'), $arrData);
                 header('Location:/dossier/effectifs-degagements-dossier/id/'.$this->_getParam('id'));
                 $this->_helper->flashMessenger(array(
                     'context' => 'success',
                     'title' => 'Mise à jour effectifs dégagements ok',
                     'message' => ""
                 ));
-                }catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->_helper->flashMessenger(array(
                     'context' => 'error',
                     'title' => 'Erreur lors de la mise à jour',
                     'message' => $e->getMessage(),
                 ));
             }
-            }else{
-                $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
-                $this->view->idDossier = $this->_getParam('id');
-            }
+        } else {
+            $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
+            $this->view->idDossier = $this->_getParam('id');
+        }
     }
 }

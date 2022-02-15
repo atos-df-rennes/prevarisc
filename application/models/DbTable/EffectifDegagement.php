@@ -6,7 +6,7 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_EFFECTIF_DEGAGEMENT'; // Clé primaire
 
     /**
-     * 
+     *
      * retourne le bloc effectif et degagement selon l id saisi en entree
      * @return array
      */
@@ -19,7 +19,8 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function getEffectif($idInput){
+    public function getEffectif($idInput)
+    {
         $select = 'SELECT EFFECTIF
             FROM effectifDegagement 
             WHERE effectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
@@ -27,16 +28,17 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function getDegagement($idInput){
+    public function getDegagement($idInput)
+    {
         $select = 'SELECT DEGAGEMENT
             FROM effectifDegagement 
             WHERE effectifDegagement.ID_EFFECTIF_DEGAGEMENT =' .$idInput.';';
 
         return $this->getAdapter()->fetchAll($select);
     }
-  
+
     /**
-     * 
+     *
      * retourne le bloc effectif et degagement selon l id saisi en entree
      * @return array
      */
@@ -63,12 +65,11 @@ class Model_DbTable_EffectifDegagement extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    
+
 
     public function getEffectifDegagementByIDEtablissement($idInput)
     {
         $select = 'SELECT * FROM etablissementEffectifDegagement INNER JOIN effectifDegagement ON etablissementEffectifDegagement.ID_REF_EFFECTIF_DEGAGEMENT = effectifDegagement.ID_EFFECTIF_DEGAGEMENT WHERE etablissementEffectifDegagement.ID_REF_ETABLISSEMENT = '.$idInput.";";
         return $this->getAdapter()->fetchAll($select);
     }
-
 }

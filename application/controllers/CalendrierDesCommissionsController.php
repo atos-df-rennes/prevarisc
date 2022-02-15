@@ -1086,7 +1086,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 ++$numCommune;
             }
         }
-        
+
         $listeMembres = $model_membres->get($listeDossiers[0]['COMMISSION_DOSSIER']);
         foreach ($listeMembres as $var => $membre) {
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
@@ -1148,7 +1148,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-            $dbEtablissement = new Model_DbTable_Etablissement();            
+            $dbEtablissement = new Model_DbTable_Etablissement();
             $service_dossier = new Service_Dossier();
             $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
@@ -1158,7 +1158,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]["DESCRIPTION_DEGAGEMENT_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];
             $listeDossiers[$val]["DESCRIPTION_EFFECTIF_ETABLISSEMENT"] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]["infosEtab"]["general"]["ID_ETABLISSEMENT"])["DESCRIPTION_EFFECTIF"];
             $listeDossiers[$val]["DESCRIPTION_DEGAGEMENT_ETABLISSEMENT"] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]["infosEtab"]["general"]["ID_ETABLISSEMENT"])["DESCRIPTION_DEGAGEMENT"];
-
         }
 
         $this->view->dossierComm = $listeDossiers;
@@ -1204,13 +1203,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-           
+
             $listeDossiers[0]["DESCRIPTION_EFFECTIF_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"];
             $listeDossiers[0]["DESCRIPTION_DEGAGEMENT_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];
             $listeDossiers[0]["DESCRIPTION_EFFECTIF_ETABLISSEMENT"] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]["infosEtab"]["general"]["ID_ETABLISSEMENT"])["DESCRIPTION_EFFECTIF"];
             $listeDossiers[0]["DESCRIPTION_DEGAGEMENT_ETABLISSEMENT"] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]["infosEtab"]["general"]["ID_ETABLISSEMENT"])["DESCRIPTION_DEGAGEMENT"];
-            
-            }
+        }
         $this->view->dossierComm = $listeDossiers;
     }
 

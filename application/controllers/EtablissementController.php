@@ -479,38 +479,38 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function effectifsEtDegagementsAction(){
-
+    public function effectifsEtDegagementsAction()
+    {
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-        
+
             $serviceEffectifdegagement = new Service_Effectifdegagement();
-                try {
-                    //Recuperation des variables de formulaire via la requete post
-                    $post = $this->_request->getPost();
-                    $serviceEffectifdegagement->save($post);
-                    $this->_helper->flashMessenger(array(
+            try {
+                //Recuperation des variables de formulaire via la requete post
+                $post = $this->_request->getPost();
+                $serviceEffectifdegagement->save($post);
+                $this->_helper->flashMessenger(array(
                         'context' => 'success',
                         'title' => 'Mise à jour réussie !',
                         'message' => 'Les messages d\'alerte ont bien été mis à jour.',
                     ));
-                } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array(
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array(
                         'context' => 'error',
                         'title' => '',
                         'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
                     ));
-                }
+            }
         }
 
 
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $service_etablissement = new Service_Etablissement();
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifEtDegagementByRef($this->_request->id);
-        
+
         $this->view->etablissement = $service_etablissement->get($this->_request->id);
         $this->view->avis = $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
         $this->view->historique = $service_etablissement->getHistorique($this->_request->id);
@@ -519,79 +519,77 @@ class EtablissementController extends Zend_Controller_Action
 
     public function setEffectifDegagementAction()
     {
-
-
         $this->view->headScript()->appendFile('js/tinymce.min.js');
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $modelEtablissement = new Model_DbTable_Etablissement();
-        $modelEffectifDegagement->setEffectifDegagement($this->_getParam("id_etablissement"),$this->_getParam("effectif"),$this->_getParam("degagement"));
+        $modelEffectifDegagement->setEffectifDegagement($this->_getParam("id_etablissement"), $this->_getParam("effectif"), $this->_getParam("degagement"));
         $this->view->value = $modelEffectifDegagement->getEffectifEtDegagement($this->_getParam("id_etablissement"));
-
-
     }
 
 
-    public function effectifsDegagementsEtablissementAction(){
+    public function effectifsDegagementsEtablissementAction()
+    {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
-        
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
+
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
             $serviceEffectifdegagement = new Service_Effectifdegagement();
-                try {
-                    //Recuperation des variables de formulaire via la requete post
-                    $post = $this->_request->getPost();
-                    $serviceEffectifdegagement->save($post);
-                    $this->_helper->flashMessenger(array(
+            try {
+                //Recuperation des variables de formulaire via la requete post
+                $post = $this->_request->getPost();
+                $serviceEffectifdegagement->save($post);
+                $this->_helper->flashMessenger(array(
                         'context' => 'success',
                         'title' => 'Mise à jour réussie !',
                         'message' => 'Les messages d\'alerte ont bien été mis à jour.',
                     ));
-                } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array(
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(array(
                         'context' => 'error',
                         'title' => '',
                         'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
                     ));
-                }
+            }
         }
 
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $service_etablissement = new Service_Etablissement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
     }
 
-    public function effectifsDegagementsEtablissementEditAction(){
+    public function effectifsDegagementsEtablissementEditAction()
+    {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js','text/javascript');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
         $serviceEffectifdegagement = new Service_Effectifdegagement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         if ($this->_request->isPost()) {
-            try{
+            try {
                 //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
                 $arrData = [];
                 $arrData["DESCRIPTION_EFFECTIF"] = $this->_request->getParam("DESCRIPTION_EFFECTIF");
                 $arrData["DESCRIPTION_DEGAGEMENT"] = $this->_request->getParam("DESCRIPTION_DEGAGEMENT");
-                $serviceEffectifdegagement->saveFromEtablissement($this->_getParam('id'),$arrData);
+                $serviceEffectifdegagement->saveFromEtablissement($this->_getParam('id'), $arrData);
                 header('Location:/etablissement/effectifs-degagements-etablissement/id/'.$this->_getParam('id'));
                 $this->_helper->flashMessenger(array(
                     'context' => 'success',
                     'title' => 'Mise à jour effectifs dégagements ok',
                     'message' => ""
                 ));
-                }catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->_helper->flashMessenger(array(
                     'context' => 'error',
                     'title' => 'Erreur lors de la mise à jour',
                     'message' => $e->getMessage(),
                 ));
             }
-            }else{
-                $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
-                $this->view->idDossier = $this->_getParam('id');
-            }
+        } else {
+            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
+            $this->view->idDossier = $this->_getParam('id');
+        }
     }
 }

@@ -2,8 +2,6 @@
 
 class Service_Effectifdegagement
 {
-    
-
     /**
      *  Retourne un changement via son Id précisé en argument.
      *
@@ -19,7 +17,7 @@ class Service_Effectifdegagement
     }
 
 
-        /**
+    /**
      *  Retourne un changement via son Id précisé en argument.
      *
      * @param int $idChangement L'id du changement à retourner
@@ -29,10 +27,10 @@ class Service_Effectifdegagement
     public function getByIDDossier($idDossier)
     {
         $dbEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $res = null; 
+        $res = null;
         foreach ($dbEffectifDegagement->getIDEffectifDegagementByIDDossier($idDossier) as $row) {
             foreach ($row as $key => $value) {
-                if($key == "ID_REF_EFFECTIF_DEGAGEMENT"){
+                if ($key == "ID_REF_EFFECTIF_DEGAGEMENT") {
                     $res = $value;
                 }
             }
@@ -43,7 +41,7 @@ class Service_Effectifdegagement
 
 
 
-        /**
+    /**
      *  Retourne un changement via son Id précisé en argument.
      *
      * @param int $idChangement L'id du changement à retourner
@@ -53,10 +51,10 @@ class Service_Effectifdegagement
     public function getByIDEtablissement($idEtablissement)
     {
         $dbEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $res = null; 
+        $res = null;
         foreach ($dbEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement) as $row) {
             foreach ($row as $key => $value) {
-                if($key == "ID_REF_EFFECTIF_DEGAGEMENT"){
+                if ($key == "ID_REF_EFFECTIF_DEGAGEMENT") {
                     $res = $value;
                 }
             }
@@ -72,19 +70,20 @@ class Service_Effectifdegagement
     /**
      * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant
      */
-    public function addRowDossierEffectifDegagement($idDossier){
-            $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-            $modelDossierEffectifDegagement = new Model_DbTable_DossierEffectifDegagement();
+    public function addRowDossierEffectifDegagement($idDossier)
+    {
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelDossierEffectifDegagement = new Model_DbTable_DossierEffectifDegagement();
 
-            $rowEffectifDegagement = $modelEffectifDegagement->createRow();
-            $rowEffectifDegagement->save();
+        $rowEffectifDegagement = $modelEffectifDegagement->createRow();
+        $rowEffectifDegagement->save();
 
-            $rowDossierEff = $modelDossierEffectifDegagement->createRow();
-            $rowDossierEff->ID_REF_DOSSIER = $idDossier;
-            $rowDossierEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
-            $rowDossierEff->save();
+        $rowDossierEff = $modelDossierEffectifDegagement->createRow();
+        $rowDossierEff->ID_REF_DOSSIER = $idDossier;
+        $rowDossierEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        $rowDossierEff->save();
 
-            return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
 
@@ -92,38 +91,39 @@ class Service_Effectifdegagement
     /**
      * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant
      */
-    public function addRowEtablissementEffectifDegagement($idEtablissement){
-            $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-            $modelEtablissementEffectifDegagement = new Model_DbTable_EtablissementEffectifDegagement();
+    public function addRowEtablissementEffectifDegagement($idEtablissement)
+    {
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelEtablissementEffectifDegagement = new Model_DbTable_EtablissementEffectifDegagement();
 
-            $rowEffectifDegagement = $modelEffectifDegagement->createRow();
-            $rowEffectifDegagement->save();
+        $rowEffectifDegagement = $modelEffectifDegagement->createRow();
+        $rowEffectifDegagement->save();
 
-            $rowEtablissementEff = $modelEtablissementEffectifDegagement->createRow();
-            $rowEtablissementEff->ID_REF_ETABLISSEMENT = $idEtablissement;
-            $rowEtablissementEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
-            $rowEtablissementEff->save();
+        $rowEtablissementEff = $modelEtablissementEffectifDegagement->createRow();
+        $rowEtablissementEff->ID_REF_ETABLISSEMENT = $idEtablissement;
+        $rowEtablissementEff->ID_REF_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        $rowEtablissementEff->save();
 
-            return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
+        return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
 
-    public function saveFromDossier($idDossier,$data)
+    public function saveFromDossier($idDossier, $data)
     {
-        $idEffecifDegagement = $this->getByIDDossier($idDossier); 
-        if($idEffecifDegagement == null){
+        $idEffecifDegagement = $this->getByIDDossier($idDossier);
+        if ($idEffecifDegagement == null) {
             $idEffecifDegagement = $this->addRowDossierEffectifDegagement($idDossier);
         }
-        $this->save($idEffecifDegagement,$data);
+        $this->save($idEffecifDegagement, $data);
     }
 
-    public function saveFromEtablissement($idEtablissement,$data)
+    public function saveFromEtablissement($idEtablissement, $data)
     {
-        $idEffecifDegagement = $this->getByIDEtablissement($idEtablissement); 
-        if($idEffecifDegagement == null){
+        $idEffecifDegagement = $this->getByIDEtablissement($idEtablissement);
+        if ($idEffecifDegagement == null) {
             $idEffecifDegagement = $this->addRowEtablissementEffectifDegagement($idEtablissement);
         }
-        $this->save($idEffecifDegagement,$data);
+        $this->save($idEffecifDegagement, $data);
     }
 
     /**
@@ -132,18 +132,18 @@ class Service_Effectifdegagement
      *  @param id ==> identifiant de l effectif degagement
      * @param array $data Les données envoyés en post
      */
-    public function save($idEffectifDegagement,$data)
+    public function save($idEffectifDegagement, $data)
     {
         if (is_array($data)) {
             $newValue = $this->get($idEffectifDegagement);
-            foreach ($data as $key=> $newAttrValue ) {
+            foreach ($data as $key=> $newAttrValue) {
                 switch ($key) {
                     case 'DESCRIPTION_EFFECTIF':
                         $newValue->DESCRIPTION_EFFECTIF = $newAttrValue;
                         break;
                     case 'DESCRIPTION_DEGAGEMENT':
                         $newValue->DESCRIPTION_DEGAGEMENT = $newAttrValue;
-                    break;   
+                    break;
                 }
             }
             $newValue->save();
@@ -162,7 +162,7 @@ class Service_Effectifdegagement
         return self::BALISES;
     }
 
- 
+
     /**
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
@@ -186,5 +186,4 @@ class Service_Effectifdegagement
 
         return strtr($message, $params);
     }
-
 }

@@ -30,7 +30,7 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
             FROM dossiernature
             WHERE ID_DOSSIER = '".$idDossier."'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -44,7 +44,7 @@ class Model_DbTable_DossierNature extends Zend_Db_Table_Abstract
 			WHERE dossiernature.ID_NATURE = dossiernatureliste.ID_DOSSIERNATURE
             AND dossiernature.ID_DOSSIER = '".$idDossier."'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 }
