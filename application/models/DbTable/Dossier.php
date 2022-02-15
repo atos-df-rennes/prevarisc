@@ -20,7 +20,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             where d.ID_DOSSIER = '$id'
             and d.DATESUPPRESSION_DOSSIER IS NULL;
         ";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -69,7 +69,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             )
 			GROUP BY ID_ETABLISSEMENT;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -256,7 +256,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossier.DATESUPPRESSION_DOSSIER IS NULL
             ORDER BY dossier.DATEINSERT_DOSSIER;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -274,7 +274,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE
             AND dossier.id_dossier = '".$idDossier."';
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -308,7 +308,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 ->where('d.DATEVISITE_DOSSIER < ?', $dateVisite)
                 ->order('d.DATEVISITE_DOSSIER desc')
                 ->limit(1);
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -319,7 +319,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from(array('a' => 'avis'), 'LIBELLE_AVIS')
             ->join(array('d' => 'dossier'), 'd.AVIS_DOSSIER_COMMISSION = a.ID_AVIS')
             ->where('d.ID_DOSSIER = ?', $id_dossier);
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
@@ -343,7 +343,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             GROUP BY ID_ETABLISSEMENT;
         ";
 
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -426,7 +426,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             AND dossierpreventionniste.ID_DOSSIER = '".$id_dossier."'
 	        GROUP BY usr.ID_UTILISATEUR;
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 

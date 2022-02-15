@@ -38,7 +38,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
             $select->orWhere('ptl.LIBELLE_TEXTE like ?', '%'.$ue.'%');
             $select->orWhere('pal.LIBELLE_ARTICLE like ?', '%'.$ue.'%');
         }
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 

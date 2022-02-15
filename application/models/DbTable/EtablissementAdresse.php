@@ -88,7 +88,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 
             return $this->fetchRow($select)->toArray();
         }
-        
+
         return $this->fetchAll($select)->toArray();
     }
 

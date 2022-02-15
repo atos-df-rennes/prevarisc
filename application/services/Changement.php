@@ -5,7 +5,7 @@ class Service_Changement
     /**
      * Définition des balises.
      */
-    const BALISES = array(
+    public const BALISES = array(
         '{activitePrincipaleEtablissement}' => array(
             'description' => "L'activité principale de l'établissement",
             'model' => 'informations',

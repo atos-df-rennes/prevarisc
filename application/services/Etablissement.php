@@ -2,8 +2,8 @@
 
 class Service_Etablissement implements Service_Interface_Etablissement
 {
-    const STATUT_CHANGE = 1;
-    const CLASSEMENT_CHANGE = 3;
+    public const STATUT_CHANGE = 1;
+    public const CLASSEMENT_CHANGE = 3;
     /**
      * Récupération d'un établissement.
      *
