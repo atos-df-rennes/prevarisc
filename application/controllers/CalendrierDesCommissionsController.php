@@ -867,17 +867,29 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     public function generationconvocAction()
     {
         try {
+            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
+            $model_membres = new Model_DbTable_CommissionMembre();
+            $model_commission = new Model_DbTable_Commission();
+            $model_adresseCommune = new Model_DbTable_AdresseCommune();
+            $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
+            $dbDossier = new Model_DbTable_Dossier();
+            $dbDocUrba = new Model_DbTable_DossierDocUrba();
+            $dbEtablissement = new Model_DbTable_Etablissement();
+
+            $service_etablissement = new Service_Etablissement();
+
             $dateCommId = $this->_getParam('dateCommId');
             $this->view->idComm = $dateCommId;
+
             //on recupere le type de commission (salle / visite / groupe de visite)
             $dbDateComm = new Model_DbTable_DateCommission();
             $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
+
             //1 = salle . 2 = visite . 3 = groupe de visite
             $this->view->typeCommission = $commissionInfo['ID_COMMISSIONTYPEEVENEMENT'];
+
             //On récupère la liste des dossiers
             //Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
-            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
-
             if ($commissionInfo['GESTION_HEURES'] == 1) {
                 //prise en compte heures
                 $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
@@ -887,7 +899,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             //Récupération des membres de la commission
-            $model_membres = new Model_DbTable_CommissionMembre();
             $listeMembres = $model_membres->get($commissionInfo['COMMISSION_CONCERNE']);
             foreach ($listeMembres as $var => $membre) {
                 $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
@@ -898,16 +909,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
 
             //On récupère le nom de la commission
-            $model_commission = new Model_DbTable_Commission();
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
 
             //afin de récuperer les informations des communes (adresse des mairies etc)
-            $model_adresseCommune = new Model_DbTable_AdresseCommune();
-            $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
-
-            $dbDossier = new Model_DbTable_Dossier();
-            $dbDocUrba = new Model_DbTable_DossierDocUrba();
-            $service_etablissement = new Service_Etablissement();
             foreach ($listeDossiers as $val => $ue) {
                 $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
                 if (count($listePrev) > 0) {
@@ -961,8 +965,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     ++$numCommune;
                 }
             }
-            
-            $dbEtablissement = new Model_DbTable_Etablissement();
+
             $listeDossiers[0]["DESCRIPTION_EFFECTIF_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_EFFECTIF"];
             $listeDossiers[0]["DESCRIPTION_DEGAGEMENT_DOSSIER"] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]["ID_DOSSIER"])["DESCRIPTION_DEGAGEMENT"];
             $listeDossiers[0]["DESCRIPTION_EFFECTIF_ETABLISSEMENT"] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]["infosEtab"]["general"]["ID_ETABLISSEMENT"])["DESCRIPTION_EFFECTIF"];
