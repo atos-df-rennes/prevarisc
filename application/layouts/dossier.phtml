@@ -1,33 +1,35 @@
 <?php if ($this->action != "add" && $this->do != "new") : ?>
     <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation'?>
 
-    <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?php echo $this->idUser; ?>' />
+    <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?= $this->idUser; ?>' />
 
     <ul class="nav nav-tabs nav-stacked menu_dashboard" >
-        <li class="<?php echo ($this->action == "index") ? "active" : "read" ?>">
-            <a href='<?php echo $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'>
+        <li class="<?= ($this->action == "index") ? "active" : "" ?>">
+            <a href='<?= $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'>
                 <em class="icon-info-sign icon-black"></em>
                 Informations générales
             </a>
         </li>
             
         <?php if ($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
-            echo "<li class='".(($this->action == "descriptif") ? "active" : "read")."'>
+            echo "<li class='".(($this->action == "descriptif") ? "active" : "")."'>
                 <a "
                 . "href='".$this->url(array("controller" => "dossier", "action"=>"descriptif", "id" => $this->idDossier), false, true)."'><i class=\"icon-book icon-black\"></i> Descriptif ".(($this->natureDossier == 1 || $this->natureDossier == 2) ? " des travaux" : "")."</a>
             </li>";
-        } ?>  
-
-        <?php if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3) {
-            echo "<li class='".(($this->action == "textes-applicables") ? "active" : "read")."'>
-                <a "
-                . "href='".$this->url(array("controller" => "dossier", "action"=>"textes-applicables", "id" => $this->idDossier), false, true)."'><i class=\"icon-align-center icon-black\"></i> Textes applicables</a>
-            </li>";
         } ?>
 
+        <?php if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3): ?>
+            <li class='<?= strpos($this->action, "textes-applicables") !== false ? "active" : "" ?>'>
+                <a href='<?= $this->url(array("controller" => "dossier", "action"=>"textes-applicables", "id" => $this->idDossier), false, true) ?>'>
+                    <i class="icon-align-center icon-black"></i>
+                    Textes applicables
+                </a>
+            </li>
+        <?php endif ?>
+
         <?php if ($this->idTypeDossier != 5): ?>
-            <li class = <?php echo $this->action == "docconsulte" ? "active" : "read" ?>>
-                <a href= <?php echo $this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true) ?>>
+            <li class = <?= $this->action == "docconsulte" ? "active" : "" ?>>
+                <a href= <?= $this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true) ?>>
                     <i class="icon-file icon-black"></i>
                     Documents consultés
                 </a>
@@ -35,7 +37,7 @@
         <?php endif ?>
                 
         <?php if ($this->idTypeDossier == 1 && $this->isAllowedEffectifsDegagements): ?>
-            <li class="<?php echo $this->action == 'effectifs-degagements-dossier' ? 'active' : '' ?>">
+            <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
                 <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >    
                     <em class="icon-th-list icon-black"></em>
                     Effectifs et dégagements
@@ -44,28 +46,28 @@
         <?php endif ?>
 
         <?php if ($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
-            echo "<li class='".(($this->action == "prescription") ? "active" : "read")."'>
+            echo "<li class='".(($this->action == "prescription") ? "active" : "")."'>
                 <a  "
                 . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
             </li>";
         } ?>
             
-        <li class='<?php echo ($this->action == "liees") ? "active" : "read" ?>'>
-            <a href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'>
+        <li class='<?= ($this->action == "liees") ? "active" : "" ?>'>
+            <a href='<?= $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'>
                 <em class="icon-folder-open icon-black"></em>
                 Établissements et dossiers liés
             </a>
         </li>
             
         <?php if ($this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44) {
-            echo "<li class='".(($this->action == "contact") ? "active" : "read")."'>
+            echo "<li class='".(($this->action == "contact") ? "active" : "")."'>
                 <a  "
                 . "href='".$this->url(array("controller" => "dossier", "action"=>"contact", "id" => $this->idDossier), false, true)."'><i class=\"icon-user icon-black\"></i> Contacts</a>
             </li>";
         } ?>
             
-        <li class='<?php echo ($this->action == "piece-jointe") ? "active" : "read" ?>'>
-            <a href='<?php echo $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'>
+        <li class='<?= ($this->action == "piece-jointe") ? "active" : "" ?>'>
+            <a href='<?= $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'>
                 <em class="icon-share icon-black"></em>
                 Pièces jointes
             </a>
@@ -86,7 +88,7 @@
         ?>
 
         <li>
-            <a class="sep" id="<?php echo $idLink; ?>" style='cursor:pointer;'><em class="icon-lock icon-black"></em> <?php echo $label; ?></a>
+            <a class="sep" id="<?= $idLink; ?>" style='cursor:pointer;'><em class="icon-lock icon-black"></em> <?= $label; ?></a>
         </li>
 
         <?php
@@ -98,7 +100,7 @@
 
         <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
             <li>
-                <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'>
+                <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?= $this->idDateCommissionAffect; ?>'>
                     <em class='icon-calendar icon-black'></em> Afficher ordre du jour
                 </a>
             </li>
@@ -279,7 +281,7 @@ endif; ?>
 ?>
 <div class='grid_16' >
 
-<?php echo "<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />"; ?>
+<?= "<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />"; ?>
 
 <?php $this->placeholder('page_header')->captureEnd(); //$this->placeholder('before_content')->captureEnd()?>
 
@@ -357,4 +359,4 @@ endif; ?>
 </script>
 <?php $this->placeholder('after_content')->captureEnd() ?>
 
-<?php echo $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders?>
+<?= $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders?>

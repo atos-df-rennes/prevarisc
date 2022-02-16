@@ -8,9 +8,12 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets');
 
         $this->serviceEtablissement = new Service_Etablissement();
-        $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
-        $this->view->etablissement = $this->etablissement;
-        $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
+
+        if ($this->getParam('id')) {
+            $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
+            $this->view->etablissement = $this->etablissement;
+            $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
+        }
     }
 
     public function indexAction()
