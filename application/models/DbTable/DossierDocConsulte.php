@@ -8,30 +8,37 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
     public function getGeneral($idDossier, $idDoc)
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ddc' => 'dossierdocconsulte'])
-             ->where('ddc.ID_DOSSIER = ?', $idDossier)
-             ->where('ddc.ID_DOC = ?', $idDoc);
+            ->setIntegrityCheck(false)
+            ->from(['ddc' => 'dossierdocconsulte'])
+            ->where('ddc.ID_DOSSIER = ?', $idDossier)
+            ->where('ddc.ID_DOC = ?', $idDoc)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
+     * @param mixed $idDossier
+     *
      * @return array
      */
     public function getDocRenseigne($idDossier)
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ddc' => 'dossierdocconsulte'])
-             ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
-             ->where('ddc.ID_DOSSIER = ?', $idDossier);
+            ->setIntegrityCheck(false)
+            ->from(['ddc' => 'dossierdocconsulte'])
+            ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
+            ->where('ddc.ID_DOSSIER = ?', $idDossier)
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $idDossier
+     * @param mixed $idNature
+     *
      * @return array
      */
     public function getDocOtheNature($idDossier, $idNature)
@@ -50,12 +57,13 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
         }
 
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ddc' => 'dossierdocconsulte'])
-             ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
-             ->where('ddc.ID_DOSSIER = ?', $idDossier)
-             ->where('ldc.'.$column1.' = 1')
-             ->where('ldc.'.$column2.' = 0');
+            ->setIntegrityCheck(false)
+            ->from(['ddc' => 'dossierdocconsulte'])
+            ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
+            ->where('ddc.ID_DOSSIER = ?', $idDossier)
+            ->where('ldc.'.$column1.' = 1')
+            ->where('ldc.'.$column2.' = 0')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }

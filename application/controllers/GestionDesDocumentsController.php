@@ -11,7 +11,8 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('check', 'json')
-                    ->initContext();
+            ->initContext()
+        ;
     }
 
     public function indexAction()
@@ -24,14 +25,14 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
         //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
         $pathVer = $this->path.'/0';
-        $dirVer = opendir($pathVer) or die('Erreur de listage : le répertoire n\'existe pas');
+        $dirVer = opendir($pathVer) or exit('Erreur de listage : le répertoire n\'existe pas');
         $fichierVer = [];
         $dossierVer = [];
         while ($elementVer = readdir($dirVer)) {
             if (
-                $elementVer != '.'
-                && $elementVer != '..'
-                && $elementVer != '.gitignore'
+                '.' != $elementVer
+                && '..' != $elementVer
+                && '.gitignore' != $elementVer
             ) {
                 if (!is_dir($pathVer.DS.$elementVer)) {
                     $fichierVer[] = $elementVer;
@@ -48,15 +49,15 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         //Récupération de l'ensemble des documents des différentes commissions
         foreach ($liste_commission as $var => $commission) {
             $path = $this->path.DS.$commission['ID_COMMISSION'];
-            $dir = opendir($path) or die('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
+            $dir = opendir($path) or exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
             $fichier = []; // on déclare le tableau contenant le nom des fichiers
             $dossier = []; // on déclare le tableau contenant le nom des dossiers
 
             while ($element = readdir($dir)) {
                 if (
-                    $element != '.'
-                    && $element != '..'
-                    && $element != '.gitignore'
+                    '.' != $element
+                    && '..' != $element
+                    && '.gitignore' != $element
                 ) {
                     if (!is_dir($path.DS.$element)) {
                         $fichier[] = $element;

@@ -7,7 +7,7 @@
  */
 class Service_PassAuthAdapater implements Zend_Auth_Adapter_Interface
 {
-    protected $username = null;
+    protected $username;
 
     public function __construct($username)
     {

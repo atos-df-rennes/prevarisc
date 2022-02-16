@@ -16,10 +16,12 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
      * @var type   The application version
      * @var string
      */
-    protected $_version = null;
+    protected $_version;
 
     /**
      * Overrides default constructor to inject version.
+     *
+     * @param null|mixed $version
      */
     public function __construct($version = null)
     {
@@ -57,7 +59,7 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
      *
      * @see Zend_View_Helper_HeadScript->toString()
      *
-     * @param string|int $indent
+     * @param int|string $indent
      *
      * @return string
      */
@@ -109,38 +111,6 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
         return $indent.implode($this->_escape($this->getSeparator()).$indent, $items);
     }
 
-    protected function _isNeedToMinify($item): bool
-    {
-        return isset($item->attributes ['src'])
-                && !empty($item->attributes ['src'])
-                && preg_match('/^https?:\/\//', $item->attributes['src']) == false
-                && !isset($item->attributes['minify_disabled']);
-    }
-
-    /**
-     * @return string
-     */
-    protected function _generateMinifyItem(array $scripts)
-    {
-        $baseUrl = $this->getBaseUrl();
-        if (substr($baseUrl, 0, 1) == '/') {
-            $baseUrl = substr($baseUrl, 1);
-        }
-        $minScript = new stdClass();
-        $minScript->type = 'text/javascript';
-        if (is_null($baseUrl) || $baseUrl == '') {
-            $minScript->attributes['src'] = $this->getMinUrl().'?f='.implode(',', $scripts);
-        } else {
-            $minScript->attributes['src'] = $this->getMinUrl().'?b='.$baseUrl.'&f='.implode(',', $scripts);
-        }
-
-        if ($this->_version) {
-            $minScript->attributes['src'] .= '&v='.$this->_version;
-        }
-
-        return $this->itemToString($minScript, '', '', '');
-    }
-
     /**
      * Retrieve the minify url.
      *
@@ -159,5 +129,37 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
     public function getBaseUrl()
     {
         return Zend_Controller_Front::getInstance()->getBaseUrl();
+    }
+
+    protected function _isNeedToMinify($item): bool
+    {
+        return isset($item->attributes['src'])
+                && !empty($item->attributes['src'])
+                && false == preg_match('/^https?:\/\//', $item->attributes['src'])
+                && !isset($item->attributes['minify_disabled']);
+    }
+
+    /**
+     * @return string
+     */
+    protected function _generateMinifyItem(array $scripts)
+    {
+        $baseUrl = $this->getBaseUrl();
+        if ('/' == substr($baseUrl, 0, 1)) {
+            $baseUrl = substr($baseUrl, 1);
+        }
+        $minScript = new stdClass();
+        $minScript->type = 'text/javascript';
+        if (is_null($baseUrl) || '' == $baseUrl) {
+            $minScript->attributes['src'] = $this->getMinUrl().'?f='.implode(',', $scripts);
+        } else {
+            $minScript->attributes['src'] = $this->getMinUrl().'?b='.$baseUrl.'&f='.implode(',', $scripts);
+        }
+
+        if ($this->_version) {
+            $minScript->attributes['src'] .= '&v='.$this->_version;
+        }
+
+        return $this->itemToString($minScript, '', '', '');
     }
 }

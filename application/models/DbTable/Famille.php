@@ -1,8 +1,6 @@
 <?php
 
-/*
-    Famille
-*/
+// Famille
 
 class Model_DbTable_Famille extends Zend_Db_Table_Abstract
 {
@@ -10,8 +8,6 @@ class Model_DbTable_Famille extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_FAMILLE'; // Clé primaire
 
     /**
-     * @return array
-     *
      * @psalm-return array<mixed|int, mixed>
      */
     public function fetchAllPK(): array

@@ -12,10 +12,11 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     public function getDocVisite()
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ldc' => 'listedocconsulte'])
-             ->where('ldc.VISITE_DOC = 1')
-             ->order('ldc.ORDRE_DOC');
+            ->setIntegrityCheck(false)
+            ->from(['ldc' => 'listedocconsulte'])
+            ->where('ldc.VISITE_DOC = 1')
+            ->order('ldc.ORDRE_DOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -27,10 +28,11 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     public function getDocEtude()
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ldc' => 'listedocconsulte'])
-             ->where('ldc.ETUDE_DOC = 1')
-             ->order('ldc.ORDRE_DOC');
+            ->setIntegrityCheck(false)
+            ->from(['ldc' => 'listedocconsulte'])
+            ->where('ldc.ETUDE_DOC = 1')
+            ->order('ldc.ORDRE_DOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -41,10 +43,11 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     public function getDocVisiteRT()
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ldc' => 'listedocconsulte'])
-             ->where('ldc.VISITERT_DOC = 1')
-             ->order('ldc.ORDRE_DOC');
+            ->setIntegrityCheck(false)
+            ->from(['ldc' => 'listedocconsulte'])
+            ->where('ldc.VISITERT_DOC = 1')
+            ->order('ldc.ORDRE_DOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -55,31 +58,36 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     public function getDocVisiteVAO()
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ldc' => 'listedocconsulte'])
-             ->where('ldc.VISITEVAO_DOC = 1')
-             ->order('ldc.ORDRE_DOC');
+            ->setIntegrityCheck(false)
+            ->from(['ldc' => 'listedocconsulte'])
+            ->where('ldc.VISITEVAO_DOC = 1')
+            ->order('ldc.ORDRE_DOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     //récupere les dossier qui ont été selection pour le dossier
     /**
+     * @param mixed $id_dossier
+     *
      * @return array
      */
     public function recupDocDossier($id_dossier)
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ddc' => 'dossierdocconsulte'])
-             ->where('ddc.ID_DOSSIER = ?', $id_dossier);
+            ->setIntegrityCheck(false)
+            ->from(['ddc' => 'dossierdocconsulte'])
+            ->where('ddc.ID_DOSSIER = ?', $id_dossier)
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     //récupération des docconsulte après un changement de nature
     /**
-     * @param string|int $id_nature
+     * @param int|string $id_nature
+     * @param mixed      $id_dossier
      *
      * @return array
      */
@@ -88,10 +96,11 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
         echo $id_nature.' ';
 
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ddc' => 'dossierdocconsulte'])
-             ->where('ddc.ID_DOSSIER = ?', $id_dossier)
-             ->where('ddc.ID_NATURE');
+            ->setIntegrityCheck(false)
+            ->from(['ddc' => 'dossierdocconsulte'])
+            ->where('ddc.ID_DOSSIER = ?', $id_dossier)
+            ->where('ddc.ID_NATURE')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }

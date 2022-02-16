@@ -22,7 +22,7 @@ class Form_Login extends Zend_Form
             new Zend_Validate_StringLength(1, 255),
         ];
 
-        if (getenv('PREVARISC_ENFORCE_SECURITY') == 1) {
+        if (1 == getenv('PREVARISC_ENFORCE_SECURITY')) {
             $regex_validator = new Zend_Validate_Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/');
             $regex_validator->setMessage(
                 'Votre mot de passe doit contenir au moins 8 caractères '

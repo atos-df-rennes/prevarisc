@@ -4,7 +4,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        if ($request->getModuleName() == 'default') {
+        if ('default' == $request->getModuleName()) {
             // On récupère la vue
             $view = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
 
@@ -15,7 +15,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->headTitle(strip_tags($view->navigation()->breadcrumbs()->setMinDepth(0)->setSeparator(' / ')));
 
             // Envoi de la version en cours sur la vue
-            if (getenv('PREVARISC_BRANCH') != false) {
+            if (false != getenv('PREVARISC_BRANCH')) {
                 $view->branch_prevarisc = getenv('PREVARISC_BRANCH');
                 $view->revision_prevarisc = getenv('PREVARISC_REVISION');
                 $view->version_prevarisc = getenv('PREVARISC_BRANCH').'.'.getenv('PREVARISC_REVISION');

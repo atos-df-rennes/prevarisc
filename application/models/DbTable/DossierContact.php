@@ -6,6 +6,9 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_DOSSIER', 'ID_UTILISATEURINFORMATIONS']; // Clé primaire
 
     /**
+     * @param mixed $idDossier
+     * @param mixed $idFct
+     *
      * @return array
      */
     public function recupInfoContact($idDossier, $idFct)
@@ -17,12 +20,16 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
             ->join(['ui' => 'utilisateurinformations'], 'dc.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
             ->where('dc.ID_DOSSIER = ?', $idDossier)
             ->where('ui.ID_FONCTION = ?', $idFct)
-            ->limit(1);
+            ->limit(1)
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed      $idEtablissement
+     * @param null|mixed $idFct
+     *
      * @return array
      */
     public function recupContactEtablissement($idEtablissement, $idFct = null)
@@ -32,7 +39,8 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from(['ec' => 'etablissementcontact'])
             ->join(['ui' => 'utilisateurinformations'], 'ec.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
-            ->where('ec.ID_ETABLISSEMENT = ?', $idEtablissement);
+            ->where('ec.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
 
         if ($idFct) {
             $select->where('ui.ID_FONCTION = ?', $idFct);

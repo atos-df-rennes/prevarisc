@@ -30,7 +30,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
 
         $this->view->default_periodicite = $DB_periodicite->gn4ForEtablissement($this->etablissement);
-        $this->view->groupements_de_communes = count($this->etablissement['adresses']) == 0 ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']);
+        $this->view->groupements_de_communes = 0 == count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']);
 
         $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
 
@@ -95,13 +95,13 @@ class EtablissementController extends Zend_Controller_Action
                 $options = '';
                 if (
                     getenv('PREVARISC_MAIL_ENABLED')
-                    && getenv('PREVARISC_MAIL_ENABLED') == 1
+                    && 1 == getenv('PREVARISC_MAIL_ENABLED')
                 ) {
                     $typeAlerte = $this->serviceEtablissement->checkAlerte($this->etablissement, $post);
 
                     if (
                         unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_statut', 'alerte_classement')
-                        && $typeAlerte !== false
+                        && false !== $typeAlerte
                     ) {
                         $service_alerte = new Service_Alerte();
                         $options = $service_alerte->getLink($typeAlerte);
@@ -168,8 +168,8 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'L\'établissement a bien été ajouté.']);
 
                 if (
-                    $post['ID_GENRE'] == 1
-                    && count($post['ID_FILS_ETABLISSEMENT']) == 1
+                    1 == $post['ID_GENRE']
+                    && 1 == count($post['ID_FILS_ETABLISSEMENT'])
                 ) {
                     $this->_helper->flashMessenger(['context' => 'warning', 'title' => 'Ajout des établissements enfants', 'message' => "Les droits d'accès au site sont déterminés par les droits d'accès aux établissements qui le compose. Veillez à ajouter des établissements afin de garantir l'accès au site dans Prevarisc."]);
                     $this->_helper->redirector('edit', null, null, ['id' => $id_etablissement]);
@@ -396,9 +396,9 @@ class EtablissementController extends Zend_Controller_Action
 
         $dossiers = $this->serviceEtablissement->getNLastDossiers($this->_request->id);
 
-        $this->view->etudes =   $dossiers['etudes'];
-        $this->view->visites =  $dossiers['visites'];
-        $this->view->autres =   $dossiers['autres'];
+        $this->view->etudes = $dossiers['etudes'];
+        $this->view->visites = $dossiers['visites'];
+        $this->view->autres = $dossiers['autres'];
 
         $this->view->nbElemMax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
         $this->view->nbEtudes = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes');
@@ -463,6 +463,7 @@ class EtablissementController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
             $serviceEffectifdegagement = new Service_Effectifdegagement();
+
             try {
                 //Recuperation des variables de formulaire via la requete post
                 $post = $this->_request->getPost();
@@ -482,7 +483,7 @@ class EtablissementController extends Zend_Controller_Action
             }
         }
 
-        $this->view->EffectifDegagement =$modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
+        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
     }
 
@@ -498,8 +499,8 @@ class EtablissementController extends Zend_Controller_Action
             try {
                 //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
                 $arrData = [];
-                $arrData["DESCRIPTION_EFFECTIF"] = $this->_request->getParam("DESCRIPTION_EFFECTIF");
-                $arrData["DESCRIPTION_DEGAGEMENT"] = $this->_request->getParam("DESCRIPTION_DEGAGEMENT");
+                $arrData['DESCRIPTION_EFFECTIF'] = $this->_request->getParam('DESCRIPTION_EFFECTIF');
+                $arrData['DESCRIPTION_DEGAGEMENT'] = $this->_request->getParam('DESCRIPTION_DEGAGEMENT');
                 $serviceEffectifdegagement->saveFromEtablissement($this->_getParam('id'), $arrData);
 
                 // FIXME $this->_helper->redirector('effectifsDegagementsEtablissement', null, null, array('id' => $this->getParam('id')));
@@ -508,7 +509,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Mise à jour effectifs dégagements ok',
-                    'message' => ""
+                    'message' => '',
                 ]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger([

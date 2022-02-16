@@ -23,7 +23,7 @@ class Service_Adresse
      */
     public function get($q)
     {
-        if (strlen($q) == 5 && is_numeric($q)) {
+        if (5 == strlen($q) && is_numeric($q)) {
             $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
             return $DB_adresse->getVilleByCP($q);
@@ -78,7 +78,8 @@ class Service_Adresse
             ->join(['ui' => 'utilisateurinformations'], 'ui.ID_UTILISATEURINFORMATIONS = ac.ID_UTILISATEURINFORMATIONS')
             ->join(['f' => 'fonction'], 'ui.ID_FONCTION = f.ID_FONCTION')
             ->where('ac.NUMINSEE_COMMUNE = ?', $numinsee)
-            ->limit(1);
+            ->limit(1)
+        ;
 
         return $select->query()->fetch();
     }

@@ -6,7 +6,7 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
     protected $_primary = 'NUMINSEE_COMMUNE'; // Clé primaire
 
     /**
-     * @param string|int $q
+     * @param int|string $q
      *
      * @return array
      */
@@ -15,14 +15,15 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
         $select = $this->select()->setIntegrityCheck(false);
 
         $select->from('adressecommune')
-                ->where('LIBELLE_COMMUNE LIKE ?', '%'.$q.'%')
-                ->order('LENGTH(LIBELLE_COMMUNE)');
+            ->where('LIBELLE_COMMUNE LIKE ?', '%'.$q.'%')
+            ->order('LENGTH(LIBELLE_COMMUNE)')
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
 
     /**
-     * @param string|int $numinsee
+     * @param int|string $numinsee
      */
     public function getMairieInformation($numinsee)
     {

@@ -29,8 +29,8 @@ class Service_User
             $user = array_merge($user, ['infos' => $model_userinformations->find($user['ID_UTILISATEURINFORMATIONS'])->current()->toArray()]);
             $user = array_merge($user, ['group' => $model_groupe->find($user['ID_GROUPE'])->current()->toArray()]);
             $user = array_merge($user, ['preferences' => $model_preferences->fetchRow('ID_UTILISATEUR = '.$user['ID_UTILISATEUR'])->toArray()]);
-            $user = array_merge($user, ['groupements' => $user_groupements == null ? null : $user_groupements->toArray()]);
-            $user = array_merge($user, ['commissions' => $user_commissions == null ? null : $user_commissions->toArray()]);
+            $user = array_merge($user, ['groupements' => null == $user_groupements ? null : $user_groupements->toArray()]);
+            $user = array_merge($user, ['commissions' => null == $user_commissions ? null : $user_commissions->toArray()]);
             $user['infos'] = array_merge($user['infos'], ['LIBELLE_FONCTION' => $model_fonction->find($user['infos']['ID_FONCTION'])->current()->toArray()['LIBELLE_FONCTION']]);
 
             $cache->save(serialize($user));
@@ -44,14 +44,14 @@ class Service_User
      *
      * @param string $username
      *
-     * @return array|null
+     * @return null|array
      */
     public function findByUsername($username)
     {
         $model_user = new Model_DbTable_Utilisateur();
         $user = $model_user->fetchRow($model_user->select()->where('USERNAME_UTILISATEUR = ?', $username));
 
-        return $user !== null ? $this->find($user->ID_UTILISATEUR) : null;
+        return null !== $user ? $this->find($user->ID_UTILISATEUR) : null;
     }
 
     /**
@@ -64,7 +64,7 @@ class Service_User
     {
         $model_user = new Model_DbTable_Utilisateur();
         $user = $model_user->find($id_user)->current();
-        $user->LASTACTION_UTILISATEUR = $last_action_date == '' ? date('Y:m-d H:i:s') : $last_action_date;
+        $user->LASTACTION_UTILISATEUR = '' == $last_action_date ? date('Y:m-d H:i:s') : $last_action_date;
         $user->save();
     }
 
@@ -118,8 +118,8 @@ class Service_User
             if ($DB_user->isRegistered($id_user, $data['USERNAME_UTILISATEUR'])) {
                 throw new Exception("Nom d'utilisateur déjà enregistré. Veuillez en choisir un autre.");
             }
-            $user = $id_user == null ? $DB_user->createRow() : $DB_user->find($id_user)->current();
-            $informations = $id_user == null ? $DB_informations->createRow() : $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
+            $user = null == $id_user ? $DB_user->createRow() : $DB_user->find($id_user)->current();
+            $informations = null == $id_user ? $DB_informations->createRow() : $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
 
             $informations->NOM_UTILISATEURINFORMATIONS = $data['NOM_UTILISATEURINFORMATIONS'];
             $informations->PRENOM_UTILISATEURINFORMATIONS = $data['PRENOM_UTILISATEURINFORMATIONS'];
@@ -144,14 +144,14 @@ class Service_User
 
             if (array_key_exists('PASSWD_INPUT', $data)) {
                 if (
-                    getenv('PREVARISC_ENFORCE_SECURITY') == 1
-                    && $data['PASSWD_INPUT'] != ''
+                    1 == getenv('PREVARISC_ENFORCE_SECURITY')
+                    && '' != $data['PASSWD_INPUT']
                     && !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/', $data['PASSWD_INPUT'])
                 ) {
                     throw new Exception('Votre mot de passe doit contenir au moins 8 caractères '
                         .'dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.');
                 }
-                $user->PASSWD_UTILISATEUR = $data['PASSWD_INPUT'] == '' ? null : md5($user->USERNAME_UTILISATEUR.getenv('PREVARISC_SECURITY_SALT').$data['PASSWD_INPUT']);
+                $user->PASSWD_UTILISATEUR = '' == $data['PASSWD_INPUT'] ? null : md5($user->USERNAME_UTILISATEUR.getenv('PREVARISC_SECURITY_SALT').$data['PASSWD_INPUT']);
             }
 
             $user->save();
@@ -159,7 +159,7 @@ class Service_User
             $DB_groupementsUser->delete('ID_UTILISATEUR = '.$user->ID_UTILISATEUR);
             $DB_commissionsUser->delete('ID_UTILISATEUR = '.$user->ID_UTILISATEUR);
 
-            if ($id_user == null) {
+            if (null == $id_user) {
                 $userPreferences = $DB_userPreferences->createRow();
                 $userPreferences->ID_UTILISATEUR = $user->ID_UTILISATEUR;
                 $userPreferences->save();
@@ -189,7 +189,7 @@ class Service_User
             $cache->remove('user_id_'.$user->ID_UTILISATEUR);
 
             // Gestion de l'avatar
-            if ($avatar !== null && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
+            if (null !== $avatar && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
                 $path = REAL_DATA_PATH.DS.'uploads'.DS.'avatars'.DS;
 
                 GD_Resize::run($avatar['tmp_name'], $path.'small'.DS.$user->ID_UTILISATEUR.'.jpg', 25, 25);
@@ -198,6 +198,7 @@ class Service_User
             }
         } catch (Exception $e) {
             $db->rollBack();
+
             throw $e;
         }
 
@@ -226,10 +227,10 @@ class Service_User
         }
 
         foreach ($preferences as $name => $preference) {
-            if ($name == 'DASHBOARD_BLOCS') {
+            if ('DASHBOARD_BLOCS' == $name) {
                 $DB_preferences->DASHBOARD_BLOCS = json_encode($preference);
             } else {
-                $DB_preferences->$name = $preference;
+                $DB_preferences->{$name} = $preference;
             }
         }
 
@@ -271,13 +272,14 @@ class Service_User
         $db->beginTransaction();
 
         try {
-            $group = $id_group == null ? $model_groupe->createRow() : $model_groupe->find($id_group)->current();
+            $group = null == $id_group ? $model_groupe->createRow() : $model_groupe->find($id_group)->current();
             $group->LIBELLE_GROUPE = $data['LIBELLE_GROUPE'];
             $group->DESC_GROUPE = $data['DESC_GROUPE'];
             $group->save();
             $db->commit();
         } catch (Exception $e) {
             $db->rollBack();
+
             throw $e;
         }
 
@@ -315,7 +317,7 @@ class Service_User
                 $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
                 // On bouge les users du groupe à supprimer dans le groupe par défaut
-                if ($all_users != null) {
+                if (null != $all_users) {
                     foreach ($all_users as $item) {
                         $user = $DB_user->find($item->ID_UTILISATEUR)->current();
                         $user->ID_GROUPE = 1;
@@ -330,6 +332,7 @@ class Service_User
                 $db->commit();
             } catch (Exception $e) {
                 $db->rollBack();
+
                 throw $e;
             }
         }
@@ -345,6 +348,7 @@ class Service_User
     public function getGroupPrivileges($user)
     {
         $model_user = new Model_DbTable_Utilisateur();
+
         return $model_user->getGroupPrivileges($user);
     }
 
@@ -368,7 +372,7 @@ class Service_User
      *
      * @param array $user array définissant l'utilisateur
      *
-     * @return array|null
+     * @return null|array
      */
     public function logFailedLogin($user)
     {

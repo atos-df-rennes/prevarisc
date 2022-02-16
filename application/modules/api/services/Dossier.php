@@ -12,6 +12,7 @@ class Api_Service_Dossier
     public function get($id)
     {
         $service_dossier = new Service_Dossier();
+
         return $service_dossier->get($id);
     }
 
@@ -25,6 +26,7 @@ class Api_Service_Dossier
     public function getDescriptifs($id)
     {
         $service_dossier = new Service_Dossier();
+
         return $service_dossier->getDescriptifs($id);
     }
 
@@ -38,6 +40,7 @@ class Api_Service_Dossier
     public function getPiecesJointes($id)
     {
         $service_dossier = new Service_Dossier();
+
         return $service_dossier->getAllPJ($id);
     }
 
@@ -79,6 +82,7 @@ class Api_Service_Dossier
     public function getContacts($id)
     {
         $service_dossier = new Service_Dossier();
+
         return $service_dossier->getAllContacts($id);
     }
 }

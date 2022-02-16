@@ -4,9 +4,12 @@ class Service_Login
 {
     //login pour l'api
     /**
-     * @return ((string|mixed)[]|string)[]
-     *
      * @psalm-return array{reponse:string, results?:array{ID_UTILISATEUR:mixed, LIBELLE_FONCTION:mixed, ID_UTILISATEURINFORMATIONS:mixed, NOM_UTILISATEURINFORMATIONS:mixed, PRENOM_UTILISATEURINFORMATIONS:mixed, LIBELLE_GROUPE:mixed, ID_GROUPE:mixed, TOKEN:string}}
+     *
+     * @param mixed $username
+     * @param mixed $password
+     *
+     * @return ((string|mixed)[]|string)[]
      */
     public function login($username, $password): array
     {
@@ -25,7 +28,7 @@ class Service_Login
 
             // Si l'utilisateur n'est pas actif, on renvoie false
             if (
-                $user === null
+                null === $user
                 || !$user->ACTIF_UTILISATEUR
                 || md5($username.getenv('PREVARISC_SECURITY_SALT').$password) != $user->PASSWD_UTILISATEUR
             ) {
@@ -41,7 +44,7 @@ class Service_Login
             }
 
             // Stockage de l'utilisateur dans la session
-            if ($reponse == 'autorise') {
+            if ('autorise' == $reponse) {
                 $row_utilisateurInformations = $model_utilisateurInformations->find($user->ID_UTILISATEURINFORMATIONS)->current();
                 $row_groupe = $model_groupe->find($user->ID_GROUPE)->current();
                 $row_fonction = $model_fonction->find($row_utilisateurInformations->ID_FONCTION)->current();
@@ -74,8 +77,8 @@ class Service_Login
         } catch (Exception $e) {
             $reponse = 'erreur';
             $results = [
-                   'reponse' => $reponse,
-                ];
+                'reponse' => $reponse,
+            ];
         }
 
         return $results;

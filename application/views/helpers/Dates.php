@@ -9,7 +9,7 @@ class View_Helper_Dates
      * Only the two biggest parts are used.
      *
      * @param DateTime      $start
-     * @param DateTime|null $end
+     * @param null|DateTime $end
      *
      * @return string
      */
@@ -19,7 +19,7 @@ class View_Helper_Dates
             $start = new DateTime($start);
         }
 
-        if ($end === null) {
+        if (null === $end) {
             $end = new DateTime();
         }
 
@@ -33,27 +33,26 @@ class View_Helper_Dates
         }; // adds plurals
 
         $format = [];
-        if ($interval->y !== 0) {
+        if (0 !== $interval->y) {
             $format[] = '%y '.$doPlural($interval->y, 'année');
         }
-        if ($interval->m !== 0) {
+        if (0 !== $interval->m) {
             $format[] = '%m mois';
         }
-        if ($interval->d !== 0) {
+        if (0 !== $interval->d) {
             $format[] = '%d '.$doPlural($interval->d, 'jour');
         }
-        if ($interval->h !== 0) {
+        if (0 !== $interval->h) {
             $format[] = '%h '.$doPlural($interval->h, 'heure');
         }
-        if ($interval->i !== 0) {
+        if (0 !== $interval->i) {
             $format[] = '%i '.$doPlural($interval->i, 'minute');
         }
-        if ($interval->s !== 0) {
+        if (0 !== $interval->s) {
             if (!count($format)) {
                 return '<= 1 min';
-            } else {
-                $format[] = '%s '.$doPlural($interval->s, 'seconde');
             }
+            $format[] = '%s '.$doPlural($interval->s, 'seconde');
         }
 
         // We use the two biggest parts

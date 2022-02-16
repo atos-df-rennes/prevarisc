@@ -16,11 +16,11 @@ class Service_Effectifdegagement
         return $dbEffectifDegagement->find($idChangement)->current();
     }
 
-
     /**
      *  Retourne un changement via son Id précisé en argument.
      *
-     * @param int $idChangement L'id du changement à retourner
+     * @param int   $idChangement L'id du changement à retourner
+     * @param mixed $idDossier
      *
      * @return Zend_Db_Table_Row_Abstract Le résultat
      */
@@ -30,21 +30,20 @@ class Service_Effectifdegagement
         $res = null;
         foreach ($dbEffectifDegagement->getIDEffectifDegagementByIDDossier($idDossier) as $row) {
             foreach ($row as $key => $value) {
-                if ($key == "ID_EFFECTIF_DEGAGEMENT") {
+                if ('ID_EFFECTIF_DEGAGEMENT' == $key) {
                     $res = $value;
                 }
             }
         }
+
         return $res;
     }
-
-
-
 
     /**
      *  Retourne un changement via son Id précisé en argument.
      *
-     * @param int $idChangement L'id du changement à retourner
+     * @param int   $idChangement    L'id du changement à retourner
+     * @param mixed $idEtablissement
      *
      * @return Zend_Db_Table_Row_Abstract Le résultat
      */
@@ -54,21 +53,19 @@ class Service_Effectifdegagement
         $res = null;
         foreach ($dbEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement) as $row) {
             foreach ($row as $key => $value) {
-                if ($key == "ID_EFFECTIF_DEGAGEMENT") {
+                if ('ID_EFFECTIF_DEGAGEMENT' == $key) {
                     $res = $value;
                 }
             }
         }
+
         return $res;
     }
 
-
-
-
-
-
     /**
-     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant
+     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant.
+     *
+     * @param mixed $idDossier
      */
     public function addRowDossierEffectifDegagement($idDossier)
     {
@@ -86,10 +83,10 @@ class Service_Effectifdegagement
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
-
-
     /**
-     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant
+     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant.
+     *
+     * @param mixed $idEtablissement
      */
     public function addRowEtablissementEffectifDegagement($idEtablissement)
     {
@@ -107,11 +104,10 @@ class Service_Effectifdegagement
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
-
     public function saveFromDossier($idDossier, $data)
     {
         $idEffecifDegagement = $this->getByIDDossier($idDossier);
-        if ($idEffecifDegagement == null) {
+        if (null == $idEffecifDegagement) {
             $idEffecifDegagement = $this->addRowDossierEffectifDegagement($idDossier);
         }
         $this->save($idEffecifDegagement, $data);
@@ -120,7 +116,7 @@ class Service_Effectifdegagement
     public function saveFromEtablissement($idEtablissement, $data)
     {
         $idEffecifDegagement = $this->getByIDEtablissement($idEtablissement);
-        if ($idEffecifDegagement == null) {
+        if (null == $idEffecifDegagement) {
             $idEffecifDegagement = $this->addRowEtablissementEffectifDegagement($idEtablissement);
         }
         $this->save($idEffecifDegagement, $data);
@@ -129,20 +125,24 @@ class Service_Effectifdegagement
     /**
      * Sauvegarde les modifications apportées aux messages d'alerte
      * par défaut.
-     *  @param id ==> identifiant de l effectif degagement
-     * @param array $data Les données envoyés en post
+     *
+     * @param array $data                 Les données envoyés en post
+     * @param mixed $idEffectifDegagement
      */
     public function save($idEffectifDegagement, $data)
     {
         if (is_array($data)) {
             $newValue = $this->get($idEffectifDegagement);
-            foreach ($data as $key=> $newAttrValue) {
+            foreach ($data as $key => $newAttrValue) {
                 switch ($key) {
                     case 'DESCRIPTION_EFFECTIF':
                         $newValue->DESCRIPTION_EFFECTIF = $newAttrValue;
+
                         break;
+
                     case 'DESCRIPTION_DEGAGEMENT':
                         $newValue->DESCRIPTION_DEGAGEMENT = $newAttrValue;
+
                     break;
                 }
             }
@@ -162,11 +162,11 @@ class Service_Effectifdegagement
         return self::BALISES;
     }
 
-
     /**
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
      * @param string $message Le message a envoyer avec des balises
+     * @param mixed  $ets
      *
      * @return string Le message convertit
      */
@@ -175,7 +175,7 @@ class Service_Effectifdegagement
         $params = [];
         foreach (self::BALISES as $balise => $content) {
             $replacementstr = '';
-            if ($content['model'] === 'avis') {
+            if ('avis' === $content['model']) {
                 $replacementstr = $this->getAvis($ets);
             } elseif (array_key_exists($content['model'], $ets)
                 && array_key_exists($content['champ'], $ets[$content['model']])) {

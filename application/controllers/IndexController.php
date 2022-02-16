@@ -73,7 +73,7 @@ class IndexController extends Zend_Controller_Action
             $method = $blocConfig['method'];
             $bloc = [
                 'id' => $id,
-                'data' => $service->$method($user),
+                'data' => $service->{$method}($user),
                 'type' => $blocConfig['type'],
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],

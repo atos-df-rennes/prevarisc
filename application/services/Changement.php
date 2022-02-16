@@ -41,7 +41,6 @@ class Service_Changement
             'model' => 'informations',
             'champ' => 'LIBELLE_TYPE_PRINCIPAL',
         ],
-
     ];
 
     /**
@@ -116,13 +115,17 @@ class Service_Changement
                     'Passage au statut "%s"',
                     $ets['informations']['LIBELLE_STATUT']
                 );
+
                 break;
+
             case '2':
                 $objet = sprintf(
                     'Passage en avis "%s"',
                     $this->getAvis($ets)
                 );
+
                 break;
+
             case '3':
                 $objet = sprintf(
                     'Changement de classement "%s - %s %s"',
@@ -130,7 +133,9 @@ class Service_Changement
                     $ets['informations']['LIBELLE_TYPE_PRINCIPAL'],
                     $ets['informations']['LIBELLE_TYPEACTIVITE_PRINCIPAL']
                 );
+
                 break;
+
             default:
                 $objet = '';
         }
@@ -161,6 +166,7 @@ class Service_Changement
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
      * @param string $message Le message a envoyer avec des balises
+     * @param mixed  $ets
      *
      * @return string Le message convertit
      */
@@ -169,7 +175,7 @@ class Service_Changement
         $params = [];
         foreach (self::BALISES as $balise => $content) {
             $replacementstr = '';
-            if ($content['model'] === 'avis') {
+            if ('avis' === $content['model']) {
                 $replacementstr = $this->getAvis($ets);
             } elseif (array_key_exists($content['model'], $ets)
                 && array_key_exists($content['champ'], $ets[$content['model']])) {
@@ -197,13 +203,13 @@ class Service_Changement
             $ets['general']['ID_DOSSIER_DONNANT_AVIS']
         );
 
-        if ($ets['presence_avis_differe'] == true && $avisType == 'avisDiff') {
+        if (true == $ets['presence_avis_differe'] && 'avisDiff' == $avisType) {
             $avis = "Présence d'un dossier avec avis differé";
-        } elseif ($ets['avis'] != null) {
-            if ($ets['avis'] == 1 && $avisType == 'avisDoss') {
-                $avis = 'Favorable'.($ets['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation");
-            } elseif ($ets['avis'] == 2 && $avisType == 'avisDoss') {
-                $avis = 'Défavorable'.($ets['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation");
+        } elseif (null != $ets['avis']) {
+            if (1 == $ets['avis'] && 'avisDoss' == $avisType) {
+                $avis = 'Favorable'.(3 == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
+            } elseif (2 == $ets['avis'] && 'avisDoss' == $avisType) {
+                $avis = 'Défavorable'.(3 == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
             }
         } else {
             $avis = "Avis d'exploitation indisponible";

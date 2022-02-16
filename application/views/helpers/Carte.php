@@ -11,6 +11,11 @@ class View_Helper_Carte
     private $interactive_layer = [];
 
     /**
+     * @param mixed $lat
+     * @param mixed $lon
+     * @param mixed $markers
+     * @param mixed $zoom
+     *
      * @return false|self
      */
     public function carte($lat, $lon, $markers = [], array $size = ['height' => '100%'], $zoom = 17)
@@ -18,7 +23,7 @@ class View_Helper_Carte
         // Récupération des couches
         $model_couchecarto = new Model_DbTable_CoucheCarto();
         $couches = $model_couchecarto->getList();
-        if (count($couches) == 0) {
+        if (0 == count($couches)) {
             return false;
         }
 
@@ -28,13 +33,13 @@ class View_Helper_Carte
         // Récupération de la clé IGN
         $key_ign = null;
         foreach ($couches as $couche) {
-            if ($couche->ID_COUCHECARTOTYPE == 3) {
+            if (3 == $couche->ID_COUCHECARTOTYPE) {
                 $key_ign = $couche->API_COUCHECARTO;
             }
         }
         $this->key_ign = $key_ign;
 
-        if ($this->key_ign == null) {
+        if (null == $this->key_ign) {
             return false;
         }
 
@@ -62,7 +67,7 @@ class View_Helper_Carte
         $model_couchecarto = new Model_DbTable_CoucheCarto();
         $rowset_couches = $model_couchecarto->getList();
 
-        if (count($rowset_couches) == 0) {
+        if (0 == count($rowset_couches)) {
             return null;
         }
 
@@ -74,11 +79,11 @@ class View_Helper_Carte
                     'params' => [
                         'layers' => $row->LAYERS_COUCHECARTO,
                         'format' => $row->FORMAT_COUCHECARTO,
-                        'transparent' => $row->TRANSPARENT_COUCHECARTO == 1 ? true : false,
+                        'transparent' => 1 == $row->TRANSPARENT_COUCHECARTO ? true : false,
                     ],
                     'options' => [
                         'projection' => 'EPSG:4326',
-                        'isBaseLayer' => $row->ISBASELAYER_COUCHECARTO == 1 ? true : false,
+                        'isBaseLayer' => 1 == $row->ISBASELAYER_COUCHECARTO ? true : false,
                         'visibility' => false,
                     ],
                 ],
@@ -112,17 +117,17 @@ class View_Helper_Carte
             <script>
                 var map = Geoportal.load("geo_container",
                     ["'.$this->key_ign.'"],
-                    {lat:  ' .$this->lat.', lon:  '.$this->lon.'},
-                    ' .$this->zoom.',
+                    {lat:  '.$this->lat.', lon:  '.$this->lon.'},
+                    '.$this->zoom.',
                     {
-                        overlays: ' .Zend_Json::Encode($this->overlays).',
+                        overlays: '.Zend_Json::Encode($this->overlays).',
                         viewerClass: Geoportal.Viewer.Default,
                         onView: function() {
                             var markersLayer = new OpenLayers.Layer.Vector("Marqueurs non modifiables");
                             var draggableMarkersLayer = new OpenLayers.Layer.Vector("Marqueurs");
 
                             this.getViewer().getMap().addLayers([markersLayer, draggableMarkersLayer]);
-                            var markers = ' .Zend_Json::Encode($this->markers).';
+                            var markers = '.Zend_Json::Encode($this->markers).';
 
                             var drag = new OpenLayers.Control.DragFeature(draggableMarkersLayer);
                             this.getViewer().getMap().addControl(drag);
@@ -162,9 +167,13 @@ class View_Helper_Carte
 
     // Méthodes statiques
     /**
-     * @return array
-     *
      * @psalm-return array{label:mixed, lat:mixed, lon:mixed, draggable:mixed, img:mixed}
+     *
+     * @param mixed $label
+     * @param mixed $lat
+     * @param mixed $lon
+     * @param mixed $draggable
+     * @param mixed $img
      */
     public static function Marker($label, $lat, $lon, $draggable = false, $img = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png'): array
     {

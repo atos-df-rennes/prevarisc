@@ -42,7 +42,7 @@ class ProxyController extends Zend_Controller_Action
 
         $data = curl_exec($ch);
 
-        if ($data === false) {
+        if (false === $data) {
             $body = curl_error($ch);
         } else {
             $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -55,7 +55,7 @@ class ProxyController extends Zend_Controller_Action
             foreach ($headers as $header) {
                 if (
                     $header
-                    && preg_match('/^Content-Type/i', $header) !== 0
+                    && 0 !== preg_match('/^Content-Type/i', $header)
                 ) {
                     $this->_response->setRawHeader($header);
                 }

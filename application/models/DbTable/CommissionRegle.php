@@ -6,57 +6,7 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_REGLE']; // Clé primaire
 
     /**
-     * @param string|int|float          $first_table
-     * @param array|string|Zend_Db_Expr $second_table
-     * @param string|int|float          $key
-     * @param string|int|float          $id_regle
-     *
-     * @return array
-     *
-     * @psalm-return array<int, mixed>
-     */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_regle): array
-    {
-        // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
-        $return = $this->fetchAll($this->select()->union([
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "$first_table.$key = $second_table.$key AND ID_REGLE = $id_regle"),
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "$first_table.$key = $second_table.$key AND ID_REGLE = $id_regle"),
-        ]))->toArray();
-
-        // Requete sur la table finale
-        $primary = $this->fetchAll($this->select()->setIntegrityCheck(false)->from($first_table))->toArray();
-
-        // On limite les resultats
-        $return = array_slice($return, 0, count($primary));
-
-        // On rajoute les valeurs de toutes les clé primaires
-        foreach ($return as $pos => $item) :    $return[$pos][$key] = $primary[$pos][$key];
-        endforeach;
-
-        // On envoi le tout
-        return $return;
-    }
-
-    // Formaliser les resultats envoyés
-    /**
-     * @return array
-     *
-     * @psalm-return array<int, mixed>
-     */
-    private function mapResult($array, $key): array
-    {
-        $result = [];
-
-        // On parcours le tableau
-        foreach ($array as $value) {
-            $result[] = $value[$key];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string|int $id_commission
+     * @param int|string $id_commission
      *
      * @return (null|mixed|Zend_Db_Table_Row_Abstract)[][]
      *
@@ -90,5 +40,55 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
         }
 
         return $array_regles;
+    }
+
+    /**
+     * @param float|int|string          $first_table
+     * @param array|string|Zend_Db_Expr $second_table
+     * @param float|int|string          $key
+     * @param float|int|string          $id_regle
+     *
+     * @psalm-return array<int, mixed>
+     */
+    private function fullJoinRegle($first_table, $second_table, $key, $id_regle): array
+    {
+        // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
+        $return = $this->fetchAll($this->select()->union([
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
+        ]))->toArray();
+
+        // Requete sur la table finale
+        $primary = $this->fetchAll($this->select()->setIntegrityCheck(false)->from($first_table))->toArray();
+
+        // On limite les resultats
+        $return = array_slice($return, 0, count($primary));
+
+        // On rajoute les valeurs de toutes les clé primaires
+        foreach ($return as $pos => $item) {
+            $return[$pos][$key] = $primary[$pos][$key];
+        }
+
+        // On envoi le tout
+        return $return;
+    }
+
+    // Formaliser les resultats envoyés
+    /**
+     * @psalm-return array<int, mixed>
+     *
+     * @param mixed $array
+     * @param mixed $key
+     */
+    private function mapResult($array, $key): array
+    {
+        $result = [];
+
+        // On parcours le tableau
+        foreach ($array as $value) {
+            $result[] = $value[$key];
+        }
+
+        return $result;
     }
 }

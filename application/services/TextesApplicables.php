@@ -23,10 +23,10 @@ class Service_TextesApplicables
                 $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = [];
             }
 
-            $textes_applicables[ $texte_applicable['LIBELLE_TYPETEXTEAPPL' ]][] = [
+            $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']][] = [
                 'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
                 'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
-                ];
+            ];
 
             $old_titre = $new_titre;
         }

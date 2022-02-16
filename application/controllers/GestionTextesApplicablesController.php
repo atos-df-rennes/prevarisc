@@ -46,7 +46,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 $newRow->save();
             }
 
-            if ($this->_getParam('defPrescription') == 'yes') {
+            if ('yes' == $this->_getParam('defPrescription')) {
                 //on enregistre le texte dans la table prescriptiontexteliste
                 $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
                 $newTexte = $dbPrescTextes->createRow();

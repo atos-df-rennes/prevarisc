@@ -37,7 +37,7 @@ class AdminController extends Zend_Controller_Action
         ];
         $this->view->dbname = getenv('PREVARISC_DB_DBNAME');
         $this->view->db_url = getenv('PREVARISC_DB_HOST').(getenv('PREVARISC_DB_PORT') ? ':'.getenv('PREVARISC_DB_PORT') : '');
-        $this->view->api_enabled = getenv('PREVARISC_SECURITY_KEY') != '';
+        $this->view->api_enabled = '' != getenv('PREVARISC_SECURITY_KEY');
         $this->view->proxy_enabled = getenv('PREVARISC_PROXY_ENABLED');
         $this->view->third_party_plugins = implode(', ', explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS')));
 
@@ -61,7 +61,7 @@ class AdminController extends Zend_Controller_Action
         $this->view->cache_lifetime = $cache_config['lifetime'];
         $this->view->cache_enabled = $cache_config['enabled'];
 
-        $this->view->enforce_security = getenv('PREVARISC_ENFORCE_SECURITY') == 1;
+        $this->view->enforce_security = 1 == getenv('PREVARISC_ENFORCE_SECURITY');
 
         $service_search = new Service_Search();
         $users = $service_search->users(null, null, null, true, 1000)['results'];

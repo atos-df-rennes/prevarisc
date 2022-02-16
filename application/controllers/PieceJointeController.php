@@ -11,7 +11,8 @@ class PieceJointeController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('check', 'json')
-                    ->initContext();
+            ->initContext()
+        ;
     }
 
     public function indexAction()
@@ -20,17 +21,17 @@ class PieceJointeController extends Zend_Controller_Action
         $DBused = new Model_DbTable_PieceJointe();
 
         // Cas dossier
-        if ($this->_request->type == 'dossier') {
+        if ('dossier' == $this->_request->type) {
             $this->view->type = 'dossier';
             $this->view->identifiant = $this->_request->id;
             $this->view->pjcomm = $this->_request->pjcomm;
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             $this->view->verrou = $this->_request->verrou;
-        } elseif ($this->_request->type == 'etablissement') { // Cas établissement
+        } elseif ('etablissement' == $this->_request->type) { // Cas établissement
             $this->view->type = 'etablissement';
             $this->view->identifiant = $this->_request->id;
             $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_ETABLISSEMENT', $this->_request->id);
-        } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
+        } elseif ('dateCommission' == $this->_request->type) { // Cas d'une date de commission
             $this->view->type = 'dateCommission';
             $this->view->identifiant = $this->_request->id;
             $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_DATECOMMISSION', $this->_request->id);
@@ -49,15 +50,15 @@ class PieceJointeController extends Zend_Controller_Action
 
         // Cas dossier
         $piece_jointe = null;
-        if ($this->_request->type == 'dossier') {
+        if ('dossier' == $this->_request->type) {
             $type = 'dossier';
             $identifiant = $this->_request->id;
             $piece_jointe = $DBused->affichagePieceJointe('dossierpj', 'piecejointe.ID_PIECEJOINTE', $this->_request->idpj);
-        } elseif ($this->_request->type == 'etablissement') { // Cas établissement
+        } elseif ('etablissement' == $this->_request->type) { // Cas établissement
             $type = 'etablissement';
             $identifiant = $this->_request->id;
             $piece_jointe = $DBused->affichagePieceJointe('etablissementpj', 'piecejointe.ID_PIECEJOINTE', $this->_request->idpj);
-        } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
+        } elseif ('dateCommission' == $this->_request->type) { // Cas d'une date de commission
             $type = 'dateCommission';
             $identifiant = $this->_request->id;
             $piece_jointe = $DBused->affichagePieceJointe('datecommissionpj', 'piecejointe.ID_PIECEJOINTE', $this->_request->idpj);
@@ -78,7 +79,7 @@ class PieceJointeController extends Zend_Controller_Action
         $modelDossier = new Model_DbTable_Dossier();
         $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
 
-        if ($dossier['ID_PLATAU'] !== null) {
+        if (null !== $dossier['ID_PLATAU']) {
             $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
             $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
         } else {
@@ -102,6 +103,7 @@ class PieceJointeController extends Zend_Controller_Action
         header('Content-Type: application/octet-stream');
 
         readfile($filepath);
+
         exit();
     }
 
@@ -112,7 +114,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->view->identifiant = $this->_getParam('id');
 
         // Ici suivant le type on change toutes les infos nécessaires pour lier aux différents établissements, dossiers
-        if ($this->view->type == 'dossier') {
+        if ('dossier' == $this->view->type) {
             $DBdossier = new Model_DbTable_Dossier();
             $this->view->listeEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
         }
@@ -146,7 +148,7 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Données de la pièce jointe
             $nouvellePJ->EXTENSION_PIECEJOINTE = $extension;
-            $nouvellePJ->NOM_PIECEJOINTE = $this->_getParam('nomFichier') == '' ? substr($_FILES['fichier']['name'], 0, -4) : $this->_getParam('nomFichier');
+            $nouvellePJ->NOM_PIECEJOINTE = '' == $this->_getParam('nomFichier') ? substr($_FILES['fichier']['name'], 0, -4) : $this->_getParam('nomFichier');
             $nouvellePJ->DESCRIPTION_PIECEJOINTE = $this->_getParam('descriptionFichier');
             $nouvellePJ->DATE_PIECEJOINTE = $dateNow->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY.' '.Zend_Date::HOUR.':'.Zend_Date::MINUTE.':'.Zend_Date::SECOND);
 
@@ -157,12 +159,12 @@ class PieceJointeController extends Zend_Controller_Action
             $modelDossier = new Model_DbTable_Dossier();
             $dossier = $modelDossier->find($this->_getParam('id'))->current();
 
-            if ($dossier['ID_PLATAU'] !== null) {
+            if (null !== $dossier['ID_PLATAU']) {
                 $file_path = implode(DS, [
                     REAL_DATA_PATH,
                     'uploads',
                     'pieces-jointes',
-                    $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE
+                    $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE,
                 ]);
             } else {
                 $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
@@ -172,73 +174,73 @@ class PieceJointeController extends Zend_Controller_Action
             $linkPj = null;
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $file_path)) {
                 $nouvellePJ->delete();
+
                 throw new Exception('Impossible de charger la pièce jointe');
-            } else {
-                // Dans le cas d'un dossier
-                if ($this->_getParam('type') == 'dossier') {
-                    // Modèles
-                    $DBetab = new Model_DbTable_EtablissementPj();
-                    $DBsave = new Model_DbTable_DossierPj();
+            }
+            // Dans le cas d'un dossier
+            if ('dossier' == $this->_getParam('type')) {
+                // Modèles
+                $DBetab = new Model_DbTable_EtablissementPj();
+                $DBsave = new Model_DbTable_DossierPj();
 
-                    // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
-                    $linkPj = $DBsave->createRow();
-                    $linkPj->ID_DOSSIER = $this->_getParam('id');
+                // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
+                $linkPj = $DBsave->createRow();
+                $linkPj->ID_DOSSIER = $this->_getParam('id');
 
-                    // On fait les liens avec les différents établissements séléctionnés
-                    if ($this->_getParam('etab')) {
-                        foreach ($this->_getParam('etab') as $etabLink) {
-                            $linkEtab = $DBetab->createRow();
-                            $linkEtab->ID_ETABLISSEMENT = $etabLink;
-                            $linkEtab->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
-                            $linkEtab->save();
-                        }
+                // On fait les liens avec les différents établissements séléctionnés
+                if ($this->_getParam('etab')) {
+                    foreach ($this->_getParam('etab') as $etabLink) {
+                        $linkEtab = $DBetab->createRow();
+                        $linkEtab->ID_ETABLISSEMENT = $etabLink;
+                        $linkEtab->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
+                        $linkEtab->save();
                     }
-                } elseif ($this->_getParam('type') == 'etablissement') { // Dans le cas d'un établissement
-                    // Modèles
-                    $DBsave = new Model_DbTable_EtablissementPj();
+                }
+            } elseif ('etablissement' == $this->_getParam('type')) { // Dans le cas d'un établissement
+                // Modèles
+                $DBsave = new Model_DbTable_EtablissementPj();
 
-                    // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
-                    $linkPj = $DBsave->createRow();
-                    $linkPj->ID_ETABLISSEMENT = $this->_getParam('id');
+                // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
+                $linkPj = $DBsave->createRow();
+                $linkPj->ID_ETABLISSEMENT = $this->_getParam('id');
 
-                    // Mise en avant d'une pièce jointe (null = nul part, 0 = plan, 1 = diapo)
-                    if (
-                        $this->_request->PLACEMENT_ETABLISSEMENTPJ != 'null'
+                // Mise en avant d'une pièce jointe (null = nul part, 0 = plan, 1 = diapo)
+                if (
+                        'null' != $this->_request->PLACEMENT_ETABLISSEMENTPJ
                         && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])
                     ) {
-                        $miniature = $nouvellePJ;
-                        $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
-                        $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->_getParam('id'), true);
+                    $miniature = $nouvellePJ;
+                    $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
+                    $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->_getParam('id'), true);
 
-                        // On resize l'image
-                        GD_Resize::run($file_path, $miniature_path, 450);
+                    // On resize l'image
+                    GD_Resize::run($file_path, $miniature_path, 450);
 
-                        $linkPj->PLACEMENT_ETABLISSEMENTPJ = $this->_request->PLACEMENT_ETABLISSEMENTPJ;
-                    }
-                } elseif ($this->_getParam('type') == 'dateCommission') {
-                    // Modèles
-                    $DBsave = new Model_DbTable_DateCommissionPj();
-
-                    // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
-                    $linkPj = $DBsave->createRow();
-                    $linkPj->ID_DATECOMMISSION = $this->_getParam('id');
+                    $linkPj->PLACEMENT_ETABLISSEMENTPJ = $this->_request->PLACEMENT_ETABLISSEMENTPJ;
                 }
+            } elseif ('dateCommission' == $this->_getParam('type')) {
+                // Modèles
+                $DBsave = new Model_DbTable_DateCommissionPj();
 
-                // On met l'id de la pièce jointe créée
-                $linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
-
-                // On sauvegarde le tout
-                $linkPj->save();
-
-                $this->_helper->flashMessenger([
-                    'context' => 'success',
-                    'title' => 'La pièce jointe '.$nouvellePJ->NOM_PIECEJOINTE.' a bien été ajoutée',
-                    'message' => '',
-                ]);
-
-                // CALLBACK
-                echo "<script type='text/javascript'>window.top.window.callback('".$nouvellePJ->ID_PIECEJOINTE."', '".$extension."');</script>";
+                // On créé une nouvelle ligne, et on y met une bonne clé étrangère en fonction du type
+                $linkPj = $DBsave->createRow();
+                $linkPj->ID_DATECOMMISSION = $this->_getParam('id');
             }
+
+            // On met l'id de la pièce jointe créée
+            $linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
+
+            // On sauvegarde le tout
+            $linkPj->save();
+
+            $this->_helper->flashMessenger([
+                'context' => 'success',
+                'title' => 'La pièce jointe '.$nouvellePJ->NOM_PIECEJOINTE.' a bien été ajoutée',
+                'message' => '',
+            ]);
+
+            // CALLBACK
+            echo "<script type='text/javascript'>window.top.window.callback('".$nouvellePJ->ID_PIECEJOINTE."', '".$extension."');</script>";
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
@@ -267,33 +269,39 @@ class PieceJointeController extends Zend_Controller_Action
             switch ($this->_request->type) {
                 case 'dossier':
                     $DBitem = new Model_DbTable_DossierPj();
+
                     break;
+
                 case 'etablissement':
                     $DBitem = new Model_DbTable_EtablissementPj();
+
                     break;
+
                 case 'dateCommission':
                     $DBitem = new Model_DbTable_DateCommissionPj();
+
                     break;
+
                 default:
                     break;
             }
 
             // On supprime dans la BDD et physiquement
             if (
-                $pj != null
-                && $DBitem != null
+                null != $pj
+                && null != $DBitem
             ) {
                 // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
                 $modelDossier = new Model_DbTable_Dossier();
 
                 $dossier = $modelDossier->find($this->_request->id)->current();
 
-                if ($dossier['ID_PLATAU'] !== null) {
+                if (null !== $dossier['ID_PLATAU']) {
                     $file_path = implode(DS, [
                         REAL_DATA_PATH,
                         'uploads',
                         'pieces-jointes',
-                        $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE
+                        $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE,
                     ]);
                 } else {
                     $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
@@ -337,11 +345,11 @@ class PieceJointeController extends Zend_Controller_Action
 
         // FIXME Pourquoi on a une liste alors qu'on a tout le temps maximum 1 résultat ????
         // Cas dossier
-        if ($this->_request->type == 'dossier') {
+        if ('dossier' == $this->_request->type) {
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_PIECEJOINTE', $this->_request->idpj);
-        } elseif ($this->_request->type == 'etablissement') { // Cas établissement
+        } elseif ('etablissement' == $this->_request->type) { // Cas établissement
             $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_PIECEJOINTE', $this->_request->idpj);
-        } elseif ($this->_request->type == 'dateCommission') { // Cas d'une date de commission
+        } elseif ('dateCommission' == $this->_request->type) { // Cas d'une date de commission
             $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE', $this->_request->idpj);
         } else { // Cas par défaut
             $listePj = [];
@@ -358,12 +366,12 @@ class PieceJointeController extends Zend_Controller_Action
 
         $dossier = $modelDossier->find($this->_request->id)->current();
 
-        if ($dossier['ID_PLATAU'] !== null) {
+        if (null !== $dossier['ID_PLATAU']) {
             $file_path = implode(DS, [
                 REAL_DATA_PATH,
                 'uploads',
                 'pieces-jointes',
-                $pj['ID_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE']
+                $pj['ID_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'],
             ]);
         } else {
             $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);

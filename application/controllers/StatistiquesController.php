@@ -32,7 +32,7 @@
         public function extractionProcess($champs_supplementaires, $noms_des_colonnes_a_afficher, Model_DbTable_Statistiques $requete)
         {
             // Si on interroge l'action en json, on demande les champs supplémentaires
-            if ($this->_getParam('format') == 'json') {
+            if ('json' == $this->_getParam('format')) {
                 $this->view->result = $champs_supplementaires;
             } else {
                 $this->view->columns = $noms_des_colonnes_a_afficher;
@@ -49,7 +49,7 @@
         {
             $model_stat = new Model_DbTable_Statistiques();
 
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
                 $this->view->resume = 'Liste ERP en exploitation connus soumis à contrôle à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
@@ -72,7 +72,7 @@
                 ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()
             );
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $this->render('extraction');
             }
         }
@@ -82,7 +82,7 @@
         {
             $model_stat = new Model_DbTable_Statistiques();
 
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
                 $this->view->resume = 'Liste ERP en exploitation sous avis défavorable à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
@@ -120,7 +120,7 @@
                 ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->_getParam('tri'))
             );
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $this->render('extraction');
             }
         }
@@ -138,7 +138,7 @@
                 $communes[$commune['LIBELLE_COMMUNE']] = $commune['NUMINSEE_COMMUNE'];
             }
 
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
                 $this->view->resume = 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
@@ -177,7 +177,7 @@
                 ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->_getParam('commune'))->trierPar($this->_getParam('tri'))
             );
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $this->render('extraction');
             }
         }
@@ -189,7 +189,7 @@
             $dateDebut = date('01/01/'.date('Y'), time());
             $dateFin = date('31/12/'.date('Y'), time());
 
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
                 $this->view->resume = 'Liste ERP avec des visites periodiques à partir du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
@@ -231,20 +231,20 @@
                 $model_stat->listeDesERPVisitePeriodique($this->_getParam('date'), $this->_getParam('datefin'))->trierPar($this->_getParam('tri'))
             );
 
-            if ($this->_getParam('format') != 'json') {
+            if ('json' != $this->_getParam('format')) {
                 $results = $this->view->results;
                 foreach ($results as $key => $row) {
-                    if ($row['DATEVISITE_DOSSIER'] == null) {
+                    if (null == $row['DATEVISITE_DOSSIER']) {
                         $results[$key]['DATEVISITE_DOSSIER'] = "<a href='/dossier/add/id_etablissement/".$row['ID_ETABLISSEMENT']."'>Programmer une visite</a>";
                     }
 
-                    if ($row['NOM_UTILISATEURINFORMATIONS'] == null) {
+                    if (null == $row['NOM_UTILISATEURINFORMATIONS']) {
                         $results[$key]['NOM_UTILISATEURINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Ajouter un préventionniste</a>";
                     }
 
-                    if ($row['PERIODICITE_ETABLISSEMENTINFORMATIONS'] != 0) {
+                    if (0 != $row['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
                         $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = '';
-                        if ($row['DATEVISITE_DOSSIER'] != null) {
+                        if (null != $row['DATEVISITE_DOSSIER']) {
                             $date = $row['DATEVISITE_DOSSIER'];
                             $d = new DateTime($date);
                             $i = new DateInterval('P'.$row['PERIODICITE_ETABLISSEMENTINFORMATIONS'].'M');

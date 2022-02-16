@@ -12,6 +12,7 @@ class Api_Service_Etablissement
     public function get($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->get($id);
     }
 
@@ -25,6 +26,7 @@ class Api_Service_Etablissement
     public function getHistorique($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getHistorique($id);
     }
 
@@ -38,6 +40,7 @@ class Api_Service_Etablissement
     public function getDescriptifs($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getDescriptifs($id);
     }
 
@@ -51,6 +54,7 @@ class Api_Service_Etablissement
     public function getTextesApplicables($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getAllTextesApplicables($id);
     }
 
@@ -64,6 +68,7 @@ class Api_Service_Etablissement
     public function getPiecesJointes($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getAllPJ($id);
     }
 
@@ -105,6 +110,7 @@ class Api_Service_Etablissement
     public function getContacts($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getAllContacts($id);
     }
 
@@ -118,6 +124,7 @@ class Api_Service_Etablissement
     public function getDossiers($id)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getDossiers($id);
     }
 
@@ -138,6 +145,7 @@ class Api_Service_Etablissement
     public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
     {
         $service_etablissement = new Service_Etablissement();
+
         return $service_etablissement->getDefaultValues($genre, $numinsee, $type, $categorie, $local_sommeil, $classe, $id_etablissement_pere, $ids_etablissements_enfants);
     }
 }

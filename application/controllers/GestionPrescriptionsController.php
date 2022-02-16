@@ -7,8 +7,9 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('selectiontexte', 'json')
-                        ->addActionContext('selectionarticle', 'json')
-                        ->initContext();
+            ->addActionContext('selectionarticle', 'json')
+            ->initContext()
+        ;
 
         $this->_helper->layout->setLayout('menu_admin');
     }
@@ -70,7 +71,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-    /* GESTION CATEGORIES */
+    // GESTION CATEGORIES
     public function formcategorieAction()
     {
         if ($this->_getParam('id')) {
@@ -118,7 +119,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-    /* GESTION TEXTES */
+    // GESTION TEXTES
     public function formtexteAction()
     {
         if ($this->_getParam('idCat')) {
@@ -178,7 +179,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-    /* GESTION ARTICLES */
+    // GESTION ARTICLES
     public function formarticleAction()
     {
         if ($this->_getParam('idTexte')) {
@@ -261,14 +262,18 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 case 'addPrescriptionCat':
                     //cas d'une prescription dans une catégorie
                     $this->view->categorie = $this->_getParam('empl');
+
                     break;
+
                 case 'addPrescriptionTexte':
                     //cas d'une prescription dans un texte
                     $dbPrescTexte = new Model_DbTable_PrescriptionTexte();
                     $texteInfo = $dbPrescTexte->find($this->_getParam('empl'))->current();
                     $this->view->categorie = $texteInfo->ID_PRESCRIPTIONCAT;
                     $this->view->texte = $this->_getParam('empl');
+
                     break;
+
                 case 'addPrescriptionArticle':
                     //cas d'une prescription dans un article
                     $dbPrescArticle = new Model_DbTable_PrescriptionArticle();
@@ -280,7 +285,9 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->view->categorie = $texteInfo->ID_PRESCRIPTIONCAT;
 
                     $this->view->article = $this->_getParam('empl');
+
                     break;
+
                 default:
                     break;
             }
@@ -344,7 +351,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $post = $this->_request->getPost();
                 $service_prescription = new Service_Prescriptions();
 
-                if ($post['ID_PRESCRIPTIONTYPE'] != '') {
+                if ('' != $post['ID_PRESCRIPTIONTYPE']) {
                     $idPrescriptionType = $service_prescription->savePrescriptionType($post, $post['ID_PRESCRIPTIONTYPE']);
                 } else {
                     $idPrescriptionType = $service_prescription->savePrescriptionType($post);
@@ -362,7 +369,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         }
     }
 
-    /* GESTION DES TEXTES */
+    // GESTION DES TEXTES
     public function gestionTextesAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
@@ -371,13 +378,13 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             try {
                 $post = $this->_request->getPost();
-                if ($post['action'] == 'add') {
+                if ('add' == $post['action']) {
                     $service_prescTextes->saveTexte($post);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'La texte a bien été enregistré']);
-                } elseif ($post['action'] == 'edit') {
+                } elseif ('edit' == $post['action']) {
                     $service_prescTextes->saveTexte($post, $post['id_texte']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'La texte a bien été enregistré']);
-                } elseif ($post['action'] == 'replace') {
+                } elseif ('replace' == $post['action']) {
                     $service_prescTextes->replaceTexte($post['id_texte'], $post['idTexteReplace']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé']);
                 }
@@ -426,7 +433,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->liste_textes = $liste_textes;
     }
 
-    /* GESTION DES ARTICLES */
+    // GESTION DES ARTICLES
     public function gestionArticlesAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
@@ -436,13 +443,13 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             try {
                 $post = $this->_request->getPost();
-                if ($post['action'] == 'add') {
+                if ('add' == $post['action']) {
                     $service_prescription->saveArticle($post);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'L\'article a bien été enregistré']);
-                } elseif ($post['action'] == 'edit') {
+                } elseif ('edit' == $post['action']) {
                     $service_prescription->saveArticle($post, $post['id_article']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'L\'article a bien été enregistré']);
-                } elseif ($post['action'] == 'replace') {
+                } elseif ('replace' == $post['action']) {
                     $service_prescription->replaceArticle($post['id_article'], $post['idArticleReplace']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'L\'article a bien été supprimé']);
                 }
@@ -490,7 +497,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->liste_articles = $liste_articles;
     }
 
-    /* GESTION DES RAPPELS REGLEMENTAIRES */
+    // GESTION DES RAPPELS REGLEMENTAIRES
     public function gestionRappelRegAction()
     {
         $service_prescription = new Service_Prescriptions();
@@ -498,10 +505,10 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             $post = $this->_request->getPost();
 
-            if ($post['action'] == 'add') {
+            if ('add' == $post['action']) {
                 $service_prescription->savePrescription($post);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'Le rappel réglementaire a bien été enregistré']);
-            } elseif ($post['action'] == 'edit') {
+            } elseif ('edit' == $post['action']) {
                 $service_prescription->savePrescription($post, $post['idPrescription']);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Rappel réglementaire modifié.', 'message' => 'Le rappel réglementaire a bien été modifié']);
             }
@@ -548,7 +555,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->view->libelle = $prescriptionInfo[0]['PRESCRIPTIONREGL_LIBELLE'];
     }
 
-    /* FORMULAIRE DE PRESCRIPTIONS */
+    // FORMULAIRE DE PRESCRIPTIONS
     public function prescriptionFormAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
@@ -560,6 +567,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
         if ($this->_request->isPost()) {
             $service_prescription = new Service_Prescriptions();
+
             try {
                 $post = $this->_request->getPost();
                 if (isset($post['prescType'])) {

@@ -6,16 +6,19 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_UTILISATEUR'; // Clé primaire
 
     /**
-     * @return array[]|null
-     *
      * @psalm-return array<int, array{uid:mixed, nom:mixed, prenom:mixed}>|null
+     *
+     * @param mixed $commune
+     * @param mixed $id_pere
+     *
+     * @return null|array[]
      */
     public function getPrev($commune, $id_pere)
     {
         $array_result = [];
 
         // On vérfie si l'établissement père à des prev
-        if ($id_pere != '') {
+        if ('' != $id_pere) {
             $search = new Model_DbTable_Search();
             $prev_du_pere = $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_pere)->run();
             if (count($prev_du_pere) > 0) {
@@ -32,7 +35,7 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
         }
 
         // On check les prev du groupement
-        if ($commune != '') {
+        if ('' != $commune) {
             $model_gpt = new Model_DbTable_Groupement();
             $gpt = $model_gpt->getGroupementParVille($commune);
             $prev_des_gpts = $model_gpt->getPreventionnistesByGpt($gpt);

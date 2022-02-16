@@ -6,6 +6,8 @@ class Model_DbTable_PrescriptionTypeAssoc extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_PRESCRIPTIONTYPE', 'NUM_PRESCRIPTIONASSOC']; // Clé primaire
 
     /**
+     * @param mixed $idPrescriptionType
+     *
      * @return array
      */
     public function getPrescriptionAssoc($idPrescriptionType)
@@ -17,7 +19,8 @@ class Model_DbTable_PrescriptionTypeAssoc extends Zend_Db_Table_Abstract
             ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pta.ID_ARTICLE')
             ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pta.ID_TEXTE')
             ->where('pta.ID_PRESCRIPTIONTYPE = ?', $idPrescriptionType)
-            ->order('pta.NUM_PRESCRIPTIONASSOC');
+            ->order('pta.NUM_PRESCRIPTIONASSOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }

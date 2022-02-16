@@ -30,7 +30,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             $result[$tableau[$i]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $tableau[$i]['PERIODICITE_PERIODICITE'];
 
             // Avec local (on exclu igh == categ à 0)
-            if ($tableau[$i]['ID_CATEGORIE'] != 0) {
+            if (0 != $tableau[$i]['ID_CATEGORIE']) {
                 $result[$tableau[$i++]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $tableau[$i]['PERIODICITE_PERIODICITE'];
             }
         }
@@ -50,7 +50,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             foreach ($request->getPost() as $key => $value) {
                 $result = explode('_', $key);
 
-                if ($item = $perio_model->find($result[0], $result[1], $result[2])->current() == null) {
+                if ($item = null == $perio_model->find($result[0], $result[1], $result[2])->current()) {
                     $item = $perio_model->createRow();
                 } else {
                     $item = $perio_model->find($result[0], $result[1], $result[2])->current();

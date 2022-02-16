@@ -7,7 +7,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     //Fonction qui récupére toutes les infos générales d'un dossier
     /**
-     * @param string|int|float $id
+     * @param float|int|string $id
      */
     public function getGeneral($id)
     {
@@ -17,7 +17,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
             join commission c ON d.COMMISSION_DOSSIER = c.ID_COMMISSION
             join commissiontype ct ON c.ID_COMMISSIONTYPE = ct.ID_COMMISSIONTYPE
-            where d.ID_DOSSIER = '$id'
+            where d.ID_DOSSIER = '{$id}'
             and d.DATESUPPRESSION_DOSSIER IS NULL;
         ";
 
@@ -27,7 +27,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     //Fonction qui récupére tous les établissements concernés par le dossier
     //PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
     /**
-     * @param string|int $id_etablissement
+     * @param int|string $id_etablissement
      *
      * @return array
      */
@@ -48,7 +48,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     //Fonction qui récup tous les établissements liés au dossier LAST VERSION
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      *
      * @return array
      */
@@ -75,6 +75,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     // Fonction optimisée pour les ACL
     /**
+     * @param mixed $id_dossier
+     *
      * @return array
      */
     public function getEtablissementDossier2($id_dossier)
@@ -84,14 +86,15 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from('etablissementdossier', ['etablissementdossier.ID_ETABLISSEMENT'])
             ->joinLeftUsing(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
             ->where('etablissementdossier.ID_DOSSIER = ?', $id_dossier)
-            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL');
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
 
     //autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
     /**
-     * @param string|int $etablissementLibelle
+     * @param int|string $etablissementLibelle
      *
      * @return array
      */
@@ -113,7 +116,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     //Fonction qui récupère toutes les cellules concernées par le dossier
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      *
      * @return array
      */
@@ -135,13 +138,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('dossier', 'TYPE_DOSSIER')
-            ->where('dossier.ID_DOSSIER = ?', $id_dossier);
+            ->where('dossier.ID_DOSSIER = ?', $id_dossier)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      */
     public function getNatureDossier($id_dossier)
     {
@@ -154,7 +158,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      */
     public function getCommissionDossier($id_dossier)
     {
@@ -173,13 +177,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from(['d' => 'dossier'], 'd.ID_DOSSIER')
             ->join(['c' => 'commission'], 'd.COMMISSION_DOSSIER = c.ID_COMMISSION')
             ->join(['ct' => 'commissiontype'], 'c.ID_COMMISSIONTYPE = ct.ID_COMMISSIONTYPE')
-            ->where('d.ID_DOSSIER = ?', $idDossier);
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      */
     public function getGenerationInfos($id_dossier)
     {
@@ -197,7 +202,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     // Retourne la liste de tout les dossiers (études et/ou visite) d'un établissement
     // Si type vaut 1 : visites ; 0 : études
     /**
-     * @param string|int|float $etablissement
+     * @param float|int|string $etablissement
+     * @param null|mixed       $type
      *
      * @return array
      */
@@ -208,12 +214,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from('etablissementdossier', null)
             ->join('dossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'LIBELLE_DOSSIER', 'OBJET_DOSSIER', 'DESCRIPTIFGEN_DOSSIER', 'DATESECRETARIAT_DOSSIER'])
             ->join('dossiertype', 'dossier.TYPE_DOSSIER = dossiertype.ID_DOSSIERTYPE', 'VISITEBOOL_DOSSIERTYPE')
-            ->where("etablissementdossier.ID_ETABLISSEMENT = $etablissement")
+            ->where("etablissementdossier.ID_ETABLISSEMENT = {$etablissement}")
             ->where('dossier.DATESUPPRESSION_DOSSIER IS NULL')
-            ->order('dossier.DATESECRETARIAT_DOSSIER DESC');
+            ->order('dossier.DATESECRETARIAT_DOSSIER DESC')
+        ;
 
-        if ($type == '1' || $type == '0') {
-            $select->where("dossiertype.VISITEBOOL_DOSSIERTYPE = $type");
+        if ('1' == $type || '0' == $type) {
+            $select->where("dossiertype.VISITEBOOL_DOSSIERTYPE = {$type}");
         }
 
         return $this->fetchAll($select)->toArray();
@@ -221,17 +228,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     public function getLastInfosEtab($idEtablissement)
     {
-        $select = "SELECT ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
+        $select = 'SELECT ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
             FROM etablissementinformations,genre
             WHERE genre.ID_GENRE = etablissementinformations.ID_GENRE;
-        ";
+        ';
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
-     * @param string|int $idEtablissement
-     * @param string|int $idDossier
+     * @param int|string $idEtablissement
+     * @param int|string $idDossier
      *
      * @return array
      */
@@ -261,7 +268,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idDossier
+     * @param int|string $idDossier
      *
      * @return array
      */
@@ -281,15 +288,16 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function findLastVp($idEtab)
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from(['d' => 'dossier'])
-                ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
-                ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
-                ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
-                ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
-                ->where('d.DATEVISITE_DOSSIER IS NOT NULL')
-                ->order('d.DATEVISITE_DOSSIER desc')
-                ->limit(1);
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
+            ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
+            ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
+            ->where('d.DATEVISITE_DOSSIER IS NOT NULL')
+            ->order('d.DATEVISITE_DOSSIER desc')
+            ->limit(1)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
@@ -297,17 +305,18 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function findLastVpCreationDoc($idEtab, $idDossier, $dateVisite)
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from(['d' => 'dossier'])
-                ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
-                ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
-                ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
-                ->where('ed.ID_DOSSIER <> ?', $idDossier)
-                ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
-                ->where('d.DATEVISITE_DOSSIER IS NOT NULL')
-                ->where('d.DATEVISITE_DOSSIER < ?', $dateVisite)
-                ->order('d.DATEVISITE_DOSSIER desc')
-                ->limit(1);
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
+            ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
+            ->where('ed.ID_DOSSIER <> ?', $idDossier)
+            ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
+            ->where('d.DATEVISITE_DOSSIER IS NOT NULL')
+            ->where('d.DATEVISITE_DOSSIER < ?', $dateVisite)
+            ->order('d.DATEVISITE_DOSSIER desc')
+            ->limit(1)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
@@ -318,13 +327,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from(['a' => 'avis'], 'LIBELLE_AVIS')
             ->join(['d' => 'dossier'], 'd.AVIS_DOSSIER_COMMISSION = a.ID_AVIS')
-            ->where('d.ID_DOSSIER = ?', $id_dossier);
+            ->where('d.ID_DOSSIER = ?', $id_dossier)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      *
      * @return array
      */
@@ -343,11 +353,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             GROUP BY ID_ETABLISSEMENT;
         ";
 
-
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $idsCommission
+     * @param mixed $sinceDays
+     * @param mixed $untilDays
+     *
      * @return array
      */
     public function listeDesDossierDateCommissionEchu($idsCommission, $sinceDays = 10, $untilDays = 100)
@@ -355,24 +368,25 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $ids = (array) $idsCommission;
 
         $select = $this->select()->setIntegrityCheck(false)
-                     ->from(['d' => 'dossier'])
-                     ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
-                     ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
-                     ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
-                     ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
-                     ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
-                     ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
-                     ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
-                     ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
-                     ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = dossierpreventionniste.ID_PREVENTIONNISTE', 'ID_UTILISATEUR')
-                     ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
-                     ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER')
-                     ->joinLeft('datecommission', 'dossieraffectation.ID_DATECOMMISSION_AFFECT = datecommission.ID_DATECOMMISSION ')
-                     ->group('d.ID_DOSSIER')
-                     ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.((int) $sinceDays))
-                     ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.((int) $untilDays))
-                     ->where('d.AVIS_DOSSIER_COMMISSION IS NULL or d.AVIS_DOSSIER_COMMISSION = 0')
-                     ->order('datecommission.DATE_COMMISSION desc');
+            ->from(['d' => 'dossier'])
+            ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
+            ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
+            ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
+            ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+            ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+            ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = dossierpreventionniste.ID_PREVENTIONNISTE', 'ID_UTILISATEUR')
+            ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
+            ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER')
+            ->joinLeft('datecommission', 'dossieraffectation.ID_DATECOMMISSION_AFFECT = datecommission.ID_DATECOMMISSION ')
+            ->group('d.ID_DOSSIER')
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.((int) $sinceDays))
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.((int) $untilDays))
+            ->where('d.AVIS_DOSSIER_COMMISSION IS NULL or d.AVIS_DOSSIER_COMMISSION = 0')
+            ->order('datecommission.DATE_COMMISSION desc')
+        ;
 
         if (count($ids) > 0) {
             $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
@@ -411,13 +425,12 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     //Fonction qui récup tous les établissements liés au dossier LAST VERSION
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      *
      * @return array
      */
     public function getPreventionnistesDossier($id_dossier)
     {
-
         //retourne la liste des catégories de prescriptions par ordre
         $select = "SELECT usrinfos.*
             FROM dossierpreventionniste, utilisateur usr, utilisateurinformations usrinfos
@@ -432,7 +445,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     // Retourne la liste de tout les dossiers d'un Etablissement
     /**
-     * @param string|int $etablissement
+     * @param int|string $etablissement
      *
      * @return array
      */
@@ -450,7 +463,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     // Retourne l'ID du dernier dossier donnant avis pour un établissement donné
     /**
-     * @param string|int|float $idEtab
+     * @param float|int|string $idEtab
      */
     public function getDernierIdDossierDonnantAvis($idEtab)
     {
@@ -460,7 +473,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
-                where e.ID_ETABLISSEMENT = '$idEtab'
+                where e.ID_ETABLISSEMENT = '{$idEtab}'
                 and dn.ID_NATURE in (7,16,17,19,21,23,24,26,28,29,47,48)
                 and d.AVIS_DOSSIER_COMMISSION in (1,2)
                 and d.DATESUPPRESSION_DOSSIER IS NULL
@@ -472,7 +485,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
-                where e.ID_ETABLISSEMENT = '$idEtab'
+                where e.ID_ETABLISSEMENT = '{$idEtab}'
                 and dn.ID_NATURE in (7,16,17,19,21,23,24,26,28,29,47,48)
                 and d.AVIS_DOSSIER_COMMISSION in (1,2)
                 and d.DATESUPPRESSION_DOSSIER IS NULL
@@ -486,7 +499,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers provenant de Plat'au et n'étant liés à aucun établissement
+     * Retourne la liste des dossiers provenant de Plat'au et n'étant liés à aucun établissement.
      */
     public function getAllDossierPlatAU()
     {
@@ -498,7 +511,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                         FROM dossier
                         INNER JOIN dossierdocurba ON dossierdocurba.ID_DOSSIER = dossier.ID_DOSSIER
                         WHERE dossier.ID_DOSSIER = d.ID_DOSSIER
-                        LIMIT 1)")
+                        LIMIT 1)"),
                 ]
             )
             ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE', 'dt.LIBELLE_DOSSIERTYPE')
@@ -511,7 +524,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    /* Récupère les dossiers d'un établissement par type */
+    // Récupère les dossiers d'un établissement par type
     public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
     {
         $select = $this->select()
@@ -520,20 +533,28 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
             ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
             ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
-            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement);
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
 
         switch ($type) {
-            case "etudes":
+            case 'etudes':
                 $select->where('dt.ID_DOSSIERTYPE = 1');
+
                 break;
-            case "visites":
+
+            case 'visites':
                 $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+
                 break;
-            case "autres":
+
+            case 'autres':
                 $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+
                 break;
+
             default:
                 throw new Exception(sprintf('Type %s non supporté', $type));
+
                 break;
         }
 

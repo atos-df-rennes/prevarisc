@@ -6,6 +6,7 @@ class Service_GroupementCommunes
      * Récupération de tous les groupements.
      *
      * @param int numinsee Optionnel
+     * @param null|mixed $num_insee
      *
      * @return array
      */
@@ -13,7 +14,7 @@ class Service_GroupementCommunes
     {
         $model_groupement = new Model_DbTable_Groupement();
 
-        if ($num_insee !== null) {
+        if (null !== $num_insee) {
             return $model_groupement->getGroupementParVille($num_insee);
         }
 
@@ -26,7 +27,7 @@ class Service_GroupementCommunes
     {
         $model_groupement = new Model_DbTable_Groupement();
 
-        if ($num_insee !== null) {
+        if (null !== $num_insee) {
             return $model_groupement->getGroupementParVille($num_insee);
         }
 

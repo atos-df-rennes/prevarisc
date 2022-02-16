@@ -6,6 +6,8 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_DATECOMMISSION'; // Clé primaire
 
     /**
+     * @param mixed $dateCommId
+     *
      * @return array
      */
     public function getDossiersInfos($dateCommId)
@@ -18,12 +20,15 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->join(['dossNat' => 'dossiernature'], 'dossNat.ID_DOSSIER = doss.ID_DOSSIER')
             ->join(['dossNatListe' => 'dossiernatureliste'], 'dossNat.ID_NATURE = dossNatListe.ID_DOSSIERNATURE')
             ->where('dateComm.ID_DATECOMMISSION = ?', $dateCommId)
-            ->group('doss.ID_DOSSIER');
+            ->group('doss.ID_DOSSIER')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $dateCommId
+     *
      * @return array
      */
     public function getDossiersInfosByHour($dateCommId)
@@ -38,12 +43,15 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->join(['dossNatListe' => 'dossiernatureliste'], 'dossNat.ID_NATURE = dossNatListe.ID_DOSSIERNATURE')
             ->where('dateComm.ID_DATECOMMISSION = ?', $dateCommId)
             ->group('doss.ID_DOSSIER')
-            ->order('dossAffect.HEURE_DEB_AFFECT');
+            ->order('dossAffect.HEURE_DEB_AFFECT')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $dateCommId
+     *
      * @return array
      */
     public function getDossiersInfosByOrder($dateCommId)
@@ -58,12 +66,15 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->join(['dossNatListe' => 'dossiernatureliste'], 'dossNat.ID_NATURE = dossNatListe.ID_DOSSIERNATURE')
             ->where('dateComm.ID_DATECOMMISSION = ?', $dateCommId)
             ->group('doss.ID_DOSSIER')
-            ->order('dossAffect.NUM_DOSSIER');
+            ->order('dossAffect.NUM_DOSSIER')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $dateCommId
+     *
      * @return array
      */
     public function TESTRECUPDOSS($dateCommId)
@@ -77,12 +88,15 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->join(['dossNatListe' => 'dossiernatureliste'], 'dossNat.ID_NATURE = dossNatListe.ID_DOSSIERNATURE')
             ->where('dateComm.ID_DATECOMMISSION = ?', $dateCommId)
             ->group('doss.ID_DOSSIER')
-            ->order('dossAffect.NUM_DOSSIER');
+            ->order('dossAffect.NUM_DOSSIER')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $dateCommId
+     *
      * @return array
      */
     public function TESTRECUPDOSSHEURE($dateCommId)
@@ -97,15 +111,16 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->where('dateComm.ID_DATECOMMISSION = ?', $dateCommId)
             ->where('dossAffect.HEURE_DEB_AFFECT IS NOT NULL')
             ->group('doss.ID_DOSSIER')
-            ->order('dossAffect.HEURE_DEB_AFFECT');
+            ->order('dossAffect.HEURE_DEB_AFFECT')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
-     * @param string|int $idComm
+     * @param int|string $idComm
      *
-     * @return array|null
+     * @return null|array
      */
     public function getPjInfos($idComm)
     {
@@ -113,8 +128,9 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('piecejointe')
             ->join('datecommissionpj', 'datecommissionpj.ID_PIECEJOINTE = piecejointe.ID_PIECEJOINTE')
-            ->where('datecommissionpj.ID_DATECOMMISSION = '.$idComm);
+            ->where('datecommissionpj.ID_DATECOMMISSION = '.$idComm)
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 }

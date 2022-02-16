@@ -6,6 +6,8 @@ class Model_DbTable_PrescriptionReglAssoc extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_PRESCRIPTIONREGL', 'NUM_PRESCRIPTIONASSOC']; // Clé primaire
 
     /**
+     * @param mixed $idPrescriptionRegl
+     *
      * @return array
      */
     public function getPrescriptionReglAssoc($idPrescriptionRegl)
@@ -17,12 +19,15 @@ class Model_DbTable_PrescriptionReglAssoc extends Zend_Db_Table_Abstract
             ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pra.ID_ARTICLE')
             ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pra.ID_TEXTE')
             ->where('pr.ID_PRESCRIPTIONREGL = ?', $idPrescriptionRegl)
-            ->order('pra.NUM_PRESCRIPTIONASSOC');
+            ->order('pra.NUM_PRESCRIPTIONASSOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $idPrescription
+     *
      * @return array
      */
     public function getPrescriptionListeAssoc($idPrescription)
@@ -33,7 +38,8 @@ class Model_DbTable_PrescriptionReglAssoc extends Zend_Db_Table_Abstract
             ->join(['pra' => 'prescriptionreglassoc'], 'pr.ID_PRESCRIPTIONREGL = pra.ID_PRESCRIPTIONREGL')
             ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pra.ID_ARTICLE')
             ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pra.ID_TEXTE')
-            ->where('pr.ID_PRESCRIPTIONREGL = ?', $idPrescription);
+            ->where('pr.ID_PRESCRIPTIONREGL = ?', $idPrescription)
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }

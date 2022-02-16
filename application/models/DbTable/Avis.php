@@ -7,11 +7,13 @@ class Model_DbTable_Avis extends Zend_Db_Table_Abstract
 
     //Fonction qui récupère tous les avis existant pour créer un select par exemple
     /**
+     * @param mixed $tousLesChamps
+     *
      * @return array
      */
     public function getAvis($tousLesChamps = 1)
     {
-        if ($tousLesChamps == 1) {
+        if (1 == $tousLesChamps) {
             $select = 'SELECT *
                 FROM avis
             ;';
@@ -25,11 +27,12 @@ class Model_DbTable_Avis extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idAvis
+     * @param int|string $idAvis
+     * @param mixed      $tousLesChamps
      */
     public function getAvisLibelle($idAvis, $tousLesChamps = 1)
     {
-        if ($tousLesChamps == 1) {
+        if (1 == $tousLesChamps) {
             $select = "SELECT *
                 FROM avis
                 WHERE ID_AVIS = '".$idAvis."'

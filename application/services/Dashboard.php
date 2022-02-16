@@ -5,7 +5,6 @@ class Service_Dashboard
     protected $options = [];
 
     protected $blocsConfig = [
-
         // lié aux commissions
         'nextCommissions' => [
             'service' => 'Service_Dashboard',
@@ -174,7 +173,7 @@ class Service_Dashboard
         'dossierPlatau' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersPlatAUSansEtablissement',
-            'acl' => ['dashboard','view_doss_platau_sans_etab'],
+            'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
             'title' => 'Dossiers Plat\'AU à traiter',
             'type' => 'dossierPlatau',
             'height' => 'small',
@@ -187,7 +186,6 @@ class Service_Dashboard
      */
     public function __construct($options = [])
     {
-
         // default options
         $this->options = array_merge([
             'next_commissions_days' => 15,
@@ -215,40 +213,11 @@ class Service_Dashboard
     }
 
     /**
-     * @return array
-     *
-     * @psalm-return array<int, mixed>
-     */
-    protected function getCommissionUser($user): array
-    {
-        $commissionsUser = [];
-
-        if (isset($user['commissions']) && is_array($user['commissions'])) {
-            foreach ($user['commissions'] as $commission) {
-                $commissionsUser[] = $commission['ID_COMMISSION'];
-            }
-        }
-
-        return $commissionsUser;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getCommissionODJ($commission)
-    {
-        $dbDossierAffectation = new Model_DbTable_DossierAffectation();
-        $odj = array_merge(
-            $dbDossierAffectation->getDossierNonAffect($commission['ID_DATECOMMISSION']),
-            $dbDossierAffectation->getDossierAffect($commission['ID_DATECOMMISSION'])
-        );
-        return array_unique($odj, SORT_REGULAR);
-    }
-
-    /**
-     * @return array[]
-     *
      * @psalm-return array<int, array{id:mixed, LIBELLE_COMMISSION:mixed, LIBELLE_DATECOMMISSION:mixed, ID_COMMISSIONTYPEEVENEMENT:mixed, DATE_COMMISSION:mixed, HEUREDEB_COMMISSION:mixed, HEUREFIN_COMMISSION:mixed, heure:string, odj:mixed}>
+     *
+     * @param mixed $user
+     *
+     * @return array[]
      */
     public function getNextCommission($user): array
     {
@@ -264,16 +233,16 @@ class Service_Dashboard
         $commissions = [];
         foreach ($prochainesCommission as $commissiondujour) {
             $commissions[] = [
-               'id' => $commissiondujour['ID_DATECOMMISSION'],
-               'LIBELLE_COMMISSION' => $commissiondujour['LIBELLE_COMMISSION'],
-               'LIBELLE_DATECOMMISSION' => $commissiondujour['LIBELLE_DATECOMMISSION'],
-               'ID_COMMISSIONTYPEEVENEMENT' => $commissiondujour['ID_COMMISSIONTYPEEVENEMENT'],
-               'DATE_COMMISSION' => $commissiondujour['DATE_COMMISSION'],
-               'HEUREDEB_COMMISSION' => $commissiondujour['HEUREDEB_COMMISSION'],
-               'HEUREFIN_COMMISSION' => $commissiondujour['HEUREFIN_COMMISSION'],
-               'heure' => substr($commissiondujour['HEUREDEB_COMMISSION'], 0, 5).' - '.substr($commissiondujour['HEUREFIN_COMMISSION'], 0, 5),
-               'odj' => $this->getCommissionODJ($commissiondujour),
-           ];
+                'id' => $commissiondujour['ID_DATECOMMISSION'],
+                'LIBELLE_COMMISSION' => $commissiondujour['LIBELLE_COMMISSION'],
+                'LIBELLE_DATECOMMISSION' => $commissiondujour['LIBELLE_DATECOMMISSION'],
+                'ID_COMMISSIONTYPEEVENEMENT' => $commissiondujour['ID_COMMISSIONTYPEEVENEMENT'],
+                'DATE_COMMISSION' => $commissiondujour['DATE_COMMISSION'],
+                'HEUREDEB_COMMISSION' => $commissiondujour['HEUREDEB_COMMISSION'],
+                'HEUREFIN_COMMISSION' => $commissiondujour['HEUREFIN_COMMISSION'],
+                'heure' => substr($commissiondujour['HEUREDEB_COMMISSION'], 0, 5).' - '.substr($commissiondujour['HEUREFIN_COMMISSION'], 0, 5),
+                'odj' => $this->getCommissionODJ($commissiondujour),
+            ];
         }
 
         return $commissions;
@@ -328,6 +297,8 @@ class Service_Dashboard
     }
 
     /**
+     * @param mixed $user
+     *
      * @return array
      */
     public function getERPSuivis($user)
@@ -405,6 +376,7 @@ class Service_Dashboard
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
         $search->setCriteria('d.VERROU_DOSSIER', 0);
         $search->order('IFNULL(d.DATEVISITE_DOSSIER, d.DATEINSERT_DOSSIER) desc');
+
         return $search->run(false, null, false)->toArray();
     }
 
@@ -422,7 +394,7 @@ class Service_Dashboard
         $conditionEtudesSansAvis = 'd.AVIS_DOSSIER IS NULL AND (d.AVIS_DOSSIER_COMMISSION IS NULL OR d.AVIS_DOSSIER_COMMISSION = 0) AND d.TYPE_DOSSIER = 1';
         $conditionCourriersSansReponse = 'd.DATEREP_DOSSIER IS NULL AND d.TYPE_DOSSIER = 5';
 
-        $search->setCriteria("($conditionEtudesSansAvis) OR ($conditionCourriersSansReponse)");
+        $search->setCriteria("({$conditionEtudesSansAvis}) OR ({$conditionCourriersSansReponse})");
 
         $search->order('d.DATEINSERT_DOSSIER desc');
 
@@ -430,11 +402,12 @@ class Service_Dashboard
     }
 
     /**
-     * Retourne la liste des dossiers Plat'AU non associé à un etablissement
+     * Retourne la liste des dossiers Plat'AU non associé à un etablissement.
      */
     public function getDossiersPlatAUSansEtablissement()
     {
         $dbDossier = new Model_DbTable_Dossier();
+
         return $dbDossier->getAllDossierPlatAU();
     }
 
@@ -459,7 +432,7 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
-                if ($idNature == 19 || $idNature == 7 || $idNature == 46) {
+                if (19 == $idNature || 7 == $idNature || 46 == $idNature) {
                     unset($dossiers[$valCpt]);
                 }
             }
@@ -489,7 +462,7 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $tabType = $DBdossier->getTypeDossier($idLien);
-                if ($tabType['TYPE_DOSSIER'] == 0 || $tabType['TYPE_DOSSIER'] == 5) {
+                if (0 == $tabType['TYPE_DOSSIER'] || 5 == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
                 }
             }
@@ -519,7 +492,7 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $tabType = $DBdossier->getTypeDossier($idLien);
-                if ($tabType['TYPE_DOSSIER'] == 0 || $tabType['TYPE_DOSSIER'] == 5) {
+                if (0 == $tabType['TYPE_DOSSIER'] || 5 == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
                 }
             }
@@ -527,5 +500,39 @@ class Service_Dashboard
         }
 
         return $dossiers;
+    }
+
+    /**
+     * @psalm-return array<int, mixed>
+     *
+     * @param mixed $user
+     */
+    protected function getCommissionUser($user): array
+    {
+        $commissionsUser = [];
+
+        if (isset($user['commissions']) && is_array($user['commissions'])) {
+            foreach ($user['commissions'] as $commission) {
+                $commissionsUser[] = $commission['ID_COMMISSION'];
+            }
+        }
+
+        return $commissionsUser;
+    }
+
+    /**
+     * @param mixed $commission
+     *
+     * @return array
+     */
+    protected function getCommissionODJ($commission)
+    {
+        $dbDossierAffectation = new Model_DbTable_DossierAffectation();
+        $odj = array_merge(
+            $dbDossierAffectation->getDossierNonAffect($commission['ID_DATECOMMISSION']),
+            $dbDossierAffectation->getDossierAffect($commission['ID_DATECOMMISSION'])
+        );
+
+        return array_unique($odj, SORT_REGULAR);
     }
 }

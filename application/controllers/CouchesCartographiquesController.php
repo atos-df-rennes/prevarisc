@@ -11,7 +11,8 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('getCapabilities', 'json')
-                    ->initContext();
+            ->initContext()
+        ;
 
         $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
         $this->serviceCarto = new Service_Carto();

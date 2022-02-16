@@ -36,12 +36,12 @@ class View_Helper_AgendaMois
 
         // on affiche les jours du mois et aussi les jours du mois avant/apres, on les indique par une * a l'affichage on modifie l'apparence des chiffres *
         $tab_cal = [[], [], [], [], [], []]; // tab_cal[Semaine][Jour de la semaine]
-        $int_premj = ($int_premj == 0) ? 7 : $int_premj;
+        $int_premj = (0 == $int_premj) ? 7 : $int_premj;
         $t = 1;
         $p = '';
         for ($i = 0; $i < 6; ++$i) {
             for ($j = 0; $j < 7; ++$j) {
-                if ($j + 1 == $int_premj && $t == 1) {
+                if ($j + 1 == $int_premj && 1 == $t) {
                     $tab_cal[$i][$j] = $t;
                     ++$t;
                 } // on stocke le premier jour du mois
@@ -54,7 +54,7 @@ class View_Helper_AgendaMois
                     $tab_cal[$i][$j] = $p.'1';
                     $t = 2;
                 } // on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-                elseif ($t == 1) {
+                elseif (1 == $t) {
                     $tab_cal[$i][$j] = '*'.($int_nbjAV - ($int_premj - ($j + 1)) + 1);
                 } // on a pas encore mis les num du mois, on met ceux de celui d'avant
             }
@@ -78,7 +78,7 @@ class View_Helper_AgendaMois
             for ($j = 0; $j < 7; ++$j) {
                 //Cette condition permet de définir si le jour fait parti du mois en cours ou pas.
                 //Si le jour ne fait pas parti du mois il est affiché en gris clair sinon en noir.
-                if (strpos($tab_cal[$i][$j], '*') !== false) {
+                if (false !== strpos($tab_cal[$i][$j], '*')) {
                     $val = '<font color="#aaaaaa">'.str_replace('*', '', $tab_cal[$i][$j]).'</font>';
                     $id = 0;
                 } else {
@@ -92,7 +92,7 @@ class View_Helper_AgendaMois
                     $type = ' today';
                     foreach ($donnees as $boucle1 => $boucle2) {
                         foreach ($boucle2 as $libelle => $value) {
-                            if ($libelle == 'DATE_COMMISSION') {
+                            if ('DATE_COMMISSION' == $libelle) {
                                 $date = new Zend_Date($value, Zend_Date::DATES);
                                 if ($date->get(Zend_Date::DAY) == $val) {
                                     //Si un évenement du tableau correspond à la date alors on affiche qqch.
@@ -104,7 +104,7 @@ class View_Helper_AgendaMois
                 } else {
                     foreach ($donnees as $boucle1 => $boucle2) {
                         foreach ($boucle2 as $libelle => $value) {
-                            if ($libelle == 'DATE_COMMISSION') {
+                            if ('DATE_COMMISSION' == $libelle) {
                                 $date = new Zend_Date($value, Zend_Date::DATES);
                                 if ($date->get(Zend_Date::DAY) == $val) {
                                     //Si un évenement du tableau correspond à la date alors on affiche qqch.
@@ -121,6 +121,6 @@ class View_Helper_AgendaMois
         $result .= '
             </table>
         ';
-        echo  $result;
+        echo $result;
     }
 }

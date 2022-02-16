@@ -6,15 +6,18 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_TEXTE'; // Clé primaire
 
     /**
+     * @param null|mixed $visible
+     *
      * @return array
      */
     public function getAllTextes($visible = null)
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(['ptl' => 'prescriptiontexteliste']);
+            ->setIntegrityCheck(false)
+            ->from(['ptl' => 'prescriptiontexteliste'])
+        ;
 
-        if ($visible != null) {
+        if (null != $visible) {
             $select->where('VISIBLE_TEXTE = ?', $visible);
         }
 
@@ -26,14 +29,16 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
     public function getTexte($idTexte)
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->where('ID_TEXTE = ?', $idTexte);
+            ->setIntegrityCheck(false)
+            ->where('ID_TEXTE = ?', $idTexte)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $idOldTexte
+     * @param int|string $idOldTexte
+     * @param mixed      $idNewTexte
      */
     public function replace($idOldTexte, $idNewTexte)
     {

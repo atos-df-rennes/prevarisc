@@ -2,10 +2,9 @@
 
 class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 {
+    public $etablissements;
     protected $_name = 'etablissement';
     protected $_primary = 'ID_ETABLISSEMENT';
-
-    public $etablissements = null;
 
     private $ets_date;
     private $ets_dateDebut;
@@ -14,7 +13,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     // Début : liste des ERP
     public function listeDesERP($date): self
     {
-        if ($date == null) {
+        if (null == $date) {
             $date = date('d/m/Y', time());
         }
 
@@ -56,21 +55,22 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 FROM etablissementinformations
                 WHERE
                     etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND
-                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('" .$this->getDate($date)."') OR
+                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('".$this->getDate($date)."') OR
                     etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL
                 )
             ")
-            ->group('ID_ETABLISSEMENT');
+            ->group('ID_ETABLISSEMENT')
+        ;
 
         return $this;
     }
 
     public function listeDesERPVisitePeriodique($dateDebut, $dateFin): self
     {
-        if ($dateDebut == null) {
+        if (null == $dateDebut) {
             $dateDebut = date('01/01/'.date('Y'), time());
         }
-        if ($dateFin == null) {
+        if (null == $dateFin) {
             $dateFin = date('31/12/'.date('Y'), time());
         }
 
@@ -119,12 +119,13 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 FROM etablissementinformations
                 WHERE
                     etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND
-                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) >= UNIX_TIMESTAMP('" .$this->getDate($dateDebut)."')
-                    AND UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('" .$this->getDate($dateFin)."')
+                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) >= UNIX_TIMESTAMP('".$this->getDate($dateDebut)."')
+                    AND UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('".$this->getDate($dateFin)."')
                     OR  etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL
                 )
             ")
-            ->group('ID_ETABLISSEMENT');
+            ->group('ID_ETABLISSEMENT')
+        ;
 
         return $this;
     }
@@ -135,7 +136,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
      */
     public function enExploitation()
     {
-        if ($this->etablissements != null) {
+        if (null != $this->etablissements) {
             $this->etablissements->where('ID_STATUT = 2');
 
             return $this;
@@ -147,7 +148,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
      */
     public function sousmisAControle()
     {
-        if ($this->etablissements != null) {
+        if (null != $this->etablissements) {
             $this->etablissements->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS > 0 AND etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS IS NOT NULL');
 
             return $this;
@@ -159,21 +160,20 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
      */
     public function sousAvisDefavorable()
     {
-        if ($this->etablissements != null) {
+        if (null != $this->etablissements) {
             $this->etablissements->where('dossier.AVIS_DOSSIER_COMMISSION = 2'); // AND SCHEMAMISESECURITE_ETABLISSEMENTINFORMATIONS != 1
 
             $this->etablissements->columns([
                 'NBJOURS_DEFAVORABLE' => new Zend_Db_Expr("(
-                SELECT DATEDIFF('" .$this->getDate($this->ets_date)."', MAX(DATE_ETABLISSEMENTINFORMATIONS))
+                SELECT DATEDIFF('".$this->getDate($this->ets_date)."', MAX(DATE_ETABLISSEMENTINFORMATIONS))
                 FROM etablissementinformations
                 WHERE
                     etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND
-                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('" .$this->getDate($this->ets_date)."') OR
+                    UNIX_TIMESTAMP(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) <= UNIX_TIMESTAMP('".$this->getDate($this->ets_date)."') OR
                     etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL
                 GROUP BY ID_ETABLISSEMENT
                 )
                 "),
-
             ]);
 
             return $this;
@@ -181,11 +181,13 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     }
 
     /**
+     * @param mixed $commune
+     *
      * @return null|self
      */
     public function surLaCommune($commune)
     {
-        if ($this->etablissements != null) {
+        if (null != $this->etablissements) {
             $this->etablissements->where('adressecommune.NUMINSEE_COMMUNE = ?', $commune);
 
             return $this;
@@ -200,23 +202,23 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         return $this;
     }
 
+    /**
+     * @return null|array
+     */
+    public function go()
+    {
+        if (null != $this->etablissements) {
+            return $this->fetchAll($this->etablissements)->toArray();
+        }
+    }
+
     private function getDate($input): string
     {
         $array_date = explode('/', $input);
-        if (!is_array($array_date) || count($array_date) != 3) {
+        if (!is_array($array_date) || 3 != count($array_date)) {
             throw new Exception('Erreur dans la date', 500);
         }
 
         return $array_date[2].'-'.$array_date[1].'-'.$array_date[0].' 00:00:00';
-    }
-
-    /**
-     * @return array|null
-     */
-    public function go()
-    {
-        if ($this->etablissements != null) {
-            return $this->fetchAll($this->etablissements)->toArray();
-        }
     }
 }

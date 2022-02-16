@@ -30,7 +30,7 @@ class Api_Service_Calendar
 
         // Le refresh est par défaut à 5 minutes
         $refreshTime = (getenv('PREVARISC_CALENDAR_REFRESH_TIME')
-                        && getenv('PREVARISC_CALENDAR_REFRESH_TIME') !== '') ?
+                        && '' !== getenv('PREVARISC_CALENDAR_REFRESH_TIME')) ?
                         getenv('PREVARISC_CALENDAR_REFRESH_TIME') : 'PT5M';
 
         $calendar = new VObject\Component\VCalendar([
@@ -53,7 +53,7 @@ class Api_Service_Calendar
         echo $calendar->serialize();
     }
 
-    private function getVTimezoneComponent($calendar): \Sabre\VObject\Component\VTimeZone
+    private function getVTimezoneComponent($calendar): Sabre\VObject\Component\VTimeZone
     {
         $vtimezone = new VObject\Component\VTimeZone($calendar, 'VTIMEZONE');
         $daylight = new VObject\Component($calendar, 'DAYLIGHT', [
@@ -77,6 +77,10 @@ class Api_Service_Calendar
 
     /**
      * [createRequestForWebcalEvent description].
+     *
+     * @param mixed $userid
+     * @param mixed $commission
+     * @param mixed $isAllowedToViewAll
      *
      * @return string La requête générée
      */
@@ -102,9 +106,11 @@ class Api_Service_Calendar
     }
 
     /**
-     * @return (mixed|string|false|DateTime)[]|null
-     *
      * @psalm-return array{SUMMARY:string|false, LOCATION:string, DESCRIPTION:mixed, DTSTART:DateTime, DTEND:DateTime}|null
+     *
+     * @param mixed $commissionEvent
+     *
+     * @return (mixed|string|false|DateTime)[]|null
      */
     private function createICSEvent($commissionEvent)
     {
@@ -128,8 +134,8 @@ class Api_Service_Calendar
             }
             $commune = $ets && count($ets['adresses']) > 0 ? $ets['adresses'][0]['LIBELLE_COMMUNE'] : '';
             // Cas d'une commission en salle
-            if ($commissionEvent['ID_COMMISSIONTYPEEVENEMENT'] === 1) {
-                if ($commissionEvent['TYPE_DOSSIER'] === 3) {
+            if (1 === $commissionEvent['ID_COMMISSIONTYPEEVENEMENT']) {
+                if (3 === $commissionEvent['TYPE_DOSSIER']) {
                     $libelleSum = $commissionEvent['LIBELLE_DATECOMMISSION'];
                 } else {
                     $libelleSum = $commissionEvent['OBJET_DOSSIER'];
@@ -208,16 +214,16 @@ class Api_Service_Calendar
                 $ets['general']['ID_ETABLISSEMENT'],
                 $ets['general']['ID_DOSSIER_DONNANT_AVIS']
             );
-            if ($ets['presence_avis_differe'] && $avisDoss === 'avisDiff') {
+            if ($ets['presence_avis_differe'] && 'avisDiff' === $avisDoss) {
                 $avis = 'Dossier avec avis differé';
-            } elseif ($ets['avis'] === 1) {
+            } elseif (1 === $ets['avis']) {
                 $avis = 'Favorable';
-                if ($ets['informations']['ID_GENRE'] === 3) {
+                if (3 === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
-            } elseif ($ets['avis'] === 2) {
+            } elseif (2 === $ets['avis']) {
                 $avis = 'Défavorable';
-                if ($ets['informations']['ID_GENRE'] === 3) {
+                if (3 === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
             } else {
@@ -268,8 +274,8 @@ class Api_Service_Calendar
             $corpus .= 'Aucune coordonées pour la mairie.'.self::LF.self::LF;
         }
 
-        if ($commissionEvent['ID_DOSSIERTYPE'] === 1) {
-            if ($commissionEvent['TYPESERVINSTRUC_DOSSIER'] === 'servInstCommune') {
+        if (1 === $commissionEvent['ID_DOSSIERTYPE']) {
+            if ('servInstCommune' === $commissionEvent['TYPESERVINSTRUC_DOSSIER']) {
                 $serviceInstruct = $maire;
             } else {
                 $dbGroupement = new Model_DbTable_Groupement();
@@ -304,7 +310,7 @@ class Api_Service_Calendar
             self::LF.self::LF.self::LF
         );
 
-        /* Ajout Grade, prenom, nom préventionniste dans calendrier dossier detail */
+        // Ajout Grade, prenom, nom préventionniste dans calendrier dossier detail
         $dossierService = new Service_Dossier();
         $preventionnistes = $dossierService->getPreventionniste($commissionEvent['ID_DOSSIER']);
 
@@ -366,13 +372,13 @@ class Api_Service_Calendar
     // Vérifie que toutes les informations liés au préventionnistes, grade / prenom / nom, est non null
     private function isPreventionnisteExist($preventionnistes, $index): bool
     {
-        if (empty($preventionnistes[$index]['GRADE_UTILISATEURINFORMATIONS']) ||
-           empty($preventionnistes[$index]['PRENOM_UTILISATEURINFORMATIONS']) ||
-           empty($preventionnistes[$index]['NOM_UTILISATEURINFORMATIONS'])) {
+        if (empty($preventionnistes[$index]['GRADE_UTILISATEURINFORMATIONS'])
+           || empty($preventionnistes[$index]['PRENOM_UTILISATEURINFORMATIONS'])
+           || empty($preventionnistes[$index]['NOM_UTILISATEURINFORMATIONS'])) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     private function formatUtilisateurInformations($user): string

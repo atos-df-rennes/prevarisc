@@ -90,7 +90,7 @@ class ChangementController extends Zend_Controller_Action
 
         $result = false;
 
-        if ($tos !== '') {
+        if ('' !== $tos) {
             $arrayMails = explode(';', $tos);
             $object = $this->_getParam('alerte-objet');
             $message = $this->_getParam('alerte-message');

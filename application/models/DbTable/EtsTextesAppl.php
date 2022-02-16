@@ -6,7 +6,7 @@ class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_TEXTESAPPL', 'ID_ETABLISSEMENT'];
 
     /**
-     * @return array
+     * @param mixed $id_etablissement
      */
     public function recupTextes($id_etablissement): array
     {
@@ -15,10 +15,11 @@ class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
             ->from('etablissementtextapp', null)
             ->join('textesappl', 'etablissementtextapp.ID_TEXTESAPPL = textesappl.ID_TEXTESAPPL', ['ID_TEXTESAPPL', 'LIBELLE_TEXTESAPPL'])
             ->join('typetextesappl', 'textesappl.ID_TYPETEXTEAPPL = typetextesappl.ID_TYPETEXTEAPPL')
-            ->where('ID_ETABLISSEMENT = ?', $id_etablissement);
+            ->where('ID_ETABLISSEMENT = ?', $id_etablissement)
+        ;
 
         $results = $this->fetchAll($select);
 
-        return $results !== null ? $results->toArray() : [];
+        return null !== $results ? $results->toArray() : [];
     }
 }

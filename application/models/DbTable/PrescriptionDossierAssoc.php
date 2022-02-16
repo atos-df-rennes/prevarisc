@@ -6,6 +6,8 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
     protected $_primary = ['ID_PRESCRIPTION_DOSSIER', 'NUM_PRESCRIPTION_DOSSIERASSOC']; // Clé primaire
 
     /**
+     * @param mixed $idPrescriptionDossier
+     *
      * @return array
      */
     public function getPrescriptionDossierAssoc($idPrescriptionDossier)
@@ -17,12 +19,16 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
             ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pda.ID_ARTICLE')
             ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pda.ID_TEXTE')
             ->where('pda.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier)
-            ->order('pda.NUM_PRESCRIPTION_DOSSIERASSOC');
+            ->order('pda.NUM_PRESCRIPTION_DOSSIERASSOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $idPrescriptionType
+     * @param mixed $idPrescriptionDossier
+     *
      * @return array
      */
     public function getPrescriptionTypeAssoc($idPrescriptionType, $idPrescriptionDossier)
@@ -36,7 +42,8 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
             ->join(['pd' => 'prescriptiondossier'], 'pd.ID_PRESCRIPTION_TYPE = pt.ID_PRESCRIPTIONTYPE')
             ->where('pt.ID_PRESCRIPTIONTYPE = ?', $idPrescriptionType)
             ->where('pd.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier)
-            ->order('pta.NUM_PRESCRIPTIONASSOC');
+            ->order('pta.NUM_PRESCRIPTIONASSOC')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -46,7 +53,8 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pd' => 'prescriptiondossierassoc'])
-            ->where('pda.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier);
+            ->where('pda.ID_PRESCRIPTION_DOSSIER = ?', $idPrescriptionDossier)
+        ;
 
         return $this->getAdapter()->fetchAll($select)->delete();
     }

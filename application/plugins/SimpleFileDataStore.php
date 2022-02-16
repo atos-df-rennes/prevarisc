@@ -46,22 +46,19 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     /**
      * Retourne le répertoire où se trouve le fichier.
      *
-     * @param type $linkedObjectType
-     * @param type $linkedObjectId
-     *
-     * @return string
+     * @param type  $linkedObjectType
+     * @param type  $linkedObjectId
+     * @param mixed $piece_jointe
      */
     public function getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId): string
     {
         $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
 
-        $directory = implode(DS, [
+        return implode(DS, [
             REAL_DATA_PATH,
             'uploads',
             $type,
         ]);
-
-        return $directory;
     }
 
     /**
@@ -72,8 +69,6 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      * @param type $linkedObjectId
      * @param type $createDirIfNotExists
      *
-     * @return string
-     *
      * @throws Exception
      */
     public function getFilePath($piece_jointe, $linkedObjectType, $linkedObjectId, $createDirIfNotExists = false): string
@@ -83,6 +78,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
         if ($createDirIfNotExists && !is_dir($directory)) {
             if (!@mkdir($directory, 0777, true)) {
                 $error = error_get_last();
+
                 throw new Exception('Cannot create base directory '.$directory.': '.$error['message']);
             }
         }
@@ -100,7 +96,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      * @param type $linkedObjectType
      * @param type $linkedObjectId
      *
-     * @return string|null
+     * @return null|string
      */
     public function getURLPath($piece_jointe, $linkedObjectType, $linkedObjectId)
     {
@@ -125,7 +121,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      * @param type $linkedObjectType
      * @param type $linkedObjectId
      *
-     * @return string|null
+     * @return null|string
      */
     public function getFormattedFilename($piece_jointe, $linkedObjectType, $linkedObjectId)
     {
@@ -151,7 +147,9 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                 $service = new Service_Etablissement();
                 $etablissement = $service->get($linkedObjectId);
                 $tokens[] = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
+
                 break;
+
             case 'dossier':
                 $db = new Model_DbTable_EtablissementDossier();
                 $dossiers = $db->getEtablissementListe($linkedObjectId);
@@ -161,8 +159,9 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                         $service = new Service_Etablissement();
                         $etablissement = $service->get($dossier['ID_ETABLISSEMENT']);
                         $numero_id = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
-                        if (stripos($piece_jointe['DESCRIPTION_PIECEJOINTE'], $numero_id) !== false) {
+                        if (false !== stripos($piece_jointe['DESCRIPTION_PIECEJOINTE'], $numero_id)) {
                             $tokens['%NUMEROID_ETABLISSEMENT%'] = $numero_id;
+
                             break;
                         }
                         $default_numeroid[] = $numero_id;
@@ -173,9 +172,12 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                 } else {
                     $tokens['%NUMEROID_ETABLISSEMENT%'] = $linkedObjectId;
                 }
+
                 break;
+
             default:
                 $tokens['%NUMEROID_ETABLISSEMENT%'] = $linkedObjectId;
+
                 break;
         }
 
