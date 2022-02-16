@@ -1,0 +1,17 @@
+:root{
+    --backCardColor : #eaeaea;
+    --margPaddpx : 1em;
+    --sizeRadius : 15px;
+}
+
+.cardAvisDerogations{
+    background:var(--backCardColor);
+    box-shadow: 1px 0px 10px 2px rgb(37 40 37 / 75%);
+    margin: var(--margPaddpx);
+    padding: var(--margPaddpx);
+    border-radius: var(--sizeRadius);
+}
+
+.flex{
+    display:flex;
+}

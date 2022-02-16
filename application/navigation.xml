@@ -966,11 +966,13 @@
                     <label>avis-et-derogations</label>
                     <controller>dossier</controller>
                     <action>avis-et-derogations</action>
+                    <privilege>avis_derogations</privilege>
                 </avis-et-derogations>
                 <avis-et-derogations-edit>
                     <label>avis-et-derogations-edit</label>
                     <controller>dossier</controller>
                     <action>avis-et-derogations-edit</action>
+                    <privilege>avis_derogations</privilege>
                 </avis-et-derogations-edit>                
             </pages>
 

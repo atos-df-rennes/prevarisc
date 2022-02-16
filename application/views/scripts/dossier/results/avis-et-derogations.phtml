@@ -1,10 +1,4 @@
-<div class="span5" style="
-                    background: #eaeaea;
-                    box-shadow: 1px 0px 10px 2px rgb(37 40 37 / 75%);
-                    margin: 1em;
-                    border-radius: 15px;
-                    padding: 1em;
-                        ">
+<div class="span5 cardAvisDerogations">
     <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?php echo($this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION)  ?>' >&times;</a>
     <h1 style="text-align:center"><?=$this->TITRE?></h1>    
     <div class="row-fluid">
@@ -19,8 +13,7 @@
                      <?=$this->ID_DOSSIER_LIE ? $this->ID_DOSSIER_LIE: '' ?>
                 </a>
             </p>
-            
-            <div style="display:flex">
+            <div class="flex">
                 <label for="affHistorique">Afficher l'historique de l'établissement</label>
                 <input  type="checkbox" 
                     id="scales" 
@@ -31,7 +24,6 @@
             </div>
         </div>
     </div>
-   
     <div class="pull-right btn-group">
         <a 
             class="icon-pencil icon-black"
@@ -39,9 +31,7 @@
             >
         </a>
     </div>
-
 </div>
-
 
 <script>
         $(".close").click(function (event) { 

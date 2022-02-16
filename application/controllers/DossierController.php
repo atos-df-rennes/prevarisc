@@ -236,6 +236,7 @@ class DossierController extends Zend_Controller_Action
         //On récupère tous les types de dossier
         $DBdossierType = new Model_DbTable_DossierType();
         $DBdossier = new Model_DbTable_Dossier();
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $this->view->dossierType = $DBdossierType->fetchAll();
 
         //Récupération de la liste des avis pour la génération du select
@@ -253,6 +254,13 @@ class DossierController extends Zend_Controller_Action
 
         // Autorisation de suppression du dossier
         $this->view->is_allowed_delete_dossier = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_dossier');
+
+
+        // Autorisation de set avis derogations
+        $this->view->is_allowed_avis_derogation = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avis_derogations', 'avis_derogations');
+
+        //Nb avis derogations du dossier 
+        $this->view->nbAvisDerogation = $dbAvisDerogations->getNbAvisDerogationFromDossier($this->_getParam('id') ? $this->_getParam('id') : null);
 
         $service_etablissement = new Service_Etablissement();
 
@@ -3112,5 +3120,6 @@ class DossierController extends Zend_Controller_Action
         }   
 
     }
+
 }
 

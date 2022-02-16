@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/etiquetteAvisDerogations/cardAvisDerogations.css"/>
 <form class="form-horizontal span8" method="post">
 <input class="btn btn-success pull-right" type='submit' value='ajouter avis/dérogations'/>
   <div class="control-group">
@@ -39,11 +40,11 @@
   <div class="control-group">
     <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     <div class="controls">
-    <input   type="checkbox" 
+      <input   type="checkbox" 
                 id="DISPLAY_HISTORIQUE" 
                 name="DISPLAY_HISTORIQUE" 
-                <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
-    >
+        <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
+      >
     </div>        
   </div>
 </form>

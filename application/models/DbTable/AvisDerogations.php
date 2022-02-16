@@ -39,5 +39,15 @@ class Model_DbTable_AvisDerogations extends Zend_Db_Table_Abstract
           return $this->fetchAll($select)->toArray();     
      }
 
+
+
+     /**
+     * Retourne le nombre d avis et derogation rattacher au dossier
+     */
+    public function getNbAvisDerogationFromDossier($idDossier){
+          $select = $this->select()->setIntegrityCheck(false);
+          $select->from('avisderogations');
+          return sizeof($this->fetchAll($select)->toArray());
+     }
 }
 ?>

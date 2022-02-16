@@ -1,5 +1,7 @@
 <?php if($this->action != "add" && $this->do != "new" ) : ?>
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
+<link rel="stylesheet" href="/css/etiquetteAvisDerogations/greenCircle.css"/>
+
 <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?php echo $this->idUser; ?>' />	
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
@@ -30,21 +32,17 @@
             }
     ?>
 
-    <?php if($this->idTypeDossier === 1) :?>
+    <?php if($this->idTypeDossier === 1 && $this->is_allowed_avis_derogation ) :?>
         <li class="avisEtDerogation" style="position:relative">
             <a href=<?= "/dossier/avis-et-derogations/id/".$this->idDossier?>>
                 <i class="icon-file icon-black">
                 </i> 
                     Avis et dérogation
             </a>
-            <div style="
-                height:25px;
-                width:25px;
-                background:lightgreen;
-                border-radius:15px;
-                position:absolute;
-                right:0;top:calc(50% - 13px)
-                "></div>
+
+            <?php if((int)$this->nbAvisDerogation > 0 ): ?>
+                <div class="greenCircle"></div>
+            <?php endif ?>
         </li>
     <?php endif ?>
 
@@ -60,7 +58,10 @@
 		
         <li class='<?php echo ( $this->action == "liees" ) ? "active" : "read" ?>'>
             <a  
-                href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'><em class="icon-folder-open icon-black"></em> Établissements et dossiers liés</a>
+                href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'>
+                <em class="icon-folder-open icon-black"></em> 
+                Établissements et dossiers liés
+            </a>
         </li>
 		
 	<?php
@@ -95,19 +96,20 @@
             echo "
                 <li class='".( ( $this->action == "rapport" ) ? "active" : "read" )."'>
                     <a  "
-                    . "href='".$this->url(array("controller" => "dossier", "action"=>"rapport", "id" => $this->idDossier), false, true)."'><i class=\"icon-refresh icon-black\"></i> Rapport</a>
+                    . "href='".$this->url(array("controller" => "dossier", "action"=>"rapport", "id" => $this->idDossier), false, true)."'>
+                    <i class=\"icon-refresh icon-black\"></i> Rapport</a>
                 </li>
             ";
         ?>
         <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
-        <li>
-            <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><em class='icon-calendar icon-black'></em> Afficher ordre du jour</a>
-        </li>
+            <li>
+                <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><em class='icon-calendar icon-black'></em> Afficher ordre du jour</a>
+            </li>
         <?php endif; ?>
         <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
-        <li>
-            <a id="suppressionDossier" href="#"><em class="icon-remove icon-black"></em>Supprimer le dossier</a>
-        </li>
+            <li>
+                <a id="suppressionDossier" href="#"><em class="icon-remove icon-black"></em>Supprimer le dossier</a>
+            </li>
         <?php endif; ?>
     </ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd();
