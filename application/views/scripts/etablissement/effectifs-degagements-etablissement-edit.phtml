@@ -1,27 +1,29 @@
 <form action=/etablissement/effectifs-degagements-etablissement-edit/id/<?php echo $this->idDossier?> method="post">
-    <div class='pull-right' >
+    <div class='pull-right'>
         <input type='submit' class="btn btn-success" value="Sauvegarder modification">
-    </div>        
-        <h3>
-            Effectifs
-        </h3>
-        <textarea class="tinyarea" name='DESCRIPTION_EFFECTIF'>
+    </div>
+
+    <h3>
+        Effectifs
+    </h3>
+    <textarea class="tinyarea" name='DESCRIPTION_EFFECTIF'>
         <?php
-              if (isset($this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"])) {
-                  echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];
-              }
-            ?>
-        </textarea>
-        <h3>
-            Dégagements
-        </h3>
-        <textarea class="tinyarea" name='DESCRIPTION_DEGAGEMENT'>
-            <?php
-              if (isset($this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"])) {
-                  echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];
-              }
-            ?>
-        </textarea>
+            if (isset($this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"])) {
+                echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];
+            }
+        ?>
+    </textarea>
+
+    <h3>
+        Dégagements
+    </h3>
+    <textarea class="tinyarea" name='DESCRIPTION_DEGAGEMENT'>
+        <?php
+            if (isset($this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"])) {
+                echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];
+            }
+        ?>
+    </textarea>
 </form>
 
 <script type='text/javascript'>

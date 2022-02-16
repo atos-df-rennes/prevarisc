@@ -1,20 +1,25 @@
 <form action=/dossier/effectifs-degagements-dossier-edit/id/<?php echo $this->idDossier?> method="get">
-    <div class='pull-right' >
-    <input class="btn btn-success" type='submit' value="Modifier effectifs dégagements"/>
-
+    <div class='pull-right'>
+        <input class="btn btn-success" type='submit' value="Modifier effectifs dégagements"/>
     </div>
-    <h3>Effectifs : </h3>
-    <?php 
-        if(isset($this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"]))
-            {echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];}else{echo "Aucune description";}  
+
+    <h3>Effectifs :</h3>
+    <?php
+        if (isset($this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"])) {
+            echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];
+        } else {
+            echo "Aucune description";
+        }
     ?>
-    <h3>Dégagements : </h3>
-    <?php 
-            if(isset($this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"]))
-            {echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];}else{echo "Aucune description";}
-    
+
+    <h3>Dégagements :</h3>
+    <?php
+        if (isset($this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"])) {
+            echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];
+        } else {
+            echo "Aucune description";
+        }
     ?>
-    
 </form>
 
 <script type='text/javascript'>
