@@ -155,19 +155,19 @@ class DossierController extends Zend_Controller_Action
             $this->view->action = $this->_request->getActionName();
         }
 
-        $this->view->idDossier = ($this->_getParam('id'));
-
-        $idDossier = null;
-        $idDossier = $this->_getParam('id');
-        if (null == $idDossier) {
-            $idDossier = $this->_getParam('idDossier');
-        }
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+        
+        $this->idDossier = intval($this->_getParam('id'));
+        $this->view->idDossier = $this->idDossier;
 
-        if (null != $idDossier) {
+        if (null == $this->idDossier) {
+            $this->idDossier = intval($this->_getParam('idDossier'));
+        }
+
+        if (null != $this->idDossier) {
             //Si on à l'id d'un dossier, on récupére tous les établissements liés à ce dossier
             $DBdossier = new Model_DbTable_Dossier();
-            $dossier = $DBdossier->find($idDossier)->current();
+            $dossier = $DBdossier->find($this->idDossier)->current();
 
             $this->view->id_platau = null !== $dossier['ID_PLATAU'] ? $dossier['ID_PLATAU'] : null;
 
@@ -178,10 +178,9 @@ class DossierController extends Zend_Controller_Action
             $this->view->idTypeDossier = $dossier->TYPE_DOSSIER;
             $this->view->libelleType = $libelleType['LIBELLE_DOSSIERTYPE'];
 
-            $natureDossier = $DBdossier->getDossierTypeNature($idDossier);
+            $natureDossier = $DBdossier->getDossierTypeNature($this->idDossier);
             $this->view->natureDossier = $natureDossier[0]['ID_NATURE'];
             $this->view->verrouDossier = $dossier['VERROU_DOSSIER'];
-            $this->view->idDossier = ($this->_getParam('id'));
 
             $this->view->verrou = $dossier->VERROU_DOSSIER;
 
@@ -194,8 +193,8 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
         $this->_forward('index', 'piece-jointe', null, [
@@ -222,8 +221,8 @@ class DossierController extends Zend_Controller_Action
         }
 
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         } elseif ($this->_getParam('id_etablissement')) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
         }
@@ -1466,8 +1465,8 @@ class DossierController extends Zend_Controller_Action
         $this->view->listeEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
 
         $service_dossier = new Service_Dossier();
-        if ($idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $service_etablissement = new Service_Etablissement();
@@ -1501,8 +1500,8 @@ class DossierController extends Zend_Controller_Action
         $dbEtablissementDossier = new Model_DbTable_EtablissementDossier();
 
         $idDossier = (int) $this->_getParam('id');
-        if ($idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $listeEtablissementTest = $dbEtablissementDossier->getEtablissementListe($idDossier);
@@ -1546,8 +1545,8 @@ class DossierController extends Zend_Controller_Action
     {
         $this->view->idDossier = (int) $this->_getParam('id');
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         $DBdossier = new Model_DbTable_Dossier();
         $this->view->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
@@ -1560,8 +1559,8 @@ class DossierController extends Zend_Controller_Action
 
         //récupération du type de dossier (etude / visite)
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $dbdossier = new Model_DbTable_Dossier();
@@ -1895,6 +1894,7 @@ class DossierController extends Zend_Controller_Action
     {
         $idDossier = (int) $this->_getParam('id');
         $DBdossier = new Model_DbTable_Dossier();
+
         $this->view->infosDossier = $DBdossier->find($idDossier)->current();
     }
 
@@ -2599,6 +2599,12 @@ class DossierController extends Zend_Controller_Action
             $this->view->natureConcerne = $DBdossierNature->getDossierNaturesLibelle($idDossier);
         }
 
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
+
         if ($this->_request->DESCRIPTIF_DOSSIER) {
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($this->_request->id)->current();
@@ -2615,8 +2621,8 @@ class DossierController extends Zend_Controller_Action
 
         $service_dossier = new Service_Dossier();
 
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $this->view->textes_applicables_dossier = $service_dossier->getAllTextesApplicables($this->_request->id);
@@ -2697,8 +2703,8 @@ class DossierController extends Zend_Controller_Action
     public function prescriptionAction()
     {
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         if ($this->_request->isPost()) {
             try {
@@ -3034,6 +3040,13 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
+        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
+
         if ($this->_request->isPost()) {
             //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
             $serviceEffectifdegagement = new Service_Effectifdegagement();
@@ -3056,7 +3069,6 @@ class DossierController extends Zend_Controller_Action
             }
         }
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
         $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
         $this->view->idDossier = $this->_getParam('id');
     }
@@ -3065,8 +3077,14 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
-        $serviceEffectifdegagement = new Service_Effectifdegagement();
+
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $serviceEffectifdegagement = new Service_Effectifdegagement();
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
 
         if ($this->_request->isPost()) {
             try {
@@ -3076,8 +3094,7 @@ class DossierController extends Zend_Controller_Action
                 $arrData['DESCRIPTION_DEGAGEMENT'] = $this->_request->getParam('DESCRIPTION_DEGAGEMENT');
                 $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'), $arrData);
 
-                // FIXME $this->_helper->redirector('effectifsDegagementsDossier', null, null, array('id' => $this->getParam('id')));
-                header('Location:/dossier/effectifs-degagements-dossier/id/'.$this->_getParam('id'));
+                $this->_helper->redirector('effectifs-degagements-dossier', null, null, array('id' => $this->getParam('id')));
 
                 $this->_helper->flashMessenger([
                     'context' => 'success',
