@@ -12,7 +12,7 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ptl' => 'prescriptiontexteliste'));
+             ->from(['ptl' => 'prescriptiontexteliste']);
 
         if ($visible != null) {
             $select->where('VISIBLE_TEXTE = ?', $visible);
@@ -37,7 +37,7 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
      */
     public function replace($idOldTexte, $idNewTexte)
     {
-        $data = array('ID_TEXTE' => $idNewTexte);
+        $data = ['ID_TEXTE' => $idNewTexte];
         $where[] = 'ID_TEXTE = '.$idOldTexte;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossierassoc', $data, $where);

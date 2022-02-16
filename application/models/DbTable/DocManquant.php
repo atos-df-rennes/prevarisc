@@ -13,7 +13,7 @@ class Model_DbTable_DocManquant extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('dm' => 'docmanquant'));
+             ->from(['dm' => 'docmanquant']);
 
         return $this->getAdapter()->fetchAll($select);
     }

@@ -30,14 +30,14 @@ class Service_Login
                 || md5($username.getenv('PREVARISC_SECURITY_SALT').$password) != $user->PASSWD_UTILISATEUR
             ) {
                 $reponse = 'non_autorise';
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                );
+                ];
             } else {
                 $reponse = 'autorise';
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                );
+                ];
             }
 
             // Stockage de l'utilisateur dans la session
@@ -57,9 +57,9 @@ class Service_Login
                 // On encode le jeton
                 $token = hash('sha256', $time + $secret_key.$informations);
 
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                    'results' => array(
+                    'results' => [
                         'ID_UTILISATEUR' => $user->ID_UTILISATEUR,
                         'LIBELLE_FONCTION' => $row_fonction->LIBELLE_FONCTION,
                         'ID_UTILISATEURINFORMATIONS' => $user->ID_UTILISATEURINFORMATIONS,
@@ -68,14 +68,14 @@ class Service_Login
                         'LIBELLE_GROUPE' => $row_groupe->LIBELLE_GROUPE,
                         'ID_GROUPE' => $row_groupe->ID_GROUPE,
                         'TOKEN' => $token,
-                    ),
-                );
+                    ],
+                ];
             }
         } catch (Exception $e) {
             $reponse = 'erreur';
-            $results = array(
+            $results = [
                    'reponse' => $reponse,
-                );
+                ];
         }
 
         return $results;

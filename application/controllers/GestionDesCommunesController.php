@@ -65,19 +65,19 @@ class GestionDesCommunesController extends Zend_Controller_Action
             $commune->save();
 
             $this->_helper->flashMessenger(
-                array(
+                [
                     'context' => 'success',
                     'title' => 'Sauvegarde réussie !',
                     'message' => 'La commune '.$commune->LIBELLE_COMMUNE.' a été enregistrée.',
-                )
+                ]
             );
         } catch (Exception $ex) {
             $this->_helper->flashMessenger(
-                array(
+                [
                     'context' => 'error',
                     'title' => 'Aie',
                     'message' => $ex->getMessage(),
-                )
+                ]
             );
         }
 

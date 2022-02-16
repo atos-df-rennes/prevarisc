@@ -3,12 +3,12 @@
     class StatistiquesController extends Zend_Controller_Action
     {
         // Liste des differentes extractions et stats avec le lien vers la page correspondant
-        private $liste = array(
+        private $liste = [
             'ccdsa-liste-erp-en-exploitation-connus-soumis-a-controle' => 'Extraction 1 : CCDSA Liste ERP en exploitation connus soumis à contrôle',
             'liste-des-erp-sous-avis-defavorable' => 'Extraction 2 : Liste des ERP sous avis défavorable',
             'prochaines-visites-de-controle-periodique-a-faire-sur-une-commune' => 'Extraction 3 : Prochaines visites de contrôle périodique à faire sur une commune',
             'liste-erp-avec-visite-periodique-sur-un-an' => 'Extraction 4 : Liste ERP avec des visites périodiques sur 1 an',
-        );
+        ];
 
         public function init()
         {
@@ -16,7 +16,7 @@
             $this->_helper->layout->setLayout('dashboard');
             // On prépare me XML pour l'extraction et la génération
             while (list($key, $val) = each($this->liste)) {
-                $this->_helper->contextSwitch()->addActionContext($key, array('json', 'xml'));
+                $this->_helper->contextSwitch()->addActionContext($key, ['json', 'xml']);
             }
 
             $this->_helper->contextSwitch()->initContext();
@@ -37,10 +37,10 @@
             } else {
                 $this->view->columns = $noms_des_colonnes_a_afficher;
                 $this->view->results = $requete->go();
-                $this->view->titre = array(
+                $this->view->titre = [
                     'normalize' => $this->_request->getActionName(),
                     'full' => $this->liste[$this->_request->getActionName()],
-                );
+                ];
             }
         }
 
@@ -55,12 +55,12 @@
             }
 
             $this->extractionProcess(
-                array(
-                    'date' => array(
+                [
+                    'date' => [
                         'label' => 'Soumis à un contrôle périodique obligatoire à la date du', 'type' => 'date', 'data' => date('d/m/Y', time()),
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Arrondissement' => 'ARRONDISSEMENT',
@@ -69,7 +69,7 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     //"Date prochaine visite de contrôle" => "DATEVISITE_DOSSIER",
                     'Commission' => 'LIBELLE_COMMISSION',
-                ),
+                ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()
             );
             if ($this->_getParam('format') != 'json') {
@@ -88,11 +88,11 @@
             }
 
             $this->extractionProcess(
-                array(
-                    'tri' => array(
+                [
+                    'tri' => [
                         'label' => 'Tri sur une colonne',
                         'type' => 'select',
-                        'data' => array(
+                        'data' => [
                             'Arrondissement' => 'ARRONDISSEMENT',
                             'Commission' => 'ID_COMMISSION',
                             'Commune' => 'NUMINSEE_COMMUNE',
@@ -100,15 +100,15 @@
                             'Catégorie' => 'ID_CATEGORIE',
                             'Date de la dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                             'Nombre de jours écoulés sous avis défavorable par rapport à la date renseignée' => 'NBJOURS_DEFAVORABLE',
-                        ),
-                    ),
-                    'date' => array(
+                        ],
+                    ],
+                    'date' => [
                         'label' => 'Liste des ERP sous avis défavorable à la date',
                         'type' => 'date',
                         'data' => date('d/m/Y', time()),
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Arrondissement' => 'ARRONDISSEMENT',
@@ -117,7 +117,7 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     'Commission' => 'LIBELLE_COMMISSION',
                     'Nombre de jours écoulés sous avis défavorable par rapport à la date renseignée' => 'NBJOURS_DEFAVORABLE',
-                ),
+                ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousAvisDefavorable()->trierPar($this->_getParam('tri'))
             );
             if ($this->_getParam('format') != 'json') {
@@ -133,7 +133,7 @@
             // Récupération des communes
             $model_commune = new Model_DbTable_AdresseCommune();
             $rowset_communes = $model_commune->fetchAll(null, 'LIBELLE_COMMUNE');
-            $communes = array();
+            $communes = [];
             foreach ($rowset_communes as $commune) {
                 $communes[$commune['LIBELLE_COMMUNE']] = $commune['NUMINSEE_COMMUNE'];
             }
@@ -144,29 +144,29 @@
             }
 
             $this->extractionProcess(
-                array(
-                    'date' => array(
+                [
+                    'date' => [
                         'label' => 'Date',
                         'type' => 'date',
                         'data' => date('d/m/Y', time()),
-                    ),
-                    'commune' => array(
+                    ],
+                    'commune' => [
                         'label' => 'Commune',
                         'type' => 'select',
                         'data' => $communes,
-                    ),
-                    'tri' => array(
+                    ],
+                    'tri' => [
                         'label' => 'Tri sur une colonne',
                         'type' => 'select',
-                        'data' => array(
+                        'data' => [
                             'Type' => 'ID_TYPE',
                             'Catégorie' => 'ID_CATEGORIE',
                             'Date de la dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                             'Avis de la dernière visite' => 'LIBELLE_AVIS',
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'Libellé' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Type' => 'ID_TYPE',
@@ -174,7 +174,7 @@
                     'Date dernière visite de contrôle' => 'DATEVISITE_DOSSIER',
                     'Avis de la dernière visite' => 'LIBELLE_AVIS',
                     'Commission' => 'LIBELLE_COMMISSION',
-                ),
+                ],
                 $model_stat->listeDesERP($this->_getParam('date'))->enExploitation()->sousmisAControle()->surLaCommune($this->_getParam('commune'))->trierPar($this->_getParam('tri'))
             );
             if ($this->_getParam('format') != 'json') {
@@ -195,30 +195,30 @@
             }
 
             $this->extractionProcess(
-                array(
-                    'date' => array(
+                [
+                    'date' => [
                         'label' => 'visite périodique du', 'type' => 'date', 'data' => $dateDebut,
-                    ),
-                    'datefin' => array(
+                    ],
+                    'datefin' => [
                         'label' => 'au', 'type' => 'date', 'data' => $dateFin,
-                    ),
-                    'tri' => array(
+                    ],
+                    'tri' => [
                         'label' => 'Tri sur une colonne',
                         'type' => 'select',
-                        'data' => array(
+                        'data' => [
                             'Commune' => 'LIBELLE_COMMUNE',
                             'Commission' => 'ID_COMMISSION',
                             'Etablissement' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                             'Type' => 'ID_TYPE',
                             'Catégorie' => 'ID_CATEGORIE',
                             'Date de prochaine visite' => 'DATEVISITE_DOSSIER',
-                        ),
-                    ),
-                    'iderp' => array(
+                        ],
+                    ],
+                    'iderp' => [
                         'label' => '', 'type' => 'id', 'data' => 'ID_ETABLISSEMENT',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'Commune' => 'LIBELLE_COMMUNE',
                     'Etablissement' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                     'Prevenstionniste' => 'NOM_UTILISATEURINFORMATIONS',
@@ -227,7 +227,7 @@
                     'Date de prochaine visite' => 'DATEVISITE_DOSSIER',
                     'Date limite de prochaine visite' => 'PERIODICITE_ETABLISSEMENTINFORMATIONS',
                     'Commission' => 'LIBELLE_COMMISSION',
-                ),
+                ],
                 $model_stat->listeDesERPVisitePeriodique($this->_getParam('date'), $this->_getParam('datefin'))->trierPar($this->_getParam('tri'))
             );
 

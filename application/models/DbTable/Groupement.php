@@ -4,25 +4,25 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
 {
     protected $_name = 'groupement'; // Nom de la base
     protected $_primary = 'ID_GROUPEMENT'; // Clé primaire
-    protected $_referenceMap = array(
-            'groupementtype' => array(
+    protected $_referenceMap = [
+            'groupementtype' => [
                 'columns' => 'ID_GROUPEMENT',
                 'refTableClass' => 'Model_DbTable_GroupementType',
                 'refColumns' => 'ID_GROUPEMENTTYPE',
-            ),
-            'groupementcommune' => array(
+            ],
+            'groupementcommune' => [
                 'columns' => 'ID_GROUPEMENT',
                 'refTableClass' => 'Model_DbTable_GroupementCommune',
                 'refColumns' => 'ID_GROUPEMENT',
                 'onDelete' => self::CASCADE,
-            ),
-            'groupementpreventionniste' => array(
+            ],
+            'groupementpreventionniste' => [
                 'columns' => 'ID_GROUPEMENT',
                 'refTableClass' => 'Model_DbTable_GroupementPreventionniste',
                 'refColumns' => 'ID_GROUPEMENT',
                 'onDelete' => self::CASCADE,
-            ),
-        );
+            ],
+        ];
 
     /**
      * @param string|int|float $id
@@ -107,7 +107,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
      */
     public function getPreventionnistesByGpt($groupements): array
     {
-        $preventionnistes_par_gpt = array();
+        $preventionnistes_par_gpt = [];
 
         foreach ($groupements as $groupement) {
             $select = $this->select()
@@ -169,22 +169,22 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
     /**
      * @return array
      */
-    public function getByEtablissement(array $ids_etablissement = array())
+    public function getByEtablissement(array $ids_etablissement = [])
     {
         $select = $this->select()
                         ->setIntegrityCheck(false)
-                        ->from('etablissementadresse', array('etablissementadresse.ID_ETABLISSEMENT'))
-                        ->joinLeft('groupementcommune', 'etablissementadresse.NUMINSEE_COMMUNE = groupementcommune.NUMINSEE_COMMUNE', array(
+                        ->from('etablissementadresse', ['etablissementadresse.ID_ETABLISSEMENT'])
+                        ->joinLeft('groupementcommune', 'etablissementadresse.NUMINSEE_COMMUNE = groupementcommune.NUMINSEE_COMMUNE', [
                             'groupementcommune.ID_GROUPEMENT',
                             'groupementcommune.NUMINSEE_COMMUNE',
-                        ))
+                        ])
                         ->where('etablissementadresse.ID_ETABLISSEMENT IN(?)', $ids_etablissement)
-                        ->group(array('etablissementadresse.ID_ETABLISSEMENT', 'groupementcommune.ID_GROUPEMENT'));
+                        ->group(['etablissementadresse.ID_ETABLISSEMENT', 'groupementcommune.ID_GROUPEMENT']);
 
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getByGroupementType(array $types_groupement = array())
+    public function getByGroupementType(array $types_groupement = [])
     {
         $select = $this ->select()
                         ->setIntegrityCheck(false)

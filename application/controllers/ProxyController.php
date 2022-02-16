@@ -11,7 +11,7 @@ class ProxyController extends Zend_Controller_Action
         // On forme la chaine de paramètres
         $params = '';
         foreach ($this->_request->getParams() as $key => $value) {
-            if (!in_array($key, array('url', 'controller', 'action', 'module'))) {
+            if (!in_array($key, ['url', 'controller', 'action', 'module'])) {
                 $params .= $key.'='.str_replace(' ', '+', $value).'&';
             }
         }

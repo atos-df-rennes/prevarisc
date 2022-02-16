@@ -33,14 +33,14 @@ class Service_GroupementCommunes
         return $model_groupement->getAllWithTypes();
     }
 
-    public function findGroupementForEtablissement(array $ids_etablissement = array())
+    public function findGroupementForEtablissement(array $ids_etablissement = [])
     {
         $model_groupement = new Model_DbTable_Groupement();
 
         return $model_groupement->getByEtablissement($ids_etablissement);
     }
 
-    public function findGroupementForGroupementType(array $types_groupement = array())
+    public function findGroupementForGroupementType(array $types_groupement = [])
     {
         $model_groupement = new Model_DbTable_Groupement();
 

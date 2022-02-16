@@ -82,14 +82,14 @@ class Api_Service_Etablissement
         $pieces_jointes = $service_etablissement->getAllPJ($id);
 
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $pieces_jointes_content = array();
+        $pieces_jointes_content = [];
 
         foreach ($pieces_jointes as $pieces_jointe) {
             $path = $store->getFilePath($pieces_jointe, 'etablissement', $id);
-            $pieces_jointes_content[] = array(
+            $pieces_jointes_content[] = [
                 'ID_PIECE_JOINTE' => $pieces_jointe['ID_PIECEJOINTE'],
                 'IMAGE' => base64_encode(file_get_contents($path)),
-            );
+            ];
         }
 
         return $pieces_jointes_content;

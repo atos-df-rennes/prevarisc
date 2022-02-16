@@ -49,7 +49,7 @@ class GroupementController extends Zend_Controller_Action
         // Coordonnées du groupement
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
-        $this->view->preventionnistes = array();
+        $this->view->preventionnistes = [];
         if (
             isset($_GET['id'])
             && $_GET['id'] != 0
@@ -144,17 +144,17 @@ class GroupementController extends Zend_Controller_Action
             $this->view->libelle = $new_groupement->LIBELLE_GROUPEMENT;
             $this->view->type = $new_groupement->ID_GROUPEMENTTYPE;
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Ajout réussi !',
                 'message' => 'Le groupement '.$new_groupement->LIBELLE_GROUPEMENT.' a été ajouté.',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -174,17 +174,17 @@ class GroupementController extends Zend_Controller_Action
             $prev->delete('ID_GROUPEMENT = '.$_GET['id']);
             $groupements->delete('ID_GROUPEMENT = '.$_GET['id']);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Suppression réussie !',
                 'message' => 'Le groupement a été supprimé.',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
 
         // Redirection
@@ -204,17 +204,17 @@ class GroupementController extends Zend_Controller_Action
 
             $this->view->id = $new->ID_GROUPEMENTTYPE;
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Ajout réussi !',
                 'message' => 'Le traitement est ok.',
-            ));
+            ]);
         } catch (Exception $ex) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
                 'message' => $ex->getMessage(),
-            ));
+            ]);
         }
         // Redirection
         $this->_helper->redirector('index');

@@ -12,7 +12,7 @@ class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
         $array_groupementstypes = $model_groupementstypes->fetchAll()->toArray();
 
         // Initialisation du tableau des groupements
-        $array_groupements = array();
+        $array_groupements = [];
 
         // Pour chaque type, on retouve les model_groupements
         foreach ($array_groupementstypes as $value) {
@@ -20,10 +20,10 @@ class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
                 ->select()
                 ->where('ID_GROUPEMENTTYPE = '.$value['ID_GROUPEMENTTYPE'])
                 ->order('LIBELLE_GROUPEMENT ASC');
-            $array_groupements[ $value['ID_GROUPEMENTTYPE'] ] = array(
+            $array_groupements[ $value['ID_GROUPEMENTTYPE'] ] = [
                 0 => $value['LIBELLE_GROUPEMENTTYPE'],
                 1 => $model_groupements->fetchAll($select)->toArray(),
-            );
+            ];
         }
 
         // Attributs

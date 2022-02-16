@@ -32,7 +32,7 @@ class View_Helper_Dates
             return $nb > 1 ? $str.'s' : $str;
         }; // adds plurals
 
-        $format = array();
+        $format = [];
         if ($interval->y !== 0) {
             $format[] = '%y '.$doPlural($interval->y, 'année');
         }

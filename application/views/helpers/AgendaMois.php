@@ -30,12 +30,12 @@ class View_Helper_AgendaMois
         $int_premj = date('w', mktime(0, 0, 0, $num_mois, 1, $num_an));
 
         // tableau des jours, tableau des mois...
-        $tab_jours = array('', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di');
+        $tab_jours = ['', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
 
         $int_nbjAV = date('t', mktime(0, 0, 0, ($num_mois - 1 < 1) ? 12 : $num_mois - 1, 1, $num_an)); // nb de jours du moi d'avant
 
         // on affiche les jours du mois et aussi les jours du mois avant/apres, on les indique par une * a l'affichage on modifie l'apparence des chiffres *
-        $tab_cal = array(array(), array(), array(), array(), array(), array()); // tab_cal[Semaine][Jour de la semaine]
+        $tab_cal = [[], [], [], [], [], []]; // tab_cal[Semaine][Jour de la semaine]
         $int_premj = ($int_premj == 0) ? 7 : $int_premj;
         $t = 1;
         $p = '';

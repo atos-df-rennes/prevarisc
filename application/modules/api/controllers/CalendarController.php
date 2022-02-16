@@ -9,7 +9,7 @@ class Api_CalendarController extends Zend_Controller_Action
             $idCommission = $this->_getParam('commission');
         }
 
-        $headers = array('Content-Type: text/Calendar; charset=utf-8');
+        $headers = ['Content-Type: text/Calendar; charset=utf-8'];
 
         $this->view->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

@@ -74,9 +74,9 @@ class Service_Adresse
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
-        $select->from(array('ac' => 'adressecommune'))
-            ->join(array('ui' => 'utilisateurinformations'), 'ui.ID_UTILISATEURINFORMATIONS = ac.ID_UTILISATEURINFORMATIONS')
-            ->join(array('f' => 'fonction'), 'ui.ID_FONCTION = f.ID_FONCTION')
+        $select->from(['ac' => 'adressecommune'])
+            ->join(['ui' => 'utilisateurinformations'], 'ui.ID_UTILISATEURINFORMATIONS = ac.ID_UTILISATEURINFORMATIONS')
+            ->join(['f' => 'fonction'], 'ui.ID_FONCTION = f.ID_FONCTION')
             ->where('ac.NUMINSEE_COMMUNE = ?', $numinsee)
             ->limit(1);
 

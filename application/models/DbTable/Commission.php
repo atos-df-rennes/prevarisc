@@ -4,18 +4,18 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
 {
     protected $_name = 'commission'; // Nom de la base
     protected $_primary = 'ID_COMMISSION'; // Clé primaire
-    protected $_referenceMap = array(
-            'commissiontype' => array(
+    protected $_referenceMap = [
+            'commissiontype' => [
                 'columns' => 'ID_COMMISSIONTYPE',
                 'refTableClass' => 'Model_DbTable_CommissionType',
                 'refColumns' => 'ID_COMMISSIONTYPE',
-            ),
-    );
+            ],
+    ];
 
     public function fetchAllPK(): array
     {
         $all = $this->getCommissions();
-        $result = array();
+        $result = [];
         foreach ($all as $row) {
             $result[$row['ID_COMMISSION']] = $row;
         }
@@ -136,7 +136,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         foreach ($array_typesCommission as $row_typeCommission) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from('commissionregle', array('ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'))
+                ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'])
                 ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
                 ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', null)
                 ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', null)
@@ -183,7 +183,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         foreach ($array_typesCommission as $row_typeCommission) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from('commissionregle', array('ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'))
+                ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'])
                 ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
                 ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', null)
                 ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', null)
@@ -222,16 +222,16 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
     {
         $model_groupementCommune = new Model_DbTable_GroupementCommune();
 
-        $regles = array();
+        $regles = [];
 
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('commissionregle', array('ID_GROUPEMENT', 'NUMINSEE_COMMUNE'))
+            ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE'])
             ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
-            ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', array('ID_TYPE'))
-            ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', array('ID_CATEGORIE'))
-                ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', array('ID_CLASSE'))
-            ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', array('LOCALSOMMEIL'))
+            ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', ['ID_TYPE'])
+            ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', ['ID_CATEGORIE'])
+                ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', ['ID_CLASSE'])
+            ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', ['LOCALSOMMEIL'])
             ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', null)
             ->where('commission.ID_COMMISSION = ?', $id_commission);
 
@@ -241,14 +241,14 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
             return $regles;
         }
 
-        $groupement_cache = array();
+        $groupement_cache = [];
         foreach ($results as $result) {
-            $communes = array();
+            $communes = [];
             if ($result->NUMINSEE_COMMUNE != null) {
-                $communes = array($result->NUMINSEE_COMMUNE);
+                $communes = [$result->NUMINSEE_COMMUNE];
             } elseif ($result->ID_GROUPEMENT != null) {
                 if (!isset($groupement_cache[$result->ID_GROUPEMENT])) {
-                    $groupement_cache[$result->ID_GROUPEMENT] = array();
+                    $groupement_cache[$result->ID_GROUPEMENT] = [];
                     $row_groupement = $model_groupementCommune->fetchAll("ID_GROUPEMENT = '".$result->ID_GROUPEMENT."'");
                     foreach ($row_groupement as $row) {
                         $groupement_cache[$result->ID_GROUPEMENT][] = $row['NUMINSEE_COMMUNE'];
@@ -257,13 +257,13 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                 $communes = $groupement_cache[$result->ID_GROUPEMENT];
             }
 
-            $regles[] = array(
+            $regles[] = [
                 'NUMINSEE_COMMUNE' => $communes,
                 'LOCALSOMMEIL' => $result->LOCALSOMMEIL,
                 'ID_TYPE' => $result->ID_TYPE,
                 'ID_CLASSE' => $result->ID_CLASSE,
                 'ID_CATEGORIE' => $result->ID_CATEGORIE,
-            );
+            ];
         }
 
         return $regles;

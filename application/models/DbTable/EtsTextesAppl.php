@@ -3,7 +3,7 @@
 class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
 {
     protected $_name = 'etablissementtextapp';
-    protected $_primary = array('ID_TEXTESAPPL', 'ID_ETABLISSEMENT');
+    protected $_primary = ['ID_TEXTESAPPL', 'ID_ETABLISSEMENT'];
 
     /**
      * @return array
@@ -13,12 +13,12 @@ class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('etablissementtextapp', null)
-            ->join('textesappl', 'etablissementtextapp.ID_TEXTESAPPL = textesappl.ID_TEXTESAPPL', array('ID_TEXTESAPPL', 'LIBELLE_TEXTESAPPL'))
+            ->join('textesappl', 'etablissementtextapp.ID_TEXTESAPPL = textesappl.ID_TEXTESAPPL', ['ID_TEXTESAPPL', 'LIBELLE_TEXTESAPPL'])
             ->join('typetextesappl', 'textesappl.ID_TYPETEXTEAPPL = typetextesappl.ID_TYPETEXTEAPPL')
             ->where('ID_ETABLISSEMENT = ?', $id_etablissement);
 
         $results = $this->fetchAll($select);
 
-        return $results !== null ? $results->toArray() : array();
+        return $results !== null ? $results->toArray() : [];
     }
 }

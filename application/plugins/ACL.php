@@ -92,7 +92,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
         }
 
         // Si l'utilisateur n'est pas connecté, alors on le redirige vers la page de login (si il ne s'y trouve pas encore)
-        if (!Zend_Auth::getInstance()->hasIdentity() && !in_array($request->getActionName(), array('login', 'error'))) {
+        if (!Zend_Auth::getInstance()->hasIdentity() && !in_array($request->getActionName(), ['login', 'error'])) {
             $redirect = $_SERVER['REQUEST_URI'] == '/' ? [] : ['redirect' => urlencode($_SERVER['REQUEST_URI'])];
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('login', 'session', 'default', $redirect);
         } elseif (Zend_Auth::getInstance()->hasIdentity()) {
@@ -103,7 +103,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
             if (!$utilisateur) {
                 $request->setControllerName('error');
                 $request->setActionName('error');
-                $error = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+                $error = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
                 $error->type = Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER;
                 $error->request = clone $request;
                 $error->exception = new Zend_Controller_Dispatcher_Exception('Accès non autorisé', 401);
@@ -220,7 +220,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                         }
 
                         $resource_imploded = implode($resource_exploded, '_');
-                        $list_resources_finale = array($resource_imploded);
+                        $list_resources_finale = [$resource_imploded];
 
                         $resources = new ResourceContainer($list_resources_finale);
                         foreach ($resources as $r) {
@@ -338,7 +338,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 }
                                 $request->setControllerName('error');
                                 $request->setActionName('error');
-                                $error = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+                                $error = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
                                 $error->type = Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER;
                                 $error->request = clone $request;
                                 $error->exception = new Zend_Controller_Dispatcher_Exception('Accès non autorisé', 401);
@@ -369,7 +369,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 if ($page->getResource() === null && $request != null) {
                     return $this->getEtablissementPageResourses($request->getParam('id'));
                 } else {
-                    return array($page->getResource());
+                    return [$page->getResource()];
                 }
             } elseif ($page->get('controller') == 'dossier') {
                 if ($page->getResource() === null && $request != null) {
@@ -377,7 +377,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                         $model_dossier = new Model_DbTable_Dossier();
                         $dossier_nature = $model_dossier->getNatureDossier($id_dossier);
                         $etablissements = $model_dossier->getEtablissementDossier2($id_dossier);
-                        $resources = array();
+                        $resources = [];
                         if (count((array) $etablissements) > 0) {
                             foreach ($etablissements as $etablissement) {
                                 $resources = array_merge($resources, $this->getEtablissementPageResourses($etablissement['ID_ETABLISSEMENT']));
@@ -390,13 +390,13 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                     return $resources;
                 } else {
-                    return array($page->getResource());
+                    return [$page->getResource()];
                 }
             } else {
-                return $page->getResource() === null ? $page->getParent() instanceof Zend_Navigation_Page ? $this->getPageResources($page->getParent(), $request) : array(null) : array($page->getResource());
+                return $page->getResource() === null ? $page->getParent() instanceof Zend_Navigation_Page ? $this->getPageResources($page->getParent(), $request) : [null] : [$page->getResource()];
             }
         } else {
-            return array(null);
+            return [null];
         }
     }
 
@@ -433,9 +433,9 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
         $etablissement = $service_etablissement->get($id_etablissement);
 
-        $groupements = array();
-        $communes = array();
-        $etablissements = array($id_etablissement => $etablissement);
+        $groupements = [];
+        $communes = [];
+        $etablissements = [$id_etablissement => $etablissement];
 
         switch ($etablissement['informations']['ID_GENRE']) {
             case '1':
@@ -473,7 +473,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
         switch ($etablissement['informations']['ID_GENRE']) {
             case '1':
-                $resource = array('editsite');
+                $resource = ['editsite'];
 
                 foreach ($ids_etablissement as $id) {
                     $new_resource = 'etablissement_erp_';
@@ -551,7 +551,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 $resource .= $communes[$id_etablissement];
                 break;
         }
-        $list_resources_finale = is_array($resource) ? $resource : array($resource);
+        $list_resources_finale = is_array($resource) ? $resource : [$resource];
         //$this->develop_resources($list_resources_finale);
 
         return $list_resources_finale;
@@ -564,15 +564,15 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
  */
 class ResourceContainer implements Iterator
 {
-    protected $resources = array();
+    protected $resources = [];
 
-    protected $developped_resources = array();
+    protected $developped_resources = [];
 
     protected $resources_index = 0;
 
     protected $developped_resources_index = 0;
 
-    public function __construct(array $resources = array())
+    public function __construct(array $resources = [])
     {
         $this->resources = $resources;
     }
@@ -598,7 +598,7 @@ class ResourceContainer implements Iterator
             ++$this->resources_index;
             if (isset($this->resources[$this->resources_index])) {
                 $this->developped_resources_index = 0;
-                $this->developped_resources = array($this->resources[$this->resources_index]);
+                $this->developped_resources = [$this->resources[$this->resources_index]];
                 $this->develop_resources($this->developped_resources);
             }
         }
@@ -606,12 +606,12 @@ class ResourceContainer implements Iterator
 
     public function rewind()
     {
-        $this->developped_resources = array();
+        $this->developped_resources = [];
         $this->resources_index = 0;
         $this->developped_resources_index = 0;
 
         if (count($this->resources) > 0) {
-            $this->developped_resources = array($this->resources[$this->resources_index]);
+            $this->developped_resources = [$this->resources[$this->resources_index]];
             $this->develop_resources($this->developped_resources);
         }
     }

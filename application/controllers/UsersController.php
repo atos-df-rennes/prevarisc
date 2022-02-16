@@ -30,11 +30,11 @@ class UsersController extends Zend_Controller_Action
         $this->view->fonctions = $service_user->getAllFonctions();
         $this->view->communes = $service_adresse->getAllCommunes();
         $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = array('LDAP_ACTIF' =>
+        $this->view->params = ['LDAP_ACTIF' =>
             getenv('PREVARISC_LDAP_ENABLED')
             || getenv('PREVARISC_NTLM_ENABLED')
             || getenv('PREVARISC_CAS_ENABLED')
-        );
+        ];
 
         $this->view->add = false;
 
@@ -42,10 +42,10 @@ class UsersController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $service_user->save($post, $_FILES['avatar'], $this->_request->uid);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été mis à jour.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été mis à jour.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -64,11 +64,11 @@ class UsersController extends Zend_Controller_Action
         $this->view->fonctions = $service_user->getAllFonctions();
         $this->view->communes = $service_adresse->getAllCommunes();
         $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = array('LDAP_ACTIF' =>
+        $this->view->params = ['LDAP_ACTIF' =>
             getenv('PREVARISC_LDAP_ENABLED')
             || getenv('PREVARISC_NTLM_ENABLED')
             || getenv('PREVARISC_CAS_ENABLED')
-        );
+        ];
 
         $this->view->add = true;
 
@@ -76,10 +76,10 @@ class UsersController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $service_user->save($post, $_FILES['avatar']);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été ajouté.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'utilisateur a bien été ajouté.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'utilisateur n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -128,17 +128,17 @@ class UsersController extends Zend_Controller_Action
                 $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
                 $cache->remove('acl');
 
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Mise à jour réussie !',
                     'message' => 'La matrice des droits a bien été mise à jour.',
-                ));
+                ]);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'error',
                     'title' => 'Aie',
                     'message' => $e->getMessage(),
-                ));
+                ]);
             }
 
             // Redirection
@@ -160,10 +160,10 @@ class UsersController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $service_user->saveGroup($post, $this->_request->gid);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été mis à jour.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été mis à jour.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -180,10 +180,10 @@ class UsersController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $service_user->saveGroup($post);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été ajouté.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Le groupe a bien été ajouté.']);
                 $this->_helper->redirector('index', null, null);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Le groupe n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -200,9 +200,9 @@ class UsersController extends Zend_Controller_Action
 
         try {
             $service_user->deleteGroup($this->_request->gid);
-            $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le groupe a été supprimé.'));
+            $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'Le groupe a été supprimé.']);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$e->getMessage().')'));
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'Erreur dans la suppression du groupe. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
 
         $this->_helper->redirector('index', null, null);
@@ -223,17 +223,17 @@ class UsersController extends Zend_Controller_Action
 
         // On met le libellé du type dans le tableau des activités
         $types = $service_type->getAllWithTypes();
-        $types_sort = array();
+        $types_sort = [];
 
         foreach ($types as $_type) {
             $types_sort[$_type['ID_TYPE']] = $_type;
         }
 
-        $type_sort = array();
+        $type_sort = [];
 
         foreach ($types as $type) {
             if (!array_key_exists($types_sort[$type['ID_TYPE']]['LIBELLE_TYPE'], $type_sort)) {
-                $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']] = array();
+                $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']] = [];
             }
 
             $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']][] = $type;
@@ -280,7 +280,7 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
-                                        $types = array();
+                                        $types = [];
                                         foreach ($tmp_types as $t) {
                                             $types[$t['ID_TYPEACTIVITE']] = $t['LIBELLE_ACTIVITE'];
                                         }
@@ -306,7 +306,7 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
-                                        $types = array();
+                                        $types = [];
                                         foreach ($tmp_types as $t) {
                                             $types[$t['ID_TYPEACTIVITE']] = $t['LIBELLE_ACTIVITE'];
                                         }
@@ -330,7 +330,7 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_famille = new Service_Famille();
                                         $tmp_familles = $service_famille->getAll();
-                                        $familles = array();
+                                        $familles = [];
                                         $types = null;
                                         foreach ($tmp_familles as $t) {
                                             $types[$t['ID_FAMILLE']] = $t['LIBELLE_FAMILLE'];
@@ -357,7 +357,7 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_classe = new Service_Classe();
                                         $tmp_classes = $service_classe->getAll();
-                                        $classes = array();
+                                        $classes = [];
                                         foreach ($tmp_classes as $t) {
                                             $classes[$t['ID_CLASSE']] = $t['LIBELLE_CLASSE'];
                                         }
@@ -423,7 +423,7 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_genre = new Service_Genre();
                                         $tmp_classement = $service_genre->getClassements();
-                                        $classement = array();
+                                        $classement = [];
                                         foreach ($tmp_classement as $t) {
                                             $classement[$t['ID_CLASSEMENT']] = $t['LIBELLE_CLASSEMENT'];
                                         }
@@ -441,9 +441,9 @@ class UsersController extends Zend_Controller_Action
                                 break;
                         }
 
-                        $id_resource = $model_resource->createRow(array('name' => $name, 'text' => $this->_request->text == '' ? $text : $this->_request->text))->save();
-                        $model_privilege->createRow(array('name' => 'view_ets', 'text' => 'Lecture', 'id_resource' => $id_resource))->save();
-                        $model_privilege->createRow(array('name' => 'edit_ets', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
+                        $id_resource = $model_resource->createRow(['name' => $name, 'text' => $this->_request->text == '' ? $text : $this->_request->text])->save();
+                        $model_privilege->createRow(['name' => 'view_ets', 'text' => 'Lecture', 'id_resource' => $id_resource])->save();
+                        $model_privilege->createRow(['name' => 'edit_ets', 'text' => 'Modifier', 'id_resource' => $id_resource])->save();
                         break;
                     case 'dossier':
                         $name = 'dossier_';
@@ -454,7 +454,7 @@ class UsersController extends Zend_Controller_Action
                             array_walk($array, function (&$val, $key) use (&$array) {
                                 $service_dossier = new Service_Dossier();
                                 $tmp_natures = $service_dossier->getAllNatures();
-                                $natures = array();
+                                $natures = [];
                                 foreach ($tmp_natures as $n) {
                                     $natures[$n['ID_DOSSIERNATURE']] = $n['LIBELLE_DOSSIERNATURE'];
                                 }
@@ -466,18 +466,18 @@ class UsersController extends Zend_Controller_Action
                         $text .= (is_array($this->_request->dossier_natures) ? 'Natures '.implode($array, '-') : 'Toutes les natures');
                         $text .= ')';
 
-                        $id_resource = $model_resource->createRow(array('name' => $name, 'text' => $this->_request->text == '' ? $text : $this->_request->text))->save();
-                        $model_privilege->createRow(array('name' => 'view_doss', 'text' => 'Lecture', 'id_resource' => $id_resource))->save();
-                        $model_privilege->createRow(array('name' => 'edit_doss', 'text' => 'Modifier', 'id_resource' => $id_resource))->save();
-                        $model_privilege->createRow(array('name' => 'verrouillage_dossier', 'text' => 'Verrouillage d\'un dossier', 'id_resource' => $id_resource))->save();
+                        $id_resource = $model_resource->createRow(['name' => $name, 'text' => $this->_request->text == '' ? $text : $this->_request->text])->save();
+                        $model_privilege->createRow(['name' => 'view_doss', 'text' => 'Lecture', 'id_resource' => $id_resource])->save();
+                        $model_privilege->createRow(['name' => 'edit_doss', 'text' => 'Modifier', 'id_resource' => $id_resource])->save();
+                        $model_privilege->createRow(['name' => 'verrouillage_dossier', 'text' => 'Verrouillage d\'un dossier', 'id_resource' => $id_resource])->save();
                         break;
                     default:
                         break;
                 }
 
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La ressource a bien été ajoutée.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La ressource a bien été ajoutée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Ajout annulé', 'message' => 'La ressource n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Ajout annulé', 'message' => 'La ressource n\'a été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('ressources-specialisees');
@@ -494,9 +494,9 @@ class UsersController extends Zend_Controller_Action
         if ($this->_request->isGet()) {
             try {
                 $model_resource->find($this->_request->id)->current()->delete();
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La ressource a bien été supprimée.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La ressource a bien été supprimée.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Suppression annulée', 'message' => 'La ressource n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Suppression annulée', 'message' => 'La ressource n\'a été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('ressources-specialisees');

@@ -52,17 +52,17 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 }
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les informations ont été sauvegardées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -111,17 +111,17 @@ class GestionDesCommissionsController extends Zend_Controller_Action
 
             $this->view->tid = $_GET['tid'];
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La commission a bien été sauvegardée',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 }

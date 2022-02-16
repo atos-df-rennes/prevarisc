@@ -3,7 +3,7 @@
 class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossiercontact'; // Nom de la base
-    protected $_primary = array('ID_DOSSIER', 'ID_UTILISATEURINFORMATIONS'); // Clé primaire
+    protected $_primary = ['ID_DOSSIER', 'ID_UTILISATEURINFORMATIONS']; // Clé primaire
 
     /**
      * @return array
@@ -13,8 +13,8 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
         //Permet de récuperer les informations concernant le directeur unique de sécurité
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('dc' => 'dossiercontact'))
-            ->join(array('ui' => 'utilisateurinformations'), 'dc.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
+            ->from(['dc' => 'dossiercontact'])
+            ->join(['ui' => 'utilisateurinformations'], 'dc.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
             ->where('dc.ID_DOSSIER = ?', $idDossier)
             ->where('ui.ID_FONCTION = ?', $idFct)
             ->limit(1);
@@ -30,8 +30,8 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
         //Permet de récuperer les informations concernant le directeur unique de sécurité
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('ec' => 'etablissementcontact'))
-            ->join(array('ui' => 'utilisateurinformations'), 'ec.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
+            ->from(['ec' => 'etablissementcontact'])
+            ->join(['ui' => 'utilisateurinformations'], 'ec.ID_UTILISATEURINFORMATIONS = ui.ID_UTILISATEURINFORMATIONS')
             ->where('ec.ID_ETABLISSEMENT = ?', $idEtablissement);
 
         if ($idFct) {

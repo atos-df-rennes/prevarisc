@@ -3,7 +3,7 @@
 class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
 {
     protected $_name = 'commissionregle'; // Nom de la base
-    protected $_primary = array('ID_REGLE'); // Clé primaire
+    protected $_primary = ['ID_REGLE']; // Clé primaire
 
     /**
      * @param string|int|float          $first_table
@@ -18,10 +18,10 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     private function fullJoinRegle($first_table, $second_table, $key, $id_regle): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
-        $return = $this->fetchAll($this->select()->union(array(
+        $return = $this->fetchAll($this->select()->union([
             $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "$first_table.$key = $second_table.$key AND ID_REGLE = $id_regle"),
             $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "$first_table.$key = $second_table.$key AND ID_REGLE = $id_regle"),
-        )))->toArray();
+        ]))->toArray();
 
         // Requete sur la table finale
         $primary = $this->fetchAll($this->select()->setIntegrityCheck(false)->from($first_table))->toArray();
@@ -45,7 +45,7 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
      */
     private function mapResult($array, $key): array
     {
-        $result = array();
+        $result = [];
 
         // On parcours le tableau
         foreach ($array as $value) {
@@ -72,11 +72,11 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
         $rowset_reglesDeLaCommission = $this->fetchAll('ID_COMMISSION = '.$id_commission);
 
         // On initialise le tableau qui contiendra l'ensemble des critères
-        $array_regles = array();
+        $array_regles = [];
 
         // Pour chaque règle, on va chercher les critères
         foreach ($rowset_reglesDeLaCommission as $row_regleDeLaCommission) {
-            $array_regles[] = array(
+            $array_regles[] = [
                 'id_regle' => $row_regleDeLaCommission['ID_REGLE'],
                 'commune' => ($row_regleDeLaCommission['NUMINSEE_COMMUNE']) ? $model_commune->fetchRow('NUMINSEE_COMMUNE = '.$row_regleDeLaCommission['NUMINSEE_COMMUNE']) : null,
                 'groupement' => $row_regleDeLaCommission['ID_GROUPEMENT'],
@@ -86,7 +86,7 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
                 'local_sommeil' => $this->mapResult($this->fetchAll($this->select()->setIntegrityCheck(false)->from('commissionreglelocalsommeil')->where('ID_REGLE = '.$row_regleDeLaCommission['ID_REGLE']))->toArray(), 'LOCALSOMMEIL'),
                 'etude_visite' => $this->mapResult($this->fetchAll($this->select()->setIntegrityCheck(false)->from('commissionregleetudevisite')->where('ID_REGLE = '.$row_regleDeLaCommission['ID_REGLE']))->toArray(), 'ETUDEVISITE'),
                 'infos' => $model_commission->fetchRow('ID_COMMISSION = '.$id_commission),
-            );
+            ];
         }
 
         return $array_regles;

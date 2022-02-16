@@ -25,13 +25,13 @@ class Service_User
             $user_groupements = $model_user->getGroupements($user['ID_UTILISATEUR']);
             $user_commissions = $model_user->getCommissions($user['ID_UTILISATEUR']);
 
-            $user = array_merge($user, array('uid' => $user['ID_UTILISATEUR']));
-            $user = array_merge($user, array('infos' => $model_userinformations->find($user['ID_UTILISATEURINFORMATIONS'])->current()->toArray()));
-            $user = array_merge($user, array('group' => $model_groupe->find($user['ID_GROUPE'])->current()->toArray()));
-            $user = array_merge($user, array('preferences' => $model_preferences->fetchRow('ID_UTILISATEUR = '.$user['ID_UTILISATEUR'])->toArray()));
-            $user = array_merge($user, array('groupements' => $user_groupements == null ? null : $user_groupements->toArray()));
-            $user = array_merge($user, array('commissions' => $user_commissions == null ? null : $user_commissions->toArray()));
-            $user['infos'] = array_merge($user['infos'], array('LIBELLE_FONCTION' => $model_fonction->find($user['infos']['ID_FONCTION'])->current()->toArray()['LIBELLE_FONCTION']));
+            $user = array_merge($user, ['uid' => $user['ID_UTILISATEUR']]);
+            $user = array_merge($user, ['infos' => $model_userinformations->find($user['ID_UTILISATEURINFORMATIONS'])->current()->toArray()]);
+            $user = array_merge($user, ['group' => $model_groupe->find($user['ID_GROUPE'])->current()->toArray()]);
+            $user = array_merge($user, ['preferences' => $model_preferences->fetchRow('ID_UTILISATEUR = '.$user['ID_UTILISATEUR'])->toArray()]);
+            $user = array_merge($user, ['groupements' => $user_groupements == null ? null : $user_groupements->toArray()]);
+            $user = array_merge($user, ['commissions' => $user_commissions == null ? null : $user_commissions->toArray()]);
+            $user['infos'] = array_merge($user['infos'], ['LIBELLE_FONCTION' => $model_fonction->find($user['infos']['ID_FONCTION'])->current()->toArray()['LIBELLE_FONCTION']]);
 
             $cache->save(serialize($user));
         }
@@ -212,14 +212,14 @@ class Service_User
      *
      * @return mixed false if failed or Model_DbTable_UtilisateurPreferences on success
      */
-    public function savePreferences($id_utilisateur, array $preferences = array())
+    public function savePreferences($id_utilisateur, array $preferences = [])
     {
         if (!$id_utilisateur) {
             return false;
         }
 
         $DB_userPreferences = new Model_DbTable_UtilisateurPreferences();
-        $DB_preferences = $DB_userPreferences->fetchRow(array('ID_UTILISATEUR = ?' => $id_utilisateur));
+        $DB_preferences = $DB_userPreferences->fetchRow(['ID_UTILISATEUR = ?' => $id_utilisateur]);
 
         if (!$DB_preferences) {
             return false;

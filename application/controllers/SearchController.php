@@ -34,7 +34,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_typeactivite = $service_typeactivite->getAllWithTypes();
         $this->view->DB_famille = $service_famille->getAll();
         $this->view->DB_commission = $service_commission->getAll();
-        $typeGroupementTerritorial = array(5);
+        $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
         if (
@@ -74,13 +74,13 @@ class SearchController extends Zend_Controller_Action
                     $sheet->getDefaultRowDimension()->setRowHeight(-1);
 
                     // Formattage des titres de colonnes
-                    $styleArray = array(
-                        'borders' => array(
-                            'allborders' => array(
+                    $styleArray = [
+                        'borders' => [
+                            'allborders' => [
                                 'style' => PHPExcel_Style_Border::BORDER_THIN
-                            )
-                        )
-                    );
+                            ]
+                        ]
+                    ];
                     $sheet->getStyle('A1:W1')->applyFromArray($styleArray);
                     unset($styleArray);
                     $sheet->getStyle('A1:W1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -211,11 +211,11 @@ class SearchController extends Zend_Controller_Action
                     $this->view->writer->save('php://output');
                     exit();
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array(
+                    $this->_helper->flashMessenger([
                             'context' => 'error',
                             'title' => 'Problème d\'export',
                             'message' => 'L\'export a rencontré un problème. Veuillez rééssayez. (' . $e->getMessage() . ')'
-                    ));
+                    ]);
                 }
             } else {
                 // Recherche
@@ -247,7 +247,7 @@ class SearchController extends Zend_Controller_Action
                         $groupements_territoriaux = $parameters['groupements_territoriaux'];
                     } else {
                         if ($this->view->user != null && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
-                            $groupements_territoriaux = array();
+                            $groupements_territoriaux = [];
                             foreach ($this->view->user['groupements'] as $groupement) {
                                 if ($groupement['ID_GROUPEMENT'] != null) {
                                     array_push($groupements_territoriaux, $groupement['ID_GROUPEMENT']);
@@ -265,7 +265,7 @@ class SearchController extends Zend_Controller_Action
 
                     $this->view->results = $paginator;
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. (' . $e->getMessage() . ')'));
+                    $this->_helper->flashMessenger(['context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. (' . $e->getMessage() . ')']);
                 }
             }
         }
@@ -289,8 +289,8 @@ class SearchController extends Zend_Controller_Action
         $this->view->array_commissions = $service_commissions->getCommissionsAndTypes();
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
-        $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && $this->_request->getQuery()['commune'] != '' ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : array();
-        $typeGroupementTerritorial = array(5);
+        $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && $this->_request->getQuery()['commune'] != '' ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : [];
+        $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
         $checkDateFormat = function ($date): bool {
@@ -315,7 +315,7 @@ class SearchController extends Zend_Controller_Action
                     $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
                     $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#' ? $parameters['objet'] : null;
                     $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
-                    $criteresRecherche = array();
+                    $criteresRecherche = [];
                     $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
                     $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
                     $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
@@ -349,13 +349,13 @@ class SearchController extends Zend_Controller_Action
                     $sheet->getDefaultRowDimension()->setRowHeight(- 1);
 
                     // Formattage des titres de colonnes
-                    $styleArray = array(
-                        'borders' => array(
-                            'allborders' => array(
+                    $styleArray = [
+                        'borders' => [
+                            'allborders' => [
                                 'style' => PHPExcel_Style_Border::BORDER_THIN
-                            )
-                        )
-                    );
+                            ]
+                        ]
+                    ];
                     $sheet->getStyle('A1:U1')->applyFromArray($styleArray);
                     unset($styleArray);
                     $sheet->getStyle('A1:U1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -453,11 +453,11 @@ class SearchController extends Zend_Controller_Action
                     $this->view->writer->save('php://output');
                     exit();
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array(
+                    $this->_helper->flashMessenger([
                             'context' => 'error',
                             'title' => 'Problème d\'export',
                             'message' => 'L\'export a rencontré un problème. Veuillez rééssayez. (' . $e->getMessage() . ')'
-                    ));
+                    ]);
                 }
             } else {
                 // Recherche
@@ -475,7 +475,7 @@ class SearchController extends Zend_Controller_Action
                     $num_doc_urba = array_key_exists('permis', $parameters) && $parameters['permis'] != '' ? $parameters['permis'] : null;
                     $objet = array_key_exists('objet', $parameters) && $parameters['objet'] != ''  && (string) $parameters['objet'][0] != '#' ? $parameters['objet'] : null;
                     $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
-                    $criteresRecherche = array();
+                    $criteresRecherche = [];
                     $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
                     $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
                     $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
@@ -500,7 +500,7 @@ class SearchController extends Zend_Controller_Action
                         $criteresRecherche['groupements_territoriaux'] = $parameters ['groupements_territoriaux'];
                     } else {
                         if ($this->view->user != null && array_key_exists('groupements', $this->view->user) && count($this->view->user ['groupements']) > 0) {
-                            $criteresRecherche['groupements_territoriaux'] = array();
+                            $criteresRecherche['groupements_territoriaux'] = [];
                             foreach ($this->view->user ['groupements'] as $groupement) {
                                 if ($groupement ['ID_GROUPEMENT'] != null) {
                                     array_push($criteresRecherche['groupements_territoriaux'], $groupement ['ID_GROUPEMENT']);
@@ -518,7 +518,7 @@ class SearchController extends Zend_Controller_Action
 
                     $this->view->results = $paginator;
                 } catch (Exception $e) {
-                    $this->_helper->flashMessenger(array('context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')'));
+                    $this->_helper->flashMessenger(['context' => 'error','title' => 'Problème de recherche','message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. (' . $e->getMessage() . ')']);
                 }
             }
         }
@@ -550,7 +550,7 @@ class SearchController extends Zend_Controller_Action
 
                 $this->view->results = $paginator;
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }

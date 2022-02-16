@@ -12,7 +12,7 @@ class Model_DbTable_TypeTextesAppl extends Zend_Db_Table_Abstract
     public function getType()
     {
         $select = $this->select()
-            ->from(array('ty' => 'typetextesappl'))
+            ->from(['ty' => 'typetextesappl'])
             ->order('ty.ID_TYPETEXTEAPPL');
 
         return $this->getAdapter()->fetchAll($select);

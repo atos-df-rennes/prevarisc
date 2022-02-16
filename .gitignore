@@ -12,4 +12,4 @@ vendor
 /public/ign/*
 /public/data/uploads/commission
 HashedFileDataStore.php
-.php_cs.cache
+.php-cs-fixer.cache

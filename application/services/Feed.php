@@ -61,19 +61,19 @@ class Service_Feed
         $model = new Model_DbTable_News();
         $model_groupe = new Model_DbTable_NewsGroupe();
 
-        $id_news = $model->createRow(array(
+        $id_news = $model->createRow([
             'ID_NEWS' => time(),
             'TYPE_NEWS' => $type,
             'TEXTE_NEWS' => $message,
             'ID_UTILISATEUR' => $author,
-        ))->save();
+        ])->save();
 
         // Ajout des destinataires du message
         foreach ($confidentialite as $value) {
-            $model_groupe->createRow(array(
+            $model_groupe->createRow([
                 'ID_NEWS' => $id_news,
                 'ID_GROUPE' => $value,
-            ))->save();
+            ])->save();
         }
 
         return $id_news;

@@ -12,7 +12,7 @@ class Model_DbTable_DossierNatureliste extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('dnl' => 'dossiernatureliste'))
+            ->from(['dnl' => 'dossiernatureliste'])
             ->where('ID_DOSSIERTYPE = ?', $type)
             ->where('ORDRE IS NOT NULL')
             ->order('dnl.ORDRE');

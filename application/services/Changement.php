@@ -5,44 +5,44 @@ class Service_Changement
     /**
      * Définition des balises.
      */
-    public const BALISES = array(
-        '{activitePrincipaleEtablissement}' => array(
+    public const BALISES = [
+        '{activitePrincipaleEtablissement}' => [
             'description' => "L'activité principale de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_TYPEACTIVITE_PRINCIPAL',
-        ),
-        '{categorieEtablissement}' => array(
+        ],
+        '{categorieEtablissement}' => [
             'description' => "La catégorie de l'etablissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_CATEGORIE',
-        ),
-        '{etablissementAvis}' => array(
+        ],
+        '{etablissementAvis}' => [
             'description' => "L'avis de l'établissement",
             'model' => 'avis',
             'champ' => '',
-        ),
-        '{etablissementLibelle}' => array(
+        ],
+        '{etablissementLibelle}' => [
             'description' => "Le libelle de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-        ),
-        '{etablissementNumeroId}' => array(
+        ],
+        '{etablissementNumeroId}' => [
             'description' => "Le numéro Id de l'établissement",
             'model' => 'general',
             'champ' => 'NUMEROID_ETABLISSEMENT',
-        ),
-        '{etablissementStatut}' => array(
+        ],
+        '{etablissementStatut}' => [
             'description' => "Le statut (Ouvert ou Fermé) de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_STATUT',
-        ),
-        '{typePrincipalEtablissement}' => array(
+        ],
+        '{typePrincipalEtablissement}' => [
             'description' => "Le type principal de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_TYPE_PRINCIPAL',
-        ),
+        ],
 
-    );
+    ];
 
     /**
      * Retourne tous les enregistrement contenus dans la table changement.
@@ -166,7 +166,7 @@ class Service_Changement
      */
     public function convertMessage($message, $ets)
     {
-        $params = array();
+        $params = [];
         foreach (self::BALISES as $balise => $content) {
             $replacementstr = '';
             if ($content['model'] === 'avis') {

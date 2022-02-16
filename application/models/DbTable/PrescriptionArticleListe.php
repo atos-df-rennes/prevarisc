@@ -13,7 +13,7 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ptl' => 'prescriptionarticleliste'));
+             ->from(['ptl' => 'prescriptionarticleliste']);
 
         if ($visible != null) {
             $select->where('ptl.VISIBLE_ARTICLE = ?', $visible);
@@ -38,7 +38,7 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
      */
     public function replace($idOldArticle, $idNewArticle)
     {
-        $data = array('ID_ARTICLE' => $idNewArticle);
+        $data = ['ID_ARTICLE' => $idNewArticle];
         $where[] = 'ID_ARTICLE = '.$idOldArticle;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossierassoc', $data, $where);

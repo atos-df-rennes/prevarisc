@@ -104,17 +104,17 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             $categorie->save();
             $this->view->categorie = $categorie;
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La catégorie a bien été sauvegardée',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde de la catégorie',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -164,17 +164,17 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             $texte->save();
             $this->view->texte = $texte;
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le texte a bien été sauvegardé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -224,17 +224,17 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             $article->save();
             $this->view->article = $article;
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'L\'article a bien été sauvegardé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde de l\'article',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -353,11 +353,11 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $this->view->prescriptionType = $service_prescription->getPrescriptionTypeDetail($idPrescriptionType);
                 $this->view->idPrescriptionType = $this->view->prescriptionType[0]['ID_PRESCRIPTIONTYPE'];
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'error',
                     'title' => 'Erreur lors de la sauvegarde de la prescription',
                     'message' => $e->getMessage(),
-                ));
+                ]);
             }
         }
     }
@@ -373,16 +373,16 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $post = $this->_request->getPost();
                 if ($post['action'] == 'add') {
                     $service_prescTextes->saveTexte($post);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'La texte a bien été enregistré'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'La texte a bien été enregistré']);
                 } elseif ($post['action'] == 'edit') {
                     $service_prescTextes->saveTexte($post, $post['id_texte']);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'La texte a bien été enregistré'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'La texte a bien été enregistré']);
                 } elseif ($post['action'] == 'replace') {
                     $service_prescTextes->replaceTexte($post['id_texte'], $post['idTexteReplace']);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 
@@ -438,13 +438,13 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 $post = $this->_request->getPost();
                 if ($post['action'] == 'add') {
                     $service_prescription->saveArticle($post);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'L\'article a bien été enregistré'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'L\'article a bien été enregistré']);
                 } elseif ($post['action'] == 'edit') {
                     $service_prescription->saveArticle($post, $post['id_article']);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'L\'article a bien été enregistré'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Modification effectuée.', 'message' => 'L\'article a bien été enregistré']);
                 } elseif ($post['action'] == 'replace') {
                     $service_prescription->replaceArticle($post['id_article'], $post['idArticleReplace']);
-                    $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'L\'article a bien été supprimé'));
+                    $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'L\'article a bien été supprimé']);
                 }
             } catch (Exception $e) {
             }
@@ -500,10 +500,10 @@ class GestionPrescriptionsController extends Zend_Controller_Action
 
             if ($post['action'] == 'add') {
                 $service_prescription->savePrescription($post);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'Le rappel réglementaire a bien été enregistré'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Enregistrement effectué.', 'message' => 'Le rappel réglementaire a bien été enregistré']);
             } elseif ($post['action'] == 'edit') {
                 $service_prescription->savePrescription($post, $post['idPrescription']);
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Rappel réglementaire modifié.', 'message' => 'Le rappel réglementaire a bien été modifié'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Rappel réglementaire modifié.', 'message' => 'Le rappel réglementaire a bien été modifié']);
             }
         }
 

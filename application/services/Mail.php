@@ -7,7 +7,7 @@ class Service_Mail
     {
         if (getenv('PREVARISC_MAIL_ENABLED') && getenv('PREVARISC_MAIL_ENABLED') == 1) {
             $transport = null;
-            $config = array();
+            $config = [];
             if (getenv('PREVARISC_MAIL_PORT') !== '') {
                 $config['port'] = getenv('PREVARISC_MAIL_PORT');
             }

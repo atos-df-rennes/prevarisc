@@ -13,7 +13,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ldc' => 'listedocconsulte'))
+             ->from(['ldc' => 'listedocconsulte'])
              ->where('ldc.VISITE_DOC = 1')
              ->order('ldc.ORDRE_DOC');
 
@@ -28,7 +28,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ldc' => 'listedocconsulte'))
+             ->from(['ldc' => 'listedocconsulte'])
              ->where('ldc.ETUDE_DOC = 1')
              ->order('ldc.ORDRE_DOC');
 
@@ -42,7 +42,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ldc' => 'listedocconsulte'))
+             ->from(['ldc' => 'listedocconsulte'])
              ->where('ldc.VISITERT_DOC = 1')
              ->order('ldc.ORDRE_DOC');
 
@@ -56,7 +56,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ldc' => 'listedocconsulte'))
+             ->from(['ldc' => 'listedocconsulte'])
              ->where('ldc.VISITEVAO_DOC = 1')
              ->order('ldc.ORDRE_DOC');
 
@@ -71,7 +71,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ddc' => 'dossierdocconsulte'))
+             ->from(['ddc' => 'dossierdocconsulte'])
              ->where('ddc.ID_DOSSIER = ?', $id_dossier);
 
         return $this->getAdapter()->fetchAll($select);
@@ -89,7 +89,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
 
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ddc' => 'dossierdocconsulte'))
+             ->from(['ddc' => 'dossierdocconsulte'])
              ->where('ddc.ID_DOSSIER = ?', $id_dossier)
              ->where('ddc.ID_NATURE');
 

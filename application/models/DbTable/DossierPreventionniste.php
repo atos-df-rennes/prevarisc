@@ -3,7 +3,7 @@
 class Model_DbTable_DossierPreventionniste extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossierpreventionniste'; // Nom de la base
-    protected $_primary = array('ID_DOSSIER', 'ID_PREVENTIONNISTE'); // Clé primaire
+    protected $_primary = ['ID_DOSSIER', 'ID_PREVENTIONNISTE']; // Clé primaire
 
     /**
      * @param string|int $idDossier

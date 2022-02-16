@@ -2,135 +2,135 @@
 
 class Service_Dashboard
 {
-    protected $options = array();
+    protected $options = [];
 
-    protected $blocsConfig = array(
+    protected $blocsConfig = [
 
         // lié aux commissions
-        'nextCommissions' => array(
+        'nextCommissions' => [
             'service' => 'Service_Dashboard',
             'method' => 'getNextCommission',
-            'acl' => array('dashboard', 'view_next_commissions'),
+            'acl' => ['dashboard', 'view_next_commissions'],
             'title' => 'Prochaines commissions',
             'type' => 'commissions',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
 
-        'nextCommissionsOdj' => array(
+        'nextCommissionsOdj' => [
             'service' => 'Service_Dashboard',
             'method' => 'getNextCommission',
-            'acl' => array('dashboard', 'view_next_commissions_odj'),
+            'acl' => ['dashboard', 'view_next_commissions_odj'],
             'title' => 'Prochaines commissions',
             'type' => 'odj',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
 
         // lié aux établissements
-        'ERPSuivis' => array(
+        'ERPSuivis' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPSuivis',
-            'acl' => array('dashboard', 'view_ets_suivis'),
+            'acl' => ['dashboard', 'view_ets_suivis'],
             'title' => 'Etablissements suivis',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'medium',
-        ),
-        'ERPOuvertsSousAvisDefavorable' => array(
+        ],
+        'ERPOuvertsSousAvisDefavorable' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPOuvertsSousAvisDefavorable',
-            'acl' => array('dashboard', 'view_ets_avis_defavorable'),
+            'acl' => ['dashboard', 'view_ets_avis_defavorable'],
             'title' => 'Etablissements sous avis défavorable',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'ERPOuvertsSousAvisDefavorableSuivis' => array(
+        ],
+        'ERPOuvertsSousAvisDefavorableSuivis' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPOuvertsSousAvisDefavorableSuivis',
-            'acl' => array('dashboard', 'view_ets_avis_defavorable_suivis'),
+            'acl' => ['dashboard', 'view_ets_avis_defavorable_suivis'],
             'title' => 'Etablissements suivis sous avis défavorable',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'ERPOuvertsSousAvisDefavorableSurCommune' => array(
+        ],
+        'ERPOuvertsSousAvisDefavorableSurCommune' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPOuvertsSousAvisDefavorableSurCommune',
-            'acl' => array('dashboard', 'view_ets_avis_defavorable_sur_commune'),
+            'acl' => ['dashboard', 'view_ets_avis_defavorable_sur_commune'],
             'title' => 'Etablissements de votre commune sous avis défavorable',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'ERPSansPreventionniste' => array(
+        ],
+        'ERPSansPreventionniste' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPSansPreventionniste',
-            'acl' => array('dashboard', 'view_ets_sans_preventionniste'),
+            'acl' => ['dashboard', 'view_ets_sans_preventionniste'],
             'title' => 'Etablissements sans préventionnistes',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'ERPOuvertsSansProchainesVisitePeriodiques' => array(
+        ],
+        'ERPOuvertsSansProchainesVisitePeriodiques' => [
             'service' => 'Service_Dashboard',
             'method' => 'getERPOuvertsSansProchainesVisitePeriodiques',
-            'acl' => array('dashboard', 'view_ets_ouverts_sans_prochaine_vp'),
+            'acl' => ['dashboard', 'view_ets_ouverts_sans_prochaine_vp'],
             'title' => 'Etablissements sans prochaine VP cette année',
             'type' => 'etablissements',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
 
         // lié aux dossiers
-        'DossiersSuivisSansAvis' => array(
+        'DossiersSuivisSansAvis' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersSuivisSansAvis',
-            'acl' => array('dashboard', 'view_doss_suivis_sans_avis'),
+            'acl' => ['dashboard', 'view_doss_suivis_sans_avis'],
             'title' => 'Dossiers suivis sans avis du rapporteur',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'DossiersSuivisNonVerrouilles' => array(
+        ],
+        'DossiersSuivisNonVerrouilles' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersSuivisNonVerrouilles',
-            'acl' => array('dashboard', 'view_doss_suivis_unlocked'),
+            'acl' => ['dashboard', 'view_doss_suivis_unlocked'],
             'title' => 'Dossiers suivis non verrouillés',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'DossierDateCommissionEchu' => array(
+        ],
+        'DossierDateCommissionEchu' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossierDateCommissionEchu',
-            'acl' => array('dashboard', 'view_doss_sans_avis'),
+            'acl' => ['dashboard', 'view_doss_sans_avis'],
             'title' => 'Dossiers sans avis de commission',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'DossierAvecAvisDiffere' => array(
+        ],
+        'DossierAvecAvisDiffere' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossierAvecAvisDiffere',
-            'acl' => array('dashboard', 'view_doss_avis_differe'),
+            'acl' => ['dashboard', 'view_doss_avis_differe'],
             'title' => 'Dossiers avec avis différés',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
-        'CourrierSansReponse' => array(
+        ],
+        'CourrierSansReponse' => [
             'service' => 'Service_Dashboard',
             'method' => 'getCourrierSansReponse',
-            'acl' => array('dashboard', 'view_courrier_sans_reponse'),
+            'acl' => ['dashboard', 'view_courrier_sans_reponse'],
             'title' => 'Courriers sans réponse',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
         // autres blocs
-        'feeds' => array(
+        'feeds' => [
             'service' => 'Service_Feed',
             'method' => 'getFeeds',
             'acl' => null,
@@ -138,62 +138,62 @@ class Service_Dashboard
             'type' => 'feeds',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
         // bloc levée prescriptions
-        'leveePresc' => array(
+        'leveePresc' => [
             'service' => 'Service_Dashboard',
             'method' => 'getLeveePresc',
-            'acl' => array('dashboard', 'view_doss_levee_prescriptions'),
+            'acl' => ['dashboard', 'view_doss_levee_prescriptions'],
             'title' => 'Dossiers avec une date de levée des prescriptions',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
         // bloc absence de quorum
-        'absQuorum' => array(
+        'absQuorum' => [
             'service' => 'Service_Dashboard',
             'method' => 'getAbsenceQuorum',
-            'acl' => array('dashboard', 'view_doss_absence_quorum'),
+            'acl' => ['dashboard', 'view_doss_absence_quorum'],
             'title' => 'Dossiers ayant une absence de quorum',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
         // bloc npsp
-        'npsp' => array(
+        'npsp' => [
             'service' => 'Service_Dashboard',
             'method' => 'getNpsp',
-            'acl' => array('dashboard', 'view_doss_npsp'),
+            'acl' => ['dashboard', 'view_doss_npsp'],
             'title' => 'Dossiers avec statut ne peut se prononcer',
             'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
-        ),
+        ],
 
         // bloc npsp
-        'dossierPlatau' => array(
+        'dossierPlatau' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersPlatAUSansEtablissement',
-            'acl' => array('dashboard','view_doss_platau_sans_etab'),
+            'acl' => ['dashboard','view_doss_platau_sans_etab'],
             'title' => 'Dossiers Plat\'AU à traiter',
             'type' => 'dossierPlatau',
             'height' => 'small',
             'width' => 'small',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
 
         // default options
-        $this->options = array_merge(array(
+        $this->options = array_merge([
             'next_commissions_days' => 15,
             'dossiers_sans_avis_days' => 15,
             'courrier_sans_reponse_days' => 10,
-        ), $options);
+        ], $options);
 
         // custom configurations
         if (getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS')) {
@@ -221,7 +221,7 @@ class Service_Dashboard
      */
     protected function getCommissionUser($user): array
     {
-        $commissionsUser = array();
+        $commissionsUser = [];
 
         if (isset($user['commissions']) && is_array($user['commissions'])) {
             foreach ($user['commissions'] as $commission) {
@@ -261,9 +261,9 @@ class Service_Dashboard
         );
 
         // on récupère pour chaque prochaine commission le nombre de dossiers affectés
-        $commissions = array();
+        $commissions = [];
         foreach ($prochainesCommission as $commissiondujour) {
-            $commissions[] = array(
+            $commissions[] = [
                'id' => $commissiondujour['ID_DATECOMMISSION'],
                'LIBELLE_COMMISSION' => $commissiondujour['LIBELLE_COMMISSION'],
                'LIBELLE_DATECOMMISSION' => $commissiondujour['LIBELLE_DATECOMMISSION'],
@@ -273,7 +273,7 @@ class Service_Dashboard
                'HEUREFIN_COMMISSION' => $commissiondujour['HEUREFIN_COMMISSION'],
                'heure' => substr($commissiondujour['HEUREDEB_COMMISSION'], 0, 5).' - '.substr($commissiondujour['HEUREFIN_COMMISSION'], 0, 5),
                'odj' => $this->getCommissionODJ($commissiondujour),
-           );
+           ];
         }
 
         return $commissions;
@@ -306,7 +306,7 @@ class Service_Dashboard
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         if (!$user['NUMINSEE_COMMUNE']) {
-            return array();
+            return [];
         }
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, $user['NUMINSEE_COMMUNE']);
@@ -332,16 +332,16 @@ class Service_Dashboard
      */
     public function getERPSuivis($user)
     {
-        $etablissements = array();
+        $etablissements = [];
         $id_user = $user['ID_UTILISATEUR'];
 
         // Ets 1 - 4ème catégorie
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
-        $search->setCriteria('etablissementinformations.ID_STATUT', array('2', '4'));
+        $search->setCriteria('etablissementinformations.ID_STATUT', ['2', '4']);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
-        $search->setCriteria('etablissementinformations.ID_CATEGORIE', array('1', '2', '3', '4'));
+        $search->setCriteria('etablissementinformations.ID_CATEGORIE', ['1', '2', '3', '4']);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
@@ -349,7 +349,7 @@ class Service_Dashboard
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
-        $search->setCriteria('etablissementinformations.ID_STATUT', array('2', '4'));
+        $search->setCriteria('etablissementinformations.ID_STATUT', ['2', '4']);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', '5');
         $search->setCriteria('avis.ID_AVIS', 2);
@@ -360,7 +360,7 @@ class Service_Dashboard
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
-        $search->setCriteria('etablissementinformations.ID_STATUT', array('2', '4'));
+        $search->setCriteria('etablissementinformations.ID_STATUT', ['2', '4']);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', '5');
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
@@ -371,9 +371,9 @@ class Service_Dashboard
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('utilisateur.ID_UTILISATEUR', $id_user);
-        $search->setCriteria('etablissementinformations.ID_STATUT', array('2', '4'));
+        $search->setCriteria('etablissementinformations.ID_STATUT', ['2', '4']);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
-        $search->setCriteria('etablissementinformations.ID_GENRE', array('6', '5', '4', '7', '8', '9', '10'));
+        $search->setCriteria('etablissementinformations.ID_GENRE', ['6', '5', '4', '7', '8', '9', '10']);
         $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
         return array_unique($etablissements, SORT_REGULAR);
@@ -396,7 +396,7 @@ class Service_Dashboard
 
     public function getDossiersSuivisNonVerrouilles($user)
     {
-        $dossiers = array();
+        $dossiers = [];
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -410,7 +410,7 @@ class Service_Dashboard
 
     public function getDossiersSuivisSansAvis($user)
     {
-        $dossiers = array();
+        $dossiers = [];
 
         $id_user = $user['ID_UTILISATEUR'];
 

@@ -15,32 +15,32 @@ class CommissionController extends Zend_Controller_Action
 
             // Suppression des contacts
             foreach ($model_ContactCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
-                $this->_helper->actionStack('delete', 'contact', 'default', array('item' => 'commission', 'id' => $row['ID_UTILISATEURINFORMATIONS'], 'id_item' => $row['ID_COMMISSION']));
+                $this->_helper->actionStack('delete', 'contact', 'default', ['item' => 'commission', 'id' => $row['ID_UTILISATEURINFORMATIONS'], 'id_item' => $row['ID_COMMISSION']]);
             }
 
             // Suppression des membres
             foreach ($model_MembreCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
-                $this->_helper->actionStack('delete-membre', 'commission', 'default', array('id_membre' => $row['ID_COMMISSIONMEMBRE']));
+                $this->_helper->actionStack('delete-membre', 'commission', 'default', ['id_membre' => $row['ID_COMMISSIONMEMBRE']]);
             }
 
             // Suppression des règles
             foreach ($model_RegleCommission->fetchAll('ID_COMMISSION = '.$this->_request->id) as $row) {
-                $this->_helper->actionStack('delete-regle', 'commission', 'default', array('id_regle' => $row['ID_REGLE']));
+                $this->_helper->actionStack('delete-regle', 'commission', 'default', ['id_regle' => $row['ID_REGLE']]);
             }
 
             // Suppression de la commission
             $model_commission->delete('ID_COMMISSION = '.$this->_request->id);
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La commission a bien été supprimée',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression de la commission',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -66,17 +66,17 @@ class CommissionController extends Zend_Controller_Action
             $row_regle = $model_regles->createRow();
             $row_regle->ID_COMMISSION = $this->_request->id_commission;
             $row_regle->save();
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La régle a bien été enregistrées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout de la régle',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -101,17 +101,17 @@ class CommissionController extends Zend_Controller_Action
             $model_reglesEtudeVisite->delete('ID_REGLE = '.$this->_request->id_regle);
             $model_regles->delete('ID_REGLE = '.$this->_request->id_regle);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les régles ont bien été supprimées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression des régles',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -158,55 +158,55 @@ class CommissionController extends Zend_Controller_Action
 
                 // On sauvegarde la catégorie
                 foreach ($_POST[$id_regle.'_ID_CATEGORIE'] as $categorie) {
-                    $model_reglesCategories->insert(array(
+                    $model_reglesCategories->insert([
                         'ID_REGLE' => $id_regle,
                         'ID_CATEGORIE' => $categorie,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les types d'activités
                 foreach ($_POST[$id_regle.'_ID_TYPE'] as $type) {
-                    $model_reglesTypes->insert(array(
+                    $model_reglesTypes->insert([
                         'ID_REGLE' => $id_regle,
                         'ID_TYPE' => $type,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les classes IGH
                 foreach ($_POST[$id_regle.'_ID_CLASSE'] as $classe) {
-                    $model_reglesClasses->insert(array(
+                    $model_reglesClasses->insert([
                         'ID_REGLE' => $id_regle,
                         'ID_CLASSE' => $classe,
-                    ));
+                    ]);
                 }
 
                 // Local sommeil
                 foreach ($_POST[$id_regle.'_LOCALSOMMEIL'] as $localsommeil) {
-                    $model_reglesLocalSommeil->insert(array(
+                    $model_reglesLocalSommeil->insert([
                         'ID_REGLE' => $id_regle,
                         'LOCALSOMMEIL' => $localsommeil,
-                    ));
+                    ]);
                 }
 
                 // Etude visite
                 foreach ($_POST[$id_regle.'_ETUDEVISITE'] as $etudevisite) {
-                    $model_reglesEtudeVisite->insert(array(
+                    $model_reglesEtudeVisite->insert([
                         'ID_REGLE' => $id_regle,
                         'ETUDEVISITE' => $etudevisite,
-                    ));
+                    ]);
                 }
             }
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les régles ont bien été enregistrées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'enregistrement des régles',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -228,11 +228,11 @@ class CommissionController extends Zend_Controller_Action
 
             $search = new Model_DbTable_Search();
             $search->setItem('etablissement');
-            $search->setCriteria('etablissementinformations.ID_GENRE', array(2, 5));
+            $search->setCriteria('etablissementinformations.ID_GENRE', [2, 5]);
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE IS NOT NULL');
             $rowset_ets = $search->run(false, null, false)->toArray();
 
-            $ets_to_update = array();
+            $ets_to_update = [];
 
             // Pour tout les ets, on récup leur commission par défaut
             foreach ($rowset_ets as $key => $row) {
@@ -263,17 +263,17 @@ class CommissionController extends Zend_Controller_Action
             }
 
             if ($ets_to_update) {
-                $model_etablissementInformation->update(array('ID_COMMISSION' => $id_commission), 'ID_ETABLISSEMENTINFORMATIONS IN ('.implode(',', $ets_to_update).')');
+                $model_etablissementInformation->update(['ID_COMMISSION' => $id_commission], 'ID_ETABLISSEMENTINFORMATIONS IN ('.implode(',', $ets_to_update).')');
 
                 // removes cache if any changes
                 Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
             }
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -289,18 +289,18 @@ class CommissionController extends Zend_Controller_Action
 
         // On met le libellé du type dans le tableau des activités
         $types = $model_types->fetchAll()->toArray();
-        $types_sort = array();
+        $types_sort = [];
 
         foreach ($types as $_type) {
             $types_sort[$_type['ID_TYPE']] = $_type;
         }
 
         foreach ($this->view->array_membres as &$membre) {
-            $type_sort = array();
+            $type_sort = [];
 
             foreach ($membre['types'] as $type) {
                 if (!array_key_exists($types_sort[$type['ID_TYPE']]['LIBELLE_TYPE'], $type_sort)) {
-                    $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']] = array();
+                    $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']] = [];
                 }
 
                 $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']][] = $type;
@@ -325,17 +325,17 @@ class CommissionController extends Zend_Controller_Action
             $row_membre->PRESENCE_COMMISSIONMEMBRE = 0;
             $row_membre->save();
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le membre a bien été ajouté',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout du membre',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -367,17 +367,17 @@ class CommissionController extends Zend_Controller_Action
             $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = '.$this->_request->id_membre);
             $row_membre->delete();
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le membre a bien été supprimé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du membre',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -425,58 +425,58 @@ class CommissionController extends Zend_Controller_Action
 
                 // On sauvegarde la catégorie
                 foreach ($_POST[$id_membre.'_ID_CATEGORIE'] as $categorie) {
-                    $model_membresCategories->insert(array(
+                    $model_membresCategories->insert([
                         'ID_COMMISSIONMEMBRE' => $id_membre,
                         'ID_CATEGORIE' => $categorie,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les types d'activités
                 foreach ($_POST[$id_membre.'_ID_TYPEACTIVITE'] as $type) {
-                    $model_membresTypes->insert(array(
+                    $model_membresTypes->insert([
                         'ID_COMMISSIONMEMBRE' => $id_membre,
                         'ID_TYPEACTIVITE' => $type,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les classes IGH
                 foreach ($_POST[$id_membre.'_ID_CLASSE'] as $classe) {
-                    $model_membresClasses->insert(array(
+                    $model_membresClasses->insert([
                         'ID_COMMISSIONMEMBRE' => $id_membre,
                         'ID_CLASSE' => $classe,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les types de dossier
                 foreach ($_POST[$id_membre.'_ID_DOSSIERTYPE'] as $type) {
-                    $model_membresDossierTypes->insert(array(
+                    $model_membresDossierTypes->insert([
                         'ID_COMMISSIONMEMBRE' => $id_membre,
                         'ID_DOSSIERTYPE' => $type,
-                    ));
+                    ]);
                 }
 
                 // On sauvegarde les natures du dossier
                 if (count($_POST[$id_membre.'_ID_DOSSIERNATURE']) > 0) {
                     foreach ($_POST[$id_membre.'_ID_DOSSIERNATURE'] as $type) {
-                        $model_membresDossierNatures->insert(array(
+                        $model_membresDossierNatures->insert([
                             'ID_COMMISSIONMEMBRE' => $id_membre,
                             'ID_DOSSIERNATURE' => $type,
-                        ));
+                        ]);
                     }
                 }
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les modifications ont bien été sauvegardées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde des modifications',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -545,17 +545,17 @@ class CommissionController extends Zend_Controller_Action
 
             // CALLBACK
             echo "<script type='text/javascript'>window.top.window.callback('$error');</script>";
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -577,17 +577,17 @@ class CommissionController extends Zend_Controller_Action
             $commission->DOCUMENT_CR = null;
             $commission->save();
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été supprimé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -634,17 +634,17 @@ class CommissionController extends Zend_Controller_Action
 
             // CALLBACK
             echo "<script type='text/javascript'>window.top.window.callback('$error');</script>";
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -666,17 +666,17 @@ class CommissionController extends Zend_Controller_Action
             // On met à null dans la DB
             $row_membre->$row = null;
             $row_membre->save();
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été supprimé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 }

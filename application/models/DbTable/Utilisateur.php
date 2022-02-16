@@ -31,7 +31,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     {
         $this->select = $this->select()->setIntegrityCheck(false);
         $select = $this->select
-                            ->from(array('u' => 'utilisateur'), array(
+                            ->from(['u' => 'utilisateur'], [
                                 'uid' => 'ID_UTILISATEUR',
                                 'ID_UTILISATEUR',
                                 'USERNAME_UTILISATEUR',
@@ -40,7 +40,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                                 'ACTIF_UTILISATEUR',
                                 'ID_GROUPE',
                                 'LASTACTION_UTILISATEUR',
-                        ))
+                        ])
                             ->join('utilisateurinformations', 'u.ID_UTILISATEURINFORMATIONS = utilisateurinformations.ID_UTILISATEURINFORMATIONS')
                             ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION')
                             ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC');
@@ -110,11 +110,11 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         $all = $this->fetchAll($select);
 
         if ($all == null) {
-            return array();
+            return [];
         }
 
         $all = $all->toArray();
-        $result = array();
+        $result = [];
         foreach ($all as $row) {
             $result[] = $row['ID_COMMISSION'];
         }
@@ -147,7 +147,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         $rowset_groupements = $this->getGroupements($id);
 
-        $villes = array();
+        $villes = [];
 
         // pr chq gpt on prend ses ville qu'on met ds un tableau
         foreach ($rowset_groupements as $row_groupement) {
@@ -187,8 +187,8 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         $this->select = $this->select()->setIntegrityCheck(false);
         $select = $this->select->from('groupe-privileges', null)
-            ->join('privileges', '`groupe-privileges`.id_privilege = privileges.id_privilege', array('name_privilege' => 'name'))
-            ->join('resources', 'privileges.id_resource = resources.id_resource', array('name_resource' => 'name'))
+            ->join('privileges', '`groupe-privileges`.id_privilege = privileges.id_privilege', ['name_privilege' => 'name'])
+            ->join('resources', 'privileges.id_resource = resources.id_resource', ['name_resource' => 'name'])
             ->where('`groupe-privileges`.ID_GROUPE = ?', $group);
 
         $privileges = $this->fetchAll($select)->toArray();
@@ -276,10 +276,10 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                 }
 
                 $resource_imploded = implode($resource_exploded, '_');
-                $resource_tmp = array($resource_imploded);
+                $resource_tmp = [$resource_imploded];
                 $develop_resources($resource_tmp);
 
-                array_push($privileges, array('name_privilege' => $resource['name_privilege'], 'name_resource' => $resource_imploded));
+                array_push($privileges, ['name_privilege' => $resource['name_privilege'], 'name_resource' => $resource_imploded]);
 
                 unset($privileges[$key]);
             }
@@ -320,20 +320,20 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         }
 
         $selectPrivilegeQuery = $this->select()->setIntegrityCheck(false)
-                                        ->from(array('p' => 'privileges'), array('p.id_privilege'))
+                                        ->from(['p' => 'privileges'], ['p.id_privilege'])
                                         ->where('name = ?', $privilege)
                                         ->limit(1);
 
         $selectCommune = $this->select()->setIntegrityCheck(false)
-                                ->from(array('u' => 'utilisateur'), array('ID_UTILISATEUR'))
+                                ->from(['u' => 'utilisateur'], ['ID_UTILISATEUR'])
                                 ->join(
-                                    array('ui' => 'utilisateurinformations'),
+                                    ['ui' => 'utilisateurinformations'],
                                     'ui.ID_UTILISATEURINFORMATIONS = u.ID_UTILISATEURINFORMATIONS',
-                                    array('ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
-                                        'ui.MAIL_UTILISATEURINFORMATIONS', )
+                                    ['ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
+                                        'ui.MAIL_UTILISATEURINFORMATIONS', ]
                                 )
-                                ->join(array('g' => 'groupe'), 'g.ID_GROUPE = u.ID_GROUPE', null)
-                                ->join(array('gp' => 'groupe-privileges'), 'gp.ID_GROUPE = g.ID_GROUPE', null)
+                                ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', null)
+                                ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', null)
                                 ->where('ui.MAIL_UTILISATEURINFORMATIONS IS NOT NULL')
                                 ->where('ui.MAIL_UTILISATEURINFORMATIONS <> ?', '')
                                 ->where('gp.id_privilege = ('.$selectPrivilegeQuery.')')
@@ -341,17 +341,17 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                                 ->group('u.ID_UTILISATEUR');
 
         $selectGroupement = $this->select()->setIntegrityCheck(false)
-                                    ->from(array('u' => 'utilisateur'), array('ID_UTILISATEUR'))
+                                    ->from(['u' => 'utilisateur'], ['ID_UTILISATEUR'])
                                     ->join(
-                                        array('ui' => 'utilisateurinformations'),
+                                        ['ui' => 'utilisateurinformations'],
                                         'ui.ID_UTILISATEURINFORMATIONS = u.ID_UTILISATEURINFORMATIONS',
-                                        array('ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
-                                                'ui.MAIL_UTILISATEURINFORMATIONS', )
+                                        ['ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
+                                                'ui.MAIL_UTILISATEURINFORMATIONS', ]
                                     )
-                                    ->join(array('g' => 'groupe'), 'g.ID_GROUPE = u.ID_GROUPE', null)
-                                    ->join(array('gp' => 'groupe-privileges'), 'gp.ID_GROUPE = g.ID_GROUPE', null)
-                                    ->join(array('ug' => 'utilisateurgroupement'), 'ug.ID_UTILISATEUR = u.ID_UTILISATEUR', null)
-                                    ->join(array('gc' => 'groupementcommune'), 'gc.ID_GROUPEMENT = ug.ID_GROUPEMENT', null)
+                                    ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', null)
+                                    ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', null)
+                                    ->join(['ug' => 'utilisateurgroupement'], 'ug.ID_UTILISATEUR = u.ID_UTILISATEUR', null)
+                                    ->join(['gc' => 'groupementcommune'], 'gc.ID_GROUPEMENT = ug.ID_GROUPEMENT', null)
                                     ->where('ui.MAIL_UTILISATEURINFORMATIONS IS NOT NULL')
                                     ->where('ui.MAIL_UTILISATEURINFORMATIONS <> ?', '')
                                     ->where('gp.id_privilege = ('.$selectPrivilegeQuery.')')
@@ -359,7 +359,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                                     ->group('u.ID_UTILISATEUR');
 
         $selectUnion = $this->select()
-                                ->union(array($selectCommune, $selectGroupement));
+                                ->union([$selectCommune, $selectGroupement]);
 
         return $this->fetchAll($selectUnion)->toArray();
     }

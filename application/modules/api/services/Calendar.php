@@ -33,12 +33,12 @@ class Api_Service_Calendar
                         && getenv('PREVARISC_CALENDAR_REFRESH_TIME') !== '') ?
                         getenv('PREVARISC_CALENDAR_REFRESH_TIME') : 'PT5M';
 
-        $calendar = new VObject\Component\VCalendar(array(
+        $calendar = new VObject\Component\VCalendar([
             'NAME' => $calendrierNom,
             'X-WR-CALNAME' => $calendrierNom,
             'REFRESH-INTERVAL;VALUE=DURATION' => $refreshTime,
             'X-PUBLISHED-TTL' => $refreshTime,
-        ));
+        ]);
 
         $vtimezone = $this->getVTimezoneComponent($calendar);
         $calendar->add($vtimezone);
@@ -116,7 +116,7 @@ class Api_Service_Calendar
                 $etsService = new Service_Etablissement();
                 $ets = $etsService->get($commissionEvent['ID_ETABLISSEMENT']);
 
-                $etsLibelleArray = array();
+                $etsLibelleArray = [];
                 foreach ($ets['parents'] as $parent) {
                     $etsLibelleArray[] = trim($parent['LIBELLE_ETABLISSEMENTINFORMATIONS']);
                 }
@@ -188,13 +188,13 @@ class Api_Service_Calendar
                 new DateTimeZone(date_default_timezone_get())
             );
 
-            $event = array(
+            $event = [
                 'SUMMARY' => substr($summary, 0, 255),
                 'LOCATION' => $geo,
                 'DESCRIPTION' => $this->getEventCorps($commissionEvent, $ets),
                 'DTSTART' => $dtStart,
                 'DTEND' => $dtEnd,
-            );
+            ];
         }
 
         return $event;

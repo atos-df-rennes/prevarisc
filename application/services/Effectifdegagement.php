@@ -172,7 +172,7 @@ class Service_Effectifdegagement
      */
     public function convertMessage($message, $ets)
     {
-        $params = array();
+        $params = [];
         foreach (self::BALISES as $balise => $content) {
             $replacementstr = '';
             if ($content['model'] === 'avis') {

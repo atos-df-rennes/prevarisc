@@ -10,7 +10,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'), 'max(pd.NUM_PRESCRIPTION_DOSSIER) as maxnum')
+             ->from(['pd' => 'prescriptiondossier'], 'max(pd.NUM_PRESCRIPTION_DOSSIER) as maxnum')
              ->where('ID_DOSSIER = ?', $idDossier)
              ->where('TYPE_PRESCRIPTION_DOSSIER = ?', $type);
 
@@ -25,7 +25,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'))
+             ->from(['pd' => 'prescriptiondossier'])
              ->where('pd.ID_DOSSIER = ?', $idDossier)
              ->where('pd.TYPE_PRESCRIPTION_DOSSIER = ?', $type)
              ->order('pd.NUM_PRESCRIPTION_DOSSIER');
@@ -38,7 +38,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'))
+             ->from(['pd' => 'prescriptiondossier'])
              ->where('pd.ID_PRESCRIPTION_DOSSIER = ?', $id_prescription);
 
         return $this->getAdapter()->fetchRow($select);

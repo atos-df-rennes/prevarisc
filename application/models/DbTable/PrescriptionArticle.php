@@ -13,7 +13,7 @@ class Model_DbTable_PrescriptionArticle extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pa' => 'prescriptionarticle'))
+             ->from(['pa' => 'prescriptionarticle'])
              ->where('ID_PRESCRIPTIONTEXTE = ?', $idTexte)
              ->order('pa.NUM_PRESCRIPTIONARTICLE');
 
@@ -25,7 +25,7 @@ class Model_DbTable_PrescriptionArticle extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pa' => 'prescriptionarticle'), 'max(pa.NUM_PRESCRIPTIONARTICLE) as maxnum')
+             ->from(['pa' => 'prescriptionarticle'], 'max(pa.NUM_PRESCRIPTIONARTICLE) as maxnum')
              ->where('ID_PRESCRIPTIONTEXTE = ?', $idTexte);
 
         return $this->getAdapter()->fetchRow($select);

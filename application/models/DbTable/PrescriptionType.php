@@ -12,7 +12,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('pt' => 'prescriptiontype'))
+            ->from(['pt' => 'prescriptiontype'])
             ->where('pt.PRESCRIPTIONTYPE_CATEGORIE = ?', $categorie)
             ->where('pt.PRESCRIPTIONTYPE_TEXTE = ?', $texte)
             ->where('pt.PRESCRIPTIONTYPE_ARTICLE = ?', $article)
@@ -28,10 +28,10 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('pt' => 'prescriptiontype'))
-            ->join(array('pta' => 'prescriptiontypeassoc'), 'pt.ID_PRESCRIPTIONTYPE = pta.ID_PRESCRIPTIONTYPE')
-            ->join(array('pal' => 'prescriptionarticleliste'), 'pal.ID_ARTICLE = pta.ID_ARTICLE')
-            ->join(array('ptl' => 'prescriptiontexteliste'), 'ptl.ID_TEXTE = pta.ID_TEXTE');
+            ->from(['pt' => 'prescriptiontype'])
+            ->join(['pta' => 'prescriptiontypeassoc'], 'pt.ID_PRESCRIPTIONTYPE = pta.ID_PRESCRIPTIONTYPE')
+            ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pta.ID_ARTICLE')
+            ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pta.ID_TEXTE');
 
         foreach ($tabMotCles as $ue) {
             $select->orWhere('pt.PRESCRIPTIONTYPE_LIBELLE like ?', '%'.$ue.'%');
@@ -47,7 +47,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
      */
     public function replaceId($idOldType, $idNewType)
     {
-        $data = array('ID_PRESCRIPTION_TYPE' => $idNewType);
+        $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];
         $where[] = 'ID_PRESCRIPTION_TYPE = '.$idOldType;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossier', $data, $where);

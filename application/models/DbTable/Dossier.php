@@ -81,8 +81,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementdossier', array('etablissementdossier.ID_ETABLISSEMENT'))
-            ->joinLeftUsing(array('e' => 'etablissement'), 'ID_ETABLISSEMENT')
+            ->from('etablissementdossier', ['etablissementdossier.ID_ETABLISSEMENT'])
+            ->joinLeftUsing(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
             ->where('etablissementdossier.ID_DOSSIER = ?', $id_dossier)
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL');
 
@@ -170,9 +170,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('d' => 'dossier'), 'd.ID_DOSSIER')
-            ->join(array('c' => 'commission'), 'd.COMMISSION_DOSSIER = c.ID_COMMISSION')
-            ->join(array('ct' => 'commissiontype'), 'c.ID_COMMISSIONTYPE = ct.ID_COMMISSIONTYPE')
+            ->from(['d' => 'dossier'], 'd.ID_DOSSIER')
+            ->join(['c' => 'commission'], 'd.COMMISSION_DOSSIER = c.ID_COMMISSION')
+            ->join(['ct' => 'commissiontype'], 'c.ID_COMMISSIONTYPE = ct.ID_COMMISSIONTYPE')
             ->where('d.ID_DOSSIER = ?', $idDossier);
 
         return $this->getAdapter()->fetchRow($select);
@@ -206,7 +206,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('etablissementdossier', null)
-            ->join('dossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER', array('ID_DOSSIER', 'LIBELLE_DOSSIER', 'OBJET_DOSSIER', 'DESCRIPTIFGEN_DOSSIER', 'DATESECRETARIAT_DOSSIER'))
+            ->join('dossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'LIBELLE_DOSSIER', 'OBJET_DOSSIER', 'DESCRIPTIFGEN_DOSSIER', 'DATESECRETARIAT_DOSSIER'])
             ->join('dossiertype', 'dossier.TYPE_DOSSIER = dossiertype.ID_DOSSIERTYPE', 'VISITEBOOL_DOSSIERTYPE')
             ->where("etablissementdossier.ID_ETABLISSEMENT = $etablissement")
             ->where('dossier.DATESUPPRESSION_DOSSIER IS NULL')
@@ -282,9 +282,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from(array('d' => 'dossier'))
-                ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
-                ->join(array('dn' => 'dossiernature'), 'd.ID_DOSSIER = dn.ID_DOSSIER')
+                ->from(['d' => 'dossier'])
+                ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+                ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
                 ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
                 ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
                 ->where('d.DATEVISITE_DOSSIER IS NOT NULL')
@@ -298,9 +298,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from(array('d' => 'dossier'))
-                ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
-                ->join(array('dn' => 'dossiernature'), 'd.ID_DOSSIER = dn.ID_DOSSIER')
+                ->from(['d' => 'dossier'])
+                ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+                ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
                 ->where('ed.ID_ETABLISSEMENT = ?', $idEtab)
                 ->where('ed.ID_DOSSIER <> ?', $idDossier)
                 ->where('dn.ID_NATURE = 21 OR dn.ID_NATURE = 26')
@@ -316,8 +316,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('a' => 'avis'), 'LIBELLE_AVIS')
-            ->join(array('d' => 'dossier'), 'd.AVIS_DOSSIER_COMMISSION = a.ID_AVIS')
+            ->from(['a' => 'avis'], 'LIBELLE_AVIS')
+            ->join(['d' => 'dossier'], 'd.AVIS_DOSSIER_COMMISSION = a.ID_AVIS')
             ->where('d.ID_DOSSIER = ?', $id_dossier);
 
         return $this->getAdapter()->fetchRow($select);
@@ -355,13 +355,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $ids = (array) $idsCommission;
 
         $select = $this->select()->setIntegrityCheck(false)
-                     ->from(array('d' => 'dossier'))
+                     ->from(['d' => 'dossier'])
                      ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
                      ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
-                     ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', array('LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'))
+                     ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                      ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
                      ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
-                     ->joinLeft(array('e' => 'etablissementdossier'), 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+                     ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
                      ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
                      ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
                      ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = dossierpreventionniste.ID_PREVENTIONNISTE', 'ID_UTILISATEUR')
@@ -491,19 +491,19 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getAllDossierPlatAU()
     {
         $select = $this->select()->setIntegrityCheck(false)
-            ->from(array('d' => 'dossier'))
+            ->from(['d' => 'dossier'])
             ->columns(
-                array(
+                [
                     'NB_URBA' => new Zend_Db_Expr("( SELECT group_concat(dossierdocurba.NUM_DOCURBA, ', ')
                         FROM dossier
                         INNER JOIN dossierdocurba ON dossierdocurba.ID_DOSSIER = dossier.ID_DOSSIER
                         WHERE dossier.ID_DOSSIER = d.ID_DOSSIER
                         LIMIT 1)")
-                )
+                ]
             )
-            ->join(array('dt' => 'dossiertype'), 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE', 'dt.LIBELLE_DOSSIERTYPE')
-            ->join(array('dn' => 'dossiernature'), 'd.ID_DOSSIER = dn.ID_DOSSIER')
-            ->join(array('dnl' => 'dossiernatureliste'), 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE', 'dnl.LIBELLE_DOSSIERNATURE')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE', 'dt.LIBELLE_DOSSIERTYPE')
+            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
+            ->join(['dnl' => 'dossiernatureliste'], 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE', 'dnl.LIBELLE_DOSSIERNATURE')
             ->where('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)')
             ->where('d.ID_PLATAU IS NOT NULL')
         ;

@@ -18,13 +18,13 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      *
      * @var type
      */
-    protected $types = array();
+    protected $types = [];
 
     public function __construct($options = null)
     {
         parent::__construct($options);
 
-        $this->types = array(
+        $this->types = [
             'etablissement' => 'pieces-jointes',
             'etablissement_minature' => 'pieces-jointes'.DS.'miniatures',
             'dossier' => 'pieces-jointes',
@@ -32,7 +32,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             'document' => 'documents',
             'courrier' => 'courriers',
             'avatar' => 'avatars',
-        );
+        ];
 
         if (isset($this->_options['fileFormat'])) {
             $this->format = $this->_options['fileFormat'];
@@ -55,11 +55,11 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     {
         $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
 
-        $directory = implode(DS, array(
+        $directory = implode(DS, [
             REAL_DATA_PATH,
             'uploads',
             $type,
-        ));
+        ]);
 
         return $directory;
     }
@@ -87,10 +87,10 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             }
         }
 
-        return implode(DS, array(
+        return implode(DS, [
             $directory,
             $piece_jointe ? $piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'] : '',
-        ));
+        ]);
     }
 
     /**
@@ -110,12 +110,12 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
 
         $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
 
-        return implode(DS, array(
+        return implode(DS, [
             DATA_PATH,
             'uploads',
             $type,
             $piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'],
-        ));
+        ]);
     }
 
     /**
@@ -133,7 +133,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             return null;
         }
 
-        $tokens = array(
+        $tokens = [
             '%ID_PIECEJOINTE%' => $piece_jointe['ID_PIECEJOINTE'],
             '%NOM_PIECEJOINTE%' => $piece_jointe['NOM_PIECEJOINTE'],
             '%EXTENSION_PIECEJOINTE%' => $piece_jointe['EXTENSION_PIECEJOINTE'],
@@ -144,7 +144,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             '%CODE_TYPE_OBJET%' => strtoupper(substr($linkedObjectType, 0, 3)),
             '%SHORT_CODE_TYPE_OBJET%' => strtoupper(substr($linkedObjectType, 0, 1)),
             '%NUMEROID_ETABLISSEMENT%' => null,
-        );
+        ];
 
         switch ($linkedObjectType) {
             case 'etablissement':
@@ -155,7 +155,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             case 'dossier':
                 $db = new Model_DbTable_EtablissementDossier();
                 $dossiers = $db->getEtablissementListe($linkedObjectId);
-                $default_numeroid = array();
+                $default_numeroid = [];
                 if ($dossiers) {
                     foreach ($dossiers as $dossier) {
                         $service = new Service_Etablissement();

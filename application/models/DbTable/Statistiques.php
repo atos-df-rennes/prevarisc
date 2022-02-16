@@ -22,8 +22,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
         $this->etablissements = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('e' => 'etablissement'), array('ID_ETABLISSEMENT'))
-            ->columns(array(
+            ->from(['e' => 'etablissement'], ['ID_ETABLISSEMENT'])
+            ->columns([
                 'DATEVISITE_DOSSIER' => new Zend_Db_Expr("( SELECT MAX( dossier.DATEVISITE_DOSSIER ) FROM etablissementdossier, dossier, dossiernature, etablissement
                 WHERE dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
                 AND dossiernature.ID_DOSSIER = dossier.ID_DOSSIER
@@ -33,22 +33,22 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 AND ( dossier.TYPE_DOSSIER = '2' || dossier.TYPE_DOSSIER = '3')
                 GROUP BY etablissement.ID_ETABLISSEMENT)"),
                 'ARRONDISSEMENT' => new Zend_Db_Expr('(SELECT `groupement`.LIBELLE_GROUPEMENT FROM `groupement` INNER JOIN `groupementcommune` ON groupementcommune.ID_GROUPEMENT = groupement.ID_GROUPEMENT INNER JOIN `groupementtype` ON groupementtype.ID_GROUPEMENTTYPE = groupement.ID_GROUPEMENTTYPE WHERE (groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE AND groupementtype.ID_GROUPEMENTTYPE = 2) LIMIT 1)'),
-            ))
-            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', array(
+            ])
+            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', [
                 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                 'ID_CATEGORIE',
                 'ID_TYPE',
                 'ID_COMMISSION',
                 'ID_STATUT',
                 'DATE_ETABLISSEMENTINFORMATIONS',
-            ))
+            ])
             ->joinLeft('type', 'etablissementinformations.ID_TYPE= type.ID_TYPE ', 'LIBELLE_TYPE')
-            ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', array('ID_AVIS' => 'AVIS_DOSSIER_COMMISSION'))
-            ->joinLeft('avis', 'dossier.AVIS_DOSSIER = avis.ID_AVIS', array('LIBELLE_AVIS' => 'LIBELLE_AVIS'))
+            ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['ID_AVIS' => 'AVIS_DOSSIER_COMMISSION'])
+            ->joinLeft('avis', 'dossier.AVIS_DOSSIER = avis.ID_AVIS', ['LIBELLE_AVIS' => 'LIBELLE_AVIS'])
             ->joinLeft('commission', 'commission.ID_COMMISSION = etablissementinformations.ID_COMMISSION', 'LIBELLE_COMMISSION')
             ->joinLeft('categorie', 'etablissementinformations.ID_CATEGORIE = categorie.ID_CATEGORIE', 'LIBELLE_CATEGORIE')
-            ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', array('NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'))
-            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', array('LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'))
+            ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'])
+            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
             ->joinLeft('adresserue', 'etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE AND etablissementadresse.ID_RUE = adresserue.ID_RUE')
             ->where('ID_GENRE = 2') // Pas de site - IGH
             ->where("etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = (
@@ -79,8 +79,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
         $this->etablissements = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('e' => 'etablissement'), array('ID_ETABLISSEMENT'))
-            ->columns(array(
+            ->from(['e' => 'etablissement'], ['ID_ETABLISSEMENT'])
+            ->columns([
                 'DATEVISITE_DOSSIER' => new Zend_Db_Expr('( SELECT MAX( dossier.DATEVISITE_DOSSIER ) FROM etablissementdossier, dossier, dossiernature, etablissement
                 WHERE dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER
                 AND DATEDIFF(dossier.DATEVISITE_DOSSIER,CURDATE()) > 0
@@ -91,8 +91,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 AND dossier.TYPE_DOSSIER in (2,3)
                 GROUP BY etablissement.ID_ETABLISSEMENT)'),
                 'ARRONDISSEMENT' => new Zend_Db_Expr('(SELECT `groupement`.LIBELLE_GROUPEMENT FROM `groupement` INNER JOIN `groupementcommune` ON groupementcommune.ID_GROUPEMENT = groupement.ID_GROUPEMENT INNER JOIN `groupementtype` ON groupementtype.ID_GROUPEMENTTYPE = groupement.ID_GROUPEMENTTYPE WHERE (groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE AND groupementtype.ID_GROUPEMENTTYPE = 2) LIMIT 1)'),
-            ))
-            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', array(
+            ])
+            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', [
                 'LIBELLE_ETABLISSEMENTINFORMATIONS',
                 'ID_CATEGORIE',
                 'ID_TYPE',
@@ -101,17 +101,17 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 'DATE_ETABLISSEMENTINFORMATIONS',
                 'PERIODICITE_ETABLISSEMENTINFORMATIONS',
                 'e.ID_ETABLISSEMENT',
-            ))
+            ])
             ->joinLeft('type', 'etablissementinformations.ID_TYPE= type.ID_TYPE ', 'LIBELLE_TYPE')
             ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS  = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
             ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = etablissementinformationspreventionniste.ID_UTILISATEUR')
-            ->joinLeft('utilisateurinformations', 'utilisateur.ID_UTILISATEURINFORMATIONS = utilisateurinformations.ID_UTILISATEURINFORMATIONS', array('NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'))
-            ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', array('ID_AVIS' => 'AVIS_DOSSIER_COMMISSION'))
-            ->joinLeft('avis', 'dossier.AVIS_DOSSIER = avis.ID_AVIS', array('LIBELLE_AVIS' => 'LIBELLE_AVIS'))
+            ->joinLeft('utilisateurinformations', 'utilisateur.ID_UTILISATEURINFORMATIONS = utilisateurinformations.ID_UTILISATEURINFORMATIONS', ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
+            ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['ID_AVIS' => 'AVIS_DOSSIER_COMMISSION'])
+            ->joinLeft('avis', 'dossier.AVIS_DOSSIER = avis.ID_AVIS', ['LIBELLE_AVIS' => 'LIBELLE_AVIS'])
             ->joinLeft('commission', 'commission.ID_COMMISSION = etablissementinformations.ID_COMMISSION', 'LIBELLE_COMMISSION')
             ->joinLeft('categorie', 'etablissementinformations.ID_CATEGORIE = categorie.ID_CATEGORIE', 'LIBELLE_CATEGORIE')
-            ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', array('NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'))
-            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', array('LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'))
+            ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'])
+            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
             ->joinLeft('adresserue', 'etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE AND etablissementadresse.ID_RUE = adresserue.ID_RUE')
             ->where('ID_GENRE = 2') // Pas de site - IGH
             ->where("etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = (
@@ -162,7 +162,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         if ($this->etablissements != null) {
             $this->etablissements->where('dossier.AVIS_DOSSIER_COMMISSION = 2'); // AND SCHEMAMISESECURITE_ETABLISSEMENTINFORMATIONS != 1
 
-            $this->etablissements->columns(array(
+            $this->etablissements->columns([
                 'NBJOURS_DEFAVORABLE' => new Zend_Db_Expr("(
                 SELECT DATEDIFF('" .$this->getDate($this->ets_date)."', MAX(DATE_ETABLISSEMENTINFORMATIONS))
                 FROM etablissementinformations
@@ -174,7 +174,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
                 )
                 "),
 
-            ));
+            ]);
 
             return $this;
         }

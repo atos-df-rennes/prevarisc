@@ -52,7 +52,7 @@ class SessionController extends Zend_Controller_Action
                 }
 
                 // Authentification adapters
-                $adapters = array();
+                $adapters = [];
 
                 // Adaptateur SSO noauth
                 if (
@@ -81,7 +81,7 @@ class SessionController extends Zend_Controller_Action
 
                 // Adaptateur LDAP
                 if (getenv('PREVARISC_LDAP_ENABLED') == 1) {
-                    $ldap = new Zend_Ldap(array('host' => getenv('PREVARISC_LDAP_HOST'), 'port' => getenv('PREVARISC_LDAP_PORT') ?: 389, 'username' => getenv('PREVARISC_LDAP_USERNAME'), 'password' => getenv('PREVARISC_LDAP_PASSWORD'), 'baseDn' => getenv('PREVARISC_LDAP_BASEDN')));
+                    $ldap = new Zend_Ldap(['host' => getenv('PREVARISC_LDAP_HOST'), 'port' => getenv('PREVARISC_LDAP_PORT') ?: 389, 'username' => getenv('PREVARISC_LDAP_USERNAME'), 'password' => getenv('PREVARISC_LDAP_PASSWORD'), 'baseDn' => getenv('PREVARISC_LDAP_BASEDN')]);
                     try {
                         $accountForm = getenv('PREVARISC_LDAP_ACCOUNT_FORM') ? getenv('PREVARISC_LDAP_ACCOUNT_FORM') : Zend_Ldap::ACCTNAME_FORM_DN;
                         $adapters['ldap'] = new Zend_Auth_Adapter_Ldap();
@@ -107,7 +107,7 @@ class SessionController extends Zend_Controller_Action
             }
         } catch (Exception $e) {
             $service_user->logFailedLogin($user);
-            $this->_helper->flashMessenger(array('context' => 'danger', 'title' => 'Erreur d\'authentification', 'message' => $e->getMessage()));
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur d\'authentification', 'message' => $e->getMessage()]);
         }
     }
 
@@ -134,7 +134,7 @@ class SessionController extends Zend_Controller_Action
         ) { // On test si l'utilisateur est connecté en NTLM
             $this->_helper->layout->setLayout('error');
         } else {
-            $this->_helper->redirector->gotoUrl($this->view->url(array('controller' => null, 'action' => null)));
+            $this->_helper->redirector->gotoUrl($this->view->url(['controller' => null, 'action' => null]));
         }
     }
 }

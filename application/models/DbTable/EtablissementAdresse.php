@@ -30,14 +30,14 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 
                     return $this->get($etablissement_enfants[$i]['ID_ETABLISSEMENT']);
                 } else {
-                    return array();
+                    return [];
                 }
                 break;
 
             // Adresse d'une cellule
             case 3:
                 // Récupération des parents de l'établissement
-                $results = array();
+                $results = [];
                 $id_enfant = $id_etablissement;
                 do {
                     $parent = $model_etablissement->getParent($id_enfant);
@@ -46,7 +46,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                         $id_enfant = $parent['ID_ETABLISSEMENT'];
                     }
                 } while ($parent != null);
-                $etablissement_parents = empty($results) ? array() : array_reverse($results);
+                $etablissement_parents = empty($results) ? [] : array_reverse($results);
 
                 $pere = end($etablissement_parents);
 
@@ -54,7 +54,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                     return $this->get($pere['ID_ETABLISSEMENT']);
                 }
 
-                return array();
+                return [];
                 break;
 
             // Adresse par défaut
@@ -62,9 +62,9 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 $select = $this->select()
                     ->setIntegrityCheck(false)
                     ->from('etablissementadresse')
-                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', array('LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'))
+                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
                     ->joinLeft('adresserue', 'etablissementadresse.ID_RUE = adresserue.ID_RUE AND etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE', 'LIBELLE_RUE')
-                    ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', array('LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'))
+                    ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'])
                     ->where("etablissementadresse.ID_ETABLISSEMENT = '$id_etablissement'");
 
                 return $this->fetchAll($select)->toArray();

@@ -26,7 +26,7 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
      *
      * @return Zend_View_Helper_HeadScript
      */
-    public function minifyHeadScript($mode = Zend_View_Helper_HeadScript::FILE, $spec = null, $placement = 'APPEND', array $attrs = array(), $type = 'text/javascript')
+    public function minifyHeadScript($mode = Zend_View_Helper_HeadScript::FILE, $spec = null, $placement = 'APPEND', array $attrs = [], $type = 'text/javascript')
     {
         return parent::headScript($mode, $spec, $placement, $attrs, $type);
     }
@@ -49,10 +49,10 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
     public function toString($indent = null)
     {
         // An array of Script Items to be rendered
-        $items = array();
+        $items = [];
 
         // An array of Javascript Items
-        $scripts = array();
+        $scripts = [];
 
         // Any indentation we should use.
         $indent = (null !== $indent) ? $this->getWhitespace($indent) : $this->getIndent();
@@ -72,17 +72,17 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
             if ($this->_isNeedToMinify($item)) {
                 if (!empty($item->attributes['minify_split_before']) || !empty($item->attributes['minify_split'])) {
                     $items[] = $this->_generateMinifyItem($scripts);
-                    $scripts = array();
+                    $scripts = [];
                 }
                 $scripts[] = $item->attributes['src'];
                 if (!empty($item->attributes['minify_split_after']) || !empty($item->attributes['minify_split'])) {
                     $items[] = $this->_generateMinifyItem($scripts);
-                    $scripts = array();
+                    $scripts = [];
                 }
             } else {
                 if ($scripts) {
                     $items[] = $this->_generateMinifyItem($scripts);
-                    $scripts = array();
+                    $scripts = [];
                 }
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }

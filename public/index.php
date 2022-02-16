@@ -9,7 +9,7 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__).DS.'..'.DS.'application');
 
 // Define path to application directory
-defined('DATA_PATH') || define('DATA_PATH', getenv('PREVARISC_DATA_PATH') ?  getenv('PREVARISC_DATA_PATH') : DS.'data');
+defined('DATA_PATH') || define('DATA_PATH', getenv('PREVARISC_DATA_PATH') ? getenv('PREVARISC_DATA_PATH') : DS.'data');
 
 // Define path to application directory
 defined('REAL_DATA_PATH') || define('REAL_DATA_PATH', getenv('PREVARISC_REAL_DATA_PATH') ? getenv('PREVARISC_REAL_DATA_PATH') : dirname(__FILE__).DS.'..'.DS.'public'.DS.'data');
@@ -18,42 +18,42 @@ defined('REAL_DATA_PATH') || define('REAL_DATA_PATH', getenv('PREVARISC_REAL_DAT
 require APPLICATION_PATH.DS."..".DS."vendor".DS."autoload.php";
 
 // Création de l'application avec les fichiers config
-$application = new Zend_Application('production', array(
-    'bootstrap' => array(
+$application = new Zend_Application('production', [
+    'bootstrap' => [
         'path' => APPLICATION_PATH.DS.'Bootstrap.php',
-    ),
-    'resources' => array(
-        'frontController' => array(
+    ],
+    'resources' => [
+        'frontController' => [
             'controllerDirectory' => APPLICATION_PATH.DS.'controllers',
             'moduleDirectory' => APPLICATION_PATH.DS.'modules',
-            'params' => array(
+            'params' => [
                 'displayExceptions' => getenv('PREVARISC_DEBUG_ENABLED'),
-            ),
-        ),
-        'db' => array(
+            ],
+        ],
+        'db' => [
             'adapter' => getenv('PREVARISC_DB_ADAPTER'),
-            'params' => array(
+            'params' => [
                 'host' => getenv('PREVARISC_DB_HOST'),
                 'charset' => getenv('PREVARISC_DB_CHARSET'),
                 'username' => getenv('PREVARISC_DB_USERNAME'),
                 'password' => getenv('PREVARISC_DB_PASSWORD'),
                 'dbname' => getenv('PREVARISC_DB_DBNAME'),
-            ),
-        ),
-        'dataStore' => array(
+            ],
+        ],
+        'dataStore' => [
             'adapter' => getenv('PREVARISC_DATASTORE_ADAPTER') ? getenv('PREVARISC_DATASTORE_ADAPTER') : 'Plugin_SimpleFileDataStore',
-        ),
+        ],
         'modules' => '',
-    ),
-    'ldap' => array(
+    ],
+    'ldap' => [
         'enabled' => getenv('PREVARISC_LDAP_ENABLED'),
         'host' => getenv('PREVARISC_LDAP_ENABLED') ? getenv('PREVARISC_LDAP_HOST') : '',
         'username' => getenv('PREVARISC_LDAP_ENABLED') ? getenv('PREVARISC_LDAP_USERNAME') : '',
         'password' => getenv('PREVARISC_LDAP_ENABLED') ? getenv('PREVARISC_LDAP_PASSWORD') : '',
         'baseDn' => getenv('PREVARISC_LDAP_ENABLED') ? getenv('PREVARISC_LDAP_BASEDN') : '',
-    ),
-    'cache' => array(
-        'adapter'       => getenv('PREVARISC_CACHE_ADAPTER') ? : 'File',
+    ],
+    'cache' => [
+        'adapter'       => getenv('PREVARISC_CACHE_ADAPTER') ?: 'File',
         'customAdapter' => getenv('PREVARISC_CACHE_ADAPTER') !== false,
         'enabled'      => ((int) getenv('PREVARISC_CACHE_LIFETIME')) > 0,
         'lifetime'      => (int) getenv('PREVARISC_CACHE_LIFETIME'),
@@ -61,29 +61,29 @@ $application = new Zend_Application('production', array(
         'port'          => (int) getenv('PREVARISC_CACHE_PORT'),
         'write_control' => false,
         'compression'   => false,
-        'cache_dir'     => getenv('PREVARISC_CACHE_DIR') ? : APPLICATION_PATH.DS.'..'.DS.'cache',
+        'cache_dir'     => getenv('PREVARISC_CACHE_DIR') ?: APPLICATION_PATH.DS.'..'.DS.'cache',
         'read_control'  => false,
-    ),
-    'security' => array(
+    ],
+    'security' => [
         'salt' => getenv('PREVARISC_SECURITY_SALT'),
         'session_max_lifetime' => getenv('PREVARISC_SESSION_MAX_LIFETIME'),
-    ),
-    'phpSettings' => array(
+    ],
+    'phpSettings' => [
         'display_startup_errors' => getenv('PREVARISC_DEBUG_ENABLED'),
         'display_errors' => getenv('PREVARISC_DEBUG_ENABLED'),
-    ),
-    'mail' => array(
+    ],
+    'mail' => [
         'enabled'           => getenv('PREVARISC_MAIL_ENABLED'),
-        'transport'         => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_TRANSPORT') : '',
-        'host'              => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_HOST') : '',
-        'port'              => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_PORT') : '',
+        'transport'         => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_TRANSPORT') : '',
+        'host'              => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_HOST') : '',
+        'port'              => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_PORT') : '',
         'authentication'    => getenv('PREVARISC_MAIL_ENABLED') && getenv('PREVARISC_MAIL_USERNAME') !== '',
-        'username'          => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_USERNAME') : '',
-        'password'          => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_PASSWORD') : '',
-        'sender'            => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_SENDER') : '',
-        'sender_name'       => getenv('PREVARISC_MAIL_ENABLED') ?  getenv('PREVARISC_MAIL_SENDER_NAME') : ''
-    )
-));
+        'username'          => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_USERNAME') : '',
+        'password'          => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_PASSWORD') : '',
+        'sender'            => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_SENDER') : '',
+        'sender_name'       => getenv('PREVARISC_MAIL_ENABLED') ? getenv('PREVARISC_MAIL_SENDER_NAME') : ''
+    ]
+]);
 
 // Bootstrap et gooooo !
 $application->bootstrap()->run();

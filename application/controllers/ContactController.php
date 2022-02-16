@@ -33,7 +33,7 @@ class ContactController extends Zend_Controller_Action
         if ($this->_request->item == 'etablissement') {
             $model_ets = new Model_DbTable_Etablissement();
             $etablissement_parents = $model_ets->getAllParents($this->_request->id);
-            $array = array();
+            $array = [];
 
             if ($etablissement_parents != null) {
                 foreach ($etablissement_parents as $ets) {
@@ -124,17 +124,17 @@ class ContactController extends Zend_Controller_Action
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
             $cache->remove($this->_request->item.'_id_'.$id_item);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été ajouté',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -164,17 +164,17 @@ class ContactController extends Zend_Controller_Action
                 $this->_forward('form');
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été modifié',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -185,12 +185,12 @@ class ContactController extends Zend_Controller_Action
 
             $DB_current = null;
             $DB_informations = new Model_DbTable_UtilisateurInformations();
-            $DB_contact = array(
+            $DB_contact = [
                 new Model_DbTable_EtablissementContact(),
                 new Model_DbTable_DossierContact(),
                 new Model_DbTable_GroupementContact(),
                 new Model_DbTable_CommissionContact(),
-            );
+            ];
             $primary = null;
 
             // Initalisation des modèles
@@ -234,17 +234,17 @@ class ContactController extends Zend_Controller_Action
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
             $cache->remove($this->_request->item.'_id_'.$this->_request->id);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été supprimé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 

@@ -3,7 +3,7 @@
 class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossiertextesappl'; // Nom de la base
-    protected $_primary = array('ID_TEXTESAPPL', 'ID_DOSSIER'); // Clé primaire
+    protected $_primary = ['ID_TEXTESAPPL', 'ID_DOSSIER']; // Clé primaire
 
     /**
      * @return array
@@ -24,9 +24,9 @@ class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('dta' => 'dossiertextesappl'))
-            ->join(array('ta' => 'textesappl'), 'dta.ID_TEXTESAPPL = ta.ID_TEXTESAPPL')
-            ->join(array('tta' => 'typetextesappl'), 'tta.ID_TYPETEXTEAPPL = ta.ID_TYPETEXTEAPPL')
+            ->from(['dta' => 'dossiertextesappl'])
+            ->join(['ta' => 'textesappl'], 'dta.ID_TEXTESAPPL = ta.ID_TEXTESAPPL')
+            ->join(['tta' => 'typetextesappl'], 'tta.ID_TYPETEXTEAPPL = ta.ID_TYPETEXTEAPPL')
             ->where('dta.ID_DOSSIER = ?', $idDossier)
             ->order('ta.ID_TYPETEXTEAPPL');
 
@@ -40,13 +40,13 @@ class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('dta' => 'dossiertextesappl'))
-            ->join(array('ta' => 'textesappl'), 'dta.ID_TEXTESAPPL = ta.ID_TEXTESAPPL')
-            ->join(array('tta' => 'typetextesappl'), 'tta.ID_TYPETEXTEAPPL = ta.ID_TYPETEXTEAPPL')
+            ->from(['dta' => 'dossiertextesappl'])
+            ->join(['ta' => 'textesappl'], 'dta.ID_TEXTESAPPL = ta.ID_TEXTESAPPL')
+            ->join(['tta' => 'typetextesappl'], 'tta.ID_TYPETEXTEAPPL = ta.ID_TYPETEXTEAPPL')
             ->where('dta.ID_DOSSIER = ?', $idDossier);
 
         $results = $this->fetchAll($select);
 
-        return $results !== null ? $results->toArray() : array();
+        return $results !== null ? $results->toArray() : [];
     }
 }

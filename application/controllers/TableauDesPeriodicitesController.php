@@ -23,7 +23,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
         $perio_model = new Model_DbTable_Periodicite();
         $tableau = $perio_model->fetchAll()->toArray();
 
-        $result = array();
+        $result = [];
 
         for ($i = 0; $i < count($tableau); ++$i) {
             // Sans local sommeil
@@ -62,18 +62,18 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
                 $item->PERIODICITE_PERIODICITE = $value;
                 $item->save();
 
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Le tableau des périodicités a bien été sauvegardé',
                     'message' => '',
-                ));
+                ]);
             }
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du tableau des périodicités',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
 
         // Redirection
@@ -87,17 +87,17 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             $perio_model = new Model_DbTable_Periodicite();
             $perio_model->apply();
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'OKAY!',
                 'message' => 'Le tableau des périodicités a bien été appliqué',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du tableau des périodicités',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
 
         // Récupération de la ressource cache à partir du bootstrap

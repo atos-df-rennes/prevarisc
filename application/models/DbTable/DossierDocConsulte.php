@@ -3,13 +3,13 @@
 class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossierdocconsulte'; // Nom de la base
-    protected $_primary = array('ID_DOSSIERDOCCONSULTE'); // Clé primaire
+    protected $_primary = ['ID_DOSSIERDOCCONSULTE']; // Clé primaire
 
     public function getGeneral($idDossier, $idDoc)
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ddc' => 'dossierdocconsulte'))
+             ->from(['ddc' => 'dossierdocconsulte'])
              ->where('ddc.ID_DOSSIER = ?', $idDossier)
              ->where('ddc.ID_DOC = ?', $idDoc);
 
@@ -24,8 +24,8 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ddc' => 'dossierdocconsulte'))
-             ->join(array('ldc' => 'listedocconsulte'), 'ddc.ID_DOC = ldc.ID_DOC')
+             ->from(['ddc' => 'dossierdocconsulte'])
+             ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
              ->where('ddc.ID_DOSSIER = ?', $idDossier);
 
         return $this->getAdapter()->fetchAll($select);
@@ -36,8 +36,8 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
      */
     public function getDocOtheNature($idDossier, $idNature)
     {
-        $arrayVR = array(20, 25);
-        $arrayVAO = array(47, 48);
+        $arrayVR = [20, 25];
+        $arrayVAO = [47, 48];
 
         $column1 = null;
         $column2 = null;
@@ -51,8 +51,8 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
 
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('ddc' => 'dossierdocconsulte'))
-             ->join(array('ldc' => 'listedocconsulte'), 'ddc.ID_DOC = ldc.ID_DOC')
+             ->from(['ddc' => 'dossierdocconsulte'])
+             ->join(['ldc' => 'listedocconsulte'], 'ddc.ID_DOC = ldc.ID_DOC')
              ->where('ddc.ID_DOSSIER = ?', $idDossier)
              ->where('ldc.'.$column1.' = 1')
              ->where('ldc.'.$column2.' = 0');

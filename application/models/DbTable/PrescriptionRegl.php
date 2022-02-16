@@ -20,7 +20,7 @@ class Model_DbTable_PrescriptionRegl extends Zend_Db_Table_Abstract
 
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('pre' => 'prescriptionregl'))
+            ->from(['pre' => 'prescriptionregl'])
             ->where('pre.PRESCRIPTIONREGL_TYPE = ?', $typePresc);
 
         if ($mode != null) {
@@ -34,7 +34,7 @@ class Model_DbTable_PrescriptionRegl extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
              ->setIntegrityCheck(false)
-             ->from(array('pre' => 'prescriptionregl'))
+             ->from(['pre' => 'prescriptionregl'])
              ->where('pre.ID_PRESCRIPTIONREGL = ?', $idPrescription);
 
         return $this->getAdapter()->fetchRow($select);

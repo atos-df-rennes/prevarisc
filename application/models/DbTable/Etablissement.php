@@ -109,8 +109,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('e' => 'etablissement'), 'ID_ETABLISSEMENT')
-            ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', array('LIBELLE_ETABLISSEMENTINFORMATIONS', 'PERIODICITE_ETABLISSEMENTINFORMATIONS'))
+            ->from(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
+            ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENTINFORMATIONS', 'PERIODICITE_ETABLISSEMENTINFORMATIONS'])
             ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', null)
             ->where('DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = e.ID_ETABLISSEMENT ) ')
             ->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$id_user)
@@ -147,7 +147,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
+        $select->from(['e' => 'etablissement'], null)
                 ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
                 ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
@@ -161,7 +161,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
+        $select->from(['e' => 'etablissement'], null)
                 ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'PERIODICITE_ETABLISSEMENTINFORMATIONS')
                 ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
@@ -182,7 +182,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
+        $select->from(['e' => 'etablissement'], null)
                 ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'ID_GENRE')
                 ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
                 ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
@@ -217,7 +217,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $result = $this->getParent($id_etablissement);
 
         if ($result != null) {
-            return array($result, $this->getParent($result['ID_ETABLISSEMENT']));
+            return [$result, $this->getParent($result['ID_ETABLISSEMENT'])];
         }
 
         return $result;
@@ -315,7 +315,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('avis.ID_AVIS', 2);
-        $search->setCriteria('etablissementinformations.ID_GENRE', array(2));
+        $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         if ($numInseeCommune) {
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE', $numInseeCommune);
@@ -345,9 +345,9 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
-        $search->columns(array(
+        $search->columns([
             'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
-        ));
+        ]);
         $search->joinEtablissementDossier();
         $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
                 .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
@@ -374,11 +374,11 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('dossier', array('ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER', 'AVIS_DOSSIER_COMMISSION'))
+            ->from('dossier', ['ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER', 'AVIS_DOSSIER_COMMISSION'])
             ->join('etablissementdossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER')
             ->join('dossiernature', 'dossiernature.ID_DOSSIER = etablissementdossier.ID_DOSSIER', null)
             ->where('etablissementdossier.ID_ETABLISSEMENT = ?', $id_etablissement)
-            ->where('dossiernature.ID_NATURE in (?)', array(19, 7, 17, 16, 21, 23, 24, 47, 26, 28, 29, 48))
+            ->where('dossiernature.ID_NATURE in (?)', [19, 7, 17, 16, 21, 23, 24, 47, 26, 28, 29, 48])
             ->where('dossier.AVIS_DOSSIER_COMMISSION IS NOT NULL')
             ->where('dossier.AVIS_DOSSIER_COMMISSION > 0')
             ->order('IFNULL(dossier.DATECOMM_DOSSIER, dossier.DATEVISITE_DOSSIER) DESC');

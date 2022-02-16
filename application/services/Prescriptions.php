@@ -14,7 +14,7 @@ class Service_Prescriptions
         $listePrescType = $dbPrescType->getPrescriptionType($categorie, $texte, $article);
 
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
-        $prescriptionArray = array();
+        $prescriptionArray = [];
 
         foreach ($listePrescType as $val => $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
@@ -217,7 +217,7 @@ class Service_Prescriptions
 
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
-        $prescriptionArray = array();
+        $prescriptionArray = [];
         foreach ($listePrescDossier as $val => $ue) {
             $assoc = $dbPrescReglAssoc->getPrescriptionReglAssoc($ue['ID_PRESCRIPTIONREGL']);
             array_push($prescriptionArray, $assoc);

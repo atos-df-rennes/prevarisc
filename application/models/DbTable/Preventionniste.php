@@ -12,7 +12,7 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
      */
     public function getPrev($commune, $id_pere)
     {
-        $array_result = array();
+        $array_result = [];
 
         // On vérfie si l'établissement père à des prev
         if ($id_pere != '') {
@@ -20,7 +20,7 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
             $prev_du_pere = $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_pere)->run();
             if (count($prev_du_pere) > 0) {
                 foreach ($prev_du_pere as $uid) {
-                    $array_tmp = array();
+                    $array_tmp = [];
                     $array_tmp['uid'] = $uid['uid'];
                     $array_tmp['nom'] = $uid['NOM_UTILISATEURINFORMATIONS'];
                     $array_tmp['prenom'] = $uid['PRENOM_UTILISATEURINFORMATIONS'];
@@ -39,7 +39,7 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
             if (count($prev_des_gpts) > 0) {
                 foreach ($prev_des_gpts as $prev_des_gpt) {
                     foreach ($prev_des_gpt as $uid) {
-                        $array_tmp = array();
+                        $array_tmp = [];
                         $array_tmp['uid'] = $uid['ID_UTILISATEUR'];
                         $array_tmp['nom'] = $uid['NOM_UTILISATEURINFORMATIONS'];
                         $array_tmp['prenom'] = $uid['PRENOM_UTILISATEURINFORMATIONS'];

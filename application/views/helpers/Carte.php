@@ -5,15 +5,15 @@ class View_Helper_Carte
     private $zoom;
     private $lat;
     private $lon;
-    private $overlays = array();
-    private $markers = array();
+    private $overlays = [];
+    private $markers = [];
     private $key_ign;
-    private $interactive_layer = array();
+    private $interactive_layer = [];
 
     /**
      * @return false|self
      */
-    public function carte($lat, $lon, $markers = array(), array $size = array('height' => '100%'), $zoom = 17)
+    public function carte($lat, $lon, $markers = [], array $size = ['height' => '100%'], $zoom = 17)
     {
         // Récupération des couches
         $model_couchecarto = new Model_DbTable_CoucheCarto();
@@ -67,22 +67,22 @@ class View_Helper_Carte
         }
 
         foreach ($rowset_couches as $row) {
-            $this->overlays[$row->NOM_COUCHECARTOTYPE][] = array(
+            $this->overlays[$row->NOM_COUCHECARTOTYPE][] = [
                 'name' => $row->NOM_COUCHECARTO,
                 'url' => $row->URL_COUCHECARTO,
-                'options' => array(
-                    'params' => array(
+                'options' => [
+                    'params' => [
                         'layers' => $row->LAYERS_COUCHECARTO,
                         'format' => $row->FORMAT_COUCHECARTO,
                         'transparent' => $row->TRANSPARENT_COUCHECARTO == 1 ? true : false,
-                    ),
-                    'options' => array(
+                    ],
+                    'options' => [
                         'projection' => 'EPSG:4326',
                         'isBaseLayer' => $row->ISBASELAYER_COUCHECARTO == 1 ? true : false,
                         'visibility' => false,
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
     }
 
@@ -168,12 +168,12 @@ class View_Helper_Carte
      */
     public static function Marker($label, $lat, $lon, $draggable = false, $img = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png'): array
     {
-        return array(
+        return [
             'label' => $label,
             'lat' => $lat,
             'lon' => $lon,
             'draggable' => $draggable,
             'img' => $img,
-        );
+        ];
     }
 }

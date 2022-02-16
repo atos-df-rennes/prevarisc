@@ -34,10 +34,10 @@ class CouchesCartographiquesController extends Zend_Controller_Action
                 $data = $this->getRequest()->getPost();
                 $this->serviceCarto->save($data);
 
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.']);
                 $this->_helper->redirector('list');
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -59,10 +59,10 @@ class CouchesCartographiquesController extends Zend_Controller_Action
                 $data = $this->getRequest()->getPost();
                 $this->serviceCarto->save($data, $id);
 
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été ajoutée.']);
                 $this->_helper->redirector('list');
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été ajoutée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
 
@@ -76,9 +76,9 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
         try {
             $this->serviceCarto->delete($this->getRequest()->getParam('id'));
-            $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été supprimée.'));
+            $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été supprimée.']);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array('context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$e->getMessage().')'));
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
 
         $this->_helper->redirector('list');

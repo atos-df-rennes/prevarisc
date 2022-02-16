@@ -11,8 +11,8 @@ class Model_DbTable_EtablissementDossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
                 ->setIntegrityCheck(false)
-                ->from(array('ed' => 'etablissementdossier'))
-                ->joinLeftUsing(array('e' => 'etablissement'), 'ID_ETABLISSEMENT')
+                ->from(['ed' => 'etablissementdossier'])
+                ->joinLeftUsing(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
                 ->where('ID_DOSSIER = ?', $idDossier)
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL');
 
