@@ -1179,10 +1179,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
 
-            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
-            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[0]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
-            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
-            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[0]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
+            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
+            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
+            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
         }
 
         $this->view->dossierComm = $listeDossiers;
