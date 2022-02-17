@@ -4,8 +4,6 @@ class Api_Plugin_RefererCheck extends Zend_Controller_Plugin_Abstract
 {
     /**
      * On se place dans le preDispatch pour autoriser ou non l'accès aux api.
-     *
-     * @param Zend_Controller_Request_Abstract $request
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {

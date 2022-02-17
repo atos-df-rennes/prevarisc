@@ -12,9 +12,10 @@ class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('pc' => 'prescriptioncat'))
-             ->order('pc.NUM_PRESCRIPTION_CAT');
+            ->setIntegrityCheck(false)
+            ->from(['pc' => 'prescriptioncat'])
+            ->order('pc.NUM_PRESCRIPTION_CAT')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -23,8 +24,9 @@ class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('pc' => 'prescriptioncat'), 'max(pc.NUM_PRESCRIPTION_CAT) as maxnum');
+            ->setIntegrityCheck(false)
+            ->from(['pc' => 'prescriptioncat'], 'max(pc.NUM_PRESCRIPTION_CAT) as maxnum')
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }

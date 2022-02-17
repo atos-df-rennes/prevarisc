@@ -23,14 +23,14 @@ class View_Helper_AfficheDoc
             $styleDate = "disabled='disabled'";
         }
 
-        if ($date == '00/00/0000') {
+        if ('00/00/0000' == $date) {
             $date = '';
         }
 
         $return = "
             <li class='divDoc row-fluid span12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
                 <div style='float:left;' class='span1'>
-                    <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".(($verrou == 1) ? "disabled='disabled'" : '')." />
+                    <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
                 </div>
                 <div class='span4 libelle' >
         ";
@@ -48,7 +48,7 @@ class View_Helper_AfficheDoc
                         <input type='text' readonly='true' ".$styleDate."  class='date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
                     </div>
                     <div class='span3'>
-                        <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".(($verrou == 1) ? 'display:none;' : '')."' >
+                        <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".((1 == $verrou) ? 'display:none;' : '')."' >
                                 <button class='editDoc btn'><i class='icon-pencil'></i>&nbsp;</button>
                         </span>
                         <span id='valid_".$natureId.'_'.$id.$type."' style='".$styleValid."'>

@@ -14,7 +14,7 @@ class Model_DbTable_Classement extends Zend_Db_Table_Abstract
     public function fetchAllPK(): array
     {
         $all = $this->fetchAll()->toArray();
-        $result = array();
+        $result = [];
         foreach ($all as $row) {
             $result[$row['ID_CLASSEMENT']] = $row;
         }
