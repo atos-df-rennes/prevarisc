@@ -1,26 +1,24 @@
-<form action=/dossier/effectifs-degagements-dossier-edit/id/<?php echo $this->idDossier?> method="get">
-    <div class='pull-right'>
-        <input class="btn btn-success" type='submit' value="Modifier les effectifs et dégagements"/>
-    </div>
+<div class='pull-right'>
+    <a href="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier-edit', 'id' => $this->idDossier), false, true) ?>" class="btn btn-success">Modifier les effectifs et dégagements</a>
+</div>
 
-    <h3>Effectifs :</h3>
-    <?php
-        if (isset($this->EffectifDegagement[0]) && '' !== $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"]) {
-            echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];
-        } else {
-            echo "Aucune description";
-        }
-    ?>
+<h3>Effectifs :</h3>
+<?php
+    if (isset($this->EffectifDegagement[0]) && '' !== $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"]) {
+        echo $this->EffectifDegagement[0]["DESCRIPTION_EFFECTIF"];
+    } else {
+        echo "Aucune description";
+    }
+?>
 
-    <h3>Dégagements :</h3>
-    <?php
-        if (isset($this->EffectifDegagement[0]) && '' !== $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"]) {
-            echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];
-        } else {
-            echo "Aucune description";
-        }
-    ?>
-</form>
+<h3>Dégagements :</h3>
+<?php
+    if (isset($this->EffectifDegagement[0]) && '' !== $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"]) {
+        echo $this->EffectifDegagement[0]["DESCRIPTION_DEGAGEMENT"];
+    } else {
+        echo "Aucune description";
+    }
+?>
 
 <script type='text/javascript'>
     tinymce.init({

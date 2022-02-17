@@ -443,31 +443,10 @@ class EtablissementController extends Zend_Controller_Action
 
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
 
-        if ($this->_request->isPost()) {
-            //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-            $serviceEffectifdegagement = new Service_Effectifdegagement();
+        $idEtablissement = $this->getParam('id');
 
-            try {
-                //Recuperation des variables de formulaire via la requete post
-                $post = $this->_request->getPost();
-                $serviceEffectifdegagement->save($post);
-
-                $this->_helper->flashMessenger([
-                    'context' => 'success',
-                    'title' => 'Mise à jour réussie !',
-                    'message' => 'Les effectifs et dégagements ont bien été mis à jour.',
-                ]);
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger([
-                    'context' => 'error',
-                    'title' => '',
-                    'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
-                ]);
-            }
-        }
-
-        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
-        $this->view->idDossier = $this->_getParam('id');
+        $this->view->idEtablissement = $idEtablissement;
+        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement);
     }
 
     public function effectifsDegagementsEtablissementEditAction()
@@ -478,31 +457,17 @@ class EtablissementController extends Zend_Controller_Action
         $serviceEffectifdegagement = new Service_Effectifdegagement();
         $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
 
-        if ($this->_request->isPost()) {
-            try {
-                //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-                $arrData = [];
-                $arrData['DESCRIPTION_EFFECTIF'] = $this->_request->getParam('DESCRIPTION_EFFECTIF');
-                $arrData['DESCRIPTION_DEGAGEMENT'] = $this->_request->getParam('DESCRIPTION_DEGAGEMENT');
-                $serviceEffectifdegagement->saveFromEtablissement($this->_getParam('id'), $arrData);
+        $idEtablissement = $this->getParam('id');
 
-                $this->_helper->redirector('effectifs-degagements-etablissement', null, null, array('id' => $this->getParam('id')));
+        $this->view->idEtablissement = $idEtablissement;
+        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement);
 
-                $this->_helper->flashMessenger([
-                    'context' => 'success',
-                    'title' => 'Mise à jour effectifs dégagements ok',
-                    'message' => '',
-                ]);
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger([
-                    'context' => 'error',
-                    'title' => 'Erreur lors de la mise à jour',
-                    'message' => $e->getMessage(),
-                ]);
-            }
-        } else {
-            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($this->_getParam('id'));
-            $this->view->idDossier = $this->_getParam('id');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            $serviceEffectifdegagement->saveFromEtablissement($idEtablissement, $data);
+            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, array('id' => $idEtablissement));
         }
     }
 }

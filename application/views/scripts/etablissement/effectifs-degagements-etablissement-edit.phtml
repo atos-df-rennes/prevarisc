@@ -1,4 +1,4 @@
-<form action=/etablissement/effectifs-degagements-etablissement-edit/id/<?php echo $this->idDossier?> method="post">
+<form action="<?= $this->url(array('controller' => 'etablissement', 'action' => 'effectifs-degagements-etablissement-edit', 'id' => $this->idEtablissement), false, true) ?>" method="post">
     <div class='pull-right'>
         <input type='submit' class="btn btn-success" value="Sauvegarder les modifications">
     </div>

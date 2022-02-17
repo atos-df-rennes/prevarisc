@@ -3045,32 +3045,9 @@ class DossierController extends Zend_Controller_Action
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->idDossier);
+            $this->view->idDossier = $this->idDossier;
         }
-
-        if ($this->_request->isPost()) {
-            //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-            $serviceEffectifdegagement = new Service_Effectifdegagement();
-
-            try {
-                //Recuperation des variables de formulaire via la requete post
-                $post = $this->_request->getPost();
-                $serviceEffectifdegagement->save($post);
-                $this->_helper->flashMessenger([
-                    'context' => 'success',
-                    'title' => 'Mise à jour réussie !',
-                    'message' => 'Les effectifs et dégagements ont bien été mis à jour.',
-                ]);
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger([
-                    'context' => 'error',
-                    'title' => '',
-                    'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
-                ]);
-            }
-        }
-
-        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
-        $this->view->idDossier = $this->_getParam('id');
     }
 
     public function effectifsDegagementsDossierEditAction()
@@ -3084,33 +3061,16 @@ class DossierController extends Zend_Controller_Action
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->idDossier);
+            $this->view->idDossier = $this->idDossier;
         }
 
-        if ($this->_request->isPost()) {
-            try {
-                //Si la fonction est appele depuis une request post alors on effectue le code suivant a noter que nous serons dans ce cas lorsque l utilisateur validera son formulaire
-                $arrData = [];
-                $arrData['DESCRIPTION_EFFECTIF'] = $this->_request->getParam('DESCRIPTION_EFFECTIF');
-                $arrData['DESCRIPTION_DEGAGEMENT'] = $this->_request->getParam('DESCRIPTION_DEGAGEMENT');
-                $serviceEffectifdegagement->saveFromDossier($this->_getParam('id'), $arrData);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
 
-                $this->_helper->redirector('effectifs-degagements-dossier', null, null, array('id' => $this->getParam('id')));
-
-                $this->_helper->flashMessenger([
-                    'context' => 'success',
-                    'title' => 'Mise à jour effectifs dégagements ok',
-                    'message' => '',
-                ]);
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger([
-                    'context' => 'error',
-                    'title' => 'Erreur lors de la mise à jour',
-                    'message' => $e->getMessage(),
-                ]);
-            }
-        } else {
-            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->_getParam('id'));
-            $this->view->idDossier = $this->_getParam('id');
+            $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, array('id' => $this->idDossier));
         }
     }
 }
