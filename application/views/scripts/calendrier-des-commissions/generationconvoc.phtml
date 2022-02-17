@@ -233,29 +233,24 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
 
-	/**
-	*instanciation de la Lib permettant de convertir le HTML en format string  
-	*Attention ! Il ne faut pas mettre de style sur le texte dans le wiziwig sinon le parsing ne se realisera pas 
-	*/
 	$html2Text = new \kranemora\Html2Text\Html2Text;
-	/**
-	 * Tableau des champs effectif degagment $k = nom du champ en champ de fusion, $v = valeur du champ
-	 */
+
 	$tabEffDegKV = array(
-		'descriptionEffectifDossier' =>$dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
-		'descriptionDegagementDossier' =>$dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
-		'descriptionEffectifEtablissement' =>$dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
-		'descriptionDegagementEtablissement' =>$dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
 	);
+
 	/**
 	 * Foreach sur le tableau pour attribuer les valeurs dans les champs de fusion
 	 * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
 	 */
-	foreach($tabEffDegKV as $k => $v){
-		if(isset($v) && strlen($v) > 0 ){
-			setVars($segment,$k, $html2Text->convert($v));
-		}else{
-			setVars($segment,$k, "");
+	foreach ($tabEffDegKV as $k => $v) {
+		if (isset($v) && strlen($v) > 0 ) {
+			setVars($segment, $k, $html2Text->convert($v));
+		} else {
+			setVars($segment, $k, "");
 		}
 	}
 
