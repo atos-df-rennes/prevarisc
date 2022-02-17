@@ -43,31 +43,6 @@ foreach($this->informationsMembre as $val => $membre){
                         echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le contact de la commune ".$commune[0]." n'a pas été renseigné</span><br/><br/><br/>";
                     }
                 }
-                /**
-                *instanciation de la Lib permettant de convertir le HTML en format string  
-                *Attention ! Il ne faut pas mettre de style sur le texte dans le wiziwig sinon le parsing ne se realisera pas 
-                */
-                $html2Text = new \kranemora\Html2Text\Html2Text;
-                /**
-                 * Tableau des champs effectif degagment $k = nom du champ en champ de fusion, $v = valeur du champ
-                 */
-                $tabEffDegKV = array(
-                    'descriptionEffectifDossier' => $this->dossierComm[0]['DESCRIPTION_EFFECTIF_DOSSIER'],
-                    'descriptionDegagementDossier' => $this->dossierComm[0]['DESCRIPTION_DEGAGEMENT_DOSSIER'],
-                    'descriptionEffectifEtablissement' => $this->dossierComm[0]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
-                    'descriptionDegagementEtablissement' => $this->dossierComm[0]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
-                );
-                /**
-                 * Foreach sur le tableau pour attribuer les valeurs dans les champs de fusion
-                 * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
-                 */
-                foreach($tabEffDegKV as $k => $v){
-                    if(isset($v) && strlen($v) > 0 ){
-                        addChamp($membreLoop,$k, $html2Text->convert($v));
-                    }else{
-                        addChamp($membreLoop,$k, "");
-                    }
-                }
 
                 addChamp($membreLoop,'commissionNom',$this->commissionInfos[0]['LIBELLE_COMMISSION']);
                 
@@ -248,7 +223,28 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         }
     }
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
-    addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste)); 
+    addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+
+    $html2Text = new \kranemora\Html2Text\Html2Text;
+
+    $tabEffDegKV = array(
+        'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+        'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+        'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+        'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+    );
+
+    /**
+     * Foreach sur le tableau pour attribuer les valeurs dans les champs de fusion
+     * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
+     */
+    foreach ($tabEffDegKV as $k => $v) {
+        if (isset($v) && strlen($v) > 0 ) {
+            addChamp($segment->infosDoss, $k, $html2Text->convert($v));
+        } else {
+            addChamp($segment->infosDoss, $k, "");
+        }
+    }
 }
 
 function savePj($dateCommId,$libelleMembre){

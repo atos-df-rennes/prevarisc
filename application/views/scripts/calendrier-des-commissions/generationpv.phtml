@@ -140,9 +140,9 @@ foreach($this->membresFiles as $val => $membre){
 						 */
 						foreach ($tabEffDegKV as $k => $v) {
 							if (isset($v) && strlen($v) > 0 ) {
-								addChamp($dossInfos,$k, $html2Text->convert($v));
+								addChamp($dossInfos, $k, $html2Text->convert($v));
 							} else {
-								addChamp($dossInfos,$k, "");
+								addChamp($dossInfos, $k, "");
 							}
 						}
 
