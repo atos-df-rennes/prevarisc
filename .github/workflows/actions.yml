@@ -1,35 +1,41 @@
-name: PHP Actions
+name: Prevarisc Lint
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  validate-composer:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
-
-    - name: Setup PHP with tools
-      uses: shivammathur/setup-php@v2
+    - uses: shivammathur/setup-php@v2
       with:
         php-version: '7.1'
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
+  php-cs-fixer:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
 
     - name: PHP-CS-Fixer
       run: ./vendor/bin/php-cs-fixer fix --diff --dry-run
+
+  var-dump-check:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
 
     - name: Normal VarDump Check
       uses: umutphp/php-var-dump-check-action@v2
@@ -45,5 +51,15 @@ jobs:
         exclude: '$GITHUB_WORKSPACE/vendor'
         extensions: 'php,phtml'
 
-    - name: PHP Magic Number Check
-      uses: umutphp/php-magic-number-check-action@v2
+  magical-number-check:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
+
+    - name: Magical Number Check
+      run: ./vendor/bin/phpmnd $GITHUB_WORKSPACE/application --non-zero-exit-on-violation --extensions=-switch_case

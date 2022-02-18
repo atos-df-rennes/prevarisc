@@ -1,9 +1,9 @@
-name: PR label Check
+name: Prevarisc PR Check
 
 on: pull_request
 
 jobs:
-  build:
+  check-pr:
     runs-on: ubuntu-18.04
     steps:
       - name: Checks non-draft PR has label
