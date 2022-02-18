@@ -44,3 +44,6 @@ jobs:
         checktype: 'zend'
         exclude: '$GITHUB_WORKSPACE/vendor'
         extensions: 'php,phtml'
+
+    - name: PHP Magic Number Check
+      uses: umutphp/php-magic-number-check-action@v2
