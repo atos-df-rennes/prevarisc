@@ -2,9 +2,9 @@
 
 class CommissionController extends Zend_Controller_Action
 {
-    const ID_COMMISSION_COMMUNALE = 2;
-    const ID_GENRE_ETABLISSEMENT = 2;
-    const ID_GENRE_IGH = 5;
+    public const ID_COMMISSION_COMMUNALE = 2;
+    public const ID_GENRE_ETABLISSEMENT = 2;
+    public const ID_GENRE_IGH = 5;
 
     public function deleteAction()
     {

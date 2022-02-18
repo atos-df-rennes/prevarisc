@@ -2,10 +2,10 @@
 
 class Service_Dashboard
 {
-    const ID_DOSSIERTYPE_COURRIER = 5;
-    const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
-    const ID_NATURE_LEVEE_AVIS_DEF = 19;
-    const ID_NATURE_ECHEANCIER_TRAVAUX = 46;
+    public const ID_DOSSIERTYPE_COURRIER = 5;
+    public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+    public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+    public const ID_NATURE_ECHEANCIER_TRAVAUX = 46;
 
     protected $options = [];
 

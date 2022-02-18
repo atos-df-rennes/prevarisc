@@ -2,10 +2,9 @@
 
 class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
 {
+    public const ID_GENRE_ETABLISSEMENT = 2;
     protected $_name = 'periodicite'; // Nom de la base
     protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE']; // Clé primaire
-
-    const ID_GENRE_ETABLISSEMENT = 2;
 
     public function gn4($categorie, $type, $local_sommeil): string
     {

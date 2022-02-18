@@ -5,9 +5,9 @@ use Sabre\VObject;
 class Api_Service_Calendar
 {
     public const LF = "\r\n";
-    const ID_DOSSIERTYPE_GRPVISITE = 3;
-    const ID_GENRE_CELLULE = 3;
-    const ID_AVIS_DEFAVORABLE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_AVIS_DEFAVORABLE = 2;
 
     public function sync($userid, $commission = null)
     {

@@ -4,14 +4,14 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
     public const CLASSEMENT_CHANGE = 3;
-    const ID_FONCTION_DUS = 8;
-    const ID_GENRE_CELLULE = 3;
-    const ID_GENRE_ETABLISSEMENT = 2;
-    const ID_GENRE_EIC = 6;
-    const ID_STATUS_OUVERT = 2;
-    const ID_DOSSIERTYPE_VISITE = 2;
-    const ID_DOSSIERTYPE_GRPVISITE = 3;
-    const ID_5EME_CAT = 5;
+    public const ID_FONCTION_DUS = 8;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_GENRE_ETABLISSEMENT = 2;
+    public const ID_GENRE_EIC = 6;
+    public const ID_STATUS_OUVERT = 2;
+    public const ID_DOSSIERTYPE_VISITE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_5EME_CAT = 5;
 
     /**
      * Récupération d'un établissement.

@@ -2,7 +2,7 @@
 
 class Service_Adresse
 {
-    const LONGUEUR_CODE_POSTAL = 5;
+    public const LONGUEUR_CODE_POSTAL = 5;
 
     /**
      * Récupération de l'ensemble des communes.

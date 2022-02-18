@@ -2,7 +2,7 @@
 
 class SessionController extends Zend_Controller_Action
 {
-    const MAX_LOGIN_ATTEMPTS = 2;
+    public const MAX_LOGIN_ATTEMPTS = 2;
 
     public function loginAction()
     {

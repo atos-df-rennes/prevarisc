@@ -2,6 +2,16 @@
 
 class DossierController extends Zend_Controller_Action
 {
+    public const ID_DOSSIERTYPE_VISITE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+    public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+    public const ID_NATURE_PERIODIQUE_VISITE = 21;
+    public const ID_NATURE_PERIODIQUE_GRPVISITE = 26;
+    public const ID_AVIS_DEFAVORABLE = 2;
+    public const ID_GENRE_ETABLISSEMENT = 2;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
     private $id_dossier;
 
     //liste des champs à afficher en fonction de la nature
@@ -138,17 +148,6 @@ class DossierController extends Zend_Controller_Action
         //Courrier - OK
         '45' => ['DATEINSERT', 'OBJET', 'DATESIGN', 'DATEREP', 'PREVENTIONNISTE', 'OBSERVATION'],
     ];
-
-    const ID_DOSSIERTYPE_VISITE = 2;
-    const ID_DOSSIERTYPE_GRPVISITE = 3;
-    const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
-    const ID_NATURE_LEVEE_AVIS_DEF = 19;
-    const ID_NATURE_PERIODIQUE_VISITE = 21;
-    const ID_NATURE_PERIODIQUE_GRPVISITE = 26;
-    const ID_AVIS_DEFAVORABLE = 2;
-    const ID_GENRE_ETABLISSEMENT = 2;
-    const ID_GENRE_CELLULE = 3;
-    const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
 
     public function init()
     {

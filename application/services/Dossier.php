@@ -2,8 +2,8 @@
 
 class Service_Dossier
 {
-    const ID_DOSSIERTYPE_VISITE = 2;
-    const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_DOSSIERTYPE_VISITE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
 
     /**
      * Récupération de l'ensemble des types.

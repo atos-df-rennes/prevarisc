@@ -2,8 +2,8 @@
 
 class Service_Search
 {
-    const MAX_LIMIT_PAGES_ETABLISSEMENTS = 1000;
-    const MAX_LIMIT_PAGES_DOSSIERS = 100;
+    public const MAX_LIMIT_PAGES_ETABLISSEMENTS = 1000;
+    public const MAX_LIMIT_PAGES_DOSSIERS = 100;
 
     /**
      * Recherche des établissements.

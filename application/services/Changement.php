@@ -43,8 +43,8 @@ class Service_Changement
         ],
     ];
 
-    const ID_GENRE_CELLULE = 3;
-    const ID_AVIS_DEFAVORABLE = 2;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_AVIS_DEFAVORABLE = 2;
 
     /**
      * Retourne tous les enregistrement contenus dans la table changement.
