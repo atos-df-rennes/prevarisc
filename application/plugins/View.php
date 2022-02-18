@@ -36,9 +36,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->registerHelper(new View_Helper_AgendaMois(), 'agendaMois');
             $view->registerHelper(new View_Helper_Dates(), 'formatDateDiff');
             $view->registerHelper(new View_Helper_Avatar(), 'avatar');
-            $view->registerHelper(new View_Helper_Carte(), 'carte');
             $view->registerHelper(new View_Helper_ListeGroupement(), 'listeGroupement');
-            $view->registerHelper(new SDIS62_View_Helper_FlashMessenger(), 'flashMessenger');
 
             // JS
             $view->inlineScript()->appendFile('/js/jquery-1.10.2.min.js');
