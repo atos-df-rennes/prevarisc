@@ -139,6 +139,17 @@ class DossierController extends Zend_Controller_Action
         '45' => ['DATEINSERT', 'OBJET', 'DATESIGN', 'DATEREP', 'PREVENTIONNISTE', 'OBSERVATION'],
     ];
 
+    const ID_DOSSIERTYPE_VISITE = 2;
+    const ID_DOSSIERTYPE_GRPVISITE = 3;
+    const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+    const ID_NATURE_LEVEE_AVIS_DEF = 19;
+    const ID_NATURE_PERIODIQUE_VISITE = 21;
+    const ID_NATURE_PERIODIQUE_GRPVISITE = 26;
+    const ID_AVIS_DEFAVORABLE = 2;
+    const ID_GENRE_ETABLISSEMENT = 2;
+    const ID_GENRE_CELLULE = 3;
+    const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
+
     public function init()
     {
         $this->_helper->layout->setLayout('dossier');
@@ -585,7 +596,7 @@ class DossierController extends Zend_Controller_Action
                     $this->view->dateCommInput = $date->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR);
                     $this->view->idDateCommissionAffect = $dateComm['ID_DATECOMMISSION'];
                 }
-            } elseif (2 == $this->view->infosDossier['TYPE_DOSSIER'] || 3 == $this->view->infosDossier['TYPE_DOSSIER']) {
+            } elseif (self::ID_DOSSIERTYPE_VISITE == $this->view->infosDossier['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_GRPVISITE == $this->view->infosDossier['TYPE_DOSSIER']) {
                 // CAS D'UNE VISITE
                 foreach ($listeDateAffectDossier as $val => $ue) {
                     if (1 == $ue['ID_COMMISSIONTYPEEVENEMENT']) {
@@ -899,8 +910,8 @@ class DossierController extends Zend_Controller_Action
 
             if (
                 (
-                    (21 == $this->_getParam('selectNature') && 2 == $this->_getParam('TYPE_DOSSIER'))
-                    || 26 == $this->_getParam('selectNature')
+                    (self::ID_NATURE_PERIODIQUE_VISITE == $this->_getParam('selectNature') && self::ID_DOSSIERTYPE_VISITE == $this->_getParam('TYPE_DOSSIER'))
+                    || self::ID_NATURE_PERIODIQUE_GRPVISITE == $this->_getParam('selectNature')
                 )
                 && $this->_getParam('DATEVISITE_PERIODIQUE')
             ) {
@@ -918,10 +929,12 @@ class DossierController extends Zend_Controller_Action
             //Si le dossier est une levée de prescription ou de reserve on ajoute 5 "documents consultés" de type : Attestation de
             if (
                 'new' == $this->_getParam('do')
-                && (7 == $idNature || 19 == $idNature)
+                && (self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature || self::ID_NATURE_LEVEE_AVIS_DEF == $idNature)
             ) {
                 $dbListeDocAjout = new Model_DbTable_ListeDocAjout();
-                for ($i = 0; $i < 5; ++$i) {
+                $nbDocsAAjouter = 5;
+
+                for ($i = 0; $i < $nbDocsAAjouter; ++$i) {
                     $docAttestation = $dbListeDocAjout->createRow();
                     $docAttestation->LIBELLE_DOCAJOUT = 'Attestation de';
                     $docAttestation->ID_NATURE = $idNature;
@@ -1009,8 +1022,8 @@ class DossierController extends Zend_Controller_Action
                     $listePrescRegl = $service_prescription->getPrescriptions('etude', true);
                     $service_dossier->savePrescriptionRegl($idDossier, $listePrescRegl);
                 } elseif (
-                    2 == $this->_getParam('TYPE_DOSSIER')
-                    || 3 == $this->_getParam('TYPE_DOSSIER')
+                    self::ID_DOSSIERTYPE_VISITE == $this->_getParam('TYPE_DOSSIER')
+                    || self::ID_DOSSIERTYPE_GRPVISITE == $this->_getParam('TYPE_DOSSIER')
                 ) {
                     $listePrescRegl = $service_prescription->getPrescriptions('visite', true);
                     $service_dossier->savePrescriptionRegl($idDossier, $listePrescRegl);
@@ -1019,7 +1032,7 @@ class DossierController extends Zend_Controller_Action
 
             //GESTION DE LA RECUPERATION DES DOCUMENTS CONSULTES DE LA PRECEDENTE VP SI IL EN EXISTE UNE (UNIQUEMENT EN CREATION DE DOSSIER)
             if (
-                (21 == $idNature || 26 == $idNature)
+                (self::ID_NATURE_PERIODIQUE_VISITE == $idNature || self::ID_NATURE_PERIODIQUE_GRPVISITE == $idNature)
                 && '' != $_POST['idEtablissement']
                 && 'new' == $this->_getParam('do')
             ) {
@@ -1277,7 +1290,7 @@ class DossierController extends Zend_Controller_Action
             //On met le champ ID_DOSSIER_DONNANT_AVIS de établissement avec l'ID du dossier que l'on vient d'enregistrer dans les cas suivant
             if (
                 $this->_getParam('AVIS_DOSSIER_COMMISSION')
-                && (1 == $this->_getParam('AVIS_DOSSIER_COMMISSION') || 2 == $this->_getParam('AVIS_DOSSIER_COMMISSION'))
+                && (1 == $this->_getParam('AVIS_DOSSIER_COMMISSION') || self::ID_AVIS_DEFAVORABLE == $this->_getParam('AVIS_DOSSIER_COMMISSION'))
                 && $service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
             ) {
                 if (
@@ -1678,8 +1691,9 @@ class DossierController extends Zend_Controller_Action
 
             //on définit s'il sagid d'un doc ajouté ou nom
             $tabNom = explode('_', $idValid);
+            $expectedCountIfNotAdded = 2;
 
-            if (2 === count($tabNom)) {
+            if ($expectedCountIfNotAdded === count($tabNom)) {
                 $dblistedoc = new Model_DbTable_DossierDocConsulte();
                 $listevalid = $dblistedoc->getGeneral($idDossier, $tabNom[1]);
 
@@ -1724,13 +1738,16 @@ class DossierController extends Zend_Controller_Action
         //cas de la suppression d'un document qui avait été renseigné
         $tabInfos = explode('_', $this->_getParam('docInfos'));
         $numdoc = $tabInfos[1];
-        if (2 === count($tabInfos)) {
+
+        $expectedCountIfNotAdded = 2;
+        $expectedCountIfAdded = 3;
+        if ($expectedCountIfNotAdded === count($tabInfos)) {
             //cas d'un document existant
             $dbToUse = new Model_DbTable_DossierDocConsulte();
             $searchResult = $dbToUse->getGeneral($this->_getParam('idDossier'), $numdoc);
             $docDelete = $dbToUse->find($searchResult['ID_DOSSIERDOCCONSULTE'])->current();
             $docDelete->delete();
-        } elseif (3 === count($tabInfos)) {
+        } elseif ($expectedCountIfAdded === count($tabInfos)) {
             //cas d'un document ajouté
             $dbToUse = new Model_DbTable_ListeDocAjout();
             $searchResult = $dbToUse->find($numdoc)->current();
@@ -2076,10 +2093,10 @@ class DossierController extends Zend_Controller_Action
         $this->view->typeSecondaire = substr($typeS, 0, -2);
 
         //En fonction du genre on récupère les informations de l'établissement ou du site
-        if (2 == $object_informations['ID_GENRE']) {
+        if (self::ID_GENRE_ETABLISSEMENT == $object_informations['ID_GENRE']) {
             //cas d'un établissement
             $this->view->GN = 2;
-        } elseif (3 == $object_informations['ID_GENRE']) {
+        } elseif (self::ID_GENRE_CELLULE == $object_informations['ID_GENRE']) {
             //cas d'une céllule
             $this->view->GN = 3;
         }
@@ -2102,7 +2119,7 @@ class DossierController extends Zend_Controller_Action
 
         // Catégorie
         if (
-            3 == $object_informations['ID_GENRE']
+            self::ID_GENRE_CELLULE == $object_informations['ID_GENRE']
             && $this->view->infoPere
         ) {
             $object_informations['ID_CATEGORIE'] = $this->view->infoPere['ID_CATEGORIE'];
@@ -2404,7 +2421,7 @@ class DossierController extends Zend_Controller_Action
         $natureCCL = [7, 19];
 
         if (
-            29 == $this->view->id_typeactivite
+            self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCC)
             && isset($affectDossier)
             && !$this->_getParam('repriseCC')
@@ -2428,7 +2445,7 @@ class DossierController extends Zend_Controller_Action
                 $this->view->celluleDossier = $listeDossierConcerne;
             }
         } elseif (
-            29 == $this->view->id_typeactivite
+            self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCCL)
             && !$this->_getParam('repriseCC')
         ) {

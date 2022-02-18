@@ -2,6 +2,9 @@
 
 class Service_Dossier
 {
+    const ID_DOSSIERTYPE_VISITE = 2;
+    const ID_DOSSIERTYPE_GRPVISITE = 3;
+
     /**
      * Récupération de l'ensemble des types.
      *
@@ -208,7 +211,7 @@ class Service_Dossier
                     $row->ID_TEXTESAPPL = $id_texte_applicable;
                     $row->ID_DOSSIER = $id_dossier;
                     $row->save();
-                    if ((2 == $type || 3 == $type) && $id_etablissement) {
+                    if ((self::ID_DOSSIERTYPE_VISITE == $type || self::ID_DOSSIERTYPE_GRPVISITE == $type) && $id_etablissement) {
                         $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
                         if (!$exist) {
                             $row = $etsTexteApplicable->createRow();
@@ -731,11 +734,11 @@ class Service_Dossier
     public function getDateDossier($dossier): Zend_Date
     {
         $date = $dossier->DATEINSERT_DOSSIER;
-        if (1 == $dossier->TYPE_DOSSIER || 3 == $dossier->TYPE_DOSSIER) {
+        if (1 == $dossier->TYPE_DOSSIER || self::ID_DOSSIERTYPE_GRPVISITE == $dossier->TYPE_DOSSIER) {
             if (null != $dossier->DATECOMM_DOSSIER && '' != $dossier->DATECOMM_DOSSIER) {
                 $date = $dossier->DATECOMM_DOSSIER;
             }
-        } elseif (2 == $dossier->TYPE_DOSSIER) {
+        } elseif (self::ID_DOSSIERTYPE_VISITE == $dossier->TYPE_DOSSIER) {
             if (null != $dossier->DATEVISITE_DOSSIER && '' != $dossier->DATEVISITE_DOSSIER) {
                 $date = $dossier->DATEVISITE_DOSSIER;
             }

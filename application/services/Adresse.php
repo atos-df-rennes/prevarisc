@@ -2,6 +2,8 @@
 
 class Service_Adresse
 {
+    const LONGUEUR_CODE_POSTAL = 5;
+
     /**
      * Récupération de l'ensemble des communes.
      *
@@ -23,7 +25,7 @@ class Service_Adresse
      */
     public function get($q)
     {
-        if (5 == strlen($q) && is_numeric($q)) {
+        if (self::LONGUEUR_CODE_POSTAL == strlen($q) && is_numeric($q)) {
             $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
             return $DB_adresse->getVilleByCP($q);

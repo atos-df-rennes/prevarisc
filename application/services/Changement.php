@@ -43,6 +43,9 @@ class Service_Changement
         ],
     ];
 
+    const ID_GENRE_CELLULE = 3;
+    const ID_AVIS_DEFAVORABLE = 2;
+
     /**
      * Retourne tous les enregistrement contenus dans la table changement.
      *
@@ -207,9 +210,9 @@ class Service_Changement
             $avis = "Présence d'un dossier avec avis differé";
         } elseif (null != $ets['avis']) {
             if (1 == $ets['avis'] && 'avisDoss' == $avisType) {
-                $avis = 'Favorable'.(3 == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
-            } elseif (2 == $ets['avis'] && 'avisDoss' == $avisType) {
-                $avis = 'Défavorable'.(3 == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
+                $avis = 'Favorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
+            } elseif (self::ID_AVIS_DEFAVORABLE == $ets['avis'] && 'avisDoss' == $avisType) {
+                $avis = 'Défavorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
             }
         } else {
             $avis = "Avis d'exploitation indisponible";

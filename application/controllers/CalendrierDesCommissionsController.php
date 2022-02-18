@@ -647,11 +647,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                 foreach ($_POST as $var => $val) {
                     $varExplode1 = explode('_', $var);
-                    if (2 == count($varExplode1)) {
+                    $expectedNumberOfParameters = 2;
+
+                    if ($expectedNumberOfParameters == count($varExplode1)) {
                         //il n'y à que la premiere date sélectionnée (de début) qui est composée d'un "_"
                         $varExplode2 = explode('-', $varExplode1[1]);
+                        $expectedNumberOfDateParameters = 3;
+
                         if (
-                            3 == count($varExplode2)
+                            $expectedNumberOfDateParameters == count($varExplode2)
                             && 'D' == $varExplode1[0]
                         ) {
                             //on s'assure que c'est bien une date jj/mm/aaaa
@@ -690,10 +694,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 //Cas de plusieurs dates selectionnées
                 foreach ($_POST as $var => $val) {
                     $varExplode1 = explode('_', $var);
-                    if (2 == count($varExplode1)) {
+                    $expectedNumberOfParameters = 2;
+
+                    if ($expectedNumberOfParameters == count($varExplode1)) {
                         //on est dans le cas d'une date
                         $varExplode2 = explode('-', $varExplode1[1]);
-                        if (3 == count($varExplode2)) {
+                        $expectedNumberOfDateParameters = 3;
+
+                        if ($expectedNumberOfDateParameters == count($varExplode2)) {
                             //Ici insertion des dates dans la base de données
                             if ('D' == $varExplode1[0]) {
                                 if ($premiereDate) {

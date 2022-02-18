@@ -215,7 +215,9 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     private function getDate($input): string
     {
         $array_date = explode('/', $input);
-        if (!is_array($array_date) || 3 != count($array_date)) {
+        $expectedNumberOfDateParameters = 3;
+
+        if (!is_array($array_date) || $expectedNumberOfDateParameters != count($array_date)) {
             throw new Exception('Erreur dans la date', 500);
         }
 

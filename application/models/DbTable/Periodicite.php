@@ -5,6 +5,8 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
     protected $_name = 'periodicite'; // Nom de la base
     protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE']; // Clé primaire
 
+    const ID_GENRE_ETABLISSEMENT = 2;
+
     public function gn4($categorie, $type, $local_sommeil): string
     {
         // On check la périodicité par rapport au GE4
@@ -28,7 +30,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         if (!in_array($informations['ID_GENRE'], [2, 5])) {
             return null;
         }
-        $type = 2 == $informations['ID_GENRE'] ? $informations['ID_TYPE'] : $informations['ID_CLASSE'];
+        $type = self::ID_GENRE_ETABLISSEMENT == $informations['ID_GENRE'] ? $informations['ID_TYPE'] : $informations['ID_CLASSE'];
 
         return $this->gn4($informations['ID_CATEGORIE'], $type, $informations['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 1 : 0);
     }

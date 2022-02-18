@@ -31,8 +31,10 @@ class ErrorController extends Zend_Controller_Action
 
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER:
                 $priority = Zend_Log::ERR;
-                if (401 == $errors->exception->getCode()) {
-                    $this->getResponse()->setHttpResponseCode(401);
+                $unautorizedStatusCode = 401;
+
+                if ($unautorizedStatusCode == $errors->exception->getCode()) {
+                    $this->getResponse()->setHttpResponseCode($unautorizedStatusCode);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
                 }
