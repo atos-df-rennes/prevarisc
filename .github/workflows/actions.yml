@@ -16,6 +16,9 @@ jobs:
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v2
@@ -25,8 +28,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
     - name: PHP-CS-Fixer
       run: ./vendor/bin/php-cs-fixer fix --diff --dry-run
+
+    - name: Normal VarDump Check
+      uses: umutphp/php-var-dump-check-action@v2
+      with:
+        checktype: 'none'
+        exclude: '$GITHUB_WORKSPACE/vendor'
+        extensions: 'php,phtml'
+
+    - name: Zend VarDump Check
+      uses: umutphp/php-var-dump-check-action@v2
+      with:
+        checktype: 'zend'
+        exclude: '$GITHUB_WORKSPACE/vendor'
+        extensions: 'php,phtml'
