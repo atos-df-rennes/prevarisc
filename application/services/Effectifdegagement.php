@@ -2,188 +2,79 @@
 
 class Service_Effectifdegagement
 {
-    /**
-     *  Retourne un changement via son Id précisé en argument.
-     *
-     * @param int $idChangement L'id du changement à retourner
-     *
-     * @return Zend_Db_Table_Row_Abstract Le résultat
-     */
-    public function get($idChangement)
+    public function __construct()
     {
-        $dbEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $this->modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $this->modelEffectifDegagementDossier = new Model_DbTable_DossierEffectifDegagement();
+        $this->modelEffectifDegagementEtablissement = new Model_DbTable_EtablissementEffectifDegagement();
 
-        return $dbEffectifDegagement->find($idChangement)->current();
+        $this->modelDossier = new Model_DbTable_Dossier();
+        $this->modelEtablissement = new Model_DbTable_Etablissement();
     }
 
-    /**
-     *  Retourne un changement via son Id précisé en argument.
-     *
-     * @param int   $idChangement L'id du changement à retourner
-     * @param mixed $idDossier
-     *
-     * @return Zend_Db_Table_Row_Abstract Le résultat
-     */
-    public function getByIDDossier($idDossier)
+    public function get(int $idEffectifDegagement)
     {
-        $dbEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $res = null;
-        foreach ($dbEffectifDegagement->getIDEffectifDegagementByIDDossier($idDossier) as $row) {
-            foreach ($row as $key => $value) {
-                if ('ID_EFFECTIF_DEGAGEMENT' == $key) {
-                    $res = $value;
-                }
-            }
-        }
-
-        return $res;
+        return $this->modelEffectifDegagement->find($idEffectifDegagement)->current();
     }
 
-    /**
-     *  Retourne un changement via son Id précisé en argument.
-     *
-     * @param int   $idChangement    L'id du changement à retourner
-     * @param mixed $idEtablissement
-     *
-     * @return Zend_Db_Table_Row_Abstract Le résultat
-     */
-    public function getByIDEtablissement($idEtablissement)
+    public function addRowDossierEffectifDegagement(int $idDossier)
     {
-        $dbEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $res = null;
-        foreach ($dbEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement) as $row) {
-            foreach ($row as $key => $value) {
-                if ('ID_EFFECTIF_DEGAGEMENT' == $key) {
-                    $res = $value;
-                }
-            }
-        }
-
-        return $res;
-    }
-
-    /**
-     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant.
-     *
-     * @param mixed $idDossier
-     */
-    public function addRowDossierEffectifDegagement($idDossier)
-    {
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $modelDossierEffectifDegagement = new Model_DbTable_DossierEffectifDegagement();
-
-        $rowEffectifDegagement = $modelEffectifDegagement->createRow();
+        $rowEffectifDegagement = $this->modelEffectifDegagement->createRow();
         $rowEffectifDegagement->save();
 
-        $rowDossierEff = $modelDossierEffectifDegagement->createRow();
-        $rowDossierEff->ID_DOSSIER = $idDossier;
-        $rowDossierEff->ID_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
-        $rowDossierEff->save();
+        $rowDossierEff = $this->modelEffectifDegagementDossier->insert([
+            'ID_DOSSIER' => $idDossier,
+            'ID_EFFECTIF_DEGAGEMENT' => $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT,
+        ]);
 
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
-    /**
-     * ajoute une ligne a la table dossierEffectifDegagement en retournant l identifiant.
-     *
-     * @param mixed $idEtablissement
-     */
-    public function addRowEtablissementEffectifDegagement($idEtablissement)
+    public function addRowEtablissementEffectifDegagement(int $idEtablissement)
     {
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
-        $modelEtablissementEffectifDegagement = new Model_DbTable_EtablissementEffectifDegagement();
-
-        $rowEffectifDegagement = $modelEffectifDegagement->createRow();
+        $rowEffectifDegagement = $this->modelEffectifDegagement->createRow();
         $rowEffectifDegagement->save();
 
-        $rowEtablissementEff = $modelEtablissementEffectifDegagement->createRow();
-        $rowEtablissementEff->ID_ETABLISSEMENT = $idEtablissement;
-        $rowEtablissementEff->ID_EFFECTIF_DEGAGEMENT = $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
-        $rowEtablissementEff->save();
+        $rowEtablissementEff = $this->modelEffectifDegagementEtablissement->insert([
+            'ID_ETABLISSEMENT' => $idEtablissement,
+            'ID_EFFECTIF_DEGAGEMENT' => $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT,
+        ]);
 
         return $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT;
     }
 
-    public function saveFromDossier($idDossier, $data)
+    public function saveFromDossier(int $idDossier, array $data)
     {
-        $idEffecifDegagement = $this->getByIDDossier($idDossier);
-        if (null == $idEffecifDegagement) {
-            $idEffecifDegagement = $this->addRowDossierEffectifDegagement($idDossier);
+        $idEffectifDegagement = $this->modelDossier->getIdEffectifDegagement($idDossier)->ID_EFFECTIF_DEGAGEMENT;
+
+        if (null === $idEffectifDegagement) {
+            $idEffectifDegagement = $this->addRowDossierEffectifDegagement($idDossier);
         }
-        $this->save($idEffecifDegagement, $data);
+
+        $this->save($idEffectifDegagement, $data);
     }
 
-    public function saveFromEtablissement($idEtablissement, $data)
+    public function saveFromEtablissement(int $idEtablissement, array $data)
     {
-        $idEffecifDegagement = $this->getByIDEtablissement($idEtablissement);
-        if (null == $idEffecifDegagement) {
-            $idEffecifDegagement = $this->addRowEtablissementEffectifDegagement($idEtablissement);
+        $idEffectifDegagement = $this->modelEtablissement->getIdEffectifDegagement($idEtablissement)->ID_EFFECTIF_DEGAGEMENT;
+
+        if (null === $idEffectifDegagement) {
+            $idEffectifDegagement = $this->addRowEtablissementEffectifDegagement($idEtablissement);
         }
-        $this->save($idEffecifDegagement, $data);
+
+        $this->save($idEffectifDegagement, $data);
     }
 
-    /**
-     * Sauvegarde les modifications apportées aux messages d'alerte
-     * par défaut.
-     *
-     * @param array $data                 Les données envoyés en post
-     * @param mixed $idEffectifDegagement
-     */
-    public function save($idEffectifDegagement, $data)
+    public function save(int $idEffectifDegagement, array $data)
     {
         if (is_array($data)) {
             $newValue = $this->get($idEffectifDegagement);
+
             foreach ($data as $key => $newAttrValue) {
-                switch ($key) {
-                    case 'DESCRIPTION_EFFECTIF':
-                        $newValue->DESCRIPTION_EFFECTIF = $newAttrValue;
-
-                        break;
-
-                    case 'DESCRIPTION_DEGAGEMENT':
-                        $newValue->DESCRIPTION_DEGAGEMENT = $newAttrValue;
-
-                    break;
-                }
+                $newValue->{$key} = $newAttrValue;
             }
+
             $newValue->save();
         }
-    }
-
-    /**
-     *  Retourne le tableau de balises.
-     *
-     * @return string[][] Les balises définies dans cette classe
-     *
-     * @psalm-return array{{activitePrincipaleEtablissement}:array{description:string, model:string, champ:string}, {categorieEtablissement}:array{description:string, model:string, champ:string}, {etablissementAvis}:array{description:string, model:string, champ:string}, {etablissementLibelle}:array{description:string, model:string, champ:string}, {etablissementNumeroId}:array{description:string, model:string, champ:string}, {etablissementStatut}:array{description:string, model:string, champ:string}, {typePrincipalEtablissement}:array{description:string, model:string, champ:string}}
-     */
-    public function getBalises(): array
-    {
-        return self::BALISES;
-    }
-
-    /**
-     * Convertit les balises dans le message avec les bonnes valeurs.
-     *
-     * @param string $message Le message a envoyer avec des balises
-     * @param mixed  $ets
-     *
-     * @return string Le message convertit
-     */
-    public function convertMessage($message, $ets)
-    {
-        $params = [];
-        foreach (self::BALISES as $balise => $content) {
-            $replacementstr = '';
-            if ('avis' === $content['model']) {
-                $replacementstr = $this->getAvis($ets);
-            } elseif (array_key_exists($content['model'], $ets)
-                && array_key_exists($content['champ'], $ets[$content['model']])) {
-                $replacementstr = $ets[$content['model']][$content['champ']];
-            }
-            $params[$balise] = $replacementstr;
-        }
-
-        return strtr($message, $params);
     }
 }

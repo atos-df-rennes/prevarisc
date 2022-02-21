@@ -441,12 +441,12 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelEtablissement = new Model_DbTable_Etablissement();
 
         $idEtablissement = $this->getParam('id');
 
         $this->view->idEtablissement = $idEtablissement;
-        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement);
+        $this->view->EffectifDegagement = $modelEtablissement->getEffectifEtDegagement($idEtablissement);
     }
 
     public function effectifsDegagementsEtablissementEditAction()
@@ -455,12 +455,12 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
         $serviceEffectifdegagement = new Service_Effectifdegagement();
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelEtablissement = new Model_DbTable_Etablissement();
 
         $idEtablissement = $this->getParam('id');
 
         $this->view->idEtablissement = $idEtablissement;
-        $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByIDEtablissement($idEtablissement);
+        $this->view->EffectifDegagement = $modelEtablissement->getEffectifEtDegagement($idEtablissement);
 
         $request = $this->getRequest();
         if ($request->isPost()) {

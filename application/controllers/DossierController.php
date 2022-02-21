@@ -3035,12 +3035,12 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelDossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
             $this->view->idDossier = $this->idDossier;
         }
     }
@@ -3050,13 +3050,13 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
-        $modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
+        $modelDossier = new Model_DbTable_Dossier();
         $serviceEffectifdegagement = new Service_Effectifdegagement();
         $service_dossier = new Service_Dossier();
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelEffectifDegagement->getEffectifDegagementByDossier($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
             $this->view->idDossier = $this->idDossier;
         }
 

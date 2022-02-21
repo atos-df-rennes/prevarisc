@@ -428,14 +428,27 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $this->fetchRow($select);
     }
 
-    //Retourne une row comprennant les description effectifs et degagement en passant en param l id du dossier
-    public function getEffectifEtDegagement($idEtab)
+    public function getEffectifEtDegagement(int $idEtab)
     {
-        $select =
-            'SELECT * from etablissement INNER JOIN etablissementEffectifDegagement ON etablissement.ID_ETABLISSEMENT = etablissementEffectifDegagement.ID_ETABLISSEMENT 
-             INNER JOIN effectifDegagement ON effectifDegagement.ID_EFFECTIF_DEGAGEMENT = etablissementEffectifDegagement.ID_EFFECTIF_DEGAGEMENT
-             WHERE etablissement.ID_ETABLISSEMENT = '.$idEtab.' ;';
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], [])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'e.ID_ETABLISSEMENT = eed.ID_ETABLISSEMENT', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
 
-        return $this->getAdapter()->fetchRow($select);
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['e' => 'etablissement'], 'eed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
+
+        return $this->fetchRow($select);
     }
 }
