@@ -232,7 +232,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
-	
+
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["CODEPOSTAL_COMMUNE"]." ";
@@ -276,6 +276,18 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     }
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+
+	// Gestion des effectifs & dégagements
+	$tabEffDegKV = array(
+		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+	);
+
+	foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+		setVars($segment, $nomChamp, $valeurChamp);
+	}
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {

@@ -29,14 +29,14 @@ class Service_Commission
         $rowset_typesDesCommissions = $model_typesDesCommissions->fetchAll();
 
         // Tableau de résultats
-        $array_commissions = array();
+        $array_commissions = [];
 
         // Pour tous les types, on cherche leur commission
         foreach ($rowset_typesDesCommissions as $row_typeDeCommission) {
-            $array_commissions[$row_typeDeCommission->ID_COMMISSIONTYPE] = array(
+            $array_commissions[$row_typeDeCommission->ID_COMMISSIONTYPE] = [
                 'LIBELLE' => $row_typeDeCommission->LIBELLE_COMMISSIONTYPE,
                 'ARRAY' => $model_commission->fetchAll('ID_COMMISSIONTYPE = '.$row_typeDeCommission->ID_COMMISSIONTYPE)->toArray(),
-            );
+            ];
         }
 
         return $array_commissions;

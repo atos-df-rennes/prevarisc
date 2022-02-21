@@ -35,7 +35,7 @@ class GestionDesCommunesController extends Zend_Controller_Action
         try {
             if (
                 isset($_POST['ID_UTILISATEURCIVILITE'])
-                && $_POST['ID_UTILISATEURCIVILITE'] == 'null'
+                && 'null' == $_POST['ID_UTILISATEURCIVILITE']
             ) {
                 unset($_POST['ID_UTILISATEURCIVILITE']);
             }
@@ -49,12 +49,12 @@ class GestionDesCommunesController extends Zend_Controller_Action
             // On récupère la commune
             $commune = $DB_communes->find($_GET['numinsee'])->current();
 
-            if ($commune->ID_UTILISATEURINFORMATIONS == 0) {
+            if (0 == $commune->ID_UTILISATEURINFORMATIONS) {
                 $commune->ID_UTILISATEURINFORMATIONS = $DB_informations->insert(array_intersect_key($_POST, $DB_informations->info('metadata')));
             } else {
                 $info = $DB_informations->find($commune->ID_UTILISATEURINFORMATIONS)->current();
 
-                if ($info == null) {
+                if (null == $info) {
                     $id = $DB_informations->insert(array_intersect_key($_POST, $DB_informations->info('metadata')));
                     $commune->ID_UTILISATEURINFORMATIONS = $id;
                 } else {
@@ -65,19 +65,19 @@ class GestionDesCommunesController extends Zend_Controller_Action
             $commune->save();
 
             $this->_helper->flashMessenger(
-                array(
+                [
                     'context' => 'success',
                     'title' => 'Sauvegarde réussie !',
                     'message' => 'La commune '.$commune->LIBELLE_COMMUNE.' a été enregistrée.',
-                )
+                ]
             );
         } catch (Exception $ex) {
             $this->_helper->flashMessenger(
-                array(
+                [
                     'context' => 'error',
                     'title' => 'Aie',
                     'message' => $ex->getMessage(),
-                )
+                ]
             );
         }
 

@@ -722,10 +722,6 @@
                  <delete>
                     <controller>dossier</controller>
                     <action>delete</action>
-                    <!--
-                    <resource>suppression</resource>
-                    <privilege>delete_dossier</privilege>
-                    -->
                 </delete>
                 <verrou>
                     <controller>dossier</controller>
@@ -972,6 +968,16 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
+                <effectifs-degagements-dossier>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
+                    <action>effectifs-degagements-dossier</action>
+                </effectifs-degagements-dossier>
+                <effectifs-degagements-dossier-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
+                    <action>effectifs-degagements-dossier-edit</action>
+                </effectifs-degagements-dossier-edit>
             </pages>
         </dossier>
 
@@ -995,7 +1001,7 @@
                 </index>
                 <delete>
                     <controller>etablissement</controller>
-                    <action>delete</action> 
+                    <action>delete</action>
                     <resource>suppression</resource>
                     <privilege>delete_etablissement</privilege>
                 </delete>
@@ -1118,6 +1124,20 @@
                     <action>alerteform</action>
                     <privilege>view_ets</privilege>
                 </alerteform>
+                <effectifs-degagements-etablissement>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-degagements-etablissement</action>
+                    <resource>effectifs_degagements</resource>
+                    <privilege>effectifs_degagements_ets</privilege>
+                </effectifs-degagements-etablissement>
+                <effectifs-degagements-etablissement-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-degagements-etablissement-edit</action>
+                    <resource>effectifs_degagements</resource>
+                    <privilege>effectifs_degagements_ets</privilege>
+                </effectifs-degagements-etablissement-edit>
             </pages>
         </etablissement>
 
@@ -1227,6 +1247,5 @@
                 </dev>
             </pages>
         </about>
-
     </nav>
 </configdata>

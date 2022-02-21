@@ -2,11 +2,13 @@
 
 class Service_Prescriptions
 {
-    /* GESTION PRESCRIPTION TYPE */
+    // GESTION PRESCRIPTION TYPE
     /**
-     * @return array
-     *
      * @psalm-return array<int, mixed>
+     *
+     * @param mixed $categorie
+     * @param mixed $texte
+     * @param mixed $article
      */
     public function showPrescriptionType($categorie, $texte, $article): array
     {
@@ -14,7 +16,7 @@ class Service_Prescriptions
         $listePrescType = $dbPrescType->getPrescriptionType($categorie, $texte, $article);
 
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
-        $prescriptionArray = array();
+        $prescriptionArray = [];
 
         foreach ($listePrescType as $val => $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
@@ -43,7 +45,7 @@ class Service_Prescriptions
         $dbPrescType = new Model_DbTable_PrescriptionType();
         $dbPresTypeAssoc = new Model_DbTable_PrescriptionTypeAssoc();
 
-        if ($idPrescriptionType == null) {
+        if (null == $idPrescriptionType) {
             $prescType = $dbPrescType->createRow();
         } else {
             $prescType = $dbPrescType->find($idPrescriptionType)->current();
@@ -57,7 +59,7 @@ class Service_Prescriptions
 
         $prescType->save();
 
-        if ($idPrescriptionType != null) {
+        if (null != $idPrescriptionType) {
             $prescTypeAssocDelete = $dbPresTypeAssoc->getAdapter()->quoteInto('ID_PRESCRIPTIONTYPE = ?', $post['ID_PRESCRIPTIONTYPE']);
             $dbPresTypeAssoc->delete($prescTypeAssocDelete);
         }
@@ -68,14 +70,14 @@ class Service_Prescriptions
             $newAssoc->ID_PRESCRIPTIONTYPE = $prescType->ID_PRESCRIPTIONTYPE;
             $newAssoc->NUM_PRESCRIPTIONASSOC = $i + 1;
 
-            if ($post['texte'][$i] == 0 || $post['texte'][$i] == '') {
+            if (0 == $post['texte'][$i] || '' == $post['texte'][$i]) {
                 $texe = 1;
             } else {
                 $texe = $post['texte'][$i];
             }
 
             $newAssoc->ID_TEXTE = $texe;
-            if ($post['article'][$i] == 0 || $post['article'][$i] == '') {
+            if (0 == $post['article'][$i] || '' == $post['article'][$i]) {
                 $article = 1;
             } else {
                 $article = $post['article'][$i];
@@ -88,23 +90,25 @@ class Service_Prescriptions
         return $prescType->ID_PRESCRIPTIONTYPE;
     }
 
-    /* GESTION DES TEXTES */
+    // GESTION DES TEXTES
     public function getTextesListe()
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
+
         return $dbPrescTextes->getAllTextes();
     } //FIN getTextesListe
 
     public function getTexte($id_texte)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
+
         return $dbPrescTextes->getTexte($id_texte);
     } //FIN getTexte
 
     public function saveTexte($post, $idTexte = null)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        if ($idTexte == null) {
+        if (null == $idTexte) {
             $texte = $dbPrescTextes->createRow();
             $texte->LIBELLE_TEXTE = $post['LIBELLE_TEXTE'];
             $texte->VISIBLE_TEXTE = $post['VISIBLE_TEXTE'];
@@ -120,28 +124,30 @@ class Service_Prescriptions
     public function replaceTexte($newId, $oldId)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        if ($newId != '' && $oldId != '') {
+        if ('' != $newId && '' != $oldId) {
             $dbPrescTextes->replace($newId, $oldId);
         }
     }
 
-    /* GESTION DES ARTICLES */
+    // GESTION DES ARTICLES
     public function getArticlesListe()
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
+
         return $dbPrescArticles->getAllArticles();
     } //FIN getArticlesListe
 
     public function getArticle($id_article)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
+
         return $dbPrescArticles->getArticle($id_article);
     } //FIN getArticle
 
     public function saveArticle($post, $idArticle = null)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        if ($idArticle == null) {
+        if (null == $idArticle) {
             $texte = $dbPrescArticles->createRow();
             $texte->LIBELLE_ARTICLE = $post['LIBELLE_ARTICLE'];
             $texte->VISIBLE_ARTICLE = $post['VISIBLE_ARTICLE'];
@@ -157,18 +163,18 @@ class Service_Prescriptions
     public function replaceArticle($newId, $oldId)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        if ($newId != '' && $oldId != '') {
+        if ('' != $newId && '' != $oldId) {
             $dbPrescArticles->replace($newId, $oldId);
         }
     }
 
-    /* GESTION DES PRESCRIPTIONS */
+    // GESTION DES PRESCRIPTIONS
     public function savePrescription($post, $idPrescription = null)
     {
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
-        if ($idPrescription == null) {
+        if (null == $idPrescription) {
             $prescRegl = $dbPrescRegl->createRow();
         } else {
             $prescRegl = $dbPrescRegl->find($idPrescription)->current();
@@ -179,7 +185,7 @@ class Service_Prescriptions
         $prescRegl->PRESCRIPTIONREGL_VISIBLE = $post['PRESCRIPTIONREGL_VISIBLE'];
         $prescRegl->save();
 
-        if ($idPrescription != null) {
+        if (null != $idPrescription) {
             $prescAssocDelete = $dbPrescReglAssoc->getAdapter()->quoteInto('ID_PRESCRIPTIONREGL = ?', $post['idPrescription']);
             $dbPrescReglAssoc->delete($prescAssocDelete);
         }
@@ -189,13 +195,13 @@ class Service_Prescriptions
             $newAssoc = $dbPrescReglAssoc->createRow();
             $newAssoc->ID_PRESCRIPTIONREGL = $prescRegl->ID_PRESCRIPTIONREGL;
             $newAssoc->NUM_PRESCRIPTIONASSOC = $i + 1;
-            if ($post['texte'][$i] == 0 || $post['texte'][$i] == '') {
+            if (0 == $post['texte'][$i] || '' == $post['texte'][$i]) {
                 $texe = 1;
             } else {
                 $texe = $post['texte'][$i];
             }
             $newAssoc->ID_TEXTE = $texe;
-            if ($post['article'][$i] == 0 || $post['article'][$i] == '') {
+            if (0 == $post['article'][$i] || '' == $post['article'][$i]) {
                 $article = 1;
             } else {
                 $article = $post['article'][$i];
@@ -206,9 +212,10 @@ class Service_Prescriptions
     } //FIN savePrescription
 
     /**
-     * @return array
-     *
      * @psalm-return array<int, mixed>
+     *
+     * @param mixed      $type
+     * @param null|mixed $mode
      */
     public function getPrescriptions($type, $mode = null): array
     {
@@ -217,7 +224,7 @@ class Service_Prescriptions
 
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
-        $prescriptionArray = array();
+        $prescriptionArray = [];
         foreach ($listePrescDossier as $val => $ue) {
             $assoc = $dbPrescReglAssoc->getPrescriptionReglAssoc($ue['ID_PRESCRIPTIONREGL']);
             array_push($prescriptionArray, $assoc);
@@ -228,10 +235,11 @@ class Service_Prescriptions
 
     /**
      * @param string $type
+     * @param mixed  $idPrescription
      */
     public function getPrescriptionInfo($idPrescription, $type)
     {
-        if ($type == 'rappel-reg') {
+        if ('rappel-reg' == $type) {
             $dbPrescAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
             return $dbPrescAssoc->getPrescriptionReglAssoc($idPrescription);
@@ -240,28 +248,28 @@ class Service_Prescriptions
 
     public function setOrder($data, $type)
     {
-        if ($type == 'prescriptionType') {
+        if ('prescriptionType' == $type) {
             $dbPrescType = new Model_DbTable_PrescriptionType();
             foreach ($data as $num => $presc) {
                 $prescType = $dbPrescType->find($presc)->current();
                 $prescType->PRESCRIPTIONTYPE_NUM = $num;
                 $prescType->save();
             }
-        } elseif ($type == 'categorie') {
+        } elseif ('categorie' == $type) {
             $dbPrescCat = new Model_DbTable_PrescriptionCat();
             foreach ($data as $num => $cat) {
                 $categorie = $dbPrescCat->find($cat)->current();
                 $categorie->NUM_PRESCRIPTION_CAT = $num;
                 $categorie->save();
             }
-        } elseif ($type == 'texte') {
+        } elseif ('texte' == $type) {
             $dbPrescTexte = new Model_DbTable_PrescriptionTexte();
             foreach ($data as $num => $texte) {
                 $categorie = $dbPrescTexte->find($texte)->current();
                 $categorie->NUM_PRESCRIPTIONTEXTE = $num;
                 $categorie->save();
             }
-        } elseif ($type == 'article') {
+        } elseif ('article' == $type) {
             $dbPrescArticle = new Model_DbTable_PrescriptionArticle();
             foreach ($data as $num => $article) {
                 $categorie = $dbPrescArticle->find($article)->current();

@@ -14,7 +14,7 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
 
     // Donne la liste des genres
     /**
-     * @param string|int|float $id
+     * @param float|int|string $id
      *
      * @return array
      */
@@ -22,15 +22,16 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('genre');
+            ->from('genre')
+        ;
 
-        if ($id != null) {
-            $select->where("ID_GENRE = $id");
+        if (null != $id) {
+            $select->where("ID_GENRE = {$id}");
 
             return $this->fetchRow($select)->toArray();
-        } else {
-            return $this->fetchAll($select)->toArray();
         }
+
+        return $this->fetchAll($select)->toArray();
     }
 
     /**
@@ -41,7 +42,8 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('genre')
-            ->where('ID_GENRE != 1');
+            ->where('ID_GENRE != 1')
+        ;
 
         return $this->fetchAll($select);
     }

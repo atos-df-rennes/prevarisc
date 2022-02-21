@@ -6,22 +6,23 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_PIECEJOINTE'; // Clé primaire
 
     /**
-     * @param array|string|int|float|Zend_Db_Expr $table
-     * @param string|int                          $champ
-     * @param string|int                          $identifiant
+     * @param array|float|int|string|Zend_Db_Expr $table
+     * @param int|string                          $champ
+     * @param int|string                          $identifiant
      *
-     * @return array|null
+     * @return null|array
      */
     public function affichagePieceJointe($table, $champ, $identifiant)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('piecejointe')
-            ->join($table, "piecejointe.ID_PIECEJOINTE = $table.ID_PIECEJOINTE")
+            ->join($table, "piecejointe.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
             ->where($champ.' = '.$identifiant)
-            ->order('piecejointe.ID_PIECEJOINTE DESC');
+            ->order('piecejointe.ID_PIECEJOINTE DESC')
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
     public function maxPieceJointe()
