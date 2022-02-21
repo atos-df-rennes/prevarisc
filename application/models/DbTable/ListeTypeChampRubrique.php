@@ -9,8 +9,9 @@ class Model_DbTable_ListeTypeChampRubrique extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('listetypechamprubrique', array('ID_TYPECHAMP'))
-            ->where('TYPE = ?', $name);
+            ->from('listetypechamprubrique', ['ID_TYPECHAMP'])
+            ->where('TYPE = ?', $name)
+        ;
 
         return $this->fetchRow($select)->toArray();
     }

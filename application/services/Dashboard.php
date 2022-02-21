@@ -407,7 +407,7 @@ class Service_Dashboard
     public function getDossiersPlatAUSansEtablissement()
     {
         $dbDossier = new Model_DbTable_Dossier();
-        
+
         return $dbDossier->getAllDossierPlatAU();
     }
 

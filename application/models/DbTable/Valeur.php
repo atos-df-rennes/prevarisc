@@ -9,14 +9,15 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('v' => 'valeur'))
-            ->join(array('c' => 'champ'), 'v.ID_CHAMP = c.ID_CHAMP', array())
-            ->join(array('e' => 'etablissement'), 'v.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', array())
+            ->from(['v' => 'valeur'])
+            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
+            ->join(['e' => 'etablissement'], 'v.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
             ->where('c.ID_CHAMP = ?', $idChamp)
-            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement);
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
 
         $result = $this->fetchRow($select);
-        if ($result === null) {
+        if (null === $result) {
             return $result;
         }
 

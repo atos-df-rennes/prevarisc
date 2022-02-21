@@ -8,8 +8,9 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
     public function findAll(): array
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from('champvaleurliste');
+            ->setIntegrityCheck(false)
+            ->from('champvaleurliste')
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
@@ -18,9 +19,10 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('cvl' => 'champvaleurliste'), array('ID_VALEURLISTE', 'VALEUR'))
-            ->join(array('c' => 'champ'), 'cvl.ID_CHAMP = c.ID_CHAMP', array())
-            ->where('c.ID_CHAMP = ?', $idChamp);
+            ->from(['cvl' => 'champvaleurliste'], ['ID_VALEURLISTE', 'VALEUR'])
+            ->join(['c' => 'champ'], 'cvl.ID_CHAMP = c.ID_CHAMP', [])
+            ->where('c.ID_CHAMP = ?', $idChamp)
+        ;
 
         return $this->fetchAll($select)->toArray();
     }

@@ -24,11 +24,11 @@ class Service_Formulaire
         $idCapsuleRubriqueArray = $modelCapsuleRubrique->getCapsuleRubriqueIdByName($rubrique['capsule_rubrique']);
         $idCapsuleRubrique = $idCapsuleRubriqueArray['ID_CAPSULERUBRIQUE'];
 
-        $idRubrique = $modelRubrique->insert(array(
+        $idRubrique = $modelRubrique->insert([
             'NOM' => $rubrique['nom_rubrique'],
             'DEFAULT_DISPLAY' => intval($rubrique['afficher_rubrique']),
-            'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique
-        ));
+            'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique,
+        ]);
 
         return intval($idRubrique);
     }
@@ -42,23 +42,23 @@ class Service_Formulaire
         $idTypeChamp = intval($champ['type_champ']);
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-        $idChamp = $modelChamp->insert(array(
+        $idChamp = $modelChamp->insert([
             'NOM' => $champ['nom_champ'],
             'ID_TYPECHAMP' => $idTypeChamp,
-            'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE']
-        ));
+            'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
+        ]);
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
             $listValueArray = array_filter($champ, function ($key) {
-                return strpos($key, 'valeur-ajout-') === 0;
+                return 0 === strpos($key, 'valeur-ajout-');
             }, ARRAY_FILTER_USE_KEY);
 
             foreach ($listValueArray as $listValue) {
-                $modelChampValeurListe->insert(array(
+                $modelChampValeurListe->insert([
                     'VALEUR' => $listValue,
-                    'ID_CHAMP' => $idChamp
-                ));
+                    'ID_CHAMP' => $idChamp,
+                ]);
             }
         }
 

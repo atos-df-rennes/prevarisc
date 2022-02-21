@@ -156,7 +156,7 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
-        
+
         $this->idDossier = intval($this->_getParam('id'));
         $this->view->idDossier = $this->idDossier;
 
@@ -2546,12 +2546,12 @@ class DossierController extends Zend_Controller_Action
             }
         }
 
-        /* Gestion des rubriques/champs personnalisés */
+        // Gestion des rubriques/champs personnalisés
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
         $this->view->assign('rubriques', $rubriques);
-        $this->view->assign('isDescriptifPersonnalise', intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) === 1);
+        $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
 
         // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
@@ -3073,7 +3073,7 @@ class DossierController extends Zend_Controller_Action
             $data = $request->getPost();
 
             $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, array('id' => $this->idDossier));
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->idDossier]);
         }
     }
 }

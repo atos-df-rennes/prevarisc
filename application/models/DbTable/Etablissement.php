@@ -435,7 +435,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->from(['e' => 'etablissement'], [])
             ->join(['eed' => 'etablissementeffectifdegagement'], 'e.ID_ETABLISSEMENT = eed.ID_ETABLISSEMENT', [])
             ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT')
-            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
 
         return $this->fetchRow($select);
     }
@@ -447,7 +448,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
             ->join(['eed' => 'etablissementeffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT', [])
             ->join(['e' => 'etablissement'], 'eed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
-            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
 
         return $this->fetchRow($select);
     }

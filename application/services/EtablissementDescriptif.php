@@ -4,7 +4,7 @@
 // Tout ce qui est là est générique peu importe l'objet
 class Service_EtablissementDescriptif
 {
-    const CAPSULE_RUBRIQUE = 'descriptifEtablissement';
+    public const CAPSULE_RUBRIQUE = 'descriptifEtablissement';
 
     public function getRubriques(int $idEtablissement): array
     {
@@ -30,8 +30,8 @@ class Service_EtablissementDescriptif
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
 
         $champsValeurListe = $modelChampValeurListe->findAll();
-        
-        $sortedChampValeurListe =  [];
+
+        $sortedChampValeurListe = [];
         foreach ($champsValeurListe as $champValeurListe) {
             $sortedChampValeurListe[$champValeurListe['ID_CHAMP']][] = $champValeurListe;
         }
@@ -71,8 +71,8 @@ class Service_EtablissementDescriptif
         $serviceValeur = new Service_Valeur();
 
         $valueInDB = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
-        
-        if ($valueInDB === null) {
+
+        if (null === $valueInDB) {
             $serviceValeur->insert($idChamp, $idEtablissement, $value);
         } else {
             $serviceValeur->update($idChamp, $valueInDB, $value);

@@ -9,10 +9,11 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('c' => 'champ'), array('ID_CHAMP', 'NOM', 'ID_TYPECHAMP'))
-            ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', array())
-            ->join(array('ltcr' => 'listetypechamprubrique'), 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', array('TYPE'))
-            ->where('r.ID_RUBRIQUE = ?', $idRubrique);
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
+            ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
+            ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
+            ->where('r.ID_RUBRIQUE = ?', $idRubrique)
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
@@ -21,13 +22,14 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('c' => 'champ'), array('ID_CHAMP', 'NOM'))
-            ->join(array('ltcr' => 'listetypechamprubrique'), 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', array('TYPE'))
-            ->join(array('r' => 'rubrique'), 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', array('ID_RUBRIQUE'))
-            ->where('c.ID_CHAMP = ?', $idChamp);
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM'])
+            ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
+            ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
+            ->where('c.ID_CHAMP = ?', $idChamp)
+        ;
 
-        if ($hasList === true) {
-            $select->joinLeft(array('cvl' => 'champvaleurliste'), 'c.ID_CHAMP = cvl.ID_CHAMP', array('VALEUR'));
+        if (true === $hasList) {
+            $select->joinLeft(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP', ['VALEUR']);
         }
 
         return $this->fetchAll($select)->toArray();

@@ -64,7 +64,7 @@ class FormulaireController extends Zend_Controller_Action
 
         $champs = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
         foreach ($champs as &$champ) {
-            if ($champ['TYPE'] === 'Liste') {
+            if ('Liste' === $champ['TYPE']) {
                 $champ['VALEURS'] = $modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
         }
@@ -84,7 +84,7 @@ class FormulaireController extends Zend_Controller_Action
 
                 $this->_helper->redirector('index');
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')'));
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
         }
     }
@@ -119,7 +119,7 @@ class FormulaireController extends Zend_Controller_Action
             $champ = $serviceFormulaire->insertChamp($post, $rubrique);
             $idChamp = intval($champ['ID_CHAMP']);
             $idTypeChamp = intval($champ['ID_TYPECHAMP']);
-            
+
             $insertedRowAsArray = $modelChamp->getChampAndJoins($idChamp, ($idTypeChamp === $idListe));
 
             echo json_encode($insertedRowAsArray);
@@ -141,7 +141,7 @@ class FormulaireController extends Zend_Controller_Action
 
         $idChamp = intval($this->getParam('champ'));
         $champ = $modelChamp->find($idChamp)->current();
-        
+
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
         if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
@@ -163,9 +163,9 @@ class FormulaireController extends Zend_Controller_Action
             // Modification de valeur
             // On récupère les valeurs de la liste séparément des autres champs
             $listFieldValueArray = array_filter($post, function ($key) {
-                return strpos($key, 'valeur-champ-') === 0;
+                return 0 === strpos($key, 'valeur-champ-');
             }, ARRAY_FILTER_USE_KEY);
-            
+
             foreach ($listFieldValueArray as $key => $value) {
                 $explodedKey = explode('-', $key);
                 $idValue = intval(end($explodedKey));
@@ -178,19 +178,19 @@ class FormulaireController extends Zend_Controller_Action
             // Ajout de valeur
             // On récupère les valeurs de la liste séparément des autres champs
             $listValueArray = array_filter($post, function ($key) {
-                return strpos($key, 'valeur-ajout-') === 0;
+                return 0 === strpos($key, 'valeur-ajout-');
             }, ARRAY_FILTER_USE_KEY);
 
             foreach ($listValueArray as $listValue) {
-                $modelChampValeurListe->insert(array(
+                $modelChampValeurListe->insert([
                     'VALEUR' => $listValue,
-                    'ID_CHAMP' => $champ['ID_CHAMP']
-                ));
+                    'ID_CHAMP' => $champ['ID_CHAMP'],
+                ]);
             }
-            
+
             $champ->NOM = $post['nom_champ'];
             $champ->save();
-            $this->_helper->redirector('edit-rubrique', null, null, array('rubrique' => $rubrique['ID_RUBRIQUE']));
+            $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }
     }
 
@@ -198,12 +198,12 @@ class FormulaireController extends Zend_Controller_Action
     {
         $modelChamp = new Model_DbTable_Champ();
         $idChamp = intval($this->getParam('champ'));
-        
+
         $champ = $modelChamp->find($idChamp)->current();
         $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
 
-        $this->_helper->redirector('edit-rubrique', null, null, array('rubrique' => $idRubrique));
+        $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $idRubrique]);
     }
 
     public function deleteValeurListeAction(): void

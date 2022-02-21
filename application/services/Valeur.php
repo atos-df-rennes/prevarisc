@@ -8,7 +8,7 @@ class Service_Valeur
 
         $valeur = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
 
-        if ($valeur !== null) {
+        if (null !== $valeur) {
             $typeValeur = $this->getTypeValeur($idChamp);
             $valeur = $valeur[$typeValeur];
         }
@@ -18,27 +18,27 @@ class Service_Valeur
 
     public function insert(int $idChamp, int $idEtablissement, $value): void
     {
-        if ($value !== '') {
+        if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
 
             $typeValeur = $this->getTypeValeur($idChamp);
 
-            $modelValeur->insert(array(
+            $modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
-                'ID_ETABLISSEMENT' => $idEtablissement
-            ));
+                'ID_ETABLISSEMENT' => $idEtablissement,
+            ]);
         }
     }
 
     public function update(int $idChamp, $valueInDB, $newValue): void
     {
-        if ($newValue === '') {
+        if ('' === $newValue) {
             $valueInDB->delete();
         } else {
             $typeValeur = $this->getTypeValeur($idChamp);
 
-            $valueInDB->$typeValeur = $newValue;
+            $valueInDB->{$typeValeur} = $newValue;
             $valueInDB->save();
         }
     }
@@ -49,23 +49,33 @@ class Service_Valeur
         $typeValeur = '';
 
         $champ = $modelChamp->find($idChamp)->current();
+
         switch ($champ['ID_TYPECHAMP']) {
             case 1:
             case 4:
                 $typeValeur = 'VALEUR_STR';
+
                 break;
+
             case 2:
             case 3:
                 $typeValeur = 'VALEUR_LONG_STR';
+
                 break;
+
             case 5:
                 $typeValeur = 'VALEUR_INT';
+
                 break;
+
             case 6:
                 $typeValeur = 'VALEUR_CHECKBOX';
+
                 break;
+
             default:
                 throw new Exception('Type de champ non supporté.');
+
                 break;
         }
 

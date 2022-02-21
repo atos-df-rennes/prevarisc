@@ -10,35 +10,35 @@ class Form_CustomForm extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('class', 'form-inline');
 
-        $this->addElement('text', 'nom_rubrique', array(
+        $this->addElement('text', 'nom_rubrique', [
             'label' => 'Nom de la rubrique',
             'required' => true,
-            'filters' => array(new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()),
-            'validators' => array(new Zend_Validate_StringLength(1, 255)),
-        ));
+            'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
+            'validators' => [new Zend_Validate_StringLength(1, 255)],
+        ]);
 
-        $this->addElement('checkbox', 'afficher_rubrique', array(
+        $this->addElement('checkbox', 'afficher_rubrique', [
             'label' => 'Afficher la rubrique par défaut',
-        ));
+        ]);
 
         $submit = new Zend_Form_Element_Button('save');
         $submit->class = 'btn btn-success pull-right add-rubrique';
         $submit->setLabel('Ajouter la rubrique');
         $this->addElement($submit);
 
-        $this->setDecorators(array(
+        $this->setDecorators([
             'FormElements',
             'Form',
-        ));
+        ]);
 
         $this->setElementDecorators(
-            array(
+            [
                 'ViewHelper',
                 'Label',
-            ),
-            array(
+            ],
+            [
                 'save',
-            ),
+            ],
             false
         );
     }

@@ -10,18 +10,18 @@ class Form_CustomFormField extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('class', 'form-inline');
 
-        $this->addElement('text', 'nom_champ', array(
+        $this->addElement('text', 'nom_champ', [
             'label' => 'Nom du champ',
             'required' => true,
-            'filters' => array(new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()),
-            'validators' => array(new Zend_Validate_StringLength(1, 255)),
-        ));
+            'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
+            'validators' => [new Zend_Validate_StringLength(1, 255)],
+        ]);
 
-        $this->addElement('select', 'type_champ', array(
+        $this->addElement('select', 'type_champ', [
             'label' => 'Type du champ',
             'required' => true,
-            'multiOptions' => $this->getAllListeTypeChampRubrique()
-        ));
+            'multiOptions' => $this->getAllListeTypeChampRubrique(),
+        ]);
 
         $submit = new Zend_Form_Element_Button('save');
         $submit->class = 'btn btn-success pull-right';
@@ -29,19 +29,19 @@ class Form_CustomFormField extends Zend_Form
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
 
-        $this->setDecorators(array(
+        $this->setDecorators([
             'FormElements',
             'Form',
-        ));
+        ]);
 
         $this->setElementDecorators(
-            array(
+            [
                 'ViewHelper',
                 'Label',
-            ),
-            array(
+            ],
+            [
                 'save',
-            ),
+            ],
             false
         );
     }

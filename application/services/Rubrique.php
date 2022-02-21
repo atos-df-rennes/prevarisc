@@ -14,18 +14,18 @@ class Service_Rubrique
         // Si l'utilisateur a déjà modifié, et qu'il remodifie, on supprime la ligne pour revenir à l'état d'origine
         if (
             ($rubriqueDefaultDisplay !== $userDisplay)
-            && ($userModified === null)
+            && (null === $userModified)
         ) {
             $modelDisplayRubriqueEtablissement->insert(
-                array(
+                [
                     'ID_ETABLISSEMENT' => $idEtablissement,
                     'ID_RUBRIQUE' => $idRubrique,
-                    'USER_DISPLAY' => $userDisplay
-                )
+                    'USER_DISPLAY' => $userDisplay,
+                ]
             );
         } elseif (
             ($rubriqueDefaultDisplay === $userDisplay)
-            && ($userModified !== null)
+            && (null !== $userModified)
         ) {
             $userModified->delete();
         }
