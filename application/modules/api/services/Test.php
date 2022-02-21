@@ -1,11 +1,13 @@
 <?php
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class Api_Service_Test
 {
     /**
      * Test.
-     *
-     * @return string
      */
     public function test(): string
     {

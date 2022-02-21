@@ -4,9 +4,12 @@ class Service_Login
 {
     //login pour l'api
     /**
-     * @return ((string|mixed)[]|string)[]
-     *
      * @psalm-return array{reponse:string, results?:array{ID_UTILISATEUR:mixed, LIBELLE_FONCTION:mixed, ID_UTILISATEURINFORMATIONS:mixed, NOM_UTILISATEURINFORMATIONS:mixed, PRENOM_UTILISATEURINFORMATIONS:mixed, LIBELLE_GROUPE:mixed, ID_GROUPE:mixed, TOKEN:string}}
+     *
+     * @param mixed $username
+     * @param mixed $password
+     *
+     * @return ((string|mixed)[]|string)[]
      */
     public function login($username, $password): array
     {
@@ -25,23 +28,23 @@ class Service_Login
 
             // Si l'utilisateur n'est pas actif, on renvoie false
             if (
-                $user === null
+                null === $user
                 || !$user->ACTIF_UTILISATEUR
                 || md5($username.getenv('PREVARISC_SECURITY_SALT').$password) != $user->PASSWD_UTILISATEUR
             ) {
                 $reponse = 'non_autorise';
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                );
+                ];
             } else {
                 $reponse = 'autorise';
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                );
+                ];
             }
 
             // Stockage de l'utilisateur dans la session
-            if ($reponse == 'autorise') {
+            if ('autorise' == $reponse) {
                 $row_utilisateurInformations = $model_utilisateurInformations->find($user->ID_UTILISATEURINFORMATIONS)->current();
                 $row_groupe = $model_groupe->find($user->ID_GROUPE)->current();
                 $row_fonction = $model_fonction->find($row_utilisateurInformations->ID_FONCTION)->current();
@@ -57,9 +60,9 @@ class Service_Login
                 // On encode le jeton
                 $token = hash('sha256', $time + $secret_key.$informations);
 
-                $results = array(
+                $results = [
                     'reponse' => $reponse,
-                    'results' => array(
+                    'results' => [
                         'ID_UTILISATEUR' => $user->ID_UTILISATEUR,
                         'LIBELLE_FONCTION' => $row_fonction->LIBELLE_FONCTION,
                         'ID_UTILISATEURINFORMATIONS' => $user->ID_UTILISATEURINFORMATIONS,
@@ -68,14 +71,14 @@ class Service_Login
                         'LIBELLE_GROUPE' => $row_groupe->LIBELLE_GROUPE,
                         'ID_GROUPE' => $row_groupe->ID_GROUPE,
                         'TOKEN' => $token,
-                    ),
-                );
+                    ],
+                ];
             }
         } catch (Exception $e) {
             $reponse = 'erreur';
-            $results = array(
-                   'reponse' => $reponse,
-                );
+            $results = [
+                'reponse' => $reponse,
+            ];
         }
 
         return $results;

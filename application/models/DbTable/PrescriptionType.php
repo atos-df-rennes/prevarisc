@@ -6,32 +6,40 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_PRESCRIPTIONTYPE'; // Clé primaire
 
     /**
+     * @param mixed $categorie
+     * @param mixed $texte
+     * @param mixed $article
+     *
      * @return array
      */
     public function getPrescriptionType($categorie, $texte, $article)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('pt' => 'prescriptiontype'))
+            ->from(['pt' => 'prescriptiontype'])
             ->where('pt.PRESCRIPTIONTYPE_CATEGORIE = ?', $categorie)
             ->where('pt.PRESCRIPTIONTYPE_TEXTE = ?', $texte)
             ->where('pt.PRESCRIPTIONTYPE_ARTICLE = ?', $article)
-            ->order('pt.PRESCRIPTIONTYPE_NUM');
+            ->order('pt.PRESCRIPTIONTYPE_NUM')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
     /**
+     * @param mixed $tabMotCles
+     *
      * @return array
      */
     public function getPrescriptionTypeByWords($tabMotCles)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('pt' => 'prescriptiontype'))
-            ->join(array('pta' => 'prescriptiontypeassoc'), 'pt.ID_PRESCRIPTIONTYPE = pta.ID_PRESCRIPTIONTYPE')
-            ->join(array('pal' => 'prescriptionarticleliste'), 'pal.ID_ARTICLE = pta.ID_ARTICLE')
-            ->join(array('ptl' => 'prescriptiontexteliste'), 'ptl.ID_TEXTE = pta.ID_TEXTE');
+            ->from(['pt' => 'prescriptiontype'])
+            ->join(['pta' => 'prescriptiontypeassoc'], 'pt.ID_PRESCRIPTIONTYPE = pta.ID_PRESCRIPTIONTYPE')
+            ->join(['pal' => 'prescriptionarticleliste'], 'pal.ID_ARTICLE = pta.ID_ARTICLE')
+            ->join(['ptl' => 'prescriptiontexteliste'], 'ptl.ID_TEXTE = pta.ID_TEXTE')
+        ;
 
         foreach ($tabMotCles as $ue) {
             $select->orWhere('pt.PRESCRIPTIONTYPE_LIBELLE like ?', '%'.$ue.'%');
@@ -43,11 +51,12 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idOldType
+     * @param int|string $idOldType
+     * @param mixed      $idNewType
      */
     public function replaceId($idOldType, $idNewType)
     {
-        $data = array('ID_PRESCRIPTION_TYPE' => $idNewType);
+        $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];
         $where[] = 'ID_PRESCRIPTION_TYPE = '.$idOldType;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossier', $data, $where);

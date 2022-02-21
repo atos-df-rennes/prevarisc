@@ -27,17 +27,17 @@ class AdminController extends Zend_Controller_Action
         $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
         $this->view->key_googlemap = getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY');
         $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
-        $this->view->geoconcept_infos = array(
+        $this->view->geoconcept_infos = [
             'Url' => $this->view->geoconcept_url,
             'Layer' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER'),
             'App ID' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID'),
             'Projection' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION') ?: 'Non paramétrée',
             'Token' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN'),
             'Geocoder Url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER'),
-        );
+        ];
         $this->view->dbname = getenv('PREVARISC_DB_DBNAME');
         $this->view->db_url = getenv('PREVARISC_DB_HOST').(getenv('PREVARISC_DB_PORT') ? ':'.getenv('PREVARISC_DB_PORT') : '');
-        $this->view->api_enabled = getenv('PREVARISC_SECURITY_KEY') != '';
+        $this->view->api_enabled = '' != getenv('PREVARISC_SECURITY_KEY');
         $this->view->proxy_enabled = getenv('PREVARISC_PROXY_ENABLED');
         $this->view->third_party_plugins = implode(', ', explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS')));
 
@@ -61,11 +61,11 @@ class AdminController extends Zend_Controller_Action
         $this->view->cache_lifetime = $cache_config['lifetime'];
         $this->view->cache_enabled = $cache_config['enabled'];
 
-        $this->view->enforce_security = getenv('PREVARISC_ENFORCE_SECURITY') == 1;
+        $this->view->enforce_security = 1 == getenv('PREVARISC_ENFORCE_SECURITY');
 
         $service_search = new Service_Search();
         $users = $service_search->users(null, null, null, true, 1000)['results'];
-        $this->view->users = array();
+        $this->view->users = [];
 
         foreach ($users as $user) {
             if (time() - strtotime($user['LASTACTION_UTILISATEUR']) < ini_get('session.gc_maxlifetime')) {

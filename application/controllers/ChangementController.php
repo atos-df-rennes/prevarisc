@@ -13,18 +13,18 @@ class ChangementController extends Zend_Controller_Action
             try {
                 $post = $this->_request->getPost();
                 $serviceChangement->save($post);
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'success',
                     'title' => 'Mise à jour réussie !',
                     'message' => 'Les messages d\'alerte ont bien été mis à jour.',
-                ));
-                $this->_helper->redirector('index', null, null, array('id' => $this->_request->id));
+                ]);
+                $this->_helper->redirector('index', null, null, ['id' => $this->_request->id]);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array(
+                $this->_helper->flashMessenger([
                     'context' => 'error',
                     'title' => '',
                     'message' => 'Les messages d\'alerte n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
-                ));
+                ]);
             }
         }
 
@@ -48,8 +48,8 @@ class ChangementController extends Zend_Controller_Action
             $etablissement
         );
 
-        $mails = array();
-        $tos = array();
+        $mails = [];
+        $tos = [];
         foreach ($users as $user) {
             $mails[] = $user['MAIL_UTILISATEURINFORMATIONS'];
             $tos[] = sprintf(
@@ -78,7 +78,6 @@ class ChangementController extends Zend_Controller_Action
     public function balisesAction()
     {
         $serviceChangement = new Service_Changement();
-
         $this->view->balises = $serviceChangement->getBalises();
     }
 
@@ -91,7 +90,7 @@ class ChangementController extends Zend_Controller_Action
 
         $result = false;
 
-        if ($tos !== '') {
+        if ('' !== $tos) {
             $arrayMails = explode(';', $tos);
             $object = $this->_getParam('alerte-objet');
             $message = $this->_getParam('alerte-message');

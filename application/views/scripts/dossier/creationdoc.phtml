@@ -262,7 +262,6 @@ if (!function_exists('addPrescription')) {
     }
 }
 
-
 if (!function_exists('addPrescriptionCC')) {
     function addPrescriptionCC($listePrescription,$type,$odf) {
         //TYPE_PRESCRIPTION_DOSSIER
@@ -739,6 +738,18 @@ if ($this->GN == 2) {
 } else if ($this->GN == 3) {
     addChamp($odf, 'gn2','');
     addChamp($odf, 'gn3','×');
+}
+
+// Gestion des effectifs & dégagements
+$tabEffDegKV = array(
+    'descriptionEffectifDossier' => $this->effectifDossier,
+    'descriptionDegagementDossier' => $this->degagementDossier,
+    'descriptionEffectifEtablissement' => $this->effectifEtablissement,
+    'descriptionDegagementEtablissement' => $this->degagementEtablissement,
+);
+
+foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+    addChamp($odf, $nomChamp, $valeurChamp);
 }
 
 try{

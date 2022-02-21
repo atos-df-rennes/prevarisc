@@ -1,0 +1,95 @@
+<div class='pull-right btn-group'>
+    <a class='btn' href="<?php echo $this->url(array('action' => 'list')) ?>">Revenir sur la liste des couches cartographiques</a>
+</div>
+
+<h3>Ajout d'une couche cartographique IGN</h3>
+
+<div class="accordion" id="ign-accordion">
+    <?php foreach ($this->key_ign as $index => $ignKey): ?>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="ign-accordion" href="#<?= $ignKey ?>">
+                    <?= ucfirst($ignKey) ?>
+                </a>
+            </div>
+            <div id="<?= $ignKey ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
+                <div class="accordion-inner">
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+    let result = null
+    let contentDiv = null
+    const formats = ['wmts', 'wms raster', 'wms vecteur']
+
+    <?php foreach ($this->key_ign as $key): ?>
+        formats.forEach(format => {
+            const baseFormat = format.split(' ')[0]
+
+            result = getCapabilities('<?= $key ?>', format)
+
+            if (result.length > 0) {
+                contentDiv = $('#<?= $key ?> .accordion-inner')
+
+                contentDiv.append('<div class="row-fluid"><div class="span12"><strong>' + format.toUpperCase() + '</strong></div></div>')
+                for (let i = 0; i < result.length; i++) {
+                    contentDiv.append('<div id="<?= $key ?>-' + result[i].internalName + '-' + format.replace(' ', '-') + '" class="row-fluid">')
+                    let row = $('#<?= $key ?>-' + result[i].internalName.replace(/\./g, '\\.') + '-' + format.replace(' ', '-'))
+                    row.append('<form action="/couches-cartographiques/add-couche-ign" method="post">')
+
+                    let form = $(row.selector + ' > form')
+
+                    form.append('<input type="hidden" name="TYPE_COUCHECARTO" value="' + result[i].type + '">')
+
+                    form.append('<div class="span2" title="' + result[i].name + '">' + result[i].name + '</div>')
+                    form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '" />')
+
+                    form.append('<div class="span3" title="' + result[i].internalName + '">' + result[i].internalName + '</div>')
+                    form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '" />')
+
+                    form.append('<div class="span2 " title="' + result[i].url + '">' + result[i].url + '</div>')
+                    form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '" />')
+
+                    if (baseFormat === 'wms') {
+                        const pngChecked = result[i].format === 'image/png'
+                        const jpegChecked = result[i].format === 'image/jpeg'
+
+                        form.append(
+                            `<div class="span2 text-center">
+                                <select name="FORMAT_COUCHECARTO">
+                                </select>
+                            </div>`
+                        )
+
+                        const select = $(row.selector + ' select[name="FORMAT_COUCHECARTO"')
+
+                        if (pngChecked === true) {
+                            select.append(
+                                `<option value="image/png" selected>image/png</option>
+                                <option value="image/jpeg">image/jpeg</option>`
+                            )
+                        } else if (jpegChecked === true) {
+                            select.append(
+                                `<option value="image/png">image/png</option>
+                                    <option value="image/jpeg" selected>image/jpeg</option>`
+                            )
+                        }
+                    } else {
+                        form.append('<div class="span2 text-center">' + result[i].format + '</div>')
+                        form.append('<input type="hidden" name="FORMAT_COUCHECARTO" value="' + result[i].format + '" />')
+                    }
+
+                    form.append('<div class="span1 visibilite-couche"><span><i class="icon-eye-open" title="Couche visible"></i></span></div>')
+                    form.append('<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />')
+
+                    form.append('<div class="span1"><input type="submit" class="btn btn-success" value="Ajouter"></div>')
+
+                    contentDiv.append('</div>')
+                }
+            }
+        })
+    <?php endforeach ?>
+</script>

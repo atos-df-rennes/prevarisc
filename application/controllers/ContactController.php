@@ -10,12 +10,13 @@ class ContactController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
-                    ->addActionContext('display', 'html')
-                    ->addActionContext('delete', 'json')
-                    ->addActionContext('add', 'json')
-                    ->addActionContext('get', 'json')
-                    ->addActionContext('edit', 'html')
-                    ->initContext();
+            ->addActionContext('display', 'html')
+            ->addActionContext('delete', 'json')
+            ->addActionContext('add', 'json')
+            ->addActionContext('get', 'json')
+            ->addActionContext('edit', 'html')
+            ->initContext()
+        ;
     }
 
     public function indexAction()
@@ -30,16 +31,16 @@ class ContactController extends Zend_Controller_Action
         $this->view->ajax = $this->_request->ajax;
 
         // Si on est dans un établissement, on cherche les contacts des ets parents
-        if ($this->_request->item == 'etablissement') {
+        if ('etablissement' == $this->_request->item) {
             $model_ets = new Model_DbTable_Etablissement();
             $etablissement_parents = $model_ets->getAllParents($this->_request->id);
-            $array = array();
+            $array = [];
 
-            if ($etablissement_parents != null) {
+            if (null != $etablissement_parents) {
                 foreach ($etablissement_parents as $ets) {
-                    if ($ets != null) {
+                    if (null != $ets) {
                         $contacts = $DB_contact->getContact($this->_request->item, $ets['ID_ETABLISSEMENT']);
-                        if ($contacts != null) {
+                        if (null != $contacts) {
                             $array[] = $contacts;
                         }
                     }
@@ -49,7 +50,7 @@ class ContactController extends Zend_Controller_Action
         }
 
         // Taille des cases
-        $this->view->size = ($this->_request->item == 'dossier') ? 3 : 4;
+        $this->view->size = ('dossier' == $this->_request->item) ? 3 : 4;
     }
 
     public function formAction()
@@ -74,7 +75,7 @@ class ContactController extends Zend_Controller_Action
     public function addAction()
     {
         try {
-            if (isset($_POST['ID_UTILISATEURCIVILITE']) && $_POST['ID_UTILISATEURCIVILITE'] == 'null') {
+            if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
                 unset($_POST['ID_UTILISATEURCIVILITE']);
             }
 
@@ -88,19 +89,27 @@ class ContactController extends Zend_Controller_Action
                 case 'etablissement':
                     $DB_contact = new Model_DbTable_EtablissementContact();
                     $key = 'ID_ETABLISSEMENT';
+
                     break;
+
                 case 'dossier':
                     $DB_contact = new Model_DbTable_DossierContact();
                     $key = 'ID_DOSSIER';
+
                     break;
+
                 case 'groupement':
                     $DB_contact = new Model_DbTable_GroupementContact();
                     $key = 'ID_GROUPEMENT';
+
                     break;
+
                 case 'commission':
                     $DB_contact = new Model_DbTable_CommissionContact();
                     $key = 'ID_COMMISSION';
+
                     break;
+
                 default:
                     break;
             }
@@ -116,7 +125,7 @@ class ContactController extends Zend_Controller_Action
 
             // Association du contact.
             $contact = $DB_contact->createRow();
-            $contact->$key = $id_item;
+            $contact->{$key} = $id_item;
             $contact->ID_UTILISATEURINFORMATIONS = $exist ? $_POST['ID_UTILISATEURINFORMATIONS'] : $id;
             $contact->save();
 
@@ -124,24 +133,24 @@ class ContactController extends Zend_Controller_Action
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
             $cache->remove($this->_request->item.'_id_'.$id_item);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été ajouté',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
     public function editAction()
     {
         try {
-            if (isset($_POST['ID_UTILISATEURCIVILITE']) && $_POST['ID_UTILISATEURCIVILITE'] == 'null') {
+            if (isset($_POST['ID_UTILISATEURCIVILITE']) && 'null' == $_POST['ID_UTILISATEURCIVILITE']) {
                 unset($_POST['ID_UTILISATEURCIVILITE']);
             }
 
@@ -164,17 +173,17 @@ class ContactController extends Zend_Controller_Action
                 $this->_forward('form');
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été modifié',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -185,12 +194,12 @@ class ContactController extends Zend_Controller_Action
 
             $DB_current = null;
             $DB_informations = new Model_DbTable_UtilisateurInformations();
-            $DB_contact = array(
+            $DB_contact = [
                 new Model_DbTable_EtablissementContact(),
                 new Model_DbTable_DossierContact(),
                 new Model_DbTable_GroupementContact(),
                 new Model_DbTable_CommissionContact(),
-            );
+            ];
             $primary = null;
 
             // Initalisation des modèles
@@ -198,19 +207,27 @@ class ContactController extends Zend_Controller_Action
                 case 'etablissement':
                     $DB_current = $DB_contact[0];
                     $primary = 'ID_ETABLISSEMENT';
+
                     break;
+
                 case 'dossier':
                     $DB_current = $DB_contact[1];
                     $primary = 'ID_DOSSIER';
+
                     break;
+
                 case 'groupement':
                     $DB_current = $DB_contact[2];
                     $primary = 'ID_GROUPEMENT';
+
                     break;
+
                 case 'commission':
                     $DB_current = $DB_contact[3];
                     $primary = 'ID_COMMISSION';
+
                     break;
+
                 default:
                     break;
             }
@@ -234,17 +251,17 @@ class ContactController extends Zend_Controller_Action
             $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
             $cache->remove($this->_request->item.'_id_'.$this->_request->id);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le contact a bien été supprimé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du contact',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 

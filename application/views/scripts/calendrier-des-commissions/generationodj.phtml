@@ -11,6 +11,7 @@ foreach($this->informationsMembre as $val => $membre){
 		//génération du document par commune pour les maires par exemple		
 		//si le document concernant ce membre existe alors on rentre dans la boucle
         $nomFichier = $membre['infosFiles'][0]['ID_COMMISSIONMEMBRE']."ODJ_".$membre['infosFiles'][0]['COURRIER_ODJ'];
+
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
             //Generation du segment membres
@@ -156,6 +157,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'avisDossier', getAvis($dossierInfos["AVIS_DOSSIER"]));
     addChamp($segment->infosDoss, 'nomEtab', $dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
     addChamp($segment->infosDoss, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
+        
     if(isset($dossierInfos['infosEtab']['parents'][0]) && $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"] != NULL) {
         addChamp($segment->infosDoss, 'nomPereEtab', $dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
     }
@@ -221,7 +223,19 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         }
     }
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
-    addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste)); 
+    addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+
+    // Gestion des effectifs & dégagements
+    $tabEffDegKV = array(
+        'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+        'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+        'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+        'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+    );
+
+    foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+        addChamp($segment->infosDoss, $nomChamp, $valeurChamp);
+    }
 }
 
 function savePj($dateCommId,$libelleMembre){

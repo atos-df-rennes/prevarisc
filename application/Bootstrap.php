@@ -32,7 +32,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $autoloader = Zend_Loader_Autoloader::getInstance();
 
-        $autoloader_application = new Zend_Application_Module_Autoloader(array('basePath' => APPLICATION_PATH, 'namespace' => null));
+        $autoloader_application = new Zend_Application_Module_Autoloader(['basePath' => APPLICATION_PATH, 'namespace' => null]);
 
         $autoloader_application->addResourceType('cache', 'cache/', 'Cache');
 
@@ -49,7 +49,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      *
      * @return Zend_Cache_Core|Zend_Cache_Frontend une instance de cache
      */
-    protected function getCache(array $frontendOptions = array(), array $backendOptions = array())
+    protected function getCache(array $frontendOptions = [], array $backendOptions = [])
     {
         $options = $this->getOption('cache');
 
@@ -59,26 +59,26 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             // back adapter
             $options['adapter'],
             // frontend options
-            array_merge(array(
+            array_merge([
                 'caching' => $options['enabled'],
                 'lifetime' => $options['lifetime'],
                 'cache_id_prefix' => 'prevarisc_'.md5(getenv('PREVARISC_DB_DBNAME')).'_',
                 'write_control' => $options['write_control'],
-            ), $frontendOptions),
+            ], $frontendOptions),
             // backend options
-            array_merge(array(
-                'servers' => array(
-                    array(
+            array_merge([
+                'servers' => [
+                    [
                         'host' => $options['host'],
                         'port' => $options['port'],
-                    ),
-                ),
+                    ],
+                ],
                 'compression' => $options['compression'],
                 'read_control' => $options['read_control'],
                 'cache_dir' => $options['cache_dir'],
                 'cache_file_perm' => 0666,
                 'hashed_directory_perm' => 0777,
-            ), $backendOptions),
+            ], $backendOptions),
             // use a custom name for front
             false,
             // use a custom name for back
@@ -135,7 +135,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initLayout()
     {
-        return Zend_Layout::startMvc(array('layoutPath' => APPLICATION_PATH.DS.'layouts'));
+        return Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
     }
 
     /**
@@ -155,9 +155,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function _initTranslator()
     {
         $translator = new Zend_Translate(
-            array(
+            [
                 'adapter' => 'array',
-                'content' => implode(DS, array(
+                'content' => implode(DS, [
                     APPLICATION_PATH,
                     '..',
                     'vendor',
@@ -165,10 +165,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     'zendframework1',
                     'resources',
                     'languages',
-                )),
+                ]),
                 'locale' => 'fr',
                 'scan' => Zend_Translate::LOCALE_DIRECTORY,
-            )
+            ]
         );
         Zend_Validate_Abstract::setDefaultTranslator($translator);
     }

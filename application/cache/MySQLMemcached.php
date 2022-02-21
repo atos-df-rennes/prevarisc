@@ -9,7 +9,7 @@ class Cache_MySQLMemcached extends Zend_Cache_Backend_Memcached
      * Overide default memcache object's connexion for mysql memcache implementation
      * Get method returns serialized objects instead of serialized.
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!extension_loaded('memcache')) {
             Zend_Cache::throwException('The memcache extension must be loaded for using this backend !');
@@ -19,7 +19,7 @@ class Cache_MySQLMemcached extends Zend_Cache_Backend_Memcached
             $value = $this->_options['servers'];
             if (isset($value['host'])) {
                 // in this case, $value seems to be a simple associative array (one server only)
-                $value = array(0 => $value); // let's transform it into a classical array of associative arrays
+                $value = [0 => $value]; // let's transform it into a classical array of associative arrays
             }
             $this->setOption('servers', $value);
         }

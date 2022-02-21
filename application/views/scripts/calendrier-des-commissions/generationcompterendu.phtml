@@ -40,6 +40,18 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 				addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
 
+				// Gestion des effectifs & dégagements
+				$tabEffDegKV = array(
+					'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+					'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+					'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+					'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+				);
+
+				foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+					addChamp($dossInfos, $nomChamp, $valeurChamp);
+				}
+			
 				$dateComm = new Zend_Date($this->dateComm);
 				addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
 
@@ -163,9 +175,10 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 	$odf->mergeSegment($dossInfos);
 	$nouvellePJ = savePj($this->idComm,"Compte rendu du ");
 
-        $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
+	$store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+	$path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 	$odf->saveToDisk($path);
+	
 	echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le compte rendu a été généré avec succes</span><br/><br/><br/>";
 }else{
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier de compte rendu pour la commission n'existe pas</span><br/><br/><br/>";
