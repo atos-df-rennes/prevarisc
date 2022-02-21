@@ -225,8 +225,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
     addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
 
-    $html2Text = new \kranemora\Html2Text\Html2Text;
-
+    // Gestion des effectifs & dégagements
     $tabEffDegKV = array(
         'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
         'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
@@ -234,16 +233,8 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
     );
 
-    /**
-     * Foreach sur le tableau pour attribuer les valeurs dans les champs de fusion
-     * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
-     */
-    foreach ($tabEffDegKV as $k => $v) {
-        if (isset($v) && strlen($v) > 0 ) {
-            addChamp($segment->infosDoss, $k, $html2Text->convert($v));
-        } else {
-            addChamp($segment->infosDoss, $k, "");
-        }
+    foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+        addChamp($segment->infosDoss, $nomChamp, $valeurChamp);
     }
 }
 

@@ -951,12 +951,7 @@ class DossierController extends Zend_Controller_Action
                 $dbDossierContact = new Model_DbTable_DossierContact();
                 $contactsEtab = $dbDossierContact->recupContactEtablissement($this->_getParam('idEtablissement'));
 
-                $idsFonction = [
-                    7,
-                    8,
-                    9,
-                    17,
-                ];
+                $idsFonction = [7, 8, 9, 17];
 
                 foreach ($contactsEtab as $contact) {
                     if (in_array($contact['ID_FONCTION'], $idsFonction)) {
@@ -978,14 +973,7 @@ class DossierController extends Zend_Controller_Action
             //GESTION DE LA RECUPERATION DES TEXTES APPLICABLES DANS CERTAINS CAS
             //lorsque je crée un dossier visite ou groupe de visite VP (21-26), VC (22-27), VI (24-29),
             //il faut que les textes applicables à l'ERP se retrouvent de fait dans le dossier créé
-            $idsNature = [
-                21,
-                22,
-                24,
-                26,
-                27,
-                29,
-            ];
+            $idsNature = [21, 22, 24, 26, 27, 29];
 
             if (
                 in_array($idNature, $idsNature)
@@ -2157,6 +2145,12 @@ class DossierController extends Zend_Controller_Action
         $DBdossier = new Model_DbTable_Dossier();
         $this->view->infosDossier = $DBdossier->find($idDossier)->current();
 
+        // Effectifs & Dégagements
+        $this->view->effectifDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_EFFECTIF'];
+        $this->view->degagementDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_DEGAGEMENT'];
+        $this->view->effectifEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
+        $this->view->degagementEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
+
         //Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
         $typeDossier = $dbType->find($this->view->infosDossier['TYPE_DOSSIER'])->current();
@@ -2530,6 +2524,28 @@ class DossierController extends Zend_Controller_Action
             $this->view->dateDelaipresc = $dateComm->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
 
+        //PARTIE TEXTES APPLICABLES
+        //on recupere tout les textes applicables qui ont été cochés dans le dossier
+        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
+        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
+
+        //DATE DE LA DERNIERE VISITE PERIODIQUE
+        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
+        if (
+            '' != $dateVisite
+            && isset($dateVisite)
+        ) {
+            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
+
+            $this->view->dateLastVP = null;
+            if ($dateLastVP) {
+                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
+                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
+                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
+            }
+        }
+
         $dateDuJour = new Zend_Date();
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $nouvellePJ = $DBpieceJointe->createRow();
@@ -2559,27 +2575,6 @@ class DossierController extends Zend_Controller_Action
         $linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
         $linkPj->save();
 
-        //PARTIE TEXTES APPLICABLES
-        //on recupere tout les textes applicables qui ont été cochés dans le dossier
-        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
-        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
-
-        //DATE DE LA DERNIERE VISITE PERIODIQUE
-        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
-        if (
-            '' != $dateVisite
-            && isset($dateVisite)
-        ) {
-            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-
-            $this->view->dateLastVP = null;
-            if ($dateLastVP) {
-                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
-                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
-                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
-            }
-        }
         $this->render('creationdoc');
     }
 

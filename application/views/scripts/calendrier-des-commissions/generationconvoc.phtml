@@ -233,27 +233,6 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
 
-	$html2Text = new \kranemora\Html2Text\Html2Text;
-
-	$tabEffDegKV = array(
-		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
-		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
-		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
-		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
-	);
-
-	/**
-	 * Foreach sur le tableau pour attribuer les valeurs dans les champs de fusion
-	 * Attention ! Si la valeur est NULL ou qu'un style est appliqué depuis le wiziwig le resultat sera : ""
-	 */
-	foreach ($tabEffDegKV as $k => $v) {
-		if (isset($v) && strlen($v) > 0 ) {
-			setVars($segment, $k, $html2Text->convert($v));
-		} else {
-			setVars($segment, $k, "");
-		}
-	}
-
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["CODEPOSTAL_COMMUNE"]." ";
@@ -297,6 +276,18 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     }
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+
+	// Gestion des effectifs & dégagements
+	$tabEffDegKV = array(
+		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+	);
+
+	foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+		setVars($segment, $nomChamp, $valeurChamp);
+	}
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {
