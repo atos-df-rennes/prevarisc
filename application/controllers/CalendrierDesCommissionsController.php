@@ -908,11 +908,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dbDossier = new Model_DbTable_Dossier();
             $dbDocUrba = new Model_DbTable_DossierDocUrba();
             $service_etablissement = new Service_Etablissement();
-            foreach ($listeDossiers as $val => $ue) {
+
+            foreach ($listeDossiers as $val => &$ue) {
                 $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
+
+                //Ajoute les avis derogations provenant du dossier 
+                $ue['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
                 if (count($listePrev) > 0) {
                     $listeDossiers[$val]['preventionnistes'] = $listePrev;
                 }
+
                 //On recupere la liste des établissements qui concernent le dossier
                 $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
                 //on recupere la liste des infos des établissement

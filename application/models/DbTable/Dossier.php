@@ -521,20 +521,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-
-
     /**
-     * Retourne la liste des dossiers d un etablissement sans l id d un etablissement passe en param
-     */
-    public function getListeDossierFromEtablissementWithoutOnce($idEtablissement, $idDossier){
-        $select = "SELECT * from etablissementdossier 
-                            INNER JOIN  dossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER 
-                            WHERE etablissmentdossier.ID_ETABLISSMENT = $idEtablissement 
-                            AND etablissmentdossier.ID_DOSSIER != $idDossier;";
-        return $this->getAdapter()->fetchAll($select);
-    }
-
-       /**
      * Retourne la liste des dossiers d un etablissement en se basant sur un dossier
      */
     public function getListeDossierFromDossier($idDossier){
@@ -549,5 +536,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                                        where dossier.ID_DOSSIER = $idDossier)")
                        ->where('d.ID_DOSSIER != ?',$idDossier);
        return $this->getAdapter()->fetchAll($select);
+    }
+
+
+    /**
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param
+     */
+    public function getListAvisDerogationsFromDossier($idDossier){
+        $select = $this->select()
+                                ->setIntegrityCheck(false)
+                                ->from("avisderogations")
+                                ->where("avisderogations.ID_DOSSIER = $idDossier");
+        return $this->getAdapter()->fetchAll($select);
     }
 }

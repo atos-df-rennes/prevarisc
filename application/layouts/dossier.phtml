@@ -1,7 +1,6 @@
 <?php if($this->action != "add" && $this->do != "new" ) : ?>
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation' ?>
 <link rel="stylesheet" href="/css/etiquetteAvisDerogations/greenCircle.css"/>
-
 <input type='hidden' name='ID_CREATEUR' id='ID_CREATEUR' value='<?php echo $this->idUser; ?>' />	
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li class="<?php echo ( $this->action == "index" ) ? "active" : "read" ?>">
@@ -32,7 +31,7 @@
             }
     ?>
 
-    <?php if($this->idTypeDossier === 1 && $this->is_allowed_avis_derogation ) :?>
+    <?php if($this->idTypeDossier === 1 ) :?>
         <li class="avisEtDerogation" style="position:relative">
             <a href=<?= "/dossier/avis-et-derogations/id/".$this->idDossier?>>
                 <i class="icon-file icon-black">
@@ -49,9 +48,10 @@
 
     <?php
             if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
-                echo "<li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
-                        <a  "
-                        . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
+                echo "
+                    <li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
+                            <a  "
+                            . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
                     </li>";
             }
 	?>
