@@ -512,29 +512,20 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers d un etablissement 
-     */
-    public function getListeDossierFromEtablissement($idEtablissement){
-        $select = "SELECT * from etablissementdossier 
-                            INNER JOIN dossier ON dossier.ID_DOSSIER = etablissementdossier.ID_DOSSIER 
-                            WHERE etablissmentdossier.ID_ETABLISSMENT = $idEtablissement ;";
-        return $this->getAdapter()->fetchAll($select);
-    }
-
-    /**
      * Retourne la liste des dossiers d un etablissement en se basant sur un dossier
      */
     public function getListeDossierFromDossier($idDossier){
         
         $select = $this->select()->setIntegrityCheck(false)
-                       ->from(array('d' => 'dossier'))
-                       ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
-                       ->join(array('e' => 'etablissement'), 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
-                       ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement 
-                                       inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT 
-                                       inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
-                                       where dossier.ID_DOSSIER = $idDossier)")
-                       ->where('d.ID_DOSSIER != ?',$idDossier);
+            ->from(array('d' => 'dossier'))
+            ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(array('e' => 'etablissement'), 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement 
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT 
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = $idDossier)")
+            ->where('d.ID_DOSSIER != ?',$idDossier);
+
        return $this->getAdapter()->fetchAll($select);
     }
 
@@ -544,9 +535,10 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getListAvisDerogationsFromDossier($idDossier){
         $select = $this->select()
-                                ->setIntegrityCheck(false)
-                                ->from("avisderogations")
-                                ->where("avisderogations.ID_DOSSIER = $idDossier");
+            ->setIntegrityCheck(false)
+            ->from("avisderogations")
+            ->where("avisderogations.ID_DOSSIER = $idDossier");
+
         return $this->getAdapter()->fetchAll($select);
     }
 }

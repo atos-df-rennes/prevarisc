@@ -3085,6 +3085,7 @@ class DossierController extends Zend_Controller_Action
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
+        // TODO Faire le même principe que la fonction au-dessus pour tout ce bloc
         if ($this->_request->isPost()) {
             //Recuperation de l entite via son ID_AVIS_DEROGATIONS
             $updateEntity = $dbAvisDerogations->find($this->_getParam('avis-derogation'))->current();
@@ -3093,7 +3094,7 @@ class DossierController extends Zend_Controller_Action
             $updateEntity->TYPE_AVIS_DEROGATIONS = $this->_request->getParam("TYPE_AVIS_DEROGATIONS");
             $updateEntity->TITRE = $this->_request->getParam("TITRE");
             $updateEntity->INFORMATIONS = $this->_request->getParam("INFORMATIONS");
-            $updateEntity->IS_FAVORABLE = $this->_request->getParam("IS_FAVORABLE");
+            $updateEntity->AVIS = $this->_request->getParam("AVIS");
             $updateEntity->DISPLAY_HISTORIQUE = $this->_request->getParam("DISPLAY_HISTORIQUE");
             $updateEntity->ID_DOSSIER_LIE = $this->_request->getParam("ID_DOSSIER_LIE");
 
@@ -3102,6 +3103,7 @@ class DossierController extends Zend_Controller_Action
           
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }
+        // FIXME Enlever le isGet => ça sert à rien
         if($this->_request->isGet()){
             $this->_helper->layout->setLayout('dossier');
             $this->view->headScript()->appendFile('/js/tinymce.min.js');
@@ -3109,12 +3111,14 @@ class DossierController extends Zend_Controller_Action
             $dbAvisDerogation = new Model_DbTable_AvisDerogations();
             $arrayAvisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
 
+            // TODO Passer tout l'objet ici, on fera la différence des champs dans la vue
             $this->view->TITRE = $arrayAvisDerogations['TITRE'];
             $this->view->ID_AVIS_DEROGATION = $arrayAvisDerogations['ID_AVIS_DEROGATION'];
+            // FIXME Utile ici ?
             $this->view->ID_DOSSIER = $arrayAvisDerogations['ID_DOSSIER'];
             $this->view->TYPE_AVIS_DEROGATIONS = $arrayAvisDerogations['TYPE_AVIS_DEROGATIONS'];
             $this->view->INFORMATIONS = $arrayAvisDerogations['INFORMATIONS'];
-            $this->view->IS_FAVORABLE = $arrayAvisDerogations['IS_FAVORABLE'];
+            $this->view->AVIS = $arrayAvisDerogations['AVIS'];
             $this->view->DISPLAY_HISTORIQUE = $arrayAvisDerogations['DISPLAY_HISTORIQUE'];
             $this->view->ID_DOSSIER_LIE = $arrayAvisDerogations['ID_DOSSIER_LIE'];
 
