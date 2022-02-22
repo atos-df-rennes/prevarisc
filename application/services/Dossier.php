@@ -875,7 +875,7 @@ class Service_Dossier
 
         $result = $modelAvisDerogation->getByIdDossier($idDossier);
 
-        if (null !== $result) {
+        if (!empty($result)) {
             return true;
         }
         

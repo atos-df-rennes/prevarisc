@@ -106,7 +106,7 @@ foreach($this->informationsMembre as $val => $membre){
 							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						)
 					){
-						retrieveInfoDossier($infosDoss, $dossierInfos,$odf);
+						retrieveInfoDossier($infosDoss, $dossierInfos, $odf);
 						$villeODF->infosDoss->merge();
 					}
 				}
@@ -159,7 +159,7 @@ foreach($this->informationsMembre as $val => $membre){
 							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						)
 					){
-						retrieveInfoDossier($grpLoop, $dossierInfos,$odf);
+						retrieveInfoDossier($grpLoop, $dossierInfos, $odf);
 						setVars($odf, 'nomEtab',$dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
 						setVars($odf, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
 						$dossierExported = true;
@@ -277,22 +277,15 @@ function retrieveInfoDossier($segment, $dossierInfos, $odf = null) {
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
 
+	//Generation du segment avis derogations
+	$segmentAvisDerogations = $segment->avisDerogations;
 
-	if(isset($odf)){
-		//Generation du segment avis derogations
-		$segmentAvisDerogations = $odf->setSegment('avisDerogations');                    
-		//$segmentAvisDerogations = $segment->avisDerogation;
-
-		$segmentAvisDerogations = $odf->setSegment('avisDerogation');
-		if(isset($dossierInfos["AVIS_DEROGATIONS"])){	
-			foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
-				setVars($segmentAvisDerogations, 'informationsAvisDerogations',$unAvisDerogation["INFORMATIONS"]);
-				//$segmentAvisDerogations->merge();
-			}	
-		}
-		//$odf->mergeSegment($segmentAvisDerogations);
+	if(isset($dossierInfos["AVIS_DEROGATIONS"])){
+		foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
+			setVars($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
+			$segmentAvisDerogations->merge();
+		}	
 	}
-
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {
