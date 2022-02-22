@@ -3103,28 +3103,14 @@ class DossierController extends Zend_Controller_Action
           
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }
-        // FIXME Enlever le isGet => ça sert à rien
-        if($this->_request->isGet()){
+
             $this->_helper->layout->setLayout('dossier');
             $this->view->headScript()->appendFile('/js/tinymce.min.js');
             
             $dbAvisDerogation = new Model_DbTable_AvisDerogations();
-            $arrayAvisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
 
-            // TODO Passer tout l'objet ici, on fera la différence des champs dans la vue
-            $this->view->TITRE = $arrayAvisDerogations['TITRE'];
-            $this->view->ID_AVIS_DEROGATION = $arrayAvisDerogations['ID_AVIS_DEROGATION'];
-            // FIXME Utile ici ?
-            $this->view->ID_DOSSIER = $arrayAvisDerogations['ID_DOSSIER'];
-            $this->view->TYPE_AVIS_DEROGATIONS = $arrayAvisDerogations['TYPE_AVIS_DEROGATIONS'];
-            $this->view->INFORMATIONS = $arrayAvisDerogations['INFORMATIONS'];
-            $this->view->AVIS = $arrayAvisDerogations['AVIS'];
-            $this->view->DISPLAY_HISTORIQUE = $arrayAvisDerogations['DISPLAY_HISTORIQUE'];
-            $this->view->ID_DOSSIER_LIE = $arrayAvisDerogations['ID_DOSSIER_LIE'];
-
+            $this->view->avisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
             $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
-        }   
-
     }
 
 }

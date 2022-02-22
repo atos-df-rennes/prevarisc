@@ -20,11 +20,10 @@
       </select>
     </div>
   </div>
-  <!-- TODO Enlever le WYSIWYG et remplacer par un textarea => A faire aussi dans la partie Edit -->
   <div class="control-group">
     <label class="control-label" for="inputInformations">Informations</label>
     <div class="controls">
-      <textarea name="INFORMATIONS" class="tinyarea"><?= $this->INFORMATIONS ?></textarea>
+      <textarea name="INFORMATIONS"></textarea>
     </div>
   </div>
   <div class="control-group">
@@ -50,29 +49,9 @@
                 id="DISPLAY_HISTORIQUE" 
                 name="DISPLAY_HISTORIQUE"
                 value='1'
-        <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '') ?> 
       >
     </div>        
   </div>
 </form>
 
 <?= $this->partialLoop("dossier/results/avis-et-derogations.phtml", $this->arrayAvisDerogations); ?>
-
-<script type='text/javascript'>
-    tinymce.init({
-        selector: '.tinyarea',
-        height: 200,
-        menubar: true,
-        statusbar: false,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste code'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
-        content_css: [
-            '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
-            '//www.tinymce.com/css/codepen.min.css'
-        ]
-    });
-</script>
