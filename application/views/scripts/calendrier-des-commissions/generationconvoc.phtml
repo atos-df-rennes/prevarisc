@@ -282,13 +282,15 @@ function retrieveInfoDossier($segment, $dossierInfos, $odf = null) {
 		//Generation du segment avis derogations
 		$segmentAvisDerogations = $odf->setSegment('avisDerogations');                    
 		//$segmentAvisDerogations = $segment->avisDerogation;
+
+		$segmentAvisDerogations = $odf->setSegment('avisDerogation');
 		if(isset($dossierInfos["AVIS_DEROGATIONS"])){	
 			foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
 				setVars($segmentAvisDerogations, 'informationsAvisDerogations',$unAvisDerogation["INFORMATIONS"]);
-				$segmentAvisDerogations->merge();
+				//$segmentAvisDerogations->merge();
 			}	
 		}
-		$segment->mergeSegment($segmentAvisDerogations);
+		//$odf->mergeSegment($segmentAvisDerogations);
 	}
 
 }
