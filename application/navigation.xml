@@ -974,6 +974,12 @@
                     <action>avis-et-derogations-edit</action>
                     <!--<privilege>avis_derogations</privilege>-->
                 </avis-et-derogations-edit>
+                <avis-et-derogations-delete>
+                    <label>Suppression d un avis derogation</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-delete</action>
+                    <!--<privilege>avis_derogations</privilege>-->
+                </avis-et-derogations-delete>
             </pages>
 
         </dossier>

@@ -3052,10 +3052,7 @@ class DossierController extends Zend_Controller_Action
 
         $request = $this->getRequest();
         // FIXME A déplacer dans une action spéciale suppression
-        //Suppression de la ligne
-        if($request->isDelete()){
-            $dbAvisDerogation->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
-        }
+        
 
         //Ajout d un avis/derogation dans la db
         if ($request->isPost()) {
@@ -3111,6 +3108,14 @@ class DossierController extends Zend_Controller_Action
 
             $this->view->avisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
             $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
+    }
+
+
+    public function avisEtDerogationsDeleteAction(){
+        //Suppression de la ligne
+        if($this->getRequest()->isDelete()){
+            $dbAvisDerogation->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
+        }
     }
 
 }
