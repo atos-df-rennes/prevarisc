@@ -1,8 +1,8 @@
 <h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this->ID_AVIS_DEROGATION?></strong></h4>
 <form  class="container-fluid" method="post">
     <div class="btn-group pull-right">
-        <a class="btn" href=<?php echo ("/dossier/avis-et-derogations/id/". $this->ID_DOSSIER)?>>Annuler modification</a>
-        <input type="submit" class="btn btn-success" href=<?php echo ("/dossier/avis-et-derogations/id/". $this->ID_DOSSIER)?> value="Sauvegarder">
+        <a class="btn" href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->ID_DOSSIER], false, true) ?>">Annuler modification</a>
+        <input type="submit" class="btn btn-success" href=<?php echo ("/dossier/avis-et-derogations/id/". $this->ID_DOSSIER) ?> value="Sauvegarder">
     </div>
     <div class="row">
         <p class="span2">Type</p>
@@ -28,7 +28,7 @@
         <p class="span2">Avis</p>
         <select name="IS_FAVORABLE" class="span4" required="required">       
             <option value="1" <?php echo $this->IS_FAVORABLE === 1 ? 'selected':''  ?>  >Favorable</option>
-            <option  value="0" <?php echo  $this->IS_FAVORABLE === 0 ? 'selected':''?> >Défavorable</option>
+            <option  value="0" <?php echo  $this->IS_FAVORABLE === 0 ? 'selected':'' ?> >Défavorable</option>
         </select>
     </div>
     <div class="row">
@@ -40,11 +40,12 @@
     </div>
 
     <div class="row" style="display:flex">
+        <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
         <input  type="checkbox" 
                 id="DISPLAY_HISTORIQUE" 
-                name="DISPLAY_HISTORIQUE" 
-                required="required"
-                <?php echo ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
+                name="DISPLAY_HISTORIQUE"
+                value='1'
+                <?php echo ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '') ?> 
         >
         <label for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     </div>

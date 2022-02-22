@@ -868,4 +868,17 @@ class Service_Dossier
 
         return $DB_prev->getPrevDossier($idDossier);
     }
+
+    public function hasAvisDerogation(int $idDossier): bool
+    {
+        $modelAvisDerogation = new Model_DbTable_AvisDerogations();
+
+        $result = $modelAvisDerogation->getByIdDossier($idDossier);
+
+        if (null !== $result) {
+            return true;
+        }
+        
+        return false;
+    }
 }

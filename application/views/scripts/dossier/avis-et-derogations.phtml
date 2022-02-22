@@ -9,14 +9,16 @@
   </div>
   <div class="control-group">
     <label class="control-label" for="inputType">Type</label>
-    <select class="controls" name="TYPE_AVIS_DEROGATIONS" required="required">
-            <option class="controls" value=<?= 1 ?>>
-                Avis
-            </option>
-            <option class="controls" value=<?= 2 ?>>
-                Dérogations
-            </option>
-        </select>
+    <div class="controls">
+      <select name="TYPE_AVIS_DEROGATIONS" required="required">
+        <option value=<?= 1 ?>>
+            Avis
+        </option>
+        <option value=<?= 2 ?>>
+            Dérogations
+        </option>
+      </select>
+    </div>
   </div>
   <div class="control-group">
     <label class="control-label" for="inputInformations">Informations</label>
@@ -26,10 +28,12 @@
   </div>
   <div class="control-group">
     <p class="control-label">Avis</p>
-    <select class="controls" name="IS_FAVORABLE" class="span4">       
-        <option class="controls" value="1" > Favorable</option>
-        <option class="controls" value="0" > Défavorable</option>
-    </select>
+    <div class="controls">
+      <select name="IS_FAVORABLE" class="span4">       
+          <option value="1" > Favorable</option>
+          <option value="0" > Défavorable</option>
+      </select>
+    </div>
   </div>
 
   <div class="control-group">
@@ -40,10 +44,12 @@
   <div class="control-group">
     <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     <div class="controls">
+      <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
       <input   type="checkbox" 
                 id="DISPLAY_HISTORIQUE" 
-                name="DISPLAY_HISTORIQUE" 
-        <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
+                name="DISPLAY_HISTORIQUE"
+                value='1'
+        <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '') ?> 
       >
     </div>        
   </div>

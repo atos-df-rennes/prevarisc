@@ -963,17 +963,17 @@
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
                 <avis-et-derogations>
-                    <label>avis-et-derogations</label>
+                    <label>Avis et dérogations</label>
                     <controller>dossier</controller>
                     <action>avis-et-derogations</action>
                     <!--<privilege>avis_derogations</privilege>-->
                 </avis-et-derogations>
                 <avis-et-derogations-edit>
-                    <label>avis-et-derogations-edit</label>
+                    <label>Édition des avis et dérogations</label>
                     <controller>dossier</controller>
                     <action>avis-et-derogations-edit</action>
                     <!--<privilege>avis_derogations</privilege>-->
-                </avis-et-derogations-edit>                
+                </avis-et-derogations-edit>
             </pages>
 
         </dossier>
