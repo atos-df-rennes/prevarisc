@@ -2004,6 +2004,7 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
+    /*TODO: faire champ fusion generation rapport , pas trouve ailleurs....*/
     public function generationrapportAction()
     {
         $this->_helper->viewRenderer->setNoRender();
