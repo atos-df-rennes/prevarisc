@@ -241,7 +241,6 @@ class EtablissementController extends Zend_Controller_Action
     public function editDescriptifPersonnaliseAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
