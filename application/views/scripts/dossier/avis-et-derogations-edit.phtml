@@ -27,8 +27,8 @@
     <div class="row">
         <p class="span2">Avis</p>
         <select name="AVIS" class="span4" required="required">       
-            <option value="1" <?php echo $this->avisDerogations['AVIS'] === 1 ? 'selected':''  ?>  >Favorable</option>
-            <option  value="0" <?php echo  $this->avisDerogations['AVIS'] === 0 ? 'selected':'' ?> >Défavorable</option>
+            <option value="1" <?= $this->avisDerogations['AVIS'] === 1 ? 'selected':''  ?>  >Favorable</option>
+            <option  value="0" <?=  $this->avisDerogations['AVIS'] === 0 ? 'selected':'' ?> >Défavorable</option>
         </select>
     </div>
     <div class="row">
@@ -45,7 +45,7 @@
                 id="DISPLAY_HISTORIQUE" 
                 name="DISPLAY_HISTORIQUE"
                 value='1'
-                <?php echo ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?> 
+                <?= ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?> 
         >
         <label for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     </div>
