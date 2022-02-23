@@ -30,19 +30,15 @@
                                         // Texte
                                         case 1:
                                         // Nombre
-                                        case 5: ?>
+                                        case 4: ?>
                                             <div class='text-control'><?= $champ['VALEUR'] ?></div>
                                             <?php break;
                                         // Texte long
                                         case 2: ?>
                                             <textarea readonly><?= $champ['VALEUR'] ?></textarea>
                                             <?php break;
-                                        // WYSIWYG
-                                        case 3: ?>
-                                            <div class='tinyarea text-control' readonly><?= $champ['VALEUR'] ?></div>
-                                        <?php break;
                                         // Liste
-                                        case 4: ?>
+                                        case 3: ?>
                                             <select disabled>
                                                 <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
                                                     <option
@@ -55,7 +51,7 @@
                                             </select>
                                         <?php break;
                                         // Case à cocher
-                                        case 6: ?>
+                                        case 5: ?>
                                             <input type='checkbox' disabled <?= $champ['VALEUR'] ? 'checked' : '' ?>>
                                         <?php break;
                                         default:

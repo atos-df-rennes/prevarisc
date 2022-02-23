@@ -9,10 +9,9 @@ CREATE TABLE `listetypechamprubrique` (
 INSERT INTO `listetypechamprubrique` VALUES
 (1, 'Champ texte'),
 (2, 'Champ texte long'),
-(3, 'Champ avec mise en page'),
-(4, 'Liste'),
-(5, 'Numérique'),
-(6, 'Case à cocher');
+(3, 'Liste'),
+(4, 'Numérique'),
+(5, 'Case à cocher');
 
 CREATE TABLE `champ` (
     `ID_CHAMP` bigint(20) NOT NULL AUTO_INCREMENT,

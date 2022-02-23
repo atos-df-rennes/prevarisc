@@ -57,14 +57,6 @@ class Service_EtablissementDescriptif
         $this->saveValeur($idChamp, $idEtablissement, $value);
     }
 
-    public function saveValeurWYSIWYG(string $lastKey, int $idEtablissement, $value): void
-    {
-        $explodedChamp = explode('-', $lastKey);
-        $idChamp = intval(end($explodedChamp)) + 1;
-
-        $this->saveValeur($idChamp, $idEtablissement, $value);
-    }
-
     private function saveValeur(int $idChamp, int $idEtablissement, $value): void
     {
         $modelValeur = new Model_DbTable_Valeur();

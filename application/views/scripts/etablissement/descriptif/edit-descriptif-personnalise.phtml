@@ -51,12 +51,8 @@
                                 case 2: ?>
                                     <textarea name='champ-<?= $champ["ID_CHAMP"] ?>'><?= $champ["VALEUR"] ?></textarea>
                                 <?php break;
-                                // WYSIWYG
-                                case 3: ?>
-                                    <div class='tinyarea' name='champ-<?= $champ["ID_CHAMP"] ?>'><?= $champ["VALEUR"] ?></div>
-                                <?php break;
                                 // Liste
-                                case 4: ?>
+                                case 3: ?>
                                     <select name='champ-<?= $champ["ID_CHAMP"] ?>'>
                                         <option selected value>Sélectionnez un élément</option>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
@@ -70,11 +66,11 @@
                                     </select>
                                 <?php break;
                                 // Nombre
-                                case 5: ?>
+                                case 4: ?>
                                     <input type='number' name='champ-<?= $champ["ID_CHAMP"] ?>' min='0' value='<?= $champ["VALEUR"] ?>'>
                                 <?php break;
                                 // Case à cocher
-                                case 6: ?>
+                                case 5: ?>
                                     <input
                                         type="hidden"
                                         name='champ-<?= $champ["ID_CHAMP"] ?>'

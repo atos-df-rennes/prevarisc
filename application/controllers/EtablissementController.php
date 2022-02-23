@@ -267,11 +267,6 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, $value);
                     }
 
-                    // Permet de récupérer l'id du champ WYSIWYG (non passé en paramètre)
-                    if (0 === strpos($key, 'mce_')) {
-                        $serviceEtablissementDescriptif->saveValeurWYSIWYG($lastKey, $idEtablissement, $value);
-                    }
-
                     $lastKey = $key;
                 }
 
