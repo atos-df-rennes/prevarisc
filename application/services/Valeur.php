@@ -52,23 +52,22 @@ class Service_Valeur
 
         switch ($champ['ID_TYPECHAMP']) {
             case 1:
-            case 4:
+            case 3:
                 $typeValeur = 'VALEUR_STR';
 
                 break;
 
             case 2:
-            case 3:
                 $typeValeur = 'VALEUR_LONG_STR';
 
                 break;
 
-            case 5:
+            case 4:
                 $typeValeur = 'VALEUR_INT';
 
                 break;
 
-            case 6:
+            case 5:
                 $typeValeur = 'VALEUR_CHECKBOX';
 
                 break;
