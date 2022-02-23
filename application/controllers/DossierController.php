@@ -3050,10 +3050,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($idDossier);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
 
-        $request = $this->getRequest();
-        // FIXME A déplacer dans une action spéciale suppression
-        
-
+        $request = $this->getRequest();    
         //Ajout d un avis/derogation dans la db
         if ($request->isPost()) {
             $data = $request->getPost();
@@ -3078,36 +3075,31 @@ class DossierController extends Zend_Controller_Action
      * retourne vers la page d edition de ces avis + derogations
      */
     public function avisEtDerogationsEditAction(){
+        
+        $this->_helper->layout->setLayout('dossier');
+        $this->view->headScript()->appendFile('/js/tinymce.min.js');
+
+        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($this->getParam("avis-derogation"));
+        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
+
         //Instanciation model db
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
-        $dbDossier = new Model_DbTable_Dossier();
+        $dbDossier = new Model_DbTable_Dossier(); 
+        $request = $this->_request;
+        $idDossier = $request->getParam('id');
+        $idAvisDerogation = $request->getParam('avis-derogation');
 
         // TODO Faire le même principe que la fonction au-dessus pour tout ce bloc
         if ($this->_request->isPost()) {
             //Recuperation de l entite via son ID_AVIS_DEROGATIONS
-            $updateEntity = $dbAvisDerogations->find($this->_getParam('avis-derogation'))->current();
+            $data = $this->_request->getPost();
+            //Recuperation de l entite a mettre a jour
+            $where = $dbAvisDerogations->getAdapter()->quoteInto('ID_AVIS_DEROGATION = ?', $idAvisDerogation);
+    
+            $dbAvisDerogations->update($data,$where);
 
-            //UPDATE DES ATTRIBUTS
-            $updateEntity->TYPE_AVIS_DEROGATIONS = $this->_request->getParam("TYPE_AVIS_DEROGATIONS");
-            $updateEntity->TITRE = $this->_request->getParam("TITRE");
-            $updateEntity->INFORMATIONS = $this->_request->getParam("INFORMATIONS");
-            $updateEntity->AVIS = $this->_request->getParam("AVIS");
-            $updateEntity->DISPLAY_HISTORIQUE = $this->_request->getParam("DISPLAY_HISTORIQUE");
-            $updateEntity->ID_DOSSIER_LIE = $this->_request->getParam("ID_DOSSIER_LIE");
-
-            //Sauvegarde des changements
-            $updateEntity->save();
-          
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }
-
-            $this->_helper->layout->setLayout('dossier');
-            $this->view->headScript()->appendFile('/js/tinymce.min.js');
-            
-            $dbAvisDerogation = new Model_DbTable_AvisDerogations();
-
-            $this->view->avisDerogations = $dbAvisDerogation->getByIdAvisDerogation($this->getParam("avis-derogation"));
-            $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
     }
 
 
