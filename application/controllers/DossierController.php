@@ -3053,17 +3053,10 @@ class DossierController extends Zend_Controller_Action
         $request = $this->getRequest();    
         //Ajout d un avis/derogation dans la db
         if ($request->isPost()) {
+            //Recuperation nouvelle donnee
             $data = $request->getPost();
-
-            $dbAvisDerogation->insert([
-                'TYPE_AVIS_DEROGATIONS' => $data['TYPE_AVIS_DEROGATIONS'],
-                'TITRE' => $data['TITRE'],
-                'INFORMATIONS' => $data['INFORMATIONS'],
-                'AVIS' => $data['AVIS'],
-                'ID_DOSSIER' => $idDossier,
-                'DISPLAY_HISTORIQUE' => $data['DISPLAY_HISTORIQUE'],
-                'ID_DOSSIER_LIE' => $data['ID_DOSSIER_LIE']
-            ]);
+            //insertion nouvelle donnee
+            $dbAvisDerogation->insert($data);
 
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
         }
@@ -3079,9 +3072,6 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dossier');
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
 
-        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($this->getParam("avis-derogation"));
-        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
-
         //Instanciation model db
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier(); 
@@ -3089,7 +3079,9 @@ class DossierController extends Zend_Controller_Action
         $idDossier = $request->getParam('id');
         $idAvisDerogation = $request->getParam('avis-derogation');
 
-        // TODO Faire le même principe que la fonction au-dessus pour tout ce bloc
+        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($this->getParam("avis-derogation"));
+        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
+
         if ($this->_request->isPost()) {
             //Recuperation de l entite via son ID_AVIS_DEROGATIONS
             $data = $this->_request->getPost();
@@ -3101,7 +3093,6 @@ class DossierController extends Zend_Controller_Action
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }
     }
-
 
     public function avisEtDerogationsDeleteAction(){
         //Instanciation model db
