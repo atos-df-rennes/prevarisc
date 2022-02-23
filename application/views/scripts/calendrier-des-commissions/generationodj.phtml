@@ -223,6 +223,16 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
     addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste)); 
 
+    /*TODO:TEST avec un template la nouvelle generation avec avis derogations */
+
+	$segmentAvisDerogations = $segment->avisDerogations;
+
+	if(isset($dossierInfos["AVIS_DEROGATIONS"])){
+		foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
+			addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
+			$segmentAvisDerogations->merge();
+		}	
+	}
 }
 
 function savePj($dateCommId,$libelleMembre){

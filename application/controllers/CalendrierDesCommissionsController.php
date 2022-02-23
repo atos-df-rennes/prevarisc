@@ -1052,6 +1052,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $tabCommune[] = array();
         $numCommune = 0;
         foreach ($listeDossiers as $val => $ue) {
+            
             if ($numCommune == 0) {
                 if (isset($ue['infosEtab']['adresses'][0])) {
                     $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
@@ -1094,11 +1095,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $this->view->informationsMembre = $listeMembres;
         $this->view->listeCommunes = $tabCommune;
+        
+        $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
         $this->view->dossierComm = $listeDossiers;
+        
         $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
         $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
 
-        //$listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
     }
 
     public function generationpvAction()
