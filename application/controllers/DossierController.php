@@ -3112,9 +3112,11 @@ class DossierController extends Zend_Controller_Action
 
 
     public function avisEtDerogationsDeleteAction(){
+        //Instanciation model db
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         //Suppression de la ligne
         if($this->getRequest()->isDelete()){
-            $dbAvisDerogation->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
+            $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
         }
     }
 

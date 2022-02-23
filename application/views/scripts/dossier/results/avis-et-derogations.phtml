@@ -36,10 +36,10 @@
 <script>
         $(".close").click(function (event) { 
             event.preventDefault()
-            console.log("/dossier/avis-et-derogations/id/"+$(this).attr('data-id'))
+            console.log("/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'))
            $.ajax({
                type: "delete",
-               url: "/dossier/avis-et-derogations/id/"+$(this).attr('data-id'),
+               url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'),
                success: function (response) {
                    
                }
