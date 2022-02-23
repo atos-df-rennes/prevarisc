@@ -1097,6 +1097,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->dossierComm = $listeDossiers;
         $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
         $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
+
+        //$listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
     }
 
     public function generationpvAction()
@@ -1143,7 +1145,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+            
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
         }
+            
         $this->view->dossierComm = $listeDossiers;
     }
 
@@ -1188,6 +1193,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
         }
         $this->view->dossierComm = $listeDossiers;
+        
     }
 
     public function alertsuppressionAction()

@@ -238,9 +238,22 @@ foreach($this->membresFiles as $val => $membre){
 						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos);
 						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos);
 
+						//Generation du segment avis derogations
+						$segmentAvisDerogations = $dossInfos->avisDerogations;
+
+						if(isset($dossierInfos["AVIS_DEROGATIONS"])){
+							foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
+								addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
+								$segmentAvisDerogations->merge();
+							}	
+						}
+
 						$dossInfos->merge();
 					}
 				}
+
+
+
 			}
 			$odf->mergeSegment($dossInfos);
 			$nouvellePJ = savePj($this->idComm,"Le pv a bien été généré");
