@@ -1192,8 +1192,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
         }
+        $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
         $this->view->dossierComm = $listeDossiers;
-        
     }
 
     public function alertsuppressionAction()

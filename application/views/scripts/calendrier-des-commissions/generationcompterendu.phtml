@@ -155,9 +155,20 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				addChamp($dossInfos,'numDocUrba', $listeDocUrba);
 
+				//Generation du segment avis derogations
+				$segmentAvisDerogations = $dossInfos->avisDerogations;
+
+				if(isset($dossierInfos["AVIS_DEROGATIONS"])){
+					foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
+						addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
+						$segmentAvisDerogations->merge();
+					}	
+				}
 
 				$dossInfos->merge();
 			}
+
+
 		}
 	}
 	$odf->mergeSegment($dossInfos);
