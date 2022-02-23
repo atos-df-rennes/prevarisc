@@ -1,4 +1,4 @@
-<a href="/formulaire">
+<a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>">
     <i class="icon-arrow-left"></i>
     Retourner sur la liste des formulaires
 </a>
@@ -24,7 +24,7 @@
             >
 
             <div class="pull-right">
-                <a href='/formulaire' type="button" class="btn">Annuler</a>
+                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder la rubrique</button>
             </div>
         </form>
@@ -97,7 +97,7 @@
                             </td>
                             <td id='actions'>
                                 <div class='text-center'>
-                                    <a href="/formulaire/edit-champ/rubrique/<?php echo $this->rubrique['ID_RUBRIQUE'] ?>/champ/<?php echo $champ['ID_CHAMP'] ?>">
+                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
                                         <i title='Modifier' class='icon-pencil'></i>
                                     </a>
                                     <a href="" data-id="<?php echo $champ['ID_CHAMP'] ?>" data-rubrique-id="<?php echo $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">
