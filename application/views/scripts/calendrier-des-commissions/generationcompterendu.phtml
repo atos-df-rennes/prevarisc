@@ -30,7 +30,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 
 		if($nbAdresse != 0){
 			foreach($dossierInfos['infosEtab']['adresses'] as $commune){
-
 				addChamp($dossInfos,'commissionNom', $this->commissionInfos[0]['LIBELLE_COMMISSION']);
 
 				if(isset($commune["LIBELLE_COMMUNE"])){

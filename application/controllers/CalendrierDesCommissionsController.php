@@ -1193,6 +1193,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
+            // FIXME Remplacer les $listeDossiers[$val] par $ue
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
