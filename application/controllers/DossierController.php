@@ -3068,11 +3068,11 @@ class DossierController extends Zend_Controller_Action
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
-        $idDossier = $request->getParam('id');
-        $idAvisDerogation = $request->getParam('avis-derogation');
+        $idDossier = $this->getParam('id');
+        $idAvisDerogation = $this->getParam('avis-derogation');
 
-        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($this->getParam("avis-derogation"));
-        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
+        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
+        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($idDossier));
 
         $request = $this->getRequest();
         if ($request->isPost()) {

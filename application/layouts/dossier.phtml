@@ -31,21 +31,18 @@
         }
     ?>
 
-    <!-- TODO Mettre l'onglet en surbrillance -->
-    <?php if($this->idTypeDossier === 1 ) :?>
-        <li class="avisEtDerogation" style="position:relative">
-            <a href=<?= "/dossier/avis-et-derogations/id/".$this->idDossier?>>
-                <i class="icon-file icon-black">
-                </i>
-                    Avis et dérogation
-            </a>
+    <?php if ($this->idTypeDossier === 1) :?>
+        <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
+            <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
+                <i class="icon-file icon-black"></i>
+                Avis et dérogation
 
-            <?php if($this->hasAvisDerogation): ?>
-                <div class="greenCircle"></div>
-            <?php endif ?>
+                <?php if($this->hasAvisDerogation): ?>
+                    <div class="greenCircle pull-right"></div>
+                <?php endif ?>
+            </a>
         </li>
     <?php endif ?>
-
 
     <?php
         if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {

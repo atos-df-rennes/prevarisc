@@ -1,14 +1,12 @@
-:root{
+:root {
     --circleSize : 15px;
     --colorCircle : #5cd15c;
 }
 
-.greenCircle{
+.greenCircle {
     height:var(--circleSize);
     width: var(--circleSize);
     background:var(--colorCircle);
     border-radius:var(--circleSize);
-    position:absolute;
-    right:calc(0.5 * var(--circleSize));
-    top:calc(50% - calc(0.5 * var(--circleSize)))
+    margin-right: 5px;
 }
