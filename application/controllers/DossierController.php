@@ -3088,6 +3088,13 @@ class DossierController extends Zend_Controller_Action
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
+
         $idDossier = $this->getParam('id');
 
         $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($idDossier);
@@ -3112,6 +3119,13 @@ class DossierController extends Zend_Controller_Action
     public function avisEtDerogationsEditAction(){
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
+
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
 
         $idDossier = $this->getParam('id');
         $idAvisDerogation = $this->getParam('avis-derogation');
