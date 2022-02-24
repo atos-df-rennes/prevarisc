@@ -1,4 +1,5 @@
-<h4 class="h4_subtitle">Avis / Dérogation <strong> ID BLOCK : <?= $this->avisDerogations['ID_AVIS_DEROGATION']?></strong></h4>
+<!-- TODO Revoir le visuel -->
+<h4 class="h4_subtitle">Avis / Dérogation</h4>
 <form  class="container-fluid" method="post">
     <div class="btn-group pull-right">
         <a class="btn" href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->avisDerogations['ID_DOSSIER']], false, true) ?>">Annuler modification</a>
@@ -8,10 +9,10 @@
         <p class="span2">Type</p>
         <!--Generation liste des avis-->
         <select name="TYPE_AVIS_DEROGATIONS" required="required">
-            <option value="1" <?= 1 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?> >
+            <option value="1" <?= 1 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?>>
                 Avis
             </option>
-            <option value="2" <?= 2 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?> >
+            <option value="2" <?= 2 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?>>
                 Dérogations
             </option>
         </select>
@@ -27,8 +28,8 @@
     <div class="row">
         <p class="span2">Avis</p>
         <select name="AVIS" class="span4" required="required">
-            <option value="1" <?= $this->avisDerogations['AVIS'] === 1 ? 'selected':''  ?>  >Favorable</option>
-            <option  value="0" <?=  $this->avisDerogations['AVIS'] === 0 ? 'selected':'' ?> >Défavorable</option>
+            <option value="1" <?= $this->avisDerogations['AVIS'] === 1 ? 'selected' : '' ?>>Favorable</option>
+            <option value="2" <?= $this->avisDerogations['AVIS'] === 2 ? 'selected' : '' ?>>Défavorable</option>
         </select>
     </div>
     <div class="row">

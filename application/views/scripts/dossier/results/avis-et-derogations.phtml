@@ -7,15 +7,14 @@
     <div class="row-fluid">
         <div class="span6">
             <!-- TODO Faire une table typeavisderogation ? -->
-            <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis":"Dérogation" ?></p>
+            <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis" : "Dérogation" ?></p>
             <p>Informations : <?= $this->INFORMATIONS ?>
-            <p>Avis : <?= $this->AVIS === 1 ? 'Favorable':'Défavorable' ?></p>
+            <p>Avis : <?= $this->AVIS === 1 ? 'Favorable' : 'Défavorable' ?></p>
         </div>
         <div class="span6">
             <p>Avis/Dérogation levé(e):
-                <!-- FIXME Y'a un pb sur l'objet -->
                 <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
-                     <?= $this->ID_DOSSIER_LIE ? $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER : '' ?>
+                    <?= $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER ?>
                 </a>
             </p>
             <div class="flex">
