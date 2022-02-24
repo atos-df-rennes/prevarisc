@@ -143,6 +143,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
