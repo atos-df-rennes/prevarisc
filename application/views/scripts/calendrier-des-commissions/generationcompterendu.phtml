@@ -51,7 +51,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 					addChamp($dossInfos, $nomChamp, $valeurChamp);
 				}
-			
+
 				$dateComm = new Zend_Date($this->dateComm);
 				addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
 
@@ -147,7 +147,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 					break;
 				}
 				addChamp($dossInfos,'avisDossier', $avis);
-				
+
 				switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
 					case 1:
 						$avis_commission = "Favorable";
@@ -170,26 +170,36 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				//Generation du segment avis derogations
 				$segmentAvisDerogations = $dossInfos->avisDerogations;
 
-				if(isset($dossierInfos["AVIS_DEROGATIONS"])){
-					foreach($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation){
-						addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
-						$segmentAvisDerogations->merge();
-					}	
-				}
+                foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation){
+                    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE_AVIS_DEROGATIONS']);
+                    addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+                    addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+                    addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                    addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+                    if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+                        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                    } else {
+                        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                    }
+
+                    addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+                    $segmentAvisDerogations->merge();
+                }
 
 				$dossInfos->merge();
 			}
-
-
 		}
 	}
+
 	$odf->mergeSegment($dossInfos);
 	$nouvellePJ = savePj($this->idComm,"Compte rendu du ");
 
 	$store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
 	$path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 	$odf->saveToDisk($path);
-	
+
 	echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le compte rendu a été généré avec succes</span><br/><br/><br/>";
 }else{
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier de compte rendu pour la commission n'existe pas</span><br/><br/><br/>";
