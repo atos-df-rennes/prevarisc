@@ -1,13 +1,15 @@
 <div class="span5 cardAvisDerogations">
     <!-- TODO Voir à quoi sert le data-id -->
-    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?php echo($this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION) ?>'>&times;</a>
-    <h1 style="text-align:center"><?=$this->TITRE?></h1>
+    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?= $this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>'>&times;</a>
+
+    <h1 class='text-center'><?= $this->TITRE ?></h1>
+
     <div class="row-fluid">
         <div class="span6">
             <!-- TODO Faire une table typeavisderogation ? -->
             <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis":"Dérogation" ?></p>
-            <p>Informations : <?= $this->INFORMATIONS?>
-            <p>Avis : <?= $this->AVIS === 1 ? 'Favorable':'Défavorable'?></p>
+            <p>Informations : <?= $this->INFORMATIONS ?>
+            <p>Avis : <?= $this->AVIS === 1 ? 'Favorable':'Défavorable' ?></p>
         </div>
         <div class="span6">
             <p>Avis/Dérogation levé(e):
@@ -27,6 +29,7 @@
             </div>
         </div>
     </div>
+
     <div class="pull-right">
         <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations-edit', 'id' => $this->ID_DOSSIER, 'avis-derogation' => $this->ID_AVIS_DEROGATION], false, true) ?>">
             <i class="icon-pencil icon-black"></i>
