@@ -242,6 +242,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
 
 	if (isset($dossierInfos["AVIS_DEROGATIONS"])) {
 		foreach ($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation) {
+            // TODO Ajouter les autres informations => A faire dans tous les documents
 			addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
 			$segmentAvisDerogations->merge();
 		}

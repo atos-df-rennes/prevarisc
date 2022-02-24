@@ -609,8 +609,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListAvisDerogationsFromDossier($idDossier){
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from("avisderogations")
-            ->where("avisderogations.ID_DOSSIER = $idDossier");
+            ->from(['ad' => 'avisderogations'])
+            ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
+            ->where('ad.ID_DOSSIER = ?', $idDossier);
 
         return $this->getAdapter()->fetchAll($select);
     }

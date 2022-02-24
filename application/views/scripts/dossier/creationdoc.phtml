@@ -90,7 +90,7 @@ try{
     $nbPrev = count($this->preventionnistes);
     foreach($this->preventionnistes as $prev) {
         if (array_key_exists("GRADE_UTILISATEURINFORMATIONS", $prev)) {
-            addChamp($preventionniste, 'grade', $prev['GRADE_UTILISATEURINFORMATIONS']);    
+            addChamp($preventionniste, 'grade', $prev['GRADE_UTILISATEURINFORMATIONS']);
         }
         addChamp($preventionniste, 'nom', $prev['NOM_UTILISATEURINFORMATIONS']);
         if ($nbPrev > 1) {
@@ -168,7 +168,7 @@ try{
     foreach($this->listeDocsAjout as $documentAjout) {
         addChamp($docAjout, 'exist', "X");
         addChamp($docAjout, 'libelledoc', $documentAjout['LIBELLE_DOCAJOUT']);
-        addChamp($docAjout, 'refdoc', $documentAjout['REF_DOCAJOUT']); 
+        addChamp($docAjout, 'refdoc', $documentAjout['REF_DOCAJOUT']);
         if ($documentAjout['DATE_DOCAJOUT']) {
             if ($documentAjout['DATE_DOCAJOUT'] != "0000-00-00") {
                 $date = new Zend_Date($documentAjout['DATE_DOCAJOUT'], Zend_Date::DATES);
@@ -176,7 +176,7 @@ try{
             } else {
                 $date = "";
             }
-        } 
+        }
         if (isset($date) && $date != '') {
             addChamp($docAjout, 'datedoc', $date);
         } else {
@@ -238,7 +238,7 @@ if (!function_exists('addPrescription')) {
                         if ($cpt)
                         {
                             addChamp($prescription, 'num', $listePrescription[$i][0]['NUM_PRESCRIPTION_DOSSIER']);
-                            
+
                             if ( $listePrescription[$i][0]['LIBELLE_PRESCRIPTION_DOSSIER'] == '')
                             {
                                 addChamp($prescription, 'libelle', $listePrescription[$i][0]['PRESCRIPTIONTYPE_LIBELLE']);
@@ -353,12 +353,12 @@ if ($this->id_typeactivite == 29) {
             foreach($this->celluleDossier as $cellulesInfos => $cellule) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
                 if ($this->idDossier == $cellule['ID_DOSSIER']) {
-                    addPrescriptionCC($cellule['regl'],0,$cellulesPresc);    
+                    addPrescriptionCC($cellule['regl'],0,$cellulesPresc);
                 } else {
                     $val = array();
-                    addPrescriptionCC($val,0,$cellulesPresc);    
+                    addPrescriptionCC($val,0,$cellulesPresc);
                 }
-                
+
                 addPrescriptionCC($cellule['exploit'],1,$cellulesPresc);
                 addPrescriptionCC($cellule['amelio'],2,$cellulesPresc);
                 $cellulesPresc->merge();
@@ -387,7 +387,7 @@ if ($this->id_typeactivite == 29) {
 } else {
     addPrescription($this->prescriptionReglDossier,0,$odf);
     addPrescription($this->prescriptionExploitation,1,$odf);
-    addPrescription($this->prescriptionAmelioration,2,$odf);    
+    addPrescription($this->prescriptionAmelioration,2,$odf);
 }
 
 //PARTIE TEXTE APPLICABLE
@@ -717,6 +717,29 @@ $tabEffDegKV = array(
 foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
     addChamp($odf, $nomChamp, $valeurChamp);
 }
+
+// Gestion des avis et dérogations
+$segmentAvisDerogations = $odf->setSegment('avisDerogations');
+
+foreach ($this->avisDerogations as $avisDerogation) {
+    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE_AVIS_DEROGATIONS']);
+    addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+    addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+    addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+    addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+    if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+    } else {
+        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+    }
+
+    addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+    $segmentAvisDerogations->merge();
+}
+
+$odf->mergeSegment($segmentAvisDerogations);
 
 try{
     $chemin = $this->store->getFilePath($this->nouvellePJ, 'dossier', $this->idDossier, true);

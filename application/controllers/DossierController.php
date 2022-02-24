@@ -186,7 +186,7 @@ class DossierController extends Zend_Controller_Action
             $this->view->verrou = $dossier->VERROU_DOSSIER;
 
             $serviceDossier = new Service_Dossier();
-            $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->_getParam('id'));
+            $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
             // TODO Ajouter les privilèges
 
             $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
@@ -1992,7 +1992,6 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    /*TODO: faire champ fusion generation rapport , pas trouve ailleurs....*/
     public function generationrapportAction()
     {
         $this->_helper->viewRenderer->setNoRender();
@@ -2159,6 +2158,9 @@ class DossierController extends Zend_Controller_Action
         $this->view->degagementDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_DEGAGEMENT'];
         $this->view->effectifEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
         $this->view->degagementEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
+
+        // Avis & Dérogations
+        $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
 
         //Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
