@@ -9,7 +9,7 @@ vendor
 *.mwb.*
 /nbproject
 *.phar
-composer.lock
 /public/ign/*
 /public/data/uploads/commission
 HashedFileDataStore.php
+.php-cs-fixer.cache

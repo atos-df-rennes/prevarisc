@@ -12,6 +12,7 @@ class Api_Service_User
     public function get($id)
     {
         $service_user = new Service_User();
+
         return $service_user->find($id);
     }
 

@@ -1,0 +1,16 @@
+<form action="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier-edit', 'id' => $this->idDossier), false, true) ?>" method="post">
+    <div class='pull-right'>
+        <a href="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier', 'id' => $this->idDossier), false, true) ?>" class='btn'>Annuler la modification</a>
+        <input type='submit' class="btn btn-success" value="Sauvegarder">
+    </div>      
+
+    <h3>
+        Effectifs
+    </h3>
+    <textarea name='DESCRIPTION_EFFECTIF'><?php if (isset($this->EffectifDegagement["DESCRIPTION_EFFECTIF"])) { echo $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]; } ?></textarea>
+    
+    <h3>
+        Dégagements
+    </h3>
+    <textarea name='DESCRIPTION_DEGAGEMENT'><?php if (isset($this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"])) { echo $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]; } ?></textarea>
+</form>

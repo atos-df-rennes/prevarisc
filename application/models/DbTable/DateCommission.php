@@ -35,9 +35,9 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idCommission
-     * @param string|int $debut
-     * @param string|int $fin
+     * @param int|string $idCommission
+     * @param int|string $debut
+     * @param int|string $fin
      *
      * @return array
      */
@@ -51,9 +51,11 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchAll($select);
     }
+
     /**
-     * @param int $date
-     * @param int $next_date
+     * @param int   $date
+     * @param int   $next_date
+     * @param mixed $idsCommission
      *
      * @return array
      */
@@ -71,9 +73,9 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $mois
-     * @param string|int $annee
-     * @param string|int $idcom
+     * @param int|string $mois
+     * @param int|string $annee
+     * @param int|string $idcom
      *
      * @return array
      */
@@ -88,9 +90,9 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idCommissionOrigine
-     * @param string|int $debut
-     * @param string|int $fin
+     * @param int|string $idCommissionOrigine
+     * @param int|string $debut
+     * @param int|string $fin
      *
      * @return array
      */
@@ -106,7 +108,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idComm
+     * @param int|string $idComm
      *
      * @return array
      */
@@ -123,8 +125,8 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idComm
-     * @param string|int $libelle
+     * @param int|string $idComm
+     * @param int|string $libelle
      *
      * @return Zend_Db_Statement_Interface
      */
@@ -139,8 +141,8 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idComm
-     * @param string|int $idNewType
+     * @param int|string $idComm
+     * @param int|string $idNewType
      *
      * @return Zend_Db_Statement_Interface
      */
@@ -155,8 +157,8 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $oldComm
-     * @param string|int $newComm
+     * @param int|string $oldComm
+     * @param int|string $newComm
      *
      * @return Zend_Db_Statement_Interface
      */
@@ -172,7 +174,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 
     //pour la gestion des ordres du jour récup des date liées
     /**
-     * @param string|int $idComm
+     * @param int|string $idComm
      *
      * @return array
      */
@@ -184,7 +186,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
             OR DATECOMMISSION_LIEES = '".$idComm."' )
             ORDER BY DATE_COMMISSION
         ";
-        
+
         return $this->getAdapter()->fetchAll($select);
     }
 
@@ -192,27 +194,31 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from(array('da' => 'dossieraffectation'))
-                ->join(array('dc' => 'datecommission'), 'da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION')
-                ->where('da.ID_DOSSIER_AFFECT = ?', $idDossier)
-                ->where('dc.ID_COMMISSIONTYPEEVENEMENT = 2 OR dc.ID_COMMISSIONTYPEEVENEMENT = 3');
+            ->setIntegrityCheck(false)
+            ->from(['da' => 'dossieraffectation'])
+            ->join(['dc' => 'datecommission'], 'da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION')
+            ->where('da.ID_DOSSIER_AFFECT = ?', $idDossier)
+            ->where('dc.ID_COMMISSIONTYPEEVENEMENT = 2 OR dc.ID_COMMISSIONTYPEEVENEMENT = 3')
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
+     * @param mixed $idDateComm
+     *
      * @return array
      */
     public function getDateLieesv2($idDateComm)
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from(array('dc' => 'datecommission'))
-                ->where('dc.ID_DATECOMMISSION = ?', $idDateComm)
-                ->orWhere('dc.DATECOMMISSION_LIEES = ?', $idDateComm)
-                ->order('DATE_COMMISSION');
+            ->setIntegrityCheck(false)
+            ->from(['dc' => 'datecommission'])
+            ->where('dc.ID_DATECOMMISSION = ?', $idDateComm)
+            ->orWhere('dc.DATECOMMISSION_LIEES = ?', $idDateComm)
+            ->order('DATE_COMMISSION')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -224,7 +230,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 
         // on récupère les dossiers liés à la commission
         $dossiersAffecte = $dbAffectDossier->fetchAll('ID_DATECOMMISSION_AFFECT = '.$datecommission->ID_DATECOMMISSION);
-        $dossiersAffecteIds = array();
+        $dossiersAffecteIds = [];
         foreach ($dossiersAffecte as $dossierAffecte) {
             $dossiersAffecteIds[] = $dossierAffecte['ID_DOSSIER_AFFECT'];
         }
@@ -233,17 +239,23 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         // on update les dates en text dans les différents fields du dossiers pour
         // des cohérences de données
         if ($dossiersAffecteIds) {
-            if (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, array(1))) {
+            if (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [1])) {
                 //COMMISSION EN SALLE
-                $dbDossier->update(array('DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION), 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
-            } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, array(2, 3))) {
+                $dbDossier->update(['DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
+            } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [2, 3])) {
                 //VISITE OU GROUPE DE VISITE
-                $dbDossier->update(array('DATEVISITE_DOSSIER' => $datecommission->DATE_COMMISSION), 'ID_DOSSIER IN ('.implode(',', $dossiersAffecteIds).')');
+                $dbDossier->update(['DATEVISITE_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN ('.implode(',', $dossiersAffecteIds).')');
             }
         }
     }
 
     /**
+     * @param null|mixed $idUtilisateur
+     * @param null|mixed $idCommission
+     * @param null|mixed $start
+     * @param null|mixed $end
+     * @param mixed      $ignoreEts
+     *
      * @return array
      */
     public function getEventInCommission(
@@ -254,31 +266,33 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         $ignoreEts = false
     ) {
         $select = $this->select()
-                        ->setIntegrityCheck(false)
-                        ->from(array('d' => 'dossier'))
-                        ->join(array('da' => 'dossieraffectation'), 'd.ID_DOSSIER = da.ID_DOSSIER_AFFECT')
-                        ->join(array('dc' => 'datecommission'), 'da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION')
-                        ->join(array('c' => 'commission'), 'dc.COMMISSION_CONCERNE = c.ID_COMMISSION');
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['da' => 'dossieraffectation'], 'd.ID_DOSSIER = da.ID_DOSSIER_AFFECT')
+            ->join(['dc' => 'datecommission'], 'da.ID_DATECOMMISSION_AFFECT = dc.ID_DATECOMMISSION')
+            ->join(['c' => 'commission'], 'dc.COMMISSION_CONCERNE = c.ID_COMMISSION')
+        ;
         if ($ignoreEts) {
-            $select->joinLeft(array('ed' => 'etablissementdossier'), 'd.ID_DOSSIER = ed.ID_DOSSIER');
+            $select->joinLeft(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER');
         } else {
-            $select->join(array('ed' => 'etablissementdossier'), 'd.ID_DOSSIER = ed.ID_DOSSIER');
+            $select->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER');
         }
-        $select->join(array('dn' => 'dossiernature'), 'd.ID_DOSSIER = dn.ID_DOSSIER')
-                ->join(array('dnl' => 'dossiernatureliste'), 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE')
-                ->join(array('dt' => 'dossiertype'), 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
-                ->join(array('dp' => 'dossierpreventionniste'), 'd.ID_DOSSIER = dp.ID_DOSSIER')
-                ->join(array('u' => 'utilisateur'), 'dp.ID_PREVENTIONNISTE = u.ID_UTILISATEUR');
-        if ($idUtilisateur !== null) {
+        $select->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
+            ->join(['dnl' => 'dossiernatureliste'], 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->join(['dp' => 'dossierpreventionniste'], 'd.ID_DOSSIER = dp.ID_DOSSIER')
+            ->join(['u' => 'utilisateur'], 'dp.ID_PREVENTIONNISTE = u.ID_UTILISATEUR')
+        ;
+        if (null !== $idUtilisateur) {
             $select->where('u.ID_UTILISATEUR =  ?', $idUtilisateur);
         }
-        if ($idCommission !== null) {
+        if (null !== $idCommission) {
             $select->where('dc.COMMISSION_CONCERNE =  ?', $idCommission);
         }
-        if ($start !== null) {
+        if (null !== $start) {
             $select->where('YEAR(dc.DATE_COMMISSION) >= ?', $start);
         }
-        if ($end !== null) {
+        if (null !== $end) {
             $select->where('YEAR(dc.DATE_COMMISSION) <= ?', $end);
         }
 

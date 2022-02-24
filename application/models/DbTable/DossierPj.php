@@ -3,11 +3,11 @@
 class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossierpj'; // Nom de la base
-    protected $_primary = array('ID_DOSSIER', 'ID_PIECEJOINTE'); // Clé primaire
+    protected $_primary = ['ID_DOSSIER', 'ID_PIECEJOINTE']; // Clé primaire
 
     /**
-     * @param string|int $idDossier
-     * @param string|int $idPj
+     * @param int|string $idDossier
+     * @param int|string $idPj
      */
     public function getdossierpj($idDossier, $idPj)
     {
@@ -16,12 +16,12 @@ class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 			WHERE ID_DOSSIER = '".$idDossier."'
 			AND ID_PIECEJOINTE = '".$idPj."'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $idDossier
+     * @param int|string $idDossier
      */
     public function countcommissionpj($idDossier)
     {
@@ -30,7 +30,7 @@ class Model_DbTable_DossierPj extends Zend_Db_Table_Abstract
 			WHERE ID_DOSSIER = '".$idDossier."'
 			AND PJ_COMMISSION = '1'
         ;";
-        
+
         return $this->getAdapter()->fetchRow($select);
     }
 }

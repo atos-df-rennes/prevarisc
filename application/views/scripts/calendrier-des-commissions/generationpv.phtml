@@ -121,9 +121,21 @@ foreach($this->membresFiles as $val => $membre){
 						if(isset($commune["LIBELLE_COMMUNE"])){
 							addChamp($dossInfos,'communeDossier', $commune["LIBELLE_COMMUNE"]);
 						}
-
+						
 						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
+
+						// Gestion des effectifs & dégagements
+						$tabEffDegKV = array(
+							'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+							'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+							'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+							'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+						);
+
+						foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+							addChamp($dossInfos, $nomChamp, $valeurChamp);
+						}
 
 						$dateComm = new Zend_Date($this->dateComm);
 						addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
@@ -233,7 +245,7 @@ foreach($this->membresFiles as $val => $membre){
 							$listeDocUrba .= $docurb['NUM_DOCURBA']."    ";
 						}
 						addChamp($dossInfos,'numDocUrba', $listeDocUrba);
-
+						
 						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos);
 						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos);
 						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos);

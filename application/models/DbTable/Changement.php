@@ -13,8 +13,9 @@ class Model_DbTable_Changement extends Zend_Db_Table_Abstract
     public function findAll()
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from('changement');
+            ->setIntegrityCheck(false)
+            ->from('changement')
+        ;
 
         return $this->fetchAll($select)->toArray();
     }

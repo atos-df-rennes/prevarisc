@@ -3,10 +3,10 @@
 class Model_DbTable_DossierPreventionniste extends Zend_Db_Table_Abstract
 {
     protected $_name = 'dossierpreventionniste'; // Nom de la base
-    protected $_primary = array('ID_DOSSIER', 'ID_PREVENTIONNISTE'); // Clé primaire
+    protected $_primary = ['ID_DOSSIER', 'ID_PREVENTIONNISTE']; // Clé primaire
 
     /**
-     * @param string|int $idDossier
+     * @param int|string $idDossier
      *
      * @return array
      */
@@ -23,12 +23,12 @@ class Model_DbTable_DossierPreventionniste extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $idDossier
+     * @param int|string $idDossier
      */
     public function delPrevsDossier($idDossier)
     {
         $select = "DELETE FROM dossierpreventionniste WHERE ID_DOSSIER = '".$idDossier."';";
-        
+
         return $this->getAdapter()->exec($select);
     }
 }

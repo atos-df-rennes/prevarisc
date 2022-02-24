@@ -54,12 +54,12 @@ class Service_Dossier
 
         $DBpieceJointe = new Model_DbTable_PieceJointe();
 
-        $piece_jointe = array(
+        $piece_jointe = [
             'EXTENSION_PIECEJOINTE' => $extension,
             'NOM_PIECEJOINTE' => '' == $name ? substr($file['name'], 0, -4) : $name,
             'DESCRIPTION_PIECEJOINTE' => $description,
             'DATE_PIECEJOINTE' => date('Y-m-d'),
-        );
+        ];
 
         $piece_jointe['ID_PIECEJOINTE'] = $DBpieceJointe->createRow($piece_jointe)->save();
 
@@ -84,10 +84,10 @@ class Service_Dossier
         } else {
             $DBsave = new Model_DbTable_DossierPj();
 
-            $DBsave->createRow(array(
+            $DBsave->createRow([
                 'ID_DOSSIER' => $id_dossier,
                 'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-            ))->save();
+            ])->save();
         }
     }
 
@@ -110,7 +110,7 @@ class Service_Dossier
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $file_path = $store->getFilePath($pj, 'dossier', $id_dossier);
 
-        if ($DBitem != null) {
+        if (null != $DBitem) {
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
@@ -146,7 +146,7 @@ class Service_Dossier
     {
         $dossierTextesAppl = new Model_DbTable_DossierTextesAppl();
 
-        $textes_applicables = array();
+        $textes_applicables = [];
         $textes_applicables_non_organises = $dossierTextesAppl->recupTextes($id_dossier);
 
         $old_titre = null;
@@ -155,13 +155,13 @@ class Service_Dossier
             $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
 
             if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
-                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = array();
+                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = [];
             }
 
-            $textes_applicables[ $texte_applicable['LIBELLE_TYPETEXTEAPPL' ]][$texte_applicable['ID_TEXTESAPPL']] = array(
+            $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']][$texte_applicable['ID_TEXTESAPPL']] = [
                 'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
                 'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
-            );
+            ];
 
             $old_titre = $new_titre;
         }
@@ -172,8 +172,7 @@ class Service_Dossier
     /**
      * Sauvegarde des textes applicables d'un dossier.
      *
-     * @param int   $id_dossier
-     * @param array $textes_applicables
+     * @param int $id_dossier
      */
     public function saveTextesApplicables($id_dossier, array $textes_applicables)
     {
@@ -186,7 +185,7 @@ class Service_Dossier
 
         //On récupère le premier établissements afin de mettre à jour ses textes applicables lorsque l'on est dans une visite
         $id_etablissement = null;
-        if (in_array($type, array(2, 3))) {
+        if (in_array($type, [2, 3])) {
             $tabEtablissement = $dbDossier->getEtablissementDossier($id_dossier);
             $id_etablissement = isset($tabEtablissement[0]) ? $tabEtablissement[0]['ID_ETABLISSEMENT'] : null;
         }
@@ -194,17 +193,17 @@ class Service_Dossier
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
                 $texte_applicable = $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current();
-                if ($texte_applicable !== null) {
+                if (null !== $texte_applicable) {
                     $texte_applicable->delete();
-                    if (in_array($type, array(2, 3)) && $id_etablissement) {
+                    if (in_array($type, [2, 3]) && $id_etablissement) {
                         $texte_applicable = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
-                        if ($texte_applicable !== null) {
+                        if (null !== $texte_applicable) {
                             $texte_applicable->delete();
                         }
                     }
                 }
             } else {
-                if ($dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current() === null) {
+                if (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
                     $row = $dossierTexteApplicable->createRow();
                     $row->ID_TEXTESAPPL = $id_texte_applicable;
                     $row->ID_DOSSIER = $id_dossier;
@@ -242,7 +241,7 @@ class Service_Dossier
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
-        $id_contact = $DB_informations->createRow(array(
+        $id_contact = $DB_informations->createRow([
             'NOM_UTILISATEURINFORMATIONS' => (string) $nom,
             'PRENOM_UTILISATEURINFORMATIONS' => (string) $prenom,
             'TELFIXE_UTILISATEURINFORMATIONS' => (string) $fixe,
@@ -253,7 +252,7 @@ class Service_Dossier
             'WEB_UTILISATEURINFORMATIONS' => (string) $web,
             'OBS_UTILISATEURINFORMATIONS' => (string) $adresse,
             'ID_FONCTION' => (string) $id_fonction,
-        ))->save();
+        ])->save();
 
         $this->addContactExistant($id_dossier, $id_contact);
     }
@@ -268,10 +267,10 @@ class Service_Dossier
     {
         $DB_contact = new Model_DbTable_DossierContact();
 
-        $DB_contact->createRow(array(
+        $DB_contact->createRow([
             'ID_DOSSIER' => $id_dossier,
             'ID_UTILISATEURINFORMATIONS' => $id_contact,
-        ))->save();
+        ])->save();
     }
 
     /**
@@ -284,12 +283,12 @@ class Service_Dossier
     {
         $DB_current = new Model_DbTable_EtablissementContact();
         $DB_informations = new Model_DbTable_UtilisateurInformations();
-        $DB_contact = array(
+        $DB_contact = [
             new Model_DbTable_EtablissementContact(),
             new Model_DbTable_DossierContact(),
             new Model_DbTable_GroupementContact(),
             new Model_DbTable_CommissionContact(),
-        );
+        ];
 
         // Appartient à d'autre dossier / ets ?
         $exist = false;
@@ -311,9 +310,8 @@ class Service_Dossier
     /**
      * Retourne les prescriptions d'un dossier.
      *
-     * @param int $id_dossier
-     *
-     * @return array
+     * @param int   $id_dossier
+     * @param mixed $type
      *
      * @psalm-return array<int, mixed>
      */
@@ -329,7 +327,7 @@ class Service_Dossier
         $listePrescDossier = $dbPrescDossier->recupPrescDossier($id_dossier, $type);
 
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
-        $prescriptionArray = array();
+        $prescriptionArray = [];
         foreach ($listePrescDossier as $val => $ue) {
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
@@ -444,12 +442,12 @@ class Service_Dossier
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $post['id_prescription'];
-                if ($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0) {
+                if (null != $post['texte'][$i] && '' != $post['texte'][$i] && 0 != $post['texte'][$i]) {
                     $newAssoc->ID_TEXTE = $post['texte'][$i];
                 } else {
                     $newAssoc->ID_TEXTE = 1;
                 }
-                if ($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0) {
+                if (null != $post['article'][$i] && '' != $post['article'][$i] && 0 != $post['article'][$i]) {
                     $newAssoc->ID_ARTICLE = $post['article'][$i];
                 } else {
                     $newAssoc->ID_ARTICLE = 1;
@@ -516,13 +514,13 @@ class Service_Dossier
                 $newAssoc = $dbPrescDossierAssoc->createRow();
                 $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $i + 1;
                 $newAssoc->ID_PRESCRIPTION_DOSSIER = $prescEdit->ID_PRESCRIPTION_DOSSIER;
-                if ($post['texte'][$i] != null && $post['texte'][$i] != '' && $post['texte'][$i] != 0) {
+                if (null != $post['texte'][$i] && '' != $post['texte'][$i] && 0 != $post['texte'][$i]) {
                     $newAssoc->ID_TEXTE = $post['texte'][$i];
                 } else {
                     $newAssoc->ID_TEXTE = 1;
                 }
 
-                if ($post['article'][$i] != null && $post['article'][$i] != '' && $post['article'][$i] != 0) {
+                if (null != $post['article'][$i] && '' != $post['article'][$i] && 0 != $post['article'][$i]) {
                     $newAssoc->ID_ARTICLE = $post['article'][$i];
                 } else {
                     $newAssoc->ID_ARTICLE = 1;
@@ -555,7 +553,7 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
-            if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && $ue[0]['ID_PRESCRIPTION_TYPE'] != null) {
+            if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
             } else {
@@ -572,7 +570,7 @@ class Service_Dossier
             $newPresc->save();
 
             foreach ($assoc as $val) {
-                if ($val['ID_PRESCRIPTION_TYPE'] == null) {
+                if (null == $val['ID_PRESCRIPTION_TYPE']) {
                     $newAssoc = $dbPrescDossierAssoc->createRow();
                     $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $val['NUM_PRESCRIPTION_DOSSIERASSOC'];
                     $newAssoc->ID_PRESCRIPTION_DOSSIER = $newPresc->ID_PRESCRIPTION_DOSSIER;
@@ -670,13 +668,14 @@ class Service_Dossier
     }
 
     /**
-     * @param int $id_etablissement
+     * @param int        $id_etablissement
+     * @param null|mixed $id_dossier
      */
     public function getEtabInfos($id_dossier = null, $id_etablissement = null)
     {
         $DBdossier = new Model_DbTable_Dossier();
 
-        if ($id_etablissement != null) {
+        if (null != $id_etablissement) {
             $DBetab = new Model_DbTable_Etablissement();
             $etabTab = $DBetab->getInformations($id_etablissement);
 
@@ -687,12 +686,12 @@ class Service_Dossier
 
             $service_etablissement = new Service_Etablissement();
             $etablissementInfos = $service_etablissement->get($id_etablissement);
-            if ($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS'] != null) {
+            if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
                 $etablissementInfos['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
             }
             $this->etablissement['etablissementInfos'] = $etablissementInfos;
 
-            if ($this->etablissement['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'] != null) {
+            if (null != $this->etablissement['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) {
                 $avisExploitationEtab = $DBdossier->getAvisDossier($this->etablissement['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']);
                 $this->etablissement['avisExploitationEtab'] = $avisExploitationEtab['AVIS_DOSSIER'];
             } else {
@@ -700,14 +699,15 @@ class Service_Dossier
             }
 
             return $this->etablissement;
-        } elseif ($id_dossier != null) {
+        }
+        if (null != $id_dossier) {
             $tabEtablissement = $DBdossier->getEtablissementDossier((int) $id_dossier);
             $this->listeEtablissement = $tabEtablissement;
 
             $service_etablissement = new Service_Etablissement();
             foreach ($this->listeEtablissement as $val => $ue) {
                 $etablissementInfos = $service_etablissement->get($ue['ID_ETABLISSEMENT']);
-                if ($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS'] != null) {
+                if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
                     $this->listeEtablissement[$val]['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
                 }
                 $this->listeEtablissement[$val]['infosEtab'] = $etablissementInfos;
@@ -721,22 +721,22 @@ class Service_Dossier
     {
         return
             //Cas d'une étude uniquement dans le cas d'une levée de reserve
-            in_array($idNature, array(19, 7, 17, 16)) && $dossier->DATECOMM_DOSSIER
+            in_array($idNature, [19, 7, 17, 16]) && $dossier->DATECOMM_DOSSIER
             //Cas d'une viste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
-            || in_array($idNature, array(21, 23, 24, 47)) && $dossier->DATEVISITE_DOSSIER
+            || in_array($idNature, [21, 23, 24, 47]) && $dossier->DATEVISITE_DOSSIER
             //Cas d'un groupe deviste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
-            || in_array($idNature, array(26, 28, 29, 48)) && $dossier->DATECOMM_DOSSIER;
+            || in_array($idNature, [26, 28, 29, 48]) && $dossier->DATECOMM_DOSSIER;
     }
 
     public function getDateDossier($dossier): Zend_Date
     {
         $date = $dossier->DATEINSERT_DOSSIER;
-        if ($dossier->TYPE_DOSSIER == 1 || $dossier->TYPE_DOSSIER == 3) {
-            if ($dossier->DATECOMM_DOSSIER != null && $dossier->DATECOMM_DOSSIER != '') {
+        if (1 == $dossier->TYPE_DOSSIER || 3 == $dossier->TYPE_DOSSIER) {
+            if (null != $dossier->DATECOMM_DOSSIER && '' != $dossier->DATECOMM_DOSSIER) {
                 $date = $dossier->DATECOMM_DOSSIER;
             }
-        } elseif ($dossier->TYPE_DOSSIER == 2) {
-            if ($dossier->DATEVISITE_DOSSIER != null && $dossier->DATEVISITE_DOSSIER != '') {
+        } elseif (2 == $dossier->TYPE_DOSSIER) {
+            if (null != $dossier->DATEVISITE_DOSSIER && '' != $dossier->DATEVISITE_DOSSIER) {
                 $date = $dossier->DATEVISITE_DOSSIER;
             }
         }
@@ -759,9 +759,14 @@ class Service_Dossier
     }
 
     /**
-     * @return Zend_Db_Table_Row_Abstract[]
-     *
      * @psalm-return array<int, Zend_Db_Table_Row_Abstract>
+     *
+     * @param mixed $nouveauDossier
+     * @param mixed $listeEtab
+     * @param mixed $cache
+     * @param mixed $repercuterAvis
+     *
+     * @return Zend_Db_Table_Row_Abstract[]
      */
     public function saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $repercuterAvis = false): array
     {
@@ -769,13 +774,13 @@ class Service_Dossier
         $DBdossier = new Model_DbTable_Dossier();
         $service_etablissement = new Service_Etablissement();
 
-        $updatedEtab = array();
+        $updatedEtab = [];
 
         foreach ($listeEtab as $val => $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
             $MAJEtab = 0;
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
-            if (isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && $etabToEdit->ID_DOSSIER_DONNANT_AVIS != null) {
+            if (isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && null != $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
                 $dateAncienAvis = $this->getDateDossier($dossierAncienAvis);
@@ -790,7 +795,7 @@ class Service_Dossier
                 $MAJEtab = 1;
             }
 
-            if ($MAJEtab == 1) {
+            if (1 == $MAJEtab) {
                 $etabToEdit->ID_DOSSIER_DONNANT_AVIS = $nouveauDossier->ID_DOSSIER;
                 $etabToEdit->save();
                 $updatedEtab[] = $etabToEdit;
@@ -798,7 +803,7 @@ class Service_Dossier
                 if ($repercuterAvis) {
                     $etablissementInfos = $service_etablissement->get($ue['ID_ETABLISSEMENT']);
                     foreach ($etablissementInfos['etablissement_lies'] as $etabEnfant) {
-                        if ($etabEnfant['ID_STATUT'] == '2') {
+                        if ('2' == $etabEnfant['ID_STATUT']) {
                             $etabToEdit = $dbEtab->find($etabEnfant['ID_ETABLISSEMENT'])->current();
                             $etabToEdit->ID_DOSSIER_DONNANT_AVIS = $nouveauDossier->ID_DOSSIER;
                             $etabToEdit->save();

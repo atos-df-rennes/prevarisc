@@ -6,25 +6,30 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_ETABLISSEMENT';
 
     /**
-     * @return array|null
+     * @param mixed $id_ets_info
+     *
+     * @return null|array
      */
     public function getTypesActivitesSecondaires($id_ets_info)
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from('etablissementinformationstypesactivitessecondaires')
-                ->join('type', 'ID_TYPE_SECONDAIRE = ID_TYPE', 'LIBELLE_TYPE')
-                ->join('typeactivite', 'ID_TYPEACTIVITE_SECONDAIRE = ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
-                ->where('ID_ETABLISSEMENTINFORMATIONS = ?', $id_ets_info);
+            ->setIntegrityCheck(false)
+            ->from('etablissementinformationstypesactivitessecondaires')
+            ->join('type', 'ID_TYPE_SECONDAIRE = ID_TYPE', 'LIBELLE_TYPE')
+            ->join('typeactivite', 'ID_TYPEACTIVITE_SECONDAIRE = ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
+            ->where('ID_ETABLISSEMENTINFORMATIONS = ?', $id_ets_info)
+        ;
 
         $result = $this->fetchAll($select);
 
-        return $result == null ? null : $result->toArray();
+        return null == $result ? null : $result->toArray();
     }
 
     // NOTE : à faire après enregistrement d'un établissement
     /**
-     * @return string|false
+     * @param mixed $id
+     *
+     * @return false|string
      */
     public function getIDWinprev($id)
     {
@@ -39,34 +44,52 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $parent = $this->getParent($id);
 
         // Vérifications
-        if ($infos == null) {
+        if (null == $infos) {
             return false;
         }
 
-        if ($infos->ID_GENRE == null || empty($adresses)) {
+        if (null == $infos->ID_GENRE || empty($adresses)) {
             return false;
         }
 
         // Etape 1 : genre
         switch ($infos->ID_GENRE) {
-            case 1: $genre = 'S'; break;
-            case 2: $genre = 'E'; break;
-            case 3: $genre = 'B'; break;
-            case 4: $genre = 'H'; break;
-            case 5: $genre = 'G'; break;
-            case 6: $genre = 'I'; break;
+            case 1: $genre = 'S';
+
+                break;
+
+            case 2: $genre = 'E';
+
+                break;
+
+            case 3: $genre = 'B';
+
+                break;
+
+            case 4: $genre = 'H';
+
+                break;
+
+            case 5: $genre = 'G';
+
+                break;
+
+            case 6: $genre = 'I';
+
+                break;
+
             default: break;
         }
 
         // Etape 2 : Code commune
-        if ($genre != 'S' || $genre != 'C' || !empty($adresses)) {
+        if ('S' != $genre || 'C' != $genre || !empty($adresses)) {
             $codecommune = str_pad($adresses[0]['NUMINSEE_COMMUNE'], 6, '0', STR_PAD_LEFT);
         } else {
             $codecommune = '000000';
         }
 
         // Etape 3 : Ordre sur la commune
-        if ($genre != 'S' || $genre != 'C' || !empty($adresses)) {
+        if ('S' != $genre || 'C' != $genre || !empty($adresses)) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->distinct()
@@ -74,54 +97,57 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
                 ->join('etablissementadresse', 'etablissementadresse.NUMINSEE_COMMUNE =adressecommune.NUMINSEE_COMMUNE', 'etablissementadresse.ID_ETABLISSEMENT')
                 ->join('etablissement', 'etablissementadresse.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT', null)
                 ->where('adressecommune.NUMINSEE_COMMUNE = ?', $adresses[0]['NUMINSEE_COMMUNE'])
-                ->where("etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = '".($genre == 'B' ? $parent['ID_ETABLISSEMENT'] : $id)."')");
+                ->where("etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = '".('B' == $genre ? $parent['ID_ETABLISSEMENT'] : $id)."')")
+            ;
             $nbetscommune = str_pad(count($this->fetchAll($select)), 5, '0', STR_PAD_LEFT);
         } else {
             $nbetscommune = '00000';
         }
 
         // Etape 4 : Rang de la cellule
-        if ($genre == 'B') {
+        if ('B' == $genre) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->from('etablissementlie')
                 ->join('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', null)
                 ->where('etablissementlie.ID_ETABLISSEMENT = ?', $parent['ID_ETABLISSEMENT'])
-                ->where('etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = ?)', $id);
+                ->where('etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = ?)', $id)
+            ;
             $result = $this->fetchAll($select);
-            $rangcell = str_pad($result == null ? 0 : count($result), 3, '0', STR_PAD_LEFT);
+            $rangcell = str_pad(null == $result ? 0 : count($result), 3, '0', STR_PAD_LEFT);
         } else {
             $rangcell = '000';
         }
 
         // Etape 5 : ID de la commission
-        $commission = $infos->ID_COMMISSION == null ? '0' : $infos->ID_COMMISSION;
+        $commission = null == $infos->ID_COMMISSION ? '0' : $infos->ID_COMMISSION;
 
         return $genre.$codecommune.$nbetscommune.'-'.$rangcell.'-'.$commission;
     }
 
     /**
-     * @param string|int $id_user
+     * @param int|string $id_user
      *
-     * @return array|null
+     * @return null|array
      */
     public function getByUser($id_user)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(array('e' => 'etablissement'), 'ID_ETABLISSEMENT')
-            ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', array('LIBELLE_ETABLISSEMENTINFORMATIONS', 'PERIODICITE_ETABLISSEMENTINFORMATIONS'))
+            ->from(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
+            ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENTINFORMATIONS', 'PERIODICITE_ETABLISSEMENTINFORMATIONS'])
             ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', null)
             ->where('DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = e.ID_ETABLISSEMENT ) ')
             ->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$id_user)
             ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT ) OR etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
-            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL');
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
     /**
-     * @param string|int|float $id_etablissement
+     * @param float|int|string $id_etablissement
      *
      * @return null|Zend_Db_Table_Row_Abstract
      */
@@ -133,69 +159,77 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('etablissementinformations')
             ->joinLeft('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT')
-            ->where("etablissementinformations.ID_ETABLISSEMENT = '$id_etablissement'")
-            ->where("DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = '$id_etablissement' ) ")
-            ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL');
+            ->where("etablissementinformations.ID_ETABLISSEMENT = '{$id_etablissement}'")
+            ->where("DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = '{$id_etablissement}' ) ")
+            ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+        ;
 
         return $DB_information->fetchRow($select);
     }
 
     /**
-     * @return array|null
+     * @param mixed $id_etablissement
+     *
+     * @return null|array
      */
     public function getLibelle($id_etablissement)
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
-                ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
-                ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
-                ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
-                ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
-                ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement);
+        $select->from(['e' => 'etablissement'], null)
+            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
+            ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+            ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
+            ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement)
+        ;
 
-        return ($this->fetchRow($select) != null) ? $this->fetchRow($select)->toArray() : null;
+        return (null != $this->fetchRow($select)) ? $this->fetchRow($select)->toArray() : null;
     }
 
     public function getPeriodicite($id_etablissement)
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
-                ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'PERIODICITE_ETABLISSEMENTINFORMATIONS')
-                ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
-                ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
-                ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
-                ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement);
+        $select->from(['e' => 'etablissement'], null)
+            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'PERIODICITE_ETABLISSEMENTINFORMATIONS')
+            ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+            ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
+            ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement)
+        ;
 
         if (null == ($row = $this->getAdapter()->fetchRow($select))) {
             return null;
         }
-        
+
         return $row['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
     }
 
     /**
-     * @return array|null
+     * @param mixed $id_etablissement
+     *
+     * @return null|array
      */
     public function getGenre($id_etablissement)
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(array('e' => 'etablissement'), null)
-                ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'ID_GENRE')
-                ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
-                ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
-                ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
-                ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement);
+        $select->from(['e' => 'etablissement'], null)
+            ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'ID_GENRE')
+            ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
+            ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+            ->where('e.ID_ETABLISSEMENT = ?', $id_etablissement)
+        ;
 
-        return ($this->fetchRow($select) != null) ? $this->fetchRow($select)->toArray() : null;
+        return (null != $this->fetchRow($select)) ? $this->fetchRow($select)->toArray() : null;
     }
 
     /**
-     * @param string|int|float $id_etablissement
+     * @param float|int|string $id_etablissement
      *
-     * @return array|null
+     * @return null|array
      */
     public function getParent($id_etablissement)
     {
@@ -205,28 +239,29 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft('etablissementinformations', 'etablissementinformations.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT')
             ->joinLeft('categorie', 'categorie.ID_CATEGORIE = etablissementinformations.ID_CATEGORIE')
             ->joinLeft('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT')
-            ->where("etablissementlie.ID_FILS_ETABLISSEMENT = '$id_etablissement'")
+            ->where("etablissementlie.ID_FILS_ETABLISSEMENT = '{$id_etablissement}'")
             ->where('DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT ) ')
-            ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL');
+            ->where('etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+        ;
 
-        return ($this->fetchRow($select) != null) ? $this->fetchRow($select)->toArray() : null;
+        return (null != $this->fetchRow($select)) ? $this->fetchRow($select)->toArray() : null;
     }
 
     public function getAllParents($id_etablissement)
     {
         $result = $this->getParent($id_etablissement);
 
-        if ($result != null) {
-            return array($result, $this->getParent($result['ID_ETABLISSEMENT']));
+        if (null != $result) {
+            return [$result, $this->getParent($result['ID_ETABLISSEMENT'])];
         }
 
         return $result;
     }
 
     /**
-     * @param string|int $id_etablissement
+     * @param int|string $id_etablissement
      *
-     * @return array|null
+     * @return null|array
      */
     public function getDiaporama($id_etablissement)
     {
@@ -236,15 +271,16 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft('piecejointe', 'piecejointe.ID_PIECEJOINTE = etablissementpj.ID_PIECEJOINTE')
             ->where("EXTENSION_PIECEJOINTE = '.jpg' OR EXTENSION_PIECEJOINTE = '.JPG' OR EXTENSION_PIECEJOINTE = '.jpeg' OR EXTENSION_PIECEJOINTE = '.png'")
             ->where('PLACEMENT_ETABLISSEMENTPJ = 1')
-            ->where('etablissementpj.ID_ETABLISSEMENT = '.$id_etablissement);
+            ->where('etablissementpj.ID_ETABLISSEMENT = '.$id_etablissement)
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
     /**
-     * @param string|int $id_etablissement
+     * @param int|string $id_etablissement
      *
-     * @return array|null
+     * @return null|array
      */
     public function getPlans($id_etablissement)
     {
@@ -254,13 +290,16 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft('piecejointe', 'piecejointe.ID_PIECEJOINTE = etablissementpj.ID_PIECEJOINTE')
             ->where("EXTENSION_PIECEJOINTE = '.jpg' OR EXTENSION_PIECEJOINTE = '.JPG' OR EXTENSION_PIECEJOINTE = '.png'")
             ->where('PLACEMENT_ETABLISSEMENTPJ = 2')
-            ->where('etablissementpj.ID_ETABLISSEMENT = '.$id_etablissement);
+            ->where('etablissementpj.ID_ETABLISSEMENT = '.$id_etablissement)
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
     /**
-     * @return array|null
+     * @param mixed $id_etablissement_informations
+     *
+     * @return null|array
      */
     public function getPlansInformations($id_etablissement_informations)
     {
@@ -268,9 +307,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('etablissementinformationsplan')
             ->join('typeplan', 'etablissementinformationsplan.ID_TYPEPLAN = typeplan.ID_TYPEPLAN')
-            ->where('etablissementinformationsplan.ID_ETABLISSEMENTINFORMATIONS = ?', $id_etablissement_informations);
+            ->where('etablissementinformationsplan.ID_ETABLISSEMENTINFORMATIONS = ?', $id_etablissement_informations)
+        ;
 
-        return ($this->fetchAll($select) != null) ? $this->fetchAll($select)->toArray() : null;
+        return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
     // Recalcule les périod et cat des enfants d'un ets
@@ -283,7 +323,6 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $etablissement = $model_etablissementInformations->find($id_info)->current();
 
         foreach ($etablissement_enfants as $ets) {
-
             // On récupère la fiche de l'établissement enfant
             $row_etablissement = $this->getInformations($ets['ID_ETABLISSEMENT']);
 
@@ -315,7 +354,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
         $search->setCriteria('avis.ID_AVIS', 2);
-        $search->setCriteria('etablissementinformations.ID_GENRE', array(2));
+        $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         if ($numInseeCommune) {
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE', $numInseeCommune);
@@ -345,9 +384,9 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
-        $search->columns(array(
+        $search->columns([
             'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
-        ));
+        ]);
         $search->joinEtablissementDossier();
         $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
                 .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
@@ -363,25 +402,52 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
         }
         $search->having('nextvisiteyear <= YEAR(NOW())');
-        
+
         return $search->run(false, null, false)->toArray();
     }
 
     /**
+     * @param mixed $id_etablissement
+     *
      * @return null|Zend_Db_Table_Row_Abstract
      */
     public function getDossierDonnantAvis($id_etablissement)
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('dossier', array('ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER', 'AVIS_DOSSIER_COMMISSION'))
+            ->from('dossier', ['ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER', 'AVIS_DOSSIER_COMMISSION'])
             ->join('etablissementdossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER')
             ->join('dossiernature', 'dossiernature.ID_DOSSIER = etablissementdossier.ID_DOSSIER', null)
             ->where('etablissementdossier.ID_ETABLISSEMENT = ?', $id_etablissement)
-            ->where('dossiernature.ID_NATURE in (?)', array(19, 7, 17, 16, 21, 23, 24, 47, 26, 28, 29, 48))
+            ->where('dossiernature.ID_NATURE in (?)', [19, 7, 17, 16, 21, 23, 24, 47, 26, 28, 29, 48])
             ->where('dossier.AVIS_DOSSIER_COMMISSION IS NOT NULL')
             ->where('dossier.AVIS_DOSSIER_COMMISSION > 0')
-            ->order('IFNULL(dossier.DATECOMM_DOSSIER, dossier.DATEVISITE_DOSSIER) DESC');
+            ->order('IFNULL(dossier.DATECOMM_DOSSIER, dossier.DATEVISITE_DOSSIER) DESC')
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getEffectifEtDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], [])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'e.ID_ETABLISSEMENT = eed.ID_ETABLISSEMENT', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['e' => 'etablissement'], 'eed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab);
 
         return $this->fetchRow($select);
     }

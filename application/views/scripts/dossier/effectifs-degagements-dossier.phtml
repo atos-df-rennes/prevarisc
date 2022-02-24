@@ -1,0 +1,21 @@
+<div class='pull-right'>
+    <a href="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier-edit', 'id' => $this->idDossier), false, true) ?>" class="btn">Modifier les effectifs et dégagements</a>
+</div>
+
+<h3>Effectifs :</h3>
+<?php
+    if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]) {
+        echo $this->EffectifDegagement["DESCRIPTION_EFFECTIF"];
+    } else {
+        echo "Aucune description";
+    }
+?>
+
+<h3>Dégagements :</h3>
+<?php
+    if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]) {
+        echo $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"];
+    } else {
+        echo "Aucune description";
+    }
+?>
