@@ -183,6 +183,9 @@ class DossierController extends Zend_Controller_Action
             $this->view->idDossier = ($this->_getParam('id'));
 
             $this->view->verrou = $dossier->VERROU_DOSSIER;
+
+            $serviceDossier = new Service_Dossier();
+            $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->_getParam('id'));
         }
     }
 
@@ -254,13 +257,8 @@ class DossierController extends Zend_Controller_Action
         // Autorisation de suppression du dossier
         $this->view->is_allowed_delete_dossier = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_dossier');
 
-
         // Autorisation de set avis derogations
         $this->view->is_allowed_avis_derogation = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
-
-        $serviceDossier = new Service_Dossier();
-        //Nb avis derogations du dossier 
-        $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->_getParam('id'));
 
         $service_etablissement = new Service_Etablissement();
 
@@ -2499,7 +2497,7 @@ class DossierController extends Zend_Controller_Action
             $date = new Zend_Date($this->view->infosDossier['DATEMAIRIE_DOSSIER'], Zend_Date::DATES);
             $this->view->DATEMAIRIE = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
-        
+
         //Conversion de la date de dépot en secrétariat pour l'afficher
         if ($this->view->infosDossier['DATESECRETARIAT_DOSSIER'] != '') {
             $date = new Zend_Date($this->view->infosDossier['DATESECRETARIAT_DOSSIER'], Zend_Date::DATES);
@@ -2579,7 +2577,7 @@ class DossierController extends Zend_Controller_Action
             && isset($dateVisite)
         ) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-            
+
             $this->view->dateLastVP = null;
             if ($dateLastVP) {
                 $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
@@ -3039,25 +3037,22 @@ class DossierController extends Zend_Controller_Action
 
     //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
     public function avisEtDerogationsAction(){
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js');
-        
-        //Init de la db avis derogation
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
         $idDossier = $this->getParam('id');
 
         $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($idDossier);
-
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
 
-        $request = $this->getRequest();    
-        //Ajout d un avis/derogation dans la db
+        $request = $this->getRequest();
         if ($request->isPost()) {
-            //Recuperation nouvelle donnee
             $data = $request->getPost();
-            //insertion nouvelle donnee
+            $data['ID_DOSSIER'] = $idDossier;
+
             $dbAvisDerogation->insert($data);
 
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
@@ -3070,40 +3065,32 @@ class DossierController extends Zend_Controller_Action
      * retourne vers la page d edition de ces avis + derogations
      */
     public function avisEtDerogationsEditAction(){
-        
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js');
-
-        //Instanciation model db
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
-        $dbDossier = new Model_DbTable_Dossier(); 
-        $request = $this->_request;
+        $dbDossier = new Model_DbTable_Dossier();
+
         $idDossier = $request->getParam('id');
         $idAvisDerogation = $request->getParam('avis-derogation');
 
         $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($this->getParam("avis-derogation"));
         $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($this->_request->getParam('id')));
 
-        if ($this->_request->isPost()) {
-            //Recuperation de l entite via son ID_AVIS_DEROGATIONS
-            $data = $this->_request->getPost();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
             //Recuperation de l entite a mettre a jour
             $where = $dbAvisDerogations->getAdapter()->quoteInto('ID_AVIS_DEROGATION = ?', $idAvisDerogation);
-    
+
             $dbAvisDerogations->update($data,$where);
 
+            // FIXME A faire avec le helper redirector
             header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
         }
     }
 
     public function avisEtDerogationsDeleteAction(){
-        //Instanciation model db
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
-        //Suppression de la ligne
-        if($this->getRequest()->isDelete()){
-            $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation")); // suppresssion de la ligne avec id
-        }
+
+        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation"));
     }
-
 }
-
