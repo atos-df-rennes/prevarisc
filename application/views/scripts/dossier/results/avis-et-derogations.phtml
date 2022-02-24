@@ -1,50 +1,45 @@
 <div class="span5 cardAvisDerogations">
-    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?php echo($this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION)  ?>' >&times;</a>
-    <h1 style="text-align:center"><?=$this->TITRE?></h1>    
+    <!-- TODO Voir à quoi sert le data-id -->
+    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?php echo($this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION) ?>'>&times;</a>
+    <h1 style="text-align:center"><?=$this->TITRE?></h1>
     <div class="row-fluid">
         <div class="span6">
-            <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis":"Dérogations" ?></p>
+            <!-- TODO Faire une table typeavisderogation ? -->
+            <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis":"Dérogation" ?></p>
             <p>Informations : <?= $this->INFORMATIONS?>
             <p>Avis : <?= $this->AVIS === 1 ? 'Favorable':'Défavorable'?></p>
         </div>
         <div class="span6">
             <p>Avis/Dérogation levé(e):
-                <a href='/dossier/index/id/<?= $this->ID_DOSSIER_LIE ?>'>
-                     <?=$this->ID_DOSSIER_LIE ? $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER: '' ?>
+                <!-- FIXME Y'a un pb sur l'objet -->
+                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
+                     <?= $this->ID_DOSSIER_LIE ? $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER : '' ?>
                 </a>
             </p>
             <div class="flex">
-                <label for="affHistorique">Afficher l'historique de l'établissement</label>
-                <input  type="checkbox" 
-                    id="scales" 
-                    name="affHistorique" 
+                <label for="affHistorique">Afficher dans l'historique de l'établissement</label>
+                <input  type="checkbox"
+                    id="scales"
+                    name="affHistorique"
                     disabled
-                    <?= ($this->DISPLAY_HISTORIQUE == true ? 'checked' : '')?> 
+                    <?= boolval($this->DISPLAY_HISTORIQUE) === true ? 'checked' : '' ?>
                 >
             </div>
         </div>
     </div>
-    <div class="pull-right btn-group">
-        <a 
-            class="icon-pencil icon-black"
-            href=<?= "/dossier/avis-et-derogations-edit/id/".$this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>
-            >
+    <div class="pull-right">
+        <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations-edit', 'id' => $this->ID_DOSSIER, 'avis-derogation' => $this->ID_AVIS_DEROGATION], false, true) ?>">
+            <i class="icon-pencil icon-black"></i>
         </a>
     </div>
 </div>
 
 <script>
-        $(".close").click(function (event) { 
-            event.preventDefault()
-            console.log("/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'))
-           $.ajax({
-               type: "delete",
-               url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'),
-               success: function (response) {
-                   
-               }
-           }); 
+    $(".close").click(function (event) {
+        event.preventDefault()
+        $.ajax({
+            type: "delete",
+            url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id')
         });
-         
-    
+    });
 </script>

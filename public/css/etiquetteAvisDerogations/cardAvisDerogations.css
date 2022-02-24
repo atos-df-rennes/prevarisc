@@ -16,3 +16,7 @@
 .flex{
     display:flex;
 }
+
+.controls label {
+    width: fit-content;
+}

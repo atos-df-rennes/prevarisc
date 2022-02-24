@@ -3083,8 +3083,7 @@ class DossierController extends Zend_Controller_Action
 
             $dbAvisDerogations->update($data,$where);
 
-            // FIXME A faire avec le helper redirector
-            header("location: /dossier/avis-et-derogations/id/".$this->_request->id);
+            $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
         }
     }
 
