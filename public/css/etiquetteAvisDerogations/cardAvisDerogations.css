@@ -5,12 +5,15 @@
 }
 
 .cardAvisDerogations {
-    /*TODO: ajuster padding + titre pour ajuster les espaement de la carte */
     background:var(--backCardColor);
     box-shadow: 1px 0px 10px 2px rgb(37 40 37 / 75%);
     margin: var(--margPaddpx);
     padding: var(--margPaddpx);
     border-radius: var(--sizeRadius);
+}
+
+.cardAvisDerogations h1 {
+    font-size: 28px;
 }
 
 .flex {
