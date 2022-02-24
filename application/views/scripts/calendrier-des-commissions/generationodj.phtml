@@ -237,16 +237,25 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         addChamp($segment->infosDoss, $nomChamp, $valeurChamp);
     }
 
-    /*TODO:TEST avec un template la nouvelle generation avec avis derogations */
-	$segmentAvisDerogations = $segment->avisDerogations;
+	$segmentAvisDerogations = $segment->infosDoss->avisDerogations;
 
-	if (isset($dossierInfos["AVIS_DEROGATIONS"])) {
-		foreach ($dossierInfos["AVIS_DEROGATIONS"] as $val => $unAvisDerogation) {
-            // TODO Ajouter les autres informations => A faire dans tous les documents
-			addChamp($segmentAvisDerogations, 'informationsAvisDerogations', $unAvisDerogation['INFORMATIONS']);
-			$segmentAvisDerogations->merge();
-		}
-	}
+    foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+        addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE_AVIS_DEROGATIONS']);
+        addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+        if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+        } else {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        }
+
+        addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+        $segmentAvisDerogations->merge();
+    }
 }
 
 function savePj($dateCommId,$libelleMembre){

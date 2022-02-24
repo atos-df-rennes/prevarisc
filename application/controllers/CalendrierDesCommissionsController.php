@@ -1132,17 +1132,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossier['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
             $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+
+            $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
         }
 
         $this->view->informationsMembre = $listeMembres;
         $this->view->listeCommunes = $tabCommune;
 
-        $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
         $this->view->dossierComm = $listeDossiers;
 
         $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
         $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
-
     }
 
     public function generationpvAction()
