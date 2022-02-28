@@ -876,14 +876,14 @@ class Service_Dossier
 
     public function hasAvisDerogation(int $idDossier): bool
     {
-        $modelAvisDerogation = new Model_DbTable_AvisDerogations();
+        $modelDossier = new Model_DbTable_Dossier();
 
-        $result = $modelAvisDerogation->getByIdDossier($idDossier);
+        $result = $modelDossier->getListAvisDerogationsFromDossier($idDossier);
 
         if (!empty($result)) {
             return true;
         }
-        
+
         return false;
     }
 }

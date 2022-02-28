@@ -3099,7 +3099,7 @@ class DossierController extends Zend_Controller_Action
 
         $idDossier = $this->getParam('id');
 
-        $this->view->arrayAvisDerogations = $dbAvisDerogation->getByIdDossier($idDossier);
+        $this->view->arrayAvisDerogations = $dbDossier->getListAvisDerogationsFromDossier($idDossier);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
 
         $request = $this->getRequest();

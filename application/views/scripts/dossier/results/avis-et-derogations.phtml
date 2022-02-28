@@ -9,17 +9,20 @@
             <!-- TODO Faire une table typeavisderogation ? -->
             <p>Type : <?= $this->TYPE_AVIS_DEROGATIONS === 1 ? "Avis" : "Dérogation" ?></p>
             <p>Informations : <?= $this->INFORMATIONS ?>
-            <p>Avis : <?= $this->AVIS === 1 ? 'Favorable' : 'Défavorable' ?></p>
+            <p>Avis : <?= $this->LIBELLE_AVIS ?></p>
         </div>
         <div class="span6">
             <p>Avis/Dérogation levé(e):
                 <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
-                    <?= $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER ?>
+                    <?php if ($this->ID_DOSSIER_LIE):
+                        echo $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER;
+                    endif ?>
                 </a>
             </p>
             <div class="flex">
                 <label for="affHistorique">Afficher dans l'historique de l'établissement</label>
-                <input  type="checkbox"
+                <input
+                    type="checkbox"
                     id="scales"
                     name="affHistorique"
                     disabled

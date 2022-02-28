@@ -588,8 +588,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     /**
      * Retourne la liste des dossiers d un etablissement en se basant sur un dossier
      */
-    public function getListeDossierFromDossier($idDossier){
-
+    public function getListeDossierFromDossier($idDossier)
+    {
         $select = $this->select()->setIntegrityCheck(false)
             ->from(array('d' => 'dossier'))
             ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
@@ -606,13 +606,16 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     /**
      * Retourne la liste des avis derogations d un dossier en passant l id dossier en param
      */
-    public function getListAvisDerogationsFromDossier($idDossier){
+    public function getListAvisDerogationsFromDossier($idDossier)
+    {
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['ad' => 'avisderogations'])
+            ->join(['d' => 'dossier'], 'ad.ID_DOSSIER = d.ID_DOSSIER', [])
             ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
-            ->where('ad.ID_DOSSIER = ?', $idDossier);
+            ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
+            ->where('d.ID_DOSSIER = ?', $idDossier);
 
-        return $this->getAdapter()->fetchAll($select);
+        return $this->fetchAll($select)->toArray();
     }
 }
