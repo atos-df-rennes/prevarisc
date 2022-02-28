@@ -152,6 +152,8 @@ class DossierController extends Zend_Controller_Action
             ->initContext()
         ;
 
+        $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+
         if (!isset($this->view->action)) {
             $this->view->action = $this->_request->getActionName();
         }
@@ -188,9 +190,9 @@ class DossierController extends Zend_Controller_Action
 
             $serviceDossier = new Service_Dossier();
             $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
-            // TODO Ajouter les privilèges
+            // Autorisation de set avis derogations
+            $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
 
-            $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
             $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
         }
     }
@@ -262,9 +264,6 @@ class DossierController extends Zend_Controller_Action
 
         // Autorisation de suppression du dossier
         $this->view->is_allowed_delete_dossier = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_dossier');
-
-        // Autorisation de set avis derogations
-        $this->view->is_allowed_avis_derogation = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
 
         $service_etablissement = new Service_Etablissement();
 
