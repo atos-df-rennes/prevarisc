@@ -106,7 +106,7 @@ foreach($this->informationsMembre as $val => $membre){
 							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						)
 					){
-						retrieveInfoDossier($infosDoss, $dossierInfos, $odf);
+						retrieveInfoDossier($infosDoss, $dossierInfos);
 						$villeODF->infosDoss->merge();
 					}
 				}
@@ -159,7 +159,7 @@ foreach($this->informationsMembre as $val => $membre){
 							&& $membre['dossiertypes'][ $dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						)
 					){
-						retrieveInfoDossier($grpLoop, $dossierInfos, $odf);
+						retrieveInfoDossier($grpLoop, $dossierInfos);
 						setVars($odf, 'nomEtab',$dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
 						setVars($odf, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
 						$dossierExported = true;
@@ -221,7 +221,7 @@ function savePj($dateCommId, $membreNom){
 	return $nouvellePJ;
 }
 
-function retrieveInfoDossier($segment, $dossierInfos, $odf = null) {
+function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'nomEtab',$dossierInfos['infosEtab']['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]);
     $nomPere = "";
     if(isset($dossierInfos['infosEtab']['parents'][0]["LIBELLE_ETABLISSEMENTINFORMATIONS"])) {
