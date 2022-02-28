@@ -7,7 +7,7 @@
     <div class="control-group">
         <label class="control-label" for="inputType">Type</label>
         <div class="controls">
-            <select name="TYPE" required>
+            <select id="inputType" name="TYPE" required>
                 <option value='Avis'>
                     Avis
                 </option>
@@ -33,9 +33,9 @@
     </div>
 
     <div class="control-group">
-        <p class="control-label">Avis</p>
+        <label class="control-label" for="inputAvis">Avis</label>
         <div class="controls">
-            <select name="AVIS" class="span4">
+            <select id="inputAvis" name="AVIS">
                 <?php foreach ($this->listeAvis as $avis): ?>
                     <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
                 <?php endforeach ?>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="control-group">
-        <p class="control-label">Avis/Dérogation levé(e):</p>
+        <label class="control-label">Avis/Dérogation levé(e):</label>
         <?= $this->partial('dossier/results/avisderogation/dossier.phtml', ['DOSSIERS_ETAB' => $this->listDossierEtab, 'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE]); ?>
     </div>
 
