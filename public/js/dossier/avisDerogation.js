@@ -1,11 +1,11 @@
 $(document).ready(function() {
-    const selectType = $('select[name="TYPE_AVIS_DEROGATIONS"]')
+    const selectType = $('select[name="TYPE"]')
     const submit = $('input[type="submit"]')
 
     selectType.on('change', function() {
         const val = selectType.val()
 
-        if (parseInt(val) === 1) {
+        if (val === 'Avis') {
             submit.val("Ajouter l'avis")
         } else {
             submit.val("Ajouter la dérogation")
