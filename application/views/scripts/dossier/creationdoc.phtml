@@ -722,7 +722,7 @@ foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 $segmentAvisDerogations = $odf->setSegment('avisDerogations');
 
 foreach ($this->avisDerogations as $avisDerogation) {
-    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE_AVIS_DEROGATIONS']);
+    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
     addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
     addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
     addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);

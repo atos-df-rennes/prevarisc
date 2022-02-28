@@ -170,7 +170,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				$segmentAvisDerogations = $dossInfos->avisDerogations;
 
                 foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation){
-                    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE_AVIS_DEROGATIONS']);
+                    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
                     addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
                     addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
                     addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
