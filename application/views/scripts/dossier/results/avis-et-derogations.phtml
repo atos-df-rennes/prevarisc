@@ -6,7 +6,6 @@
 
     <div class="row-fluid">
         <div class="span6">
-            <!-- TODO Faire une table typeavisderogation ? -->
             <p>Type : <?= $this->TYPE ?></p>
             <p>Informations : <?= $this->INFORMATIONS ?>
             <p>Avis : <?= $this->LIBELLE_AVIS ?></p>
@@ -23,7 +22,6 @@
                 <label for="affHistorique">Afficher dans l'historique de l'établissement</label>
                 <input
                     type="checkbox"
-                    id="scales"
                     name="affHistorique"
                     disabled
                     <?= boolval($this->DISPLAY_HISTORIQUE) === true ? 'checked' : '' ?>

@@ -3,6 +3,7 @@
 
     <input type='hidden' name='ID_DOSSIER' value='<?= $this->idDossier ?>' />
 
+    <!-- TODO Faire une table typeavisderogation ? -->
     <div class="control-group">
         <label class="control-label" for="inputType">Type</label>
         <div class="controls">
@@ -34,10 +35,10 @@
     <div class="control-group">
         <p class="control-label">Avis</p>
         <div class="controls">
-            <!-- FIXME Utiliser la jointure avec la table avis -->
             <select name="AVIS" class="span4">
-                <option value="1"> Favorable</option>
-                <option value="2"> Défavorable</option>
+                <?php foreach ($this->listeAvis as $avis): ?>
+                    <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
+                <?php endforeach ?>
             </select>
         </div>
     </div>
@@ -48,7 +49,7 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
+        <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
         <div class="controls">
             <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
             <input

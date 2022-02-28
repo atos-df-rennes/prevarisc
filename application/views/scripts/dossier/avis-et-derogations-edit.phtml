@@ -31,10 +31,10 @@
 
     <div class="row">
         <p class="span2">Avis</p>
-        <!-- FIXME Utiliser la jointure avec la table avis -->
         <select name="AVIS" class="span4">
-            <option value="1" <?= $this->avisDerogations['AVIS'] === 1 ? 'selected' : '' ?>>Favorable</option>
-            <option value="2" <?= $this->avisDerogations['AVIS'] === 2 ? 'selected' : '' ?>>Défavorable</option>
+            <?php foreach ($this->listeAvis as $avis): ?>
+                <option value='<?= $avis["ID_AVIS"] ?>' <?= $this->avisDerogations['AVIS'] === $avis['ID_AVIS'] ? 'selected' : '' ?>><?= $avis['LIBELLE_AVIS'] ?></option>
+            <?php endforeach ?>
         </select>
     </div>
 
@@ -55,6 +55,6 @@
             value='1'
             <?= ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?>
         >
-        <label for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
+        <label for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
     </div>
 </form>
