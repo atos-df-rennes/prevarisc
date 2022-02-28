@@ -395,25 +395,31 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
-
         /**
          * Ajout de la partie avis derogations
          */
         $key = 'AVIS_DEROGATIONS';
         $dbEtablissement = new Model_DbTable_Etablissement();
-        foreach ($dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement) as $elem => $value) {
-            $prefixe = $value['TYPE_AVIS_DEROGATIONS'] === 1 ? "Avis-" : "Dérogations-";
-            $valueDisplay = $prefixe.$value['TITRE'];
-            $historique[$key][$elem] =
-            array(
-                //"valeur" => $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement),
+
+        $avisDerogations = $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement);
+
+        foreach ($avisDerogations as $elem => $value) {
+            $valueDisplay = implode(' - ', [
+                $value['TYPE'],
+                $value['TITRE'],
+            ]);
+
+            $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
+
+            $historique[$key][$elem] = array(
                 'valeur' => $valueDisplay,
                 'url' => "/dossier/avis-et-derogations/id/".$value['ID_DOSSIER'],
-                'debut'  => $value['DATECOMM_DOSSIER'],
+                'debut'  => $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR),
                 "author" => null
-                );
+            );
 
         }
+
         return $historique;
     }
 
