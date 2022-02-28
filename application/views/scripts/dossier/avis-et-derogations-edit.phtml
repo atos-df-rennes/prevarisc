@@ -1,10 +1,11 @@
 <!-- TODO Revoir le visuel -->
 <h4 class="h4_subtitle">Avis / Dérogation</h4>
-<form  class="container-fluid" method="post">
+<form class="container-fluid" method="post">
     <div class="btn-group pull-right">
         <a class="btn" href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->avisDerogations['ID_DOSSIER']], false, true) ?>">Annuler modification</a>
-        <input type="submit" class="btn btn-success" href=<?= "/dossier/avis-et-derogations/id/". $this->avisDerogations['ID_DOSSIER'] ?> value="Sauvegarder">
+        <input type="submit" class="btn btn-success" value="Sauvegarder" />
     </div>
+
     <div class="row">
         <p class="span2">Type</p>
         <!--Generation liste des avis-->
@@ -17,14 +18,17 @@
             </option>
         </select>
     </div>
+
     <div class="row">
         <p class="span2">Titre</p>
-        <input name="TITRE" class="span4" type="text" placeholder="votre titre" required="required" value='<?= $this->avisDerogations['TITRE'] ?>' >
+        <input name="TITRE" class="span4" type="text" required="required" value='<?= $this->avisDerogations['TITRE'] ?>' >
     </div>
+
     <div class="row">
         <p>Informations</p>
         <textarea name="INFORMATIONS"><?= $this->avisDerogations['INFORMATIONS'] ?></textarea>
     </div>
+
     <div class="row">
         <p class="span2">Avis</p>
         <select name="AVIS" class="span4" required="required">
@@ -32,6 +36,7 @@
             <option value="2" <?= $this->avisDerogations['AVIS'] === 2 ? 'selected' : '' ?>>Défavorable</option>
         </select>
     </div>
+
     <div class="row">
         <h2 class="h4_subtitle span3">Avis/Dérogation levé(e):</h2>
     </div>
@@ -42,11 +47,12 @@
 
     <div class="row" style="display:flex">
         <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
-        <input  type="checkbox"
-                id="DISPLAY_HISTORIQUE"
-                name="DISPLAY_HISTORIQUE"
-                value='1'
-                <?= ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?>
+        <input
+            type="checkbox"
+            id="DISPLAY_HISTORIQUE"
+            name="DISPLAY_HISTORIQUE"
+            value='1'
+            <?= ($this->avisDerogations['DISPLAY_HISTORIQUE'] == true ? 'checked' : '') ?>
         >
         <label for="DISPLAY_HISTORIQUE">Afficher l'historique de l'établissement</label>
     </div>

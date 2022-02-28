@@ -1,6 +1,8 @@
 <form class="form-horizontal span8" method="post">
     <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
 
+    <input type='hidden' name='ID_DOSSIER' value='<?= $this->idDossier ?>' />
+
     <div class="control-group">
         <label class="control-label" for="inputType">Type</label>
         <div class="controls">

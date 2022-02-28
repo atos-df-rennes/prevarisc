@@ -159,6 +159,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
 
         $this->idDossier = intval($this->_getParam('id'));
+        // FIXME A déplacer dans le 2ème if ?
         $this->view->idDossier = $this->idDossier;
 
         if (null == $this->idDossier) {
@@ -3068,6 +3069,7 @@ class DossierController extends Zend_Controller_Action
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
             $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
+            // FIXME Normalement inutile
             $this->view->idDossier = $this->idDossier;
         }
 
@@ -3103,7 +3105,6 @@ class DossierController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-            $data['ID_DOSSIER'] = $idDossier;
 
             $dbAvisDerogation->insert($data);
 
@@ -3131,7 +3132,7 @@ class DossierController extends Zend_Controller_Action
         $idAvisDerogation = $this->getParam('avis-derogation');
 
         $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
-        $this->view->listDossierEtab = ($dbDossier->getListeDossierFromDossier($idDossier));
+        $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -3140,7 +3141,7 @@ class DossierController extends Zend_Controller_Action
             //Recuperation de l entite a mettre a jour
             $where = $dbAvisDerogations->getAdapter()->quoteInto('ID_AVIS_DEROGATION = ?', $idAvisDerogation);
 
-            $dbAvisDerogations->update($data,$where);
+            $dbAvisDerogations->update($data, $where);
 
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
         }
