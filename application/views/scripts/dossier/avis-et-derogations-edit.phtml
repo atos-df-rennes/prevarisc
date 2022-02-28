@@ -9,19 +9,19 @@
     <div class="row">
         <p class="span2">Type</p>
         <!--Generation liste des avis-->
-        <select name="TYPE_AVIS_DEROGATIONS" required="required">
-            <option value="1" <?= 1 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?>>
+        <select name="TYPE" required>
+            <option value="Avis" <?= 'Avis' === $this->avisDerogations['TYPE'] ? 'selected' : '' ?>>
                 Avis
             </option>
-            <option value="2" <?= 2 === $this->avisDerogations['TYPE_AVIS_DEROGATIONS'] ? 'selected' : '' ?>>
-                Dérogations
+            <option value="Dérogation" <?= 'Dérogation' === $this->avisDerogations['TYPE'] ? 'selected' : '' ?>>
+                Dérogation
             </option>
         </select>
     </div>
 
     <div class="row">
         <p class="span2">Titre</p>
-        <input name="TITRE" class="span4" type="text" required="required" value='<?= $this->avisDerogations['TITRE'] ?>' >
+        <input name="TITRE" class="span4" type="text" required value='<?= $this->avisDerogations['TITRE'] ?>' >
     </div>
 
     <div class="row">
@@ -31,7 +31,8 @@
 
     <div class="row">
         <p class="span2">Avis</p>
-        <select name="AVIS" class="span4" required="required">
+        <!-- FIXME Utiliser la jointure avec la table avis -->
+        <select name="AVIS" class="span4">
             <option value="1" <?= $this->avisDerogations['AVIS'] === 1 ? 'selected' : '' ?>>Favorable</option>
             <option value="2" <?= $this->avisDerogations['AVIS'] === 2 ? 'selected' : '' ?>>Défavorable</option>
         </select>
