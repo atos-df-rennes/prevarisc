@@ -29,6 +29,8 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addRubriqueAction(): void
     {
+        $this->_helper->viewRenderer->setNoRender(true);
+
         $modelRubrique = new Model_DbTable_Rubrique();
         $serviceFormulaire = new Service_Formulaire();
 
@@ -102,6 +104,8 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addChampAction(): void
     {
+        $this->_helper->viewRenderer->setNoRender(true);
+
         $modelChamp = new Model_DbTable_Champ();
         $modelRubrique = new Model_DbTable_Rubrique();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
