@@ -45,7 +45,7 @@
             </li>
         <?php endif ?>
 
-        <?php if ($this->idTypeDossier === 1) :?>
+        <?php if ($this->idTypeDossier === 1): ?>
             <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
                 <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
                     <i class="icon-file icon-black"></i>

@@ -3150,6 +3150,6 @@ class DossierController extends Zend_Controller_Action
     public function avisEtDerogationsDeleteAction(){
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
 
-        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->_request->getParam("avis-derogation"));
+        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->getParam("avis-derogation"));
     }
 }
