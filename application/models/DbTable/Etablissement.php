@@ -466,6 +466,6 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
             ->where('ad.DISPLAY_HISTORIQUE = ?', 1);
 
-        return $this->fetchAll($select);
+        return $this->fetchAll($select)->toArray();
     }
 }

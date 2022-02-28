@@ -415,9 +415,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'valeur' => $valueDisplay,
                 'url' => "/dossier/avis-et-derogations/id/".$value['ID_DOSSIER'],
                 'debut'  => $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR),
-                "author" => null
+                'author' => null,
             );
-
         }
 
         return $historique;
