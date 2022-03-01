@@ -536,6 +536,54 @@
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
                 </changement>
+                <formulaire>
+                    <label>Formulaires</label>
+                    <controller>formulaire</controller>
+                    <resource>gestion_parametrages</resource>
+                    <privilege>gestion_formulaires</privilege>
+                    <pages>
+                        <index>
+                            <label>Index</label>
+                            <controller>formulaire</controller>
+                            <action>index</action>
+                        </index>
+                        <add-rubrique>
+                            <label>Ajout d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>add-rubrique</action>
+                        </add-rubrique>
+                        <edit-rubrique>
+                            <label>Édition d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>edit-rubrique</action>
+                        </edit-rubrique>
+                        <delete-rubrique>
+                            <label>Suppression d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>delete-rubrique</action>
+                        </delete-rubrique>
+                        <add-champ>
+                            <label>Ajout d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>add-champ</action>
+                        </add-champ>
+                        <edit-champ>
+                            <label>Édition d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>edit-champ</action>
+                        </edit-champ>
+                        <delete-champ>
+                            <label>Suppression d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>delete-champ</action>
+                        </delete-champ>
+                        <delete-valeur-liste>
+                            <label>Suppression d'une valeur d'une liste</label>
+                            <controller>formulaire</controller>
+                            <action>delete-valeur-liste</action>
+                        </delete-valeur-liste>
+                    </pages>
+                </formulaire>
             </pages>
         </admin>
 

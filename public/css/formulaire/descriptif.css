@@ -1,0 +1,13 @@
+#descriptif-personnalise a {
+    font-weight: 600;
+    text-decoration: underline;
+    margin-left: 1rem;
+}
+
+.form-horizontal .control-group {
+    margin-bottom: 25px;
+}
+
+#affichage-informations .text-control {
+    padding-top: 5px;
+}
