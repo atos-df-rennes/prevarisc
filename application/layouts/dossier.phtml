@@ -35,6 +35,15 @@
                 </a>
             </li>
         <?php endif ?>
+
+        <?php if ($this->idTypeDossier === 1): ?>
+            <li class = <?= $this->action == "docconsulte" ? "active" : "" ?>>
+                <a href= <?= $this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true) ?>>
+                    <i class="icon-file icon-black"></i>
+                    Vérification technique
+                </a>
+            </li>
+        <?php endif ?>
                 
         <?php if ($this->idTypeDossier == 1 && $this->isAllowedEffectifsDegagements): ?>
             <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
