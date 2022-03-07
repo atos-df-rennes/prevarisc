@@ -293,11 +293,11 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     $segmentAvisDerogations = $segment->avisDerogations;
 
     foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
-        addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
-        addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
-        addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
-        addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
-        addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+        setVars($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+        setVars($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        setVars($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        setVars($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        setVars($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
         if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
             $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
@@ -305,7 +305,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
             $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
         }
 
-        addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+        setVars($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
 
         $segmentAvisDerogations->merge();
     }
