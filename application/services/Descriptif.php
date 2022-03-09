@@ -12,16 +12,12 @@ abstract class Service_Descriptif
 
     public function getRubriques(int $idObject, $classObject): array
     {
-
         $modelChamp = new Model_DbTable_Champ();
         $serviceValeur = new Service_Valeur();
 
         $modelRubrique = new Model_DbTable_Rubrique();
-        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique($this->CAPSULE_RUBRIQUE,$classObject);
-        /*
-        print("#=>".$this->CAPSULE_RUBRIQUE);
-        print_r('<pre>'.var_dump($modelRubrique->getRubriquesByCapsuleRubrique($this->CAPSULE_RUBRIQUE)).'</pre>');         
-        */
+        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique($this->CAPSULE_RUBRIQUE, $classObject);
+
         foreach ($rubriques as &$rubrique) {
             $rubrique['CHAMPS'] = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
 

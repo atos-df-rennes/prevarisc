@@ -3086,7 +3086,7 @@ class DossierController extends Zend_Controller_Action
 
             $idDossier = $this->getParam('id');
 
-            $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier,get_class($this)));
+            $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
             $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
         }
     }
@@ -3099,7 +3099,7 @@ class DossierController extends Zend_Controller_Action
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
         $idDossier = $this->getParam('id');
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier,get_class($this)));
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
 
         $request = $this->getRequest();
         if ($request->isPost()) {

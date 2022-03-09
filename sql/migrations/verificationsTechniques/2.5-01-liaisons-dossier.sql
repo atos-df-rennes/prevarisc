@@ -1,3 +1,7 @@
+INSERT INTO `capsulerubrique` VALUES
+(2, 'descriptifVerificationsTechniques', 'Vérifications techniques du dossier');
+
+-- FIXME Mettre des IF NOT EXISTS pour chaque création de table
 CREATE TABLE `capsulerubriquedossier` (
     `ID_DOSSIER` bigint(20) NOT NULL,
     `ID_CAPSULERUBRIQUE` bigint(20) NOT NULL,
