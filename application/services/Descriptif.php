@@ -41,14 +41,20 @@ abstract class Service_Descriptif
         return $sortedChampValeurListe;
     }
 
-    public function saveRubriqueDisplay(string $key, int $idElement, int $value): void
+    public function saveRubriqueDisplay(string $key, int $idElement, $classObject,int $value): void
     {
-        $serviceRubriqueDossier = new Service_RubriqueDossier();
+        $serviceRubrique = NULL;
+        if(strpos(strtolower($classObject),'dossier') !== false){
+            $serviceRubrique = new Service_RubriqueDossier();
+        }
+        if(strpos(strtolower($classObject),'etablissement') !== false){
+            $serviceRubrique = new Service_Rubrique();
+        }
 
         $explodedRubrique = explode('-', $key);
         $idRubrique = end($explodedRubrique);
 
-        $serviceRubriqueDossier->updateRubriqueDisplay($idRubrique, $idElement, $value);
+        $serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
     public function saveValeurChamp(string $key, int $idObject, $classObject, $value): void

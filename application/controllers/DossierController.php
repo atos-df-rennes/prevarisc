@@ -3109,7 +3109,7 @@ class DossierController extends Zend_Controller_Action
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, get_class($this), intval($value));
                     }
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {

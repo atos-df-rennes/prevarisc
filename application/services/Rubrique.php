@@ -1,5 +1,7 @@
 <?php
 
+//TODO transformer cette class en class abstraite afin de faire etendre au maximum 
+
 class Service_Rubrique
 {
     public function updateRubriqueDisplay(int $idRubrique, int $idEtablissement, int $userDisplay): void
