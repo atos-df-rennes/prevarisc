@@ -5,13 +5,25 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
     protected $_name = 'rubrique'; // Nom de la base
     protected $_primary = 'ID_RUBRIQUE'; // Clé primaire
 
-    public function getRubriquesByCapsuleRubrique(string $capsuleRubrique, bool $adminView = false): array
+    public function getRubriquesByCapsuleRubrique(string $capsuleRubrique, $classObject, bool $adminView = false): array
     {
+        $alias = NULL;
+        $tableName = NULL;
+
+        if(strpos(strtolower($classObject),'dossier') !== false){
+            $alias = 'drd';
+            $tableName = 'displayrubriqueDossier';
+        }
+        if(strpos(strtolower($classObject),'etablissement') !== false){
+            $alias = 'dre';
+            $tableName = 'displayrubriqueetablissement';
+        }
+
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['r' => 'rubrique'], ['ID_RUBRIQUE', 'NOM'])
             ->join(['cr' => 'capsulerubrique'], 'r.ID_CAPSULERUBRIQUE = cr.ID_CAPSULERUBRIQUE', [])
-            ->joinLeft(['dre' => 'displayrubriqueetablissement'], 'r.ID_RUBRIQUE = dre.ID_RUBRIQUE', [])
+            ->joinLeft([$alias => $tableName], 'r.ID_RUBRIQUE = '.$alias.'.ID_RUBRIQUE', [])
             ->where('cr.NOM_INTERNE = ?', $capsuleRubrique)
             ->order('r.Id_RUBRIQUE')
         ;
@@ -23,12 +35,15 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
         } else {
             $select->columns(
                 [
-                    'DISPLAY' => new Zend_Db_Expr(
+                    'DISPLAY' => new Zend_Db_Expr(sprintf(
                         'CASE WHEN
-                            dre.USER_DISPLAY IS NULL THEN r.DEFAULT_DISPLAY
-                        ELSE
-                            dre.USER_DISPLAY
-                        END'
+                        %s.USER_DISPLAY IS NULL THEN r.DEFAULT_DISPLAY
+                    ELSE
+                        %s.USER_DISPLAY
+                    END'
+                    ,
+                    $alias,$alias
+                    )
                     ),
                 ]
             );

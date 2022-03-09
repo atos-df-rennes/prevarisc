@@ -2549,7 +2549,7 @@ class DossierController extends Zend_Controller_Action
         // Gestion des rubriques/champs personnalisés
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
-        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
+        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab, get_class($this));
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
 
@@ -3074,6 +3074,54 @@ class DossierController extends Zend_Controller_Action
 
             $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
             $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->idDossier]);
+        }
+    }
+
+    public function verificationsTechniquesAction(){
+        if (1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'))) {
+            $this->_helper->layout->setLayout('dossier');
+            $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+
+            $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+
+            $idDossier = $this->getParam('id');
+
+            $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier,get_class($this)));
+            $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+        }
+    }
+    
+    public function editVerificationsTechniquesAction(): void
+    {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $idDossier = $this->getParam('id');
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier,get_class($this)));
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getParams();
+                $lastKey = null;
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
+                    }
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                    }
+                    $lastKey = $key;
+                }
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
         }
     }
 }

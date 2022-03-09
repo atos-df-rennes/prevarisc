@@ -1,11 +1,12 @@
 <?php
 
-class Service_Valeur
+class Service_ValeurDossier
 {
-    public function get(int $idChamp, int $idObject, $classObject)
+    public function get(int $idChamp, int $idDossier)
     {
         $modelValeur = new Model_DbTable_Valeur();
-        $valeur = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+
+        $valeur = $modelValeur->getByChampAndDossier($idChamp, $idDossier);
 
         if (null !== $valeur) {
             $typeValeur = $this->getTypeValeur($idChamp);
@@ -15,33 +16,18 @@ class Service_Valeur
         return $valeur;
     }
 
-    public function insert(int $idChamp, int $idObject, $classObject, $value): void
+    public function insert(int $idChamp, int $idDossier, $value): void
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
-            
-            $typeValeur = $this->getTypeValeur($idChamp);  
-            $idValeurInsert = $modelValeur->insert([
-            $typeValeur => $value,
-            'ID_CHAMP' => $idChamp,
+
+            $typeValeur = $this->getTypeValeur($idChamp);
+
+            $modelValeur->insert([
+                $typeValeur => $value,
+                'ID_CHAMP' => $idChamp,
+                'ID_DOSSIER' => $idDossier,
             ]);
-
-            if(strpos(strtolower($classObject),"dossier") !== false){
-                
-                $modelDossierValeur = new Model_DbTable_DossierValeur();
-                try{
-                    $modelDossierValeur->insert(
-                        [
-                            'ID_DOSSIER'    => $idObject,
-                            'ID_VALEUR'     => $idValeurInsert
-                        ]
-                    );
-                }
-                catch (Exception $e) {
-                    echo $e;
-                }
-
-            }
         }
     }
 
