@@ -22,25 +22,19 @@ class Service_Valeur
             
             $typeValeur = $this->getTypeValeur($idChamp);  
             $idValeurInsert = $modelValeur->insert([
-            $typeValeur => $value,
-            'ID_CHAMP' => $idChamp,
+                $typeValeur => $value,
+                'ID_CHAMP' => $idChamp,
             ]);
 
-            if(strpos(strtolower($classObject),"dossier") !== false){
-                
+            if(strpos(strtolower($classObject), "dossier") !== false){
                 $modelDossierValeur = new Model_DbTable_DossierValeur();
-                try{
-                    $modelDossierValeur->insert(
-                        [
-                            'ID_DOSSIER'    => $idObject,
-                            'ID_VALEUR'     => $idValeurInsert
-                        ]
-                    );
-                }
-                catch (Exception $e) {
-                    echo $e;
-                }
 
+                $modelDossierValeur->insert(
+                    [
+                        'ID_DOSSIER'    => $idObject,
+                        'ID_VALEUR'     => $idValeurInsert
+                    ]
+                );
             }
         }
     }
