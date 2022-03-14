@@ -19,7 +19,6 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
-        // Définition des forms, models et services
         $form = new Form_CustomForm();
 
         $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
