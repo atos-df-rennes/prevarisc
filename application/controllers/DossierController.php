@@ -3136,7 +3136,8 @@ class DossierController extends Zend_Controller_Action
     }
 
     //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
-    public function avisEtDerogationsAction(){
+    public function avisEtDerogationsAction()
+    {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
 
@@ -3171,9 +3172,10 @@ class DossierController extends Zend_Controller_Action
     /**
      * Retourne les informations d'une liste d avis et derogations selon l id d une etude
      * +
-     * retourne vers la page d edition de ces avis + derogations
+     * retourne vers la page d edition de ces avis + derogations.
      */
-    public function avisEtDerogationsEditAction(){
+    public function avisEtDerogationsEditAction()
+    {
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
@@ -3206,9 +3208,10 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function avisEtDerogationsDeleteAction(){
+    public function avisEtDerogationsDeleteAction()
+    {
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
 
-        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->getParam("avis-derogation"));
+        $dbAvisDerogations->delete('ID_AVIS_DEROGATION = '.$this->getParam('avis-derogation'));
     }
 }
