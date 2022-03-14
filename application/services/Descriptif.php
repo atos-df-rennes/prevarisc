@@ -1,28 +1,47 @@
 <?php
 
-// FIXME Faire un service Formulaire plutôt que Etablissement ?
-// Tout ce qui est là est générique peu importe l'objet
 abstract class Service_Descriptif
 {
-    public const CAPSULE_RUBRIQUE = 'NA';
+    private $modelChamp;
+    private $modelChampValeurListe;
+    private $modelRubrique;
+    private $modelValeur;
+    
+    private $serviceValeur;
 
-    public function setCapsuleRubrique($newValue) : void{
-        $this->CAPSULE_RUBRIQUE = $newValue;
+    private $capsuleRubrique;
+    private $modelDisplayRubrique;
+
+    public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique)
+    {
+        // Services communs
+        $this->modelChamp = new Model_DbTable_Champ();
+        $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();
+        $this->modelRubrique = new Model_DbTable_Rubrique();
+        $this->modelValeur = new Model_DbTable_Valeur();
+        
+        $this->serviceValeur = new Service_Valeur();
+
+        // Services spécifiques à l'objet, setter dans le Service correspondant
+        $this->capsuleRubrique = $capsuleRubrique;
+        $this->modelDisplayRubrique = $modelDisplayRubrique;
     }
 
-    public function getRubriques(int $idObject, $classObject): array
+    public function getRubriques(int $idObject, string $classObject): array
     {
-        $modelChamp = new Model_DbTable_Champ();
-        $serviceValeur = new Service_Valeur();
-
-        $modelRubrique = new Model_DbTable_Rubrique();
-        $rubriques = $modelRubrique->getRubriquesByCapsuleRubrique($this->CAPSULE_RUBRIQUE, $classObject);
+        $rubriques = $this->modelRubrique->getRubriquesByCapsuleRubrique($this->capsuleRubrique);
 
         foreach ($rubriques as &$rubrique) {
-            $rubrique['CHAMPS'] = $modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
+            $userDisplay = $this->modelDisplayRubrique->getUserDisplay($idObject, $rubrique['ID_RUBRIQUE']);
+
+            if (!empty($userDisplay)) {
+                $rubrique['DISPLAY'] = $userDisplay;
+            }
+
+            $rubrique['CHAMPS'] = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
 
             foreach ($rubrique['CHAMPS'] as &$champ) {
-                $champ['VALEUR'] = $serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
+                $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
             }
         }
 
@@ -31,9 +50,9 @@ abstract class Service_Descriptif
 
     public function getValeursListe(): array
     {
-        $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
-        $champsValeurListe = $modelChampValeurListe->findAll();
+        $champsValeurListe = $this->modelChampValeurListe->findAll();
         $sortedChampValeurListe = [];
+
         foreach ($champsValeurListe as $champValeurListe) {
             $sortedChampValeurListe[$champValeurListe['ID_CHAMP']][] = $champValeurListe;
         }
@@ -43,7 +62,9 @@ abstract class Service_Descriptif
 
     public function saveRubriqueDisplay(string $key, int $idElement, $classObject,int $value): void
     {
-        $serviceRubrique = NULL;
+        // A faire dans les services propres comme pour le userDisplay
+        $serviceRubrique = null;
+
         if(strpos(strtolower($classObject),'dossier') !== false){
             $serviceRubrique = new Service_RubriqueDossier();
         }
@@ -67,15 +88,12 @@ abstract class Service_Descriptif
 
     private function saveValeur(int $idChamp, int $idObject, $classObject, $value): void
     {
-        $modelValeur = new Model_DbTable_Valeur();
-        $serviceValeur = new Service_Valeur();
-
-        $valueInDB = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
         if (null === $valueInDB) {
-            $serviceValeur->insert($idChamp, $idObject, $classObject, $value);
+            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value);
         } else {
-            $serviceValeur->update($idChamp, $valueInDB, $value);
+            $this->serviceValeur->update($idChamp, $valueInDB, $value);
         }
     }
 }
