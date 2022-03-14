@@ -3078,17 +3078,13 @@ class DossierController extends Zend_Controller_Action
     }
 
     public function verificationsTechniquesAction(){
-        if (1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'))) {
-            $this->_helper->layout->setLayout('dossier');
-            $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
 
-            $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $idDossier = $this->getParam('id');
 
-            $idDossier = $this->getParam('id');
-
-            $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
-            $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
-        }
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
     
     public function editVerificationsTechniquesAction(): void
@@ -3110,7 +3106,7 @@ class DossierController extends Zend_Controller_Action
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, get_class($this), intval($value));
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
                     }
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {

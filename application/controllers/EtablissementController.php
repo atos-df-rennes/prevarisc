@@ -258,7 +258,7 @@ class EtablissementController extends Zend_Controller_Action
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, get_class($this), intval($value));
+                        $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
                     }
 
                     // Informations concernant les valeurs des champs

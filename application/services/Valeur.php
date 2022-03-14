@@ -2,7 +2,7 @@
 
 class Service_Valeur
 {
-    public function get(int $idChamp, int $idObject, $classObject)
+    public function get(int $idChamp, int $idObject, string $classObject)
     {
         $modelValeur = new Model_DbTable_Valeur();
         $valeur = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
@@ -15,7 +15,7 @@ class Service_Valeur
         return $valeur;
     }
 
-    public function insert(int $idChamp, int $idObject, $classObject, $value): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value): void
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
@@ -26,12 +26,22 @@ class Service_Valeur
                 'ID_CHAMP' => $idChamp,
             ]);
 
-            if(strpos(strtolower($classObject), "dossier") !== false){
+            if(strpos($classObject, "Dossier") !== false){
                 $modelDossierValeur = new Model_DbTable_DossierValeur();
 
                 $modelDossierValeur->insert(
                     [
                         'ID_DOSSIER'    => $idObject,
+                        'ID_VALEUR'     => $idValeurInsert
+                    ]
+                );
+            }
+            if(strpos($classObject, "Etablissement") !== false){
+                $modelEtablissementValeur = new Model_DbTable_EtablissementValeur();
+
+                $modelEtablissementValeur->insert(
+                    [
+                        'ID_ETABLISSEMENT'    => $idObject,
                         'ID_VALEUR'     => $idValeurInsert
                     ]
                 );

@@ -5,20 +5,27 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     protected $_name = 'valeur'; // Nom de la base
     protected $_primary = 'ID_VALEUR'; // Clé primaire
 
-    public function getByChampAndObject(int $idChamp, int $idObject, $classObject)
+    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject): ?Zend_Db_Table_Row
     {
 
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['v' => 'valeur'])
             ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
-            ->where('c.ID_CHAMP = ?', $idChamp);
-        if(strpos(strtolower($classObject),'dossier') !== false){
-            $select
-            ->join(['d' => 'dossierValeur'], 'd.ID_VALEUR = v.ID_VALEUR', [])
-            ->where('d.ID_DOSSIER = ?', $idObject);
+            ->where('c.ID_CHAMP = ?', $idChamp)
+        ;
+
+        if(strpos($classObject, 'Dossier') !== false){
+            $select->join(['dv' => 'dossierValeur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
+                ->where('dv.ID_DOSSIER = ?', $idObject)
+            ;
         }
-        $result = $this->fetchRow($select);
-        return $result;
+        if(strpos($classObject, 'Etablissement') !== false){
+            $select->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR', [])
+                ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
+            ;
+        }
+
+        return $this->fetchRow($select);
     }
 }

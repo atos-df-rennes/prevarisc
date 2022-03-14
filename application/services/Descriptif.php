@@ -8,11 +8,12 @@ abstract class Service_Descriptif
     private $modelValeur;
     
     private $serviceValeur;
-
+    
     private $capsuleRubrique;
     private $modelDisplayRubrique;
+    private $serviceRubrique;
 
-    public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique)
+    public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique, $serviceRubrique)
     {
         // Services communs
         $this->modelChamp = new Model_DbTable_Champ();
@@ -25,6 +26,7 @@ abstract class Service_Descriptif
         // Services spécifiques à l'objet, setter dans le Service correspondant
         $this->capsuleRubrique = $capsuleRubrique;
         $this->modelDisplayRubrique = $modelDisplayRubrique;
+        $this->serviceRubrique = $serviceRubrique;
     }
 
     public function getRubriques(int $idObject, string $classObject): array
@@ -60,25 +62,15 @@ abstract class Service_Descriptif
         return $sortedChampValeurListe;
     }
 
-    public function saveRubriqueDisplay(string $key, int $idElement, $classObject,int $value): void
+    public function saveRubriqueDisplay(string $key, int $idElement, int $value): void
     {
-        // A faire dans les services propres comme pour le userDisplay
-        $serviceRubrique = null;
-
-        if(strpos(strtolower($classObject),'dossier') !== false){
-            $serviceRubrique = new Service_RubriqueDossier();
-        }
-        if(strpos(strtolower($classObject),'etablissement') !== false){
-            $serviceRubrique = new Service_Rubrique();
-        }
-
         $explodedRubrique = explode('-', $key);
         $idRubrique = end($explodedRubrique);
 
-        $serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
+        $this->serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
-    public function saveValeurChamp(string $key, int $idObject, $classObject, $value): void
+    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value): void
     {
         $explodedChamp = explode('-', $key);
         $idChamp = end($explodedChamp);
@@ -86,7 +78,7 @@ abstract class Service_Descriptif
         $this->saveValeur($idChamp, $idObject, $classObject, $value);
     }
 
-    private function saveValeur(int $idChamp, int $idObject, $classObject, $value): void
+    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value): void
     {
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
