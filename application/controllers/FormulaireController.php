@@ -19,7 +19,7 @@ class FormulaireController extends Zend_Controller_Action
         // Récupération des rubriques pour chaque objet global
         // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
         foreach ($capsulesRubriques as &$capsuleRubrique) {
-            $capsuleRubrique['RUBRIQUES'] = $modelRubrique->getRubriquesByCapsuleRubrique($capsuleRubrique['NOM_INTERNE'], null, true);
+            $capsuleRubrique['RUBRIQUES'] = $modelRubrique->getRubriquesByCapsuleRubrique($capsuleRubrique['NOM_INTERNE']);
         }
 
         // Assignation des variables à la vue
