@@ -43,7 +43,7 @@
                                     <input
                                         type='text'
                                         name='champ-<?= $champ["ID_CHAMP"] ?>'
-                                        value='<?= $champ["VALEUR"] ?>'
+                                        value='<?= htmlspecialchars($champ["VALEUR"], ENT_QUOTES) ?>'
                                     >
                                 <?php break;
                                 // Texte long
@@ -56,7 +56,7 @@
                                         <option selected value>Sélectionnez un élément</option>
                                         <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
                                             <option
-                                                value="<?= $champvaleurliste['VALEUR'] ?>"
+                                                value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
                                                 <?= $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
                                             >
                                                 <?= $champvaleurliste['VALEUR'] ?>
