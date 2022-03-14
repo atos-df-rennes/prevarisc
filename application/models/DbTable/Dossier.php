@@ -568,7 +568,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from(['d' => 'dossier'], [])
             ->join(['ded' => 'dossiereffectifdegagement'], 'd.ID_DOSSIER = ded.ID_DOSSIER', [])
             ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT')
-            ->where('d.ID_DOSSIER = ?', $idDossier);
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
 
         return $this->fetchRow($select);
     }
@@ -580,7 +581,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
             ->join(['ded' => 'dossiereffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT', [])
             ->join(['d' => 'dossier'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
-            ->where('d.ID_DOSSIER = ?', $idDossier);
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
 
         return $this->fetchRow($select);
     }

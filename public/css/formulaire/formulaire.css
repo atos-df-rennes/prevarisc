@@ -1,0 +1,37 @@
+form #save-element {
+    margin: 0;
+}
+
+.form-inline input:not([type="submit"]),
+.form-inline select {
+    margin-bottom: 10px;
+}
+
+label.optional {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+div[id^='saved-rubriques-'] a {
+    display: block;
+}
+
+.infos-rubrique,
+.infos-champ {
+	border: 1px dotted #818183;
+	padding: 20px 20px 20px 20px;
+	margin-bottom: 20px;
+}
+
+#edit-rubrique #div-list-value {
+    display: none;
+}
+
+#default-display, #actions {
+    vertical-align: middle;
+}
+
+#actions a {
+    padding: 0.5rem;
+    text-decoration: none;
+}

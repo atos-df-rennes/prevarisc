@@ -1,0 +1,71 @@
+<a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>">
+    <i class="icon-arrow-left"></i>
+    Retourner sur la rubrique "<?= $this->rubrique['NOM'] ?>"
+</a>
+
+<div class="row-fluid">
+    <div class="span5">
+        <h2>Informations sur la rubrique</h2>
+    </div>
+
+    <div class="span4 offset2">
+        <h2>Informations sur le champ</h2>
+    </div>
+</div>
+
+<div id="edit-champ" class="row-fluid">
+    <div class="span5 infos-rubrique">
+        <h3>
+            <?= $this->rubrique['NOM'] ?>
+            <?php if($this->rubrique['DEFAULT_DISPLAY']): ?>
+                <small>(Affichée par défaut)</small>
+            <?php endif ?>
+        </h3>
+    </div>
+
+    <div class="span4 offset2 infos-champ">
+        <form action class="form-inline" method="post">
+            <label for="nom_champ">Nom du champ</label>
+            <input type="text" name="nom_champ" id="nom_champ" value="<?= $this->champ['NOM']; ?>" required>
+            <label for="type_champ">Type du champ</label>
+            <select name="type_champ" id="type_champ" disabled>
+                <?php foreach($this->listeTypeChampRubrique as $typeChamp): ?>
+                    <option
+                        value="<?= $typeChamp['ID_TYPECHAMP'] ?>"
+                        <?= $typeChamp['ID_TYPECHAMP'] === $this->champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
+                    >
+                        <?= $typeChamp['TYPE'] ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+
+            <?php if($this->valeursChamp !== null): ?>
+                <!-- Valeurs de la liste -->
+                <div class="row-fluid">
+                    <h3>Valeurs de la liste</h3>
+                    <?php foreach($this->valeursChamp as $valeur): ?>
+                        <div>
+                            <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= $valeur['VALEUR'] ?>">
+                            <a href='#' data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
+                        </div>
+                    <?php endforeach ?>
+
+                    <div id="div-valeurs-liste">
+                        <div class="row-fluid">
+                            <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                        </div>
+                        <div class="row-fluid">
+                            <div id="valeurs-liste" class="span10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <div class="pull-right">
+                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>"" type="button" class="btn">Annuler</a>
+                <button type="submit" class="btn btn-success">Sauvegarder le champ</button>
+            </div>
+        </form>
+    </div>
+</div>

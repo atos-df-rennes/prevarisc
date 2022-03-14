@@ -2557,11 +2557,19 @@ class DossierController extends Zend_Controller_Action
             }
         }
 
+        // Gestion des rubriques/champs personnalisés
+        $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+
+        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
+        $this->view->assign('rubriques', $rubriques);
+        $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
+
+        // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $nouvellePJ = $DBpieceJointe->createRow();
         $nouvellePJ->ID_PIECEJOINTE = $this->view->idPieceJointe;
-        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 3);
+        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 4);
         $nouvellePJ->EXTENSION_PIECEJOINTE = '.odt';
         $nouvellePJ->DESCRIPTION_PIECEJOINTE = sprintf(
             "Rapport de l'établissement %s (%s) généré le %s à %s",
@@ -3077,7 +3085,7 @@ class DossierController extends Zend_Controller_Action
             $data = $request->getPost();
 
             $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, array('id' => $this->idDossier));
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->idDossier]);
         }
     }
 

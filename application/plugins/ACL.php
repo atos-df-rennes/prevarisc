@@ -387,7 +387,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 }
 
                 return [$page->getResource()];
-            } elseif ('dossier' == $page->get('controller')) {
+            }
+            if ('dossier' == $page->get('controller')) {
                 if (null === $page->getResource() && null != $request) {
                     if ($id_dossier = $request->getParam('id')) {
                         $model_dossier = new Model_DbTable_Dossier();
