@@ -3100,6 +3100,7 @@ class DossierController extends Zend_Controller_Action
         $idDossier = $this->getParam('id');
 
         $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
 
         $request = $this->getRequest();
         if ($request->isPost()) {
