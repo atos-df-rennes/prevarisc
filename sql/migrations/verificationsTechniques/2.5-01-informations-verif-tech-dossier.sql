@@ -1,15 +1,7 @@
+SET NAMES 'utf8';
+
 INSERT IGNORE INTO `capsulerubrique` VALUES
 (2, 'descriptifVerificationsTechniques', 'Vérifications techniques du dossier');
-
-CREATE TABLE IF NOT EXISTS `capsulerubriquedossier` (
-    `ID_DOSSIER` bigint(20) NOT NULL,
-    `ID_CAPSULERUBRIQUE` bigint(20) NOT NULL,
-    PRIMARY KEY (`ID_DOSSIER`,`ID_CAPSULERUBRIQUE`),
-    KEY `fk_capsuleRubriqueDossier_dossier_idx` (`ID_DOSSIER`),
-    KEY `fk_capsuleRubriqueDossier_capsulerubrique_idx` (`ID_CAPSULERUBRIQUE`),
-    CONSTRAINT `fk_capsuleRubriqueDossier_dossier` FOREIGN KEY (`ID_DOSSIER`) REFERENCES `dossier` (`ID_DOSSIER`) ON DELETE CASCADE ON UPDATE NO ACTION,
-    CONSTRAINT `fk_capsuleRubriqueDossier_capsulerubrique` FOREIGN KEY (`ID_CAPSULERUBRIQUE`) REFERENCES `capsulerubrique` (`ID_CAPSULERUBRIQUE`) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS `displayrubriquedossier` (
     `ID_DOSSIER` bigint(20) NOT NULL,
