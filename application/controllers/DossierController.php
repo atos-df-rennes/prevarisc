@@ -3077,7 +3077,8 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function verificationsTechniquesAction(){
+    public function verificationsTechniquesAction()
+    {
         $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
 
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
@@ -3086,7 +3087,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
-    
+
     public function editVerificationsTechniquesAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');

@@ -6,9 +6,9 @@ abstract class Service_Descriptif
     private $modelChampValeurListe;
     private $modelRubrique;
     private $modelValeur;
-    
+
     private $serviceValeur;
-    
+
     private $capsuleRubrique;
     private $modelDisplayRubrique;
     private $serviceRubrique;
@@ -20,7 +20,7 @@ abstract class Service_Descriptif
         $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $this->modelRubrique = new Model_DbTable_Rubrique();
         $this->modelValeur = new Model_DbTable_Valeur();
-        
+
         $this->serviceValeur = new Service_Valeur();
 
         // Services spécifiques à l'objet, setter dans le Service correspondant

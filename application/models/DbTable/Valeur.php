@@ -7,7 +7,6 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
 
     public function getByChampAndObject(int $idChamp, int $idObject, string $classObject): ?Zend_Db_Table_Row
     {
-
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['v' => 'valeur'])
@@ -15,12 +14,12 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
             ->where('c.ID_CHAMP = ?', $idChamp)
         ;
 
-        if(strpos($classObject, 'Dossier') !== false){
+        if (false !== strpos($classObject, 'Dossier')) {
             $select->join(['dv' => 'dossierValeur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
                 ->where('dv.ID_DOSSIER = ?', $idObject)
             ;
         }
-        if(strpos($classObject, 'Etablissement') !== false){
+        if (false !== strpos($classObject, 'Etablissement')) {
             $select->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR', [])
                 ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
             ;

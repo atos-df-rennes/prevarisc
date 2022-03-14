@@ -19,30 +19,30 @@ class Service_Valeur
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
-            
-            $typeValeur = $this->getTypeValeur($idChamp);  
+
+            $typeValeur = $this->getTypeValeur($idChamp);
             $idValeurInsert = $modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
             ]);
 
-            if(strpos($classObject, "Dossier") !== false){
+            if (false !== strpos($classObject, 'Dossier')) {
                 $modelDossierValeur = new Model_DbTable_DossierValeur();
 
                 $modelDossierValeur->insert(
                     [
-                        'ID_DOSSIER'    => $idObject,
-                        'ID_VALEUR'     => $idValeurInsert
+                        'ID_DOSSIER' => $idObject,
+                        'ID_VALEUR' => $idValeurInsert,
                     ]
                 );
             }
-            if(strpos($classObject, "Etablissement") !== false){
+            if (false !== strpos($classObject, 'Etablissement')) {
                 $modelEtablissementValeur = new Model_DbTable_EtablissementValeur();
 
                 $modelEtablissementValeur->insert(
                     [
-                        'ID_ETABLISSEMENT'    => $idObject,
-                        'ID_VALEUR'     => $idValeurInsert
+                        'ID_ETABLISSEMENT' => $idObject,
+                        'ID_VALEUR' => $idValeurInsert,
                     ]
                 );
             }

@@ -2,7 +2,8 @@
 
 class Service_EtablissementDescriptif extends Service_Descriptif
 {
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct(
             'descriptifEtablissement',
             new Model_DbTable_DisplayRubriqueEtablissement(),
