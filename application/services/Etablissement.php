@@ -409,12 +409,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $value['TITRE'],
             ]);
 
-            $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
+            $date = null !== $value['DATECOMM_DOSSIER'] ? new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES) : null;
 
             $historique[$key][$elem] = array(
                 'valeur' => $valueDisplay,
                 'url' => "/dossier/avis-et-derogations/id/".$value['ID_DOSSIER'],
-                'debut'  => $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR),
+                'debut'  => null !== $date ? $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR) : null,
                 'author' => null,
             );
         }

@@ -11,7 +11,13 @@
         <tbody>
             <?php foreach($this->array as $item) : ?>
             <tr>
-                <td>Du <?= $item["debut"] ?></td>
+                <td>
+                    <?php if (null !== $item["debut"]): ?>
+                        Du <?= $item["debut"] ?>
+                    <?php else: ?>
+                        Date de commission non renseignée
+                    <?php endif ?>
+                </td>
                 <td>
                     <a href="<?= $item['url'] ?>"><?= $item["valeur"] ?></a>
                 </td>
