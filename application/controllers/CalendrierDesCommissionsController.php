@@ -932,12 +932,18 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             //On récupère le nom de la commission
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
 
+            // FIXME Grouper les foreach en un seul, là c'est débile de faire 3 fois le même
             //afin de récuperer les informations des communes (adresse des mairies etc)
             foreach ($listeDossiers as $val => $ue) {
                 $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
+
+                //Ajoute les avis derogations provenant du dossier
+                $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
                 if (count($listePrev) > 0) {
                     $listeDossiers[$val]['preventionnistes'] = $listePrev;
                 }
+
                 //On recupere la liste des établissements qui concernent le dossier
                 $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
                 //on recupere la liste des infos des établissement
@@ -1126,11 +1132,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossier['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
             $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+
+            $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
         }
 
         $this->view->informationsMembre = $listeMembres;
         $this->view->listeCommunes = $tabCommune;
+
         $this->view->dossierComm = $listeDossiers;
+
         $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
         $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
     }
@@ -1181,6 +1191,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
 
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
+            // FIXME Remplacer les $listeDossiers[$val] par $ue
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
@@ -1220,6 +1233,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbEtablissement = new Model_DbTable_Etablissement();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1235,7 +1249,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
         }
+
         $this->view->dossierComm = $listeDossiers;
     }
 

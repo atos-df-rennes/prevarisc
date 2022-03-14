@@ -1,0 +1,28 @@
+<?php if (empty($this->array)) : ?>
+    <p class='muted'>Pas d'historique disponible.</p>
+<?php else : ?>
+    <table class='table table-bordered table-hover'>
+        <thead>
+            <tr>
+                <th style='width: 250px' >Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->array as $item) : ?>
+            <tr>
+                <td>
+                    <?php if (null !== $item["debut"]): ?>
+                        Du <?= $item["debut"] ?>
+                    <?php else: ?>
+                        Date de commission non renseignée
+                    <?php endif ?>
+                </td>
+                <td>
+                    <a href="<?= $item['url'] ?>"><?= $item["valeur"] ?></a>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>

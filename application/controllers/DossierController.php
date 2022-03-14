@@ -143,6 +143,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -151,6 +152,8 @@ class DossierController extends Zend_Controller_Action
             ->initContext()
         ;
 
+        $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+
         if (!isset($this->view->action)) {
             $this->view->action = $this->_request->getActionName();
         }
@@ -158,6 +161,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
 
         $this->idDossier = intval($this->_getParam('id'));
+        // FIXME A déplacer dans le 2ème if ?
         $this->view->idDossier = $this->idDossier;
 
         if (null == $this->idDossier) {
@@ -184,7 +188,11 @@ class DossierController extends Zend_Controller_Action
 
             $this->view->verrou = $dossier->VERROU_DOSSIER;
 
-            $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+            $serviceDossier = new Service_Dossier();
+            $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
+            // Autorisation de set avis derogations
+            $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
+
             $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
         }
     }
@@ -2151,6 +2159,9 @@ class DossierController extends Zend_Controller_Action
         $this->view->effectifEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
         $this->view->degagementEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
 
+        // Avis & Dérogations
+        $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
+
         //Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
         $typeDossier = $dbType->find($this->view->infosDossier['TYPE_DOSSIER'])->current();
@@ -3065,6 +3076,7 @@ class DossierController extends Zend_Controller_Action
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
             $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
+            // FIXME Normalement inutile
             $this->view->idDossier = $this->idDossier;
         }
 
@@ -3075,5 +3087,82 @@ class DossierController extends Zend_Controller_Action
             $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
             $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->idDossier]);
         }
+    }
+
+    //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
+    public function avisEtDerogationsAction(){
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+
+        $dbAvisDerogation = new Model_DbTable_AvisDerogations();
+        $dbDossier = new Model_DbTable_Dossier();
+
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
+
+        $idDossier = $this->getParam('id');
+
+        $this->view->arrayAvisDerogations = $dbDossier->getListAvisDerogationsFromDossier($idDossier);
+        $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+
+        $DBlisteAvis = new Model_DbTable_Avis();
+        $this->view->listeAvis = $DBlisteAvis->getAvis();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            $dbAvisDerogation->insert($data);
+
+            $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
+        }
+    }
+
+    /**
+     * Retourne les informations d'une liste d avis et derogations selon l id d une etude
+     * +
+     * retourne vers la page d edition de ces avis + derogations
+     */
+    public function avisEtDerogationsEditAction(){
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+        $dbDossier = new Model_DbTable_Dossier();
+
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
+
+        $idDossier = $this->getParam('id');
+        $idAvisDerogation = $this->getParam('avis-derogation');
+
+        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
+        $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+
+        $DBlisteAvis = new Model_DbTable_Avis();
+        $this->view->listeAvis = $DBlisteAvis->getAvis();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            //Recuperation de l entite a mettre a jour
+            $where = $dbAvisDerogations->getAdapter()->quoteInto('ID_AVIS_DEROGATION = ?', $idAvisDerogation);
+
+            $dbAvisDerogations->update($data, $where);
+
+            $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
+        }
+    }
+
+    public function avisEtDerogationsDeleteAction(){
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+
+        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->getParam("avis-derogation"));
     }
 }

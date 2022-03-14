@@ -1,11 +1,11 @@
 <?php
 
 function addChamp($odf,$nomOdf, $variable){
-  try{
-    $odf->setVars($nomOdf,$variable, true,'UTF8');
-  } catch (Exception $e) {
+    try{
+        $odf->setVars($nomOdf,$variable, true,'UTF8');
+    } catch (Exception $e) {
 
-  }
+    }
 }
 
 // PARTIE PRESCRIPTION
@@ -21,13 +21,13 @@ function addPrescription($listePrescription,$type,$odf){
         try{
 			$prescription = $odf->listeExploitation;
 		} catch (Exception $e) {
-                    
+
 		}
     }else if ($type == 2){
         try{
 			$prescription = $odf->listeAmelioration;
 		} catch (Exception $e) {
-                    
+
 		}
     }
 
@@ -121,7 +121,7 @@ foreach($this->membresFiles as $val => $membre){
 						if(isset($commune["LIBELLE_COMMUNE"])){
 							addChamp($dossInfos,'communeDossier', $commune["LIBELLE_COMMUNE"]);
 						}
-						
+
 						addChamp($dossInfos,'objetDossier', $dossierInfos['OBJET_DOSSIER']);
 						addChamp($dossInfos,'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
 
@@ -136,6 +136,27 @@ foreach($this->membresFiles as $val => $membre){
 						foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 							addChamp($dossInfos, $nomChamp, $valeurChamp);
 						}
+
+                        // Gestion des avis & dérogations
+                        $segmentAvisDerogations = $dossInfos->avisDerogations;
+
+                        foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+                            addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+                            addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+                            addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+                            addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                            addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+                            if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                            } else {
+                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                            }
+
+                            addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+                            $segmentAvisDerogations->merge();
+                        }
 
 						$dateComm = new Zend_Date($this->dateComm);
 						addChamp($dossInfos,'dateCommission', $dateComm->get(Zend_Date::DAY." ".Zend_Date::MONTH_NAME." ".Zend_Date::YEAR));
@@ -226,7 +247,7 @@ foreach($this->membresFiles as $val => $membre){
 							    break;
 						}
 						addChamp($dossInfos,'avisDossier', $avis);
-                                                
+
 						switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
 							case 1:
 								$avis = "Favorable";
@@ -245,7 +266,7 @@ foreach($this->membresFiles as $val => $membre){
 							$listeDocUrba .= $docurb['NUM_DOCURBA']."    ";
 						}
 						addChamp($dossInfos,'numDocUrba', $listeDocUrba);
-						
+
 						addPrescription($dossierInfos['prescriptionReglDossier'],0,$dossInfos);
 						addPrescription($dossierInfos['prescriptionExploitation'],1,$dossInfos);
 						addPrescription($dossierInfos['prescriptionAmelioration'],2,$dossInfos);
@@ -254,6 +275,7 @@ foreach($this->membresFiles as $val => $membre){
 					}
 				}
 			}
+
 			$odf->mergeSegment($dossInfos);
 			$nouvellePJ = savePj($this->idComm,"Le pv a bien été généré");
             $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
