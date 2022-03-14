@@ -10,7 +10,7 @@
                 Informations générales
             </a>
         </li>
-            
+
         <?php if ($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
             echo "<li class='".(($this->action == "descriptif") ? "active" : "")."'>
                 <a "
@@ -44,12 +44,25 @@
                 </a>
             </li>
         <?php endif ?>
-                
+
         <?php if ($this->idTypeDossier == 1 && $this->isAllowedEffectifsDegagements): ?>
             <li class="<?= strpos($this->action, 'effectifs-degagements-dossier') !== false ? 'active' : '' ?>">
-                <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >    
+                <a class='sep' href='<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>' >
                     <em class="icon-th-list icon-black"></em>
                     Effectifs et dégagements
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($this->idTypeDossier === 1 && $this->isAllowedAvisDerogation): ?>
+            <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
+                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
+                    <i class="icon-file icon-black"></i>
+                    Avis et dérogation
+
+                    <?php if($this->hasAvisDerogation): ?>
+                        <div class="greenCircle pull-right"></div>
+                    <?php endif ?>
                 </a>
             </li>
         <?php endif ?>
@@ -60,27 +73,27 @@
                 . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
             </li>";
         } ?>
-            
+
         <li class='<?= ($this->action == "liees") ? "active" : "" ?>'>
             <a href='<?= $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'>
                 <em class="icon-folder-open icon-black"></em>
                 Établissements et dossiers liés
             </a>
         </li>
-            
+
         <?php if ($this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44) {
             echo "<li class='".(($this->action == "contact") ? "active" : "")."'>
                 <a  "
                 . "href='".$this->url(array("controller" => "dossier", "action"=>"contact", "id" => $this->idDossier), false, true)."'><i class=\"icon-user icon-black\"></i> Contacts</a>
             </li>";
         } ?>
-            
+
         <li class='<?= ($this->action == "piece-jointe") ? "active" : "" ?>'>
             <a href='<?= $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'>
                 <em class="icon-share icon-black"></em>
                 Pièces jointes
             </a>
-        </li> 
+        </li>
 
         <li class="nav-header">Actions</li>
 
@@ -210,7 +223,7 @@ endif; ?>
 
                 echo "
                     <a href='/etablissement/index/id/".$this->enteteEtab[0]['ID_ETABLISSEMENT']."' class='etab'>
-                        ".$this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS']." 
+                        ".$this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS']."
                     </a>
                 ";
 
@@ -340,7 +353,7 @@ endif; ?>
 			});
 			return false;
 		});
-	
+
 		$("#DEVERROU").live('click',function(){
 			$.ajax({
                 url: "/dossier/deverrou",

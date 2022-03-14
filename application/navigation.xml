@@ -1016,6 +1016,21 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
+                <avis-et-derogations>
+                    <label>Avis et dérogations</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations</action>
+                </avis-et-derogations>
+                <avis-et-derogations-edit>
+                    <label>Édition des avis et dérogations</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-edit</action>
+                </avis-et-derogations-edit>
+                <avis-et-derogations-delete>
+                    <label>Suppression d un avis derogation</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-delete</action>
+                </avis-et-derogations-delete>
                 <effectifs-degagements-dossier>
                     <label>Effectifs et Dégagements</label>
                     <controller>dossier</controller>
@@ -1037,6 +1052,7 @@
                     <action>edit-verifications-techniques</action>
                 </edit-verifications-techniques>
             </pages>
+
         </dossier>
 
         <!-- Gestion des erreurs -->

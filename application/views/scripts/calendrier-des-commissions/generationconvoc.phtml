@@ -73,7 +73,7 @@ foreach($this->informationsMembre as $val => $membre){
 				$heureCommTab = explode(":",$this->heureDeb);
 				$heureComm = $heureCommTab[0].":".$heureCommTab[1];
 				setVars($villeODF,'heureDebutComm',$heureComm);
-                                
+
 				$heureDebut = '';
 				foreach($this->dossierComm as $val => $dossierInfos){
 					if(
@@ -92,7 +92,7 @@ foreach($this->informationsMembre as $val => $membre){
 					}
 				}
 				setVars($villeODF, 'heureDeb1erDossier', $heureDebut);
-                                
+
 				//ICI FOREACH SUR LES DOSSIERS DE LA COMMUNE
 				//Generation du segment pour l'affichage des différentes infos du dossier
 				$infosDoss = $villeODF->infosDoss;
@@ -288,6 +288,27 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 	foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 		setVars($segment, $nomChamp, $valeurChamp);
 	}
+
+    // Gestion des avis & dérogations
+    $segmentAvisDerogations = $segment->avisDerogations;
+
+    foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+        setVars($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+        setVars($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        setVars($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        setVars($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        setVars($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+        if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+        } else {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        }
+
+        setVars($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+        $segmentAvisDerogations->merge();
+    }
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {

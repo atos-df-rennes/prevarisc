@@ -469,8 +469,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_DOSSIER from (
                 (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -481,8 +481,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 limit 1)
             UNION
                 (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -585,5 +585,39 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ;
 
         return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier
+     */
+    public function getListeDossierFromDossier($idDossier)
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(array('d' => 'dossier'))
+            ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(array('e' => 'etablissement'), 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = $idDossier)")
+            ->where('d.ID_DOSSIER != ?',$idDossier);
+
+       return $this->getAdapter()->fetchAll($select);
+    }
+
+    /**
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param
+     */
+    public function getListAvisDerogationsFromDossier($idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ad' => 'avisderogations'])
+            ->join(['d' => 'dossier'], 'ad.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
+            ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
+            ->where('d.ID_DOSSIER = ?', $idDossier);
+
+        return $this->fetchAll($select)->toArray();
     }
 }
