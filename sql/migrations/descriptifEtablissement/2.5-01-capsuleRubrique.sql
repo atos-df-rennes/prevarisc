@@ -1,16 +1,16 @@
 SET NAMES 'utf8';
 
-CREATE TABLE `capsulerubrique` (
+CREATE TABLE IF NOT EXISTS `capsulerubrique` (
     `ID_CAPSULERUBRIQUE` bigint(20) NOT NULL AUTO_INCREMENT,
     `NOM_INTERNE` varchar(255) NOT NULL,
     `NOM` varchar(255) NOT NULL,
     PRIMARY KEY (`ID_CAPSULERUBRIQUE`)
 );
 
-INSERT INTO `capsulerubrique` VALUES
+INSERT IGNORE INTO `capsulerubrique` VALUES
 (1, 'descriptifEtablissement', 'Descriptif de l''établissement');
 
-CREATE TABLE `capsulerubriqueetablissement` (
+CREATE TABLE IF NOT EXISTS `capsulerubriqueetablissement` (
     `ID_ETABLISSEMENT` bigint(20) unsigned NOT NULL,
     `ID_CAPSULERUBRIQUE` bigint(20) NOT NULL,
     PRIMARY KEY (`ID_ETABLISSEMENT`,`ID_CAPSULERUBRIQUE`),

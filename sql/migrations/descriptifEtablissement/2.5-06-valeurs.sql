@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS `valeur` (
 CREATE TABLE IF NOT EXISTS `etablissementvaleur` (
 	`ID_ETABLISSEMENT` bigint(20) unsigned NOT NULL,
     `ID_VALEUR` bigint(20) NOT NULL,
-    KEY `fk_etablissementvaleur_dossier_idx` (`ID_ETABLISSEMENT`),
-    KEY `fk_etablissementvaleur_valeur_idx` (`ID_VALEUR`),
-    CONSTRAINT `fk_etablissementvaleur_etablissement` FOREIGN KEY (`ID_ETABLISSEMENT`) REFERENCES `etablissement` (`ID_ETABLISSEMENT`) ON DELETE CASCADE ON UPDATE NO ACTION,
-	CONSTRAINT `fk_etablissementvaleur_valeur` FOREIGN KEY (`ID_VALEUR`) REFERENCES `valeur` (`ID_VALEUR`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `fk_etablissementValeur_dossier_idx` (`ID_ETABLISSEMENT`),
+    KEY `fk_etablissementValeur_valeur_idx` (`ID_VALEUR`),
+    CONSTRAINT `fk_etablissementValeur_etablissement` FOREIGN KEY (`ID_ETABLISSEMENT`) REFERENCES `etablissement` (`ID_ETABLISSEMENT`) ON DELETE CASCADE ON UPDATE NO ACTION,
+	CONSTRAINT `fk_etablissementValeur_valeur` FOREIGN KEY (`ID_VALEUR`) REFERENCES `valeur` (`ID_VALEUR`) ON DELETE CASCADE ON UPDATE CASCADE
 );

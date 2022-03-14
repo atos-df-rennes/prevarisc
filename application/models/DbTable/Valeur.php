@@ -15,7 +15,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
         ;
 
         if (false !== strpos($classObject, 'Dossier')) {
-            $select->join(['dv' => 'dossierValeur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
+            $select->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
                 ->where('dv.ID_DOSSIER = ?', $idObject)
             ;
         }

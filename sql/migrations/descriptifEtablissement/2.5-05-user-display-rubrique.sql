@@ -1,6 +1,6 @@
 SET NAMES 'utf8';
 
-CREATE TABLE `displayrubriqueetablissement` (
+CREATE TABLE IF NOT EXISTS `displayrubriqueetablissement` (
     `ID_ETABLISSEMENT` bigint(20) unsigned NOT NULL,
     `ID_RUBRIQUE` bigint(20) NOT NULL,
     `USER_DISPLAY` TINYINT(1) DEFAULT 0,
