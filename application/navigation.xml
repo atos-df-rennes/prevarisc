@@ -1223,6 +1223,11 @@
                 </dev>
             </pages>
         </about>
+    
+        <fusion-command>
+            <controller>fusion-command</controller>
+            <action>index</action>
+        </fusion-command>
 
     </nav>
 </configdata>
