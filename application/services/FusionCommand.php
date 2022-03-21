@@ -28,8 +28,6 @@ class Service_FusionCommand
         }     
     }
 
-    //TODO reset les valeur des fk au niveau d adresse etablissement sinon impossible se delete les adresses commune si une clef est renseignee dans adresse rue
-    //TODO voir s il faut faire une table a part 
     public function setAdresseRueFk($newNumINSEE, $arrayOldCommune){
         $modelAdresseRue = new Model_DbTable_AdresseRue();
         foreach ($arrayOldCommune as $oldCommune) {
