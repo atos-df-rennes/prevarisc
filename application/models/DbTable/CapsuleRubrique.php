@@ -8,9 +8,8 @@ class Model_DbTable_CapsuleRubrique extends Zend_Db_Table_Abstract
     public function getCapsuleRubriqueIdByName(string $name): array
     {
         $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from('capsulerubrique', ['ID_CAPSULERUBRIQUE'])
-            ->where('NOM_INTERNE = ?', $name)
+            ->from(['cr' => 'capsulerubrique'], ['ID_CAPSULERUBRIQUE'])
+            ->where('cr.NOM_INTERNE = ?', $name)
         ;
 
         return $this->fetchRow($select)->toArray();

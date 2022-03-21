@@ -2558,11 +2558,28 @@ class DossierController extends Zend_Controller_Action
             }
         }
 
-        // Gestion des rubriques/champs personnalisés
-        $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, get_class($this));
 
-        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab, get_class($this));
-        $this->view->assign('rubriques', $rubriques);
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
+
+        $rubriquesByCapsuleRubrique = [
+            'descriptifEtablissement' => $rubriquesEtablissement,
+            'descriptifVerificationsTechniques' => $rubriquesDossier,
+        ];
+
+        $serviceFormulaire = new Service_Formulaire();
+        // Gestion des rubriques/champs personnalisés
+        $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+        // Récupération des rubriques pour chaque objet global
+        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+        foreach ($capsulesRubriques as &$capsuleRubrique) {
+            $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+        }
+
+        $this->view->assign('formulaires', $capsulesRubriques);
         $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
 
         // Sauvegarde de la pièce jointe
