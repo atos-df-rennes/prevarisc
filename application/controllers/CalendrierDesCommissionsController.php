@@ -1173,6 +1173,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
 
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $serviceFormulaire = new Service_Formulaire();
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1198,6 +1202,26 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
+            $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
 
         $this->view->dossierComm = $listeDossiers;
@@ -1234,6 +1258,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
 
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $serviceFormulaire = new Service_Formulaire();
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1251,6 +1279,26 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
 
             $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
+            $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
 
         $this->view->dossierComm = $listeDossiers;
