@@ -7,8 +7,11 @@ class Service_FusionCommand
         foreach ($objectJson as $nouvelleFusion) {
             $this->setNewNumINSEE($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);           
             $this->setAdresseRueFk($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);
+
             $this->deleteArrayGroupementCommune($nouvelleFusion->listeCommune);
             $this->deleteArrayCommissionRegle($nouvelleFusion->listeCommune);
+
+            $this->deleteArrayAdresseCommune($nouvelleFusion->listeCommune);
         }
     }
 
@@ -61,6 +64,17 @@ class Service_FusionCommand
             ->where("commissionregle.NUMINSEE_COMMUNE = '$commissionRegleToDelete->NUMINSEE'");
             $toDelete = $modelCommissionRegle->fetchAll($select);        
             $modelCommissionRegle->delete('NUMINSEE_COMMUNE = '.$commissionRegleToDelete->NUMINSEE);
+        }
+    }
+
+    public function deleteArrayAdresseCommune($arrayAdresseCommuneToDelete){
+        $modelAdresseCommune = new Model_DbTable_AdresseCommune();
+        foreach ($arrayAdresseCommuneToDelete as $adresseCommuneToDelete) {
+            $select = $modelAdresseCommune->select()
+            ->from('adressecommune')
+            ->where("adressecommune.NUMINSEE_COMMUNE = '$adresseCommuneToDelete->NUMINSEE'");
+            $toDelete = $modelAdresseCommune->fetchAll($select);        
+            $modelAdresseCommune->delete('NUMINSEE_COMMUNE = '.$adresseCommuneToDelete->NUMINSEE);
         }
     }
 }
