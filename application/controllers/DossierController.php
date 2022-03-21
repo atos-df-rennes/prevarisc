@@ -3128,9 +3128,9 @@ class DossierController extends Zend_Controller_Action
                     }
                     $lastKey = $key;
                 }
-                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
             $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
         }
