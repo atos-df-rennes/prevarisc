@@ -188,6 +188,48 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                 }
 
 				$dossInfos->merge();
+
+                // Gestion des formulaires personnalisés
+                $serviceUtils = new Service_Utils();
+
+                foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
+                    // Permet d'avoir les informations unitairement
+                    foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+                        addChamp(
+                            $odf,
+                            $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM']
+                                ]
+                            ),
+                            $rubrique['NOM']
+                        );
+
+                        foreach ($rubrique['CHAMPS'] as $champ) {
+                            // Définition du libellé pour les cases à cocher
+                            if ('Case à cocher' === $champ['TYPE']) {
+                                if (true === boolval($champ['VALEUR'])) {
+                                    $champ['VALEUR'] = 'Oui';
+                                } else {
+                                    $champ['VALEUR'] = 'Non';
+                                }
+                            }
+
+                            addChamp(
+                                $odf,
+                                $serviceUtils->getFullFusionName(
+                                    $formulaire['NOM_INTERNE'],
+                                    [
+                                        $rubrique['NOM'],
+                                        $champ['NOM']
+                                    ]
+                                ),
+                                $champ['VALEUR']
+                            );
+                        }
+                    }
+                }
 			}
 		}
 	}
