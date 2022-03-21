@@ -1041,6 +1041,16 @@
                     <controller>dossier</controller>
                     <action>effectifs-degagements-dossier-edit</action>
                 </effectifs-degagements-dossier-edit>
+                <verifications-techniques>
+                    <label>Vérifications techniques</label>
+                    <controller>dossier</controller>
+                    <action>verifications-techniques</action>
+                </verifications-techniques>
+                <edit-verifications-techniques>
+                    <label>Edition vérifications techniques</label>
+                    <controller>dossier</controller>
+                    <action>edit-verifications-techniques</action>
+                </edit-verifications-techniques>
             </pages>
 
         </dossier>

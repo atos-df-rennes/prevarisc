@@ -213,7 +213,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
 
-        $this->view->assign('rubriques', $serviceEtablissementDescriptif->getRubriques($idEtablissement));
+        $this->view->assign('rubriques', $serviceEtablissementDescriptif->getRubriques($idEtablissement, get_class($this)));
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
     }
 
@@ -263,7 +263,7 @@ class EtablissementController extends Zend_Controller_Action
 
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, $value);
+                        $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
 
                     $lastKey = $key;

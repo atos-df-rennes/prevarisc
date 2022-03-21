@@ -20,6 +20,6 @@ class Service_Utils
     {
         $loweredName = strtolower($name);
 
-        return preg_replace(['/\s+/', '/\'+/'], '_', $loweredName);
+        return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
     }
 }

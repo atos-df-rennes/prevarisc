@@ -6,7 +6,7 @@ if (!function_exists('addChamp')) {
             if ($variable == "") {
                 $variable = "";
             }
-            
+
             $odf->setVars($nomOdf,$variable, true,'UTF8');
         } catch (Exception $e) {
 
@@ -498,52 +498,10 @@ addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEUR
 addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS']);
 addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS']);
 
-if ($this->isDescriptifPersonnalise === true) {
-    // Descriptif personnalisé de l'établissement
-    $serviceUtils = new Service_Utils();
-
-    // Permet d'avoir les informations unitairement
-    foreach ($this->rubriques as $rubrique) {
-        addChamp(
-            $odf,
-            $serviceUtils->getFullFusionName(
-                'descriptif_etablissement',
-                [
-                    $rubrique['NOM']
-                ]
-            ),
-            $rubrique['NOM']
-        );
-
-        foreach ($rubrique['CHAMPS'] as $champ) {
-            // Définition du libellé pour les cases à cocher
-            if ('Case à cocher' === $champ['TYPE']) {
-                if (true === boolval($champ['VALEUR'])) {
-                    $champ['VALEUR'] = 'Oui';
-                } else {
-                    $champ['VALEUR'] = 'Non';
-                }
-            }
-
-            addChamp(
-                $odf,
-                $serviceUtils->getFullFusionName(
-                    'descriptif_etablissement',
-                    [
-                        $rubrique['NOM'],
-                        $champ['NOM']
-                    ]
-                ),
-                $champ['VALEUR']
-            );
-        }
-    }
-} else {
-    // Descriptif standard de l'établissement
-    addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
-    addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
-    addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
-}
+// Descriptif standard de l'établissement
+addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
+addChamp($odf, 'descriptifEtab',$this->etabDesc['DESCRIPTIF_ETABLISSEMENT']);
+addChamp($odf, 'derogAccEtab',$this->etabDesc['DESCRIPTIF_DEROGATIONS_ETABLISSEMENT']);
 
 //Implantation
 addChamp($odf, 'surfaceEmpriseSol',$this->etabDesc['DESCTECH_IMPLANTATION_SURFACE_ETABLISSEMENT']);
@@ -783,6 +741,48 @@ foreach ($this->avisDerogations as $avisDerogation) {
 }
 
 $odf->mergeSegment($segmentAvisDerogations);
+
+// Gestion des formulaires personnalisés
+$serviceUtils = new Service_Utils();
+
+foreach ($this->formulaires as $formulaire) {
+    // Permet d'avoir les informations unitairement
+    foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+        addChamp(
+            $odf,
+            $serviceUtils->getFullFusionName(
+                $formulaire['NOM_INTERNE'],
+                [
+                    $rubrique['NOM']
+                ]
+            ),
+            $rubrique['NOM']
+        );
+
+        foreach ($rubrique['CHAMPS'] as $champ) {
+            // Définition du libellé pour les cases à cocher
+            if ('Case à cocher' === $champ['TYPE']) {
+                if (true === boolval($champ['VALEUR'])) {
+                    $champ['VALEUR'] = 'Oui';
+                } else {
+                    $champ['VALEUR'] = 'Non';
+                }
+            }
+
+            addChamp(
+                $odf,
+                $serviceUtils->getFullFusionName(
+                    $formulaire['NOM_INTERNE'],
+                    [
+                        $rubrique['NOM'],
+                        $champ['NOM']
+                    ]
+                ),
+                $champ['VALEUR']
+            );
+        }
+    }
+}
 
 try{
     $chemin = $this->store->getFilePath($this->nouvellePJ, 'dossier', $this->idDossier, true);

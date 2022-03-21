@@ -2,11 +2,10 @@
 
 class Service_Valeur
 {
-    public function get(int $idChamp, int $idEtablissement)
+    public function get(int $idChamp, int $idObject, string $classObject)
     {
         $modelValeur = new Model_DbTable_Valeur();
-
-        $valeur = $modelValeur->getByChampAndEtablissement($idChamp, $idEtablissement);
+        $valeur = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
         if (null !== $valeur) {
             $typeValeur = $this->getTypeValeur($idChamp);
@@ -16,18 +15,37 @@ class Service_Valeur
         return $valeur;
     }
 
-    public function insert(int $idChamp, int $idEtablissement, $value): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value): void
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
 
             $typeValeur = $this->getTypeValeur($idChamp);
-
-            $modelValeur->insert([
+            $idValeurInsert = $modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
-                'ID_ETABLISSEMENT' => $idEtablissement,
             ]);
+
+            if (false !== strpos($classObject, 'Dossier')) {
+                $modelDossierValeur = new Model_DbTable_DossierValeur();
+
+                $modelDossierValeur->insert(
+                    [
+                        'ID_DOSSIER' => $idObject,
+                        'ID_VALEUR' => $idValeurInsert,
+                    ]
+                );
+            }
+            if (false !== strpos($classObject, 'Etablissement')) {
+                $modelEtablissementValeur = new Model_DbTable_EtablissementValeur();
+
+                $modelEtablissementValeur->insert(
+                    [
+                        'ID_ETABLISSEMENT' => $idObject,
+                        'ID_VALEUR' => $idValeurInsert,
+                    ]
+                );
+            }
         }
     }
 

@@ -588,25 +588,30 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier
+     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier.
+     *
+     * @param mixed $idDossier
      */
     public function getListeDossierFromDossier($idDossier)
     {
         $select = $this->select()->setIntegrityCheck(false)
-            ->from(array('d' => 'dossier'))
-            ->join(array('ed' => 'etablissementdossier'), 'ed.ID_DOSSIER = d.ID_DOSSIER')
-            ->join(array('e' => 'etablissement'), 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
             ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
                             inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
                             inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
-                            where dossier.ID_DOSSIER = $idDossier)")
-            ->where('d.ID_DOSSIER != ?',$idDossier);
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+        ;
 
-       return $this->getAdapter()->fetchAll($select);
+        return $this->getAdapter()->fetchAll($select);
     }
 
     /**
-     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param.
+     *
+     * @param mixed $idDossier
      */
     public function getListAvisDerogationsFromDossier($idDossier)
     {
@@ -616,7 +621,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->join(['d' => 'dossier'], 'ad.ID_DOSSIER = d.ID_DOSSIER', [])
             ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
             ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
-            ->where('d.ID_DOSSIER = ?', $idDossier);
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
 
         return $this->fetchAll($select)->toArray();
     }

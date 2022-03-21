@@ -455,7 +455,9 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Retourne la liste des avis et derogations d un etablissement
+     * Retourne la liste des avis et derogations d un etablissement.
+     *
+     * @param mixed $idEtablissement
      */
     public function getListAvisDerogationsEtablissement($idEtablissement)
     {
@@ -466,7 +468,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
             ->join(['ad' => 'avisderogations'], 'd.ID_DOSSIER = ad.ID_DOSSIER')
             ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
-            ->where('ad.DISPLAY_HISTORIQUE = ?', 1);
+            ->where('ad.DISPLAY_HISTORIQUE = ?', 1)
+        ;
 
         return $this->fetchAll($select)->toArray();
     }

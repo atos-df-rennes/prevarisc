@@ -26,7 +26,7 @@
     <div class="span4 offset2 infos-champ">
         <form action class="form-inline" method="post">
             <label for="nom_champ">Nom du champ</label>
-            <input type="text" name="nom_champ" id="nom_champ" value="<?= $this->champ['NOM']; ?>" required>
+            <input type="text" name="nom_champ" id="nom_champ" value="<?= htmlspecialchars($this->champ['NOM'], ENT_QUOTES) ?>" required>
             <label for="type_champ">Type du champ</label>
             <select name="type_champ" id="type_champ" disabled>
                 <?php foreach($this->listeTypeChampRubrique as $typeChamp): ?>
@@ -45,7 +45,7 @@
                     <h3>Valeurs de la liste</h3>
                     <?php foreach($this->valeursChamp as $valeur): ?>
                         <div>
-                            <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= $valeur['VALEUR'] ?>">
+                            <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= htmlspecialchars($valeur['VALEUR'], ENT_QUOTES) ?>">
                             <a href='#' data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
                         </div>
                     <?php endforeach ?>

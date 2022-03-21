@@ -1,14 +1,14 @@
 <?php
 
-class Service_Rubrique
+class Service_RubriqueDossier
 {
-    public function updateRubriqueDisplay(int $idRubrique, int $idEtablissement, int $userDisplay): void
+    public function updateRubriqueDisplay(int $idRubrique, int $idDossier, int $userDisplay): void
     {
         $modelRubrique = new Model_DbTable_Rubrique();
-        $modelDisplayRubriqueEtablissement = new Model_DbTable_DisplayRubriqueEtablissement();
+        $modelDisplayRubriqueDossier = new Model_DbTable_DisplayRubriqueDossier();
 
         $rubriqueDefaultDisplay = $modelRubrique->find($idRubrique)->current()['DEFAULT_DISPLAY'];
-        $userModified = $modelDisplayRubriqueEtablissement->find($idEtablissement, $idRubrique)->current();
+        $userModified = $modelDisplayRubriqueDossier->find($idDossier, $idRubrique)->current();
 
         // Aucun intérêt de renseigner l'information si les valeurs sont les mêmes et que l'utilisateur n'a pas modifié
         // Si l'utilisateur a déjà modifié, et qu'il remodifie, on supprime la ligne pour revenir à l'état d'origine
@@ -16,9 +16,9 @@ class Service_Rubrique
             ($rubriqueDefaultDisplay !== $userDisplay)
             && (null === $userModified)
         ) {
-            $modelDisplayRubriqueEtablissement->insert(
+            $modelDisplayRubriqueDossier->insert(
                 [
-                    'ID_ETABLISSEMENT' => $idEtablissement,
+                    'ID_DOSSIER' => $idDossier,
                     'ID_RUBRIQUE' => $idRubrique,
                     'USER_DISPLAY' => $userDisplay,
                 ]

@@ -190,10 +190,11 @@ class DossierController extends Zend_Controller_Action
 
             $serviceDossier = new Service_Dossier();
             $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
-            // Autorisation de set avis derogations
-            $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
 
+            // Définition des autorisations
+            $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
             $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
+            $this->view->isAllowedVerificationsTechniques = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'verificationstechniques', 'verifications_techniques');
         }
     }
 
@@ -2557,11 +2558,28 @@ class DossierController extends Zend_Controller_Action
             }
         }
 
-        // Gestion des rubriques/champs personnalisés
-        $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, get_class($this));
 
-        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtab);
-        $this->view->assign('rubriques', $rubriques);
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
+
+        $rubriquesByCapsuleRubrique = [
+            'descriptifEtablissement' => $rubriquesEtablissement,
+            'descriptifVerificationsTechniques' => $rubriquesDossier,
+        ];
+
+        $serviceFormulaire = new Service_Formulaire();
+        // Gestion des rubriques/champs personnalisés
+        $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+        // Récupération des rubriques pour chaque objet global
+        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+        foreach ($capsulesRubriques as &$capsuleRubrique) {
+            $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+        }
+
+        $this->view->assign('formulaires', $capsulesRubriques);
         $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
 
         // Sauvegarde de la pièce jointe
@@ -3089,8 +3107,55 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
+    public function verificationsTechniquesAction()
+    {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $idDossier = $this->getParam('id');
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+    }
+
+    public function editVerificationsTechniquesAction(): void
+    {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $idDossier = $this->getParam('id');
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getParams();
+                $lastKey = null;
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
+                    }
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                    }
+                    $lastKey = $key;
+                }
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
+        }
+    }
+
     //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
-    public function avisEtDerogationsAction(){
+    public function avisEtDerogationsAction()
+    {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
 
@@ -3125,9 +3190,10 @@ class DossierController extends Zend_Controller_Action
     /**
      * Retourne les informations d'une liste d avis et derogations selon l id d une etude
      * +
-     * retourne vers la page d edition de ces avis + derogations
+     * retourne vers la page d edition de ces avis + derogations.
      */
-    public function avisEtDerogationsEditAction(){
+    public function avisEtDerogationsEditAction()
+    {
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
@@ -3160,9 +3226,10 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function avisEtDerogationsDeleteAction(){
+    public function avisEtDerogationsDeleteAction()
+    {
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
 
-        $dbAvisDerogations->delete("ID_AVIS_DEROGATION = ".$this->getParam("avis-derogation"));
+        $dbAvisDerogations->delete('ID_AVIS_DEROGATION = '.$this->getParam('avis-derogation'));
     }
 }

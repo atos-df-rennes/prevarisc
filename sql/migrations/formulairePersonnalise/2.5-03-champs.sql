@@ -1,19 +1,19 @@
 SET NAMES 'utf8';
 
-CREATE TABLE `listetypechamprubrique` (
+CREATE TABLE IF NOT EXISTS `listetypechamprubrique` (
     `ID_TYPECHAMP` bigint(20) NOT NULL AUTO_INCREMENT,
     `TYPE` varchar(50) NOT NULL,
     PRIMARY KEY (`ID_TYPECHAMP`)
 );
 
-INSERT INTO `listetypechamprubrique` VALUES
+INSERT IGNORE INTO `listetypechamprubrique` VALUES
 (1, 'Champ texte'),
 (2, 'Champ texte long'),
 (3, 'Liste'),
 (4, 'Numérique'),
 (5, 'Case à cocher');
 
-CREATE TABLE `champ` (
+CREATE TABLE IF NOT EXISTS `champ` (
     `ID_CHAMP` bigint(20) NOT NULL AUTO_INCREMENT,
     `NOM` varchar(255) NOT NULL,
     `ID_TYPECHAMP` bigint(20) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE `champ` (
     CONSTRAINT `fk_champ_rubrique` FOREIGN KEY (`ID_RUBRIQUE`) REFERENCES `rubrique` (`ID_RUBRIQUE`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `champvaleurliste` (
+CREATE TABLE IF NOT EXISTS `champvaleurliste` (
     `ID_VALEURLISTE` bigint(20) NOT NULL AUTO_INCREMENT,
     `VALEUR` varchar(255) NOT NULL,
     `ID_CHAMP` bigint(20) NOT NULL,

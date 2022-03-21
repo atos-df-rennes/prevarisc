@@ -1,13 +1,13 @@
-<form action='<?= $this->url(array('action' => 'edit-descriptif')) ?>' method='post' class='form-horizontal'>
+<form action='<?= $this->url(array('action' => 'edit-verifications-techniques')) ?>' method='post' class='form-horizontal'>
     <div class='pull-right' >
         <div class="btn-group">
-            <a class='btn' href="<?= $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
+            <a class='btn' href="<?= $this->url(array('action' => 'verifications-techniques')) ?>">Annuler la modification</a>
             <input type='submit' class="btn btn-success" value='Sauvegarder'>
         </div>
     </div>
 
-    <h3>Modification des descriptifs</h3>
-    <h4 class='h4_subtitle'>Descriptif</h4>
+    <h3>Modification des vérifications techniques</h3>
+    <h4 class='h4_subtitle'>Rubriques</h4>
 
     <div class='row-fluid'>
         <div class='span10'>
@@ -16,8 +16,8 @@
                     <div class='row-fluid'>
                 <?php endif;
 
-                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);   
-                
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+
                 if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
                     </div>
                 <?php endif;
@@ -81,7 +81,7 @@
                                         value="1"
                                         <?= $champ['VALEUR'] ? 'checked' : '' ?>
                                     >
-                                <?php break;       
+                                <?php break;
                                 default:
                                     break;
                             } ?>
