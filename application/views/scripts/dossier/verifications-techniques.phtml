@@ -1,13 +1,13 @@
 <div class='pull-right' >
-    <a class='btn' href="<?= $this->url(array('action' => 'edit-verifications-techniques')) ?>">Modifier les descriptifs</a>
+    <a class='btn' href="<?= $this->url(array('action' => 'edit-verifications-techniques')) ?>">Modifier les vérifications techniques</a>
 </div>
 
 <div id='descriptif-personnalise'>
-    <h3>Descriptifs</h3>
+    <h3>Vérifications Techniques</h3>
 
-    <h4 class='h4_subtitle'>Descriptif technique</h4>
+    <h4 class='h4_subtitle'>Rubriques</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
-    
+
     <!-- TODO Faire la même avec des partials loops -->
     <?php foreach ($this->rubriques as $rubrique):
         if (boolval($rubrique['DISPLAY']) === true): ?>
@@ -16,7 +16,7 @@
             <div id='affichage-informations' class='form-horizontal'>
                 <?php if (!empty($rubrique['CHAMPS'])):
                     $numberOfFilledField = 0;
-                    
+
                     foreach ($rubrique['CHAMPS'] as $champ):
                         if (
                             ($champ['ID_TYPECHAMP'] !== 5 && $champ['VALEUR'] !== null)
@@ -67,7 +67,7 @@
                             'message' => 'Aucune valeur renseignée.'
                         ]);
                     endif;
-                else: 
+                else:
                     echo $this->partial('formulaire/partials/partial-information-manquante.phtml', [
                         'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
                     ]);

@@ -6,9 +6,9 @@
         </div>
     </div>
 
-    <h3>Modification des descriptifs</h3>
-    <h4 class='h4_subtitle'>Descriptif</h4>
-    
+    <h3>Modification des vérifications techniques</h3>
+    <h4 class='h4_subtitle'>Rubriques</h4>
+
     <div class='row-fluid'>
         <div class='span10'>
             <?php foreach ($this->rubriques as $key => $rubrique):
@@ -16,8 +16,8 @@
                     <div class='row-fluid'>
                 <?php endif;
 
-                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);   
-                
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+
                 if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
                     </div>
                 <?php endif;
@@ -81,7 +81,7 @@
                                         value="1"
                                         <?= $champ['VALEUR'] ? 'checked' : '' ?>
                                     >
-                                <?php break;       
+                                <?php break;
                                 default:
                                     break;
                             } ?>

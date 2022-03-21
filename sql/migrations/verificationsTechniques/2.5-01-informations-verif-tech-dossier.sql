@@ -22,3 +22,10 @@ CREATE TABLE IF NOT EXISTS `dossiervaleur` (
     CONSTRAINT `fk_dossierValeur_dossier` FOREIGN KEY (`ID_DOSSIER`) REFERENCES `dossier` (`ID_DOSSIER`) ON DELETE CASCADE ON UPDATE NO ACTION,
 	CONSTRAINT `fk_dossierValeur_valeur` FOREIGN KEY (`ID_VALEUR`) REFERENCES `valeur` (`ID_VALEUR`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+INSERT INTO `resources` (`name`, `text`) VALUES ('verificationstechniques', 'Vérifications techniques');
+INSERT INTO `privileges` (`name`, `text`, `id_resource`) VALUES (
+    'verifications_techniques',
+    'Lecture et écriture vérifications techniques',
+    (SELECT `id_resource` FROM `resources` WHERE `name` = 'verificationstechniques')
+);
