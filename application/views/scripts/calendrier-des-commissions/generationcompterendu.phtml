@@ -187,8 +187,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                     $segmentAvisDerogations->merge();
                 }
 
-				$dossInfos->merge();
-
                 // Gestion des formulaires personnalisés
                 $serviceUtils = new Service_Utils();
 
@@ -196,7 +194,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                     // Permet d'avoir les informations unitairement
                     foreach ($formulaire['RUBRIQUES'] as $rubrique) {
                         addChamp(
-                            $odf,
+                            $dossInfos,
                             $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
                                 [
@@ -217,7 +215,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                             }
 
                             addChamp(
-                                $odf,
+                                $dossInfos,
                                 $serviceUtils->getFullFusionName(
                                     $formulaire['NOM_INTERNE'],
                                     [
@@ -230,6 +228,8 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                         }
                     }
                 }
+
+                $dossInfos->merge();
 			}
 		}
 	}
