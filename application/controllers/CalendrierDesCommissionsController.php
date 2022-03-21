@@ -1151,6 +1151,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $dbDossier = new Model_DbTable_Dossier();
         $dbEtablissement = new Model_DbTable_Etablissement();
+
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $serviceFormulaire = new Service_Formulaire();
+
         foreach ($listeDossiers as &$dossier) {
             $dossier['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $dossier['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
@@ -1158,6 +1163,26 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
 
             $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
+
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
+            $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
 
         $this->view->informationsMembre = $listeMembres;
