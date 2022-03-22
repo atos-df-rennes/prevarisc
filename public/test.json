@@ -1,0 +1,21 @@
+[
+    {
+        "nomCommune":"CHARNY-OREE-DE-PUISAYE",
+        "NUMINSEE":"89086",
+        "listeCommune":[
+            {
+                "nomCommune":"CHAMBEUGLE",
+                "NUMINSEE":"89070"
+            },
+            {
+                "nomCommune":"CHENE ARNOULT",
+                "NUMINSEE":"89097"
+            },
+            {
+                "nomCommune":"CHEVILLON",
+                "NUMINSEE":"89103"
+            }
+        ]
+    }
+
+]
