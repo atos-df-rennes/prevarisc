@@ -23,7 +23,9 @@ class Service_FusionCommand
                 ->from('etablissementadresse')
                 ->where("etablissementadresse.NUMINSEE_COMMUNE = '{$oldCommune->NUMINSEE}'")
             ;
-            foreach ($modelEtablissementAdresse->fetchAll($select) as $oldNumINSEE) {
+
+            $oldCommunes = $modelEtablissementAdresse->fetchAll($select);
+            foreach ($oldCommunes as $oldNumINSEE) {
                 $oldNumINSEE->NUMINSEE_COMMUNE = $newNumINSEE;
                 $oldNumINSEE->save();
             }
@@ -34,13 +36,13 @@ class Service_FusionCommand
     {
         $modelAdresseRue = new Model_DbTable_AdresseRue();
         foreach ($arrayOldCommune as $oldCommune) {
-            $select =
-                $modelAdresseRue->select()
-                    ->setIntegrityCheck(false)
-                    ->from('adresserue')
-                    ->where("adresserue.NUMINSEE_COMMUNE = '{$oldCommune->NUMINSEE}'")
-                ;
-            foreach ($modelAdresseRue->fetchAll($select) as $oldNumINSEE) {
+            $select = $modelAdresseRue->select()
+                ->from('adresserue')
+                ->where("adresserue.NUMINSEE_COMMUNE = '{$oldCommune->NUMINSEE}'")
+            ;
+
+            $oldCommunes = $modelAdresseRue->fetchAll($select);
+            foreach ($oldCommunes as $oldNumINSEE) {
                 $oldNumINSEE->NUMINSEE_COMMUNE = $newNumINSEE;
                 $oldNumINSEE->save();
             }
@@ -51,11 +53,6 @@ class Service_FusionCommand
     {
         $modelGroupementCommune = new Model_DbTable_GroupementCommune();
         foreach ($arrayCommuneToDelete as $communeToDelete) {
-            $select = $modelGroupementCommune->select()
-                ->from('groupementcommune')
-                ->where("groupementcommune.NUMINSEE_COMMUNE = '{$communeToDelete->NUMINSEE}'")
-            ;
-            $toDelete = $modelGroupementCommune->fetchAll($select);
             $modelGroupementCommune->delete('NUMINSEE_COMMUNE = '.$communeToDelete->NUMINSEE);
         }
     }
@@ -64,11 +61,6 @@ class Service_FusionCommand
     {
         $modelCommissionRegle = new Model_DbTable_CommissionRegle();
         foreach ($arrayCommissionRegleToDelete as $commissionRegleToDelete) {
-            $select = $modelCommissionRegle->select()
-                ->from('commissionregle')
-                ->where("commissionregle.NUMINSEE_COMMUNE = '{$commissionRegleToDelete->NUMINSEE}'")
-            ;
-            $toDelete = $modelCommissionRegle->fetchAll($select);
             $modelCommissionRegle->delete('NUMINSEE_COMMUNE = '.$commissionRegleToDelete->NUMINSEE);
         }
     }
@@ -77,11 +69,6 @@ class Service_FusionCommand
     {
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
         foreach ($arrayAdresseCommuneToDelete as $adresseCommuneToDelete) {
-            $select = $modelAdresseCommune->select()
-                ->from('adressecommune')
-                ->where("adressecommune.NUMINSEE_COMMUNE = '{$adresseCommuneToDelete->NUMINSEE}'")
-            ;
-            $toDelete = $modelAdresseCommune->fetchAll($select);
             $modelAdresseCommune->delete('NUMINSEE_COMMUNE = '.$adresseCommuneToDelete->NUMINSEE);
         }
     }
