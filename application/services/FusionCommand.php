@@ -2,8 +2,8 @@
 
 class Service_FusionCommand
 {
-
-    public function mergeArrayCommune($objectJson){
+    public function mergeArrayCommune(array $objectJson): void
+    {
         foreach ($objectJson as $nouvelleFusion) {
             $this->setNewNumINSEE($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);           
             $this->setAdresseRueFk($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);
@@ -15,7 +15,8 @@ class Service_FusionCommand
         }
     }
 
-    public function setNewNumINSEE($newNumINSEE, $arrayOldCommune){
+    public function setNewNumINSEE(string $newNumINSEE, array $arrayOldCommune): void
+    {
         $modelEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelEtablissementAdresse->select()
@@ -28,7 +29,8 @@ class Service_FusionCommand
         }     
     }
 
-    public function setAdresseRueFk($newNumINSEE, $arrayOldCommune){
+    public function setAdresseRueFk(string $newNumINSEE, array $arrayOldCommune): void
+    {
         $modelAdresseRue = new Model_DbTable_AdresseRue();
         foreach ($arrayOldCommune as $oldCommune) {
             $select = 
@@ -43,7 +45,8 @@ class Service_FusionCommand
         }    
     }
 
-    public function deleteArrayGroupementCommune($arrayCommuneToDelete){
+    public function deleteArrayGroupementCommune(array $arrayCommuneToDelete): void
+    {
         $modelGroupementCommune = new Model_DbTable_GroupementCommune();
         foreach ($arrayCommuneToDelete as $communeToDelete) {
             $select = $modelGroupementCommune->select()
@@ -54,7 +57,8 @@ class Service_FusionCommand
         }
     }
 
-    public function deleteArrayCommissionRegle($arrayCommissionRegleToDelete){
+    public function deleteArrayCommissionRegle($arrayCommissionRegleToDelete): void
+    {
         $modelCommissionRegle = new Model_DbTable_CommissionRegle();
         foreach ($arrayCommissionRegleToDelete as $commissionRegleToDelete) {
             $select = $modelCommissionRegle->select()
@@ -65,7 +69,8 @@ class Service_FusionCommand
         }
     }
 
-    public function deleteArrayAdresseCommune($arrayAdresseCommuneToDelete){
+    public function deleteArrayAdresseCommune($arrayAdresseCommuneToDelete): void
+    {
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
         foreach ($arrayAdresseCommuneToDelete as $adresseCommuneToDelete) {
             $select = $modelAdresseCommune->select()
@@ -76,4 +81,3 @@ class Service_FusionCommand
         }
     }
 }
-?>

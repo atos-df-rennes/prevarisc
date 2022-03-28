@@ -16,6 +16,10 @@
         <a href='/gestion-des-communes' ><em class="icon-th-list icon-black"></em> Gestion des communes</a>
     </li>
 
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
+        <a href='/fusion-des-communes' ><em class="icon-th-list icon-black"></em> Fusion des communes</a>
+    </li>
+
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'couches-cartographiques') echo "class='active'" ?> >
         <a href='/couches-cartographiques/list' ><em class="icon-cog icon-black"></em> Gestion des couches cartographiques</a>
     </li>
@@ -48,10 +52,6 @@
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'changement') echo "class='active'" ?> >
         <a href='/changement' ><em class="icon-th-list icon-black"></em> Messages des alertes</a>
-    </li>
-
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
-        <a href='/fusion-des-communes' ><em class="icon-th-list icon-black"></em> Fusion des communes</a>
     </li>
 </ul>
 

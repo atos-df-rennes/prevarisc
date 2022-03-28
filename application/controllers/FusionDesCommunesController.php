@@ -20,6 +20,10 @@ class FusionDesCommunesController extends Zend_Controller_Action
                 return $this->render('index');
             }
 
+            if (!$form->fusioncommunes->receive()) {
+                throw new Exception('Erreur lors de la réception du fichier');
+            }
+
             $this->view->downloadComplete = true;
 
             $service = new Service_FusionCommand();
@@ -29,7 +33,7 @@ class FusionDesCommunesController extends Zend_Controller_Action
                 )
             );
 
-            // TODO Supprimer le fichier uploadé
+            unlink($form->fusioncommunes->getFileName());
         }
     }
 }
