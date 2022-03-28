@@ -14,16 +14,17 @@ class Form_FusionCommunes extends Zend_Form
         $file->setDestination(COMMAND_PATH);
 
         $file->addValidator('Count', false, 1)
-            ->addValidator('Extension', false, 'json');
+            ->addValidator('Extension', false, 'json')
+        ;
 
         $this->addElement($file);
         $this->addElement(
             new Zend_Form_Element_Submit(
                 'fusioncommunes',
-                array(
+                [
                     'class' => 'btn btn-primary',
                     'label' => 'Fusionner les communes',
-                )
+                ]
             ),
             'submit'
         );

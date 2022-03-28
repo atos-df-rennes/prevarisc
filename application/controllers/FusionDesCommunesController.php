@@ -12,7 +12,7 @@ class FusionDesCommunesController extends Zend_Controller_Action
         $form = new Form_FusionCommunes();
         $this->view->form = $form;
 
-        /** @var $request Zend_Controller_Request_Http */
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
