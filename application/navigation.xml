@@ -1224,10 +1224,9 @@
             </pages>
         </about>
     
-        <fusion-command>
-            <controller>fusion-command</controller>
+        <fusion-des-communes>
+            <controller>fusion-des-communes</controller>
             <action>index</action>
-        </fusion-command>
-
+        </fusion-des-communes>
     </nav>
 </configdata>

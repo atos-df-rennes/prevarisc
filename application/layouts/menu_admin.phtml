@@ -50,8 +50,8 @@
         <a href='/changement' ><em class="icon-th-list icon-black"></em> Messages des alertes</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'FusionCommand') echo "class='active'" ?> >
-        <a href='/fusion-command' ><em class="icon-th-list icon-black"></em> Fusion command</a>
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
+        <a href='/fusion-des-communes' ><em class="icon-th-list icon-black"></em> Fusion des communes</a>
     </li>
 </ul>
 
