@@ -1,5 +1,6 @@
 <?php
 
+// TODO Mettre des validations pour savoir si les communes sont bien présentes en base et mettre des messages d'erreur/d'information le cas échéant
 class Service_FusionCommand
 {
     public function mergeArrayCommune(array $objectJson): void
@@ -18,6 +19,7 @@ class Service_FusionCommand
     public function setNewNumINSEE(string $newNumINSEE, array $arrayOldCommune): void
     {
         $modelEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
+
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelEtablissementAdresse->select()
                 ->from('etablissementadresse')
@@ -25,6 +27,7 @@ class Service_FusionCommand
             ;
 
             $oldCommunes = $modelEtablissementAdresse->fetchAll($select);
+
             foreach ($oldCommunes as $oldNumINSEE) {
                 $oldNumINSEE->NUMINSEE_COMMUNE = $newNumINSEE;
                 $oldNumINSEE->save();
@@ -35,6 +38,7 @@ class Service_FusionCommand
     public function setAdresseRueFk(string $newNumINSEE, array $arrayOldCommune): void
     {
         $modelAdresseRue = new Model_DbTable_AdresseRue();
+
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelAdresseRue->select()
                 ->from('adresserue')
@@ -42,6 +46,7 @@ class Service_FusionCommand
             ;
 
             $oldCommunes = $modelAdresseRue->fetchAll($select);
+
             foreach ($oldCommunes as $oldNumINSEE) {
                 $oldNumINSEE->NUMINSEE_COMMUNE = $newNumINSEE;
                 $oldNumINSEE->save();
@@ -52,22 +57,25 @@ class Service_FusionCommand
     public function deleteArrayGroupementCommune(array $arrayCommuneToDelete): void
     {
         $modelGroupementCommune = new Model_DbTable_GroupementCommune();
+
         foreach ($arrayCommuneToDelete as $communeToDelete) {
             $modelGroupementCommune->delete('NUMINSEE_COMMUNE = '.$communeToDelete->NUMINSEE);
         }
     }
 
-    public function deleteArrayCommissionRegle($arrayCommissionRegleToDelete): void
+    public function deleteArrayCommissionRegle(array $arrayCommissionRegleToDelete): void
     {
         $modelCommissionRegle = new Model_DbTable_CommissionRegle();
+
         foreach ($arrayCommissionRegleToDelete as $commissionRegleToDelete) {
             $modelCommissionRegle->delete('NUMINSEE_COMMUNE = '.$commissionRegleToDelete->NUMINSEE);
         }
     }
 
-    public function deleteArrayAdresseCommune($arrayAdresseCommuneToDelete): void
+    public function deleteArrayAdresseCommune(array $arrayAdresseCommuneToDelete): void
     {
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
+
         foreach ($arrayAdresseCommuneToDelete as $adresseCommuneToDelete) {
             $modelAdresseCommune->delete('NUMINSEE_COMMUNE = '.$adresseCommuneToDelete->NUMINSEE);
         }
