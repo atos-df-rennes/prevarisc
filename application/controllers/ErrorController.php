@@ -26,20 +26,27 @@ class ErrorController extends Zend_Controller_Action
                 $this->getResponse()->setHttpResponseCode(404);
                 $priority = Zend_Log::NOTICE;
                 $this->view->message = 'Page introuvable';
+
                 break;
+
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER:
                 $priority = Zend_Log::ERR;
-                if ($errors->exception->getCode() == 401) {
-                    $this->getResponse()->setHttpResponseCode(401);
+                $unautorizedStatusCode = 401;
+
+                if ($unautorizedStatusCode == $errors->exception->getCode()) {
+                    $this->getResponse()->setHttpResponseCode($unautorizedStatusCode);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
                 }
+
                 break;
+
             default:
                 // Type de l'erreur : application error
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'L\'application a levée une erreur';
+
                 break;
         }
 

@@ -13,19 +13,19 @@ class IndexController extends Zend_Controller_Action
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $acl = unserialize($cache->load('acl'));
         $profil = $user['group']['LIBELLE_GROUPE'];
-        $blocs = array();
+        $blocs = [];
 
         foreach ($blocsConfig as $blocId => $blocConfig) {
             if (
                 !$blocConfig['acl']
                 || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))
             ) {
-                $blocs[$blocId] = array(
+                $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],
                     'height' => $blocConfig['height'],
                     'width' => $blocConfig['width'],
-                );
+                ];
             }
         }
 
@@ -60,7 +60,7 @@ class IndexController extends Zend_Controller_Action
 
         $id = $this->getParam('id');
 
-        $bloc = array();
+        $bloc = [];
         $service_user = new Service_User();
         $service_dashboard = new Service_Dashboard();
         $blocsConfig = $service_dashboard->getBlocConfig();
@@ -71,14 +71,14 @@ class IndexController extends Zend_Controller_Action
             $user = $service_user->find($identity['ID_UTILISATEUR']);
             $service = new $blocConfig['service']();
             $method = $blocConfig['method'];
-            $bloc = array(
+            $bloc = [
                 'id' => $id,
-                'data' => $service->$method($user),
+                'data' => $service->{$method}($user),
                 'type' => $blocConfig['type'],
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],
                 'width' => $blocConfig['width'],
-            );
+            ];
         }
 
         $this->view->bloc = $bloc;
@@ -93,9 +93,9 @@ class IndexController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             try {
                 $service_feed->addMessage($this->_request->getParam('type'), $this->_request->getParam('text'), Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], $this->_request->getParam('conf'));
-                $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Message ajouté !', 'message' => 'Le message a bien été ajouté.'));
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message ajouté !', 'message' => 'Le message a bien été ajouté.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(array('context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de l\'ajout du message : '.$e->getMessage()));
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de l\'ajout du message : '.$e->getMessage()]);
             }
             $this->_helper->redirector('index', 'index');
         }
@@ -107,9 +107,9 @@ class IndexController extends Zend_Controller_Action
 
         try {
             $service_feed->deleteMessage($this->_request->getParam('id'));
-            $this->_helper->flashMessenger(array('context' => 'success', 'title' => 'Message supprimé !', 'message' => 'Le message a bien été supprimé.'));
+            $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message supprimé !', 'message' => 'Le message a bien été supprimé.']);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array('context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$e->getMessage()));
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$e->getMessage()]);
         }
         $this->_helper->redirector('index', 'index');
     }

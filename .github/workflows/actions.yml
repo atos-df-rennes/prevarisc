@@ -1,0 +1,65 @@
+name: Prevarisc Lint
+
+on: pull_request
+
+jobs:
+  validate-composer:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+  php-cs-fixer:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
+
+    - name: PHP-CS-Fixer
+      run: ./vendor/bin/php-cs-fixer fix --diff --dry-run
+
+  var-dump-check:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
+
+    - name: Normal VarDump Check
+      uses: umutphp/php-var-dump-check-action@v2
+      with:
+        checktype: 'none'
+        exclude: '$GITHUB_WORKSPACE/vendor'
+        extensions: 'php,phtml'
+
+    - name: Zend VarDump Check
+      uses: umutphp/php-var-dump-check-action@v2
+      with:
+        checktype: 'zend'
+        exclude: '$GITHUB_WORKSPACE/vendor'
+        extensions: 'php,phtml'
+
+  magical-number-check:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
+
+    - name: Magical Number Check
+      run: ./vendor/bin/phpmnd $GITHUB_WORKSPACE/application --non-zero-exit-on-violation --extensions=-switch_case
