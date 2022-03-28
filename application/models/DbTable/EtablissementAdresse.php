@@ -6,7 +6,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_ADRESSE'; // Clé primaire
 
     /**
-     * @param string|int|float $id_etablissement
+     * @param float|int|string $id_etablissement
      */
     public function get($id_etablissement)
     {
@@ -29,24 +29,24 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                     }
 
                     return $this->get($etablissement_enfants[$i]['ID_ETABLISSEMENT']);
-                } else {
-                    return array();
                 }
-                break;
 
+                return [];
+
+                break;
             // Adresse d'une cellule
             case 3:
                 // Récupération des parents de l'établissement
-                $results = array();
+                $results = [];
                 $id_enfant = $id_etablissement;
                 do {
                     $parent = $model_etablissement->getParent($id_enfant);
-                    if ($parent != null) {
+                    if (null != $parent) {
                         $results[] = $parent;
                         $id_enfant = $parent['ID_ETABLISSEMENT'];
                     }
-                } while ($parent != null);
-                $etablissement_parents = empty($results) ? array() : array_reverse($results);
+                } while (null != $parent);
+                $etablissement_parents = empty($results) ? [] : array_reverse($results);
 
                 $pere = end($etablissement_parents);
 
@@ -54,18 +54,19 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                     return $this->get($pere['ID_ETABLISSEMENT']);
                 }
 
-                return array();
-                break;
+                return [];
 
+                break;
             // Adresse par défaut
             default:
                 $select = $this->select()
                     ->setIntegrityCheck(false)
                     ->from('etablissementadresse')
-                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', array('LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'))
+                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
                     ->joinLeft('adresserue', 'etablissementadresse.ID_RUE = adresserue.ID_RUE AND etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE', 'LIBELLE_RUE')
-                    ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', array('LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'))
-                    ->where("etablissementadresse.ID_ETABLISSEMENT = '$id_etablissement'");
+                    ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'])
+                    ->where("etablissementadresse.ID_ETABLISSEMENT = '{$id_etablissement}'")
+                ;
 
                 return $this->fetchAll($select)->toArray();
         }
@@ -73,7 +74,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 
     // Donne la liste des rues
     /**
-     * @param string|int|float $id
+     * @param float|int|string $id
      *
      * @return array
      */
@@ -81,10 +82,11 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('adresseruetype');
+            ->from('adresseruetype')
+        ;
 
-        if ($id != null) {
-            $select->where("ID_RUETYPE = $id");
+        if (null != $id) {
+            $select->where("ID_RUETYPE = {$id}");
 
             return $this->fetchRow($select)->toArray();
         }
@@ -94,7 +96,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 
     // Donne la liste de ville par rapport é un code postal
     /**
-     * @param string|int|float $code_postal
+     * @param float|int|string $code_postal
      *
      * @return array
      */
@@ -103,14 +105,15 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('adressecommune')
-            ->where("CODEPOSTAL_COMMUNE = '$code_postal'");
+            ->where("CODEPOSTAL_COMMUNE = '{$code_postal}'")
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
 
     // Retourne les types de voie d'une commune
     /**
-     * @param string|int|float $code_insee
+     * @param float|int|string $code_insee
      *
      * @return array
      */
@@ -120,15 +123,17 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('adresserue', null)
             ->join('adresseruetype', 'adresserue.ID_RUETYPE = adresseruetype.ID_RUETYPE')
-            ->where("NUMINSEE_COMMUNE = '$code_insee'")
-            ->group('ID_RUETYPE');
+            ->where("NUMINSEE_COMMUNE = '{$code_insee}'")
+            ->group('ID_RUETYPE')
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
 
     // Retourne les voies par rapport é une ville et un type de voie
     /**
-     * @param string|int|float $code_insee
+     * @param float|int|string $code_insee
+     * @param null|mixed       $q
      *
      * @return array
      */
@@ -137,9 +142,10 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('adresserue')
-            ->where("NUMINSEE_COMMUNE = '$code_insee'");
+            ->where("NUMINSEE_COMMUNE = '{$code_insee}'")
+        ;
 
-        if ($q != null) {
+        if (null != $q) {
             $select->where('LIBELLE_RUE LIKE ?', '%'.$q.'%');
         }
 

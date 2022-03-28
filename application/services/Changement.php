@@ -5,44 +5,46 @@ class Service_Changement
     /**
      * Définition des balises.
      */
-    public const BALISES = array(
-        '{activitePrincipaleEtablissement}' => array(
+    public const BALISES = [
+        '{activitePrincipaleEtablissement}' => [
             'description' => "L'activité principale de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_TYPEACTIVITE_PRINCIPAL',
-        ),
-        '{categorieEtablissement}' => array(
+        ],
+        '{categorieEtablissement}' => [
             'description' => "La catégorie de l'etablissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_CATEGORIE',
-        ),
-        '{etablissementAvis}' => array(
+        ],
+        '{etablissementAvis}' => [
             'description' => "L'avis de l'établissement",
             'model' => 'avis',
             'champ' => '',
-        ),
-        '{etablissementLibelle}' => array(
+        ],
+        '{etablissementLibelle}' => [
             'description' => "Le libelle de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_ETABLISSEMENTINFORMATIONS',
-        ),
-        '{etablissementNumeroId}' => array(
+        ],
+        '{etablissementNumeroId}' => [
             'description' => "Le numéro Id de l'établissement",
             'model' => 'general',
             'champ' => 'NUMEROID_ETABLISSEMENT',
-        ),
-        '{etablissementStatut}' => array(
+        ],
+        '{etablissementStatut}' => [
             'description' => "Le statut (Ouvert ou Fermé) de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_STATUT',
-        ),
-        '{typePrincipalEtablissement}' => array(
+        ],
+        '{typePrincipalEtablissement}' => [
             'description' => "Le type principal de l'établissement",
             'model' => 'informations',
             'champ' => 'LIBELLE_TYPE_PRINCIPAL',
-        ),
+        ],
+    ];
 
-    );
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_AVIS_DEFAVORABLE = 2;
 
     /**
      * Retourne tous les enregistrement contenus dans la table changement.
@@ -116,13 +118,17 @@ class Service_Changement
                     'Passage au statut "%s"',
                     $ets['informations']['LIBELLE_STATUT']
                 );
+
                 break;
+
             case '2':
                 $objet = sprintf(
                     'Passage en avis "%s"',
                     $this->getAvis($ets)
                 );
+
                 break;
+
             case '3':
                 $objet = sprintf(
                     'Changement de classement "%s - %s %s"',
@@ -130,7 +136,9 @@ class Service_Changement
                     $ets['informations']['LIBELLE_TYPE_PRINCIPAL'],
                     $ets['informations']['LIBELLE_TYPEACTIVITE_PRINCIPAL']
                 );
+
                 break;
+
             default:
                 $objet = '';
         }
@@ -161,15 +169,16 @@ class Service_Changement
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
      * @param string $message Le message a envoyer avec des balises
+     * @param mixed  $ets
      *
      * @return string Le message convertit
      */
     public function convertMessage($message, $ets)
     {
-        $params = array();
+        $params = [];
         foreach (self::BALISES as $balise => $content) {
             $replacementstr = '';
-            if ($content['model'] === 'avis') {
+            if ('avis' === $content['model']) {
                 $replacementstr = $this->getAvis($ets);
             } elseif (array_key_exists($content['model'], $ets)
                 && array_key_exists($content['champ'], $ets[$content['model']])) {
@@ -197,13 +206,13 @@ class Service_Changement
             $ets['general']['ID_DOSSIER_DONNANT_AVIS']
         );
 
-        if ($ets['presence_avis_differe'] == true && $avisType == 'avisDiff') {
+        if (true == $ets['presence_avis_differe'] && 'avisDiff' == $avisType) {
             $avis = "Présence d'un dossier avec avis differé";
-        } elseif ($ets['avis'] != null) {
-            if ($ets['avis'] == 1 && $avisType == 'avisDoss') {
-                $avis = 'Favorable'.($ets['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation");
-            } elseif ($ets['avis'] == 2 && $avisType == 'avisDoss') {
-                $avis = 'Défavorable'.($ets['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation");
+        } elseif (null != $ets['avis']) {
+            if (1 == $ets['avis'] && 'avisDoss' == $avisType) {
+                $avis = 'Favorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
+            } elseif (self::ID_AVIS_DEFAVORABLE == $ets['avis'] && 'avisDoss' == $avisType) {
+                $avis = 'Défavorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
             }
         } else {
             $avis = "Avis d'exploitation indisponible";

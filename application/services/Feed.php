@@ -7,9 +7,10 @@ class Service_Feed
      *
      * int $id_groupe
      *
-     * @return array
+     * @param null|int $count
+     * @param mixed    $id_group
      *
-     * @param int|null $count
+     * @return array
      */
     public function get($id_group, $count = 5)
     {
@@ -22,13 +23,15 @@ class Service_Feed
             ->where('newsgroupe.ID_GROUPE = ?', $id_group)
             ->group('ID_NEWS')
             ->order('ID_NEWS DESC')
-            ->limit($count);
+            ->limit($count)
+        ;
 
         return $select->query()->fetchAll();
     }
 
     /**
-     * @param int|null $count
+     * @param null|int $count
+     * @param mixed    $user
      *
      * @return array
      */
@@ -43,7 +46,8 @@ class Service_Feed
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
             ->group('ID_NEWS')
             ->order('ID_NEWS DESC')
-            ->limit($count);
+            ->limit($count)
+        ;
 
         return $select->query()->fetchAll();
     }
@@ -54,26 +58,25 @@ class Service_Feed
      * @param int    $type
      * @param string $message
      * @param int    $author
-     * @param array  $confidentialite
      */
     public function addMessage($type, $message, $author, array $confidentialite)
     {
         $model = new Model_DbTable_News();
         $model_groupe = new Model_DbTable_NewsGroupe();
 
-        $id_news = $model->createRow(array(
+        $id_news = $model->createRow([
             'ID_NEWS' => time(),
             'TYPE_NEWS' => $type,
             'TEXTE_NEWS' => $message,
             'ID_UTILISATEUR' => $author,
-        ))->save();
+        ])->save();
 
         // Ajout des destinataires du message
         foreach ($confidentialite as $value) {
-            $model_groupe->createRow(array(
+            $model_groupe->createRow([
                 'ID_NEWS' => $id_news,
                 'ID_GROUPE' => $value,
-            ))->save();
+            ])->save();
         }
 
         return $id_news;

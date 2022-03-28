@@ -6,18 +6,19 @@ class Model_DbTable_TypeActivite extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_TYPEACTIVITE'; // Clé primaire
 
     /**
-     * @return array|null
+     * @return null|array
      */
     public function myfetchAll()
     {
         $select = $this->select()
-                ->setIntegrityCheck(false)
-                ->from('typeactivite')
-                ->join('type', 'type.ID_TYPE = typeactivite.ID_TYPE')
-                ->order('type.LIBELLE_TYPE');
+            ->setIntegrityCheck(false)
+            ->from('typeactivite')
+            ->join('type', 'type.ID_TYPE = typeactivite.ID_TYPE')
+            ->order('type.LIBELLE_TYPE')
+        ;
 
         $result = $this->fetchAll($select);
 
-        return $result == null ? null : $result->toArray();
+        return null == $result ? null : $result->toArray();
     }
 }

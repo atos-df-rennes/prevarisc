@@ -2,6 +2,8 @@
 
 class Service_Adresse
 {
+    public const LONGUEUR_CODE_POSTAL = 5;
+
     /**
      * Récupération de l'ensemble des communes.
      *
@@ -23,7 +25,7 @@ class Service_Adresse
      */
     public function get($q)
     {
-        if (strlen($q) == 5 && is_numeric($q)) {
+        if (self::LONGUEUR_CODE_POSTAL == strlen($q) && is_numeric($q)) {
             $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
             return $DB_adresse->getVilleByCP($q);
@@ -74,11 +76,12 @@ class Service_Adresse
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
-        $select->from(array('ac' => 'adressecommune'))
-            ->join(array('ui' => 'utilisateurinformations'), 'ui.ID_UTILISATEURINFORMATIONS = ac.ID_UTILISATEURINFORMATIONS')
-            ->join(array('f' => 'fonction'), 'ui.ID_FONCTION = f.ID_FONCTION')
+        $select->from(['ac' => 'adressecommune'])
+            ->join(['ui' => 'utilisateurinformations'], 'ui.ID_UTILISATEURINFORMATIONS = ac.ID_UTILISATEURINFORMATIONS')
+            ->join(['f' => 'fonction'], 'ui.ID_FONCTION = f.ID_FONCTION')
             ->where('ac.NUMINSEE_COMMUNE = ?', $numinsee)
-            ->limit(1);
+            ->limit(1)
+        ;
 
         return $select->query()->fetch();
     }

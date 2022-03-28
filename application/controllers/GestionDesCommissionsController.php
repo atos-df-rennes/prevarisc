@@ -35,7 +35,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
 
             // Sauvegarde
             for ($i = 0; $i < count($this->_request->id_commission); ++$i) {
-                if ($_POST['id_commission'][$i] != 0) {
+                if (0 != $_POST['id_commission'][$i]) {
                     $item = $model_commissions->find($_POST['id_commission'][$i])->current();
                     $item->ID_COMMISSIONTYPE = $_POST['idtype_commission'][$i];
                     $item->LIBELLE_COMMISSION = $_POST['nom_commission'][$i];
@@ -52,17 +52,17 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 }
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les informations ont été sauvegardées',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -88,7 +88,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
             // Si on sauvegarde, on désactive le rendu
             if (
                 isset($_GET['action'])
-                && $_GET['action'] == 'save'
+                && 'save' == $_GET['action']
             ) {
                 $this->_helper->viewRenderer->setNoRender(true);
             }
@@ -98,30 +98,30 @@ class GestionDesCommissionsController extends Zend_Controller_Action
 
                 if (
                     isset($_GET['action'])
-                    && $_GET['action'] == 'save'
+                    && 'save' == $_GET['action']
                 ) {
                     $this->view->commission->setFromArray(array_intersect_key($_POST, $DB_commission->info('metadata')))->save();
                 }
             } elseif (
                 isset($_GET['action'])
-                && $_GET['action'] == 'save'
+                && 'save' == $_GET['action']
             ) {
                 $DB_commission->insert(array_intersect_key($_POST, $DB_commission->info('metadata')));
             }
 
             $this->view->tid = $_GET['tid'];
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La commission a bien été sauvegardée',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 }

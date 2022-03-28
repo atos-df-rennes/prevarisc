@@ -46,7 +46,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 $newRow->save();
             }
 
-            if ($this->_getParam('defPrescription') == 'yes') {
+            if ('yes' == $this->_getParam('defPrescription')) {
                 //on enregistre le texte dans la table prescriptiontexteliste
                 $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
                 $newTexte = $dbPrescTextes->createRow();
@@ -54,17 +54,17 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 $newTexte->save();
             }
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le texte a bien été sauvegardé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
 
         // Redirection

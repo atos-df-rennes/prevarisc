@@ -7,25 +7,32 @@ class Api_Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param string|array $genre
-     * @param string|array $categorie
-     * @param string|array $classe
-     * @param string|array $famille
-     * @param string|array $types_activites
+     * @param array|string $genre
+     * @param array|string $categorie
+     * @param array|string $classe
+     * @param array|string $famille
+     * @param array|string $types_activites
      * @param bool         $avis_favorable
-     * @param string|array $statuts
+     * @param array|string $statuts
      * @param bool         $local_sommeil
      * @param float        $lon
      * @param float        $lat
      * @param int          $parent
-     * @param int          $count           Par défaut 10, max 1000
-     * @param int          $page            par défaut = 1
+     * @param int          $count                    Par défaut 10, max 1000
+     * @param int          $page                     par défaut = 1
+     * @param null|mixed   $genres
+     * @param null|mixed   $categories
+     * @param null|mixed   $classes
+     * @param null|mixed   $familles
+     * @param null|mixed   $commissions
+     * @param null|mixed   $groupements_territoriaux
      *
      * @return array
      */
     public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $commissions = null, $groupements_territoriaux = null, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
+
         return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $commissions, $groupements_territoriaux = null, $count, $page);
     }
 
@@ -45,15 +52,16 @@ class Api_Service_Search
     public function dossiers($types = null, $objet = null, $num_doc_urba = null, $parent = null, $avis_differe = null, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
+
         return $service_search->dossiers($types, $objet, $num_doc_urba, $parent, $avis_differe, $count, $page);
     }
 
     /**
      * Recherche des utilisateurs.
      *
-     * @param string|array $fonctions
+     * @param array|string $fonctions
      * @param string       $name
-     * @param int|array    $groups
+     * @param array|int    $groups
      * @param bool         $actif     Optionnel
      * @param int          $count     Par défaut 10, max 100
      * @param int          $page      par défaut = 1
@@ -63,6 +71,7 @@ class Api_Service_Search
     public function users($fonctions = null, $name = null, $groups = null, $actif = true, $count = 10, $page = 1)
     {
         $service_search = new Service_Search();
+
         return $service_search->users($fonctions, $name, $groups, $actif, $count, $page);
     }
 }

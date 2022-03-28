@@ -6,16 +6,19 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_DOCMANQUANT'; // Clé primaire
 
     /**
+     * @param mixed $idDossier
+     *
      * @return array
      */
     public function getDocManquantDoss($idDossier)
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('ddm' => 'dossierdocmanquant'))
-             ->where('ddm.ID_DOSSIER = ?', $idDossier)
-             ->order('ddm.NUM_DOCSMANQUANT');
+            ->setIntegrityCheck(false)
+            ->from(['ddm' => 'dossierdocmanquant'])
+            ->where('ddm.ID_DOSSIER = ?', $idDossier)
+            ->order('ddm.NUM_DOCSMANQUANT')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -24,10 +27,11 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
     {
         //retourne la liste des documents manquant (uniquement les derniers pour la génération de document)
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('ddm' => 'dossierdocmanquant'))
-             ->where('ddm.ID_DOSSIER = ?', $idDossier)
-             ->order('ddm.NUM_DOCSMANQUANT DESC');
+            ->setIntegrityCheck(false)
+            ->from(['ddm' => 'dossierdocmanquant'])
+            ->where('ddm.ID_DOSSIER = ?', $idDossier)
+            ->order('ddm.NUM_DOCSMANQUANT DESC')
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
@@ -36,10 +40,11 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
     {
         //retourne la liste des documents manquant (uniquement les derniers pour la génération de document)
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('ddm' => 'dossierdocmanquant'))
-             ->where('ddm.ID_DOSSIER = ?', $idDossier)
-             ->where('ddm.NUM_DOCSMANQUANT = ?', $num);
+            ->setIntegrityCheck(false)
+            ->from(['ddm' => 'dossierdocmanquant'])
+            ->where('ddm.ID_DOSSIER = ?', $idDossier)
+            ->where('ddm.NUM_DOCSMANQUANT = ?', $num)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }

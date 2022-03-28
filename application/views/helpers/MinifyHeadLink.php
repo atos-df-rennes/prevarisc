@@ -24,16 +24,18 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      *
      * @var array
      */
-    protected $_cssExtensions = array('.css', '.css1', '.css2', '.css3');
+    protected $_cssExtensions = ['.css', '.css1', '.css2', '.css3'];
 
     /**
      * @var type   The application version
      * @var string
      */
-    protected $_version = null;
+    protected $_version;
 
     /**
      * Overrides default constructor to inject version.
+     *
+     * @param null|mixed $version
      */
     public function __construct($version = null)
     {
@@ -44,7 +46,6 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
     /**
      * Returns current object instance. Optionally, allows passing array of
      * values to build link.
-     *
      *
      * @param array  $attributes
      * @param string $placement
@@ -66,7 +67,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      *
      * @see Zend_View_Helper_HeadScript->toString()
      *
-     * @param string|int $indent
+     * @param int|string $indent
      *
      * @return string
      */
@@ -75,16 +76,16 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
         $indent = (null !== $indent) ? $this->getWhitespace($indent) : $this->getIndent();
         $trimmedBaseUrl = trim($this->getBaseUrl(), '/');
 
-        $items = array();
-        $stylesheets = array();
+        $items = [];
+        $stylesheets = [];
         $this->getContainer()->ksort();
         foreach ($this as $item) {
-            if ($item->type == 'text/css' && $item->conditionalStylesheet === false && strpos($item->href, 'http://') === false && $this->isValidStyleSheetExtension($item->href)) {
-                $stylesheets [$item->media] [] = str_replace($this->getBaseUrl(), '', $item->href);
+            if ('text/css' == $item->type && false === $item->conditionalStylesheet && false === strpos($item->href, 'http://') && $this->isValidStyleSheetExtension($item->href)) {
+                $stylesheets[$item->media][] = str_replace($this->getBaseUrl(), '', $item->href);
             } else {
                 // first get all the stylsheets up to this point, and get them into
                 // the items array
-                $seen = array();
+                $seen = [];
                 foreach ($stylesheets as $media => $styles) {
                     $minStyles = new stdClass();
                     $minStyles->rel = 'stylesheet';
@@ -101,16 +102,16 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
                     if (in_array($this->itemToString($minStyles), $seen)) {
                         continue;
                     }
-                    $items [] = $this->itemToString($minStyles); // add the minified item
-                    $seen [] = $this->itemToString($minStyles); // remember we saw it
+                    $items[] = $this->itemToString($minStyles); // add the minified item
+                    $seen[] = $this->itemToString($minStyles); // remember we saw it
                 }
-                $stylesheets = array(); // Empty our stylesheets array
-                $items [] = $this->itemToString($item); // Add the item
+                $stylesheets = []; // Empty our stylesheets array
+                $items[] = $this->itemToString($item); // Add the item
             }
         }
 
         // Make sure we pick up the final minified item if it exists.
-        $seen = array();
+        $seen = [];
         foreach ($stylesheets as $media => $styles) {
             $minStyles = new stdClass();
             $minStyles->rel = 'stylesheet';
@@ -124,8 +125,8 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
             if (in_array($this->itemToString($minStyles), $seen)) {
                 continue;
             }
-            $items [] = $this->itemToString($minStyles);
-            $seen [] = $this->itemToString($minStyles);
+            $items[] = $this->itemToString($minStyles);
+            $seen[] = $this->itemToString($minStyles);
         }
 
         return $indent.implode($this->_escape($this->getSeparator()).$indent, $items);
@@ -135,13 +136,11 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      * Loops through the defined valid static css extensions we use.
      *
      * @param string $string
-     *
-     * @return bool
      */
     public function isValidStyleSheetExtension($string): bool
     {
         foreach ($this->_cssExtensions as $ext) {
-            if (substr_compare($string, $ext, -strlen($ext), strlen($ext)) === 0) {
+            if (0 === substr_compare($string, $ext, -strlen($ext), strlen($ext))) {
                 return true;
             }
         }
