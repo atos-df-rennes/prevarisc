@@ -2029,9 +2029,13 @@ class DossierController extends Zend_Controller_Action
     public function creationdocAction($idDossier, $idEtab, $commission)
     {
         $this->view->idDossier = $idDossier;
+
         $this->view->idCommission = $commission;
 
         $this->view->fichierSelect = $this->_getParam('file');
+
+        $this->view->DS = DS;
+        $this->view->REAL_DATA_PATH = REAL_DATA_PATH;
 
         $dateDuJour = new Zend_Date();
         $this->view->dateDuJour = $dateDuJour->get(Zend_Date::DAY.'/'.Zend_Date::MONTH.'/'.Zend_Date::YEAR);
