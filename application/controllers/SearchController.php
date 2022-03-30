@@ -308,6 +308,8 @@ class SearchController extends Zend_Controller_Action
             && count($this->_request->getQuery()) > 0
             && !empty($_GET)
         ) {
+            var_dump($this->_request->getParams("provenance"));
+            //var_dump($this->_request->getQuery())
             // Export Calc
             if (isset($_GET['Exporter'])) {
                 try {
@@ -338,9 +340,10 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['groupements_territoriaux'] = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
                     $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
                     $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $criteresRecherche['provenance'] = $this->_request->getParam("provenance");
 
                     $search = $service_search->extractionDossiers($types, $objet, $num_doc_urba, null, null, $criteresRecherche);
-
+                
                     $objPHPExcel = new PHPExcel();
                     $objPHPExcel->setActiveSheetIndex(0);
                     $sheet = $objPHPExcel->getActiveSheet();
@@ -463,7 +466,7 @@ class SearchController extends Zend_Controller_Action
                 }
             } else {
                 // Recherche
-
+                    
                 // Si premier affichage de la page
                 if (!isset($_GET['Rechercher'])) {
                     // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
@@ -498,6 +501,8 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
                     $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
                     $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $criteresRecherche['provenance'] = $this->_request->getParam("provenance");
+
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $criteresRecherche['groupements_territoriaux'] = $parameters['groupements_territoriaux'];
                     } else {

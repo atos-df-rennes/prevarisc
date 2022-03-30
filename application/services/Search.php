@@ -646,6 +646,24 @@ class Service_Search
                 $select->order('d.DATEINSERT_DOSSIER DESC');
             }
 
+            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
+                foreach ($criterias['provenance'] as $value) {
+                    switch ($value) {   
+                        case '1':
+                            //Dossier provenant de PLATAU
+                            $select->where("d.ID_PLATAU IS NOT NULL");          
+                            break;
+    
+                        case '2':
+                            //Dossier ne provenant pas de PLATAU
+                            $select->where("d.ID_PLATAU IS NULL");
+                            break;
+                                    
+                        default:
+                            break;
+                    }                }                
+
+            }
             // Gestion des pages et du count
             $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_DOSSIERS ? self::MAX_LIMIT_PAGES_DOSSIERS : $count);
 
@@ -930,7 +948,26 @@ class Service_Search
             if (isset($criterias['dateVisiteEnd']) && null !== $criterias['dateVisiteEnd']) {
                 $select->where("d.DATEVISITE_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateVisiteEnd']);
             }
+            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
+                switch ($criterias['provenance']) {
+                    case '0':
+                        //Dossier provenant ou pas de PLATAU --> pas de critere a ajouter
+                        break;
 
+                    case '1':
+                        //Dossier provenant de PLATAU
+                        $select->where("d.ID_PLATAU IS NOT NULL");          
+                        break;
+
+                    case '2':
+                        //Dossier ne provenant pas de PLATAU
+                        $select->where("d.ID_PLATAU IS NULL");
+                        break;
+                                
+                    default:
+                        break;
+                }
+            }
             $select->order('adressecommune.LIBELLE_COMMUNE ASC')
                 ->order('categorie.LIBELLE_CATEGORIE ASC')
                 ->order('type.LIBELLE_TYPE ASC')
@@ -950,7 +987,6 @@ class Service_Search
 
             $cache->save(serialize($results));
         }
-
         return $results;
     }
 
