@@ -13,6 +13,7 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_GENRE'; // Clé primaire
 
     // Donne la liste des genres
+
     /**
      * @param float|int|string $id
      *

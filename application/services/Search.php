@@ -648,21 +648,23 @@ class Service_Search
 
             if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
                 foreach ($criterias['provenance'] as $value) {
-                    switch ($value) {   
+                    switch ($value) {
                         case '1':
                             //Dossier provenant de PLATAU
-                            $select->where("d.ID_PLATAU IS NOT NULL");          
+                            $select->where('d.ID_PLATAU IS NOT NULL');
+
                             break;
-    
+
                         case '2':
                             //Dossier ne provenant pas de PLATAU
-                            $select->where("d.ID_PLATAU IS NULL");
+                            $select->where('d.ID_PLATAU IS NULL');
+
                             break;
-                                    
+
                         default:
                             break;
-                    }                }                
-
+                    }
+                }
             }
             // Gestion des pages et du count
             $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_DOSSIERS ? self::MAX_LIMIT_PAGES_DOSSIERS : $count);
@@ -956,14 +958,16 @@ class Service_Search
 
                     case '1':
                         //Dossier provenant de PLATAU
-                        $select->where("d.ID_PLATAU IS NOT NULL");          
+                        $select->where('d.ID_PLATAU IS NOT NULL');
+
                         break;
 
                     case '2':
                         //Dossier ne provenant pas de PLATAU
-                        $select->where("d.ID_PLATAU IS NULL");
+                        $select->where('d.ID_PLATAU IS NULL');
+
                         break;
-                                
+
                     default:
                         break;
                 }
@@ -987,6 +991,7 @@ class Service_Search
 
             $cache->save(serialize($results));
         }
+
         return $results;
     }
 
