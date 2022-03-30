@@ -308,8 +308,6 @@ class SearchController extends Zend_Controller_Action
             && count($this->_request->getQuery()) > 0
             && !empty($_GET)
         ) {
-            var_dump($this->_request->getParams("provenance"));
-            //var_dump($this->_request->getQuery())
             // Export Calc
             if (isset($_GET['Exporter'])) {
                 try {
