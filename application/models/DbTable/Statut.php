@@ -14,7 +14,7 @@ class Model_DbTable_Statut extends Zend_Db_Table_Abstract
 
     // Donne la liste des catégories
     /**
-     * @param string|int|float $id
+     * @param float|int|string $id
      *
      * @return array
      */
@@ -22,14 +22,15 @@ class Model_DbTable_Statut extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('statut');
+            ->from('statut')
+        ;
 
-        if ($id != null) {
-            $select->where("ID_STATUT = $id");
+        if (null != $id) {
+            $select->where("ID_STATUT = {$id}");
 
             return $this->fetchRow($select)->toArray();
-        } else {
-            return $this->fetchAll($select)->toArray();
         }
+
+        return $this->fetchAll($select)->toArray();
     }
 }

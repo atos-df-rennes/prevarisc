@@ -11,7 +11,8 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('check', 'json')
-                    ->initContext();
+            ->initContext()
+        ;
     }
 
     public function indexAction()
@@ -24,14 +25,14 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
         //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
         $pathVer = $this->path.'/0';
-        $dirVer = opendir($pathVer) or die('Erreur de listage : le répertoire n\'existe pas');
-        $fichierVer = array();
-        $dossierVer = array();
+        $dirVer = opendir($pathVer) or exit('Erreur de listage : le répertoire n\'existe pas');
+        $fichierVer = [];
+        $dossierVer = [];
         while ($elementVer = readdir($dirVer)) {
             if (
-                $elementVer != '.'
-                && $elementVer != '..'
-                && $elementVer != '.gitignore'
+                '.' != $elementVer
+                && '..' != $elementVer
+                && '.gitignore' != $elementVer
             ) {
                 if (!is_dir($pathVer.DS.$elementVer)) {
                     $fichierVer[] = $elementVer;
@@ -48,15 +49,15 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         //Récupération de l'ensemble des documents des différentes commissions
         foreach ($liste_commission as $var => $commission) {
             $path = $this->path.DS.$commission['ID_COMMISSION'];
-            $dir = opendir($path) or die('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
-            $fichier = array(); // on déclare le tableau contenant le nom des fichiers
-            $dossier = array(); // on déclare le tableau contenant le nom des dossiers
+            $dir = opendir($path) or exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
+            $fichier = []; // on déclare le tableau contenant le nom des fichiers
+            $dossier = []; // on déclare le tableau contenant le nom des dossiers
 
             while ($element = readdir($dir)) {
                 if (
-                    $element != '.'
-                    && $element != '..'
-                    && $element != '.gitignore'
+                    '.' != $element
+                    && '..' != $element
+                    && '.gitignore' != $element
                 ) {
                     if (!is_dir($path.DS.$element)) {
                         $fichier[] = $element;
@@ -91,7 +92,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             // Extension du fichier
             $filename = str_replace(DS, '', $_FILES['fichier']['name']);
             $extension = strtolower(strrchr($filename, '.'));
-            if (!in_array($extension, array('.odt'))) {
+            if (!in_array($extension, ['.odt'])) {
                 throw new Exception('Seuls les fichiers .odt sont autorisés en upload.');
             }
 
@@ -99,17 +100,17 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->_getParam('commission').DS.$filename)) {
                 throw new Exception('Impossible de déplacer le fichier uploadé');
             }
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été ajouté',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
         echo '
             <script type="text/javascript">
@@ -137,11 +138,11 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                 throw new Exception('Impossible de supprimer le fichier '.$filename);
             }
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
             echo $e->getMessage();
         }
     }

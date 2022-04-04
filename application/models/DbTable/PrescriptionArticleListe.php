@@ -6,16 +6,19 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_ARTICLE'; // Clé primaire
 
     /**
+     * @param null|mixed $visible
+     *
      * @return array
      */
     public function getAllArticles($visible = null)
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('ptl' => 'prescriptionarticleliste'));
+            ->setIntegrityCheck(false)
+            ->from(['ptl' => 'prescriptionarticleliste'])
+        ;
 
-        if ($visible != null) {
+        if (null != $visible) {
             $select->where('ptl.VISIBLE_ARTICLE = ?', $visible);
         }
 
@@ -27,18 +30,20 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
     public function getArticle($idArticle)
     {
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->where('ID_ARTICLE = ?', $idArticle);
+            ->setIntegrityCheck(false)
+            ->where('ID_ARTICLE = ?', $idArticle)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
-     * @param string|int $idOldArticle
+     * @param int|string $idOldArticle
+     * @param mixed      $idNewArticle
      */
     public function replace($idOldArticle, $idNewArticle)
     {
-        $data = array('ID_ARTICLE' => $idNewArticle);
+        $data = ['ID_ARTICLE' => $idNewArticle];
         $where[] = 'ID_ARTICLE = '.$idOldArticle;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossierassoc', $data, $where);

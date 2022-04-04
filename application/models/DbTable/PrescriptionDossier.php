@@ -9,26 +9,31 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'), 'max(pd.NUM_PRESCRIPTION_DOSSIER) as maxnum')
-             ->where('ID_DOSSIER = ?', $idDossier)
-             ->where('TYPE_PRESCRIPTION_DOSSIER = ?', $type);
+            ->setIntegrityCheck(false)
+            ->from(['pd' => 'prescriptiondossier'], 'max(pd.NUM_PRESCRIPTION_DOSSIER) as maxnum')
+            ->where('ID_DOSSIER = ?', $idDossier)
+            ->where('TYPE_PRESCRIPTION_DOSSIER = ?', $type)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }
 
     /**
+     * @param mixed $idDossier
+     * @param mixed $type
+     *
      * @return array
      */
     public function recupPrescDossier($idDossier, $type)
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'))
-             ->where('pd.ID_DOSSIER = ?', $idDossier)
-             ->where('pd.TYPE_PRESCRIPTION_DOSSIER = ?', $type)
-             ->order('pd.NUM_PRESCRIPTION_DOSSIER');
+            ->setIntegrityCheck(false)
+            ->from(['pd' => 'prescriptiondossier'])
+            ->where('pd.ID_DOSSIER = ?', $idDossier)
+            ->where('pd.TYPE_PRESCRIPTION_DOSSIER = ?', $type)
+            ->order('pd.NUM_PRESCRIPTION_DOSSIER')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -37,9 +42,10 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
     {
         //retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
-             ->setIntegrityCheck(false)
-             ->from(array('pd' => 'prescriptiondossier'))
-             ->where('pd.ID_PRESCRIPTION_DOSSIER = ?', $id_prescription);
+            ->setIntegrityCheck(false)
+            ->from(['pd' => 'prescriptiondossier'])
+            ->where('pd.ID_PRESCRIPTION_DOSSIER = ?', $id_prescription)
+        ;
 
         return $this->getAdapter()->fetchRow($select);
     }

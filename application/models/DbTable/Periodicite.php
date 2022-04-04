@@ -2,8 +2,9 @@
 
 class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
 {
+    public const ID_GENRE_ETABLISSEMENT = 2;
     protected $_name = 'periodicite'; // Nom de la base
-    protected $_primary = array('ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE'); // Clé primaire
+    protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE']; // Clé primaire
 
     public function gn4($categorie, $type, $local_sommeil): string
     {
@@ -13,21 +14,22 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
             ->from('periodicite', 'PERIODICITE_PERIODICITE')
             ->where('ID_CATEGORIE = ?', (int) $categorie)
             ->where('ID_TYPE = ?', (int) $type)
-            ->where('LOCALSOMMEIL_PERIODICITE = ?', $local_sommeil);
+            ->where('LOCALSOMMEIL_PERIODICITE = ?', $local_sommeil)
+        ;
 
         // Retourne le résultat
         $result = $this->getAdapter()->fetchOne($select);
 
-        return $result === false ? '0' : $result;
+        return false === $result ? '0' : $result;
     }
 
     public function gn4ForEtablissement($etablissement)
     {
         $informations = $etablissement['informations'];
-        if (!in_array($informations['ID_GENRE'], array(2, 5))) {
+        if (!in_array($informations['ID_GENRE'], [2, 5])) {
             return null;
         }
-        $type = $informations['ID_GENRE'] == 2 ? $informations['ID_TYPE'] : $informations['ID_CLASSE'];
+        $type = self::ID_GENRE_ETABLISSEMENT == $informations['ID_GENRE'] ? $informations['ID_TYPE'] : $informations['ID_CLASSE'];
 
         return $this->gn4($informations['ID_CATEGORIE'], $type, $informations['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 1 : 0);
     }
@@ -54,6 +56,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
             $db->getConnection()->commit();
         } catch (Exception $e) {
             $db->rollBack();
+
             throw $e;
         }
     }

@@ -7,7 +7,7 @@ class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
 
     //récupere les éventuels documents qui auraient été ajoutés
     /**
-     * @param string|int $id_dossier
+     * @param int|string $id_dossier
      *
      * @return array
      */
@@ -22,8 +22,8 @@ class Model_DbTable_ListeDocAjout extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param string|int $id_dossier
-     * @param string|int $id_nature
+     * @param int|string $id_dossier
+     * @param int|string $id_nature
      *
      * @return array
      */

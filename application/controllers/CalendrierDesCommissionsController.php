@@ -7,10 +7,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('dashboard');
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('commissionselection', 'json')
-                    ->addActionContext('recupevenement', 'json')
-                    ->addActionContext('recupevenementodj', 'json')
-                    ->addActionContext('recupdateliee', 'json')
-                    ->initContext();
+            ->addActionContext('recupevenement', 'json')
+            ->addActionContext('recupevenementodj', 'json')
+            ->addActionContext('recupdateliee', 'json')
+            ->initContext()
+        ;
     }
 
     public function indexAction()
@@ -30,25 +31,25 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $rowset_typesDesCommissions = $model_typesDesCommissions->fetchAll();
 
         // Tableau de résultats
-        $array_commissions = array();
+        $array_commissions = [];
 
         // Pour tous les types, on cherche leur commission
         foreach ($rowset_typesDesCommissions as $row_typeDeCommission) {
             $array_results = $model_commission->fetchAll('ID_COMMISSIONTYPE = '.$row_typeDeCommission->ID_COMMISSIONTYPE)->toArray();
-            $array_results2 = array();
+            $array_results2 = [];
             foreach ($array_results as $item) {
-                $array_results2[] = array(
+                $array_results2[] = [
                     'ID_COMMISSION' => $item['ID_COMMISSION'],
                     'LIBELLE_COMMISSION' => $item['LIBELLE_COMMISSION'],
                     'DOCUMENT_CR' => $item['DOCUMENT_CR'],
                     'ID_COMMISSIONTYPE' => $item['ID_COMMISSIONTYPE'],
                     'LIBELLE_COMMISSIONTYPE' => $row_typeDeCommission->LIBELLE_COMMISSIONTYPE,
-                );
+                ];
             }
-            $array_commissions[$row_typeDeCommission->ID_COMMISSIONTYPE] = array(
+            $array_commissions[$row_typeDeCommission->ID_COMMISSIONTYPE] = [
                 'LIBELLE' => $row_typeDeCommission->LIBELLE_COMMISSIONTYPE,
                 'ARRAY' => $array_results2,
-            );
+            ];
         }
 
         $userId = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
@@ -63,7 +64,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $url .= sprintf('&commission=%s', $this->_getParam('idComm'));
         }
 
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'webcals' : 'webcal';
+        $protocol = (!empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS']) ? 'webcals' : 'webcal';
 
         $this->view->url_webcal = $protocol.'://'.$_SERVER['HTTP_HOST'].$url;
         $this->view->array_commissions = $array_commissions;
@@ -164,17 +165,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $dossierAffectationUpdate->HEURE_FIN_AFFECT = $heureFin->get('HH:mm');
             $dossierAffectationUpdate->save();
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'L\'événement a bien été modifié',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -194,11 +195,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $dossierAffectationUpdate->save();
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -223,7 +224,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $dbDateCommission = new Model_DbTable_DateCommission();
 
-        $items = array();
+        $items = [];
         $requete = ($this->_getParam('idComm'))
             ? "COMMISSION_CONCERNE = '".$this->_getParam('idComm')."' AND DATE_COMMISSION BETWEEN '".$dateDebut."' AND '".$dateFin."'"
             : "DATE_COMMISSION BETWEEN '".$dateDebut."' AND '".$dateFin."'";
@@ -232,7 +233,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $requete .= " AND ID_COMMISSIONTYPEEVENEMENT = '".$this->_getParam('type')."'";
         }
         foreach ($dbDateCommission->fetchAll($requete)->toArray() as $commissionEvent) {
-            $items[] = array(
+            $items[] = [
                 'id' => $commissionEvent['ID_DATECOMMISSION'],
                 'title' => '   '.$commissionEvent['LIBELLE_DATECOMMISSION'],
                 'start' => date($commissionEvent['DATE_COMMISSION'].' '.$commissionEvent['HEUREDEB_COMMISSION']),
@@ -240,7 +241,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 'url' => 'commission/id/'.$commissionEvent['ID_DATECOMMISSION'],
                 'className' => 'display-'.$commissionEvent['ID_COMMISSIONTYPEEVENEMENT'],
                 'allDay' => false,
-            );
+            ];
         }
         $this->view->items = $items;
     }
@@ -259,7 +260,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDossierAffect = new Model_DbTable_DossierAffectation();
         $listeDossiersAffect = $dbDossierAffect->getDossierAffect($this->_getParam('dateCommId'));
 
-        $items = array();
+        $items = [];
 
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
@@ -285,14 +286,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             if (isset($dossierAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])) {
                 $affichage .= $dossierAffect['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'].' - ';
             }
-            $affichage = $dossierAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS' ];
+            $affichage = $dossierAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'];
 
             $nbAdresse = count($dossierAffect['infosEtab']['adresses']);
-            if ($nbAdresse != 0) {
+            if (0 != $nbAdresse) {
                 $affichage .= ' (';
                 foreach ($dossierAffect['infosEtab']['adresses'] as $commune) {
                     $affichage .= $commune['LIBELLE_COMMUNE'];
-                    if ($nbAdresse != 1) {
+                    if (1 != $nbAdresse) {
                         $affichage .= ', ';
                     }
                     --$nbAdresse;
@@ -302,11 +303,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $affichage .= ' ( adresse non renseignée )';
             }
 
-            if ($dossierAffect['LIBELLE_DOSSIERNATURE'] != '') {
+            if ('' != $dossierAffect['LIBELLE_DOSSIERNATURE']) {
                 $affichage .= ' - '.$dossierAffect['LIBELLE_DOSSIERNATURE'];
             }
 
-            if ($dossierAffect['OBJET_DOSSIER'] != '') {
+            if ('' != $dossierAffect['OBJET_DOSSIER']) {
                 $affichage .= ' - Objet : '.$dossierAffect['OBJET_DOSSIER'];
             }
 
@@ -323,13 +324,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $affichage .= ' ('.$preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'].' '.$preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].')';
             }
 
-            if ($dossierAffect['VERROU_DOSSIER'] == 0) {
+            if (0 == $dossierAffect['VERROU_DOSSIER']) {
                 $color = '#e2a420';
-            } elseif ($dossierAffect['VERROU_DOSSIER'] == 1) {
+            } elseif (1 == $dossierAffect['VERROU_DOSSIER']) {
                 $color = '#83bff6';
             }
 
-            $items[] = array(
+            $items[] = [
                 'id' => $dossierAffect['ID_DOSSIER'],
                 'url' => '/dossier/index/id/'.$dossierAffect['ID_DOSSIER'],
                 'title' => '   '.$affichage,
@@ -337,7 +338,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 'end' => date($dateDebut.' '.$dossierAffect['HEURE_FIN_AFFECT']),
                 'backgroundColor' => $color,
                 'allDay' => false,
-            );
+            ];
         }
 
         $this->view->items = $items;
@@ -363,18 +364,18 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             //On retourne la valeur du verrou pour pour savoir la couleur à afficher dans le calendrier
             echo $dossier['VERROU_DOSSIER'];
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'affectation du dossier',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
     public function dialogcommAction()
     {
         $this->view->do = $this->_getParam('do');
-        if ($this->view->do == 'edit') {
+        if ('edit' == $this->view->do) {
             //récupération de l'id de la date sur laquelle on clique
             $this->view->dateClick = $this->_getParam('idDateComm');
 
@@ -389,7 +390,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->view->idParam = $this->_getParam('idComm');
             $this->view->idTypeSelect = $commQtipInfo->ID_COMMISSIONTYPEEVENEMENT;
 
-            if ($commQtipInfo->DATECOMMISSION_LIEES == null) {
+            if (null == $commQtipInfo->DATECOMMISSION_LIEES) {
                 //On est sur la date principale
                 $this->view->listeDates = $dbDateCommission->getCommissionsQtypListing($this->_getParam('idDateComm'));
                 $this->view->dateCommission = $commQtipInfo->ID_DATECOMMISSION;
@@ -400,7 +401,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
             //Récupération du libelle de la Commission selectionnee
             $this->view->libelleDateComm = $commQtipInfo->LIBELLE_DATECOMMISSION;
-        } elseif ($this->view->do == 'newComm') {
+        } elseif ('newComm' == $this->view->do) {
             $dbCommissions = new Model_DbTable_Commission();
             $commFind = $dbCommissions->find($this->_getParam('idComm'));
             $commSelect = $commFind->current();
@@ -425,14 +426,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $HeureF = new Zend_Date($this->_getParam('dateF'), Zend_Date::ISO_8601, 'en');
 
             //Liste des dates selectionnées dans un tableau puis envoyées à la vue
-            $listeDates = array();
+            $listeDates = [];
             while ($dateD->compare($dateF) <= 0) {
-                array_push($listeDates, array(
+                array_push($listeDates, [
                     'date' => $dateD->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr'),
                     'inputH' => $dateD->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY),
                     'heureD' => $HeureD->get('HH:mm'),
                     'heureF' => $HeureF->get('HH:mm'),
-                ));
+                ]);
                 $dateD->addDay(1);
             }
             //Envoi à la vue la liste des dates selectionnées
@@ -454,6 +455,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dateAjoutee = new Zend_Date($this->_getParam('date'), Zend_Date::DATES, 'fr');
                     $this->view->dateAjoutee = $dateAjoutee->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');
                     $this->view->dateAjouteeInput = $dateAjoutee->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
+
                     break;
                 //LIBELLE
                 case 'libelleCom':
@@ -462,12 +464,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $commQtipInfo = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
                     $this->view->libelleDateComm = $commQtipInfo->LIBELLE_DATECOMMISSION;
+
                     break;
+
                 case 'valid_libelleCom':
                     //VALIDATION Lorsque l'on modifie le libellé de la commission programmée
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $commEdit = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
-                    if ($commEdit->DATECOMMISSION_LIEES == null) {
+                    if (null == $commEdit->DATECOMMISSION_LIEES) {
                         //On est sur la date maitre
                         $dbDateCommission->dateCommUpdateLibelle($this->_getParam('idDateComm'), addslashes($this->_getParam('data')));
                     } else {
@@ -475,6 +479,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                         $dbDateCommission->dateCommUpdateLibelle($commEdit->DATECOMMISSION_LIEES, addslashes($this->_getParam('data')));
                     }
                     $this->view->libelleDateComm = $this->_getParam('data');
+
                     break;
                 //TYPE
                 case 'typeCom':
@@ -485,13 +490,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $commEdit = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
                     $this->view->typeComSelect = $commEdit['ID_COMMISSIONTYPEEVENEMENT'];
+
                     break;
+
                 case 'valid_typeCom':
                     //VALIDATION Permet de valider le changement de type des commissions concernées
                     $idTypeSelect = $this->_getParam('typeSelect');
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $LigneComm = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
-                    if ($LigneComm->DATECOMMISSION_LIEES != null) {
+                    if (null != $LigneComm->DATECOMMISSION_LIEES) {
                         $idUtile = $LigneComm->DATECOMMISSION_LIEES;
                     } else {
                         $idUtile = $LigneComm->ID_DATECOMMISSION;
@@ -500,7 +507,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dbTypeEvenement = new Model_DbTable_CommissionTypeEvenement();
                     $infoType = $dbTypeEvenement->find($idTypeSelect)->current();
                     $this->view->libelleType = $infoType['LIBELLE_COMMISSIONTYPEEVENEMENT'];
+
                     break;
+
                 case 'annule_typeCom':
                     //ANNULATION Permet de ne rien modifier concernant le type ré-affiche le type non modifié
                     $idDateComm = $this->_getParam('idDateComm');
@@ -511,6 +520,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dbTypeEvenement = new Model_DbTable_CommissionTypeEvenement();
                     $infoType = $dbTypeEvenement->find($typeComSelect)->current();
                     $this->view->libelleType = $infoType['LIBELLE_COMMISSIONTYPEEVENEMENT'];
+
                     break;
                 //DATE
                 case 'dateComm':
@@ -520,7 +530,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $tabInfos = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
                     $this->view->dateCommDetail = $tabInfos;
                     $this->view->first = $this->_getParam('first');
+
                     break;
+
                 case 'valid_dateCom':
                     //VALIDATION Lorsque l'on modifie la date
                     $HeureD = new Zend_Date($this->_getParam('hd'), 'HH:mm', 'en');
@@ -538,23 +550,27 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                     $this->view->updateDateComm = $updateDateComm;
                     $this->view->first = $this->_getParam('first');
+
                     break;
+
                 case 'supp_dateCom':
                     //ANNULATION Lorsque l'on annule la modification une date
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $dateCommSupp = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
-                    if ($dateCommSupp->DATECOMMISSION_LIEES != null) {
+                    if (null != $dateCommSupp->DATECOMMISSION_LIEES) {
                         $dateCommSupp->delete();
                     } else {
                         $this->_helper->viewRenderer->setNoRender();
                     }
+
                     break;
+
                 case 'addDateS':
                     $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES, 'fr');
                     //verifier si la date liéee contien une date liee. Si oui on récup cette id et on insere si non on prend l'id et on insere
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $LigneComm = $dbDateCommission->find($this->_getParam('idDateCommLiee'))->current();
-                    if ($LigneComm->DATECOMMISSION_LIEES != null) {
+                    if (null != $LigneComm->DATECOMMISSION_LIEES) {
                         $idUtile = $LigneComm->DATECOMMISSION_LIEES;
                     } else {
                         $idUtile = $LigneComm->ID_DATECOMMISSION;
@@ -569,7 +585,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $newDate->save();
                     $this->view->TabNouvelleDate = $newDate;
                     $this->view->nouvelleDate = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');
+
                     break;
+
                 case 'makeDefaut':
                     //Cas utilisé pour rendre une date de commission comme celle par défaut
                     $idDateCom = $this->_getParam('idDateComm');
@@ -582,10 +600,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                     $newMasterComm->DATECOMMISSION_LIEES = null;
                     $newMasterComm->save();
+
                     break;
+
                 default:
                     //cas théoriquement jamais utilisé
                     echo 'Erreur mauvais choix';
+
                     break;
             }
         }
@@ -616,9 +637,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dbDateCommission = new Model_DbTable_DateCommission();
 
             $premiereDate = true;
-            $listeDates = array();
+            $listeDates = [];
 
-            if ($this->_getParam('repeat') == 'on') {
+            if ('on' == $this->_getParam('repeat')) {
                 //Cas d'une seule date avec une périodicité selectionnée
                 $periodicite = $this->_getParam('periodicite');
 
@@ -626,12 +647,16 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                 foreach ($_POST as $var => $val) {
                     $varExplode1 = explode('_', $var);
-                    if (count($varExplode1) == 2) {
+                    $expectedNumberOfParameters = 2;
+
+                    if ($expectedNumberOfParameters == count($varExplode1)) {
                         //il n'y à que la premiere date sélectionnée (de début) qui est composée d'un "_"
                         $varExplode2 = explode('-', $varExplode1[1]);
+                        $expectedNumberOfDateParameters = 3;
+
                         if (
-                            count($varExplode2) == 3
-                            && $varExplode1[0] == 'D'
+                            $expectedNumberOfDateParameters == count($varExplode2)
+                            && 'D' == $varExplode1[0]
                         ) {
                             //on s'assure que c'est bien une date jj/mm/aaaa
                             //Ici insertion la premiere dates dans la base de données
@@ -646,20 +671,20 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                             while ($dateDebut->compare($dateFin) <= 0) {
                                 //on liste toutes les dates jusqu'a la date de fin
                                 $dateDb = $dateDebut->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
-                                if ($first != 1) {
+                                if (1 != $first) {
                                     $idOrigine = $dbDateCommission->addDateComm($dateDb, $heureDebRef, $heureFinRef, $this->_getParam('idComm'), $this->_getParam('typeCom'), $this->_getParam('libelle_comm'));
                                     $idCalendrierTab = $idOrigine;
                                 } else {
                                     $first = 0;
                                 }
-                                array_push($listeDates, array(
+                                array_push($listeDates, [
                                     'id' => $idCalendrierTab,
                                     'title' => $libelle,
                                     'start' => $dateDb.' '.$heureDebRef,
                                     'end' => $dateDb.' '.$heureFinRef,
                                     'url' => 'calendrier-des-commissions/id/'.$idCalendrierTab,
                                     'className' => 'display-'.$typeComm,
-                                ));
+                                ]);
                                 $dateDebut->addDay(7 * $periodicite);
                             }
                         }
@@ -669,12 +694,16 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 //Cas de plusieurs dates selectionnées
                 foreach ($_POST as $var => $val) {
                     $varExplode1 = explode('_', $var);
-                    if (count($varExplode1) == 2) {
+                    $expectedNumberOfParameters = 2;
+
+                    if ($expectedNumberOfParameters == count($varExplode1)) {
                         //on est dans le cas d'une date
                         $varExplode2 = explode('-', $varExplode1[1]);
-                        if (count($varExplode2) == 3) {
+                        $expectedNumberOfDateParameters = 3;
+
+                        if ($expectedNumberOfDateParameters == count($varExplode2)) {
                             //Ici insertion des dates dans la base de données
-                            if ($varExplode1[0] == 'D') {
+                            if ('D' == $varExplode1[0]) {
                                 if ($premiereDate) {
                                     $idOrigine = $dbDateCommission->addDateComm($varExplode1[1], $this->_getParam('D_'.$varExplode1[1]), $this->_getParam('F_'.$varExplode1[1]), $this->_getParam('idComm'), $this->_getParam('typeCom'), $this->_getParam('libelle_comm'));
                                     $idCalendrierTab = $idOrigine;
@@ -684,32 +713,32 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                                 }
                             } //fin $premiereDate && $varExplode1[0]=='D'
 
-                            if ($varExplode1[0] == 'D') {
-                                array_push($listeDates, array(
+                            if ('D' == $varExplode1[0]) {
+                                array_push($listeDates, [
                                     'id' => $idCalendrierTab,
                                     'title' => $libelle,
                                     'start' => $varExplode1[1].' '.$this->_getParam('D_'.$varExplode1[1]),
                                     'end' => $varExplode1[1].' '.$this->_getParam('F_'.$varExplode1[1]),
                                     'url' => 'calendrier-des-commissions/id/'.$idCalendrierTab,
                                     'className' => 'display-'.$typeComm,
-                                ));
+                                ]);
                             } //fin $varExplode1[0]=='D'
                         } //fin count = 3
                     } //fin count = 2
                 } //fin foreach
             }
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Les dates ont bien été sauvegardées',
                 'message' => '',
-            ));
+            ]);
             echo json_encode($listeDates);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur inattendue lors de la sauvegarde des dates',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -733,17 +762,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $dbDateCommission->updateDependingDossierDates($commUpdate);
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'L\'événement a bien été déplacé',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors du déplacement de l\'événement',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -757,17 +786,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $commResize = $dbDateCommission->find($this->_getParam('idComm'))->current();
             $commResize->HEUREFIN_COMMISSION = $heureFin->get('HH:mm');
             $commResize->save();
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'L\'événement a bien été modifié',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -778,9 +807,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->_helper->viewRenderer->setNoRender();
 
             $gestionHeure = null;
-            if ($this->_getParam('gestionHeure') == 'non') {
+            if ('non' == $this->_getParam('gestionHeure')) {
                 $gestionHeure = 0;
-            } elseif ($this->_getParam('gestionHeure') == 'oui') {
+            } elseif ('oui' == $this->_getParam('gestionHeure')) {
                 $gestionHeure = 1;
             }
 
@@ -791,7 +820,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dateCommConcerne->save();
 
             $dbDossierAffectation = new Model_DbTable_DossierAffectation();
-            if ($gestionHeure == 0) {
+            if (0 == $gestionHeure) {
                 //Si on ne prend pas en compte les heures, on passe en revue chacuns des dossiers concernés par la commission
                 //Récupération de l'ensemble des dossiers
                 $listeDossiersConcernes = $dbDossierAffectation->getAllDossierAffect($this->_getParam('dateCommId'));
@@ -800,7 +829,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $nbDossier = 0;
                 foreach ($listeDossiersConcernes as $lib => $val) {
                     //si l'heure de début ou de fin sont différent de NULL on les passe à NULL
-                    if ($val['ID_DOSSIER_AFFECT'] != null) {
+                    if (null != $val['ID_DOSSIER_AFFECT']) {
                         $dossierEdit = $dbDossierAffectation->find($this->_getParam('dateCommId'), $val['ID_DOSSIER_AFFECT'])->current();
                         $dossierEdit->HEURE_DEB_AFFECT = null;
                         $dossierEdit->HEURE_FIN_AFFECT = null;
@@ -822,17 +851,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $dossierEdit->save();
                 }
             }
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'La modification de l\'événement a bien été enregistrée',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification de l\'événement',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -856,11 +885,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 ++$numDossier;
             }
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur inattendue',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -878,7 +907,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             //Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
             $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-            if ($commissionInfo['GESTION_HEURES'] == 1) {
+            if (1 == $commissionInfo['GESTION_HEURES']) {
                 //prise en compte heures
                 $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
             } else {
@@ -927,15 +956,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             $libelleCommune = '';
-            $tabCommune = array();
+            $tabCommune = [];
             $numCommune = 0;
             foreach ($listeDossiers as $val => $ue) {
-                if ($numCommune == 0) {
+                if (0 == $numCommune) {
                     if (count($ue['infosEtab']['adresses']) > 0) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                         $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
                         $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
-                        $tabCommune[$numCommune] = array($libelleCommune, $communeInfo);
+                        $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
                     }
                     ++$numCommune;
                 }
@@ -951,12 +980,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     }
                 }
 
-                if ($existe == 0) {
+                if (0 == $existe) {
                     if (count($ue['infosEtab']['adresses']) > 0) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                         $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
                         $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
-                        $tabCommune[$numCommune] = array($libelleCommune, $communeInfo);
+                        $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
                     }
                     ++$numCommune;
                 }
@@ -969,17 +998,17 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
             $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
 
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été généré',
                 'message' => '',
-            ));
+            ]);
         } catch (Exception $e) {
-            $this->_helper->flashMessenger(array(
+            $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la génération du document',
                 'message' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
@@ -995,10 +1024,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
         $listeDossiers = null;
-        if ($commSelect['GESTION_HEURES'] == 1) {
+        if (1 == $commSelect['GESTION_HEURES']) {
             //prise en compte heures
             $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
-        } elseif ($commSelect['GESTION_HEURES'] == 0) {
+        } elseif (0 == $commSelect['GESTION_HEURES']) {
             //prise en compte ordre
             $listeDossiers = $dbDateCommPj->getDossiersInfosByOrder($dateCommId);
         }
@@ -1021,9 +1050,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $service_etablissement = new Service_Etablissement();
 
         foreach ($listeDossiers as $val => $ue) {
-            $listeDossiers[$val]['preventionnistes'] = array();
-            $listeDossiers[$val]['listeDocUrba'] = array();
-            $listeDossiers[$val]['infosEtab'] = array();
+            $listeDossiers[$val]['preventionnistes'] = [];
+            $listeDossiers[$val]['listeDocUrba'] = [];
+            $listeDossiers[$val]['infosEtab'] = [];
 
             $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
             if (count($listePrev) > 0) {
@@ -1043,10 +1072,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
 
         $libelleCommune = '';
-        $tabCommune[] = array();
+        $tabCommune[] = [];
         $numCommune = 0;
         foreach ($listeDossiers as $val => $ue) {
-            if ($numCommune == 0) {
+            if (0 == $numCommune) {
                 if (isset($ue['infosEtab']['adresses'][0])) {
                     $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                     $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
@@ -1055,8 +1084,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
                 }
 
-                if (isset($libelleCommune) && isset($communeInfo)) {
-                    $tabCommune[$numCommune] = array($libelleCommune, $communeInfo);
+                if (isset($libelleCommune, $communeInfo)) {
+                    $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
                 }
                 ++$numCommune;
             }
@@ -1072,11 +1101,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 }
             }
 
-            if ($existe == 0) {
+            if (0 == $existe) {
                 $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                 $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
                 $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
-                $tabCommune[$numCommune] = array($libelleCommune, $communeInfo);
+                $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
                 ++$numCommune;
             }
         }
@@ -1111,7 +1140,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE'].' AND ID_GROUPEMENT IS NULL');
         $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-        if ($commissionInfo['GESTION_HEURES'] == 1) {
+        if (1 == $commissionInfo['GESTION_HEURES']) {
             $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
         } else {
             $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
@@ -1161,7 +1190,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']);
         $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-        if ($commissionInfo['GESTION_HEURES'] == 1) {
+        if (1 == $commissionInfo['GESTION_HEURES']) {
             $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
         } else {
             $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
@@ -1296,7 +1325,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $ics = '';
 
-        if ($idComm != null && $mois != null && $annee != null) {
+        if (null != $idComm && null != $mois && null != $annee) {
             $dbDateCommission = new Model_DbTable_DateCommission();
             $dbCommission = new Model_DbTable_Commission();
             $dossiersaff = new Model_DbTable_DossierAffectation();

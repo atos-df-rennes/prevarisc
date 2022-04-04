@@ -3,5 +3,5 @@
 class Model_DbTable_CommissionRegleClasse extends Zend_Db_Table_Abstract
 {
     protected $_name = 'commissionregleclasse'; // Nom de la base
-    protected $_primary = array('ID_REGLE'); // Clé primaire
+    protected $_primary = ['ID_REGLE']; // Clé primaire
 }
