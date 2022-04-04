@@ -24,8 +24,6 @@ class FusionDesCommunesController extends Zend_Controller_Action
                 throw new Exception('Erreur lors de la réception du fichier');
             }
 
-            $this->view->downloadComplete = true;
-
             $service = new Service_FusionCommand();
             $this->view->hasErrors = $service->mergeArrayCommune(
                 json_decode(
@@ -34,6 +32,8 @@ class FusionDesCommunesController extends Zend_Controller_Action
             );
 
             unlink($form->fusioncommunes->getFileName());
+
+            $this->view->processComplete = true;
         }
     }
 }
