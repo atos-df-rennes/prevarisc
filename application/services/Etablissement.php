@@ -773,7 +773,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Sauvegarde des champs de la fiche d'informations en fonction du genre
             $informations->ICPE_ETABLISSEMENTINFORMATIONS = $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS =
             $informations->DROITPUBLIC_ETABLISSEMENTINFORMATIONS =
-            $informations->R12320_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS =
+            $informations->R14320_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS =
             $informations->ID_CLASSE = $informations->ID_FAMILLE = $informations->ID_CATEGORIE = $informations->ID_TYPE =
             $informations->ID_TYPEACTIVITE = $informations->ID_COMMISSION = $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS =
             $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS =
@@ -787,7 +787,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
-                    $informations->R12320_ETABLISSEMENTINFORMATIONS = (int) $data['R12320_ETABLISSEMENTINFORMATIONS'];
+                    $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->DROITPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['DROITPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = (int) $data['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
@@ -805,7 +805,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
-                    $informations->R12320_ETABLISSEMENTINFORMATIONS = (int) $data['R12320_ETABLISSEMENTINFORMATIONS'];
+                    $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
