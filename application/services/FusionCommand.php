@@ -1,11 +1,14 @@
 <?php
 
-// TODO Mettre des validations pour savoir si les communes sont bien présentes en base et mettre des messages d'erreur/d'information le cas échéant
 class Service_FusionCommand
 {
-    public function mergeArrayCommune(array $objectJson): void
+    public function mergeArrayCommune(array $objectJson): int
     {
         foreach ($objectJson as $nouvelleFusion) {
+            if ($this->checkExists($nouvelleFusion)) {
+                return true;
+            }
+
             $this->setNewNumINSEE($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);
             $this->setAdresseRueFk($nouvelleFusion->NUMINSEE, $nouvelleFusion->listeCommune);
 
@@ -14,6 +17,35 @@ class Service_FusionCommand
 
             $this->deleteArrayAdresseCommune($nouvelleFusion->listeCommune);
         }
+
+        return 0;
+    }
+
+    public function checkExists(stdClass $nouvelleFusion): int
+    {
+        $modelAdresseCommune = new Model_DbTable_AdresseCommune();
+        
+        $numinseeQuery = $modelAdresseCommune->select()
+            ->where("NUMINSEE_COMMUNE = '{$nouvelleFusion->NUMINSEE}'")
+        ;
+        $numinseeResult = $modelAdresseCommune->fetchAll($numinseeQuery)->toArray();
+        $numinseeCount = count($numinseeResult);
+
+        if ($numinseeCount === 0) {
+            error_log("Le numero INSEE $nouvelleFusion->NUMINSEE n'existe pas dans la base de donnees, veuillez l'ajouter");
+            return true;
+        } else if ($numinseeCount > 1) {
+            error_log("Il existe plusieurs lignes avec le numero INSEE $nouvelleFusion->NUMINSEE, veuillez en supprimer");
+            return true;
+        }
+        
+        $libelleCommune = $numinseeResult['0']['LIBELLE_COMMUNE'];
+        if (strcmp($nouvelleFusion->nomCommune, $libelleCommune) !== 0) {
+            error_log("Le numero INSEE $nouvelleFusion->NUMINSEE n'a pas pour libelle $nouvelleFusion->nomCommune, veuillez faire la mise à jour");
+            return true;
+        }
+
+        return false;
     }
 
     public function setNewNumINSEE(string $newNumINSEE, array $arrayOldCommune): void

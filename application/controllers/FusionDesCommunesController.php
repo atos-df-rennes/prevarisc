@@ -27,7 +27,7 @@ class FusionDesCommunesController extends Zend_Controller_Action
             $this->view->downloadComplete = true;
 
             $service = new Service_FusionCommand();
-            $service->mergeArrayCommune(
+            $this->view->hasErrors = $service->mergeArrayCommune(
                 json_decode(
                     file_get_contents($form->fusioncommunes->getFileName())
                 )
