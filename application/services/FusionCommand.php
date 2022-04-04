@@ -44,7 +44,7 @@ class Service_FusionCommand
 
         $libelleCommune = $numinseeResult['0']['LIBELLE_COMMUNE'];
         if (0 !== strcmp($nouvelleFusion->nomCommune, $libelleCommune)) {
-            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'a pas pour libelle {$nouvelleFusion->nomCommune}, veuillez faire la mise à jour");
+            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'a pas pour libelle {$nouvelleFusion->nomCommune}, veuillez faire la mise a jour");
 
             return true;
         }
