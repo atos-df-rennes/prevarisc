@@ -24,24 +24,28 @@ class Service_FusionCommand
     public function checkExists(stdClass $nouvelleFusion): int
     {
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
-        
+
         $numinseeQuery = $modelAdresseCommune->select()
             ->where("NUMINSEE_COMMUNE = '{$nouvelleFusion->NUMINSEE}'")
         ;
         $numinseeResult = $modelAdresseCommune->fetchAll($numinseeQuery)->toArray();
         $numinseeCount = count($numinseeResult);
 
-        if ($numinseeCount === 0) {
-            error_log("Le numero INSEE $nouvelleFusion->NUMINSEE n'existe pas dans la base de donnees, veuillez l'ajouter");
-            return true;
-        } else if ($numinseeCount > 1) {
-            error_log("Il existe plusieurs lignes avec le numero INSEE $nouvelleFusion->NUMINSEE, veuillez en supprimer");
+        if (0 === $numinseeCount) {
+            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'existe pas dans la base de donnees, veuillez l'ajouter");
+
             return true;
         }
-        
+        if ($numinseeCount > 1) {
+            error_log("Il existe plusieurs lignes avec le numero INSEE {$nouvelleFusion->NUMINSEE}, veuillez en supprimer");
+
+            return true;
+        }
+
         $libelleCommune = $numinseeResult['0']['LIBELLE_COMMUNE'];
-        if (strcmp($nouvelleFusion->nomCommune, $libelleCommune) !== 0) {
-            error_log("Le numero INSEE $nouvelleFusion->NUMINSEE n'a pas pour libelle $nouvelleFusion->nomCommune, veuillez faire la mise à jour");
+        if (0 !== strcmp($nouvelleFusion->nomCommune, $libelleCommune)) {
+            error_log("Le numero INSEE {$nouvelleFusion->NUMINSEE} n'a pas pour libelle {$nouvelleFusion->nomCommune}, veuillez faire la mise à jour");
+
             return true;
         }
 
