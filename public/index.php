@@ -8,6 +8,9 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 // Définition du chemin vers le dossier application/
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__).DS.'..'.DS.'application');
 
+// Définition du chemin vers le dossier command/
+defined('COMMAND_PATH') || define('COMMAND_PATH', getenv('PREVARISC_COMMAND_PATH') ? getenv('PREVARISC_COMMAND_PATH') : APPLICATION_PATH.DS.'command');
+
 // Define path to application directory
 defined('DATA_PATH') || define('DATA_PATH', getenv('PREVARISC_DATA_PATH') ? getenv('PREVARISC_DATA_PATH') : DS.'data');
 
