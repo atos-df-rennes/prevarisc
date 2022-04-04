@@ -20,7 +20,7 @@ class Form_FusionCommunes extends Zend_Form
         $this->addElement($file);
         $this->addElement(
             new Zend_Form_Element_Submit(
-                'fusioncommunes',
+                'savefusioncommunes',
                 [
                     'class' => 'btn btn-primary',
                     'label' => 'Fusionner les communes',
@@ -28,7 +28,5 @@ class Form_FusionCommunes extends Zend_Form
             ),
             'submit'
         );
-
-        // FIXME Voir pour utiliser les decorators
     }
 }
