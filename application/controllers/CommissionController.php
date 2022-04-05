@@ -2,6 +2,10 @@
 
 class CommissionController extends Zend_Controller_Action
 {
+    public const ID_COMMISSION_COMMUNALE = 2;
+    public const ID_GENRE_ETABLISSEMENT = 2;
+    public const ID_GENRE_IGH = 5;
+
     public function deleteAction()
     {
         try {
@@ -150,8 +154,8 @@ class CommissionController extends Zend_Controller_Action
                 $model_reglesEtudeVisite->delete("ID_REGLE = {$id_regle}");
 
                 // On met à jour la commune et le groupement
-                $rowset_regle->NUMINSEE_COMMUNE = (2 == $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_NUMINSEE_COMMUNE'] : null;
-                $rowset_regle->ID_GROUPEMENT = (2 != $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_ID_GROUPEMENT'] : null;
+                $rowset_regle->NUMINSEE_COMMUNE = (self::ID_COMMISSION_COMMUNALE == $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_NUMINSEE_COMMUNE'] : null;
+                $rowset_regle->ID_GROUPEMENT = (self::ID_COMMISSION_COMMUNALE != $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_ID_GROUPEMENT'] : null;
 
                 // On sauvegarde la règle
                 $rowset_regle->save();
@@ -240,14 +244,14 @@ class CommissionController extends Zend_Controller_Action
                 foreach ($regles as $regle) {
                     if (
                         (
-                            2 == $row['ID_GENRE']
+                            self::ID_GENRE_ETABLISSEMENT == $row['ID_GENRE']
                             && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
                             && $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] == $regle['LOCALSOMMEIL']
                             && $row['ID_TYPE'] == $regle['ID_TYPE']
                             && $row['ID_CATEGORIE'] == $regle['ID_CATEGORIE']
                         )
                         || (
-                            5 == $row['ID_GENRE']
+                            self::ID_GENRE_IGH == $row['ID_GENRE']
                             && in_array($row['NUMINSEE_COMMUNE'], $regle['NUMINSEE_COMMUNE'])
                             && $row['ID_CLASSE'] == $regle['ID_CLASSE']
                         )

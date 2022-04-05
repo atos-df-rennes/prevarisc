@@ -2,6 +2,9 @@
 
 class Service_Search
 {
+    public const MAX_LIMIT_PAGES_ETABLISSEMENTS = 1000;
+    public const MAX_LIMIT_PAGES_DOSSIERS = 100;
+
     /**
      * Recherche des établissements.
      *
@@ -210,7 +213,7 @@ class Service_Search
             }
 
             // Gestion des pages et du count
-            $select->limitPage($page, $count > 1000 ? 1000 : $count);
+            $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_ETABLISSEMENTS ? self::MAX_LIMIT_PAGES_ETABLISSEMENTS : $count);
 
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
@@ -644,7 +647,7 @@ class Service_Search
             }
 
             // Gestion des pages et du count
-            $select->limitPage($page, $count > 100 ? 100 : $count);
+            $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_DOSSIERS ? self::MAX_LIMIT_PAGES_DOSSIERS : $count);
 
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
@@ -1024,7 +1027,7 @@ class Service_Search
             $this->setCriteria($select, 'dossiertype.ID_DOSSIERTYPE', 5);
 
             // Gestion des pages et du count
-            $select->limitPage($page, $count > 100 ? 100 : $count);
+            $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_DOSSIERS ? self::MAX_LIMIT_PAGES_DOSSIERS : $count);
             // Construction du résultat
             $rows_counter = new Zend_Paginator_Adapter_DbSelect($select);
             $results = [

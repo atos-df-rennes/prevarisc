@@ -5,6 +5,9 @@ use Sabre\VObject;
 class Api_Service_Calendar
 {
     public const LF = "\r\n";
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_AVIS_DEFAVORABLE = 2;
 
     public function sync($userid, $commission = null)
     {
@@ -135,7 +138,7 @@ class Api_Service_Calendar
             $commune = $ets && count($ets['adresses']) > 0 ? $ets['adresses'][0]['LIBELLE_COMMUNE'] : '';
             // Cas d'une commission en salle
             if (1 === $commissionEvent['ID_COMMISSIONTYPEEVENEMENT']) {
-                if (3 === $commissionEvent['TYPE_DOSSIER']) {
+                if (self::ID_DOSSIERTYPE_GRPVISITE === $commissionEvent['TYPE_DOSSIER']) {
                     $libelleSum = $commissionEvent['LIBELLE_DATECOMMISSION'];
                 } else {
                     $libelleSum = $commissionEvent['OBJET_DOSSIER'];
@@ -218,12 +221,13 @@ class Api_Service_Calendar
                 $avis = 'Dossier avec avis differé';
             } elseif (1 === $ets['avis']) {
                 $avis = 'Favorable';
-                if (3 === $ets['informations']['ID_GENRE']) {
+
+                if (self::ID_GENRE_CELLULE === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
-            } elseif (2 === $ets['avis']) {
+            } elseif (self::ID_AVIS_DEFAVORABLE === $ets['avis']) {
                 $avis = 'Défavorable';
-                if (3 === $ets['informations']['ID_GENRE']) {
+                if (self::ID_GENRE_CELLULE === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
             } else {

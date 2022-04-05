@@ -2,6 +2,11 @@
 
 class Service_Dashboard
 {
+    public const ID_DOSSIERTYPE_COURRIER = 5;
+    public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+    public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+    public const ID_NATURE_ECHEANCIER_TRAVAUX = 46;
+
     protected $options = [];
 
     protected $blocsConfig = [
@@ -432,7 +437,11 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
-                if (19 == $idNature || 7 == $idNature || 46 == $idNature) {
+
+                if (
+                    self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
+                    || self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature
+                    || self::ID_NATURE_ECHEANCIER_TRAVAUX == $idNature) {
                     unset($dossiers[$valCpt]);
                 }
             }
@@ -462,7 +471,8 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $tabType = $DBdossier->getTypeDossier($idLien);
-                if (0 == $tabType['TYPE_DOSSIER'] || 5 == $tabType['TYPE_DOSSIER']) {
+
+                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
                 }
             }
@@ -492,7 +502,8 @@ class Service_Dashboard
                     $idLien = $lien['ID_DOSSIER1'];
                 }
                 $tabType = $DBdossier->getTypeDossier($idLien);
-                if (0 == $tabType['TYPE_DOSSIER'] || 5 == $tabType['TYPE_DOSSIER']) {
+
+                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
                 }
             }

@@ -5,6 +5,14 @@ class Service_Etablissement implements Service_Interface_Etablissement
     public const STATUT_CHANGE = 1;
     public const CLASSEMENT_CHANGE = 3;
     public const NB_DOSSIERS_A_AFFICHER = 5;
+    public const ID_FONCTION_DUS = 8;
+    public const ID_GENRE_CELLULE = 3;
+    public const ID_GENRE_ETABLISSEMENT = 2;
+    public const ID_GENRE_EIC = 6;
+    public const ID_STATUS_OUVERT = 2;
+    public const ID_DOSSIERTYPE_VISITE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const ID_5EME_CAT = 5;
 
     /**
      * Récupération d'un établissement.
@@ -150,7 +158,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $contacts = array_merge($contacts, $this->getAllContacts($etablissement_parent['ID_ETABLISSEMENT']));
             }
             foreach ($contacts as $contact) {
-                if (8 == $contact['ID_FONCTION']) {
+                if (self::ID_FONCTION_DUS == $contact['ID_FONCTION']) {
                     $contacts_dus[] = $contact;
                 }
             }
@@ -174,7 +182,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     'NBPREV_ETABLISSEMENT' => null,
                     'DUREEVISITE_ETABLISSEMENT' => $duree_totale,
                 ];
-            } elseif (3 == $informations->ID_GENRE && $parent_direct) {
+            } elseif (self::ID_GENRE_CELLULE == $informations->ID_GENRE && $parent_direct) {
                 // la catégorie d'une cellule est celle de l'établissement parent
                 $informations->ID_CATEGORIE = $parent_direct['ID_CATEGORIE'];
 
@@ -193,10 +201,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
             if (1 == $informations->ID_GENRE) {
                 foreach ($etablissement_lies as $etablissement) {
                     if (
-                        2 != $etablissement['ID_GENRE']
+                        self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']
                         || (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
                             || 0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS'])
-                        || 2 != $etablissement['ID_STATUT']
+                        || self::ID_STATUS_OUVERT != $etablissement['ID_STATUT']
                     ) {
                         continue;
                     }
@@ -208,7 +216,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                         $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     }
                 }
-            } elseif (3 == $informations->ID_GENRE && $etablissement_parents) {
+            } elseif (self::ID_GENRE_CELLULE == $informations->ID_GENRE && $etablissement_parents) {
                 $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = end($etablissement_parents)['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
             }
 
@@ -442,7 +450,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
         foreach ($dossier_types as $key => $type) {
-            if (1 != $type['ID_DOSSIERTYPE'] && 2 != $type['ID_DOSSIERTYPE'] && 3 != $type['ID_DOSSIERTYPE']) {
+            if (1 != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE != $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = (int) $type['ID_DOSSIERTYPE'];
                 ++$i;
             }
@@ -769,9 +777,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         // On filtre par le genre
         if (!$enfants) {
-            if (2 == $id_genre) {
+            if (self::ID_GENRE_ETABLISSEMENT == $id_genre) {
                 $search->setCriteria('etablissementinformations.ID_GENRE', 1);
-            } elseif (3 == $id_genre) {
+            } elseif (self::ID_GENRE_CELLULE == $id_genre) {
                 $search->setCriteria('etablissementinformations.ID_GENRE', 2);
             }
         }
@@ -779,7 +787,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         if ($enfants) {
             if (1 == $id_genre) {
                 $search->setCriteria('etablissementinformations.ID_GENRE', [2, 4, 5, 6]);
-            } elseif (2 == $id_genre) {
+            } elseif (self::ID_GENRE_ETABLISSEMENT == $id_genre) {
                 $search->setCriteria('etablissementinformations.ID_GENRE', 3);
             }
         }
@@ -887,7 +895,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Sauvegarde des champs de la fiche d'informations en fonction du genre
             $informations->ICPE_ETABLISSEMENTINFORMATIONS = $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS =
             $informations->DROITPUBLIC_ETABLISSEMENTINFORMATIONS =
-            $informations->R12320_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS =
+            $informations->R14320_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS =
             $informations->ID_CLASSE = $informations->ID_FAMILLE = $informations->ID_CATEGORIE = $informations->ID_TYPE =
             $informations->ID_TYPEACTIVITE = $informations->ID_COMMISSION = $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS =
             $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS =
@@ -901,13 +909,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
-                    $informations->R12320_ETABLISSEMENTINFORMATIONS = (int) $data['R12320_ETABLISSEMENTINFORMATIONS'];
+                    $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->DROITPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['DROITPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = (int) $data['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS ? (int) $data['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] : null;
-                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = 5 == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
+                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $informations->ID_COMMISSION = $data['ID_COMMISSION'];
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
@@ -919,10 +927,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
-                    $informations->R12320_ETABLISSEMENTINFORMATIONS = (int) $data['R12320_ETABLISSEMENTINFORMATIONS'];
+                    $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
-                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = 5 == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
+                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
@@ -976,6 +984,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             $etablissement->save();
+
             $etablissement->NUMEROID_ETABLISSEMENT = null != $data['NUMEROID_ETABLISSEMENT'] ? $data['NUMEROID_ETABLISSEMENT'] : $etablissement->ID_ETABLISSEMENT;
             $etablissement->save();
 
@@ -1000,7 +1009,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             // Sauvegarde des rubriques pour les EIC
-            if (6 == $id_genre && array_key_exists('RUBRIQUES', $data) && count($data['RUBRIQUES']) > 0) {
+            if (self::ID_GENRE_EIC == $id_genre && array_key_exists('RUBRIQUES', $data) && count($data['RUBRIQUES']) > 0) {
                 foreach ($data['RUBRIQUES'] as $key => $rubrique) {
                     if ($key > 0) {
                         $DB_rubrique->createRow([
@@ -1072,7 +1081,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                         if (1 == $id_genre && !in_array($genre_enfant, [2, 4, 5, 6, 7, 8, 9])) {
                             throw new Exception('L\'établissement enfant n\'est pas compatible (Un site ne ne peut contenir que des établissements, habitations, EIC, camping, manifestation, IOP)', 500);
                         }
-                        if (in_array($id_genre, [2, 5]) && 3 != $genre_enfant) {
+                        if (in_array($id_genre, [2, 5]) && self::ID_GENRE_CELLULE != $genre_enfant) {
                             throw new Exception('L\'établissement enfant n\'est pas compatible (Un établissement ou IGH ne ne peut contenir que des cellules)', 500);
                         }
                         if (1 == $genre_enfant) {
@@ -1097,7 +1106,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 if (in_array($id_genre, [2, 4, 5, 6, 7, 8, 9]) && 1 != $genre_pere) {
                     throw new Exception('Le père n\'est pas compatible (Un établissement a comme père un site)', 500);
                 }
-                if (3 == $id_genre && !in_array($genre_pere, [2, 5])) {
+                if (self::ID_GENRE_CELLULE == $id_genre && !in_array($genre_pere, [2, 5])) {
                     throw new Exception('Le père n\'est pas compatible (Les cellules ont comme père un établissement ou IGH)', 500);
                 }
                 if (1 == $id_genre) {

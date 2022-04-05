@@ -91,12 +91,12 @@
                             </li>
                        <?php endforeach ?>
                     </ul>
-                    <?php if ($this->etablissement['informations']['R12320_ETABLISSEMENTINFORMATIONS']) : ?>
-                        <p>Le <strong>R123-20</strong> est appliqué sur cet établissement.</p>
+                    <?php if ($this->etablissement['informations']['R14320_ETABLISSEMENTINFORMATIONS']) : ?>
+                        <p>Le <strong>R143-20</strong> est appliqué sur cet établissement.</p>
                     <?php endif ?>
                     <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2))) : ?>
                         <?php if ($this->etablissement['informations']['DROITPUBLIC_ETABLISSEMENTINFORMATIONS']) : ?>
-                            <p>Le <strong>R123-16</strong> est appliqué sur cet établissement (droit public).</p>
+                            <p>Le <strong>R143-16</strong> est appliqué sur cet établissement (droit public).</p>
                         <?php endif ?>
                     <?php endif ?>
                 </dd>

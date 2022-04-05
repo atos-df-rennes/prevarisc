@@ -2,6 +2,8 @@
 
 class SessionController extends Zend_Controller_Action
 {
+    public const MAX_LOGIN_ATTEMPTS = 2;
+
     public function loginAction()
     {
         $this->_helper->layout->setLayout('login');
@@ -65,7 +67,7 @@ class SessionController extends Zend_Controller_Action
                 } elseif (
                     1 == getenv('PREVARISC_ENFORCE_SECURITY')
                     && isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
-                    && $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] >= 2
+                    && $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] >= self::MAX_LOGIN_ATTEMPTS
                     && isset($user['IP_UTILISATEUR'])
                     && $user['IP_UTILISATEUR']
                 ) {
