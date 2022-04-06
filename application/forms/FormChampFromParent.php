@@ -1,5 +1,4 @@
 <?php
-
 class Form_FormChampFromParent extends Zend_Form
 {
     /**

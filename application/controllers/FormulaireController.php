@@ -171,6 +171,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
 
+        
         $request = $this->getRequest();
 
         if ($request->isPost()) {
