@@ -62,10 +62,54 @@
                 </div>
             <?php endif ?>
 
+
             <div class="pull-right">
                 <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>"" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder le champ</button>
             </div>
         </form>
     </div>
+
+    <div class="row span4">
+        <div class='span12'>
+
+        </div>
+
+
+        <?php if ($this->type === 'Parent') : ?>
+
+            
+            <?= $this->formChamp ?>
+            <table class="table table-bordered table-condensed inline">
+                <thead>
+                    <tr>
+                        <th>Nom du champ</th>
+                        <th>Type du champ</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($this->listChamp as $champ) :?>
+                        <tr>
+                            <td><?= $champ['NOM'] ?></td>
+                            <td><?= $champ['TYPE'] ?></td>
+                            <td id='actions'>
+                                <div class='text-center'>
+                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
+                                        <i title='Modifier' class='icon-pencil'></i>
+                                    </a>
+                                    <a href="" data-id="<?= $champ['ID_CHAMP'] ?>" data-rubrique-id="<?= $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">
+                                        <i title='Supprimer' class='icon-trash'></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>    
+                </tbody>
+            </table>
+        <?php endif ?>
+    </div>
+
+    </div>
+   
 </div>
