@@ -22,7 +22,6 @@
                 value="1"
                 <?= $this->rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
             >
-
             <div class="pull-right">
                 <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder la rubrique</button>
@@ -40,6 +39,11 @@
         <div class="span6 offset2">
             <h3>Liste des champs</h3>
         </div>
+    <?php else :?>
+        <div class="span2 offset4 alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Attention ! </strong>Aucun champs de renseigné.
+        </div>
     <?php endif ?>
 </div>
 
@@ -48,7 +52,6 @@
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
             <?= $this->fieldForm->nom_champ ?>
             <?= $this->fieldForm->type_champ ?>
-
             <div id="div-list-value">
                 <h5>Définition des valeurs de la liste</h5>
                 <div class="row-fluid">
@@ -93,6 +96,23 @@
                                             <li><?= $valeur['VALEUR'] ?></li>
                                         <?php endforeach ?>
                                     </ul>
+                                <?php endif ?>
+                                <?php if($champ['TYPE'] === 'Parent'): ?>
+                                    <?php if(!empty($champ['LIST_CHAMP'])) : ?>
+                                        <ul>
+                                            <?php foreach($champ['LIST_CHAMP'] as $champFils): ?>
+                                                <li>
+                                                    <?= $champFils['NOM']?>
+                                                    <i><?= $champFils['TYPE']?></i>
+                                                </li>
+                                            <?php endforeach ?>
+                                        </ul>
+                                    <?php else : ?>
+                                        <div class="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Attention ! </strong>Aucun champs fils de renseigné.
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </td>
                             <td id='actions'>

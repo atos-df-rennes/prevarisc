@@ -66,6 +66,9 @@ class FormulaireController extends Zend_Controller_Action
             if ('Liste' === $champ['TYPE']) {
                 $champ['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
+            if('Parent' === $champ['TYPE']){
+                $champ['LIST_CHAMP'] = $this->modelChamp->getChampFromParent($champ['ID_CHAMP']);
+            }
         }
 
         $this->view->assign('fieldForm', $fieldForm);
@@ -128,6 +131,7 @@ class FormulaireController extends Zend_Controller_Action
 
         $idChamp = intval($this->getParam('champ'));
         $champ = $this->modelChamp->find($idChamp)->current();
+        $champType = $this->modelChamp->getTypeChamp($idChamp);
 
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
         if ($champ['ID_TYPECHAMP'] === $idListe) {
@@ -139,11 +143,24 @@ class FormulaireController extends Zend_Controller_Action
 
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
+        if($champType['TYPE'] === 'Parent'){
+            $this->view->assign('listChamp', $this->modelChamp->getChampFromParent($idChamp));
+            $this->view->assign('listType',$this->modelListeTypeChampRubrique->getTypeWithoutParent());
+            $this->view->assign('formChamp',new Form_FormChampFromParent());
+        }
+
         $this->view->assign('champ', $champ);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
+        $this->view->assign('type', $champType['TYPE']);
 
+        
         $request = $this->getRequest();
+
+        if($request->isPut()){
+            $put = $request->isPut();
+            var_dump('<pre>',$put,'</pre>');
+        }
         if ($request->isPost()) {
             $post = $request->getPost();
 
