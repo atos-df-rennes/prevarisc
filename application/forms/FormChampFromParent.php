@@ -28,15 +28,9 @@ class Form_FormChampFromParent extends Zend_Form
         );
 
         $submit = new Zend_Form_Element_Button('save');
-        $submit->class = 'btn btn-success pull-right add-champ';
+        $submit->class = 'marginBottom btn btn-success pull-left add-champ';
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
-        
-        
-        $monInputSubmit = new Zend_Form_Element_Submit('save2');
-        $monInputSubmit->class = 'btn btn-success pull-right add-champ';
-        $monInputSubmit->setLabel('Mon Ajouter le champ');
-        $this->addElement($monInputSubmit);
 
         $this->setDecorators([
             'FormElements',
