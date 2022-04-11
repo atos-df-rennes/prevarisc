@@ -201,7 +201,7 @@ class FormulaireController extends Zend_Controller_Action
     public function deleteChampAction(): void
     {
         $idChamp = intval($this->getParam('champ'));
-
+        var_dump($idChamp);
         $champ = $this->modelChamp->find($idChamp)->current();
         $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
