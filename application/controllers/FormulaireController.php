@@ -158,14 +158,9 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
-
         
         $request = $this->getRequest();
 
-        if($request->isPut()){
-            $put = $request->isPut();
-            var_dump('<pre>',$put,'</pre>');
-        }
         if ($request->isPost()) {
             $post = $request->getPost();
 
