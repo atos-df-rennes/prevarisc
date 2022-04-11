@@ -107,7 +107,10 @@ class FormulaireController extends Zend_Controller_Action
     }
 
     public function addChampAction(): void
-    {
+    {   
+        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
         $this->_helper->viewRenderer->setNoRender(true);
 
         $idRubrique = intval($this->getParam('rubrique'));
@@ -131,6 +134,7 @@ class FormulaireController extends Zend_Controller_Action
     public function editChampAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
+        $this->view->inlineScript()->appendFile('/js/formulaire/gestionChampParent.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
@@ -151,7 +155,14 @@ class FormulaireController extends Zend_Controller_Action
         if($champType['TYPE'] === 'Parent'){
             $this->view->assign('listChamp', $this->modelChamp->getChampFromParent($idChamp));
             $this->view->assign('listType',$this->modelListeTypeChampRubrique->getTypeWithoutParent());
-            $this->view->assign('formChamp',new Form_FormChampFromParent());
+            $this->view->assign('formChamp',new Form_FormChampFromParent(
+                                                        array(
+                                                            'champParentID' => $this->getRequest()->getParam('champ'),
+                                                            'rubriqueID' => $this->getRequest()->getParam('rubrique')
+                                                            )
+
+                                                        ) 
+                                                    );
         }
 
         $this->view->assign('champ', $champ);
@@ -205,8 +216,11 @@ class FormulaireController extends Zend_Controller_Action
         $champ = $this->modelChamp->find($idChamp)->current();
         $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
-
-        $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $idRubrique]);
+        if($this->getParam('ID_PARENT')){
+            $this->_helper->redirector('edit-champ', null, null, ['rubrique' => $idRubrique, 'champ' => $this->getParam('ID_PARENT')]);
+        }else{
+            $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $idRubrique]);
+        }
     }
 
     public function deleteValeurListeAction(): void

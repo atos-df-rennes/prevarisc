@@ -71,9 +71,6 @@
     </div>
 
     <div class="row span4">
-        <div class='span12'>
-
-        </div>
         <?php if ($this->type === 'Parent') : ?>            
             <?= $this->formChamp ?>
             <table class="table table-bordered table-condensed inline">
@@ -84,7 +81,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id='tableParentChamp'>
                     <?php foreach($this->listChamp as $champ) :?>
                         <tr>
                             <td><?= $champ['NOM'] ?></td>
@@ -94,7 +91,7 @@
                                     <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
                                         <i title='Modifier' class='icon-pencil'></i>
                                     </a>
-                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'delete-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
+                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'delete-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP'], 'ID_PARENT' => $champ['ID_PARENT']], null, true) ?>">
                                         <i title='Supprimer' class='icon-trash'></i>
                                     </a>
                                 </div>

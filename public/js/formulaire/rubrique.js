@@ -16,6 +16,7 @@ $(document).ready(function() {
         const savedFieldsTitlesDiv = $('.titles')
 
         const formData = $(form).serialize()
+        console.log("Data recieve : ",formData)
 
         $.ajax({
             url: '/formulaire/add-champ',
@@ -24,6 +25,7 @@ $(document).ready(function() {
             success: function(data) {
                 const parsedData = JSON.parse(data)
 
+                
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
                     savedFieldsDiv.append(getTableElement())
@@ -47,6 +49,7 @@ $(document).ready(function() {
                         </div>`)
                     }
                 }
+                
 
                 form.reset()
                 $('#div-list-value').hide()

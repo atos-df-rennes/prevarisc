@@ -42,11 +42,17 @@ class Service_Formulaire
         $idTypeChamp = intval($champ['type_champ']);
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-        $idChamp = $modelChamp->insert([
+        $dataToInsert = [
             'NOM' => $champ['nom_champ'],
             'ID_TYPECHAMP' => $idTypeChamp,
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
-        ]);
+        ];
+
+        if($champ['ID_CHAMP_PARENT']){
+            $dataToInsert["ID_PARENT"] = $champ['ID_CHAMP_PARENT'];
+        } 
+
+        $idChamp = $modelChamp->insert($dataToInsert);
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
