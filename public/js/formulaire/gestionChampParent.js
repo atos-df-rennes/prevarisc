@@ -1,17 +1,24 @@
 $(document).ready(function() {
 
-    const tableauParentChamp =  $('#tableParentChamp')
+    let tableauParentChamp =  $('#tableParentChamp')
 
-    const ajouterLigneTableau = (objectData = {}) => {
-
+    let ajouterLigneTableau = () => {
         tableauParentChamp.append(
             `
             <tr>
                 <td>
-                    1
+                `
+                +
+                 document.getElementsByName('nom_champ')[1].value
+                +
+                `
                 </td>
                 <td>
-                    2
+                `
+                +
+                document.getElementsByName('type_champ')[1].options[document.getElementsByName('type_champ')[1].selectedIndex].text
+                +
+                `
                 </td>
                 <td id='actions'>`
                 +
@@ -37,7 +44,7 @@ $(document).ready(function() {
 
     $('#add-champ').on('click', function() {
         const form = this.closest('form')
-        const idRubrique = $('#ID_CHAMP_PARENT').val()
+        const idRubrique = $('#rubrique').val()
         const formData = $(form).serialize()
         $.ajax({
             url: '/formulaire/add-champ',
@@ -46,8 +53,8 @@ $(document).ready(function() {
             success: function(data) {
                 const parsedData = JSON.parse(data)
                 console.log("Pardsed data : ",parsedData)
-                form.reset()
                 ajouterLigneTableau()
+                form.reset()
             },
             error: function() {
                 return false;
