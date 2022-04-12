@@ -41,25 +41,16 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
     public function getChampsByRubriqueWithParent(int $idRubrique): array
     {
-
-
-        /**
-         * select champ.ID_CHAMP, champ.ID_PARENT, valeur.ID_VALEUR, valeur.VALEUR_STR 
-	from  champ  left JOIN valeur 
-    on valeur.ID_CHAMP = champ.ID_CHAMP 
-    where champ.ID_PARENT = '10'
-    ORDER BY valeur.ID_VALEUR ;
-         */
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
+            ->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+            ->joinLeft(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP')
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
-            ->joinLeft(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP')
             ->where('r.ID_RUBRIQUE = ?', $idRubrique)
             ->where('c.ID_PARENT IS NOT NULL')
             ;
-
+        
         return $this->fetchAll($select)->toArray();
     }
 
@@ -305,6 +296,19 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP')
         ->where('c.ID_CHAMP = ?', $idParent);
 
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getChampValue(int $idParent):array{
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+            ->joinLeft(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP')
+            ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
+            ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
+            ->where('c.ID_PARENT = ?', $idParent)
+            ;
+        
         return $this->fetchAll($select)->toArray();
     }
 }
