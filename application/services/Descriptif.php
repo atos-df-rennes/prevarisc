@@ -74,7 +74,6 @@ abstract class Service_Descriptif
     {
         $explodedChamp = explode('-', $key);
         $idChamp = end($explodedChamp);
-
         $this->saveValeur($idChamp, $idObject, $classObject, $value);
     }
 

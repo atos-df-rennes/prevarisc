@@ -32,11 +32,21 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
     public function getChampsByRubriqueWithParent(int $idRubrique): array
     {
+
+
+        /**
+         * select champ.ID_CHAMP, champ.ID_PARENT, valeur.ID_VALEUR, valeur.VALEUR_STR 
+	from  champ  left JOIN valeur 
+    on valeur.ID_CHAMP = champ.ID_CHAMP 
+    where champ.ID_PARENT = '10'
+    ORDER BY valeur.ID_VALEUR ;
+         */
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
+            ->joinLeft(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP')
             ->where('r.ID_RUBRIQUE = ?', $idRubrique)
             ->where('c.ID_PARENT IS NOT NULL')
             ;
