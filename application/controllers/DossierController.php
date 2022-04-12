@@ -204,7 +204,7 @@ class DossierController extends Zend_Controller_Action
             // Définition des autorisations
             $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
             $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
-            //$this->view->isAllowedVerificationsTechniques = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'verificationstechniques', 'verifications_techniques');
+            $this->view->isAllowedVerificationsTechniques = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'verificationstechniques', 'verifications_techniques');
         }
     }
 
