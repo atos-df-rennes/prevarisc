@@ -52,6 +52,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
     public function getChampAndJoins(int $idChamp, bool $hasList = false): array
     {
         $select = $this->select()
