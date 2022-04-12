@@ -204,16 +204,34 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
         $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+        $modelChamp = new Model_DbTable_Champ();
 
         $idEtablissement = $this->getParam('id');
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
-
-        $this->view->assign('rubriques', $serviceEtablissementDescriptif->getRubriques($idEtablissement, get_class($this)));
+        
+        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtablissement, get_class($this));
+        //On regarde s il y a n champ de type parent 
+        $listeChampFils = [];
+        //6 = ID_TYPE de Parent
+        $idTypeParent = 6;
+        foreach ($rubriques as $rubrique){
+            foreach ($rubrique ['CHAMPS'] as $champ) {
+                if($champ['ID_TYPECHAMP'] === $idTypeParent){
+                    foreach ($modelChamp->getChampsByRubriqueWithParent(intval($champ['ID_RUBRIQUE'])) as $champFils) {
+                        //var_dump('<pre>',$champFils,'</pre>');
+                        array_push($listeChampFils,$champFils);
+                    }
+                }
+            }
+        }
+        $this->view->assign('listeChampFils',$listeChampFils);
+        $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
     }
 
