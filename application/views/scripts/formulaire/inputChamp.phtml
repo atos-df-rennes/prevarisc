@@ -49,7 +49,6 @@
             <?php foreach ($this->listeChampFils as $champsFils): ?>
                 <div class="colTableInput">
                     <th><?= $champsFils['NOM'] ?></th>
-                    <!--<input name=<?= 'champ-'.$champsFils['ID_CHAMP'] ?> /> -->
                     <?= $this->partial('formulaire/inputChamp.phtml', [
                         'champ' => $champsFils,
                         'champsvaleurliste' => $this->champsvaleurliste,
