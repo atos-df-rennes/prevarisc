@@ -4,7 +4,7 @@
         <input
             type='text'
             name='champ-<?= $this->champ["ID_CHAMP"] ?>'
-            value='<?= htmlspecialchars($this->champ["VALEUR"], ENT_QUOTES) ?>'
+            value='<?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"], ENT_QUOTES) :'' ?>'
         >
     <?php break;
     // Texte long
@@ -40,16 +40,16 @@
             type="checkbox"
             name='champ-<?= $this->champ["ID_CHAMP"] ?>'
             value="1"
-            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
+            <?= $this->champ['VALEUR'] != null ? 'checked' : '' ?>
         >
     <?php break;   
 
-    case 6:?>
+    case 60:?>
         <div class="tableInput">
             <?php foreach ($this->listeChampFils as $champsFils): ?>
                 <div class="colTableInput">
                     <th><?= $champsFils['NOM'] ?></th>
-                    <input name=<?= 'champ-'.$champsFils['ID_CHAMP'] ?> /> 
+                    <!--<input name=<?= 'champ-'.$champsFils['ID_CHAMP'] ?> /> -->
                     <?= $this->partial('formulaire/inputChamp.phtml', [
                         'champ' => $champsFils,
                         'champsvaleurliste' => $this->champsvaleurliste,

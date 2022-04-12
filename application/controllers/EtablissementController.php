@@ -224,7 +224,6 @@ class EtablissementController extends Zend_Controller_Action
             foreach ($rubrique ['CHAMPS'] as $champ) {
                 if($champ['ID_TYPECHAMP'] === $idTypeParent){
                     foreach ($modelChamp->getChampsByRubriqueWithParent(intval($champ['ID_RUBRIQUE'])) as $champFils) {
-                        //var_dump('<pre>',$champFils,'</pre>');
                         array_push($listeChampFils,$champFils);
                     }
                 }

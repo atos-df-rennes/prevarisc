@@ -108,23 +108,22 @@
     <?php endforeach ?>
 
 
-
+    
     <?php foreach ($this->rubriques as $rubrique): ?>
         <?php if (!empty($rubrique['CHAMPS'])): ?>
             <?php foreach ($rubrique['CHAMPS'] as $champ): ?>
                 <div class='control-group'>
-                        <label for='champ-<?= $champ["ID_CHAMP"] ?>' class='control-label'>
-                            <strong><?= $champ['NOM'] ?></strong>
-                        </label>
-                        <div class='controls'>
-
-                <?= $this->partial('formulaire/inputChamp.phtml', [
-                        'champ' => $champ,
-                        'champsvaleurliste' => $this->champsvaleurliste,
-                        'listeChampFils' => $this->listeChampFils
-                    ]); 
-                ?>
-                        </div>
+                    <label for='champ-<?= $champ["ID_CHAMP"] ?>' class='control-label'>
+                        <strong><?= $champ['NOM'] ?></strong>
+                    </label>
+                    <div class='controls'>
+                        <?= $this->partial('formulaire/inputChamp.phtml', [
+                                'champ' => $champ,
+                                'champsvaleurliste' => $this->champsvaleurliste,
+                                'listeChampFils' => $this->listeChampFils
+                            ]); 
+                        ?>
+                    </div>
                 </div>
             <?php endforeach ?>
         <?php endif ?>
