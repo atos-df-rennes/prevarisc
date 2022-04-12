@@ -9,7 +9,7 @@
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= $this->champ["VALEUR"] ?></textarea>
+        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= htmlspecialchars($this->champ["VALEUR"]) ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
@@ -27,7 +27,7 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= $this->champ["ID_CHAMP"] ?>' min='0' value='<?= $this->champ["VALEUR"] ?>'>
+        <input type='number' name='champ-<?= $this->champ["ID_CHAMP"] ?>' min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
@@ -40,7 +40,7 @@
             type="checkbox"
             name='champ-<?= $this->champ["ID_CHAMP"] ?>'
             value="1"
-            <?= $this->champ['VALEUR'] != null ? 'checked' : '' ?>
+            <?= htmlspecialchars($this->champ['VALEUR'] != null ? 'checked' : '' )?>
         >
     <?php break;   
 
