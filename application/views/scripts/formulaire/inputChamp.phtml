@@ -1,0 +1,65 @@
+<?php switch ($this->champ['ID_TYPECHAMP']) {
+    // Texte
+    case 1: ?>
+        <input
+            type='text'
+            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            value='<?= htmlspecialchars($this->champ["VALEUR"], ENT_QUOTES) ?>'
+        >
+    <?php break;
+    // Texte long
+    case 2: ?>
+        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= $this->champ["VALEUR"] ?></textarea>
+    <?php break;
+    // Liste
+    case 3: ?>
+        <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'>
+            <option selected value>Sélectionnez un élément</option>
+            <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
+                <option
+                    value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
+                    <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
+                >
+                    <?= $champvaleurliste['VALEUR'] ?>
+                </option>
+            <?php endforeach ?>
+        </select>
+    <?php break;
+    // Nombre
+    case 4: ?>
+        <input type='number' name='champ-<?= $this->champ["ID_CHAMP"] ?>' min='0' value='<?= $this->champ["VALEUR"] ?>'>
+    <?php break;
+    // Case à cocher
+    case 5: ?>
+        <input
+            type="hidden"
+            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            value="0"
+        >
+        <input
+            type="checkbox"
+            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            value="1"
+            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
+        >
+    <?php break;   
+
+    case 6:?>
+        <div class="tableInput">
+            <?php foreach ($this->listeChampFils as $champsFils): ?>
+                <div class="colTableInput">
+                    <th><?= $champsFils['NOM'] ?></th>
+                    <input name=<?= 'champ-'.$champsFils['ID_CHAMP'] ?> /> 
+                    <?= $this->partial('formulaire/inputChamp.phtml', [
+                        'champ' => $champsFils,
+                        'champsvaleurliste' => $this->champsvaleurliste,
+                        'listeChampFils' => $this->listeChampFils
+                        ]); 
+                    ?>
+                </div>
+            <?php endforeach;?>
+        </div>
+    <?php break;
+    default:
+        break;
+} ?>
