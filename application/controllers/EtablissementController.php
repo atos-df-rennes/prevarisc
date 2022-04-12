@@ -223,12 +223,13 @@ class EtablissementController extends Zend_Controller_Action
         foreach ($rubriques as $rubrique){
             foreach ($rubrique ['CHAMPS'] as $champ) {
                 if($champ['ID_TYPECHAMP'] === $idTypeParent){
-                    foreach ($modelChamp->getChampsByRubriqueWithParent(intval($champ['ID_RUBRIQUE'])) as $champFils) {
+                    foreach ($modelChamp->getChampValue(intval($champ['ID_CHAMP'])) as $champFils) {
                         array_push($listeChampFils,$champFils);
                     }
                 }
             }
         }
+        var_dump('<pre>',$listeChampFils,'</pre>');
         $this->view->assign('listeChampFils',$listeChampFils);
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
@@ -271,7 +272,6 @@ class EtablissementController extends Zend_Controller_Action
             try {
                 $post = $request->getPost();
                 $lastKey = null;
-
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {

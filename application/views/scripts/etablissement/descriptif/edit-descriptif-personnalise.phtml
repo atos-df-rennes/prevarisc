@@ -25,7 +25,8 @@
         </div>
     </div>
 
-    <!-- TODO Faire la même avec des partials loops -->
+
+    <!--
     <?php foreach ($this->rubriques as $rubrique): ?>
         <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
             <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
@@ -106,10 +107,11 @@
             endif ?>
         </div>
     <?php endforeach ?>
+    -->
 
-
-    
     <?php foreach ($this->rubriques as $rubrique): ?>
+        <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
+        <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
         <?php if (!empty($rubrique['CHAMPS'])): ?>
             <?php foreach ($rubrique['CHAMPS'] as $champ): ?>
                 <div class='control-group'>
@@ -125,6 +127,7 @@
                         ?>
                     </div>
                 </div>
+        </div>
             <?php endforeach ?>
         <?php endif ?>
 
