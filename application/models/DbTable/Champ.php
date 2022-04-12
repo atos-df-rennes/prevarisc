@@ -92,15 +92,26 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     }
 
     public function getChampValue(int $idParent):array{
+        $LIST_TYPE_VALEUR = ["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"];
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
-            ->joinLeft(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP')
+            ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $LIST_TYPE_VALEUR)
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->where('c.ID_PARENT = ?', $idParent)
             ;
         
-        return $this->fetchAll($select)->toArray();
+        $res = [];
+        foreach ($this->fetchAll($select)->toArray() as $champ) {
+            $tmpChamp = $champ;
+            foreach ($LIST_TYPE_VALEUR as $T) {
+                if(!empty($champ[$T])){
+                    $tmpChamp["VALEUR"] = $champ[$T];
+                }
+            }
+            array_push($res, $tmpChamp);
+        }
+        return $res;
     }
 }
