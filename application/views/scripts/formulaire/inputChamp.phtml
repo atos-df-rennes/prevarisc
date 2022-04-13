@@ -49,7 +49,7 @@
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
-            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
+            <?= !empty($this->champ['VALEUR']) ? 'checked' : '' ?>
         >
     <?php break;   
 

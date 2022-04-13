@@ -7,19 +7,15 @@
 
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
-    
-    <?php foreach ($this->rubriques as $rubrique):
-        if (boolval($rubrique['DISPLAY']) === true): ?>
-            <h4 class='h4_subtitle' id='<?= strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?= $rubrique['NOM'] ?></h4>
-            <div id='affichage-informations' class='form-horizontal'>
-                <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
-                        'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
-                        'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
-                        'listeChampFils' => isset($this->listeChampFils) ? $this->listeChampFils : [] ,
-                        'canWrite' => false
-                    ]); 
-                ?>
-            </div>
-        <?php endif;
-    endforeach ?>
+
+    <div id='affichage-informations' class='form-horizontal'>
+        <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
+                'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
+                'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
+                'listeChampFils' => isset($this->listeChampFils) ? $this->listeChampFils : [] ,
+                'canWrite' => false
+            ]); 
+        ?>
+    </div>
+
 </div>
