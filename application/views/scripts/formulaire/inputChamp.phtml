@@ -15,7 +15,7 @@
     case 3: ?>
         <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'>
             <option selected value>Sélectionnez un élément</option>
-            <?php if (isset($this->champ['VALEUR'])) :?>
+            <?php if (!empty($this->champsvaleurliste[$this->champ['ID_CHAMP']]))  :?>
                 <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
                     <option
                         value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
@@ -26,7 +26,7 @@
                 <?php endforeach ?>
             <?php else:?>
                 <option>
-                    <?= "Aucune valeur de saisies" ?>
+                    <?= "Aucune valeur de disponible" ?>
                 </option>
             <?php endif ?>
         </select>

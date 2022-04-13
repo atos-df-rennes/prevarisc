@@ -91,7 +91,35 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getChampValue(int $idParent):array{
+
+    public function getValueChampList(int $idChamp):array{
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'ID_TYPECHAMP'])
+            ->join(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP')
+            ->where('c.ID_CHAMP = ?', $idChamp);
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getValueSelectChampList(int $idChamp):String{
+        $select = $this->select()
+        ->setIntegrityCheck(false)
+        ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'ID_TYPECHAMP'])
+        ->join(['v' => 'valeur'], 'c.ID_CHAMP = v.ID_CHAMP',["VALEUR"=>"VALEUR_STR"])
+        ->where('c.ID_CHAMP = ?', $idChamp);
+    return isset($this->fetchAll($select)->toArray()[0]['VALEUR']) ? $this->fetchAll($select)->toArray()[0]['VALEUR'] :'';
+    }
+
+    public function getSelectListOfChamp(int $idChamp):array{
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'ID_TYPECHAMP'])
+            ->join(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP')
+            ->where('c.ID_CHAMP = ?', $idChamp);
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getChampFilsValue(int $idParent):array{
         $LIST_TYPE_VALEUR = ["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"];
         $select = $this->select()
             ->setIntegrityCheck(false)
@@ -107,11 +135,16 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             $tmpChamp = $champ;
             foreach ($LIST_TYPE_VALEUR as $T) {
                 if(!empty($champ[$T])){
-                    $tmpChamp["VALEUR"] = $champ[$T];
+                    $tmpChamp['VALEUR'] = $champ[$T];
+                }
+                elseif((!empty($champ['TYPE']) && $champ['TYPE'] === 'Liste') || (!empty($champ['ID_TYPECHAMP']) && $champ['ID_TYPECHAMP'] === 3) ){
+                    $tmpChamp['VALEUR'] = $this->getValueSelectChampList($tmpChamp['ID_CHAMP']);
+                    $tmpChamp['VALEUR_LISTE'] = $this->getValueChampList($tmpChamp['ID_CHAMP']);
                 }
             }
             array_push($res, $tmpChamp);
         }
+       
         return $res;
     }
 }
