@@ -9,20 +9,26 @@
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= htmlspecialchars($this->champ["VALEUR"]) ?></textarea>
+        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"]) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
         <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'>
             <option selected value>Sélectionnez un élément</option>
-            <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
-                <option
-                    value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
-                    <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
-                >
-                    <?= $champvaleurliste['VALEUR'] ?>
+            <?php if (isset($this->champ['VALEUR'])) :?>
+                <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
+                    <option
+                        value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
+                        <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
+                    >
+                        <?= $champvaleurliste['VALEUR'] ?>
+                    </option>
+                <?php endforeach ?>
+            <?php else:?>
+                <option>
+                    <?= "Aucune valeur de saisies" ?>
                 </option>
-            <?php endforeach ?>
+            <?php endif ?>
         </select>
     <?php break;
     // Nombre
@@ -40,7 +46,7 @@
             type="checkbox"
             name='champ-<?= $this->champ["ID_CHAMP"] ?>'
             value="1"
-            <?= htmlspecialchars($this->champ['VALEUR'] != null ? 'checked' : '' )?>
+            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
     <?php break;   
 
