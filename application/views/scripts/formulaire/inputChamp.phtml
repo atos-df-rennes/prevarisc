@@ -5,11 +5,12 @@
             type='text'
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value='<?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"], ENT_QUOTES) :'' ?>'
+            <?= $this->canWrite ? '': 'disabled'?>
         >
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'><?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"]) :'' ?></textarea>
+        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"]) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
@@ -59,7 +60,8 @@
                         'champ' => $champsFils,
                         'champsvaleurliste' => $this->champsvaleurliste,
                         'listeChampFils' => $this->listeChampFils,
-                        'isChampFils' => true
+                        'isChampFils' => true,
+                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false
                         ]); 
                     ?>
                 </div>
