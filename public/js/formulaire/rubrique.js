@@ -23,6 +23,7 @@ $(document).ready(function() {
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
             success: function(data) {
+                /*FIXME le parsing n arrive pas a ce realiser et plante a la tentative  */
                 const parsedData = JSON.parse(data)
 
                 
@@ -33,7 +34,7 @@ $(document).ready(function() {
                         <h3>Liste des champs</h3>
                     </div>`)
                 }
-
+                
                 const table = savedFieldsDiv.children('table')
                 table.append(getRowElement(parsedData))
 
@@ -50,7 +51,6 @@ $(document).ready(function() {
                     }
                 }
                 
-
                 form.reset()
                 $('#div-list-value').hide()
             },

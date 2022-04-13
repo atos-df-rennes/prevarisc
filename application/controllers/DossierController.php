@@ -3122,8 +3122,6 @@ class DossierController extends Zend_Controller_Action
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
             $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
-            // FIXME Normalement inutile
-            $this->view->idDossier = $this->idDossier;
         }
 
         $request = $this->getRequest();
