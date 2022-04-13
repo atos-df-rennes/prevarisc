@@ -7,7 +7,6 @@
     <h4 class='h4_subtitle'>Rubriques</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
     <div id='affichage-informations' class='form-horizontal'>
-        <pre><?= var_dump($this->rubriques) ?></pre>
         <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
                 'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
                 'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
