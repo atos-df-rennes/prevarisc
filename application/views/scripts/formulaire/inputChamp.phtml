@@ -14,7 +14,7 @@
     <?php break;
     // Liste
     case 3: ?>
-        <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'>
+        <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'<?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
             <?php if (!empty($this->champsvaleurliste[$this->champ['ID_CHAMP']]))  :?>
                 <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
@@ -34,7 +34,7 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>' min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
+        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'             <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
@@ -42,11 +42,13 @@
             type="hidden"
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="0"
+            <?= $this->canWrite ? '': 'disabled'?>
         >
         <input
             type="checkbox"
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
+            <?= $this->canWrite ? '': 'disabled'?>
             <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
     <?php break;   
