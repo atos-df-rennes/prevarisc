@@ -3,13 +3,13 @@
     case 1: ?>
         <input
             type='text'
-            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value='<?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"], ENT_QUOTES) :'' ?>'
         >
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= $this->champ["ID_CHAMP"] ?>'><?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"]) :'' ?></textarea>
+        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'><?= isset($this->champ["VALEUR"]) ? htmlspecialchars($this->champ["VALEUR"]) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
@@ -21,7 +21,7 @@
                         value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
                         <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
                     >
-                        <?= $champvaleurliste['VALEUR'] ?>
+                        <?= htmlspecialchars($champvaleurliste['VALEUR']) ?>
                     </option>
                 <?php endforeach ?>
             <?php else:?>
@@ -33,18 +33,18 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= $this->champ["ID_CHAMP"] ?>' min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
+        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>' min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
         <input
             type="hidden"
-            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="0"
         >
         <input
             type="checkbox"
-            name='champ-<?= $this->champ["ID_CHAMP"] ?>'
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
             <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
