@@ -93,7 +93,7 @@
 
                                     <ul>
                                         <?php foreach($champ['VALEURS'] as $valeur): ?>
-                                            <li><?= $valeur['VALEUR'] ?></li>
+                                            <li><?= htmlspecialchars($valeur['VALEUR']) ?></li>
                                         <?php endforeach ?>
                                     </ul>
                                 <?php endif ?>
