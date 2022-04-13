@@ -23,6 +23,8 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
 
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
@@ -186,6 +188,8 @@ class EtablissementController extends Zend_Controller_Action
 
     public function descriptifAction()
     {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
         if (1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'))) {
             $this->descriptifPersonnaliseAction();
         } else {
@@ -261,6 +265,7 @@ class EtablissementController extends Zend_Controller_Action
     public function editDescriptifPersonnaliseAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
