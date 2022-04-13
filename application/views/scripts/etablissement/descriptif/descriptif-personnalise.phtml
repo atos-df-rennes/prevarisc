@@ -8,43 +8,17 @@
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
     
-    <!-- TODO Faire la même avec des partials loops -->
     <?php foreach ($this->rubriques as $rubrique):
         if (boolval($rubrique['DISPLAY']) === true): ?>
             <h4 class='h4_subtitle' id='<?= strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?= $rubrique['NOM'] ?></h4>
-
             <div id='affichage-informations' class='form-horizontal'>
-                <?php if (empty($rubrique['CHAMPS'])) : ?>
-                    <?= $this->partial('formulaire/partials/partial-information-manquante.phtml', [
-                        'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
-                    ]);?>
-                <?php else : ?>
-                    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
-                        <?php if (!empty($rubrique['CHAMPS'])): ?>
-                            <?php foreach ($rubrique['CHAMPS'] as $champ): ?>
-                                <div class='control-group'>
-                                    <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='control-label'>
-                                        <strong><?= htmlspecialchars($champ['NOM']) ?></strong>
-                                    </label>
-                                    <div class='controls'>
-                                        <?= $this->partial('formulaire/inputChamp.phtml', [
-                                                'champ' => $champ,
-                                                'champsvaleurliste' => $this->champsvaleurliste,
-                                                'listeChampFils' => $this->listeChampFils,
-                                                'isChampFils' => false,
-                                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                                            ]); 
-                                        ?>
-                                    </div>
-                                </div>
-                            <?php endforeach ?>
-                        <?php endif ?>
-                    </div>
-                <?php endif ?>
-
-                
-
-                
+                <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
+                        'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
+                        'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
+                        'listeChampFils' => isset($this->listeChampFils) ? $this->listeChampFils : [] ,
+                        'canWrite' => false
+                    ]); 
+                ?>
             </div>
         <?php endif;
     endforeach ?>
