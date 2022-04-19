@@ -50,8 +50,7 @@ $(document).ready(function() {
             url: '/formulaire/add-champ',
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
-            success: function(data) {
-                const parsedData = JSON.parse(data)
+            success: function() {
                 ajouterLigneTableau()
                 form.reset()
             },
