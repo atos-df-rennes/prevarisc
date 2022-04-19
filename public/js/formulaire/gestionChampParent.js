@@ -52,7 +52,6 @@ $(document).ready(function() {
             type: 'POST',
             success: function(data) {
                 const parsedData = JSON.parse(data)
-                console.log("Pardsed data : ",parsedData)
                 ajouterLigneTableau()
                 form.reset()
             },

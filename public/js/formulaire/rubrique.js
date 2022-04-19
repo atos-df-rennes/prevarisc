@@ -16,8 +16,6 @@ $(document).ready(function() {
         const savedFieldsTitlesDiv = $('.titles')
 
         const formData = $(form).serialize()
-        console.log("Data recieve : ",formData)
-
         $.ajax({
             url: '/formulaire/add-champ',
             data: formData+'&rubrique='+idRubrique,
