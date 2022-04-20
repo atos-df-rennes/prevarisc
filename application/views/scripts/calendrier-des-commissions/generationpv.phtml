@@ -208,7 +208,8 @@ foreach($this->membresFiles as $val => $membre){
 														$champFils['NOM']
 													]
 												),
-												$champFils['VALEUR']
+												'Case à cocher' === $champ['TYPE'] ? (true === boolval($champ['VALEUR']) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
+												
 											);
 										}
 									}else{
