@@ -138,7 +138,7 @@ foreach($this->membresFiles as $val => $membre){
 						}
 
                         // Gestion des avis & dérogations
-                        $segmentAvisDerogations = $dossInfos->avisDerogations;
+                        $segmentAvisDerogations = isset($dossInfos->avisDerogations) ? $dossInfos->avisDerogations : null;
 
                         foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
                             addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
@@ -161,9 +161,22 @@ foreach($this->membresFiles as $val => $membre){
                         // Gestion des formulaires personnalisés
                         $serviceUtils = new Service_Utils();
 
+						//Ajout du model permettant de recuperer les champ fils d un parent
+						$modelChamp = new Model_DbTable_Champ();
+
                         foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
-                            // Permet d'avoir les informations unitairement
+							// Permet d'avoir les informations unitairement
                             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+							/*	var_dump(
+									'<pre>',
+									$serviceUtils->getFullFusionName(
+										$formulaire['NOM_INTERNE'],
+										[
+											$rubrique['NOM']
+										]
+										),
+										'</pre>'
+								);*/
                                 addChamp(
                                     $odf,
                                     $serviceUtils->getFullFusionName(
@@ -174,28 +187,53 @@ foreach($this->membresFiles as $val => $membre){
                                     ),
                                     $rubrique['NOM']
                                 );
-
                                 foreach ($rubrique['CHAMPS'] as $champ) {
-                                    // Définition du libellé pour les cases à cocher
-                                    if ('Case à cocher' === $champ['TYPE']) {
-                                        if (true === boolval($champ['VALEUR'])) {
-                                            $champ['VALEUR'] = 'Oui';
-                                        } else {
-                                            $champ['VALEUR'] = 'Non';
-                                        }
-                                    }
-
-                                    addChamp(
-                                        $odf,
-                                        $serviceUtils->getFullFusionName(
-                                            $formulaire['NOM_INTERNE'],
-                                            [
-                                                $rubrique['NOM'],
-                                                $champ['NOM']
-                                            ]
-                                        ),
-                                        $champ['VALEUR']
-                                    );
+									if($champ['ID_TYPECHAMP'] === 6){
+										foreach ($modelChamp->getChampFilsValue($champ["ID_CHAMP"]) as $champFils) {
+											var_dump('<pre>',$serviceUtils->getFullFusionName(
+												$formulaire['NOM_INTERNE'],
+												[
+													$rubrique['NOM'],
+													$champ['NOM'],
+													$champFils['NOM']
+												]
+											),'</pre>');
+											addChamp(
+												$odf,
+												$serviceUtils->getFullFusionName(
+													$formulaire['NOM_INTERNE'],
+													[
+														$rubrique['NOM'],
+														$champ['NOM'],
+														$champFils['NOM']
+													]
+												),
+												$champFils['VALEUR']
+											);
+										}
+									}else{
+										// Définition du libellé pour les cases à cocher
+										if ('Case à cocher' === $champ['TYPE']) {
+											if (true === boolval($champ['VALEUR'])) {
+												$champ['VALEUR'] = 'Oui';
+											} else {
+												$champ['VALEUR'] = 'Non';
+											}
+										}
+										addChamp(
+											$odf,
+											$serviceUtils->getFullFusionName(
+												$formulaire['NOM_INTERNE'],
+												[
+													$rubrique['NOM'],
+													$champ['NOM']
+												]
+											),
+											$champ['VALEUR']
+										);
+									}
+									
+									
                                 }
                             }
                         }

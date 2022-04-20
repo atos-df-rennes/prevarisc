@@ -566,7 +566,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['d' => 'dossier'], [])
-            ->join(['ded' => 'dossiereffectifdegagement'], 'd.ID_DOSSIER = ded.ID_DOSSIER', [])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
             ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT')
             ->where('d.ID_DOSSIER = ?', $idDossier)
         ;

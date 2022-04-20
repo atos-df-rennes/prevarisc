@@ -720,27 +720,29 @@ foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 }
 
 // Gestion des avis et dérogations
-$segmentAvisDerogations = $odf->setSegment('avisDerogations');
+if(isset($this->avisDerogations)){
+    $segmentAvisDerogations = $odf->setSegment('avisDerogations');
 
-foreach ($this->avisDerogations as $avisDerogation) {
-    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
-    addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
-    addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
-    addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
-    addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+    foreach ($this->avisDerogations as $avisDerogation) {
+        addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+        addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
-    if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
-        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
-    } else {
-        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+        } else {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        }
+
+        addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+        $segmentAvisDerogations->merge();
     }
 
-    addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
-
-    $segmentAvisDerogations->merge();
+    $odf->mergeSegment($segmentAvisDerogations);
 }
-
-$odf->mergeSegment($segmentAvisDerogations);
 
 // Gestion des formulaires personnalisés
 $serviceUtils = new Service_Utils();
