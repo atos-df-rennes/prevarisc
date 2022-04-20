@@ -224,18 +224,18 @@ class EtablissementController extends Zend_Controller_Action
         $listeChampFils = [];
         //6 = ID_TYPE de Parent
         $idTypeParent = 6;
-        $idTypeListe = 3;
+        
 
         foreach ($rubriques as $rubrique){
             foreach ($rubrique ['CHAMPS'] as $champ) {
-                if($champ['ID_TYPECHAMP']){
+                if($champ['ID_TYPECHAMP'] === $idTypeParent){
                     foreach ($modelChamp->getChampFilsValue(intval($champ['ID_CHAMP'])) as $champFils) {
                         array_push($listeChampFils,$champFils);
                     }
                 }
             }
         }
-
+        
         $this->view->assign('listeChampFils',$listeChampFils);
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
