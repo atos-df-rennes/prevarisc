@@ -190,14 +190,14 @@ foreach($this->membresFiles as $val => $membre){
                                 foreach ($rubrique['CHAMPS'] as $champ) {
 									if($champ['ID_TYPECHAMP'] === 6){
 										foreach ($modelChamp->getChampFilsValue($champ["ID_CHAMP"]) as $champFils) {
-											var_dump('<pre>',$serviceUtils->getFullFusionName(
+											/*var_dump('<pre>',$serviceUtils->getFullFusionName(
 												$formulaire['NOM_INTERNE'],
 												[
 													$rubrique['NOM'],
 													$champ['NOM'],
 													$champFils['NOM']
 												]
-											),'</pre>');
+											),'</pre>');*/
 											addChamp(
 												$odf,
 												$serviceUtils->getFullFusionName(

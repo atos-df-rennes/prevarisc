@@ -18,4 +18,11 @@
         ?>
     </div>
 
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+                        'corpsformulaire' => $this->corpsformulaire,
+                        'valeurformulaire' => $this->valeurformulaire,
+                        'canWrite' => true
+                    ]); 
+    ?>
+
 </div>

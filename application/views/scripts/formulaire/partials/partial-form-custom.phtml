@@ -1,0 +1,11 @@
+<?php foreach ($this->corpsformulaire as $rubrique) : ?>
+    <?php foreach ( ($rubrique) as $champ) : ?>
+        <h2><?= $champ['NOM'] ?></h2>
+            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                'champ' => $champ,
+                'valeurformulaire' => $this->valeurformulaire,
+                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                ]); 
+            ?>
+    <?php endforeach ?>
+<?php endforeach ?>

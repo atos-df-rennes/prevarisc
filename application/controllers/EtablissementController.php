@@ -225,7 +225,6 @@ class EtablissementController extends Zend_Controller_Action
         //6 = ID_TYPE de Parent
         $idTypeParent = 6;
         
-
         foreach ($rubriques as $rubrique){
             foreach ($rubrique ['CHAMPS'] as $champ) {
                 if($champ['ID_TYPECHAMP'] === $idTypeParent){
@@ -239,6 +238,11 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('listeChampFils',$listeChampFils);
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
+
+        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
+        $this->view->assign('corpsformulaire',$modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        $this->view->assign('valeurformulaire',$modelChamp->getValeurFormulaire($idEtablissement,$ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+
     }
 
     public function editDescriptifAction()
