@@ -1,0 +1,76 @@
+<?php switch ($this->champ['ID_TYPECHAMP']) {
+    // Texte
+    case 1: ?>
+        <input
+            type='text'
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            value='<?= isset($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
+            <?= $this->canWrite ? '': 'disabled'?>
+        >
+
+    <?php break;
+    // Texte long
+    case 2: ?>
+        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]], ENT_QUOTES) :'' ?></textarea>
+    <?php break;
+    // Liste
+    case 3: ?>
+        <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'<?= $this->canWrite ? '': 'disabled'?>>
+            <option selected value>Sélectionnez un élément</option>
+            <?php if (!empty($this->champ['VALEUR']))  :?>
+                <?php foreach($this->champ['VALEUR'] as $valeurListe): ?>
+                    <option
+                        value="<?= htmlspecialchars($valeurListe['VALEUR'], ENT_QUOTES) ?>"
+                        <?php if (!empty( $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'])) :?>
+                            <?= $valeurListe['VALEUR'] === $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'] ? 'selected' : '' ?>
+                        <?php endif?>
+                    >
+                        <?= htmlspecialchars($valeurListe['VALEUR']) ?>
+                    </option>
+                <?php endforeach ?>
+            <?php else:?>
+                <option>
+                    <?= "Aucune valeur de disponible" ?>
+                </option>
+            <?php endif ?>
+        </select>
+    <?php break;
+    // Nombre
+    case 4: ?>
+        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
+    <?php break;
+    // Case à cocher
+    case 5: ?>
+        <input
+            type="hidden"
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            value="0"
+            <?= $this->canWrite ? '': 'disabled'?>
+        >
+        <input
+            type="checkbox"
+            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            value="1"
+            <?= $this->canWrite ? '': 'disabled'?>
+            <?= !empty($this->champ['VALEUR']) ? 'checked' : '' ?>
+        >
+    <?php break;   
+
+    case 6:?>
+        <div class="tableInput">
+            <?php foreach ($this->champ["CHAMP_FILS"] as $champsFils): ?>
+                <div class="colTableInput">
+                    <th><?= $champsFils['NOM'] ?></th>
+                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                        'champ' => $champsFils,
+                        'valeurformulaire' => $this->valeurformulaire,
+                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                        ]); 
+                    ?>
+                </div>
+            <?php endforeach;?>
+        </div>
+    <?php break;
+    default:
+        break;
+} ?>
