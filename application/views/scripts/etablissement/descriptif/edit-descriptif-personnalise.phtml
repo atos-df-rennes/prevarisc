@@ -25,13 +25,12 @@
         </div>
     </div>
 
-    <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
-            'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
-            'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
-            'listeChampFils' => isset($this->listeChampFils) ? $this->listeChampFils : [] ,
-            'canWrite' => true
-        ]); 
-    ?>
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+                    'corpsformulaire' => $this->corpsformulaire,
+                    'valeurformulaire' => $this->valeurformulaire,
+                    'canWrite' => true
+                ]); 
+        ?>
 
 
 </form>
