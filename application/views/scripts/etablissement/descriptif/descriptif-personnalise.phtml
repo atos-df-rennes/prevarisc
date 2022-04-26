@@ -17,9 +17,9 @@
                 ]); 
         ?>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
-                    'corpsformulaire' => $this->corpsformulaire,
-                    'valeurformulaire' => $this->valeurformulaire,
-                    'canWrite' => true
+                    'corpsformulaire' => isset($this->corpsformulaire) ? $this->corpsformulaire : array(),
+                    'valeurformulaire' => isset($this->valeurformulaire) ? $this->valeurformulaire : array(),
+                    'canWrite' => false
                 ]); 
         ?>
     </div>
