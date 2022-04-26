@@ -109,6 +109,12 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     public function getCorpFormulaire(int $idCapsuleRubrique){
         $res = array();
 
+        $modelRubrique = new Model_DbTable_Rubrique();
+
+        foreach ($modelRubrique->getAllRubriqueForm($idCapsuleRubrique) as $rubrique) {
+            $res[$rubrique['ID_RUBRIQUE']] = $rubrique;
+        }
+ 
         $selectRubriqueForm = $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
@@ -117,28 +123,28 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->where('c.ID_PARENT IS NULL')
             ->where('r.ID_CAPSULERUBRIQUE = ?',$idCapsuleRubrique);
 
-        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $rubrique) {
-            if($rubrique['TYPE'] === 'Parent'){
-                $rubrique['CHAMP_FILS'] = $this->getChampFromParent($rubrique['ID_CHAMP']);
-                foreach ($rubrique['CHAMP_FILS'] as &$champFils) {
+        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {
+            if($champ['TYPE'] === 'Parent'){
+                $champ['CHAMP_FILS'] = $this->getChampFromParent($champ['ID_CHAMP']);
+                foreach ($champ['CHAMP_FILS'] as &$champFils) {
                     if($champFils['TYPE'] === 'Liste'){
                         $champFils['VALEUR'] = $this->getValueChampList($champFils['ID_CHAMP']);
                     }
                 }    
             }
-            if($rubrique['TYPE'] === 'Liste'){
-                $rubrique['VALEUR'] = $this->getValueChampList($rubrique['ID_CHAMP']);
+            if($champ['TYPE'] === 'Liste'){
+                $champ['VALEUR'] = $this->getValueChampList($champ['ID_CHAMP']);
             }
-              
-            $res[$rubrique['ID_RUBRIQUE']][$rubrique['ID_CHAMP']] = $rubrique;
+            $res[$champ['ID_RUBRIQUE']] ['CHAMPS'] [$champ['ID_CHAMP']] = $champ;
         }
+
         return $res;
     }
 
     public function getValeurFormulaire(int $idEtablissement, int $idCapsuleRubrique){
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
             ->join(['v' => 'valeur'],'v.ID_CHAMP = c.ID_CHAMP',["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"])
             ->join(['ev' => 'etablissementvaleur'],'ev.ID_VALEUR = v.ID_VALEUR')
             ->join(['r' => 'rubrique'],'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
@@ -151,4 +157,5 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         }
         return $res;
     }
+
 }
