@@ -240,10 +240,12 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
 
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        
+
         $this->view->assign('corpsformulaire',$modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
         $this->view->assign('valeurformulaire',$modelChamp->getValeurFormulaire($idEtablissement,$ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
 
+
+        var_dump('<pre>',$this->view->rubriques,'</pre>');
     }
 
     public function editDescriptifAction()

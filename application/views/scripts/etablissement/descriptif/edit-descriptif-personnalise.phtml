@@ -25,8 +25,6 @@
         </div>
     </div>
     
-    <?= '<pre>',var_dump($this->corpsformulaire),'</pre>' ?>
-
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
                     'corpsformulaire' => $this->corpsformulaire,
                     'valeurformulaire' => $this->valeurformulaire,
@@ -34,6 +32,4 @@
                     'canWrite' => true
                 ]); 
         ?>
-
-
 </form>
