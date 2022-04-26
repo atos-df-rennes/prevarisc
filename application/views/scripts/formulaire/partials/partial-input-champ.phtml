@@ -17,7 +17,7 @@
     case 3: ?>
         <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'<?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
-            <?php if (!empty($this->champ['VALEUR']))  :?>
+            <?php if (!empty($this->champ['VALEUR']) || true)  :?>
                 <?php foreach($this->champ['VALEUR'] as $valeurListe): ?>
                     <option
                         value="<?= htmlspecialchars($valeurListe['VALEUR'], ENT_QUOTES) ?>"
