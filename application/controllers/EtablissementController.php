@@ -225,15 +225,18 @@ class EtablissementController extends Zend_Controller_Action
         //6 = ID_TYPE de Parent
         $idTypeParent = 6;
         
+        $tmpRubrique = [];
         foreach ($rubriques as $rubrique){
-            foreach ($rubrique ['CHAMPS'] as $champ) {
+            foreach ($rubrique['CHAMPS'] as $champ) {
                 if($champ['ID_TYPECHAMP'] === $idTypeParent){
                     foreach ($modelChamp->getChampFilsValue(intval($champ['ID_CHAMP'])) as $champFils) {
                         array_push($listeChampFils,$champFils);
                     }
                 }
+                $tmpRubrique[$rubrique['ID_RUBRIQUE']] = $rubrique;
             }
         }
+        $rubriques = $tmpRubrique;
         
         $this->view->assign('listeChampFils',$listeChampFils);
         $this->view->assign('rubriques', $rubriques);

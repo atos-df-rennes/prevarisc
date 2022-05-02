@@ -12,6 +12,7 @@
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
                     'corpsformulaire' => isset($this->corpsformulaire) ? $this->corpsformulaire : array(),
                     'valeurformulaire' => isset($this->valeurformulaire) ? $this->valeurformulaire : array(),
+                    'rubriquedisplay' => $this->rubriques,
                     'canWrite' => false
                 ]); 
         ?>
