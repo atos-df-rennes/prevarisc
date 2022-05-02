@@ -167,16 +167,6 @@ foreach($this->membresFiles as $val => $membre){
                         foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
 							// Permet d'avoir les informations unitairement
                             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-								var_dump(
-									'<pre>',
-									$serviceUtils->getFullFusionName(
-										$formulaire['NOM_INTERNE'],
-										[
-											$rubrique['NOM']
-										]
-										),
-										'</pre>'
-								);
                                 addChamp(
                                     $odf,
                                     $serviceUtils->getFullFusionName(
@@ -188,16 +178,10 @@ foreach($this->membresFiles as $val => $membre){
                                     $rubrique['NOM']
                                 );
                                 foreach ($rubrique['CHAMPS'] as $champ) {
+									//Si le champ est un champ Parent alors ....
+									var_dump('<pre>',$champ,'</pre>');
 									if($champ['ID_TYPECHAMP'] === 6){
-										foreach ($modelChamp->getChampFilsValue($champ["ID_CHAMP"]) as $champFils) {
-											/*var_dump('<pre>',$serviceUtils->getFullFusionName(
-												$formulaire['NOM_INTERNE'],
-												[
-													$rubrique['NOM'],
-													$champ['NOM'],
-													$champFils['NOM']
-												]
-											),'</pre>');*/
+										foreach ($modelChamp->getChampFilsValue($champ["ID_CHAMP"],9) as $champFils) {
 											addChamp(
 												$odf,
 												$serviceUtils->getFullFusionName(
@@ -208,7 +192,7 @@ foreach($this->membresFiles as $val => $membre){
 														$champFils['NOM']
 													]
 												),
-												'Case à cocher' === $champ['TYPE'] ? (true === boolval($champ['VALEUR']) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
+												'Case à cocher' === $champFils['TYPE'] ? (true === boolval($champFils['VALEUR']) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
 												
 											);
 										}
