@@ -141,15 +141,30 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $res;
     }
 
-    public function getValeurFormulaire(int $idEtablissement, int $idCapsuleRubrique){
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
-            ->join(['v' => 'valeur'],'v.ID_CHAMP = c.ID_CHAMP',["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"])
-            ->join(['ev' => 'etablissementvaleur'],'ev.ID_VALEUR = v.ID_VALEUR')
-            ->join(['r' => 'rubrique'],'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
-            ->where('ev.ID_ETABLISSEMENT = ?',$idEtablissement)
-            ->where('r.ID_CAPSULERUBRIQUE = ?',$idCapsuleRubrique);
+    public function getValeurFormulaire(int $idEntity, int $idCapsuleRubrique){
+
+        $select = $this->select();
+
+        switch ($idCapsuleRubrique) {
+            case 1:
+                $select = $select->setIntegrityCheck(false)
+                ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
+                ->join(['v' => 'valeur'],'v.ID_CHAMP = c.ID_CHAMP',["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"])
+                ->join(['ev' => 'etablissementvaleur'],'ev.ID_VALEUR = v.ID_VALEUR')
+                ->join(['r' => 'rubrique'],'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
+                ->where('ev.ID_ETABLISSEMENT = ?',$idEntity)
+                ->where('r.ID_CAPSULERUBRIQUE = ?',$idCapsuleRubrique);
+                break;
+            case 2:
+                $select = $select->setIntegrityCheck(false)
+                ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
+                ->join(['v' => 'valeur'],'v.ID_CHAMP = c.ID_CHAMP',["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"])
+                ->join(['ev' => 'etablissementvaleur'],'ev.ID_VALEUR = v.ID_VALEUR')
+                ->join(['r' => 'rubrique'],'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
+                ->where('ev.ID_ETABLISSEMENT = ?',$idEntity)
+                ->where('r.ID_CAPSULERUBRIQUE = ?',$idCapsuleRubrique);
+                break;
+        } 
 
         $res = array();
         foreach ($this->fetchAll($select)->toArray() as $valeur) {
