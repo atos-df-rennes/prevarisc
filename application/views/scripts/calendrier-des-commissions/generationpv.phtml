@@ -167,7 +167,7 @@ foreach($this->membresFiles as $val => $membre){
                         foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
 							// Permet d'avoir les informations unitairement
                             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-							/*	var_dump(
+								var_dump(
 									'<pre>',
 									$serviceUtils->getFullFusionName(
 										$formulaire['NOM_INTERNE'],
@@ -176,7 +176,7 @@ foreach($this->membresFiles as $val => $membre){
 										]
 										),
 										'</pre>'
-								);*/
+								);
                                 addChamp(
                                     $odf,
                                     $serviceUtils->getFullFusionName(
