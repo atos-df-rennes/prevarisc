@@ -245,7 +245,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->assign('valeurformulaire',$modelChamp->getValeurFormulaire($idEtablissement,$ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
 
 
-        var_dump('<pre>',$this->view->rubriques,'</pre>');
+        //var_dump('<pre>',$this->view->rubriques,'</pre>');
     }
 
     public function editDescriptifAction()

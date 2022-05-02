@@ -37,7 +37,7 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= htmlspecialchars($this->champ["VALEUR"]) ?>'>
+        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
