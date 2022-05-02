@@ -155,7 +155,6 @@ class FormulaireController extends Zend_Controller_Action
                                                             'champParentID' => $this->getRequest()->getParam('champ'),
                                                             'rubriqueID' => $this->getRequest()->getParam('rubrique')
                                                             )
-
                                                         ) 
                                                     );
         }
