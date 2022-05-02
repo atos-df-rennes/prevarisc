@@ -50,18 +50,21 @@
 <div id="edit-rubrique" class="row-fluid">
     <div class="span4 infos-champ">
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
-            <?= $this->fieldForm->nom_champ ?>
-            <?= $this->fieldForm->type_champ ?>
-            <div id="div-list-value">
-                <h5>Définition des valeurs de la liste</h5>
-                <div class="row-fluid">
-                    <a href='#' id='add-list-value'>Ajouter une valeur</a>
-                </div>
-                <div class="row-fluid">
-                    <div id="list-value" class="span10">
+            <div class = 'flexCol'>
+                <?= $this->fieldForm->nom_champ ?>
+                <?= $this->fieldForm->type_champ ?>
+                <div id="div-list-value">
+                    <h5>Définition des valeurs de la liste</h5>
+                    <div class="row-fluid">
+                        <a href='#' id='add-list-value'>Ajouter une valeur</a>
                     </div>
-                </div>
+                    <div class="row-fluid">
+                        <div id="list-value" class="span10">
+                        </div>
+                    </div>
+                </div>                
             </div>
+
 
             <?= $this->fieldForm->save ?>
         </form>
