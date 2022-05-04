@@ -485,8 +485,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
 
+        $ID_TYPE_CHAMP_TEXTE = 1;
+        $ID_TYPE_CHAMP_TEXTE_LONG = 2;
+        $ID_TYPE_LISTE= 3;
+
         foreach ($dossier_types as $key => $type) {
-            if (1 !== $type['ID_DOSSIERTYPE'] && 2 !== $type['ID_DOSSIERTYPE'] && 3 !== $type['ID_DOSSIERTYPE']) {
+            if ($ID_TYPE_CHAMP_TEXTE !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_CHAMP_TEXTE_LONG !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_LISTE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;
             }
@@ -513,8 +517,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
 
+        $ID_TYPE_CHAMP_TEXTE = 1;
+        $ID_TYPE_CHAMP_TEXTE_LONG = 2;
+        $ID_TYPE_LISTE= 3;
+
         foreach ($dossier_types as $key => $type) {
-            if (1 !== $type['ID_DOSSIERTYPE'] && 2 !== $type['ID_DOSSIERTYPE'] && 3 !== $type['ID_DOSSIERTYPE']) {
+            if ($ID_TYPE_CHAMP_TEXTE !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_CHAMP_TEXTE_LONG !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_LISTE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;
             }
