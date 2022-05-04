@@ -44,7 +44,7 @@ abstract class Service_Descriptif
 
             foreach ($rubrique['CHAMPS'] as &$champ) {
                 if($champ['TYPE'] == 'Parent'){
-                    $champ['FILS'] = $this->modelChamp->getChampFilsValue($champ['ID_CHAMP']);
+                    $champ['FILS'] = $this->modelChamp->getChampFilsValue($champ['ID_CHAMP'], $idObject, $classObject);
                 }else{
                     $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
                 }
