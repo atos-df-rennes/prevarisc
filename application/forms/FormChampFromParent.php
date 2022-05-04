@@ -1,4 +1,5 @@
 <?php
+
 class Form_FormChampFromParent extends Zend_Form
 {
     /**
@@ -19,7 +20,6 @@ class Form_FormChampFromParent extends Zend_Form
 
     public function init()
     {
-
         $dbType = new Model_DbTable_ListeTypeChampRubrique();
         $this->setMethod('post');
         $this->setAttrib('class', 'form-inline');
@@ -55,7 +55,6 @@ class Form_FormChampFromParent extends Zend_Form
         $submit->class = 'marginBottom btn btn-success pull-left add-champ';
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
-        
 
         $this->setDecorators([
             'FormElements',
