@@ -24,6 +24,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
     }
 
     // Donne la liste des catégories
+
     /**
      * @param float|int|string $id
      *
@@ -47,6 +48,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
     }
 
     // Donne la liste des catégories
+
     /**
      * @param float|int|string $type
      *

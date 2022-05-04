@@ -6,6 +6,7 @@ class Model_DbTable_CommissionTypeEvenement extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_COMMISSIONTYPEEVENEMENT'; // Clé primaire
 
     //Fonction qui récupère toutes les infos générales d'un dossier
+
     /**
      * @return array
      */
