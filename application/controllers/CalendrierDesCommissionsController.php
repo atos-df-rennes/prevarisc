@@ -1354,7 +1354,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             // Gestion des rubriques/champs personnalisés
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
-
+            
             // Récupération des rubriques pour chaque objet global
             // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
             foreach ($capsulesRubriques as &$capsuleRubrique) {
