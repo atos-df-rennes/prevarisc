@@ -158,11 +158,11 @@ class FormulaireController extends Zend_Controller_Action
             $this->view->assign(
                 'formChamp',
                 new Form_FormChampFromParent(
-                [
-                    'champParentID' => $this->getRequest()->getParam('champ'),
-                    'rubriqueID' => $this->getRequest()->getParam('rubrique'),
-                ]
-            )
+                    [
+                        'champParentID' => $this->getRequest()->getParam('champ'),
+                        'rubriqueID' => $this->getRequest()->getParam('rubrique'),
+                    ]
+                )
             );
         }
 
