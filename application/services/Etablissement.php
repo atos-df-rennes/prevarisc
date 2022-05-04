@@ -487,7 +487,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $ID_TYPE_CHAMP_TEXTE = 1;
         $ID_TYPE_CHAMP_TEXTE_LONG = 2;
-        $ID_TYPE_LISTE= 3;
+        $ID_TYPE_LISTE = 3;
 
         foreach ($dossier_types as $key => $type) {
             if ($ID_TYPE_CHAMP_TEXTE !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_CHAMP_TEXTE_LONG !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_LISTE !== $type['ID_DOSSIERTYPE']) {
@@ -519,7 +519,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $ID_TYPE_CHAMP_TEXTE = 1;
         $ID_TYPE_CHAMP_TEXTE_LONG = 2;
-        $ID_TYPE_LISTE= 3;
+        $ID_TYPE_LISTE = 3;
 
         foreach ($dossier_types as $key => $type) {
             if ($ID_TYPE_CHAMP_TEXTE !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_CHAMP_TEXTE_LONG !== $type['ID_DOSSIERTYPE'] && $ID_TYPE_LISTE !== $type['ID_DOSSIERTYPE']) {
