@@ -1334,9 +1334,18 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 'descriptifVerificationsTechniques' => $rubriquesDossier,
             ];
 
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+            ];
+
             // Gestion des rubriques/champs personnalisés
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
-
+            
             // Récupération des rubriques pour chaque objet global
             // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
             foreach ($capsulesRubriques as &$capsuleRubrique) {
