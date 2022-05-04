@@ -16,23 +16,29 @@ class Model_DbTable_ListeTypeChampRubrique extends Zend_Db_Table_Abstract
         return $this->fetchRow($select)->toArray();
     }
 
-    public function getTypeWithoutParent():array{
+    public function getTypeWithoutParent(): array
+    {
         $select = $this->select()
-        ->setIntegrityCheck(false)
-        ->from(['t' => 'listetypechamprubrique'],['value' => 't.ID_TYPECHAMP', 'id' => 't.TYPE'])
-        ->where("t.TYPE != 'Parent'");    
+            ->setIntegrityCheck(false)
+            ->from(['t' => 'listetypechamprubrique'], ['value' => 't.ID_TYPECHAMP', 'id' => 't.TYPE'])
+            ->where("t.TYPE != 'Parent'")
+        ;
+
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getTypeWithoutParentToSelectForm():array{
+    public function getTypeWithoutParentToSelectForm(): array
+    {
         $select = $this->select()
-        ->setIntegrityCheck(false)
-        ->from(['t' => 'listetypechamprubrique'],['value' => 't.ID_TYPECHAMP', 'id' => 't.TYPE'])
-        ->where("t.TYPE != 'Parent'");    
-        $res = array();
+            ->setIntegrityCheck(false)
+            ->from(['t' => 'listetypechamprubrique'], ['value' => 't.ID_TYPECHAMP', 'id' => 't.TYPE'])
+            ->where("t.TYPE != 'Parent'")
+        ;
+        $res = [];
         foreach ($this->fetchAll($select)->toArray() as $value) {
             $res[$value['value']] = $value['id'];
         }
+
         return $res;
     }
 }

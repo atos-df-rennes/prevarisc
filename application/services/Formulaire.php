@@ -48,9 +48,9 @@ class Service_Formulaire
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
         ];
 
-        if(!empty($champ['ID_CHAMP_PARENT'])){
-            $dataToInsert["ID_PARENT"] = $champ['ID_CHAMP_PARENT'];
-        } 
+        if (!empty($champ['ID_CHAMP_PARENT'])) {
+            $dataToInsert['ID_PARENT'] = $champ['ID_CHAMP_PARENT'];
+        }
 
         $idChamp = $modelChamp->insert($dataToInsert);
 

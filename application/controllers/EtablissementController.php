@@ -25,7 +25,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
         $DB_periodicite = new Model_DbTable_Periodicite();
@@ -218,34 +217,33 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
-        
+
         $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtablissement, get_class($this));
-        //On regarde s il y a n champ de type parent 
+        //On regarde s il y a n champ de type parent
         $listeChampFils = [];
         //6 = ID_TYPE de Parent
         $idTypeParent = 6;
-        
+
         $tmpRubrique = [];
-        foreach ($rubriques as $rubrique){
+        foreach ($rubriques as $rubrique) {
             foreach ($rubrique['CHAMPS'] as $champ) {
-                if($champ['ID_TYPECHAMP'] === $idTypeParent){
+                if ($champ['ID_TYPECHAMP'] === $idTypeParent) {
                     foreach ($modelChamp->getChampFilsValue(intval($champ['ID_CHAMP']), $idEtablissement, 'Etablissement') as $champFils) {
-                        array_push($listeChampFils,$champFils);
+                        array_push($listeChampFils, $champFils);
                     }
                 }
                 $tmpRubrique[$rubrique['ID_RUBRIQUE']] = $rubrique;
             }
         }
         $rubriques = $tmpRubrique;
-        
-        $this->view->assign('listeChampFils',$listeChampFils);
+
+        $this->view->assign('listeChampFils', $listeChampFils);
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
 
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        $this->view->assign('corpsformulaire',$modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-        $this->view->assign('valeurformulaire',$modelChamp->getValeurFormulaire($idEtablissement,$ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-
+        $this->view->assign('corpsformulaire', $modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        $this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
     }
 
     public function editDescriptifAction()

@@ -1,10 +1,10 @@
 <?php
+
 class Form_FormChampFromParent extends Zend_Form
 {
     /**
      * {@inheritdoc}
      */
-
     protected $champParentID;
     protected $rubriqueID;
 
@@ -20,7 +20,6 @@ class Form_FormChampFromParent extends Zend_Form
 
     public function init()
     {
-
         $dbType = new Model_DbTable_ListeTypeChampRubrique();
         $this->setMethod('post');
         $this->setAttrib('class', 'form-inline');
@@ -33,29 +32,29 @@ class Form_FormChampFromParent extends Zend_Form
         ]);
 
         $this->addElement('hidden', 'ID_CHAMP_PARENT', [
-            'required'  => true,
-            'value'     => $this->champParentID
+            'required' => true,
+            'value' => $this->champParentID,
         ]);
         $this->addElement('hidden', 'rubrique', [
-            'required'  => true,
-            'value'     => $this->rubriqueID
+            'required' => true,
+            'value' => $this->rubriqueID,
         ]);
 
-        $this->addElement('select','type_champ',
-        array(
-                'label'         => 'Type de champ',
-                'required'      => true,
-                'empty_option'  => 'Choisir un type',
-                'multiOptions'  => $dbType->getTypeWithoutParentToSelectForm()
-                ,
-            )
+        $this->addElement(
+            'select',
+            'type_champ',
+            [
+                'label' => 'Type de champ',
+                'required' => true,
+                'empty_option' => 'Choisir un type',
+                'multiOptions' => $dbType->getTypeWithoutParentToSelectForm(),
+            ]
         );
         $submit = new Zend_Form_Element_Button('save');
         $submit->id = 'add-champ';
         $submit->class = 'marginBottom btn btn-success pull-left add-champ';
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
-        
 
         $this->setDecorators([
             'FormElements',
