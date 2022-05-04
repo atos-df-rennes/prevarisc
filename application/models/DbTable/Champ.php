@@ -300,17 +300,31 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return isset($this->fetchAll($select)->toArray()[0]['VALEUR']) ? $this->fetchAll($select)->toArray()[0]['VALEUR'] :'';
     }
 
-    public function getChampFilsValue(int $idParent):array{
+    public function getChampFilsValue(int $idParent, int $idEntity, string $aClass):array{
         $LIST_TYPE_VALEUR = ["VALEUR_STR","VALEUR_LONG_STR","VALEUR_INT","VALEUR_CHECKBOX"];
-        $select = $this->select()
+        $select = 
+            $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
             ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $LIST_TYPE_VALEUR)
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
-            ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
-            ->where('c.ID_PARENT = ?', $idParent)
-            ;
+            ->where('c.ID_PARENT = ?', $idParent);
+
+        if(false !== strpos('Dossier',$aClass)){
+            $select
+                ->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
+                ->join(['d' => 'dossier'], 'dv.ID_DOSSIER = d.ID_DOSSIER')
+                ->where('d.ID_DOSSIER = ?', $idEntity)
+                ;
+        }
+        if(false !== strpos('Etablissement',$aClass)){
+            $select
+                ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
+                ->join(['e' => 'etablissement'], 'ev.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+                ->where('e.ID_ETABLISSEMENT = ?', $idEntity)
+                ;
+        }
         
         $res = [];
         foreach ($this->fetchAll($select)->toArray() as $champ) {

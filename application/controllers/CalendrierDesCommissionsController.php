@@ -1280,7 +1280,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
-
         }
 
         $this->view->dossierComm = $listeDossiers;
