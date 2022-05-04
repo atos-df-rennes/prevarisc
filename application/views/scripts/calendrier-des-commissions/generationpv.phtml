@@ -179,9 +179,8 @@ foreach($this->membresFiles as $val => $membre){
                                 );
                                 foreach ($rubrique['CHAMPS'] as $champ) {
 									//Si le champ est un champ Parent alors ....
-									var_dump('<pre>',$champ,'</pre>');
 									if($champ['ID_TYPECHAMP'] === 6){
-										foreach ($modelChamp->getChampFilsValue($champ["ID_CHAMP"],9) as $champFils) {
+										foreach ($champ['FILS'] as $champFils) {
 											addChamp(
 												$odf,
 												$serviceUtils->getFullFusionName(
@@ -192,8 +191,7 @@ foreach($this->membresFiles as $val => $membre){
 														$champFils['NOM']
 													]
 												),
-												'Case à cocher' === $champFils['TYPE'] ? (true === boolval($champFils['VALEUR']) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
-												
+												'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
 											);
 										}
 									}else{
@@ -216,9 +214,7 @@ foreach($this->membresFiles as $val => $membre){
 											),
 											$champ['VALEUR']
 										);
-									}
-									
-									
+									}																		
                                 }
                             }
                         }

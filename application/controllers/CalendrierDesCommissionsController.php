@@ -1012,7 +1012,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
 
                 // Gestion des formulaires personnalisés
-                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'],'Dossier');
                 $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
 
                 $rubriquesByCapsuleRubrique = [
@@ -1169,8 +1169,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
 
             // Gestion des formulaires personnalisés
-            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
-            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'],'Dossier');
+            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
 
             $rubriquesByCapsuleRubrique = [
                 'descriptifEtablissement' => $rubriquesEtablissement,
@@ -1253,7 +1253,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
 
             // Gestion des formulaires personnalisés
-            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], get_class($this));
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
             $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
 
             $rubriquesByCapsuleRubrique = [
@@ -1271,7 +1271,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
-
         }
 
         $this->view->dossierComm = $listeDossiers;
