@@ -338,12 +338,13 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         }
 
         $res = [];
+
         foreach ($this->fetchAll($select)->toArray() as $champ) {
             $tmpChamp = $champ;
             foreach ($LIST_TYPE_VALEUR as $T) {
                 if (!empty($champ[$T])) {
                     $tmpChamp['VALEUR'] = $champ[$T];
-                } elseif ((!empty($champ['TYPE']) && 'Liste' === $champ['TYPE']) || (!empty($champ['ID_TYPECHAMP']) && 3 === $champ['ID_TYPECHAMP'])) {
+                } elseif (!empty($champ['TYPE']) && 'Liste' === $champ['TYPE']) {
                     $tmpChamp['VALEUR'] = $this->getValueSelectChampList($tmpChamp['ID_CHAMP']);
                     $tmpChamp['VALEUR_LISTE'] = $this->getValueChampList($tmpChamp['ID_CHAMP']);
                 }
