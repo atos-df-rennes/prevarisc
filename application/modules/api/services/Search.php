@@ -7,10 +7,10 @@ class Api_Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param array|string $genre
-     * @param array|string $categorie
-     * @param array|string $classe
-     * @param array|string $famille
+     * @param array|string $genres
+     * @param array|string $categories
+     * @param array|string $classes
+     * @param array|string $familles
      * @param array|string $types_activites
      * @param bool         $avis_favorable
      * @param array|string $statuts
@@ -18,14 +18,10 @@ class Api_Service_Search
      * @param float        $lon
      * @param float        $lat
      * @param int          $parent
-     * @param int          $count                    Par défaut 10, max 1000
-     * @param int          $page                     par défaut = 1
-     * @param null|mixed   $genres
-     * @param null|mixed   $categories
-     * @param null|mixed   $classes
-     * @param null|mixed   $familles
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
+     * @param int          $count                    Par défaut 10, max 1000
+     * @param int          $page                     par défaut = 1
      *
      * @return array
      */
@@ -33,7 +29,7 @@ class Api_Service_Search
     {
         $service_search = new Service_Search();
 
-        return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $commissions, $groupements_territoriaux = null, $count, $page);
+        return $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, $lon, $lat, $parent, null, null, null, $commissions, $groupements_territoriaux, $count, $page);
     }
 
     /**
