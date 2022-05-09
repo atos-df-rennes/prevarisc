@@ -34,6 +34,16 @@
         </li>
     <?php endif ?>
 
+    <?php if ($this->isAllowedEffectifsDegagements): ?>
+        <li class="<?= strpos($action_name, 'avis-derogations-etablissement') !== false ? 'active' : '' ?>">
+            <a class='sep' href='<?= $this->url(array("action"=>"avis-derogations-etablissement")) ?>'>
+                <em class="icon-th-list icon-black"></em>
+                Avis et dérogations
+            </a>
+        </li>
+    <?php endif ?>
+
+
     <li class="<?= $action_name == 'pieces-jointes' ? 'active' : '' ?>">
         <a href='<?= $this->url(array("action"=>"pieces-jointes")) ?>'>
             <em class="icon-share icon-black"></em>

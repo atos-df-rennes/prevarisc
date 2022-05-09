@@ -1217,6 +1217,13 @@
                     <resource>effectifs_degagements</resource>
                     <privilege>effectifs_degagements_ets</privilege>
                 </effectifs-degagements-etablissement-edit>
+                 <avis-derogations-etablissement>
+                    <label>Avis et dérogations</label>
+                    <controller>etablissement</controller>
+                    <action>avis-derogations-etablissement</action>
+                    <resource>effectifs_degagements</resource>
+                    <privilege>effectifs_degagements_ets</privilege>
+                </avis-derogations-etablissement>
             </pages>
         </etablissement>
 

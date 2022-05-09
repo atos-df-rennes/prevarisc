@@ -535,4 +535,10 @@ class EtablissementController extends Zend_Controller_Action
             $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $idEtablissement]);
         }
     }
+
+    public function avisDerogationsEtablissementAction()
+    {
+        $this->_helper->layout->setLayout('etablissement');
+        $this->view->historique = $this->serviceEtablissement->getHistorique($this->_request->id);
+    }
 }
