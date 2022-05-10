@@ -82,14 +82,16 @@
             <table class="table table-bordered table-condensed inline">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Nom du champ</th>
                         <th>Type du champ</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id='tableParentChamp'>
+                <tbody id='tableParentChamp' class="grp">
                     <?php foreach($this->listChamp as $champ) :?>
-                        <tr>
+                        <tr id=<?=$champ['ID_CHAMP']?>>
+                            <td class='tdMove'><i class="icon-move"></i></td>
                             <td><?= $champ['NOM'] ?></td>
                             <td><?= $champ['TYPE'] ?></td>
                             <td id='actions'>
