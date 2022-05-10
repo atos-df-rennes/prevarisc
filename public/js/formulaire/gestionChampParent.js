@@ -5,7 +5,8 @@ $(document).ready(function() {
     let ajouterLigneTableau = () => {
         tableauParentChamp.append(
             `
-            <tr>
+            <tr id=`+$('#ID_CHAMP').val()+`>
+                <td class='tdMove'><i class="icon-move"></i></td>
                 <td>
                 `
                 +
