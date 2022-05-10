@@ -121,7 +121,8 @@ function getTableElement() {
 }
 
 function getRowElement(parsedData) {
-    return `<tr>
+    return `<tr id=`+parsedData[0].ID_CHAMP+`>
+        <td class='tdMove'><i class="icon-move"></i></td>
         <td>`
         +parsedData[0].NOM+
         `</td>
