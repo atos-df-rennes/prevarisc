@@ -6,10 +6,21 @@ window.onload = function(){
 
 
     const getLisOrderInput = (idInputElem = null) => {
-        const listChampClass = ['inputChamp', 'parent']
-
-        console.log(document.getElementById(idInputElem))
-        console.log(Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.className)))
+        const listChampClass = ['inputChamp', 'parent','TR']
+        //console.log(document.getElementById(idInputElem))
+        console.log(Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName)))
+        
+        let toReturn = []
+        Array
+            .from(document.getElementById(idInputElem).children)
+                .filter(ch => listChampClass.includes(ch.tagName)).forEach(el =>{
+                    toReturn.push({
+                        idx : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
+                        idChamp : el.id
+                    })
+                })
+        console.log('To return : ',toReturn)
+        //console.log(Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.className)))
     }
 
     for(let i = 0; i< listGrp.length; i++){
