@@ -54,7 +54,12 @@ class FormulaireController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+
 
         $fieldForm = new Form_CustomFormField();
 
