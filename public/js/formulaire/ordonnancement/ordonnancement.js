@@ -15,7 +15,7 @@ window.onload = function(){
                     toReturn.push({
                         //Nouvelle position
                         idx : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
-                        ID_CHAMP : el.id
+                        ID : el.id
                     })
                 })
         return toReturn
@@ -23,22 +23,26 @@ window.onload = function(){
     
     //Retourne la liste des entity qui ont changé d'index
     const compareAndRequest = (newList = []) => {
-        console.log("New data : ",newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ))
-        newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ).forEach(champ =>{
+        newList.filter(elem => elem.ID != originList[elem.idx].ID ).forEach(champ =>{
             setNewIdxRequest(champ)
         })
     }
 
     const setNewIdxRequest = (objData = {}) =>{
-        $.ajax({
-            type: "post",
-            url: "/formulaire/update-idx",
-            data: objData,
-            datatype:'json',
-            success: function (response) {
-                console.log("Success change index")
-            }
-        });
+        document.location.href.includes('edit') ? 
+            $.ajax({
+                type: "post",
+                url: "/formulaire/update-champ-idx",
+                data: objData,
+                datatype:'json'
+            })        
+        :
+            $.ajax({
+                type: "post",
+                url: "/formulaire/update-rubrique-idx",
+                data: objData,
+                datatype:'json'
+            })
     }
 
     for(let i = 0; i< listGrp.length; i++){
