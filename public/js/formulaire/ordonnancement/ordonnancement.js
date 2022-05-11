@@ -14,7 +14,7 @@ window.onload = function(){
                 .filter(ch => listChampClass.includes(ch.tagName)).forEach(el =>{
                     toReturn.push({
                         //Nouvelle position
-                        IDX : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
+                        idx : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
                         ID_CHAMP : el.id
                     })
                 })
@@ -23,8 +23,8 @@ window.onload = function(){
     
     //Retourne la liste des entity qui ont changé d'index
     const compareAndRequest = (newList = []) => {
-        console.log("New data : ",newList.filter(elem => elem.ID_CHAMP != originList[elem.IDX].ID_CHAMP ))
-        newList.filter(elem => elem.ID_CHAMP != originList[elem.IDX].ID_CHAMP ).forEach(champ =>{
+        console.log("New data : ",newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ))
+        newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ).forEach(champ =>{
             setNewIdxRequest(champ)
         })
     }
@@ -32,7 +32,7 @@ window.onload = function(){
     const setNewIdxRequest = (objData = {}) =>{
         $.ajax({
             type: "post",
-            url: "/formulaire/update-IDX",
+            url: "/formulaire/update-idx",
             data: objData,
             datatype:'json',
             success: function (response) {
