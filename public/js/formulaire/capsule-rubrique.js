@@ -91,7 +91,8 @@ function getRowElement(parsedData) {
             </div>`
     }
 
-    return `<tr>
+    return `<tr id=`+parsedData.ID_RUBRIQUE+`>
+        <td class='tdMove'><i class="icon-move"></i></td>
         <td>`
         +parsedData.NOM+
         `</td>
