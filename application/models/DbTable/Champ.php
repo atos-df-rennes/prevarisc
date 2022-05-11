@@ -282,7 +282,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP')
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP')
             ->where('c.ID_CHAMP = ?', $idParent)
-            ->order('c2.idx asc')
+            ->order('c2.IDX asc')
 
         ;
         return $this->fetchAll($select)->toArray();
@@ -439,11 +439,11 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $res;
     }
 
-    //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
+    //postParam => ['IDX' = nouvelle IDX champ, 'ID_CHAMP' => ID du champ]
     public function updateNewIdx($postParam):void
     {
         $champ = $this->find($postParam['ID_CHAMP'])->current();
-        $champ->idx = $postParam['idx'];
+        $champ->IDX = $postParam['IDX'];
         $champ->save();
         echo(json_encode($champ));
     }

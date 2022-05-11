@@ -4,33 +4,27 @@ window.onload = function(){
     const listParent = document.getElementsByClassName('parent')
     const listMain = document.getElementsByClassName('main')
 
-    var originList = []
-
+    let originList = []
 
     const getLisOrderInput = (idInputElem = null) => {
         const listChampClass = ['inputChamp', 'parent','TR']
-        //console.log(document.getElementById(idInputElem))
-        //console.log(Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName)))
-        
         let toReturn = []
         Array
             .from(document.getElementById(idInputElem).children)
                 .filter(ch => listChampClass.includes(ch.tagName)).forEach(el =>{
                     toReturn.push({
                         //Nouvelle position
-                        idx : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
+                        IDX : (Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.tagName))).indexOf(el),
                         ID_CHAMP : el.id
                     })
                 })
-        //console.log('To return : ',toReturn)
-        //console.log(Array.from(document.getElementById(idInputElem).children).filter(ch => listChampClass.includes(ch.className)))
         return toReturn
     }
     
     //Retourne la liste des entity qui ont changé d'index
     const compareAndRequest = (newList = []) => {
-        console.log("New data : ",newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ))
-        newList.filter(elem => elem.ID_CHAMP != originList[elem.idx].ID_CHAMP ).forEach(champ =>{
+        console.log("New data : ",newList.filter(elem => elem.ID_CHAMP != originList[elem.IDX].ID_CHAMP ))
+        newList.filter(elem => elem.ID_CHAMP != originList[elem.IDX].ID_CHAMP ).forEach(champ =>{
             setNewIdxRequest(champ)
         })
     }
@@ -38,7 +32,7 @@ window.onload = function(){
     const setNewIdxRequest = (objData = {}) =>{
         $.ajax({
             type: "post",
-            url: "/formulaire/update-idx",
+            url: "/formulaire/update-IDX",
             data: objData,
             datatype:'json',
             success: function (response) {
