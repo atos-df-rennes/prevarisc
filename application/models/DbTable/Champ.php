@@ -442,9 +442,8 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
     public function updateNewIdx($postParam):void
     {
-        $champ = $this->find($postParam['ID_CHAMP'])->current();
+        $champ = $this->find($postParam['ID'])->current();
         $champ->idx = $postParam['idx'];
         $champ->save();
-        echo(json_encode($champ));
     }
 }

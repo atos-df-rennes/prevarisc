@@ -17,7 +17,11 @@ class FormulaireController extends Zend_Controller_Action
         // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $form = new Form_CustomForm();
 
@@ -136,7 +140,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/gestionChampParent.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
-        
+
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
 
@@ -237,13 +241,24 @@ class FormulaireController extends Zend_Controller_Action
         $valeurListe->delete();
     }
 
-    public function updateIdxAction():void
+    public function updateChampIdxAction():void
     {
         $this->_helper->viewRenderer->setNoRender(true);
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
             $this->modelChamp->updateNewIdx($post);
+        }
+
+    }
+
+    public function updateRubriqueIdxAction():void
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $this->modelRubrique->updateNewIdx($post);
         }
 
     }

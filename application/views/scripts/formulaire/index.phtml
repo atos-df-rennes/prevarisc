@@ -31,14 +31,16 @@
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Nom de la rubrique</th>
                                     <th>Afficher la rubrique par défaut</th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id=<?=$formulaire['ID_CAPSULERUBRIQUE']?> class="grp">
                                 <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
-                                    <tr>
+                                    <tr id=<?=$rubrique['ID_RUBRIQUE']?>>
+                                        <td class='tdMove'><i class="icon-move"></i></td>
                                         <td><?= $rubrique['NOM'] ?></td>
                                         <td id='default-display'>
                                             <?php if($rubrique['DISPLAY']): ?>

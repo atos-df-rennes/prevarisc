@@ -31,4 +31,15 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
+
+    //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
+    public function updateNewIdx($postParam):void
+    {   
+        echo(json_encode($postParam));
+        $rubrique = $this->find($postParam['ID'])->current();
+        $rubrique->idx = $postParam['idx'];
+        echo(json_encode($rubrique));
+        $rubrique->save();
+    }
 }
