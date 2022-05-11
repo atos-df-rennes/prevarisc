@@ -136,6 +136,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('menu_admin');
         $this->view->inlineScript()->appendFile('/js/formulaire/gestionChampParent.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
+        
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
 
@@ -233,5 +234,16 @@ class FormulaireController extends Zend_Controller_Action
 
         $valeurListe = $this->modelChampValeurListe->find($idValeurListe)->current();
         $valeurListe->delete();
+    }
+
+    public function updateIdxAction():void
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $this->modelChamp->updateNewIdx($post);
+        }
+
     }
 }
