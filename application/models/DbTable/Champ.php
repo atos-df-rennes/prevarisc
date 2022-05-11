@@ -34,7 +34,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->where('r.ID_RUBRIQUE = ?', $idRubrique)
             ->where('c.ID_PARENT IS NULL')
-            ->order('c.IDX desc')
+            ->order('c.IDX asc')
             ;
 
         return $this->fetchAll($select)->toArray();
@@ -49,7 +49,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
             ->where('c.ID_PARENT IS NULL')
-            ->order('c.IDX desc')
+            ->order('c.IDX asc')
         ;
 
         if (true === $hasList) {
@@ -282,10 +282,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP')
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP')
             ->where('c.ID_CHAMP = ?', $idParent)
-            ->order('c.IDX desc')
+            ->order('c2.idx asc')
 
         ;
-
         return $this->fetchAll($select)->toArray();
     }
 
@@ -296,8 +295,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'ID_TYPECHAMP'])
             ->join(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP')
             ->where('c.ID_CHAMP = ?', $idChamp)
-            ->order('c.IDX desc')
-
         ;
 
         return $this->fetchAll($select)->toArray();
@@ -326,7 +323,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                 ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
                 ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
                 ->where('c.ID_PARENT = ?', $idParent)
-                ->order('c.IDX desc')
+                ->order('c.IDX asc')
             ;
 
         if (false !== strpos('Dossier', $aClass)) {
@@ -334,7 +331,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                 ->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
                 ->join(['d' => 'dossier'], 'dv.ID_DOSSIER = d.ID_DOSSIER')
                 ->where('d.ID_DOSSIER = ?', $idEntity)
-                ->order('c.IDX desc')
+                ->order('c.IDX asc')
                 ;
         }
         if (false !== strpos('Etablissement', $aClass)) {
@@ -380,7 +377,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c.ID_TYPECHAMP')
             ->where('c.ID_PARENT IS NULL')
             ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
-            ->order('c.IDX desc')
+            ->order('c.IDX asc')
         ;
 
         foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {
@@ -395,6 +392,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             if ('Liste' === $champ['TYPE']) {
                 $champ['VALEUR'] = $this->getValueChampList($champ['ID_CHAMP']);
             }
+                
             $res[$champ['ID_RUBRIQUE']]['CHAMPS'][$champ['ID_CHAMP']] = $champ;
         }
 
@@ -414,7 +412,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
-                    ->order('c.IDX desc')
+                    ->order('c.IDX asc')
                 ;
 
                 break;
@@ -427,7 +425,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
-                    ->order('c.IDX desc')
+                    ->order('c.IDX asc')
                 ;
 
                 break;
@@ -439,5 +437,14 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         }
 
         return $res;
+    }
+
+    //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
+    public function updateNewIdx($postParam):void
+    {
+        $champ = $this->find($postParam['ID_CHAMP'])->current();
+        $champ->idx = $postParam['idx'];
+        $champ->save();
+        echo(json_encode($champ));
     }
 }
