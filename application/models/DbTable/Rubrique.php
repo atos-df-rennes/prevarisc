@@ -9,15 +9,14 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['r' => 'rubrique'], ['ID_RUBRIQUE', 'NOM'])
+            ->from(['r' => 'rubrique'], ['ID_RUBRIQUE', 'NOM','idx'])
             ->columns(
                 ['DISPLAY' => 'r.DEFAULT_DISPLAY']
             )
             ->join(['cr' => 'capsulerubrique'], 'r.ID_CAPSULERUBRIQUE = cr.ID_CAPSULERUBRIQUE', [])
             ->where('cr.NOM_INTERNE = ?', $capsuleRubrique)
-            ->order('r.Id_RUBRIQUE')
+            ->order('r.idx asc')
         ;
-
         return $this->fetchAll($select)->toArray();
     }
 
@@ -36,10 +35,8 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
     public function updateNewIdx($postParam):void
     {   
-        echo(json_encode($postParam));
         $rubrique = $this->find($postParam['ID'])->current();
         $rubrique->idx = $postParam['idx'];
-        echo(json_encode($rubrique));
         $rubrique->save();
     }
 }
