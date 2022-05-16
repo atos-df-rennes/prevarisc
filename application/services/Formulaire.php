@@ -28,6 +28,7 @@ class Service_Formulaire
             'NOM' => $rubrique['nom_rubrique'],
             'DEFAULT_DISPLAY' => intval($rubrique['afficher_rubrique']),
             'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique,
+            'idx' => intval($rubrique['idx'])
         ]);
 
         return intval($idRubrique);
