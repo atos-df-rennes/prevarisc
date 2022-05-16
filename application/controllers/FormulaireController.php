@@ -121,8 +121,12 @@ class FormulaireController extends Zend_Controller_Action
         $rubrique = $this->modelRubrique->find($idRubrique)->current()->toArray();
 
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $post = $request->getPost();
+
+            $post['idx'] =  $this->getRequest()->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($this->getRequest()->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique(intval($this->getParam('rubrique')));
+
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
             $champ = $this->serviceFormulaire->insertChamp($post, $rubrique);

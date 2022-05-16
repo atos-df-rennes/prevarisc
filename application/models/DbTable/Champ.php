@@ -223,4 +223,25 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $champ->idx = $postParam['idx'];
         $champ->save();
     }
+
+
+    
+    public function getNbChampOfRubrique(int $idRubrique):int{
+        $select = $this->select();
+
+        $select->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT'])
+                ->where('c.ID_PARENT IS NULL')
+                ->where('c.ID_RUBRIQUE = ?',$idRubrique);
+
+        return sizeof($this->fetchAll($select)->toArray());
+    }
+
+    public function getNbChampOfParent(int $idParent):int{
+        $select = $this->select();
+
+        $select->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT'])
+                ->where('c.ID_PARENT = ?',$idParent);
+
+        return sizeof($this->fetchAll($select)->toArray());
+    }
 }
