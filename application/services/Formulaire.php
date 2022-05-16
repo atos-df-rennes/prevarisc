@@ -46,6 +46,7 @@ class Service_Formulaire
             'NOM' => $champ['nom_champ'],
             'ID_TYPECHAMP' => $idTypeChamp,
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
+            'idx' => $champ['idx']
         ];
 
         if (!empty($champ['ID_CHAMP_PARENT'])) {

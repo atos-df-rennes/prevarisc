@@ -39,4 +39,8 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
         $rubrique->idx = $postParam['idx'];
         $rubrique->save();
     }
+
+    public function getNbRubriqueOfDesc(int $idCaps):int{
+
+    }
 }
