@@ -40,7 +40,15 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
         $rubrique->save();
     }
 
-    public function getNbRubriqueOfDesc(int $idCaps):int{
+    public function getNbRubriqueOfDesc(string $nomCaps):int{
+        $select = $this->select();
 
+        $select
+                ->setIntegrityCheck(false)
+                ->from(['r' => 'rubrique'], ['r.ID_RUBRIQUE','r.ID_CAPSULERUBRIQUE','r.NOM'])
+                ->join(['cr' => 'capsulerubrique'],'r.ID_CAPSULERUBRIQUE = cr.ID_CAPSULERUBRIQUE')
+                ->where('cr.NOM_INTERNE = ?',$nomCaps);
+
+        return sizeof($this->fetchAll($select)->toArray());
     }
 }

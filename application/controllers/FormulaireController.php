@@ -47,6 +47,7 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
 
+            $post['idx'] = intval($this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']));
             $idRubrique = $this->serviceFormulaire->insertRubrique($post);
             $insertedRowAsArray = $this->modelRubrique->find($idRubrique)->current()->toArray();
 
