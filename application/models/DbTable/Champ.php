@@ -285,6 +285,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->order('c2.idx asc')
 
         ;
+
         return $this->fetchAll($select)->toArray();
     }
 
@@ -392,7 +393,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             if ('Liste' === $champ['TYPE']) {
                 $champ['VALEUR'] = $this->getValueChampList($champ['ID_CHAMP']);
             }
-                
+
             $res[$champ['ID_RUBRIQUE']]['CHAMPS'][$champ['ID_CHAMP']] = $champ;
         }
 
@@ -440,30 +441,32 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     }
 
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
-    public function updateNewIdx($postParam):void
+    public function updateNewIdx($postParam): void
     {
         $champ = $this->find($postParam['ID'])->current();
         $champ->idx = $postParam['idx'];
         $champ->save();
     }
 
-
-    
-    public function getNbChampOfRubrique(int $idRubrique):int{
+    public function getNbChampOfRubrique(int $idRubrique): int
+    {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT'])
-                ->where('c.ID_PARENT IS NULL')
-                ->where('c.ID_RUBRIQUE = ?',$idRubrique);
+        $select->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
+            ->where('c.ID_PARENT IS NULL')
+            ->where('c.ID_RUBRIQUE = ?', $idRubrique)
+        ;
 
         return sizeof($this->fetchAll($select)->toArray());
     }
 
-    public function getNbChampOfParent(int $idParent):int{
+    public function getNbChampOfParent(int $idParent): int
+    {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], ['ID_CHAMP','ID_PARENT'])
-                ->where('c.ID_PARENT = ?',$idParent);
+        $select->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
+            ->where('c.ID_PARENT = ?', $idParent)
+        ;
 
         return sizeof($this->fetchAll($select)->toArray());
     }

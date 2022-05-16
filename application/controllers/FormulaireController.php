@@ -65,7 +65,6 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
-
         $fieldForm = new Form_CustomFormField();
 
         $idRubrique = intval($this->getParam('rubrique'));
@@ -126,7 +125,7 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
 
-            $post['idx'] =  $this->getRequest()->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($this->getRequest()->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique(intval($this->getParam('rubrique')));
+            $post['idx'] = $this->getRequest()->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($this->getRequest()->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique(intval($this->getParam('rubrique')));
 
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
@@ -246,7 +245,7 @@ class FormulaireController extends Zend_Controller_Action
         $valeurListe->delete();
     }
 
-    public function updateChampIdxAction():void
+    public function updateChampIdxAction(): void
     {
         $this->_helper->viewRenderer->setNoRender(true);
         $request = $this->getRequest();
@@ -254,10 +253,9 @@ class FormulaireController extends Zend_Controller_Action
             $post = $request->getPost();
             $this->modelChamp->updateNewIdx($post);
         }
-
     }
 
-    public function updateRubriqueIdxAction():void
+    public function updateRubriqueIdxAction(): void
     {
         $this->_helper->viewRenderer->setNoRender(true);
         $request = $this->getRequest();
@@ -265,6 +263,5 @@ class FormulaireController extends Zend_Controller_Action
             $post = $request->getPost();
             $this->modelRubrique->updateNewIdx($post);
         }
-
     }
 }
