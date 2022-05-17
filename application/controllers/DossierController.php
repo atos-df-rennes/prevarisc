@@ -3186,6 +3186,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
 
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
@@ -3208,7 +3209,6 @@ class DossierController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-
             $dbAvisDerogation->insert($data);
 
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
