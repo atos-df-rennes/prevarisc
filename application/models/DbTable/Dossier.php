@@ -605,7 +605,28 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->where('d.ID_DOSSIER != ?', $idDossier)
         ;
 
-        return $this->getAdapter()->fetchAll($select);
+        $dossEtab['Etudes'] = array();
+        $dossEtab['Visites'] = array();
+        $dossEtab['Autre'] = array();
+
+        foreach($this->getAdapter()->fetchAll($select) as $dossier) {
+            switch ($dossier['TYPE_DOSSIER']) {
+                case '1':
+                    array_push($dossEtab['Etudes'],$dossier);
+                    break;
+                
+                case '2':
+                case '3':
+                    array_push($dossEtab['Visites'],$dossier);
+                    break;
+                
+                default:
+                    array_push($dossEtab['Autres'],$dossier);
+                    break;
+            }
+        }
+
+        return $dossEtab;
     }
 
     /**

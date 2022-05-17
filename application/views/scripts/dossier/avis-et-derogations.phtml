@@ -41,12 +41,19 @@
             </select>
         </div>
     </div>
-
+<!--
     <div class="control-group">
         <label class="control-label">Avis/Dérogation levé(e):</label>
         <?= $this->partial('dossier/results/avisderogation/dossier.phtml', ['DOSSIERS_ETAB' => $this->listDossierEtab, 'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE]); ?>
     </div>
-
+-->
+    <?=
+        $this->partial('dossier/results/avisderogation/liste-dossier.phtml',
+                [
+                    'listeDossierParType' => $this->listDossierEtab, 
+                    'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
+                ]); 
+    ?>
     <div class="control-group">
         <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
         <div class="controls">

@@ -1,0 +1,14 @@
+<?php foreach ($this->listeDossierParType as $type => $dossiers) :?>
+    <hr>
+    <h4><?= $type ?> :</h4>
+        <?= 
+            $this->
+                partial('dossier/results/avisderogation/dossier.phtml',
+                [
+                    'DOSSIERS_ETAB' => $dossiers, 
+                    'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
+                ]); 
+        ?>
+    <hr>
+    
+<?php endforeach ?>
