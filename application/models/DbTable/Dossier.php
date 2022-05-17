@@ -6,6 +6,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_DOSSIER'; // Clé primaire
 
     //Fonction qui récupére toutes les infos générales d'un dossier
+
     /**
      * @param float|int|string $id
      */
@@ -26,6 +27,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     //Fonction qui récupére tous les établissements concernés par le dossier
     //PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
+
     /**
      * @param int|string $id_etablissement
      *
@@ -47,6 +49,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+
     /**
      * @param int|string $id_dossier
      *
@@ -74,6 +77,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     // Fonction optimisée pour les ACL
+
     /**
      * @param mixed $id_dossier
      *
@@ -93,6 +97,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     //autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
+
     /**
      * @param int|string $etablissementLibelle
      *
@@ -115,6 +120,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     //Fonction qui récupère toutes les cellules concernées par le dossier
+
     /**
      * @param int|string $id_dossier
      *
@@ -201,6 +207,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     // Retourne la liste de tout les dossiers (études et/ou visite) d'un établissement
     // Si type vaut 1 : visites ; 0 : études
+
     /**
      * @param float|int|string $etablissement
      * @param null|mixed       $type
@@ -424,6 +431,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+
     /**
      * @param int|string $id_dossier
      *
@@ -444,6 +452,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     // Retourne la liste de tout les dossiers d'un Etablissement
+
     /**
      * @param int|string $etablissement
      *
@@ -462,6 +471,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     // Retourne l'ID du dernier dossier donnant avis pour un établissement donné
+
     /**
      * @param float|int|string $idEtab
      */
@@ -605,24 +615,27 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->where('d.ID_DOSSIER != ?', $idDossier)
         ;
 
-        $dossEtab['Etudes'] = array();
-        $dossEtab['Visites'] = array();
-        $dossEtab['Autre'] = array();
+        $dossEtab['Etudes'] = [];
+        $dossEtab['Visites'] = [];
+        $dossEtab['Autre'] = [];
 
-        foreach($this->getAdapter()->fetchAll($select) as $dossier) {
+        foreach ($this->getAdapter()->fetchAll($select) as $dossier) {
             switch ($dossier['TYPE_DOSSIER']) {
                 //Dossier de type Etude
                 case '1':
-                    array_push($dossEtab['Etudes'],$dossier);
+                    array_push($dossEtab['Etudes'], $dossier);
+
                     break;
 
                 case '2':                //Dossier de type visite
                 case '3':                //Dossier de type groupe de visite
-                    array_push($dossEtab['Visites'],$dossier);
+                    array_push($dossEtab['Visites'], $dossier);
+
                     break;
-                
+
                 default:                //Le reste
-                    array_push($dossEtab['Autres'],$dossier);
+                    array_push($dossEtab['Autres'], $dossier);
+
                     break;
             }
         }
