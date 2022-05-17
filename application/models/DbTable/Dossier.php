@@ -611,16 +611,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         foreach($this->getAdapter()->fetchAll($select) as $dossier) {
             switch ($dossier['TYPE_DOSSIER']) {
+                //Dossier de type Etude
                 case '1':
                     array_push($dossEtab['Etudes'],$dossier);
                     break;
-                
-                case '2':
-                case '3':
+
+                case '2':                //Dossier de type visite
+                case '3':                //Dossier de type groupe de visite
                     array_push($dossEtab['Visites'],$dossier);
                     break;
                 
-                default:
+                default:                //Le reste
                     array_push($dossEtab['Autres'],$dossier);
                     break;
             }
