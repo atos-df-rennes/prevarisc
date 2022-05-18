@@ -1,0 +1,1 @@
+alter table champ add column tableau boolean

@@ -200,6 +200,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
+            $champ->tableau = $post['is-tableau'] === 'on' ? 1 : 0 ;
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }

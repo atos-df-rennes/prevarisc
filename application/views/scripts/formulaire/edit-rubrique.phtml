@@ -86,6 +86,7 @@
                             <td><?= $champ['NOM'] ?></td>
                             <td>
                                 <?= $champ['TYPE'] ?>
+                                <?= ($champ['TYPE'] === 'Parent' && !empty($champ['tableau'])) ? (intval($champ['tableau']) === 1 ? 'tableau' : '') : ''?>
                                 <?php if($champ['TYPE'] === 'Liste'): ?>
                                     <?php if(count($champ['VALEURS']) === 0): ?>
                                         <div class="alert">

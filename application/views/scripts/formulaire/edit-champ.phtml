@@ -24,7 +24,7 @@
     </div>
 
     <div class="span4 offset2 infos-champ">
-        <form action class="form-inline" method="post">
+        <form action class="flex" method="post">
             <label for="nom_champ">Nom du champ</label>
             <input type="text" name="nom_champ" id="nom_champ" value="<?= htmlspecialchars($this->champ['NOM'], ENT_QUOTES) ?>" required>
             <label for="type_champ">Type du champ</label>
@@ -38,7 +38,13 @@
                     </option>
                 <?php endforeach ?>
             </select>
-
+            <?php if(intval($this->champ['ID_TYPECHAMP']) === 6) :?>
+            <div>
+                <label for='is-tableau'>Afficher comme tableau
+                    <input name='is-tableau' type='checkbox' <?= $this->champ['tableau'] ? 'checked' : '' ?>/>
+                </label>
+            </div>
+            <?php endif ?>
             <?php if($this->valeursChamp !== null): ?>
                 <!-- Valeurs de la liste -->
                 <div class="row-fluid">
