@@ -9,7 +9,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP', 'tableau'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
         ;
@@ -35,7 +35,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'tableau'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
@@ -53,7 +53,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'tableau'])
             ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP')
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP')
             ->where('c.ID_CHAMP = ?', $idParent)
@@ -92,7 +92,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $select =
             $this->select()
                 ->setIntegrityCheck(false)
-                ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+                ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
                 ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $LIST_TYPE_VALEUR)
                 ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
                 ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
@@ -144,7 +144,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         $selectRubriqueForm = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
             ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE', ['r.ID_RUBRIQUE'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c.ID_TYPECHAMP')
             ->where('c.ID_PARENT IS NULL')

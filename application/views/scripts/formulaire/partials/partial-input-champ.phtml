@@ -57,6 +57,19 @@
     <?php break;   
 
     case 6:?>
+    <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
+        <table class='table table-condensed table-striped tablesorter'>
+            <thead>
+                <tr>
+                    <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
+                        <th><?= $champsFils['NOM'] ?></th>
+                    <?php endforeach ?>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    <?php else : ?>
         <div class="tableInput">
             <?php foreach ($this->champ["CHAMP_FILS"] as $champsFils): ?>
                 <div class="colTableInput">
@@ -70,6 +83,7 @@
                 </div>
             <?php endforeach;?>
         </div>
+    <?php endif?>
     <?php break;
     default:
         break;
