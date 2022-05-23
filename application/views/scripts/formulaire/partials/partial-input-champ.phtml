@@ -70,6 +70,20 @@
             <tbody>
             <tr>
                 <td>
+                    <button class='btn'>+</button>
+                </td>
+                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
+                        <td>
+                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                'champ' => $champsFils,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                                    ]); 
+                            ?>
+                        </td>
+                <?php endforeach ?>
+            </tr>
+            <tr>
+                <td>
                     <button class='btn btn-danger'>X</button>
                     4269
                 </td>
@@ -82,13 +96,8 @@
                                     ]); 
                             ?>
                         </td>
-                        <?php endforeach ?>
-                    </tr>
-                <tr>
-                    <td>
-                        <button class='btn'>+</button>
-                    </td>
-                </tr>
+                <?php endforeach ?>
+            </tr>
             </tbody>
         </table>
 
