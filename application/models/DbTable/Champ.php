@@ -17,7 +17,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchRow($select);
     }
 
-    public function getChampsByRubrique(int $idRubrique): array
+    public function getChampsByRubrique($idRubrique): array
     {
         $select = $this->select()
             ->setIntegrityCheck(false)

@@ -11,7 +11,7 @@
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]], ENT_QUOTES) :'' ?></textarea>
+        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
@@ -41,6 +41,7 @@
     <?php break;
     // Case à cocher
     case 5: ?>
+        <?= var_dump($this->champ) ?>
         <input
             type="hidden"
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
@@ -54,19 +55,43 @@
             <?= $this->canWrite ? '': 'disabled'?>
             <?= !empty($this->champ['VALEUR']) ? 'checked' : '' ?>
         >
+        <pre><?= var_dump($this->champ)?></pre>
     <?php break;   
 
     case 6:?>
     <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
-        <table class='table table-condensed table-striped tablesorter'>
+        <table class='table table-striped '>
             <thead>
                 <tr>
+                    <th>IDX</th>
                     <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <th><?= $champsFils['NOM'] ?></th>
                     <?php endforeach ?>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+            <tr>
+                <td>
+                    <button class='btn btn-danger'>X</button>
+                    4269
+                </td>
+                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
+                        <td>
+                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                'champ' => $champsFils,
+                                'valeurformulaire' => $this->valeurformulaire,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                                    ]); 
+                            ?>
+                        </td>
+                        <?php endforeach ?>
+                    </tr>
+                <tr>
+                    <td>
+                        <button class='btn'>+</button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
     <?php else : ?>
