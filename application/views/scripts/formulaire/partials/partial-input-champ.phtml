@@ -41,21 +41,19 @@
     <?php break;
     // Case à cocher
     case 5: ?>
-        <?= var_dump($this->champ) ?>
         <input
             type="hidden"
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name='champ-<?= htmlspecialchars($this->champ['ID_CHAMP']) ?>'
             value="0"
             <?= $this->canWrite ? '': 'disabled'?>
         >
         <input
             type="checkbox"
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name='champ-<?= htmlspecialchars($this->champ['ID_CHAMP']) ?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
-            <?= !empty($this->champ['VALEUR']) ? 'checked' : '' ?>
+            <?= !empty($this->valeurformulaire[ $this->champ['ID_CHAMP']]['VALEUR_CHECKBOX']) ? 'checked' : '' ?>
         >
-        <pre><?= var_dump($this->champ)?></pre>
     <?php break;   
 
     case 6:?>
