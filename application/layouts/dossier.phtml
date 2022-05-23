@@ -36,7 +36,7 @@
             </li>
         <?php endif ?>
 
-        <?php if ( ($this->idTypeDossier === 2 || $this->idTypeDossier === 3) && $this->isAllowedVerificationsTechniques): ?>
+        <?php if (($this->idTypeDossier === 2 || $this->idTypeDossier === 3) && $this->isAllowedVerificationsTechniques): ?>
             <li class="<?= strpos($this->action, 'verifications-techniques') !== false ? 'active' : '' ?>">
                 <a href= <?= $this->url(array("controller" => "dossier", "action"=>"verifications-techniques", "id" => $this->idDossier), false, true) ?>>
                     <i class="icon-file icon-black"></i>
