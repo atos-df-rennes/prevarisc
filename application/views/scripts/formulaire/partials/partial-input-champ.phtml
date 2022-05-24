@@ -87,6 +87,10 @@
                     <span class='btn btn-danger'>X</span>
                     4269
                 </td>
+                <pre>
+                    <?= var_dump($this->valeurformulaire) ?>
+                    
+                </pre>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
