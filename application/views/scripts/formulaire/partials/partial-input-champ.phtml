@@ -58,6 +58,7 @@
 
     case 6:?>
     <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
+        Tableau
         <table class='table table-striped '>
             <thead>
                 <tr>
@@ -67,30 +68,12 @@
                     <?php endforeach ?>
                 </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <button class='btn'>+</button>
-                </td>
-                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
-                        <td>
-                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                'champ' => $champsFils,
-                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                                    ]); 
-                            ?>
-                        </td>
-                <?php endforeach ?>
-            </tr>
-            <tr>
+            <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?>>
+            <tr id= <?= 'corpsInputTableauRef-'.$this->champ['ID_CHAMP'] ?>>
                 <td>
                     <span class='btn btn-danger'>X</span>
                     4269
                 </td>
-                <pre>
-                    <?= var_dump($this->valeurformulaire) ?>
-                    
-                </pre>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
@@ -101,6 +84,11 @@
                             ?>
                         </td>
                 <?php endforeach ?>
+            </tr>
+            <tr>
+                <td>
+                    <button class='btn addRow' attr=<?= $champsFils['ID_CHAMP']?>>Ajouter ligne</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -124,3 +112,18 @@
     default:
         break;
 } ?>
+
+<script>
+    window.onload = () => {
+
+        console.log($('.addRow').attr('attr'))
+
+        $('.addRow').click(function() {
+             
+            console.log('Is click')
+            console.log($(this))
+            console.log($(this).attr('attr'))
+            console.log('HMTML to copy ',$('.corpsInputTableauRef-'+$(this).attr('attr')).html())
+        })
+    }
+</script>

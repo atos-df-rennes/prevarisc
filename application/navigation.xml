@@ -1220,6 +1220,16 @@
             </pages>
         </etablissement>
 
+
+        <!--Lige ds rubriques - tableau -->
+        <rubrique>
+            <controller>rubrique</controller>
+            <get-row-tableau>
+                <label>get-row-tableau</label>
+                <action>get-row-tableau</action>
+            </get-row-tableau>
+        </rubrique>
+
         <!-- Recherche -->
         <search>
             <label>Recherche Prevarisc</label>

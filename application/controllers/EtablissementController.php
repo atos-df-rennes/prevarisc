@@ -2,6 +2,8 @@
 
 class EtablissementController extends Zend_Controller_Action
 {
+
+    
     public function init(): void
     {
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');

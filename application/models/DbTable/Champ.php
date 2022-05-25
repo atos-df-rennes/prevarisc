@@ -17,6 +17,14 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchRow($select);
     }
 
+    public function getAllFils(int $idParent){
+        $select = $this->select()
+        ->setIntegrityCheck(false)
+        ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP', 'tableau'])
+        ->where('c.ID_PARENT = ?', $$idParent);
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function getChampsByRubrique($idRubrique): array
     {
         $select = $this->select()
@@ -176,7 +184,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         switch ($idCapsuleRubrique) {
             case 1:
                 $select = $select->setIntegrityCheck(false)
-                    ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
+                    ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau'])
                     ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
                     ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
@@ -188,7 +196,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
             case 2:
                 $select = $select->setIntegrityCheck(false)
-                    ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM'])
+                    ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau'])
                     ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
                     ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
@@ -201,8 +209,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         $res = [];
         foreach ($this->fetchAll($select)->toArray() as $valeur) {
-            $res[$valeur['ID_CHAMP']] = $valeur;
+            $res[$valeur['ID_CHAMP']] = $valeur;                
         }
+        
 
         return $res;
     }
