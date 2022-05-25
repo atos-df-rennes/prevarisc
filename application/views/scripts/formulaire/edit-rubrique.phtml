@@ -37,6 +37,7 @@
 <div id="edit-rubrique" class="row-fluid">
     <div class="span3 infos-champ">
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
+            <!-- FIXME Div inutile ? -->
             <div class = 'flexCol'>
                 <?= $this->fieldForm->nom_champ ?>
                 <?= $this->fieldForm->type_champ ?>
@@ -51,7 +52,6 @@
                     </div>
                 </div>
             </div>
-
 
             <?= $this->fieldForm->save ?>
         </form>

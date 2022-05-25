@@ -1,4 +1,14 @@
 $(document).ready(function() {
+    const typeChampSelect = $('#type_champ')
+
+    typeChampSelect.on('change', function() {
+        if (typeChampSelect.find(":selected").text() === 'Liste') {
+            $('#div-list-value').show()
+        } else {
+            $('#div-list-value').hide()
+        }
+    })
+
     $('#add-list-value').on('click', function(e) {
         e.preventDefault()
         const date = Date.now()

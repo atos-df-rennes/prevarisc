@@ -50,9 +50,10 @@ class Form_FormChampFromParent extends Zend_Form
                 'multiOptions' => $dbType->getTypeWithoutParentToSelectForm(),
             ]
         );
+
         $submit = new Zend_Form_Element_Button('save');
         $submit->id = 'add-champ';
-        $submit->class = 'marginBottom btn btn-success pull-left add-champ';
+        $submit->class = 'btn btn-success pull-right';
         $submit->setLabel('Ajouter le champ');
         $this->addElement($submit);
 
@@ -71,5 +72,18 @@ class Form_FormChampFromParent extends Zend_Form
             ],
             false
         );
+    }
+
+    public function getAllListeTypeChampRubrique(): array
+    {
+        $selectValues = [];
+        $serviceFormulaire = new Service_Formulaire();
+
+        $typesChampRubrique = $serviceFormulaire->getAllListeTypeChampRubrique();
+        foreach ($typesChampRubrique as $typeChampRubrique) {
+            $selectValues[$typeChampRubrique['ID_TYPECHAMP']] = $typeChampRubrique['TYPE'];
+        }
+
+        return $selectValues;
     }
 }
