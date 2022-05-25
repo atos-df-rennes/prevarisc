@@ -30,25 +30,12 @@
     </div>
 </div>
 
-<div class="row-fluid titles">
-    <div class="span4">
-        <h3>Informations sur le champ</h3>
-    </div>
-
-    <?php if(count($this->champs) > 0): ?>
-        <div class="span6 offset2">
-            <h3>Liste des champs</h3>
-        </div>
-    <?php else :?>
-        <div class="span2 offset4 alert">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Attention ! </strong>Aucun champs de renseigné.
-        </div>
-    <?php endif ?>
-</div>
+<?= $this->partial('formulaire/partials/champ/partial-add-and-list-titles.phtml', [
+    'count' => count($this->champs),
+]); ?>
 
 <div id="edit-rubrique" class="row-fluid">
-    <div class="span4 infos-champ">
+    <div class="span3 infos-champ">
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
             <div class = 'flexCol'>
                 <?= $this->fieldForm->nom_champ ?>
@@ -62,7 +49,7 @@
                         <div id="list-value" class="span10">
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
 
 
@@ -70,7 +57,7 @@
         </form>
     </div>
 
-    <div id="saved-fields" class="span6 offset2">
+    <div id="saved-fields" class="span6 offset3">
         <?php if(count($this->champs) > 0): ?>
             <table class="table table-bordered table-condensed">
                 <thead>

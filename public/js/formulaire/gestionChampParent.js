@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
     let tableauParentChamp =  $('#tableParentChamp')
 
     let ajouterLigneTableau = () => {
@@ -37,10 +36,8 @@ $(document).ready(function() {
                 </td>
             </tr>
             `
-
         )
     }
-
 
     $('#add-champ').on('click', function() {
         const form = this.closest('form')
@@ -60,10 +57,4 @@ $(document).ready(function() {
         })
         return false
     })
-
- 
-
-
 })
-
-

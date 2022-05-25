@@ -1,0 +1,14 @@
+<div class="row-fluid titles">
+    <div class="span4">
+        <h3><?= $this->titleInfo ?? 'Informations sur le champ' ?></h3>
+    </div>
+
+    <div class="span6 offset2 <?php if ($this->count === 0) echo 'alert' ?>">
+        <?php if ($this->count === 0): ?>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Attention ! </strong>Aucun champ n'est renseigné.
+        <?php else: ?>
+            <h3><?= $this->titleList ?? 'Liste des champs' ?></h3>
+        <?php endif ?>
+    </div>
+</div>

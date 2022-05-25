@@ -4,17 +4,17 @@
 </a>
 
 <div class="row-fluid">
-    <div class="span5">
-        <h2>Informations sur la rubrique</h2>
+    <div class="span4">
+        <h3>Informations sur la rubrique</h3>
     </div>
 
-    <div class="span4 offset2">
-        <h2>Informations sur le champ</h2>
+    <div class="span6 offset2">
+        <h3>Informations sur le champ</h3>
     </div>
 </div>
 
 <div id="edit-champ" class="row-fluid">
-    <div class="span5 infos-rubrique">
+    <div class="span4 infos-rubrique">
         <h3>
             <?= $this->rubrique['NOM'] ?>
             <?php if($this->rubrique['DEFAULT_DISPLAY']): ?>
@@ -25,19 +25,23 @@
 
     <div class="span4 offset2 infos-champ">
         <form action class="form-inline" method="post">
-            <label for="nom_champ">Nom du champ</label>
-            <input type="text" name="nom_champ" id="nom_champ" value="<?= htmlspecialchars($this->champ['NOM'], ENT_QUOTES) ?>" required>
-            <label for="type_champ">Type du champ</label>
-            <select name="type_champ" id="type_champ" disabled>
-                <?php foreach($this->listeTypeChampRubrique as $typeChamp): ?>
-                    <option
-                        value="<?= $typeChamp['ID_TYPECHAMP'] ?>"
-                        <?= $typeChamp['ID_TYPECHAMP'] === $this->champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
-                    >
-                        <?= $typeChamp['TYPE'] ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
+            <div class="row-fluid">
+                <label for="nom_champ">Nom du champ</label>
+                <input type="text" name="nom_champ" id="nom_champ" value="<?= htmlspecialchars($this->champ['NOM'], ENT_QUOTES) ?>" required>
+            </div>
+            <div class="row-fluid">
+                <label for="type_champ">Type du champ</label>
+                <select name="type_champ" id="type_champ" disabled>
+                    <?php foreach($this->listeTypeChampRubrique as $typeChamp): ?>
+                        <option
+                            value="<?= $typeChamp['ID_TYPECHAMP'] ?>"
+                            <?= $typeChamp['ID_TYPECHAMP'] === $this->champ['ID_TYPECHAMP'] ? 'selected' : '' ?>
+                        >
+                            <?= $typeChamp['TYPE'] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
 
             <?php if($this->valeursChamp !== null): ?>
                 <!-- Valeurs de la liste -->
@@ -69,40 +73,43 @@
             </div>
         </form>
     </div>
+</div>
 
-    <div class="row span4">
-        <?php if ($this->type === 'Parent') : ?>            
-            <?= $this->formChamp ?>
-            <table class="table table-bordered table-condensed inline">
-                <thead>
+<?= $this->partial('formulaire/partials/champ/partial-add-and-list-titles.phtml', [
+    'count' => count($this->listChamp),
+    'titleInfo' => 'Informations sur le champ enfant',
+    'titleList' => 'Liste des champs enfants',
+]); ?>
+
+<div class="row-fluid span4">
+    <?php if ($this->type === 'Parent') : ?>
+        <?= $this->formChamp ?>
+        <table class="table table-bordered table-condensed inline">
+            <thead>
+                <tr>
+                    <th>Nom du champ</th>
+                    <th>Type du champ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id='tableParentChamp'>
+                <?php foreach($this->listChamp as $champ) :?>
                     <tr>
-                        <th>Nom du champ</th>
-                        <th>Type du champ</th>
-                        <th></th>
+                        <td><?= $champ['NOM'] ?></td>
+                        <td><?= $champ['TYPE'] ?></td>
+                        <td id='actions'>
+                            <div class='text-center'>
+                                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
+                                    <i title='Modifier' class='icon-pencil'></i>
+                                </a>
+                                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'delete-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP'], 'ID_PARENT' => $champ['ID_PARENT']], null, true) ?>">
+                                    <i title='Supprimer' class='icon-trash'></i>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody id='tableParentChamp'>
-                    <?php foreach($this->listChamp as $champ) :?>
-                        <tr>
-                            <td><?= $champ['NOM'] ?></td>
-                            <td><?= $champ['TYPE'] ?></td>
-                            <td id='actions'>
-                                <div class='text-center'>
-                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
-                                        <i title='Modifier' class='icon-pencil'></i>
-                                    </a>
-                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'delete-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP'], 'ID_PARENT' => $champ['ID_PARENT']], null, true) ?>">
-                                        <i title='Supprimer' class='icon-trash'></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>    
-                </tbody>
-            </table>
-        <?php endif ?>
-    </div>
-
-    </div>
-   
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php endif ?>
 </div>
