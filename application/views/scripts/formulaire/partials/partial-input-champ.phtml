@@ -72,7 +72,7 @@
             <tr id= <?= 'corpsInputTableauRef-'.$this->champ['ID_CHAMP'] ?>>
                 <td>
                     <span class='btn btn-danger'>X</span>
-                    4269
+                    <?= $this->champ['ID_CHAMP'] ?>
                 </td>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
@@ -85,13 +85,9 @@
                         </td>
                 <?php endforeach ?>
             </tr>
-            <tr>
-                <td>
-                    <button class='btn addRow' attr=<?= $champsFils['ID_CHAMP']?>>Ajouter ligne</button>
-                </td>
-            </tr>
             </tbody>
         </table>
+        <button class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
 
     <?php else : ?>
         <div class="tableInput">
@@ -123,7 +119,18 @@
             console.log('Is click')
             console.log($(this))
             console.log($(this).attr('attr'))
-            console.log('HMTML to copy ',$('.corpsInputTableauRef-'+$(this).attr('attr')).html())
+            console.log("Document get is  :",document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')))
+            //document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')).innerHTML += '<p>TOTO</p>'
+
+            console.log("The target is corpsInputTableauRef-124")
+            console.log("We see at corpsInputTableauRef-"+$(this).attr('attr'))
+            $('#tbody-'+$(this).attr('attr')).append("<tr><td>Yooo</td><tr>")
+
+           //$('#corpsInputTableauRef-'+$(this).attr('attr')).append("<tr><td>Yooo</td><tr>")
+            //document.getElementById('tbody-'+$(this).attr('attr')).append('<tr><td>An arrow</td></tr>')
+            //document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')).appendChild('<tr><td>An arrow</td></tr>') 
+            //console.log('HMTML to copy ',$('#corpsInputTableauRef-'+$(this).attr('attr')))
+            //$('#corpsInputTableauRef-'+$(this).attr('attr')).append('<p>Yo</p>')
         })
     }
 </script>
