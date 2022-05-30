@@ -72,7 +72,7 @@
             
             <tr id='ligneTableau' class='hidden'>
                 <td>
-                    <button></button>
+                    <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
                 </td>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
@@ -87,7 +87,7 @@
             <tr id= <?= 'corpsInputTableauRef-'.$this->champ['ID_CHAMP'] ?>>
                 <td>
                     <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                    <button type='button' class='btn btn-danger'>X</button>
+                    <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
                     <?= $this->champ['ID_CHAMP'] ?>
                 </td>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
@@ -133,6 +133,13 @@
     window.onload = () => {
         $('.addRow').click(function() {
             $('#tbody-'+$(this).attr('attr')).append('<tr>'+$('#ligneTableau').html()+'</tr>')
+            $('.deleteRow').click(function(){
+                $(this).closest('tr').remove();
+            })
+        })
+
+        $('.deleteRow').click(function(){
+            $(this).closest('tr').remove();
         })
     }
 </script>
