@@ -1,6 +1,6 @@
 $(document).ready(function() {
     const typeChampSelect = $('#type_champ')
-
+    
     typeChampSelect.on('change', function() {
         if (typeChampSelect.find(":selected").text() === 'Liste') {
             $('#div-list-value').show()
@@ -78,7 +78,8 @@ $(document).ready(function() {
 
 function deleteChamp(element) {
     const idChamp = element.getAttribute('data-id')
-    const idRubrique = element.getAttribute('data-id')
+    const idRubrique = element.getAttribute('data-rubrique-id')
+    const idParent = element.getAttribute('data-id-parent')
 
     const parentDiv = $(element).parent().parent().parent()
     const parentTable = $(element).closest('table')
@@ -89,6 +90,7 @@ function deleteChamp(element) {
     $.ajax({
         url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
         type: 'POST',
+        data: idParent,
         success: function() {
             if (nbOfRows === 1) {
                 parentTable.remove()

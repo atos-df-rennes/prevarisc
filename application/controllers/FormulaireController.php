@@ -103,9 +103,6 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addChampAction(): void
     {
-        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-
         $this->_helper->viewRenderer->setNoRender(true);
 
         $idRubrique = intval($this->getParam('rubrique'));
@@ -129,7 +126,7 @@ class FormulaireController extends Zend_Controller_Action
     public function editChampAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->inlineScript()->appendFile('/js/formulaire/gestionChampParent.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 

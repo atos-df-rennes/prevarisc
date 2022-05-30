@@ -65,8 +65,8 @@
         </form>
     </div>
 
-    <?php if(count($this->champs) > 0): ?>
-        <div id="saved-fields" class="span6 offset2">
+    <div id="saved-fields" class="span6 offset2">
+        <?php if(count($this->champs) > 0): ?>
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
@@ -108,7 +108,7 @@
                                     <?php else : ?>
                                         <div class="alert">
                                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <strong>Attention ! </strong>Aucun champs fils de renseigné.
+                                            <strong>Attention ! </strong>Aucun champ fils renseigné.
                                         </div>
                                     <?php endif ?>
                                 <?php endif ?>
@@ -127,6 +127,6 @@
                     <?php endforeach ?>
                 </tbody>
             </table>
-        </div>
-    <?php endif ?>
+        <?php endif ?>
+    </div>
 </div>
