@@ -1270,3 +1270,7 @@ dl.champ_effectif_camping dd input {
 .marginBottom{
     margin: 0 1em;
 }
+
+.hidden{
+    display: none;
+}

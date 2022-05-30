@@ -69,6 +69,26 @@
                 </tr>
             </thead>
             <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?>>
+            
+            <tr id='ligneTableau' class='hidden'>
+                <td>
+                    <button></button>
+                </td>
+                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
+                        <td>
+                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                'champ' => $champsFils,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                                ]); 
+                            ?>
+                        </td>
+                <?php endforeach ?>
+            </tr>
+
+            
+               
+            
+
             <tr id= <?= 'corpsInputTableauRef-'.$this->champ['ID_CHAMP'] ?>>
                 <td>
                     <span class='btn btn-danger'>X</span>
@@ -124,8 +144,8 @@
 
             console.log("The target is corpsInputTableauRef-124")
             console.log("We see at corpsInputTableauRef-"+$(this).attr('attr'))
-            $('#tbody-'+$(this).attr('attr')).append("<tr><td>Yooo</td><tr>")
-
+            $('#tbody-'+$(this).attr('attr')).append('<tr>'+$('#ligneTableau').html()+'</tr>')
+            console.log("Modele de reference : ",$('#ligneTableau').html())
            //$('#corpsInputTableauRef-'+$(this).attr('attr')).append("<tr><td>Yooo</td><tr>")
             //document.getElementById('tbody-'+$(this).attr('attr')).append('<tr><td>An arrow</td></tr>')
             //document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')).appendChild('<tr><td>An arrow</td></tr>') 

@@ -215,4 +215,17 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
+
+    public function getNewRowTable(int $idChampParent, int $idEtablissement):array{
+        $res = [];
+        $select = $this->select()->setIntegrityCheck(false);
+        $select->distinct()
+            ->from(['c' => 'champ'], ['ID_CHAMP','tableau'])
+            ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['ID_VALEUR'])
+            ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
+            ->where('c.ID_PARENT = ?', $idChampParent)
+            ->where('ev.ID_ETABLISSEMENT = ?', $idEtablissement);
+        return [];
+        }
+
 }
