@@ -107,7 +107,10 @@
             </tr>
             </tbody>
         </table>
-        <button class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
+        <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
+            <span class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</span>
+        <?php endif ?>
+        
 
     <?php else : ?>
         <div class="tableInput">
@@ -135,22 +138,7 @@
         console.log($('.addRow').attr('attr'))
 
         $('.addRow').click(function() {
-             
-            console.log('Is click')
-            console.log($(this))
-            console.log($(this).attr('attr'))
-            console.log("Document get is  :",document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')))
-            //document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')).innerHTML += '<p>TOTO</p>'
-
-            console.log("The target is corpsInputTableauRef-124")
-            console.log("We see at corpsInputTableauRef-"+$(this).attr('attr'))
             $('#tbody-'+$(this).attr('attr')).append('<tr>'+$('#ligneTableau').html()+'</tr>')
-            console.log("Modele de reference : ",$('#ligneTableau').html())
-           //$('#corpsInputTableauRef-'+$(this).attr('attr')).append("<tr><td>Yooo</td><tr>")
-            //document.getElementById('tbody-'+$(this).attr('attr')).append('<tr><td>An arrow</td></tr>')
-            //document.getElementById('corpsInputTableauRef-'+$(this).attr('attr')).appendChild('<tr><td>An arrow</td></tr>') 
-            //console.log('HMTML to copy ',$('#corpsInputTableauRef-'+$(this).attr('attr')))
-            //$('#corpsInputTableauRef-'+$(this).attr('attr')).append('<p>Yo</p>')
         })
     }
 </script>
