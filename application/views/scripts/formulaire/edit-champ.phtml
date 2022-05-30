@@ -25,11 +25,11 @@
 
     <div class="span4 offset2 infos-champ">
         <form action class="form-inline" method="post">
-            <div class="row-fluid">
+            <div>
                 <label for="nom_champ">Nom du champ</label>
                 <input type="text" name="nom_champ" id="nom_champ" value="<?= htmlspecialchars($this->champ['NOM'], ENT_QUOTES) ?>" required>
             </div>
-            <div class="row-fluid">
+            <div>
                 <label for="type_champ">Type du champ</label>
                 <select name="type_champ" id="type_champ" disabled>
                     <?php foreach($this->listeTypeChampRubrique as $typeChamp): ?>
@@ -81,15 +81,19 @@
     'titleList' => 'Liste des champs enfants',
 ]); ?>
 
-<div class="row-fluid span3 infos-champ">
+<div class="row-fluid">
     <?php if ($this->type === 'Parent') : ?>
-        <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
-            <!-- FIXME Div inutile ? -->
-            <div class = 'flexCol'>
-                <?= $this->formChamp->nom_champ ?>
-                <?= $this->formChamp->type_champ ?>
+        <div class="span4 infos-champ">
+            <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
+                <div>
+                    <?= $this->formChamp->nom_champ ?>
+                </div>
+                <div>
+                    <?= $this->formChamp->type_champ ?>
+                </div>
                 <?= $this->formChamp->ID_CHAMP_PARENT ?>
                 <?= $this->formChamp->rubrique ?>
+
                 <div id="div-list-value">
                     <h5>Définition des valeurs de la liste</h5>
                     <div class="row-fluid">
@@ -100,11 +104,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <?= $this->formChamp->save ?>
-        </form>
+                <?= $this->formChamp->save ?>
+            </form>
+        </div>
+    <?php endif ?>
 
+    <div class="span6 offset2">
         <table class="table table-bordered table-condensed inline">
             <thead>
                 <tr>
@@ -132,5 +138,5 @@
                 <?php endforeach ?>
             </tbody>
         </table>
-    <?php endif ?>
+    </div>
 </div>
