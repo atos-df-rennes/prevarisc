@@ -84,14 +84,10 @@
                         </td>
                 <?php endforeach ?>
             </tr>
-
-            
-               
-            
-
             <tr id= <?= 'corpsInputTableauRef-'.$this->champ['ID_CHAMP'] ?>>
                 <td>
-                    <span class='btn btn-danger'>X</span>
+                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                    <button type='button' class='btn btn-danger'>X</button>
                     <?= $this->champ['ID_CHAMP'] ?>
                 </td>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
@@ -108,7 +104,8 @@
             </tbody>
         </table>
         <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
-            <span class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</span>
+            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+            <button type='button' class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
         <?php endif ?>
         
 
@@ -134,9 +131,6 @@
 
 <script>
     window.onload = () => {
-
-        console.log($('.addRow').attr('attr'))
-
         $('.addRow').click(function() {
             $('#tbody-'+$(this).attr('attr')).append('<tr>'+$('#ligneTableau').html()+'</tr>')
         })
