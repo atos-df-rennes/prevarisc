@@ -58,7 +58,10 @@
 
     case 6:?>
     <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
-        Tableau
+        <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
+            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+            <button type='button' class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
+        <?php endif ?>
         <table class='table table-striped '>
             <thead>
                 <tr>
@@ -103,10 +106,7 @@
             </tr>
             </tbody>
         </table>
-        <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
-            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-            <button type='button' class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
-        <?php endif ?>
+
         
 
     <?php else : ?>
