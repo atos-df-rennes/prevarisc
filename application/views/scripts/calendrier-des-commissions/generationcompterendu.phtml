@@ -166,10 +166,11 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				addChamp($dossInfos,'numDocUrba', $listeDocUrba);
 
-				//Generation du segment avis derogations
-				$segmentAvisDerogations = $dossInfos->avisDerogations;
+                // FIXME ça fonctionne pas ici
+                //Generation du segment avis derogations
+                $segmentAvisDerogations = $dossInfos->avisDerogations;
 
-                foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation){
+                foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
                     addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
                     addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
                     addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
