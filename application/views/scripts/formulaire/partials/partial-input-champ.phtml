@@ -88,7 +88,7 @@
                         </td>
                 <?php endforeach ?>
             </tr>
-                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $ligneValeur): ?>
+                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
                 <tr>
                     <!--Bouton supp-->
                     <td>
@@ -96,11 +96,10 @@
                         <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
                             <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
                         <?php endif?>
-                        <?= $this->champ['ID_CHAMP'] ?>
+                        <?= $k ?>
                     </td>
                     <!--Construction de la ligne avec les champs-->
                     <?php foreach($ligneValeur as $idParent => $listValeur): ?>
-                        <!--<pre>List valeur : <?= var_dump($listValeur) ?></pre>-->
                         <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
                             <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                                 <td>
