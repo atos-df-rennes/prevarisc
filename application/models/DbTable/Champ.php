@@ -208,24 +208,54 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         }
 
         $res = [];
-        foreach ($this->fetchAll($select)->toArray() as $valeur) {
-            $res[$valeur['ID_CHAMP']] = $valeur;                
-        }
-        
+        foreach ($this->fetchAll($select)->toArray() as $valeur) {                     
+            $res[$valeur['ID_CHAMP']] = $valeur;
+        }  
 
+
+        $s2 = $this->select()->setIntegrityCheck(false);
+        $s2->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau','ID_PARENT','ID_TYPECHAMP'])
+            ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['v.ID_VALEUR','IDX_VALEUR' => 'v.idx','VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
+            ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
+            ->order('IDX_VALEUR')
+            ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
+            ->where('c.ID_PARENT = ?', 124);
+
+        $res['RES_TABLEAU'] = [];
+        foreach($this->fetchAll($select)->toArray() as $value){
+            if( empty($res['RES_TABLEAU'][$value['ID_CHAMP']])){
+                $res['RES_TABLEAU'][$value['ID_CHAMP']] = [];
+            }
+            foreach(
+                array_filter($this->fetchAll($s2)->toArray(),function($v) use($value){
+                    return $v['ID_CHAMP'] === $value['ID_CHAMP'];
+                }) as $val
+            ){
+                if(empty($res['RES_TABLEAU'][$val['ID_PARENT']][$val['ID_CHAMP']])){
+                    $res['RES_TABLEAU']
+                        [$val['IDX_VALEUR']]
+                            [$val['ID_PARENT']]
+                                [$val['ID_CHAMP']] = [];
+                                    //[$val['ID_VALEUR']] = [];
+                }
+                $res['RES_TABLEAU']
+                    [$val['IDX_VALEUR']]
+                        [$val['ID_PARENT']]
+                            [$val['ID_CHAMP']] = $val;
+                                //[$val['ID_VALEUR']] = $val;  
+                //array_push($res['RES_TABLEAU'][$val['ID_PARENT']][$val['ID_CHAMP']][$val['ID_VALEUR']], $val);
+            }
+
+            //Clear la liste des residu
+            $tmpRes = [];
+            foreach($res["RES_TABLEAU"] as $k=>$entity){
+                if(sizeof($entity) > 0){
+                    $tmpRes[$k] = $entity;
+                }
+            }
+            $res["RES_TABLEAU"] = $tmpRes;   
+        }
         return $res;
     }
-
-    public function getNewRowTable(int $idChampParent, int $idEtablissement):array{
-        $res = [];
-        $select = $this->select()->setIntegrityCheck(false);
-        $select->distinct()
-            ->from(['c' => 'champ'], ['ID_CHAMP','tableau'])
-            ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['ID_VALEUR'])
-            ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
-            ->where('c.ID_PARENT = ?', $idChampParent)
-            ->where('ev.ID_ETABLISSEMENT = ?', $idEtablissement);
-        return [];
-        }
 
 }
