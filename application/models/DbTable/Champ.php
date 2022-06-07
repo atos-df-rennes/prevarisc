@@ -242,8 +242,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     [$val['IDX_VALEUR']]
                         [$val['ID_PARENT']]
                             [$val['ID_CHAMP']] = $val;
-                                //[$val['ID_VALEUR']] = $val;  
-                //array_push($res['RES_TABLEAU'][$val['ID_PARENT']][$val['ID_CHAMP']][$val['ID_VALEUR']], $val);
             }
 
             //Clear la liste des residu

@@ -90,18 +90,7 @@ ID_CHAMP : <?= $this->champ['ID_CHAMP'] ?>
                         </td>
                 <?php endforeach ?>
             </tr>
-        
-
-
-            <!--
-            <pre>
-                    <p>Index d e2 : <?= var_dump(array_search(2,array_keys($this->valeurformulaire['RES_TABLEAU']))) ?></p>
-
-                        <?=  var_dump($this->valeurformulaire['RES_TABLEAU'][""][$this->champ['ID_CHAMP']]) ?>
-                    </pre>
-                            -->
-
-            <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $ligneValeur): ?>
+                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $ligneValeur): ?>
                 <tr>
                     <!--Bouton supp-->
                     <td>
@@ -112,7 +101,6 @@ ID_CHAMP : <?= $this->champ['ID_CHAMP'] ?>
                         <?= $this->champ['ID_CHAMP'] ?>
                     </td>
                     <!--Construction de la ligne avec les champs-->
-                    
                     <?php foreach($ligneValeur as $idParent => $listValeur): ?>
                         <!--<pre>List valeur : <?= var_dump($listValeur) ?></pre>-->
                         <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
@@ -128,9 +116,6 @@ ID_CHAMP : <?= $this->champ['ID_CHAMP'] ?>
                             <?php endforeach ?>      
                         <?php endif ?>
                     <?php endforeach ?>    
-                    
-              
-                                 
                 </tr>
             <?php endforeach ?>
             </tbody>
