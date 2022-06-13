@@ -194,6 +194,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
+                    ->order('c.idx asc')
                 ;
 
                 break;
@@ -206,6 +207,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
+                    ->order('c.idx asc')
                 ;
 
                 break;
@@ -373,17 +375,18 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             $res[$rubrique['ID_RUBRIQUE']] = $rubrique;
         }
 
+        //Requete recuperant tous les champs des rubriques
         $selectRubriqueForm = $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
-            ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE', ['r.ID_RUBRIQUE'])
+            ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE', ['r.ID_RUBRIQUE','r.idx'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c.ID_TYPECHAMP')
             ->where('c.ID_PARENT IS NULL')
             ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
             ->order('c.idx asc')
         ;
 
-        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {
+        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {          
             if ('Parent' === $champ['TYPE']) {
                 $champ['CHAMP_FILS'] = $this->getChampFromParent($champ['ID_CHAMP']);
                 foreach ($champ['CHAMP_FILS'] as &$champFils) {
@@ -399,6 +402,11 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             $res[$champ['ID_RUBRIQUE']]['CHAMPS'][$champ['ID_CHAMP']] = $champ;
         }
 
+        function sortByIdx($a,$b){
+            return $a['idx'] - $b['idx'];
+        }
+
+        usort($res,'sortByIdx');
         return $res;
     }
 /*
