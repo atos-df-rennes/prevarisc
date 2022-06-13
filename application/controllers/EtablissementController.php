@@ -290,6 +290,7 @@ class EtablissementController extends Zend_Controller_Action
             try {
                 $post = $request->getPost();
                 $lastKey = null;
+
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
