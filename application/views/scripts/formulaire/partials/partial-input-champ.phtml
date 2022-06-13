@@ -65,13 +65,19 @@
         <table class='table table-striped '>
             <thead>
                 <tr>
+                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                        <th>#</th>
+                <?php endif ?>
                     <th>IDX</th>
                     <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <th><?= $champsFils['NOM'] ?></th>
                     <?php endforeach ?>
+                    <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                        <th>Supprimer</th>
+                    <?php endif ?>
                 </tr>
             </thead>
-            <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?>>
+            <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
             <tr id='ligneTableau' class='hidden'>
                 <td>
                     <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
@@ -90,14 +96,17 @@
             </tr>
                 <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
                 <tr>
-                    <!--Bouton supp-->
-                    <td>
-                        <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                            <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
-                        <?php endif?>
-                        <?= $k ?>
+                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+
+                    <td class='tdMove'>
+                        <i class="icon-move"></i>
                     </td>
+                    <?php endif ?>
+                    <td>
+                    <?= $k ?>
+                    </td>
+
+
                     <!--Construction de la ligne avec les champs-->
                     <?php foreach($ligneValeur as $idParent => $listValeur): ?>
                         <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
@@ -113,6 +122,13 @@
                             <?php endforeach ?>      
                         <?php endif ?>
                     <?php endforeach ?>    
+                    
+                    <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                        <td>
+                            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                                <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+                        </td>
+                    <?php endif?>
                 </tr>
             <?php endforeach ?>
             </tbody>

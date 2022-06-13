@@ -58,7 +58,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
-
+/*
     public function getChampFromParent(int $idParent): array
     {
         $select = $this->select()
@@ -141,6 +141,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
+    
 
     public function getCorpFormulaire(int $idCapsuleRubrique)
     {
@@ -178,6 +179,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
+    */
 
     public function getValeurFormulaire(int $idEntity, int $idCapsuleRubrique)
     {
@@ -319,7 +321,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $select =
             $this->select()
                 ->setIntegrityCheck(false)
-                ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+                ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
                 ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $LIST_TYPE_VALEUR)
                 ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
                 ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
@@ -373,7 +375,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         $selectRubriqueForm = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
             ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE', ['r.ID_RUBRIQUE'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c.ID_TYPECHAMP')
             ->where('c.ID_PARENT IS NULL')
@@ -399,7 +401,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
-
+/*
     public function getValeurFormulaire(int $idEntity, int $idCapsuleRubrique)
     {
         $select = $this->select();
@@ -439,6 +441,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
+    */
 
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
     public function updateNewIdx($postParam): void
