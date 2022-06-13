@@ -95,7 +95,7 @@
                 <?php endforeach ?>
             </tr>
                 <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
-                <tr>
+                <tr id=<?= 'tr-'.$k ?>>
                 <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
 
                     <td class='tdMove'>

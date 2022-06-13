@@ -271,15 +271,13 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifPersonnaliseAction(): void
     {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
-
-
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
         
-        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
