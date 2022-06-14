@@ -273,4 +273,13 @@ class FormulaireController extends Zend_Controller_Action
             return var_dump($this->serviceFormulaire->addRowTable($post['ID_CHAMP'], $post['ID_ENTITY'], $post['ENTITY'], $post['idx']));
         }
     }
+
+    public function deleteRowTableAction():array{
+        $this->_helper->viewRenderer->setNoRender(true);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            return var_dump($this->serviceFormulaire->deleteRowTable($post['ID_CHAMP_PARENT'], $post['idx']));
+        }
+    }
 }

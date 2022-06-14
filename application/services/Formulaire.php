@@ -78,26 +78,53 @@ class Service_Formulaire
         //Recuperation structure ligne tableau
         $modelChamp = new Model_DbTable_Champ();
  
-        $structureLigneTableau = $modelChamp->getAllFils($idChamp);
-        
-        
+        $structureLigneTableau = $modelChamp->getAllFils($idChamp);        
         
         foreach ($structureLigneTableau as $champ) {
-            switch ($nomEntity) {
-                case 'Etablissement':
-                    $serviceValeur = new Service_Valeur();
-                    $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,'Etablissement',NULL,$idx);
-                    break;
-                case 'Dossier':
-    
-                    break;
-                default:
-    
-                    break;
-            }    
+            $serviceValeur = new Service_Valeur();
+            $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,$nomEntity,NULL,$idx);
+        }
+        return $res;
+    }
+
+
+    public function deleteRowTable(int $idChampParent, int $idx):void{
+
+        /*
+        $deleteEtabDossier = $DBetablissementDossier->find($this->_getParam('idLienDossier'))->current();
+        $deleteEtabDossier->delete();
+        */
+
+        //suppression des fk
+        $modelEtablissementValeur = new Model_DbTable_Valeur();
+        $select = $modelEtablissementValeur->select()
+            ->setIntegrityCheck(false)
+            ->from(['ev' => 'etablissementvaleur'],['ev.ID_ETABLISSEMENT','ev.ID_VALEUR'])
+            ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
+            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
+            ->where('c.ID_PARENT = ?', $idChampParent)
+            ->where('v.idx = ?', $idx);
+        var_dump('<pre>',$modelEtablissementValeur->fetchAll($select)->toArray(),'</pre>');
+        
+        
+        foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
+            $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
+            $toDelete->delete();
         }
         
-        return $res;
-        
+        //$modelEtablissementValeur->delete($select);
+
+            /*
+        //Suppression
+        $modelValeur = new Model_DbTable_Valeur();
+        $select = $modelValeur->select()
+                    ->setIntegrityCheck(false)
+                    ->from(['v' => 'valeur'])
+                    ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
+                    ->where('c.ID_CHAMP = ?', $idChampParent)
+                    ->where('v.idx = ?', $idx);
+        $valuesToDelete = $modelValeur->fetchAll($select)->toArray();
+        $modelValeur->delete($valuesToDelete);
+            */
     }
 }

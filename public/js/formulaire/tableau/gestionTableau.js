@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#btnAddRowTable').click(function () { 
+    $('.btnAddRowTable').click(function () { 
         $.ajax({
             type: "POST",
             url: "/formulaire/add-row-table",
@@ -11,4 +11,16 @@ $(document).ready(function() {
         });
     });
 
+
+    $('.deleteRow').click(function (e) { 
+        $.ajax({
+            type: "POST",
+            url: "/formulaire/delete-row-table",
+            data: {ID_CHAMP_PARENT:$(this).attr('idParent'), idx:$(this).attr('idx')},
+            dataType: "dataType",
+            success: function (response) {
+                console.log("Response : ",response)
+            }
+        });
+    });
 })
