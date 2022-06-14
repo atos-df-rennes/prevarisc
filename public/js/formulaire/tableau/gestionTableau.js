@@ -16,7 +16,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "/formulaire/delete-row-table",
-            data: {ID_CHAMP_PARENT:$(this).attr('idParent'), idx:$(this).attr('idx'), ENTITY: document.location.href.split('/')[3].charAt(0).toUpperCase()+document.location.href.split('/')[3].slice(1)},
+            data: {ID_CHAMP_PARENT:$(this).attr('idParent'), idx:$(this).attr('idx'), ENTITY: document.location.href.split('/')[3].charAt(0).toUpperCase()+document.location.href.split('/')[3].slice(1), ID_ENTITY:document.location.href.split('/')[6]},
             dataType: "dataType",
             success: function (response) {
                 console.log("Response : ",response)

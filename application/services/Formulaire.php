@@ -88,7 +88,7 @@ class Service_Formulaire
     }
 
 
-    public function deleteRowTable(int $idChampParent, string $entity, int $idx):void{
+    public function deleteRowTable(int $idChampParent, string $entity, int $idEntity,int $idx):void{
         //suppression des fk
 
 
@@ -102,6 +102,7 @@ class Service_Formulaire
                         ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
                         ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
                         ->where('c.ID_PARENT = ?', $idChampParent)
+                        ->where('ev.ID_ETABLISSEMENT = ? ',$idEntity)
                         ->where('v.idx = ?', $idx);      
                     
                 foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
@@ -119,6 +120,7 @@ class Service_Formulaire
                         ->from(['dv' => 'dossiervaleur'],['dv.ID_DOSSIER','dv.ID_VALEUR'])
                         ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
                         ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
+                        ->where('dv.ID_DOSSIER = ? ',$idEntity)
                         ->where('c.ID_PARENT = ?', $idChampParent)
                         ->where('v.idx = ?', $idx);      
                     

@@ -279,7 +279,7 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-            $this->serviceFormulaire->deleteRowTable($post['ID_CHAMP_PARENT'], $post['ENTITY'], $post['idx']);
+            $this->serviceFormulaire->deleteRowTable($post['ID_CHAMP_PARENT'], $post['ENTITY'], $post['ID_ENTITY'], $post['idx']);
         }
     }
 }
