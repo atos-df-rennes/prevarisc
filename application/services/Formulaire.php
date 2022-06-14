@@ -88,43 +88,61 @@ class Service_Formulaire
     }
 
 
-    public function deleteRowTable(int $idChampParent, int $idx):void{
-
-        /*
-        $deleteEtabDossier = $DBetablissementDossier->find($this->_getParam('idLienDossier'))->current();
-        $deleteEtabDossier->delete();
-        */
-
+    public function deleteRowTable(int $idChampParent, string $entity, int $idx):void{
         //suppression des fk
-        $modelEtablissementValeur = new Model_DbTable_Valeur();
-        $select = $modelEtablissementValeur->select()
-            ->setIntegrityCheck(false)
-            ->from(['ev' => 'etablissementvaleur'],['ev.ID_ETABLISSEMENT','ev.ID_VALEUR'])
-            ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
-            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
-            ->where('c.ID_PARENT = ?', $idChampParent)
-            ->where('v.idx = ?', $idx);
-        var_dump('<pre>',$modelEtablissementValeur->fetchAll($select)->toArray(),'</pre>');
-        
-        
-        foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
-            $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
-            $toDelete->delete();
-        }
-        
-        //$modelEtablissementValeur->delete($select);
 
-            /*
-        //Suppression
+
+        switch ($entity) {
+            case 'Etablissement':
+                $modelEtablissementValeur = new Model_DbTable_Valeur();
+                $select = 
+                    $modelEtablissementValeur->select()
+                        ->setIntegrityCheck(false)
+                        ->from(['ev' => 'etablissementvaleur'],['ev.ID_ETABLISSEMENT','ev.ID_VALEUR'])
+                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
+                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
+                        ->where('c.ID_PARENT = ?', $idChampParent)
+                        ->where('v.idx = ?', $idx);      
+                    
+                foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
+                    $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
+                    $toDelete->delete();
+                }
+
+
+                break;
+            case 'Dossier':
+                $modelDossierValeur = new Model_DbTable_Valeur();
+                $select = 
+                    $modelDossierValeur->select()
+                        ->setIntegrityCheck(false)
+                        ->from(['dv' => 'dossiervaleur'],['dv.ID_DOSSIER','dv.ID_VALEUR'])
+                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
+                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
+                        ->where('c.ID_PARENT = ?', $idChampParent)
+                        ->where('v.idx = ?', $idx);      
+                    
+                foreach($modelDossierValeur->fetchAll($select)->toArray() as $ev){
+                    $toDelete = $modelDossierValeur->find(['ID_DOSSIER' => $ev['ID_DOSSIER'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
+                    $toDelete->delete();
+                }
+                break;
+            
+        }
+
+        
+        //Suppression des valeurs 
         $modelValeur = new Model_DbTable_Valeur();
         $select = $modelValeur->select()
                     ->setIntegrityCheck(false)
                     ->from(['v' => 'valeur'])
-                    ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
+                    ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [''])
                     ->where('c.ID_CHAMP = ?', $idChampParent)
                     ->where('v.idx = ?', $idx);
-        $valuesToDelete = $modelValeur->fetchAll($select)->toArray();
-        $modelValeur->delete($valuesToDelete);
-            */
+
+        foreach($modelValeur->fetchAll($select)->toArray() as $ev){
+            $toDelete = $modelValeur->find(['ID_VALEUR' => $ev['ID_VALEUR']])->current();
+            $toDelete->delete();
+        }
     }
 }
