@@ -83,11 +83,12 @@
             </thead>
             <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
             <tr id='ligneTableau' class='hidden'>
-                <td>
-                    <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
-                        <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
-                    <?php endif?>
-                </td>
+                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                    <td class='tdMove'>
+                        <i class="icon-move"></i>
+                    </td>
+                <?php endif ?>
+                <td></td>
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
@@ -97,20 +98,22 @@
                             ?>
                         </td>
                 <?php endforeach ?>
+                <td>
+                    <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
+                        <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+                    <?php endif?>
+                </td>
             </tr>
                 <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
                 <tr id=<?= 'tr-'.$k ?>>
-                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-
-                    <td class='tdMove'>
-                        <i class="icon-move"></i>
-                    </td>
+                    <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                            <td class='tdMove'>
+                                <i class="icon-move"></i>
+                            </td>
                     <?php endif ?>
                     <td>
-                    <?= $k ?>
+                        <?= $k ?>
                     </td>
-
-
                     <!--Construction de la ligne avec les champs-->
                     <?php foreach($ligneValeur as $idParent => $listValeur): ?>
                         <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
