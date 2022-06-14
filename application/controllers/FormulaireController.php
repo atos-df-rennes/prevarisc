@@ -264,4 +264,13 @@ class FormulaireController extends Zend_Controller_Action
             $this->modelRubrique->updateNewIdx($post);
         }
     }
+
+    public function addRowTableAction():array{
+        $this->_helper->viewRenderer->setNoRender(true);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            return var_dump($this->serviceFormulaire->addRowTable($post['ID_CHAMP'], $post['ID_ENTITY'], $post['ENTITY'], $post['idx']));
+        }
+    }
 }

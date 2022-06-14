@@ -15,7 +15,7 @@ class Service_Valeur
         return $valeur;
     }
 
-    public function insert(int $idChamp, int $idObject, string $classObject, $value): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx=null): void
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
@@ -24,6 +24,7 @@ class Service_Valeur
             $idValeurInsert = $modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
+                'idx' => $idx
             ]);
 
             if (false !== strpos($classObject, 'Dossier')) {

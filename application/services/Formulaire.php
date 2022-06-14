@@ -72,4 +72,32 @@ class Service_Formulaire
 
         return $modelChamp->find($idChamp)->current()->toArray();
     }
+
+    public function addRowTable(int $idChamp, int $idEntity, string $nomEntity,$idx = null):array{
+        $res = [];
+        //Recuperation structure ligne tableau
+        $modelChamp = new Model_DbTable_Champ();
+ 
+        $structureLigneTableau = $modelChamp->getAllFils($idChamp);
+        
+        
+        
+        foreach ($structureLigneTableau as $champ) {
+            switch ($nomEntity) {
+                case 'Etablissement':
+                    $serviceValeur = new Service_Valeur();
+                    $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,'Etablissement',NULL,$idx);
+                    break;
+                case 'Dossier':
+    
+                    break;
+                default:
+    
+                    break;
+            }    
+        }
+        
+        return $res;
+        
+    }
 }

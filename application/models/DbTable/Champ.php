@@ -21,7 +21,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $select = $this->select()
         ->setIntegrityCheck(false)
         ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP', 'tableau'])
-        ->where('c.ID_PARENT = ?', $$idParent);
+        ->where('c.ID_PARENT = ?', $idParent);
         return $this->fetchAll($select)->toArray();
     }
 

@@ -7,9 +7,11 @@
             value='<?= isset($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
-<!--        name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>''
-    -->
     <!--
+        name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>''
+
+        
+
     -->
 
     <?php break;
@@ -64,7 +66,7 @@
     <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
         <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
             <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-            <button type='button' class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?>>Ajouter ligne</button>
+            <button id='btnAddRowTable' type='button' class='btn addRow' attr=<?= $this->champ['ID_CHAMP']?> >Ajouter ligne</button>
         <?php endif ?>
         <table class='table table-striped '>
             <thead>
