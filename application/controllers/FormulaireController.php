@@ -265,12 +265,12 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
-    public function addRowTableAction():array{
+    public function addRowTableAction():void{
         $this->_helper->viewRenderer->setNoRender(true);
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-            return var_dump($this->serviceFormulaire->addRowTable($post['ID_CHAMP'], $post['ID_ENTITY'], $post['ENTITY'], $post['idx']));
+            $this->serviceFormulaire->addRowTable($post['ID_CHAMP'], $post['ID_ENTITY'], $post['ENTITY'], $post['idx']);
         }
     }
 

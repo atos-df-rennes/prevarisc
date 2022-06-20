@@ -73,8 +73,7 @@ class Service_Formulaire
         return $modelChamp->find($idChamp)->current()->toArray();
     }
 
-    public function addRowTable(int $idChamp, int $idEntity, string $nomEntity,$idx = null):array{
-        $res = [];
+    public function addRowTable(int $idChamp, int $idEntity, string $nomEntity,$idx = null):void{
         //Recuperation structure ligne tableau
         $modelChamp = new Model_DbTable_Champ();
  
@@ -84,11 +83,10 @@ class Service_Formulaire
             $serviceValeur = new Service_Valeur();
             $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,$nomEntity,NULL,$idx);
         }
-        return $res;
     }
 
 
-    public function deleteRowTable(int $idChampParent, string $entity, int $idEntity,int $idx):void{
+    public function deleteRowTable(int $idChampParent, string $entity, int $idEntity,$idx):void{
         //suppression des fk
 
 
@@ -103,7 +101,10 @@ class Service_Formulaire
                         ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
                         ->where('c.ID_PARENT = ?', $idChampParent)
                         ->where('ev.ID_ETABLISSEMENT = ? ',$idEntity)
-                        ->where('v.idx = ?', $idx);      
+                        ->where('v.idx = ?', $idx)
+                        ;
+                        
+                        //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');      
                     
                 foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
                     $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
@@ -122,7 +123,9 @@ class Service_Formulaire
                         ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
                         ->where('dv.ID_DOSSIER = ? ',$idEntity)
                         ->where('c.ID_PARENT = ?', $idChampParent)
-                        ->where('v.idx = ?', $idx);      
+                        ->where('v.idx = ?', $idx)
+                        ;
+                        //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
                     
                 foreach($modelDossierValeur->fetchAll($select)->toArray() as $ev){
                     $toDelete = $modelDossierValeur->find(['ID_DOSSIER' => $ev['ID_DOSSIER'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
@@ -140,7 +143,9 @@ class Service_Formulaire
                     ->from(['v' => 'valeur'])
                     ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [''])
                     ->where('c.ID_CHAMP = ?', $idChampParent)
-                    ->where('v.idx = ?', $idx);
+                    ->where('v.idx = ?', $idx)
+                    ;
+                    //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
 
         foreach($modelValeur->fetchAll($select)->toArray() as $ev){
             $toDelete = $modelValeur->find(['ID_VALEUR' => $ev['ID_VALEUR']])->current();

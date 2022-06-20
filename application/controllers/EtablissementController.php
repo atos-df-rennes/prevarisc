@@ -25,7 +25,9 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
 
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
@@ -52,6 +54,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
 
         $service_carto = new Service_Carto();
 
@@ -277,7 +280,9 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
-        
+
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+
         
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
@@ -302,6 +307,7 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
 
+                    
                     $lastKey = $key;
                 }
 
