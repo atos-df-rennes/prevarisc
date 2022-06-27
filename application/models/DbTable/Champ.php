@@ -205,4 +205,15 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $res;
     }
+
+    public function getInfosParent(int $idChampEnfant): array
+    {
+        $select = $this->select()
+            ->from(['c' => 'champ'], [])
+            ->join(['c2' => 'champ'], 'c.ID_PARENT = c2.ID_CHAMP', ['ID_CHAMP', 'NOM'])
+            ->where('c.ID_CHAMP = ?', $idChampEnfant)
+        ;
+
+        return $this->fetchRow($select)->toArray();
+    }
 }

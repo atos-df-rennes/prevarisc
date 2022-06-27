@@ -1,7 +1,20 @@
-<a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>">
-    <i class="icon-arrow-left"></i>
-    Retourner sur la rubrique "<?= $this->rubrique['NOM'] ?>"
-</a>
+<?php if (null !== $this->champ['ID_PARENT']): ?>
+    <a href="<?= $this->url([
+        'controller' => 'formulaire',
+        'action' => 'edit-champ',
+        'rubrique' => $this->champ['ID_RUBRIQUE'],
+        'champ' => $this->champ['ID_PARENT']
+        ], null, true) ?>"
+    >
+        <i class="icon-arrow-left"></i>
+        Retourner sur le champ parent "<?= $this->infosParent['NOM'] ?>"
+    </a>
+<?php else: ?>
+    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>">
+        <i class="icon-arrow-left"></i>
+        Retourner sur la rubrique "<?= $this->rubrique['NOM'] ?>"
+    </a>
+<?php endif ?>
 
 <div class="row-fluid">
     <div class="span4">
@@ -21,6 +34,11 @@
                 <small>(Affichée par défaut)</small>
             <?php endif ?>
         </h3>
+
+        <?php if (null !== $this->champ['ID_PARENT']): ?>
+            <b>Champ parent :</b>
+            <?= $this->infosParent['NOM'] ?>
+        <?php endif ?>
     </div>
 
     <div class="span4 offset2 infos-champ">

@@ -136,6 +136,10 @@ class FormulaireController extends Zend_Controller_Action
         $champ = $this->modelChamp->find($idChamp)->current();
         $champType = $this->modelChamp->getTypeChamp($idChamp);
 
+        if (null !== $champ['ID_PARENT']) {
+            $this->view->assign('infosParent', $this->modelChamp->getInfosParent($champ['ID_CHAMP']));
+        }
+
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
         if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
