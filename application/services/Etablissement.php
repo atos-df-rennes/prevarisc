@@ -486,10 +486,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
 
-        $ID_TYPE_CHAMP_TEXTE = 1;
-        $ID_TYPE_CHAMP_TEXTE_LONG = 2;
-        $ID_TYPE_LISTE = 3;
-
         foreach ($dossier_types as $key => $type) {
             if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
@@ -517,10 +513,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $i = 0;
         $types_autre = [];
-
-        $ID_TYPE_CHAMP_TEXTE = 1;
-        $ID_TYPE_CHAMP_TEXTE_LONG = 2;
-        $ID_TYPE_LISTE = 3;
 
         foreach ($dossier_types as $key => $type) {
             if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
