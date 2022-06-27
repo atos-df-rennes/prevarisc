@@ -113,7 +113,9 @@ class FormulaireController extends Zend_Controller_Action
             $post = $request->getPost();
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-            $champ = $this->serviceFormulaire->insertChamp($post, $rubrique);
+            $isParent = $request->getParam('isParent', false);
+            $champ = $this->serviceFormulaire->insertChamp($post, $rubrique, $isParent);
+
             $idChamp = intval($champ['ID_CHAMP']);
             $idTypeChamp = intval($champ['ID_TYPECHAMP']);
 
@@ -141,11 +143,18 @@ class FormulaireController extends Zend_Controller_Action
         }
 
         $rubrique = $this->modelRubrique->find($champ['ID_RUBRIQUE'])->current();
-
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
         if ('Parent' === $champType['TYPE']) {
-            $this->view->assign('listChamp', $this->modelChamp->getChampFromParent($idChamp));
+            $listChamps = $this->modelChamp->getChampFromParent($idChamp);
+
+            foreach ($listChamps as &$listChamp) {
+                if ('Liste' === $listChamp['TYPE']) {
+                    $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
+                }
+            }
+
+            $this->view->assign('listChamp', $listChamps);
             $this->view->assign('listType', $this->modelListeTypeChampRubrique->getTypeWithoutParent());
             $this->view->assign(
                 'formChamp',

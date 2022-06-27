@@ -15,9 +15,12 @@ $(document).ready(function() {
         const idRubrique = $('#rubrique-id').val()
         const savedFieldsTitlesDiv = $('.titles')
 
+        const currentUrl = window.location.href
+        const isParent = currentUrl.includes('edit-champ')
+
         const formData = $(form).serialize()
         $.ajax({
-            url: '/formulaire/add-champ',
+            url: '/formulaire/add-champ?isParent='+isParent,
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
             success: function(data) {

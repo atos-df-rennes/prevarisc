@@ -33,17 +33,25 @@ class Service_Formulaire
         return intval($idRubrique);
     }
 
-    public function insertChamp(array $champ, array $rubrique): array
+    public function insertChamp(array $champ, array $rubrique, bool $isParent = false): array
     {
         $modelChamp = new Model_DbTable_Champ();
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
 
-        $idTypeChamp = intval($champ['type_champ']);
+        $typeChamp = 'type_champ';
+        $nomChamp = 'nom_champ';
+
+        if ($isParent) {
+            $typeChamp = 'type_champ_enfant';
+            $nomChamp = 'nom_champ_enfant';
+        }
+
+        $idTypeChamp = intval($champ[$typeChamp]);
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
         $dataToInsert = [
-            'NOM' => $champ['nom_champ'],
+            'NOM' => $champ[$nomChamp],
             'ID_TYPECHAMP' => $idTypeChamp,
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
         ];
