@@ -35,30 +35,36 @@ window.onload = function(){
                 url: "/formulaire/update-champ-idx",
                 data: objData,
                 datatype:'json'
-            })        
+            }).then(console.log('Requete ok'))      
         :
             $.ajax({
                 type: "post",
                 url: "/formulaire/update-rubrique-idx",
                 data: objData,
                 datatype:'json'
-            })
+            }).then(console.log('Requete ok'))
     }
 
     for(let i = 0; i< listGrp.length; i++){
         new Sortable.create(document.getElementById(listGrp[i].id), {
             group: listGrp[i].id,
-            animation: 100
+            animation: 100,
+            onEnd: function () {
+                compareAndRequest(getLisOrderInput(listGrp[i].id))
+            }
           });
 
+/*
           document.getElementById(listGrp[i].id).addEventListener(
               'dragend',
               function(){
+                    console.log("Dragend ...")
                     compareAndRequest(getLisOrderInput(listGrp[i].id))
+                    console.log("new attribution done")
                 },
               false
           )
-
+*/
           document.getElementById(listGrp[i].id).addEventListener(
             'dragstart',
             function(){
@@ -89,4 +95,17 @@ window.onload = function(){
           });
     }
 
+
+
+    document.addEventListener('dragend', function(){
+        console.log('Drag end')
+    })
+
+    document.addEventListener('click', function(){
+        console.log('Clic document')
+    })
+
+    document.addEventListener('mouseup', function(){
+        console.log('Clic up')
+    })
 }

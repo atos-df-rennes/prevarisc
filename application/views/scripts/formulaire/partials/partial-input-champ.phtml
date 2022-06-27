@@ -175,7 +175,7 @@
 <script>
     window.onload = () => {
         $('.addRow').click(function() {
-            $($(this).closest('.ligneTableau')).appendTo($(this).closest('tbody'));
+            document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML += document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
         })
 
         $('.deleteRow').click(function(){
