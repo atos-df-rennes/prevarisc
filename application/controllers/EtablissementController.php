@@ -298,7 +298,7 @@ class EtablissementController extends Zend_Controller_Action
 
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
+                        $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, 'Etablissement', $value);
                     }
                 }
 

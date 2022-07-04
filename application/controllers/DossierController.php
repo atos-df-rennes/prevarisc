@@ -3135,24 +3135,28 @@ class DossierController extends Zend_Controller_Action
 
     public function verificationsTechniquesAction()
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
         $idDossier = $this->getParam('id');
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, 'Dossier'));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
 
     public function editVerificationsTechniquesAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
         $idDossier = $this->getParam('id');
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, 'Dossier'));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
 
         $request = $this->getRequest();
