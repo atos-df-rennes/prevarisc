@@ -15,4 +15,27 @@ class Model_DbTable_ListeTypeChampRubrique extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select)->toArray();
     }
+
+    public function getTypeWithoutParent(): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['t' => 'listetypechamprubrique'], ['value' => 't.ID_TYPECHAMP', 'id' => 't.TYPE'])
+            ->where("t.TYPE != 'Parent'")
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getTypeWithoutParentToSelectForm(): array
+    {
+        $results = $this->getTypeWithoutParent();
+
+        $types = [];
+        foreach ($results as $type) {
+            $types[$type['value']] = $type['id'];
+        }
+
+        return $types;
+    }
 }

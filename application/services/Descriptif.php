@@ -1,6 +1,6 @@
 <?php
 
-abstract class Service_Descriptif
+class Service_Descriptif
 {
     private $modelChamp;
     private $modelChampValeurListe;
@@ -43,7 +43,15 @@ abstract class Service_Descriptif
             $rubrique['CHAMPS'] = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
 
             foreach ($rubrique['CHAMPS'] as &$champ) {
-                $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
+                if ('Parent' === $champ['TYPE']) {
+                    $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
+
+                    foreach ($champ['FILS'] as &$champFils) {
+                        $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+                    }
+                } else {
+                    $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
+                }
             }
         }
 
@@ -74,7 +82,6 @@ abstract class Service_Descriptif
     {
         $explodedChamp = explode('-', $key);
         $idChamp = end($explodedChamp);
-
         $this->saveValeur($idChamp, $idObject, $classObject, $value);
     }
 

@@ -16,8 +16,14 @@ class FormulaireController extends Zend_Controller_Action
     {
         // Définition des layouts et scripts
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
+        /** @var Zend_View_Helper_InlineScript */
+        $viewInlineScript = $this->view;
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         $form = new Form_CustomForm();
 
@@ -39,6 +45,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
 
         // Sauvegarde des rubriques ajoutées
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
@@ -53,8 +60,14 @@ class FormulaireController extends Zend_Controller_Action
     public function editRubriqueAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
+        /** @var Zend_View_Helper_InlineScript */
+        $viewInlineScript = $this->view;
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         $fieldForm = new Form_CustomFormField();
 
@@ -66,12 +79,16 @@ class FormulaireController extends Zend_Controller_Action
             if ('Liste' === $champ['TYPE']) {
                 $champ['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
+            if ('Parent' === $champ['TYPE']) {
+                $champ['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
+            }
         }
 
         $this->view->assign('fieldForm', $fieldForm);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('champs', $champs);
 
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
@@ -100,17 +117,22 @@ class FormulaireController extends Zend_Controller_Action
 
     public function addChampAction(): void
     {
-        $this->_helper->viewRenderer->setNoRender(true);
+        /** @var Zend_Controller_Action_Helper_ViewRenderer */
+        $viewRenderer = $this->_helper->viewRenderer;
+        $viewRenderer->setNoRender(true);
 
         $idRubrique = intval($this->getParam('rubrique'));
         $rubrique = $this->modelRubrique->find($idRubrique)->current()->toArray();
 
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-            $champ = $this->serviceFormulaire->insertChamp($post, $rubrique);
+            $isParent = filter_var($request->getParam('isParent', false), FILTER_VALIDATE_BOOL);
+            $champ = $this->serviceFormulaire->insertChamp($post, $rubrique, $isParent);
+
             $idChamp = intval($champ['ID_CHAMP']);
             $idTypeChamp = intval($champ['ID_TYPECHAMP']);
 
@@ -123,11 +145,23 @@ class FormulaireController extends Zend_Controller_Action
     public function editChampAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
+        /** @var Zend_View_Helper_InlineScript */
+        $viewInlineScript = $this->view;
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
         $idChamp = intval($this->getParam('champ'));
         $champ = $this->modelChamp->find($idChamp)->current();
+        $champType = $this->modelChamp->getTypeChamp($idChamp);
+
+        if (null !== $champ['ID_PARENT']) {
+            $this->view->assign('infosParent', $this->modelChamp->getInfosParent($champ['ID_CHAMP']));
+        }
 
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
         if ($champ['ID_TYPECHAMP'] === $idListe) {
@@ -136,13 +170,36 @@ class FormulaireController extends Zend_Controller_Action
         }
 
         $rubrique = $this->modelRubrique->find($champ['ID_RUBRIQUE'])->current();
-
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
+
+        if ('Parent' === $champType['TYPE']) {
+            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
+
+            foreach ($listChamps as &$listChamp) {
+                if ('Liste' === $listChamp['TYPE']) {
+                    $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
+                }
+            }
+
+            $this->view->assign('listChamp', $listChamps);
+            $this->view->assign('listType', $this->modelListeTypeChampRubrique->getTypeWithoutParent());
+            $this->view->assign(
+                'formChamp',
+                new Form_FormChampFromParent(
+                    [
+                        'champParentID' => $this->getRequest()->getParam('champ'),
+                        'rubriqueID' => $this->getRequest()->getParam('rubrique'),
+                    ]
+                )
+            );
+        }
 
         $this->view->assign('champ', $champ);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
+        $this->view->assign('type', $champType['TYPE']);
 
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
@@ -184,12 +241,14 @@ class FormulaireController extends Zend_Controller_Action
     public function deleteChampAction(): void
     {
         $idChamp = intval($this->getParam('champ'));
-
         $champ = $this->modelChamp->find($idChamp)->current();
         $idRubrique = $champ['ID_RUBRIQUE'];
         $champ->delete();
-
-        $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $idRubrique]);
+        if ($this->getParam('ID_PARENT')) {
+            $this->_helper->redirector('edit-champ', null, null, ['rubrique' => $idRubrique, 'champ' => $this->getParam('ID_PARENT')]);
+        } else {
+            $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $idRubrique]);
+        }
     }
 
     public function deleteValeurListeAction(): void
