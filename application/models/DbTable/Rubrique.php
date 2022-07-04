@@ -20,15 +20,4 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
-
-    public function getAllRubriqueForm($idCaps)
-    {
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['r' => 'rubrique'])
-            ->where('r.ID_CAPSULERUBRIQUE = ? ', $idCaps)
-        ;
-
-        return $this->fetchAll($select)->toArray();
-    }
 }
