@@ -74,21 +74,21 @@ abstract class Service_Descriptif
         $this->serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
-    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value): void
+    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value, $idx = null): void
     {
-        $explodedChamp = explode('-', $key);
-        $idChamp = end($explodedChamp);
-        $this->saveValeur($idChamp, $idObject, $classObject, $value);
+            $explodedChamp = explode('-', $key);
+            $idChamp = end($explodedChamp);
+            $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 
-    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value): void
+    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, $idx = null): void
     {
-        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
 
         if (null === $valueInDB) {
-            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value);
+            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value,$idx);
         } else {
-            $this->serviceValeur->update($idChamp, $valueInDB, $value);
+            $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
         }
     }
 }

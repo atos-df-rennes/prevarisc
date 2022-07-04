@@ -50,7 +50,7 @@ class Service_Valeur
         }
     }
 
-    public function update(int $idChamp, $valueInDB, $newValue): void
+    public function update(int $idChamp, $valueInDB, $newValue, int $idx = null): void
     {
         if ('' === $newValue) {
             $valueInDB->delete();
@@ -58,6 +58,7 @@ class Service_Valeur
             $typeValeur = $this->getTypeValeur($idChamp);
 
             $valueInDB->{$typeValeur} = $newValue;
+            $valueInDB->idx = $idx;
             $valueInDB->save();
         }
     }

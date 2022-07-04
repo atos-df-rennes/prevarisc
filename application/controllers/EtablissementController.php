@@ -298,6 +298,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
+                    
                     if (0 === strpos($key, 'afficher_rubrique-')) {
                         $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
                     }
@@ -306,7 +307,29 @@ class EtablissementController extends Zend_Controller_Action
                     if (0 === strpos($key, 'champ-')) {
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
+                    
+                    if (0 === strpos($key, 'valeur-')) {
 
+                        /*
+                        var_dump('<pre>',$key,'</pre>');
+                        var_dump('<pre>',$idEtablissement,'</pre>');
+                        var_dump('<pre>',get_class($this),'</pre>');
+                        var_dump('<pre>',$value,'</pre>');
+                        var_dump('<pre>',explode('-',$key),'</pre>');
+                        */
+
+                     /*   var_dump('<pre>',
+                        explode('-',$key)[sizeof(explode('-',$key)) -2 ]
+                        ,'</pre>');
+                       */ 
+                        if(                        explode('-',$key)[sizeof(explode('-',$key)) -2 ] !== '-1'){
+                            $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value, explode('-',$key)[sizeof(explode('-',$key)) -2 ]);
+                           // die(1);
+                        }
+
+                            
+
+                        }
                     
                     $lastKey = $key;
                 }

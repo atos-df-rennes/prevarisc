@@ -5,14 +5,15 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     protected $_name = 'valeur'; // Nom de la base
     protected $_primary = 'ID_VALEUR'; // Clé primaire
 
-    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject): ?Zend_Db_Table_Row
+    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, int $idx = null): ?Zend_Db_Table_Row
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['v' => 'valeur'])
             ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
-            ->where('c.ID_CHAMP = ?', $idChamp)
-        ;
+            ->where('c.ID_CHAMP = ?', $idChamp);
+        $idx === null ? $select->where('v.idx IS NULL') : $select->where('v.idx = ?',$idx) ;
+            
 
         if (false !== strpos($classObject, 'Dossier')) {
             $select->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])

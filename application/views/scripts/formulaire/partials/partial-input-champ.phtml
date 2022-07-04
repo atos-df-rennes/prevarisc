@@ -1,29 +1,23 @@
-<?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : '' ?>
+<!--<?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : '' ?> -->
+<?= isset($this->champ["ID_CHAMP"]) ? $this->champ["ID_CHAMP"]: '' ?>
 <?php switch ($this->champ['ID_TYPECHAMP']) {
     // Texte
     case 1: ?>
         <input
             type='text'
-            name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>''        
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
             value='<?= isset($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
-    <!--
-        
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])?>'
-
-        
-
-    -->
 
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'' <?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
+        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
-        <select name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>''        
+        <select name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'     
         <?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
             <?php if (!empty($this->champ['VALEUR']))  :?>
@@ -46,19 +40,19 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] ?>'>
+        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
         <input
             type="hidden"
-            name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'' 
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' 
             value="0"
             <?= $this->canWrite ? '': 'disabled'?>
         >
         <input
             type="checkbox"
-            name= '<?= isset($this->idxTableau) ? 'valeur-'.$this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'' 
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
             <?= !empty($this->valeurformulaire[ $this->champ['ID_CHAMP']]['VALEUR_CHECKBOX']) ? 'checked' : '' ?>
@@ -115,7 +109,13 @@
                     <?php endif?>
                 </td>
             </tr>
-                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
+
+            <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
+
+
+                <?php if(isset($k) && $k !== '' && isset($ligneValeur[$this->champ['ID_CHAMP']])): ?>
+
+
                 <tr id=<?= 'tr-'.$k ?>>
                     <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
                             <td class='tdMove'>
@@ -126,21 +126,22 @@
                         <?= $k ?>
                     </td>
                     <!--Construction de la ligne avec les champs-->
-                    <?php foreach($ligneValeur as $idParent => $listValeur): ?>
-                        <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
-                            <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
-                                <td>
-                                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                        'champ' => $champsFils,
-                                        'valeurformulaire' => $listValeur,
-                                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                        'idxTableau' => $k
-                                        ]); 
-                                    ?>
-                                </td>
-                            <?php endforeach ?>      
-                        <?php endif ?>
-                    <?php endforeach ?>    
+                        <?php foreach($ligneValeur as $idParent => $listValeur): ?>
+
+                            <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
+                                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
+                                    <td>
+                                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                            'champ' => $champsFils,
+                                            'valeurformulaire' => $listValeur,
+                                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                                            'idxTableau' => $k
+                                            ]); 
+                                        ?>
+                                    </td>
+                                <?php endforeach ?>      
+                            <?php endif ?>
+                        <?php endforeach ?>
                     
                     <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
                         <td>
@@ -149,6 +150,10 @@
                         </td>
                     <?php endif?>
                 </tr>
+
+                <?php endif ?>
+
+
             <?php endforeach ?>
             </tbody>
         </table>
@@ -175,7 +180,13 @@
 <script>
     window.onload = () => {
         $('.addRow').click(function() {
-            document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML += document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
+            document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
+            += 
+            document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
+
+            $('.deleteRow').click(function(){
+                $(this).closest('tr').remove();
+            })
         })
 
         $('.deleteRow').click(function(){

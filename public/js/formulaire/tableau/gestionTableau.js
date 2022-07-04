@@ -1,4 +1,5 @@
 $(document).ready(function() {  
+    
     $('.btnAddRowTable').click(function () { 
         $.ajax({
             type: "POST",
@@ -7,7 +8,7 @@ $(document).ready(function() {
             dataType: "json"
         })
     });
-
+    
     $('.deleteRow').click(function () { 
         $.ajax({
             type: "POST",

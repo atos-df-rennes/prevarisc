@@ -9,6 +9,8 @@
     <h3>Modification des descriptifs</h3>
     <h4 class='h4_subtitle'>Descriptif</h4>
 
+    
+
     <div class='row-fluid'>
         <div class='span10'>
             <?php foreach ($this->rubriques as $key => $rubrique):
@@ -24,11 +26,12 @@
             endforeach ?>
         </div>
     </div>
-    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+    <?= 
+        $this->partial('formulaire/partials/partial-form-custom.phtml', [
                     'corpsformulaire' => $this->corpsformulaire,
                     'valeurformulaire' => $this->valeurformulaire,
                     'rubriquedisplay' => $this->rubriques,
                     'canWrite' => true
                 ]); 
-        ?>
+    ?>
 </form>
