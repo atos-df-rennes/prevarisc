@@ -1,12 +1,14 @@
 window.onload = function(){
 
+    console.log("i'm load bro")
+
     const listGrp = document.getElementsByClassName('grp')
     const listParent = document.getElementsByClassName('parent')
     const listMain = document.getElementsByClassName('main')
 
     let originList = []
 
-    const getLisOrderInput = (idInputElem = null) => {
+    const getLisOrderInput = function(idInputElem = null){
         const listChampClass = ['inputChamp', 'parent','TR']
         let toReturn = []
         Array
@@ -22,13 +24,13 @@ window.onload = function(){
     }
     
     //Retourne la liste des entity qui ont changé d'index
-    const compareAndRequest = (newList = []) => {
+    const compareAndRequest = function(newList = []){
         newList.filter(elem => elem.ID != originList[elem.idx].ID ).forEach(champ =>{
             setNewIdxRequest(champ)
         })
     }
 
-    const setNewIdxRequest = (objData = {}) =>{
+    const setNewIdxRequest = function(objData = {}){
         document.location.href.includes('edit') ? 
             $.ajax({
                 type: "post",

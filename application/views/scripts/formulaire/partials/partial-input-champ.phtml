@@ -6,14 +6,14 @@
         <input
             type='text'
             name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
-            value='<?= isset($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
+            value='<?= !empty($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
 
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
+        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?>><?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
@@ -40,7 +40,7 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] ?>'>
+        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
@@ -170,7 +170,7 @@
 } ?>
 
 <script>
-    window.onload = () => {
+    window.onload = function() {
         $('.addRow').click(function() {
             document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
             += 

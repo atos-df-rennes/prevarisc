@@ -5,16 +5,17 @@
 <h3>Effectifs :</h3>
 <?php
     if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]) {
-        echo $this->EffectifDegagement["DESCRIPTION_EFFECTIF"];
+        htmlspecialchars($this->EffectifDegagement["DESCRIPTION_EFFECTIF"]);
     } else {
         echo "Aucune description";
     }
 ?>
 
 <h3>Dégagements :</h3>
+
 <?php
     if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]) {
-        echo $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"];
+        htmlspecialchars($this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]);
     } else {
         echo "Aucune description";
     }
