@@ -3,6 +3,7 @@
 class Service_Login
 {
     //login pour l'api
+
     /**
      * @psalm-return array{reponse:string, results?:array{ID_UTILISATEUR:mixed, LIBELLE_FONCTION:mixed, ID_UTILISATEURINFORMATIONS:mixed, NOM_UTILISATEURINFORMATIONS:mixed, PRENOM_UTILISATEURINFORMATIONS:mixed, LIBELLE_GROUPE:mixed, ID_GROUPE:mixed, TOKEN:string}}
      *

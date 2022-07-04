@@ -6,6 +6,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_DOC'; // Clé primaire
 
     //Fonction qui récupère tous les doc de viste
+
     /**
      * @return array
      */
@@ -22,6 +23,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     }
 
     //Fonction qui récupère tous les doc d'etude
+
     /**
      * @return array
      */
@@ -68,6 +70,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     }
 
     //récupere les dossier qui ont été selection pour le dossier
+
     /**
      * @param mixed $id_dossier
      *
@@ -85,6 +88,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     }
 
     //récupération des docconsulte après un changement de nature
+
     /**
      * @param int|string $id_nature
      * @param mixed      $id_dossier

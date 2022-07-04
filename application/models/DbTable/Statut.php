@@ -13,6 +13,7 @@ class Model_DbTable_Statut extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_STATUT'; // Clé primaire
 
     // Donne la liste des catégories
+
     /**
      * @param float|int|string $id
      *

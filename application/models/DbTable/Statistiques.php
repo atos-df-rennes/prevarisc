@@ -131,6 +131,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     }
 
     // CHAMPS SUPPLEMENTAIRES
+
     /**
      * @return null|self
      */

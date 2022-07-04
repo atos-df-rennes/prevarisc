@@ -7,72 +7,12 @@
 
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
-    
-    <!-- TODO Faire la même avec des partials loops -->
-    <?php foreach ($this->rubriques as $rubrique):
-        if (boolval($rubrique['DISPLAY']) === true): ?>
-            <h4 class='h4_subtitle' id='<?= strtolower(preg_replace('/\s+/', '-', $rubrique["NOM"])) ?>'><?= $rubrique['NOM'] ?></h4>
 
-            <div id='affichage-informations' class='form-horizontal'>
-                <?php if (!empty($rubrique['CHAMPS'])):
-                    $numberOfFilledField = 0;
-                    
-                    foreach ($rubrique['CHAMPS'] as $champ):
-                        if (
-                            ($champ['ID_TYPECHAMP'] !== 5 && $champ['VALEUR'] !== null)
-                            || ($champ['ID_TYPECHAMP'] === 5 && $champ['VALEUR'] !== null && $champ['VALEUR'] !== 0)
-                        ):
-                            $numberOfFilledField++ ?>
-                            <div class='control-group'>
-                                <strong class='control-label'><?= $champ['NOM'] ?></strong>
-                                <div class='controls'>
-                                    <?php switch ($champ['ID_TYPECHAMP']) {
-                                        // Texte
-                                        case 1:
-                                        // Nombre
-                                        case 4: ?>
-                                            <div class='text-control'><?= $champ['VALEUR'] ?></div>
-                                        <?php break;
-                                        // Texte long
-                                        case 2: ?>
-                                            <textarea readonly><?= $champ['VALEUR'] ?></textarea>
-                                        <?php break;
-                                        // Liste
-                                        case 3: ?>
-                                            <select disabled>
-                                                <?php foreach($this->champsvaleurliste[$champ['ID_CHAMP']] as $champvaleurliste): ?>
-                                                    <option
-                                                        value="<?= $champvaleurliste['VALEUR'] ?>"
-                                                        <?= $champvaleurliste['VALEUR'] === $champ['VALEUR'] ? 'selected' : '' ?>
-                                                    >
-                                                        <?= $champvaleurliste['VALEUR'] ?>
-                                                    </option>
-                                                <?php endforeach ?>
-                                            </select>
-                                        <?php break;
-                                        // Case à cocher
-                                        case 5: ?>
-                                            <input type='checkbox' disabled <?= $champ['VALEUR'] ? 'checked' : '' ?>>
-                                        <?php break;
-                                        default:
-                                            break;
-                                    } ?>
-                                </div>
-                            </div>
-                        <?php endif;
-                    endforeach;
-
-                    if ($numberOfFilledField === 0):
-                        echo $this->partial('formulaire/partials/partial-information-manquante.phtml', [
-                            'message' => 'Aucune valeur renseignée.'
-                        ]);
-                    endif;
-                else: 
-                    echo $this->partial('formulaire/partials/partial-information-manquante.phtml', [
-                        'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
-                    ]);
-                endif ?>
-            </div>
-        <?php endif;
-    endforeach ?>
+    <div id='affichage-informations' class='form-horizontal'>
+        <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+            'rubriques' => $this->rubriques,
+            'champsvaleurliste' => $this->champsvaleurliste,
+            'canWrite' => false
+        ]); ?>
+    </div>
 </div>
