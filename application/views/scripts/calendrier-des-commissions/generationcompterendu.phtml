@@ -207,6 +207,13 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 							//Si le champ est un champ Parent alors ....
 							if($champ['ID_TYPECHAMP'] === 6){
 								foreach ($champ['FILS'] as $champFils) {
+                                    if ('Case à cocher' === $champFils['TYPE']) {
+                                        if (true === boolval($champFils['VALEUR'])) {
+                                            $champFils['VALEUR'] = 'Oui';
+                                        } else {
+                                            $champFils['VALEUR'] = 'Non';
+                                        }
+                                    }
 									addChamp(
 										$dossInfos,
 										$serviceUtils->getFullFusionName(
@@ -217,7 +224,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 												$champFils['NOM']
 											]
 										),
-										'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
+										$champFils['VALEUR']
 									);
 								}
 							}else{
@@ -240,7 +247,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 									),
 									$champ['VALEUR']
 								);
-							}																		
+							}
 						}
 					}
                 }

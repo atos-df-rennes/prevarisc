@@ -277,6 +277,13 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                 //Si le champ est un champ Parent alors ....
                 if($champ['ID_TYPECHAMP'] === 6){
                     foreach ($champ['FILS'] as $champFils) {
+                        if ('Case à cocher' === $champFils['TYPE']) {
+                            if (true === boolval($champFils['VALEUR'])) {
+                                $champFils['VALEUR'] = 'Oui';
+                            } else {
+                                $champFils['VALEUR'] = 'Non';
+                            }
+                        }
                         addChamp(
                             $segment,
                             $serviceUtils->getFullFusionName(
@@ -287,8 +294,8 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                     $champFils['NOM']
                                 ]
                             ),
-                            'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
-                        );
+                            $champFils['VALEUR']
+						);
                     }
                 }else{
                     // Définition du libellé pour les cases à cocher
@@ -310,7 +317,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                         ),
                         $champ['VALEUR']
                     );
-                }																		
+                }
             }
         }
     }

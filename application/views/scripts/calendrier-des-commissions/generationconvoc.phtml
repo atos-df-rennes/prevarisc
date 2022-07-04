@@ -330,17 +330,24 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 				//Si le champ est un champ Parent alors ....
 				if($champ['ID_TYPECHAMP'] === 6){
 					foreach ($champ['FILS'] as $champFils) {
-						addChamp(
-							$segment,
-							$serviceUtils->getFullFusionName(
-								$formulaire['NOM_INTERNE'],
-								[
-									$rubrique['NOM'],
-									$champ['NOM'],
-									$champFils['NOM']
-								]
-							),
-							'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
+						if ('Case à cocher' === $champFils['TYPE']) {
+                            if (true === boolval($champFils['VALEUR'])) {
+                                $champFils['VALEUR'] = 'Oui';
+                            } else {
+                                $champFils['VALEUR'] = 'Non';
+                            }
+                        }
+                        addChamp(
+                            $segment,
+                            $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM'],
+                                    $champ['NOM'],
+                                    $champFils['NOM']
+                                ]
+                            ),
+                            $champFils['VALEUR']
 						);
 					}
 				}else{
@@ -363,7 +370,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 						),
 						$champ['VALEUR']
 					);
-				}																		
+				}
 			}
 		}
     }
