@@ -24,7 +24,8 @@ $(document).ready(function() {
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
             success: function(data) {
-                const parsedData = JSON.parse(data)                
+                const jsonParsedData = JSON.parse(data)
+
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
                     savedFieldsDiv.append(getTableElement())
@@ -34,13 +35,13 @@ $(document).ready(function() {
                 }
                 
                 const table = savedFieldsDiv.children('table')
-                table.append(getRowElement(parsedData))
+                table.append(getRowElement(jsonParsedData))
 
-                if (parsedData[0].TYPE === 'Liste') {
-                    const typeRow = table.children('tbody').children().children('#type-'+parsedData[0].ID_CHAMP)
+                if (jsonParsedData[0].TYPE === 'Liste') {
+                    const typeRow = table.children('tbody').children().children('#type-'+jsonParsedData[0].ID_CHAMP)
 
-                    if (parsedData[0].VALEUR !== null) {
-                        typeRow.append(getListElements(parsedData))
+                    if (jsonParsedData[0].VALEUR !== null) {
+                        typeRow.append(getListElements(jsonParsedData))
                     } else {
                         typeRow.append(`<div class="alert">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -123,20 +124,22 @@ function getTableElement() {
     </table>`
 }
 
-function getRowElement(parsedData) {
+function getRowElement(jsonParsedData) {
+    const parsedData = Array.isArray(jsonParsedData) ? jsonParsedData[0] : jsonParsedData
+
     return `<tr>
         <td>`
-        +parsedData[0].NOM+
+        +parsedData.NOM+
         `</td>
-        <td id='type-`+parsedData[0].ID_CHAMP+`'>`
-        +parsedData[0].TYPE+
+        <td id='type-`+parsedData.ID_CHAMP+`'>`
+        +parsedData.TYPE+
         `</td>
         <td id='actions'>
             <div class='text-center'>
-                <a href='/formulaire/edit-champ/rubrique/`+parsedData[0].ID_RUBRIQUE+`/champ/`+parsedData[0].ID_CHAMP+`'>
+                <a href='/formulaire/edit-champ/rubrique/`+parsedData.ID_RUBRIQUE+`/champ/`+parsedData.ID_CHAMP+`'>
                     <i title='Modifier' class='icon-pencil'></i>
                 </a>
-                <a href='' data-id='`+parsedData[0].ID_CHAMP+`' data-rubrique-id='`+parsedData[0].ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
+                <a href='' data-id='`+parsedData.ID_CHAMP+`' data-rubrique-id='`+parsedData.ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
                     <i title='Supprimer' class='icon-trash'></i>
                 </a>
             </div>
@@ -144,11 +147,11 @@ function getRowElement(parsedData) {
     </tr>`
 }
 
-function getListElements(parsedData) {
+function getListElements(jsonParsedData) {
     let list = '<ul>'
 
-    for (let i = 0; i < parsedData.length; i++) {
-        list += '<li>'+parsedData[i].VALEUR+'</li>'
+    for (let i = 0; i < jsonParsedData.length; i++) {
+        list += '<li>'+jsonParsedData[i].VALEUR+'</li>'
     }
 
     list += '</ul>'

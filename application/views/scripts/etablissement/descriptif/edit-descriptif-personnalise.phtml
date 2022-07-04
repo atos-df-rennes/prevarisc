@@ -25,9 +25,8 @@
         </div>
     </div>
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
-        'corpsformulaire' => $this->corpsformulaire,
-        'valeurformulaire' => $this->valeurformulaire,
-        'rubriquedisplay' => $this->rubriques,
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
         'canWrite' => true
     ]); ?>
 </form>

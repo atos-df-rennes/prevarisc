@@ -4,40 +4,31 @@
         <input
             type='text'
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
-            value='<?= isset($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
+            value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
-
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]], ENT_QUOTES) :'' ?></textarea>
+        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
         <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'<?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
-            <?php if (!empty($this->champ['VALEUR']) || true)  :?>
-                <?php foreach($this->champ['VALEUR'] as $valeurListe): ?>
-                    <option
-                        value="<?= htmlspecialchars($valeurListe['VALEUR'], ENT_QUOTES) ?>"
-                        <?php if (!empty( $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'])) :?>
-                            <?= $valeurListe['VALEUR'] === $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'] ? 'selected' : '' ?>
-                        <?php endif?>
-                    >
-                        <?= htmlspecialchars($valeurListe['VALEUR']) ?>
-                    </option>
-                <?php endforeach ?>
-            <?php else:?>
-                <option>
-                    <?= "Aucune valeur de disponible" ?>
+            <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
+                <option
+                    value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
+                    <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
+                >
+                    <?= $champvaleurliste['VALEUR'] ?>
                 </option>
-            <?php endif ?>
+            <?php endforeach ?>
         </select>
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] ?>'>
+        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->champ['VALEUR'] ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
@@ -52,20 +43,20 @@
             name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
-            <?= !empty($this->champ['VALEUR']) ? 'checked' : '' ?>
+            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
-    <?php break;   
-
+    <?php break;
+    // Parent
     case 6:?>
         <div class="tableInput">
-            <?php foreach ($this->champ["CHAMP_FILS"] as $champsFils): ?>
+            <?php foreach ($this->champ["FILS"] as $champsFils): ?>
                 <div class="colTableInput">
                     <th><?= $champsFils['NOM'] ?></th>
                     <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                         'champ' => $champsFils,
-                        'valeurformulaire' => $this->valeurformulaire,
+                        'champsvaleurliste' => $this->champsvaleurliste,
                         'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                        ]); 
+                        ]);
                     ?>
                 </div>
             <?php endforeach;?>

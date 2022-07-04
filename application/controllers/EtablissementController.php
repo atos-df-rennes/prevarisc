@@ -19,11 +19,17 @@ class EtablissementController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js');
-        $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
-        $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        /** @var Zend_View_Helper_HeadScript */
+        $viewHeadScript = $this->view;
+        $viewHeadScript->headScript()->appendFile('/js/tinymce.min.js');
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
@@ -47,9 +53,15 @@ class EtablissementController extends Zend_Controller_Action
     public function editAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
-        $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadScript */
+        $viewHeadScript = $this->view;
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
 
         $service_carto = new Service_Carto();
 
@@ -90,9 +102,11 @@ class EtablissementController extends Zend_Controller_Action
         $mygroupe = Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'];
         $this->view->is_allowed_change_statut = unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut');
 
-        if ($this->_request->isPost()) {
+        /** @var Zend_Controller_Request_Http */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $request->getPost();
                 $options = '';
                 if (
                     getenv('PREVARISC_MAIL_ENABLED')
@@ -110,9 +124,9 @@ class EtablissementController extends Zend_Controller_Action
                 }
 
                 $date = date('Y-m-d');
-                $this->serviceEtablissement->save($post['ID_GENRE'], $post, $this->_request->id, $date);
+                $this->serviceEtablissement->save($post['ID_GENRE'], $post, $request->id, $date);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
-                $this->_helper->redirector('index', null, null, ['id' => $this->_request->id]);
+                $this->_helper->redirector('index', null, null, ['id' => $request->id]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
@@ -121,9 +135,14 @@ class EtablissementController extends Zend_Controller_Action
 
     public function addAction()
     {
-        $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
-        $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        /** @var Zend_View_Helper_HeadScript */
+        $viewHeadScript = $this->view;
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
+        $viewHeadScript->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
 
         $service_genre = new Service_Genre();
         $service_statut = new Service_Statut();
@@ -162,9 +181,11 @@ class EtablissementController extends Zend_Controller_Action
         $mygroupe = Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'];
         $this->view->is_allowed_change_statut = unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut');
 
-        if ($this->_request->isPost()) {
+        /** @var Zend_Controller_Request_Http */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
             try {
-                $post = $this->_request->getPost();
+                $post = $request->getPost();
                 $id_etablissement = $this->serviceEtablissement->save($post['ID_GENRE'], $post);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'L\'établissement a bien été ajouté.']);
 
@@ -187,7 +208,9 @@ class EtablissementController extends Zend_Controller_Action
 
     public function descriptifAction()
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         if (1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'))) {
             $this->descriptifPersonnaliseAction();
@@ -206,44 +229,24 @@ class EtablissementController extends Zend_Controller_Action
     public function descriptifPersonnaliseAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
-        $modelChamp = new Model_DbTable_Champ();
 
         $idEtablissement = $this->getParam('id');
 
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
 
-        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtablissement, get_class($this));
-        //On regarde s il y a n champ de type parent
-        $listeChampFils = [];
-        //6 = ID_TYPE de Parent
-        $idTypeParent = 6;
+        $rubriques = $serviceEtablissementDescriptif->getRubriques($idEtablissement, 'Etablissement');
 
-        $tmpRubrique = [];
-        foreach ($rubriques as $rubrique) {
-            foreach ($rubrique['CHAMPS'] as $champ) {
-                if ($champ['ID_TYPECHAMP'] === $idTypeParent) {
-                    foreach ($modelChamp->getChampFilsValue(intval($champ['ID_CHAMP']), $idEtablissement, 'Etablissement') as $champFils) {
-                        array_push($listeChampFils, $champFils);
-                    }
-                }
-                $tmpRubrique[$rubrique['ID_RUBRIQUE']] = $rubrique;
-            }
-        }
-        $rubriques = $tmpRubrique;
-
-        $this->view->assign('listeChampFils', $listeChampFils);
         $this->view->assign('rubriques', $rubriques);
         $this->view->assign('champsvaleurliste', $serviceEtablissementDescriptif->getValeursListe());
-
-        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        $this->view->assign('corpsformulaire', $modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-        $this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
     }
 
     public function editDescriptifAction()
@@ -253,16 +256,18 @@ class EtablissementController extends Zend_Controller_Action
         } else {
             $this->descriptifAction();
 
-            if ($this->_request->isPost()) {
+            /** @var Zend_Controller_Request_Http */
+            $request = $this->getRequest();
+            if ($request->isPost()) {
                 try {
-                    $post = $this->_request->getPost();
-                    $this->serviceEtablissement->saveDescriptifs($this->_request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
+                    $post = $request->getPost();
+                    $this->serviceEtablissement->saveDescriptifs($request->id, $post['historique'], $post['descriptif'], $post['derogations'], $post['descriptifs_techniques']);
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
                 }
 
-                $this->_helper->redirector('descriptif', null, null, ['id' => $this->_request->id]);
+                $this->_helper->redirector('descriptif', null, null, ['id' => $request->id]);
             }
         }
     }
@@ -279,11 +284,12 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->descriptifPersonnaliseAction();
 
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
-                $lastKey = null;
+
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
@@ -294,8 +300,6 @@ class EtablissementController extends Zend_Controller_Action
                     if (0 === strpos($key, 'champ-')) {
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
-
-                    $lastKey = $key;
                 }
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);

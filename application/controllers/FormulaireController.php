@@ -80,7 +80,7 @@ class FormulaireController extends Zend_Controller_Action
                 $champ['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
             if ('Parent' === $champ['TYPE']) {
-                $champ['LIST_CHAMP'] = $this->modelChamp->getChampFromParent($champ['ID_CHAMP']);
+                $champ['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
             }
         }
 
@@ -173,7 +173,7 @@ class FormulaireController extends Zend_Controller_Action
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
         if ('Parent' === $champType['TYPE']) {
-            $listChamps = $this->modelChamp->getChampFromParent($idChamp);
+            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
 
             foreach ($listChamps as &$listChamp) {
                 if ('Liste' === $listChamp['TYPE']) {
