@@ -6,6 +6,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets');
+        $this->view->isAllowedAvisDerogations = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
 
         $this->serviceEtablissement = new Service_Etablissement();
 
