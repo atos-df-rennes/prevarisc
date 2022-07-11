@@ -1014,6 +1014,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
     public function generationodjAction()
     {
+        $tabCommune = [];
         $dateCommId = $this->_getParam('dateCommId');
         $this->view->idComm = $dateCommId;
 
@@ -1303,7 +1304,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $ics .= 'DTEND:'.$dateEnd."\n";
                 $ics .= 'SUMMARY:'.$row['LIBELLE_DATECOMMISSION']."\n";
                 $ics .= 'DESCRIPTION:'.$row['LIBELLE_DATECOMMISSION'].$descriptifAdd."\n";
-                $ics .= 'UID:'.date('Ymd').'T'.date('His').'-'.rand()."prevarisc\n";
+                $ics .= 'UID:'.date('Ymd').'T'.date('His').'-'.random_int(0, mt_getrandmax())."prevarisc\n";
                 $ics .= "SEQUENCE:0\n";
                 $ics .= 'DTSTAMP:'.date('Ymd').'T'.date('His')."\n";
                 $ics .= "END:VEVENT\n";

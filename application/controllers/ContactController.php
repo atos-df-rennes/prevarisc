@@ -115,7 +115,7 @@ class ContactController extends Zend_Controller_Action
             }
 
             $id_item = $this->_request->id;
-            $exist = isset($_POST['exist']) ? $_POST['exist'] : false;
+            $exist = $_POST['exist'] ?? false;
 
             $id = null;
             if (!$exist) {

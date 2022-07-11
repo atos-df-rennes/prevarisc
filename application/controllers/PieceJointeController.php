@@ -45,6 +45,8 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function getAction()
     {
+        $type = null;
+        $identifiant = null;
         // Modèles
         $DBused = new Model_DbTable_PieceJointe();
 

@@ -179,7 +179,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($idDossier)->current();
 
-            $this->view->id_platau = null !== $dossier['ID_PLATAU'] ? $dossier['ID_PLATAU'] : null;
+            $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
 
             $DBdossierType = new Model_DbTable_DossierType();
             $libelleType = $DBdossierType->find($dossier->TYPE_DOSSIER)->current();
@@ -220,6 +220,7 @@ class DossierController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $historiqueEtab = [];
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
 
         $this->view->do = 'new';
@@ -1673,7 +1674,7 @@ class DossierController extends Zend_Controller_Action
             $datePost = $this->_getParam('date_'.$idValid);
 
             if (
-                '' == $idDossier
+                0 == $idDossier
                 || '' == $idValid
             ) {
                 return false;
@@ -1686,7 +1687,7 @@ class DossierController extends Zend_Controller_Action
                 $date = '0000-00-00';
             }
             $ref = str_replace('"', "''", $_POST['ref_'.$idValid]);
-            $libelle = isset($_POST['libelle_'.$idValid]) ? $_POST['libelle_'.$idValid] : '';
+            $libelle = $_POST['libelle_'.$idValid] ?? '';
 
             //on définit s'il sagid d'un doc ajouté ou nom
             $tabNom = explode('_', $idValid);
@@ -1773,7 +1774,7 @@ class DossierController extends Zend_Controller_Action
 
             $dossier = $DB_dossier->find($this->_getParam('idDossier'))->current();
             $idNature = $DB_dossier->getNatureDossier($this->_getParam('idDossier'));
-            $idNature = isset($idNature['ID_NATURE']) ? $idNature['ID_NATURE'] : 0;
+            $idNature = $idNature['ID_NATURE'] ?? 0;
 
             if ($service_dossier->isDossierDonnantAvis($dossier, $idNature)) {
                 $service_dossier->saveDossierDonnantAvis(
@@ -1941,7 +1942,7 @@ class DossierController extends Zend_Controller_Action
 
         if (
             isset($idDossier)
-            && '' != $idDossier
+            && 0 != $idDossier
         ) {
             $pathBase = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 

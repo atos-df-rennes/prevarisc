@@ -27,7 +27,7 @@ class SessionController extends Zend_Controller_Action
                     if (1 == count($cred)) {
                         array_unshift($cred, null);
                     }
-                    list($domain, $username) = $cred;
+                    [$domain, $username] = $cred;
                 }
             } elseif ($this->_request->isPost()) { // Cas par défaut
                 if (!$form->isValid($this->_request->getPost())) {
@@ -89,7 +89,7 @@ class SessionController extends Zend_Controller_Action
                     $ldap = new Zend_Ldap(['host' => getenv('PREVARISC_LDAP_HOST'), 'port' => getenv('PREVARISC_LDAP_PORT') ?: 389, 'username' => getenv('PREVARISC_LDAP_USERNAME'), 'password' => getenv('PREVARISC_LDAP_PASSWORD'), 'baseDn' => getenv('PREVARISC_LDAP_BASEDN')]);
 
                     try {
-                        $accountForm = getenv('PREVARISC_LDAP_ACCOUNT_FORM') ? getenv('PREVARISC_LDAP_ACCOUNT_FORM') : Zend_Ldap::ACCTNAME_FORM_DN;
+                        $accountForm = getenv('PREVARISC_LDAP_ACCOUNT_FORM') ?: Zend_Ldap::ACCTNAME_FORM_DN;
                         $adapters['ldap'] = new Zend_Auth_Adapter_Ldap();
                         $adapters['ldap']->setLdap($ldap);
                         $adapters['ldap']->setUsername($ldap->getCanonicalAccountName($username, $accountForm));
