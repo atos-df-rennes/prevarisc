@@ -4,6 +4,8 @@ class EtablissementController extends Zend_Controller_Action
 {
     public function init(): void
     {
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
+
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets');
         $this->view->isAllowedAvisDerogations = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
@@ -14,6 +16,7 @@ class EtablissementController extends Zend_Controller_Action
             $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
             $this->view->etablissement = $this->etablissement;
             $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
+            $this->view->hasAvisDerogations = array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id)) ? true : false;
         }
     }
 
@@ -573,6 +576,6 @@ class EtablissementController extends Zend_Controller_Action
     public function avisDerogationsEtablissementAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->historiqueAvisDerogations = $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'];
+        $this->view->historiqueAvisDerogations = $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? [];
     }
 }

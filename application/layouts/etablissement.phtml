@@ -39,6 +39,10 @@
             <a class='sep' href='<?= $this->url(array("action"=>"avis-derogations-etablissement")) ?>'>
                 <em class="icon-file icon-black"></em>
                 Avis et dérogations
+
+                <?php if($this->hasAvisDerogations): ?>
+                    <div class="greenCircle pull-right"></div>
+                <?php endif ?>
             </a>
         </li>
     <?php endif ?>
