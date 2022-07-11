@@ -1,6 +1,9 @@
-window.onload = function(){
+document.addEventListener("DOMContentLoaded", function() {
 
-    console.log("i'm load bro")
+
+console.log("i'm load bro")
+
+
 
     const listGrp = document.getElementsByClassName('grp')
     const listParent = document.getElementsByClassName('parent')
@@ -20,6 +23,8 @@ window.onload = function(){
                         ID : el.id
                     })
                 })
+
+        console.log("New return ; ",toReturn)
         return toReturn
     }
     
@@ -56,17 +61,6 @@ window.onload = function(){
             }
           });
 
-/*
-          document.getElementById(listGrp[i].id).addEventListener(
-              'dragend',
-              function(){
-                    console.log("Dragend ...")
-                    compareAndRequest(getLisOrderInput(listGrp[i].id))
-                    console.log("new attribution done")
-                },
-              false
-          )
-*/
           document.getElementById(listGrp[i].id).addEventListener(
             'dragstart',
             function(){
@@ -97,17 +91,4 @@ window.onload = function(){
           });
     }
 
-
-
-    document.addEventListener('dragend', function(){
-        console.log('Drag end')
-    })
-
-    document.addEventListener('click', function(){
-        console.log('Clic document')
-    })
-
-    document.addEventListener('mouseup', function(){
-        console.log('Clic up')
-    })
-}
+},false);

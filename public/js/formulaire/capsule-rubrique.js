@@ -16,9 +16,11 @@ $(document).ready(function() {
 
                 // On crée la table uniquement si elle n'existe pas
                 if (savedRubriquesDiv.children().length === 0) {
-                    savedRubriquesTitlesDiv.append(`<div class="span6 offset2">
+                    savedRubriquesTitlesDiv.append(`
+                    <div class="span6 offset2">
                         <h3>Liste des rubriques</h3>
-                    </div>`)
+                    </div>
+                    `)
                     savedRubriquesDiv.append(getTableElement())
                 }
 
@@ -69,17 +71,19 @@ function deleteRubrique(element) {
 }
 
 function getTableElement() {
-    return `<table class="table table-bordered table-condensed">
-        <thead>
-            <tr>
-                <th>Nom de la rubrique</th>
-                <th>Afficher la rubrique par défaut</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>`
+    return `
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Nom de la rubrique</th>
+                    <th>Afficher la rubrique par défaut</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        `
 }
 
 function getRowElement(parsedData) {

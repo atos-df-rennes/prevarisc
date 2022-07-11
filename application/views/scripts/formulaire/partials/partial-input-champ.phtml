@@ -71,7 +71,6 @@
                 <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
                         <th>#</th>
                 <?php endif ?>
-                    <th>IDX</th>
                     <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <th>
                             <?= $champsFils['NOM'] ?>
@@ -90,19 +89,16 @@
                         <i class="icon-move"></i>
                     </td>
                 <?php endif ?>
-                <td></td>
-                
                 <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
                         <td>
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                                 'champ' => $champsFils,
                                 'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                'idxTableau' => -1
+                                'idxTableau' => 0
                                 ]); 
                             ?>
                         </td>
                 <?php endforeach ?>
-                    
                 <td>
                     <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
                         <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
@@ -118,9 +114,7 @@
                                 <i class="icon-move"></i>
                             </td>
                     <?php endif ?>
-                    <td>
-                        <?= $k ?>
-                    </td>
+                    
                     <!--Construction de la ligne avec les champs-->
                     <?php foreach($ligneValeur as $idParent => $listValeur): ?>
                         <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
@@ -172,9 +166,25 @@
 <script>
     window.onload = function() {
         $('.addRow').click(function() {
+
+            //Ajout de la nouvelle ligne au tableau selectionne
             document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
-            += 
+            +=
+            ( 
             document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
+            )
+
+            
+            //recuperation du tr comprennant tous les inputs
+            let inputInTr = document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr')[document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr').length -1 ].getElementsByTagName('input')
+            //Creation du timestamp pour grouper la ligne des inputs
+            const newD = Date.now()
+
+            Array.from(inputInTr).forEach(input => {
+                if(input.name){
+                    input.setAttribute("name",'valeur-'+newD+'-'+input.name.split('-')[input.name.split('-').length - 1])
+                }
+            })
 
             $('.deleteRow').click(function(){
                 $(this).closest('tr').remove();

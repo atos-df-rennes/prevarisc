@@ -1,5 +1,33 @@
 $(document).ready(function() {  
     
+    $('.addRow').click(function() {
+        //Ajout de la nouvelle ligne au tableau selectionne
+        document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
+        +=
+        ( 
+        document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
+        )
+        
+        //recuperation du tr comprennant tous les inputs
+        let inputInTr = document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr')[document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr').length -1 ].getElementsByTagName('input')
+        //Creation du timestamp pour grouper la ligne des inputs
+        const newD = Date.now()
+        Array.from(inputInTr).forEach(input => {
+            if(input.name){
+                input.setAttribute("name",'valeur-'+newD+'-'+input.name.split('-')[input.name.split('-').length - 1])
+            }
+        })
+
+        $('.deleteRow').click(function(){
+            $(this).closest('tr').remove();
+        })
+    })
+
+    $('.deleteRow').click(function(){
+        $(this).closest('tr').remove();
+    })
+    
+    /*
     $('.btnAddRowTable').click(function () { 
         $.ajax({
             type: "POST",
@@ -8,7 +36,7 @@ $(document).ready(function() {
             dataType: "json"
         })
     });
-    
+    */
     $('.deleteRow').click(function () { 
         $.ajax({
             type: "POST",
