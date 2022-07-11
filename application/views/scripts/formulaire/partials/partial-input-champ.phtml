@@ -5,7 +5,7 @@
     case 1: ?>
         <input
             type='text'
-            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
             value='<?= !empty($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
@@ -13,11 +13,11 @@
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?>><?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
+        <textarea name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?>><?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
-        <select name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'     
+        <select name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'     
         <?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
             <?php if (!empty($this->champ['VALEUR']))  :?>
@@ -27,7 +27,7 @@
                         <?php if (!empty( $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'])) :?>
                             <?= $valeurListe['VALEUR'] === $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'] ? 'selected' : '' ?>
                         <?php endif?>
-                    >
+                        >
                         <?= htmlspecialchars($valeurListe['VALEUR']) ?>
                     </option>
                 <?php endforeach ?>
@@ -40,19 +40,19 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
+        <input type='number' name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
         <input
             type="hidden"
-            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' 
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>' 
             value="0"
             <?= $this->canWrite ? '': 'disabled'?>
         >
         <input
             type="checkbox"
-            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-' . $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
             <?= !empty($this->valeurformulaire[ $this->champ['ID_CHAMP']]['VALEUR_CHECKBOX']) ? 'checked' : '' ?>
@@ -94,7 +94,8 @@
                             <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                                 'champ' => $champsFils,
                                 'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                'idxTableau' => 0
+                                'idxTableau' => 0,
+                                'idParent' => $this->champ['ID_CHAMP']
                                 ]); 
                             ?>
                         </td>
@@ -124,7 +125,8 @@
                                         'champ' => $champsFils,
                                         'valeurformulaire' => $listValeur,
                                         'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                        'idxTableau' => $k
+                                        'idxTableau' => $k,
+                                        'idParent' => $idParent
                                         ]); 
                                     ?>
                                 </td>
@@ -162,37 +164,3 @@
     default:
         break;
 } ?>
-
-<script>
-    window.onload = function() {
-        $('.addRow').click(function() {
-
-            //Ajout de la nouvelle ligne au tableau selectionne
-            document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
-            +=
-            ( 
-            document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
-            )
-
-            
-            //recuperation du tr comprennant tous les inputs
-            let inputInTr = document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr')[document.getElementById('tbody-'+$(this).attr('idparent')).getElementsByTagName('tr').length -1 ].getElementsByTagName('input')
-            //Creation du timestamp pour grouper la ligne des inputs
-            const newD = Date.now()
-
-            Array.from(inputInTr).forEach(input => {
-                if(input.name){
-                    input.setAttribute("name",'valeur-'+newD+'-'+input.name.split('-')[input.name.split('-').length - 1])
-                }
-            })
-
-            $('.deleteRow').click(function(){
-                $(this).closest('tr').remove();
-            })
-        })
-
-        $('.deleteRow').click(function(){
-            $(this).closest('tr').remove();
-        })
-    }
-</script>

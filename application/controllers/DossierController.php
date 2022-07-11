@@ -3171,7 +3171,7 @@ class DossierController extends Zend_Controller_Action
                     }
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'valeur-')) {
-                        var_dump($key);
+                        //var_dump($key);
                         //die(1);
                         $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
                     }

@@ -74,14 +74,14 @@ abstract class Service_Descriptif
         $this->serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
-    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value, $idx = null): void
+    public function  saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
     {
             $explodedChamp = explode('-', $key);
             $idChamp = end($explodedChamp);
             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 
-    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, $idx = null): void
+    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
 

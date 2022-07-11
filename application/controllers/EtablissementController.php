@@ -1,4 +1,4 @@
-<?php
+pre<?php
 
 class EtablissementController extends Zend_Controller_Action
 {
@@ -272,6 +272,37 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
+    private function groupInputByOrder(array $initialList){
+        $newList = [];
+        foreach ($initialList as $inputName => $value) {   
+            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+ 
+                $idxInput = explode('-',$inputName)[1];
+                $idParent =  explode('-',$inputName)[2];
+                $idInput =  explode('-',$inputName)[3];
+                
+                if(!array_key_exists($idParent,$newList)){
+                    $newList[$idParent] = [];                
+                }
+                if(!array_key_exists($idxInput,$newList[$idParent])){
+                    $newList[$idParent][$idxInput] = [];                
+                }
+                $newList[$idParent][$idxInput][$idInput] = $value;
+            }
+        }
+        $tmpList =[];
+        foreach ($newList as $parent => $listIdx) {
+            foreach ($listIdx as $idx => $input) {
+                foreach($input as $idChamp => $valeur){
+                    $tmpList[$parent][intval(array_search($idx,array_keys($listIdx)) +1)][$idChamp] = $valeur;
+                }
+            }
+
+        }
+        $newList = $tmpList;
+        return $newList;
+    }
+
     public function editDescriptifPersonnaliseAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
@@ -310,31 +341,39 @@ class EtablissementController extends Zend_Controller_Action
                     }
                     
                     if (0 === strpos($key, 'valeur-')) {
+                        if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
 
-                        /*
-                        var_dump('<pre>',$key,'</pre>');
-                        var_dump('<pre>',$idEtablissement,'</pre>');
-                        var_dump('<pre>',get_class($this),'</pre>');
-                        var_dump('<pre>',$value,'</pre>');
-                        var_dump('<pre>',explode('-',$key),'</pre>');
-                        */
+                            foreach($this->groupInputByOrder($post) as $k => $v){
+                                foreach($v as $idChamp => $input){
+                                    /*
+                                    if(isset($input) && $k !== 0){
+                                        var_dump(
+                                            '<pre>',
+                                                $v,
+                                                $key,
+                                                $idChamp,
+                                                $k
+                                            ,'</pre>');
+                                        //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $input, intval($k));
+                                    }
+                                    */
+                                   
+                                    //var_dump('<pre>',intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]),'</pre>');
+                                    
+                                    $serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]));
+                                }
+                            }
 
-                     /*   var_dump('<pre>',
-                        explode('-',$key)[sizeof(explode('-',$key)) -2 ]
-                        ,'</pre>');
-                       */ 
-                        if(                        explode('-',$key)[sizeof(explode('-',$key)) -2 ] !== '-1'){
-                            $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value, explode('-',$key)[sizeof(explode('-',$key)) -2 ]);
-                           // die(1);
+                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -2 ]));
+
+                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]));
+                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval( array_search(explode('-',$key)[sizeof(explode('-',$key)) -2 ])));
+                            //die(1);
                         }
 
-                            
+                    }
 
-                        }
-                    
-                    $lastKey = $key;
                 }
-
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
