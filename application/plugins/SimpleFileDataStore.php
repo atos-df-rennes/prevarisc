@@ -52,7 +52,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      */
     public function getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId): string
     {
-        $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
+        $type = $this->types[$linkedObjectType] ?? $linkedObjectType;
 
         return implode(DS, [
             REAL_DATA_PATH,
@@ -104,7 +104,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             return null;
         }
 
-        $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
+        $type = $this->types[$linkedObjectType] ?? $linkedObjectType;
 
         return implode(DS, [
             DATA_PATH,
@@ -146,7 +146,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             case 'etablissement':
                 $service = new Service_Etablissement();
                 $etablissement = $service->get($linkedObjectId);
-                $tokens[] = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
+                $tokens[] = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ?: $linkedObjectId;
 
                 break;
 
@@ -158,7 +158,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                     foreach ($dossiers as $dossier) {
                         $service = new Service_Etablissement();
                         $etablissement = $service->get($dossier['ID_ETABLISSEMENT']);
-                        $numero_id = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
+                        $numero_id = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ?: $linkedObjectId;
                         if (false !== stripos($piece_jointe['DESCRIPTION_PIECEJOINTE'], $numero_id)) {
                             $tokens['%NUMEROID_ETABLISSEMENT%'] = $numero_id;
 

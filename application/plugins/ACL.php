@@ -427,7 +427,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     private function getPagePrivilege($page)
     {
         if (null !== $page) {
-            return null === $page->getPrivilege() ? $page->getParent() instanceof Zend_Navigation_Page ? $this->getPagePrivilege($page->getParent()) : null : $page->getPrivilege();
+            return $page->getPrivilege() ?? ($page->getParent() instanceof Zend_Navigation_Page ? $this->getPagePrivilege($page->getParent()) : null);
         }
 
         return null;
@@ -486,7 +486,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
             $communes[$id] = implode('-', $communes[$id]);
         }
 
-        $resource = '';
+        $resource = [];
 
         switch ($etablissement['informations']['ID_GENRE']) {
             case '1':
