@@ -43,6 +43,7 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
      */
     public function replace($idOldArticle, $idNewArticle)
     {
+        $where = [];
         $data = ['ID_ARTICLE' => $idNewArticle];
         $where[] = 'ID_ARTICLE = '.$idOldArticle;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
