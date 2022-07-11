@@ -1131,7 +1131,7 @@ class Service_Search
         $selectListePrev->from(['ui' => 'utilisateurinformations'], ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
             ->join('utilisateur', 'ui.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', null)
             ->join('dossierpreventionniste', 'dossierpreventionniste.ID_PREVENTIONNISTE = utilisateur.ID_UTILISATEUR', 'ID_PREVENTIONNISTE')
-            ->order('NOM_UTILISATEURINFORMATIONS', 'ASC')
+            ->order('NOM_UTILISATEURINFORMATIONS')
             ->distinct()
         ;
 

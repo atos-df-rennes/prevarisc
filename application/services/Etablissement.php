@@ -869,7 +869,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];
             $informations->ID_GENRE = $id_genre;
-            $informations->ID_STATUT = isset($data['ID_STATUT']) ? $data['ID_STATUT'] : 1;
+            $informations->ID_STATUT = $data['ID_STATUT'] ?? 1;
             $informations->UTILISATEUR_ETABLISSEMENTINFORMATIONS = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
             $informations->ID_ETABLISSEMENT = $etablissement->ID_ETABLISSEMENT;
 
@@ -1087,7 +1087,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
@@ -1123,7 +1123,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || (null !== $id_etablissement_pere && '' != $id_etablissement_pere)) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
@@ -1131,7 +1131,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             default:
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
