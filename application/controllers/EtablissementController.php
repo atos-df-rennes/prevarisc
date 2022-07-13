@@ -1,9 +1,9 @@
-pre<?php
+<?php
 
 class EtablissementController extends Zend_Controller_Action
 {
 
-    
+
     public function init(): void
     {
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
@@ -274,18 +274,18 @@ class EtablissementController extends Zend_Controller_Action
 
     private function groupInputByOrder(array $initialList){
         $newList = [];
-        foreach ($initialList as $inputName => $value) {   
+        foreach ($initialList as $inputName => $value) {
             if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
- 
+
                 $idxInput = explode('-',$inputName)[1];
                 $idParent =  explode('-',$inputName)[2];
                 $idInput =  explode('-',$inputName)[3];
-                
+
                 if(!array_key_exists($idParent,$newList)){
-                    $newList[$idParent] = [];                
+                    $newList[$idParent] = [];
                 }
                 if(!array_key_exists($idxInput,$newList[$idParent])){
-                    $newList[$idParent][$idxInput] = [];                
+                    $newList[$idParent][$idxInput] = [];
                 }
                 $newList[$idParent][$idxInput][$idInput] = $value;
             }
@@ -315,7 +315,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        
+
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $idEtablissement = $this->getParam('id');
@@ -330,7 +330,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
-                    
+
                     if (0 === strpos($key, 'afficher_rubrique-')) {
                         $serviceEtablissementDescriptif->saveRubriqueDisplay($key, $idEtablissement, intval($value));
                     }
@@ -339,36 +339,16 @@ class EtablissementController extends Zend_Controller_Action
                     if (0 === strpos($key, 'champ-')) {
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
-                    
+
                     if (0 === strpos($key, 'valeur-')) {
                         if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
-
                             foreach($this->groupInputByOrder($post) as $k => $v){
-                                foreach($v as $idChamp => $input){
-                                    /*
-                                    if(isset($input) && $k !== 0){
-                                        var_dump(
-                                            '<pre>',
-                                                $v,
-                                                $key,
-                                                $idChamp,
-                                                $k
-                                            ,'</pre>');
-                                        //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $input, intval($k));
+                                foreach($v as $idx => $input){
+                                    foreach ($input as $idChamp => $value) {
+                                        $serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, $idx);
                                     }
-                                    */
-                                   
-                                    //var_dump('<pre>',intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]),'</pre>');
-                                    
-                                    $serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]));
                                 }
                             }
-
-                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -2 ]));
-
-                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval(explode('-',$key)[sizeof(explode('-',$key)) -3 ]));
-                            //$serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, intval( array_search(explode('-',$key)[sizeof(explode('-',$key)) -2 ])));
-                            //die(1);
                         }
 
                     }
