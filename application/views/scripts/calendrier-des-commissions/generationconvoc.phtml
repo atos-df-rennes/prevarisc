@@ -314,12 +314,12 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                 $avisDerogations->merge();
             }
         } else {
-            addChamp($avisDerogations, 'type', '');
-            addChamp($avisDerogations, 'titre', '');
-            addChamp($avisDerogations, 'informations', '');
-            addChamp($avisDerogations, 'avis', '');
-            addChamp($avisDerogations, 'identifiantdossierleve', '');
-            addChamp($avisDerogations, 'affichagehistorique', '');
+            setVars($avisDerogations, 'type', '');
+            setVars($avisDerogations, 'titre', '');
+            setVars($avisDerogations, 'informations', '');
+            setVars($avisDerogations, 'avis', '');
+            setVars($avisDerogations, 'identifiantdossierleve', '');
+            setVars($avisDerogations, 'affichagehistorique', '');
 
             $avisDerogations->merge();
         }
@@ -332,7 +332,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
         if (is_array($formulaire['RUBRIQUES'])) {
             // Permet d'avoir les informations unitairement
             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-                addChamp(
+                setVars(
                     $segment,
                     $serviceUtils->getFullFusionName(
                         $formulaire['NOM_INTERNE'],
@@ -353,7 +353,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     $champFils['VALEUR'] = 'Non';
                                 }
                             }
-                            addChamp(
+                            setVars(
                                 $segment,
                                 $serviceUtils->getFullFusionName(
                                     $formulaire['NOM_INTERNE'],
@@ -375,7 +375,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 $champ['VALEUR'] = 'Non';
                             }
                         }
-                        addChamp(
+                        setVars(
                             $segment,
                             $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
