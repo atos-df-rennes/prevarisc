@@ -138,24 +138,39 @@ foreach($this->membresFiles as $val => $membre){
 						}
 
                         // Gestion des avis & dérogations
-                        $segmentAvisDerogations = isset($dossInfos->avisDerogations) ? $dossInfos->avisDerogations : null;
+                        try {
+                            $avisDerogations = $dossInfos->avisDerogations;
+                        } catch (Exception $e) {}
 
-                        foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
-                            addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
-                            addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
-                            addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
-                            addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
-                            addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+                        if (isset($avisDerogations)) {
+                            if (!empty($dossierInfos["AVIS_DEROGATIONS"])) {
+                                foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+                                    addChamp($avisDerogations, 'type', $avisDerogation['TYPE']);
+                                    addChamp($avisDerogations, 'titre', $avisDerogation['TITRE']);
+                                    addChamp($avisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+                                    addChamp($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                                    addChamp($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
-                            if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
-                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                                    if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+                                        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                                    } else {
+                                        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                                    }
+
+                                    addChamp($avisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+                                    $avisDerogations->merge();
+                                }
                             } else {
-                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                                addChamp($avisDerogations, 'type', '');
+                                addChamp($avisDerogations, 'titre', '');
+                                addChamp($avisDerogations, 'informations', '');
+                                addChamp($avisDerogations, 'avis', '');
+                                addChamp($avisDerogations, 'identifiantdossierleve', '');
+                                addChamp($avisDerogations, 'affichagehistorique', '');
+
+                                $avisDerogations->merge();
                             }
-
-                            addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
-
-                            $segmentAvisDerogations->merge();
                         }
 
                         // Gestion des formulaires personnalisés
@@ -165,27 +180,50 @@ foreach($this->membresFiles as $val => $membre){
 						$modelChamp = new Model_DbTable_Champ();
 
                         foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
-							// Permet d'avoir les informations unitairement
-                            foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-                                addChamp(
-                                    $odf,
-                                    $serviceUtils->getFullFusionName(
-                                        $formulaire['NOM_INTERNE'],
-                                        [
-                                            $rubrique['NOM']
-                                        ]
-                                    ),
-                                    $rubrique['NOM']
-                                );
-                                foreach ($rubrique['CHAMPS'] as $champ) {
-									//Si le champ est un champ Parent alors ....
-									if($champ['ID_TYPECHAMP'] === 6){
-										foreach ($champ['FILS'] as $champFils) {
-											if ('Case à cocher' === $champFils['TYPE']) {
-                                                if (true === boolval($champFils['VALEUR'])) {
-                                                    $champFils['VALEUR'] = 'Oui';
+                            if (is_array($formulaire['RUBRIQUES'])) {
+                                // Permet d'avoir les informations unitairement
+                                foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+                                    addChamp(
+                                        $odf,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM']
+                                            ]
+                                        ),
+                                        $rubrique['NOM']
+                                    );
+                                    foreach ($rubrique['CHAMPS'] as $champ) {
+                                        //Si le champ est un champ Parent alors ....
+                                        if ($champ['ID_TYPECHAMP'] === 6) {
+                                            foreach ($champ['FILS'] as $champFils) {
+                                                if ('Case à cocher' === $champFils['TYPE']) {
+                                                    if (true === boolval($champFils['VALEUR'])) {
+                                                        $champFils['VALEUR'] = 'Oui';
+                                                    } else {
+                                                        $champFils['VALEUR'] = 'Non';
+                                                    }
+                                                }
+                                                addChamp(
+                                                    $odf,
+                                                    $serviceUtils->getFullFusionName(
+                                                        $formulaire['NOM_INTERNE'],
+                                                        [
+                                                            $rubrique['NOM'],
+                                                            $champ['NOM'],
+                                                            $champFils['NOM']
+                                                        ]
+                                                    ),
+                                                    $champFils['VALEUR']
+                                                );
+                                            }
+                                        } else {
+                                            // Définition du libellé pour les cases à cocher
+                                            if ('Case à cocher' === $champ['TYPE']) {
+                                                if (true === boolval($champ['VALEUR'])) {
+                                                    $champ['VALEUR'] = 'Oui';
                                                 } else {
-                                                    $champFils['VALEUR'] = 'Non';
+                                                    $champ['VALEUR'] = 'Non';
                                                 }
                                             }
                                             addChamp(
@@ -194,34 +232,13 @@ foreach($this->membresFiles as $val => $membre){
                                                     $formulaire['NOM_INTERNE'],
                                                     [
                                                         $rubrique['NOM'],
-                                                        $champ['NOM'],
-                                                        $champFils['NOM']
+                                                        $champ['NOM']
                                                     ]
                                                 ),
-                                                $champFils['VALEUR']
+                                                $champ['VALEUR']
                                             );
-										}
-									}else{
-										// Définition du libellé pour les cases à cocher
-										if ('Case à cocher' === $champ['TYPE']) {
-											if (true === boolval($champ['VALEUR'])) {
-												$champ['VALEUR'] = 'Oui';
-											} else {
-												$champ['VALEUR'] = 'Non';
-											}
-										}
-										addChamp(
-											$odf,
-											$serviceUtils->getFullFusionName(
-												$formulaire['NOM_INTERNE'],
-												[
-													$rubrique['NOM'],
-													$champ['NOM']
-												]
-											),
-											$champ['VALEUR']
-										);
-									}
+                                        }
+                                    }
                                 }
                             }
                         }

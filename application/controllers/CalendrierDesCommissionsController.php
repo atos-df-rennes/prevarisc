@@ -1008,12 +1008,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             foreach ($listeDossiers as &$dossier) {
                 $dossier['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
                 $dossier['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
-                $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
-                $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+                $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = !empty($dossier['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'] : '';
+                $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = !empty($dossier['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'] : '';
 
                 // Gestion des formulaires personnalisés
                 $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
-                $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
                 $rubriquesByCapsuleRubrique = [
                     'descriptifEtablissement' => $rubriquesEtablissement,
@@ -1163,14 +1163,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         foreach ($listeDossiers as &$dossier) {
             $dossier['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $dossier['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($dossier['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
-            $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
-            $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+            $dossier['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = !empty($dossier['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'] : '';
+            $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = !empty($dossier['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'] : '';
 
             $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
             $rubriquesByCapsuleRubrique = [
                 'descriptifEtablissement' => $rubriquesEtablissement,
@@ -1249,12 +1249,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             // FIXME Remplacer les $listeDossiers[$val] par $ue
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
-            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
-            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = !empty($listeDossiers[$val]['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'] : '';
+            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = !empty($listeDossiers[$val]['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'] : '';
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesEtablissement = !empty($listeDossiers[$val]['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
             $rubriquesByCapsuleRubrique = [
                 'descriptifEtablissement' => $rubriquesEtablissement,
@@ -1320,14 +1320,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $listeDossiers[$val]['DESCRIPTION_EFFECTIF_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_EFFECTIF'];
             $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_DOSSIER'] = $dbDossier->getEffectifEtDegagement($listeDossiers[$val]['ID_DOSSIER'])['DESCRIPTION_DEGAGEMENT'];
-            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'];
-            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'];
+            $listeDossiers[$val]['DESCRIPTION_EFFECTIF_ETABLISSEMENT'] = !empty($listeDossiers[$val]['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_EFFECTIF'] : '';
+            $listeDossiers[$val]['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = !empty($listeDossiers[$val]['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'] : '';
 
             $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesEtablissement = !empty($listeDossiers[$val]['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
             $rubriquesByCapsuleRubrique = [
                 'descriptifEtablissement' => $rubriquesEtablissement,
