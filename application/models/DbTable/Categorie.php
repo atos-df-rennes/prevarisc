@@ -6,6 +6,7 @@ class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_CATEGORIE'; // Clé primaire
 
     // Donne la liste des catégories
+
     /**
      * @param float|int|string $id
      *

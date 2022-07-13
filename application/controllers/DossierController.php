@@ -3122,8 +3122,6 @@ class DossierController extends Zend_Controller_Action
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
             $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
-            // FIXME Normalement inutile
-            $this->view->idDossier = $this->idDossier;
         }
 
         $request = $this->getRequest();
@@ -3137,41 +3135,57 @@ class DossierController extends Zend_Controller_Action
 
     public function verificationsTechniquesAction()
     {
-        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
+        $modelDossier = new Model_DbTable_Dossier();
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
-        $idDossier = $this->getParam('id');
+        $service_dossier = new Service_Dossier();
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
+        }
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
 
     public function editVerificationsTechniquesAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
+        $modelDossier = new Model_DbTable_Dossier();
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
-        $idDossier = $this->getParam('id');
+        $service_dossier = new Service_Dossier();
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
+        }
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
 
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
                 $post = $request->getParams();
-                $lastKey = null;
+
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, intval($value));
                     }
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                        $serviceDossierDescriptif->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
                     }
-                    $lastKey = $key;
                 }
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {

@@ -26,6 +26,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     }
 
     // NOTE : à faire après enregistrement d'un établissement
+
     /**
      * @param mixed $id
      *

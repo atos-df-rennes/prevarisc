@@ -762,26 +762,51 @@ foreach ($this->formulaires as $formulaire) {
         );
 
         foreach ($rubrique['CHAMPS'] as $champ) {
-            // Définition du libellé pour les cases à cocher
-            if ('Case à cocher' === $champ['TYPE']) {
-                if (true === boolval($champ['VALEUR'])) {
-                    $champ['VALEUR'] = 'Oui';
-                } else {
-                    $champ['VALEUR'] = 'Non';
+            //Si le champ est un champ Parent alors ....
+            if($champ['ID_TYPECHAMP'] === 6){
+                foreach ($champ['FILS'] as $champFils) {
+                    if ('Case à cocher' === $champFils['TYPE']) {
+                        if (true === boolval($champFils['VALEUR'])) {
+                            $champFils['VALEUR'] = 'Oui';
+                        } else {
+                            $champFils['VALEUR'] = 'Non';
+                        }
+                    }
+                    addChamp(
+                        $odf,
+                        $serviceUtils->getFullFusionName(
+                            $formulaire['NOM_INTERNE'],
+                            [
+                                $rubrique['NOM'],
+                                $champ['NOM'],
+                                $champFils['NOM']
+                            ]
+                        ),
+                        $champFils['VALEUR']
+                    );
                 }
-            }
+            }else{
+                // Définition du libellé pour les cases à cocher
+                if ('Case à cocher' === $champ['TYPE']) {
+                    if (true === boolval($champ['VALEUR'])) {
+                        $champ['VALEUR'] = 'Oui';
+                    } else {
+                        $champ['VALEUR'] = 'Non';
+                    }
+                }
 
-            addChamp(
-                $odf,
-                $serviceUtils->getFullFusionName(
-                    $formulaire['NOM_INTERNE'],
-                    [
-                        $rubrique['NOM'],
-                        $champ['NOM']
-                    ]
-                ),
-                $champ['VALEUR']
-            );
+                addChamp(
+                    $odf,
+                    $serviceUtils->getFullFusionName(
+                        $formulaire['NOM_INTERNE'],
+                        [
+                            $rubrique['NOM'],
+                            $champ['NOM']
+                        ]
+                    ),
+                    $champ['VALEUR']
+                );
+            }
         }
     }
 }
