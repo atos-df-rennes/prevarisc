@@ -345,7 +345,7 @@ class EtablissementController extends Zend_Controller_Action
                             foreach($this->groupInputByOrder($post) as $k => $v){
                                 foreach($v as $idx => $input){
                                     foreach ($input as $idChamp => $value) {
-                                        $serviceEtablissementDescriptif->saveValeurChamp($key, intval($idEtablissement), get_class($this), $value, $idx);
+                                        $serviceEtablissementDescriptif->saveValeurChamp($idChamp, intval($idEtablissement), get_class($this), $value, $idx);
                                     }
                                 }
                             }
