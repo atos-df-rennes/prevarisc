@@ -3135,50 +3135,122 @@ class DossierController extends Zend_Controller_Action
 
     public function verificationsTechniquesAction()
     {
+        $this->_helper->layout->setLayout('dossier');
         $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $serviceDossierVerifications = new Service_DossierVerificationsTechniques();
+        $modelChamp = new Model_DbTable_Champ();
+
         $idDossier = $this->getParam('id');
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
-        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+        $rubriques = $serviceDossierVerifications->getRubriques($idDossier, get_class($this));
+
+        $tmpRubrique = [];
+        foreach ($rubriques as $rubrique) {
+            foreach ($rubrique['CHAMPS'] as $champ) {
+                $tmpRubrique[$rubrique['ID_RUBRIQUE']] = $rubrique;
+            }
+        }
+        $rubriques = $tmpRubrique;
+
+
+        $this->view->assign('rubriques', $rubriques);
+
+        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
+        $this->view->assign('corpsformulaire', $modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        $this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
     }
 
+
+
+
+    private function groupInputByOrder(array $initialList){
+        $newList = [];
+        foreach ($initialList as $inputName => $value) {
+            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+
+                $idxInput = explode('-',$inputName)[1];
+                $idParent =  explode('-',$inputName)[2];
+                $idInput =  explode('-',$inputName)[3];
+
+                if(!array_key_exists($idParent,$newList)){
+                    $newList[$idParent] = [];
+                }
+                if(!array_key_exists($idxInput,$newList[$idParent])){
+                    $newList[$idParent][$idxInput] = [];
+                }
+                $newList[$idParent][$idxInput][$idInput] = $value;
+            }
+        }
+        $tmpList =[];
+        foreach ($newList as $parent => $listIdx) {
+            foreach ($listIdx as $idx => $input) {
+                foreach($input as $idChamp => $valeur){
+                    $tmpList[$parent][intval(array_search($idx,array_keys($listIdx)) +1)][$idChamp] = $valeur;
+                }
+            }
+
+        }
+        $newList = $tmpList;
+        return $newList;
+    }
     public function editVerificationsTechniquesAction(): void
     {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
+
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+
+        $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
+
         $idDossier = $this->getParam('id');
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($idDossier, get_class($this)));
-        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+        $this->verificationsTechniquesAction();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
-                $post = $request->getParams();
+                $post = $request->getPost();
                 $lastKey = null;
+
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
+
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $idDossier, intval($value));
+                        $serviceDossierVerificationsTechniques->saveRubriqueDisplay($key, $idDossier, intval($value));
                     }
+
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                        $serviceDossierVerificationsTechniques->saveValeurChamp($key, $idDossier, get_class($this), $value);
                     }
-                    // Informations concernant les valeurs des champs
+
                     if (0 === strpos($key, 'valeur-')) {
-                        $serviceDossierDescriptif->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                        if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
+                            foreach($this->groupInputByOrder($post) as $k => $v){
+                                foreach($v as $idx => $input){
+                                    foreach ($input as $idChamp => $value) {
+                                        $serviceDossierVerificationsTechniques->saveValeurChamp($idChamp, intval($idDossier), get_class($this), $value, $idx);
+                                    }
+                                }
+                            }
+                        }
+
                     }
-                    $lastKey = $key;
+
                 }
-                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
+
             $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
         }
     }

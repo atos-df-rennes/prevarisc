@@ -277,18 +277,40 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                 //Si le champ est un champ Parent alors ....
                 if($champ['ID_TYPECHAMP'] === 6){
                     foreach ($champ['FILS'] as $champFils) {
+                        $corpsNomenclature = [];
+                        //Si le parent est un tableau alors on ajoute l'index du fils dans le nom
+                        if($champ['tableau'] === 1){
+                            $corpsNomenclature = [
+                                $rubrique['NOM'],
+                                $champ['NOM'],
+                                $champFils['NOM'],
+                                $champFils['idx']
+                            ]; 
+                        }else{
+                            $corpsNomenclature = [
+                                $rubrique['NOM'],
+                                $champ['NOM'],
+                                $champFils['NOM']
+                            ] ;
+
+                        }       
                         addChamp(
                             $segment,
                             $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
-                                [
-                                    $rubrique['NOM'],
-                                    $champ['NOM'],
-                                    $champFils['NOM']
-                                ]
+                                $corpsNomenclature
                             ),
-                            'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : $champFils['VALEUR']
+                            'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : (empty($champFils['VALEUR']) ? '' : $champFils['VALEUR'])
                         );
+                        if($champ['tableau'] === 1){
+                            echo($serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                $corpsNomenclature
+                            ).'<br>');
+                            var_dump('<pre>',$champFils,'</pre>');
+                        }
+
+
                     }
                 }else{
                     // Définition du libellé pour les cases à cocher
@@ -313,6 +335,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                 }																		
             }
         }
+        //die(1);
     }
 }
 

@@ -81,9 +81,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                 $select = $select->setIntegrityCheck(false)
                     ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau'])
                     ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
-                    ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
+                    ->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
-                    ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
+                    ->where('dv.ID_DOSSIER = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
                     ->order('c.idx asc')
                 ;
@@ -100,11 +100,25 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $s2 = $this->select()->setIntegrityCheck(false);
         $s2->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau','ID_PARENT','ID_TYPECHAMP'])
             ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['v.ID_VALEUR','IDX_VALEUR' => 'v.idx','VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
-            ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
-            ->order('IDX_VALEUR')
-            ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
-            ->where('c.ID_PARENT IS NOT NULL');
+            ;
+        
+        //1 = decriptif technique
+        //2 = verifications technique
+        switch ($idCapsuleRubrique) {
+            case 'value':
+                $s2->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
+                ->order('IDX_VALEUR')
+                ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
+                ->where('c.ID_PARENT IS NOT NULL');
+                break;
 
+            case 2:
+                $s2->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
+                ->order('IDX_VALEUR')
+                ->where('dv.ID_DOSSIER = ?', $idEntity)
+                ->where('c.ID_PARENT IS NOT NULL');
+                break;
+        }
         $res['RES_TABLEAU'] = [];
         foreach($this->fetchAll($select)->toArray() as $value){
             if( empty($res['RES_TABLEAU'][$value['ID_CHAMP']])){
@@ -200,26 +214,28 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     public function getChampFilsValue(int $idParent, int $idEntity, string $aClass): array
     {
         $LIST_TYPE_VALEUR = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'];
+        $DISPLAY_LISTE_VALEUR_IDX = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX','idx'];
         $select =
             $this->select()
                 ->setIntegrityCheck(false)
                 ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT', 'NOM', 'ID_TYPECHAMP', 'tableau'])
-                ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $LIST_TYPE_VALEUR)
+                ->joinLeft(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', $DISPLAY_LISTE_VALEUR_IDX)
                 ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', [])
                 ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
                 ->where('c.ID_PARENT = ?', $idParent)
-                ->order('c.idx asc')
+                ->order('idx asc')
+
             ;
 
-        if (false !== strpos('Dossier', $aClass)) {
+        if (strpos('Dossier', $aClass)) {
             $select
                 ->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
                 ->join(['d' => 'dossier'], 'dv.ID_DOSSIER = d.ID_DOSSIER')
                 ->where('d.ID_DOSSIER = ?', $idEntity)
-                ->order('c.idx asc')
+                
                 ;
         }
-        if (false !== strpos('Etablissement', $aClass)) {
+        if (strpos('Etablissement', $aClass)) {
             $select
                 ->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
                 ->join(['e' => 'etablissement'], 'ev.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
@@ -290,7 +306,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $res;
     }
 
-    //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
     public function updateNewIdx($postParam): void
     {
         $champ = $this->find($postParam['ID'])->current();

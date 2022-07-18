@@ -1203,7 +1203,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             foreach ($capsulesRubriques as &$capsuleRubrique) {
                 $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
-
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
 
