@@ -613,13 +613,15 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                             inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
                             where dossier.ID_DOSSIER = {$idDossier})")
             ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC');
         ;
+        $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Etudes'] = [];
         $dossEtab['Visites'] = [];
-        $dossEtab['Autre'] = [];
+        $dossEtab['Etudes'] = [];
+        $dossEtab['Autres'] = [];
 
-        foreach ($this->getAdapter()->fetchAll($select) as $dossier) {
+        foreach ($dossiers as $dossier) {
             switch ($dossier['TYPE_DOSSIER']) {
                 //Dossier de type Etude
                 case '1':
