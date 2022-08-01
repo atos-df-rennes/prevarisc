@@ -3236,6 +3236,8 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction()
     {
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 
