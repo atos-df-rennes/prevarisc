@@ -10,6 +10,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_EIC = 6;
     public const ID_STATUS_OUVERT = 2;
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     public const ID_5EME_CAT = 5;
@@ -486,11 +487,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $types_autre = [];
 
         foreach ($dossier_types as $key => $type) {
-            $dossierTypeEtude = 1;
-            $dossierTypeVisite = 2;
-            $dossierTypeGroupeDeVisite = 3;
-
-            if ($dossierTypeEtude !== $type['ID_DOSSIERTYPE'] && $dossierTypeVisite !== $type['ID_DOSSIERTYPE'] && $dossierTypeGroupeDeVisite !== $type['ID_DOSSIERTYPE']) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;
             }
@@ -518,11 +515,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $types_autre = [];
 
         foreach ($dossier_types as $key => $type) {
-            $dossierTypeEtude = 1;
-            $dossierTypeVisite = 2;
-            $dossierTypeGroupeDeVisite = 3;
-
-            if ($dossierTypeEtude !== $type['ID_DOSSIERTYPE'] && $dossierTypeVisite !== $type['ID_DOSSIERTYPE'] && $dossierTypeGroupeDeVisite !== $type['ID_DOSSIERTYPE']) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;
             }

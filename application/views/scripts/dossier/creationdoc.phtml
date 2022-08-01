@@ -719,28 +719,30 @@ foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
     addChamp($odf, $nomChamp, $valeurChamp);
 }
 
-// Gestion des avis et dérogations
-$segmentAvisDerogations = $odf->setSegment('avisDerogations');
+try {
+    // Gestion des avis et dérogations
+    $segmentAvisDerogations = $odf->setSegment('avisDerogations');
 
-foreach ($this->avisDerogations as $avisDerogation) {
-    addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
-    addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
-    addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
-    addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
-    addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+    foreach ($this->avisDerogations as $avisDerogation) {
+        addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
+        addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
+        addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
-    if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
-        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
-    } else {
-        $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+        } else {
+            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        }
+
+        addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+        $segmentAvisDerogations->merge();
     }
 
-    addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
-
-    $segmentAvisDerogations->merge();
-}
-
-$odf->mergeSegment($segmentAvisDerogations);
+    $odf->mergeSegment($segmentAvisDerogations);
+} catch (OdfException $e) {}
 
 // Gestion des formulaires personnalisés
 $serviceUtils = new Service_Utils();
@@ -760,33 +762,58 @@ foreach ($this->formulaires as $formulaire) {
         );
 
         foreach ($rubrique['CHAMPS'] as $champ) {
-            // Définition du libellé pour les cases à cocher
-            if ('Case à cocher' === $champ['TYPE']) {
-                if (true === boolval($champ['VALEUR'])) {
-                    $champ['VALEUR'] = 'Oui';
-                } else {
-                    $champ['VALEUR'] = 'Non';
+            //Si le champ est un champ Parent alors ....
+            if($champ['ID_TYPECHAMP'] === 6){
+                foreach ($champ['FILS'] as $champFils) {
+                    if ('Case à cocher' === $champFils['TYPE']) {
+                        if (true === boolval($champFils['VALEUR'])) {
+                            $champFils['VALEUR'] = 'Oui';
+                        } else {
+                            $champFils['VALEUR'] = 'Non';
+                        }
+                    }
+                    addChamp(
+                        $odf,
+                        $serviceUtils->getFullFusionName(
+                            $formulaire['NOM_INTERNE'],
+                            [
+                                $rubrique['NOM'],
+                                $champ['NOM'],
+                                $champFils['NOM']
+                            ]
+                        ),
+                        $champFils['VALEUR']
+                    );
                 }
-            }
+            }else{
+                // Définition du libellé pour les cases à cocher
+                if ('Case à cocher' === $champ['TYPE']) {
+                    if (true === boolval($champ['VALEUR'])) {
+                        $champ['VALEUR'] = 'Oui';
+                    } else {
+                        $champ['VALEUR'] = 'Non';
+                    }
+                }
 
-            addChamp(
-                $odf,
-                $serviceUtils->getFullFusionName(
-                    $formulaire['NOM_INTERNE'],
-                    [
-                        $rubrique['NOM'],
-                        $champ['NOM']
-                    ]
-                ),
-                $champ['VALEUR']
-            );
+                addChamp(
+                    $odf,
+                    $serviceUtils->getFullFusionName(
+                        $formulaire['NOM_INTERNE'],
+                        [
+                            $rubrique['NOM'],
+                            $champ['NOM']
+                        ]
+                    ),
+                    $champ['VALEUR']
+                );
+            }
         }
     }
 }
 
 try{
     $chemin = null;
-    
+
     if ($this->infosDossier['ID_PLATAU'] !== null) {
         $chemin = implode(DS, array(
             REAL_DATA_PATH,

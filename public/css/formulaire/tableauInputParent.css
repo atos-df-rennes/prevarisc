@@ -1,0 +1,10 @@
+.tableInput {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.colTableInput {
+    display: flex;
+    flex-flow: column;
+    margin: auto 1em;
+}
