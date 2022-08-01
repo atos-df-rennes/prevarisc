@@ -613,8 +613,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                             inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
                             where dossier.ID_DOSSIER = {$idDossier})")
             ->where('d.ID_DOSSIER != ?', $idDossier)
-            ->order('d.ID_DOSSIER DESC');
+            ->order('d.ID_DOSSIER DESC')
         ;
+
         $dossiers = $this->getAdapter()->fetchAll($select);
 
         $dossEtab['Visites'] = [];
