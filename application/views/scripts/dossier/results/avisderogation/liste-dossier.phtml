@@ -1,23 +1,25 @@
 <?php foreach ($this->listeDossierParType as $type => $dossiers) :?>
-    <p>
-        <?= $type ?>
-        <?php if(empty($dossiers)): ?>
-            : <strong>Aucun dossier de ce type disponible</strong>
-        <?php else: ?>
-            <span class='btn deploy' attr="<?= 'dossType'.$type ?>">
-                <i class='icon-minus'></i>
-            </span>
-        <?php endif ?>
-    </p>
-    <div id="<?= 'dossType'.$type ?>">
-        <?=
-            $this->partial(
-                'dossier/results/avisderogation/dossier.phtml',
-                [
-                    'DOSSIERS_ETAB' => $dossiers,
-                    'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
-                ]
-            );
-        ?>
+    <div class="controls">
+        <p>
+            <?= $type ?>
+            <?php if(empty($dossiers)): ?>
+                : <strong>Aucun dossier de ce type disponible</strong>
+            <?php else: ?>
+                <span class='btn deploy' attr="<?= 'dossType'.$type ?>">
+                    <i class='icon-minus'></i>
+                </span>
+            <?php endif ?>
+        </p>
+        <div id="<?= 'dossType'.$type ?>">
+            <?=
+                $this->partial(
+                    'dossier/results/avisderogation/dossier.phtml',
+                    [
+                        'DOSSIERS_ETAB' => $dossiers,
+                        'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
+                    ]
+                );
+            ?>
+        </div>
     </div>
 <?php endforeach ?>
