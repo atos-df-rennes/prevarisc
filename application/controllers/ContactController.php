@@ -234,7 +234,7 @@ class ContactController extends Zend_Controller_Action
 
             // Appartient à d'autre ets ?
             $exist = false;
-            foreach ($DB_contact as $key => $model) {
+            foreach ($DB_contact as $model) {
                 if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$this->_request->id)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                     $exist = true;
                 }

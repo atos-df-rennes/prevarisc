@@ -313,7 +313,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             if (isset($dossierAffect['listeDocUrba']) && count($dossierAffect['listeDocUrba']) > 0) {
                 $affichage .= ' - Doc urbanisme : ';
-                foreach ($dossierAffect['listeDocUrba'] as $val => $ue) {
+                foreach ($dossierAffect['listeDocUrba'] as $ue) {
                     $affichage .= $ue['NUM_DOCURBA'].' . ';
                 }
             }
@@ -631,7 +631,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->_helper->viewRenderer->setNoRender();
 
             $libelle = $this->_getParam('libelle_comm');
-            $idComm = $this->_getParam('idComm');
             $typeComm = $this->_getParam('typeCom');
 
             $dbDateCommission = new Model_DbTable_DateCommission();
@@ -827,7 +826,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 //Pour chacun d'entre eux on passe les champs HEURE_DEB_AFFECT et HEURE_FIN_AFFECT à NULL
                 //On créee un compteur afin de les classer dans l'ordre souhaité
                 $nbDossier = 0;
-                foreach ($listeDossiersConcernes as $lib => $val) {
+                foreach ($listeDossiersConcernes as $val) {
                     //si l'heure de début ou de fin sont différent de NULL on les passe à NULL
                     if (null != $val['ID_DOSSIER_AFFECT']) {
                         $dossierEdit = $dbDossierAffectation->find($this->_getParam('dateCommId'), $val['ID_DOSSIER_AFFECT'])->current();
@@ -843,7 +842,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $listeDossiersConcernes = $dbDossierAffectation->getAllDossierAffect($this->_getParam('dateCommId'));
                 //Pour chacun d'entre eux on passe les champs HEURE_DEB_AFFECT et HEURE_FIN_AFFECT à NULL
                 //On créee un compteur afin de les classer dans l'ordre souhaité
-                foreach ($listeDossiersConcernes as $lib => $val) {
+                foreach ($listeDossiersConcernes as $val) {
                     $dossierEdit = $dbDossierAffectation->find($this->_getParam('dateCommId'), $val['ID_DOSSIER_AFFECT'])->current();
                     $dossierEdit->HEURE_DEB_AFFECT = null;
                     $dossierEdit->HEURE_FIN_AFFECT = null;
@@ -958,7 +957,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $libelleCommune = '';
             $tabCommune = [];
             $numCommune = 0;
-            foreach ($listeDossiers as $val => $ue) {
+            foreach ($listeDossiers as $ue) {
                 if (0 == $numCommune) {
                     if (count($ue['infosEtab']['adresses']) > 0) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
@@ -970,7 +969,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 }
 
                 $existe = 0;
-                foreach ($tabCommune as $tabKey => $value) {
+                foreach ($tabCommune as $value) {
                     if (
                         count($ue['infosEtab']['adresses']) > 0
                         && isset($value[0])
@@ -1075,7 +1074,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $libelleCommune = '';
         $tabCommune[] = [];
         $numCommune = 0;
-        foreach ($listeDossiers as $val => $ue) {
+        foreach ($listeDossiers as $ue) {
             if (0 == $numCommune) {
                 if (isset($ue['infosEtab']['adresses'][0])) {
                     $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
@@ -1092,7 +1091,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             $existe = 0;
-            foreach ($tabCommune as $tabKey => $value) {
+            foreach ($tabCommune as $value) {
                 if (isset($ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'])) {
                     if (isset($value[0]) && $value[0] == $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE']) {
                         $existe = 1;

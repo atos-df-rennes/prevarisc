@@ -372,7 +372,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisNonVerrouilles($user)
     {
-        $dossiers = [];
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -387,8 +386,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisSansAvis($user)
     {
-        $dossiers = [];
-
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis

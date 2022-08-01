@@ -262,9 +262,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $DB_information = new Model_DbTable_EtablissementInformations();
         $DB_categorie = new Model_DbTable_Categorie();
-        $DB_famille = new Model_DbTable_Famille();
         $DB_type = new Model_DbTable_Type();
-        $DB_classe = new Model_DbTable_Classe();
         $DB_utilisateurs = new Model_DbTable_Utilisateur();
         $DB_utilisateursInfo = new Model_DbTable_UtilisateurInformations();
         $DB_statut = new Model_DbTable_Statut();
@@ -412,7 +410,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $dossier_types = $dossier_types->fetchAll()->toArray();
         $i = 0;
         $types_autre = [];
-        foreach ($dossier_types as $key => $type) {
+        foreach ($dossier_types as $type) {
             if (1 != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE != $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = (int) $type['ID_DOSSIERTYPE'];
                 ++$i;
@@ -1346,7 +1344,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         // Appartient à d'autre ets ?
         $exist = false;
-        foreach ($DB_contact as $key => $model) {
+        foreach ($DB_contact as $model) {
             if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                 $exist = true;
             }

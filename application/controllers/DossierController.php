@@ -166,8 +166,6 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->idDossier = ($this->_getParam('id'));
-
-        $idDossier = null;
         $idDossier = $this->_getParam('id');
         if (null == $idDossier) {
             $idDossier = $this->_getParam('idDossier');
@@ -320,8 +318,6 @@ class DossierController extends Zend_Controller_Action
         if (isset($commissionEtab)) {
             $this->view->commissionEtab = $commissionEtab;
         }
-
-        $genreInfo = $this->view->genre;
 
         if (isset($idEtablissement)) {
             $this->view->idEtablissement = $idEtablissement;
@@ -598,7 +594,7 @@ class DossierController extends Zend_Controller_Action
                 }
             } elseif (self::ID_DOSSIERTYPE_VISITE == $this->view->infosDossier['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_GRPVISITE == $this->view->infosDossier['TYPE_DOSSIER']) {
                 // CAS D'UNE VISITE
-                foreach ($listeDateAffectDossier as $val => $ue) {
+                foreach ($listeDateAffectDossier as $ue) {
                     if (1 == $ue['ID_COMMISSIONTYPEEVENEMENT']) {
                         //COMMISSION EN SALLE
                         $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
@@ -616,7 +612,7 @@ class DossierController extends Zend_Controller_Action
 
                         $listeDateValue = '';
                         $listeDateInput = '';
-                        foreach ($dateLiees as $val => $ue) {
+                        foreach ($dateLiees as $ue) {
                             $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
                             $this->view->idDateVisiteAffect = $ue['ID_DATECOMMISSION'];
                             $listeDateValue .= $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
@@ -1006,7 +1002,7 @@ class DossierController extends Zend_Controller_Action
                 $dbEtablissementTextAppl = new Model_DbTable_EtsTextesAppl();
                 $listeTexteApplEtab = $dbEtablissementTextAppl->recupTextes($_POST['idEtablissement']);
                 $dbDossierTexteAppl = new Model_DbTable_DossierTextesAppl();
-                foreach ($listeTexteApplEtab as $val => $ue) {
+                foreach ($listeTexteApplEtab as $ue) {
                     $saveTexteAppl = $dbDossierTexteAppl->createRow();
                     $saveTexteAppl->ID_DOSSIER = $idDossier;
                     $saveTexteAppl->ID_TEXTESAPPL = $ue['ID_TEXTESAPPL'];
@@ -1050,7 +1046,7 @@ class DossierController extends Zend_Controller_Action
 
                     //on copie les docrenseigne pour la nouvelle visite
                     $dbDocConsulte = new Model_DbTable_DossierDocConsulte();
-                    foreach ($listeDocRenseigne as $val => $ue) {
+                    foreach ($listeDocRenseigne as $ue) {
                         $cpDocConsulte = $dbDocConsulte->createRow();
                         $cpDocConsulte->ID_NATURE = $idNature;
                         $cpDocConsulte->REF_CONSULTE = $ue['REF_CONSULTE'];
@@ -1062,7 +1058,7 @@ class DossierController extends Zend_Controller_Action
                     }
 
                     $dbListeDocAjout = new Model_DbTable_ListeDocAjout();
-                    foreach ($listeDocAjout as $val => $ue) {
+                    foreach ($listeDocAjout as $ue) {
                         $cpDocAjout = $dbListeDocAjout->createRow();
                         $cpDocAjout->LIBELLE_DOCAJOUT = $ue['LIBELLE_DOCAJOUT'];
                         $cpDocAjout->REF_DOCAJOUT = $ue['REF_DOCAJOUT'];
@@ -1080,7 +1076,7 @@ class DossierController extends Zend_Controller_Action
                 $dateDocManquantRecepArray = [];
 
                 if (isset($_POST['docManquant'])) {
-                    foreach ($_POST['docManquant']  as $libelle => $value) {
+                    foreach ($_POST['docManquant']  as $value) {
                         if ('' != $value) {
                             array_push($docManquantArray, $value);
                         }
@@ -1088,7 +1084,7 @@ class DossierController extends Zend_Controller_Action
                 }
 
                 if (isset($_POST['dateReceptionDocManquant'])) {
-                    foreach ($_POST['dateReceptionDocManquant']  as $libelle => $value) {
+                    foreach ($_POST['dateReceptionDocManquant']  as $value) {
                         if ('' != $value) {
                             array_push($dateDocManquantRecepArray, $value);
                         }
@@ -1096,7 +1092,7 @@ class DossierController extends Zend_Controller_Action
                 }
 
                 if (isset($_POST['dateDocManquant'])) {
-                    foreach ($_POST['dateDocManquant']  as $libelle => $value) {
+                    foreach ($_POST['dateDocManquant']  as $value) {
                         if ('' != $value) {
                             array_push($dateDocManquantArray, $value);
                         }
@@ -1107,7 +1103,7 @@ class DossierController extends Zend_Controller_Action
 
                 $dbDossDocManquant = new Model_DbTable_DossierDocManquant();
                 $cpt = 0;
-                foreach ($docManquantArray  as $libelle => $value) {
+                foreach ($docManquantArray  as $value) {
                     $docEnC = $dbDossDocManquant->getDocManquantDossNum($idDossier, $cpt);
 
                     if ($docEnC) {
@@ -1170,7 +1166,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossierDocUrba->delete($where);
 
             if (isset($_POST['docUrba'])) {
-                foreach ($_POST['docUrba']  as $libelle => $value) {
+                foreach ($_POST['docUrba']  as $value) {
                     $saveDocUrba = $DBdossierDocUrba->createRow();
                     $saveDocUrba->ID_DOSSIER = $idDossier;
                     $saveDocUrba->NUM_DOCURBA = $value;
@@ -1182,7 +1178,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossierPrev = new Model_DbTable_DossierPreventionniste();
             $DBdossierPrev->delete('ID_DOSSIER = '.$idDossier);
             if (isset($_POST['preventionniste'])) {
-                foreach ($_POST['preventionniste'] as $prev => $infos) {
+                foreach ($_POST['preventionniste'] as $infos) {
                     $savePrev = $DBdossierPrev->createRow();
                     $savePrev->ID_DOSSIER = $idDossier;
                     $savePrev->ID_PREVENTIONNISTE = $infos;
@@ -1354,7 +1350,7 @@ class DossierController extends Zend_Controller_Action
                     1 == $this->_getParam('AVIS_DOSSIER_COMMISSION')
                     && in_array($idNature, [47, 48])
                 ) {
-                    foreach ($updatedEtab as $val => $ue) {
+                    foreach ($updatedEtab as $ue) {
                         $etabInformation = $dbEtab->getInformations($ue['ID_ETABLISSEMENT']);
                         // Si l'établissement est en statut projet, et uniquement ce cas
                         if (
@@ -1526,7 +1522,7 @@ class DossierController extends Zend_Controller_Action
         //Pour chacun des établissement on va récuperer les dossiers concernés
         $listeDossierEtab = [];
 
-        foreach ($listeEtab as $lib => $val) {
+        foreach ($listeEtab as $val) {
             $etabInfo = $dbEtablissement->getInformations($val);
 
             $listeDossierEtab[$val]['LIBELLE_ETABLISSEMENT'] = $etabInfo['LIBELLE_ETABLISSEMENTINFORMATIONS'];
@@ -1541,7 +1537,7 @@ class DossierController extends Zend_Controller_Action
         $this->listeDossierLies = $dbDossierLie->getDossierLie($idDossier);
 
         $dejaLies = [];
-        foreach ($this->listeDossierLies as $numrez => $attr) {
+        foreach ($this->listeDossierLies as $attr) {
             //on parcour chacun dossiers liers pour en récupérer les informations à afficher
             if ($idDossier == $attr['ID_DOSSIER1']) {
                 array_push($dejaLies, $attr['ID_DOSSIER2']);
@@ -1593,7 +1589,7 @@ class DossierController extends Zend_Controller_Action
         $listeDocAjout = null;
         $listeDocConsulte = null;
         $listeDocRenseigne = null;
-        foreach ($this->view->listeNatures as $index => $nature) {
+        foreach ($this->view->listeNatures as $nature) {
             if (in_array($dossierType['TYPE_DOSSIER'], [2, 3])) {
                 if (in_array($nature['ID_NATURE'], [20, 25])) {
                     //cas d'un groupe de visite d'une récption de travaux
@@ -1696,8 +1692,6 @@ class DossierController extends Zend_Controller_Action
             if ($expectedCountIfNotAdded === count($tabNom)) {
                 $dblistedoc = new Model_DbTable_DossierDocConsulte();
                 $listevalid = $dblistedoc->getGeneral($idDossier, $tabNom[1]);
-
-                $liste = $dblistedoc->find($listevalid['ID_DOSSIERDOCCONSULTE'])->current();
                 if ($listevalid) {
                     //si UN enregistrement existe
                     $liste = $dblistedoc->find($listevalid['ID_DOSSIERDOCCONSULTE'])->current();
@@ -2349,7 +2343,7 @@ class DossierController extends Zend_Controller_Action
         $listeDateInput = '';
         $listeHeureInput = [];
 
-        foreach ($recupCommLiees as $val => $ue) {
+        foreach ($recupCommLiees as $ue) {
             $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
 
             if ($nbDateDecompte == $nbDatesTotal) {
@@ -2754,7 +2748,7 @@ class DossierController extends Zend_Controller_Action
 
             $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
             $prescriptionArray = [];
-            foreach ($listePrescType as $val => $ue) {
+            foreach ($listePrescType as $ue) {
                 $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
                 if (count($assoc) > 0) {
                     array_push($prescriptionArray, $assoc);
@@ -2782,7 +2776,7 @@ class DossierController extends Zend_Controller_Action
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
         $prescriptionArray = [];
 
-        foreach ($listePrescType as $val => $ue) {
+        foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
             array_push($prescriptionArray, $assoc);
         }
@@ -2875,7 +2869,7 @@ class DossierController extends Zend_Controller_Action
         $texteArray = [];
         $articleArray = [];
 
-        foreach ($prescType as $libelle => $value) {
+        foreach ($prescType as $value) {
             array_push($articleArray, $value['LIBELLE_ARTICLE']);
             array_push($texteArray, $value['LIBELLE_TEXTE']);
             $this->view->libelle = $value['PRESCRIPTIONTYPE_LIBELLE'];

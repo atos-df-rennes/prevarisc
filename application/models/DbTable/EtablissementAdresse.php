@@ -32,8 +32,6 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-
-                break;
             // Adresse d'une cellule
             case 3:
                 // Récupération des parents de l'établissement
@@ -55,8 +53,6 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-
-                break;
             // Adresse par défaut
             default:
                 $select = $this->select()

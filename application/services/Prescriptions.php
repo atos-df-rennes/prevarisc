@@ -18,7 +18,7 @@ class Service_Prescriptions
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
         $prescriptionArray = [];
 
-        foreach ($listePrescType as $val => $ue) {
+        foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
             array_push($prescriptionArray, $assoc);
         }
@@ -225,7 +225,7 @@ class Service_Prescriptions
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
         $prescriptionArray = [];
-        foreach ($listePrescDossier as $val => $ue) {
+        foreach ($listePrescDossier as $ue) {
             $assoc = $dbPrescReglAssoc->getPrescriptionReglAssoc($ue['ID_PRESCRIPTIONREGL']);
             array_push($prescriptionArray, $assoc);
         }

@@ -182,34 +182,10 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 break;
 
                             case 'eic':
-                                if ('1' == $resource_exploded[2]) {
-                                    $resource_exploded[2] = $groupements;
-                                }
-                                if ('1' == $resource_exploded[3]) {
-                                    $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
-                                }
-
-                                break;
 
                             case 'camp':
-                                if ('1' == $resource_exploded[2]) {
-                                    $resource_exploded[2] = $groupements;
-                                }
-                                if ('1' == $resource_exploded[3]) {
-                                    $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
-                                }
-
-                                break;
 
                             case 'temp':
-                                if ('1' == $resource_exploded[2]) {
-                                    $resource_exploded[2] = $groupements;
-                                }
-                                if ('1' == $resource_exploded[3]) {
-                                    $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
-                                }
-
-                                break;
 
                             case 'iop':
                                 if ('1' == $resource_exploded[2]) {

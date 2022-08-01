@@ -209,7 +209,7 @@ class Api_Service_Calendar
         return $event;
     }
 
-    private function getAvisEtablissement($event, $ets = null): string
+    private function getAvisEtablissement($ets = null): string
     {
         if ($ets) {
             $servEtab = new Service_Etablissement();
@@ -309,7 +309,7 @@ class Api_Service_Calendar
 
         $corpus .= sprintf(
             "Avis d'exploitation de l'établissement : %s%s",
-            $this->getAvisEtablissement($commissionEvent, $ets),
+            $this->getAvisEtablissement($ets),
             self::LF.self::LF.self::LF
         );
 

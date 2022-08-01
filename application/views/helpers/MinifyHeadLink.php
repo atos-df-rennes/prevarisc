@@ -47,9 +47,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      * Returns current object instance. Optionally, allows passing array of
      * values to build link.
      *
-     * @param array  $attributes
      * @param string $placement
-     *
      * @return Zend_View_Helper_HeadLink
      */
     public function minifyHeadLink(array $attributes = null, $placement = Zend_View_Helper_Placeholder_Container_Abstract::APPEND)

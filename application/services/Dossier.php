@@ -295,7 +295,7 @@ class Service_Dossier
 
         // Appartient à d'autre dossier / ets ?
         $exist = false;
-        foreach ($DB_contact as $key => $model) {
+        foreach ($DB_contact as $model) {
             if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                 $exist = true;
             }
@@ -331,7 +331,7 @@ class Service_Dossier
 
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $prescriptionArray = [];
-        foreach ($listePrescDossier as $val => $ue) {
+        foreach ($listePrescDossier as $ue) {
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
@@ -603,7 +603,7 @@ class Service_Dossier
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
         $num = 1;
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -612,7 +612,7 @@ class Service_Dossier
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
         $num = 1;
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -620,7 +620,7 @@ class Service_Dossier
         }
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -633,7 +633,7 @@ class Service_Dossier
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $j = 0;
-        foreach ($prescriptionRegl as $val => $ue) {
+        foreach ($prescriptionRegl as $ue) {
             $prescEdit = $dbPrescDossier->createRow();
             $prescEdit->ID_DOSSIER = $idDossier;
             if (array_key_exists(0, $ue) && array_key_exists('PRESCRIPTIONREGL_LIBELLE', $ue[0])) {
@@ -779,7 +779,7 @@ class Service_Dossier
 
         $updatedEtab = [];
 
-        foreach ($listeEtab as $val => $ue) {
+        foreach ($listeEtab as $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
             $MAJEtab = 0;
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente

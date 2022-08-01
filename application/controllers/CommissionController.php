@@ -460,13 +460,11 @@ class CommissionController extends Zend_Controller_Action
                 }
 
                 // On sauvegarde les natures du dossier
-                if (count($_POST[$id_membre.'_ID_DOSSIERNATURE']) > 0) {
-                    foreach ($_POST[$id_membre.'_ID_DOSSIERNATURE'] as $type) {
-                        $model_membresDossierNatures->insert([
-                            'ID_COMMISSIONMEMBRE' => $id_membre,
-                            'ID_DOSSIERNATURE' => $type,
-                        ]);
-                    }
+                foreach ($_POST[$id_membre.'_ID_DOSSIERNATURE'] as $type) {
+                    $model_membresDossierNatures->insert([
+                        'ID_COMMISSIONMEMBRE' => $id_membre,
+                        'ID_DOSSIERNATURE' => $type,
+                    ]);
                 }
             }
 

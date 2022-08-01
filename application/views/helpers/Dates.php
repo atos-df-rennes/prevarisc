@@ -23,10 +23,6 @@ class View_Helper_Dates
             $end = new DateTime();
         }
 
-        if (!($end instanceof DateTime)) {
-            $end = new DateTime($start);
-        }
-
         $interval = $end->diff($start);
         $doPlural = function ($nb, $str) {
             return $nb > 1 ? $str.'s' : $str;

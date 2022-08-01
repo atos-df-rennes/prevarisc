@@ -100,7 +100,7 @@ class SessionController extends Zend_Controller_Action
                 }
 
                 // On lance le process d'identification avec les différents adaptateurs
-                foreach ($adapters as $key => $adapter) {
+                foreach ($adapters as $adapter) {
                     if ($adapter->authenticate()->isValid()) {
                         $service_user->resetFailedLogin($user);
                         Zend_Auth::getInstance()->getStorage()->write($user);
