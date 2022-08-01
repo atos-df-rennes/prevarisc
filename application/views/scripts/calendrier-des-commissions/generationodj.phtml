@@ -1,5 +1,7 @@
 <?php
 
+use PhpCsFixer\Tokenizer\Transformer\ConstructorPromotionTransformer;
+
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
@@ -7,6 +9,7 @@ if(count($this->membresFiles) == 0){
 }
 foreach($this->informationsMembre as $val => $membre){
 	//On boucle sur les membres
+
 	if($membre['infosFiles'][0]['ID_GROUPEMENT'] == NULL) {
 		//génération du document par commune pour les maires par exemple
 		//si le document concernant ce membre existe alors on rentre dans la boucle
@@ -14,6 +17,7 @@ foreach($this->informationsMembre as $val => $membre){
 
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
+
             //Generation du segment membres
             $membreLoop = $odf->setSegment('membresComm');
 
@@ -91,7 +95,6 @@ foreach($this->informationsMembre as $val => $membre){
         $nomFichier = $membre['infosFiles'][0]['ID_COMMISSIONMEMBRE']."ODJ_".$membre['infosFiles'][0]['COURRIER_ODJ'];
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
-
             $model_groupement = new Model_DbTable_Groupement();
             $infosGroupement = $model_groupement->get($membre['infosFiles'][0]['ID_GROUPEMENT']);
 
@@ -292,7 +295,6 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                 $champ['NOM'],
                                 $champFils['NOM']
                             ] ;
-
                         }       
                         addChamp(
                             $segment,
@@ -302,15 +304,18 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             ),
                             'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : (empty($champFils['VALEUR']) ? '' : $champFils['VALEUR'])
                         );
-                        if($champ['tableau'] === 1){
-                            echo($serviceUtils->getFullFusionName(
+                        addChamp(
+                            $segment,
+                            $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
-                                $corpsNomenclature
-                            ).'<br>');
-                            var_dump('<pre>',$champFils,'</pre>');
-                        }
-
-
+                                $corpsNomenclature = [
+                                    $rubrique['NOM'],
+                                    $champ['NOM'],
+                                    $champFils['NOM']
+                                ] 
+                            ),
+                            'Case à cocher' === $champFils['TYPE'] ? ((isset($champFils['VALEUR']) ? boolval($champFils['VALEUR']) : false) ? 'Oui' : 'Non' ) : (empty($champFils['VALEUR']) ? '' : $champFils['VALEUR'])
+                        );
                     }
                 }else{
                     // Définition du libellé pour les cases à cocher
@@ -335,7 +340,6 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                 }																		
             }
         }
-        //die(1);
     }
 }
 
