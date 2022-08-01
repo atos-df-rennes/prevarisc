@@ -84,14 +84,13 @@ class Service_Dossier
             }
 
             throw new Exception($msg);
-        } else {
-            $DBsave = new Model_DbTable_DossierPj();
-
-            $DBsave->createRow([
-                'ID_DOSSIER' => $id_dossier,
-                'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-            ])->save();
         }
+
+        $DBsave = new Model_DbTable_DossierPj();
+        $DBsave->createRow([
+            'ID_DOSSIER' => $id_dossier,
+            'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
+        ])->save();
     }
 
     /**
@@ -739,9 +738,14 @@ class Service_Dossier
                 $date = $dossier->DATECOMM_DOSSIER;
             }
         } elseif (self::ID_DOSSIERTYPE_VISITE == $dossier->TYPE_DOSSIER) {
-            if (null != $dossier->DATEVISITE_DOSSIER && '' != $dossier->DATEVISITE_DOSSIER) {
-                $date = $dossier->DATEVISITE_DOSSIER;
+            if (null == $dossier->DATEVISITE_DOSSIER) {
+                return new Zend_Date($date, Zend_Date::DATES);
             }
+            if ('' == $dossier->DATEVISITE_DOSSIER) {
+                return new Zend_Date($date, Zend_Date::DATES);
+            }
+            $date = $dossier->DATEVISITE_DOSSIER;
+            return new Zend_Date($date, Zend_Date::DATES);
         }
 
         return new Zend_Date($date, Zend_Date::DATES);

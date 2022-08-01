@@ -187,15 +187,22 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Periodicite
             if (1 == $informations->ID_GENRE) {
                 foreach ($etablissement_lies as $etablissement) {
-                    if (
-                        self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']
-                        || (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
-                            || 0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS'])
-                        || self::ID_STATUS_OUVERT != $etablissement['ID_STATUT']
-                    ) {
+                    if (self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']) {
                         continue;
                     }
-
+                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
+                        || 0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (self::ID_STATUS_OUVERT != $etablissement['ID_STATUT']) {
+                        continue;
+                    }
                     if (
                         null === $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS']
                         || $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] > $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
@@ -354,8 +361,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
         @usort($dossiers_merged, function ($a, $b) {
             $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-
-            if ($date_a == $date_b || null === $a || null === $b) {
+            if ($date_a == $date_b) {
+                return 0;
+            }
+            if (null === $a) {
+                return 0;
+            }
+            if (null === $b) {
                 return 0;
             }
             if ($date_a < $date_b) {
@@ -1199,23 +1211,20 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             throw new Exception($msg);
-        } else {
-            $DBsave = new Model_DbTable_EtablissementPj();
-
-            $DBsave->createRow([
-                'ID_ETABLISSEMENT' => $id_etablissement,
-                'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-                'PLACEMENT_ETABLISSEMENTPJ' => 0 != (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
-            ])->save();
-
-            if (in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])) {
-                $miniature = $piece_jointe;
-                $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
-                $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
-                GD_Resize::run($file_path, $miniature_path, 450);
-                if (!is_file($miniature_path)) {
-                    throw new Exception("Cannot create miniature file: {$miniature_path}");
-                }
+        }
+        $DBsave = new Model_DbTable_EtablissementPj();
+        $DBsave->createRow([
+            'ID_ETABLISSEMENT' => $id_etablissement,
+            'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
+            'PLACEMENT_ETABLISSEMENTPJ' => 0 != (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
+        ])->save();
+        if (in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])) {
+            $miniature = $piece_jointe;
+            $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
+            $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
+            GD_Resize::run($file_path, $miniature_path, 450);
+            if (!is_file($miniature_path)) {
+                throw new Exception("Cannot create miniature file: {$miniature_path}");
             }
         }
 
@@ -1466,20 +1475,16 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
     private function compareActivitesSecondaires($ets, $postData): bool
     {
-        $result = false;
-
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {
             if (!array_key_exists(
                 $typesASecondaires[
                 'ID_ETABLISSEMENTINFORMATIONSTYPESACTIVITESSECONDAIRES'],
                 $postData['TYPES_ACTIVITES_SECONDAIRES']
             )) {
-                $result = true;
-
-                break;
+                return true;
             }
         }
 
-        return $result;
+        return false;
     }
 }

@@ -124,9 +124,13 @@ class Service_Prescriptions
     public function replaceTexte($newId, $oldId)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        if ('' != $newId && '' != $oldId) {
-            $dbPrescTextes->replace($newId, $oldId);
+        if ('' == $newId) {
+            return;
         }
+        if ('' == $oldId) {
+            return;
+        }
+        $dbPrescTextes->replace($newId, $oldId);
     }
 
     // GESTION DES ARTICLES
@@ -163,9 +167,13 @@ class Service_Prescriptions
     public function replaceArticle($newId, $oldId)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        if ('' != $newId && '' != $oldId) {
-            $dbPrescArticles->replace($newId, $oldId);
+        if ('' == $newId) {
+            return;
         }
+        if ('' == $oldId) {
+            return;
+        }
+        $dbPrescArticles->replace($newId, $oldId);
     }
 
     // GESTION DES PRESCRIPTIONS

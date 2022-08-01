@@ -1668,11 +1668,10 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->_getParam('id');
             $idValid = $this->_getParam('idValid');
             $datePost = $this->_getParam('date_'.$idValid);
-
-            if (
-                0 == $idDossier
-                || '' == $idValid
-            ) {
+            if (0 == $idDossier) {
+                return false;
+            }
+            if ('' == $idValid) {
                 return false;
             }
 

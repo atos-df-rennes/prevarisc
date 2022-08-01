@@ -18,6 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Define what rule sets will be applied
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_71);
     $containerConfigurator->import(SetList::DEAD_CODE);
+    $containerConfigurator->import(SetList::EARLY_RETURN);
 
     $parameters->set(Option::SKIP, [
         CountOnNullRector::class

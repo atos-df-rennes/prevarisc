@@ -376,10 +376,15 @@ class Service_User
      */
     public function logFailedLogin($user)
     {
-        if (!$user || !isset($user['ID_UTILISATEUR']) || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
+        if (!$user) {
             return;
         }
-
+        if (!isset($user['ID_UTILISATEUR'])) {
+            return;
+        }
+        if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
+            return;
+        }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser) {
@@ -397,10 +402,13 @@ class Service_User
 
     public function resetFailedLogin($user)
     {
-        if (!$user
-            || !isset($user['ID_UTILISATEUR'])
-            || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
-        ) {
+        if (!$user) {
+            return;
+        }
+        if (!isset($user['ID_UTILISATEUR'])) {
+            return;
+        }
+        if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
             return;
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
