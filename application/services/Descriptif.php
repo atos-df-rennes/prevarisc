@@ -78,7 +78,31 @@ abstract class Service_Descriptif
     {
             $explodedChamp = explode('-', $key);
             $idChamp = end($explodedChamp);
+            $idxInput = explode('-',$inputName)[1];
+            $idParent =  explode('-',$inputName)[2];
             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
+    }
+
+
+    //TODO Boucler sur toute la liste des input et tester sur chacun si une valeur a etait change que ce soit idx ou valeur propre
+    //TODO Si un seule valeur est change alors on delete toute les valeurs et on recrit tout 
+    //TODO pour delete appeler la route suivante 'deleteRowTable' provenant de serviceFormulaire
+
+    public function saveValeursChamp(array $arrayInputValue, int $idObject, string $classObject):void{
+        $serviceFormulaire = new Service_Formulaire();
+       // $serviceFormulaire->deleteRowTable()
+        foreach ($arrayInputValue as $inputName => $value) {
+            $idxInput = null;
+            $idChamp = null; 
+            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+                $idxInput = explode('-',$inputName)[1];
+                $idChamp =  explode('-',$inputName)[3];
+            }
+            $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idxInput);
+            echo('<pre>'.var_dump($valueInDB['VALEUR_STR']).'</pre>');
+            echo('<pre>'.var_dump($valueInDB['VALEUR_STR'] === $value).'</pre>');
+            //FIXME des etats false sortent alors qu'ils devraient etre true
+        }
     }
 
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void

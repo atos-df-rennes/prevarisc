@@ -303,6 +303,16 @@ class EtablissementController extends Zend_Controller_Action
         return $newList;
     }
 
+    function filterValueOnly($aValue){
+        $value = [];
+        foreach ($aValue as $key => $val) {
+            if(0 === strpos($key, 'valeur-') && (explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0') ){
+                $value[$key] = $val;
+            }
+        }
+        return $value;
+    }
+
     public function editDescriptifPersonnaliseAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
@@ -340,6 +350,11 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
 
+
+                    //TODO ajouter fonction de filtre permettant de recolter seulement les inputs qui sont saisies dans le tableau
+                    
+                    //TODO ajouter fonction saveValeursChamp afin de passer toute la liste en param pour ne plus boucler dans le controller
+                    /*
                     if (0 === strpos($key, 'valeur-')) {
                         if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
                             foreach($this->groupInputByOrder($post) as $k => $v){
@@ -352,8 +367,15 @@ class EtablissementController extends Zend_Controller_Action
                         }
 
                     }
+                    */
 
                 }
+
+                //echo('Toutes les valeurs : \n');
+                //var_dump('<pre>',$this->filterValueOnly($post),'</pre>');
+                $serviceEtablissementDescriptif->saveValeursChamp($this->filterValueOnly($post), $idEtablissement, get_class($this));
+                die(1);
+
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
