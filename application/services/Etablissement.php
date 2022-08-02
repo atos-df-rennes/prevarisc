@@ -100,9 +100,21 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 ->setCriteria('ID_NATURE', [21, 26, 47, 48])
             ;
 
-            $use_date_commission_for_periodicity = getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE');
+            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOL);
+            if ($use_date_commission_for_periodicity) {
+                $search->columns([
+                    'DATE_RELANCE_PERIODICITE' => new Zend_Db_Expr(
+                        'CASE WHEN
+                            DATECOMM_DOSSIER >= DATEVISITE_DOSSIER THEN DATECOMM_DOSSIER
+                            ELSE DATEVISITE_DOSSIER
+                        END'
+                    ),
+                ]);
+                $search->order('DATE_RELANCE_PERIODICITE DESC');
+            } else {
+                $search->order('DATEVISITE_DOSSIER DESC');
+            }
 
-            $use_date_commission_for_periodicity ? $search->order('DATECOMM_DOSSIER DESC') : $search->order('DATEVISITE_DOSSIER DESC');
             $last_visite = $search
                 ->limit(1)
                 ->run(false, null, false)->toArray();
@@ -112,11 +124,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
             if (null !== $last_visite && !empty($last_visite)) {
                 if (
                     (!$use_date_commission_for_periodicity && null !== $last_visite[0]['DATEVISITE_DOSSIER'])
-                    || ($use_date_commission_for_periodicity && null !== $last_visite[0]['DATECOMM_DOSSIER'])
+                    || ($use_date_commission_for_periodicity && null !== $last_visite[0]['DATE_RELANCE_PERIODICITE'])
                 ) {
                     $tmp_date = new Zend_Date($last_visite[0]['DATEVISITE_DOSSIER'], Zend_Date::DATES);
                     if ($use_date_commission_for_periodicity) {
-                        $tmp_date = new Zend_Date($last_visite[0]['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                        $tmp_date = new Zend_Date($last_visite[0]['DATE_RELANCE_PERIODICITE'], Zend_Date::DATES);
                     }
 
                     $last_visite = $tmp_date->get(Zend_date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
