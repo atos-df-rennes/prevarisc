@@ -719,8 +719,8 @@ foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
     addChamp($odf, $nomChamp, $valeurChamp);
 }
 
-// Gestion des avis et dérogations
-if(isset($this->avisDerogations)){
+try {
+    // Gestion des avis et dérogations
     $segmentAvisDerogations = $odf->setSegment('avisDerogations');
 
     foreach ($this->avisDerogations as $avisDerogation) {
@@ -742,7 +742,7 @@ if(isset($this->avisDerogations)){
     }
 
     $odf->mergeSegment($segmentAvisDerogations);
-}
+} catch (OdfException $e) {}
 
 // Gestion des formulaires personnalisés
 $serviceUtils = new Service_Utils();
