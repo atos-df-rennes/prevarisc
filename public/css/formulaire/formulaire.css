@@ -33,6 +33,10 @@ td.tdMove {
     vertical-align: middle;
 }
 
+td.tdMove {
+    text-align: center;
+}
+
 #actions a {
     padding: 0.5rem;
     text-decoration: none;

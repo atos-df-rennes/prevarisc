@@ -23,19 +23,8 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getAllRubriqueForm($idCaps)
-    {
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['r' => 'rubrique'])
-            ->where('r.ID_CAPSULERUBRIQUE = ? ', $idCaps)
-        ;
-
-        return $this->fetchAll($select)->toArray();
-    }
-
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
-    public function updateNewIdx($postParam): void
+    public function updateNewIdx(array $postParam): void
     {
         $rubrique = $this->find($postParam['ID'])->current();
         $rubrique->idx = $postParam['idx'];
@@ -53,6 +42,6 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
             ->where('cr.NOM_INTERNE = ?', $nomCaps)
         ;
 
-        return sizeof($this->fetchAll($select)->toArray());
+        return count($this->fetchAll($select)->toArray());
     }
 }

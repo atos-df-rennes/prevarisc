@@ -26,7 +26,6 @@ class FormulaireController extends Zend_Controller_Action
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $form = new Form_CustomForm();
 
@@ -53,7 +52,7 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
 
-            $post['idx'] = intval($this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']));
+            $post['idx'] = $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
             $idRubrique = $this->serviceFormulaire->insertRubrique($post);
             $insertedRowAsArray = $this->modelRubrique->find($idRubrique)->current()->toArray();
 
@@ -74,7 +73,6 @@ class FormulaireController extends Zend_Controller_Action
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $fieldForm = new Form_CustomFormField();
 
@@ -137,7 +135,7 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
 
-            $post['idx'] = $request->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($request->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique($idRubrique);
+            $post['idx'] = $request->getParam('ID_CHAMP_PARENT') ? $this->modelChamp->getNbChampOfParent($request->getParam('ID_CHAMP_PARENT')) : $this->modelChamp->getNbChampOfRubrique($idRubrique);
 
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
@@ -167,7 +165,6 @@ class FormulaireController extends Zend_Controller_Action
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $idChamp = intval($this->getParam('champ'));
         $champ = $this->modelChamp->find($idChamp)->current();

@@ -71,7 +71,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     }
 
     //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
-    public function updateNewIdx($postParam): void
+    public function updateNewIdx(array $postParam): void
     {
         $champ = $this->find($postParam['ID'])->current();
         $champ->idx = $postParam['idx'];
@@ -87,7 +87,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->where('c.ID_RUBRIQUE = ?', $idRubrique)
         ;
 
-        return sizeof($this->fetchAll($select)->toArray());
+        return count($this->fetchAll($select)->toArray());
     }
 
     public function getNbChampOfParent(int $idParent): int
@@ -98,7 +98,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->where('c.ID_PARENT = ?', $idParent)
         ;
 
-        return sizeof($this->fetchAll($select)->toArray());
+        return count($this->fetchAll($select)->toArray());
     }
 
     public function getInfosParent(int $idChampEnfant): array
