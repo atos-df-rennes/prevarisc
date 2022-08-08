@@ -137,7 +137,7 @@ class FormulaireController extends Zend_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
 
-            $post['idx'] = $this->getRequest()->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($this->getRequest()->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique(intval($this->getParam('rubrique')));
+            $post['idx'] = $request->getParam('ID_CHAMP_PARENT') ? intval($this->modelChamp->getNbChampOfParent($request->getParam('ID_CHAMP_PARENT'))) : $this->modelChamp->getNbChampOfRubrique($idRubrique);
 
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 

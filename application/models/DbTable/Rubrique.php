@@ -15,7 +15,9 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
             )
             ->join(['cr' => 'capsulerubrique'], 'r.ID_CAPSULERUBRIQUE = cr.ID_CAPSULERUBRIQUE', [])
             ->where('cr.NOM_INTERNE = ?', $capsuleRubrique)
-            ->order('r.idx asc')
+            ->order('ISNULL(r.idx)')
+            ->order('r.idx')
+            ->order('r.NOM')
         ;
 
         return $this->fetchAll($select)->toArray();
