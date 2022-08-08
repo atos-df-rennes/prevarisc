@@ -273,6 +273,8 @@ class FormulaireController extends Zend_Controller_Action
     public function updateChampIdxAction(): void
     {
         $this->_helper->viewRenderer->setNoRender(true);
+
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
@@ -283,6 +285,8 @@ class FormulaireController extends Zend_Controller_Action
     public function updateRubriqueIdxAction(): void
     {
         $this->_helper->viewRenderer->setNoRender(true);
+
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();

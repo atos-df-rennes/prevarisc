@@ -19,7 +19,7 @@ window.onload = function() {
     
     //Retourne la liste des entity qui ont changé d'index
     const compareAndRequest = (newList = []) => {
-        newList.filter(elem => elem.ID != originList[elem.idx].ID ).forEach(champ =>{
+        newList.filter(elem => elem.ID !== originList[elem.idx].ID ).forEach(champ =>{
             setNewIdxRequest(champ)
         })
     }
