@@ -29,7 +29,7 @@ $(document).ready(function() {
 
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
-                    const titleText = 'Liste des champs'
+                    let titleText = 'Liste des champs'
                     if (isParent) {
                         titleText += ' enfants'
                     }

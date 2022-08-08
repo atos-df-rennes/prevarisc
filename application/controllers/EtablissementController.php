@@ -241,7 +241,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_etablissement = new Service_Etablissement();
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
-        $modelChamp = new Model_DbTable_Champ();
 
         $idEtablissement = $this->getParam('id');
 
@@ -294,6 +293,7 @@ class EtablissementController extends Zend_Controller_Action
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
+
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {

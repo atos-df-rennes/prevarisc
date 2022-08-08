@@ -61,7 +61,6 @@
                 </div>
             </div>
 
-
             <?= $this->fieldForm->save ?>
         </form>
     </div>
@@ -79,18 +78,18 @@
                 </thead>
                 <tbody id='grp1' class="grp">
                     <?php foreach($this->champs as $champ): ?>
-                            <tr id=<?=$champ['ID_CHAMP']?>>
-                                <td class='tdMove'><i class="icon-move"></i></td>
-                                <td><?= $champ['NOM'] ?></td>
-                                <td>
-                                    <?= $champ['TYPE'] ?>
-                                    <?php if($champ['TYPE'] === 'Liste'): ?>
-                                        <?php if(count($champ['VALEURS']) === 0): ?>
-                                            <div class="alert">
-                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                                <strong>Attention !</strong> La liste ne possède aucune valeur, vous devriez en ajouter.
-                                            </div>
-                                        <?php endif ?>
+                        <tr id=<?=$champ['ID_CHAMP']?>>
+                            <td class='tdMove'><i class="icon-move"></i></td>
+                            <td><?= $champ['NOM'] ?></td>
+                            <td>
+                                <?= $champ['TYPE'] ?>
+                                <?php if($champ['TYPE'] === 'Liste'): ?>
+                                    <?php if(count($champ['VALEURS']) === 0): ?>
+                                        <div class="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Attention !</strong> La liste ne possède aucune valeur, vous devriez en ajouter.
+                                        </div>
+                                    <?php endif ?>
 
                                     <ul>
                                         <?php foreach($champ['VALEURS'] as $valeur): ?>
