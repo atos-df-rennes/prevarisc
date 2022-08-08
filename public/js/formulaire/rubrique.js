@@ -120,6 +120,7 @@ function getTableElement() {
     return `<table class="table table-bordered table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>Nom du champ</th>
                 <th>Type du champ</th>
                 <th></th>

@@ -72,6 +72,7 @@ function getTableElement() {
     return `<table class="table table-bordered table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>Nom de la rubrique</th>
                 <th>Afficher la rubrique par défaut</th>
                 <th></th>
