@@ -23,7 +23,16 @@
 
             <div class="row-fluid">
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
-                    <?= $this->form ?>
+                    <form action class="form-inline" method="post">
+                        <div>
+                            <?= $this->form->nom_rubrique ?>
+                        </div>
+                        <div>
+                            <?= $this->form->afficher_rubrique ?>
+                        </div>
+
+                        <?= $this->form->save ?>
+                    </form>
                 </div>
 
                 <div class="span6 offset2 saved-rubriques">

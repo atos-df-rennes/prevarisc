@@ -1,14 +1,14 @@
-<?php foreach ($this->corpsformulaire as $rubrique) : ?>
-    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($this->rubriquedisplay[$rubrique['ID_RUBRIQUE']]['DISPLAY']) === false ? 'hide' : '' ?>">
+<?php foreach ($this->rubriques as $rubrique) : ?>
+    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
         <h4 class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
+
         <?php if (empty($rubrique['CHAMPS'])): ?>
-            <?= 
+            <?=
                 $this->partial('formulaire/partials/partial-information-manquante.phtml', [
-                        'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
+                    'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
                 ]);
             ?>
         <?php else : ?>
-
             <?php foreach ($rubrique['CHAMPS'] as $champ) : ?>
                 <div class='control-group'>
                     <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='control-label'>
@@ -16,16 +16,13 @@
                     </label>
                     <div class='controls'>
                         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                'champ' => $champ,
-                                'valeurformulaire' => $this->valeurformulaire,
-                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                                ]); 
-                        ?>
+                            'champ' => $champ,
+                            'champsvaleurliste' => $this->champsvaleurliste,
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                        ]); ?>
                     </div>
                 </div>
             <?php endforeach ?>
         <?php endif ?>
-
     </div>
-   
 <?php endforeach ?>

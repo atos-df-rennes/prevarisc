@@ -16,8 +16,8 @@
                     <div class='row-fluid'>
                 <?php endif;
 
-                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);   
-                
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+
                 if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
                     </div>
                 <?php endif;
@@ -25,10 +25,8 @@
         </div>
     </div>
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
-                    'corpsformulaire' => $this->corpsformulaire,
-                    'valeurformulaire' => $this->valeurformulaire,
-                    'rubriquedisplay' => $this->rubriques,
-                    'canWrite' => true
-                ]); 
-        ?>
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
+        'canWrite' => true
+    ]); ?>
 </form>

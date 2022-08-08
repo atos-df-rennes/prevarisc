@@ -1267,6 +1267,6 @@ dl.champ_effectif_camping dd input {
     width: fit-content;
 }
 
-.marginBottom{
-    margin: 0 1em;
+.radio-controls {
+    margin-left: 3rem;
 }

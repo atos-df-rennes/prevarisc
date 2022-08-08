@@ -24,14 +24,9 @@
             endforeach ?>
         </div>
     </div>
-
-    <div id='affichage-informations' class='form-horizontal'>
-        <?= $this->partial('formulaire/formLoopInputChamp.phtml', [
-                'rubriques' => isset($this->rubriques) ? $this->rubriques : [],
-                'champsvaleurliste' => isset($this->champsvaleurliste) ? $this->champsvaleurliste : [] ,
-                'listeChampFils' => isset($this->listeChampFils) ? $this->listeChampFils : [] ,
-                'canWrite' => true
-            ]); 
-        ?>
-    </div>
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
+        'canWrite' => true
+    ]); ?>
 </form>

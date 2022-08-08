@@ -1,9 +1,9 @@
-.tableInput{
+.tableInput {
     display: flex;
     flex-wrap: wrap;
 }
 
-.colTableInput{
+.colTableInput {
     width: auto;
     display: flex;
     flex-flow: column;

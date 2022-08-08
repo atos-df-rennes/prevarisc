@@ -47,7 +47,15 @@
 
     <div class="control-group">
         <label class="control-label">Avis/Dérogation levé(e):</label>
-        <?= $this->partial('dossier/results/avisderogation/dossier.phtml', ['DOSSIERS_ETAB' => $this->listDossierEtab, 'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']]); ?>
+        <?=
+            $this->partial(
+                'dossier/results/avisderogation/liste-dossier.phtml',
+                [
+                    'listeDossierParType' => $this->listDossierEtab,
+                    'ID_DOSSIER_LIE' => $this->avisDerogations['ID_DOSSIER_LIE']
+                ]
+            );
+        ?>
     </div>
 
     <div class="control-group">

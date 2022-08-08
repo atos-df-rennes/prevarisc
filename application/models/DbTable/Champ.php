@@ -36,7 +36,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM'])
+            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
@@ -46,7 +46,22 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         if (true === $hasList) {
             $select->joinLeft(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP', ['VALEUR']);
+
+            return $this->fetchAll($select)->toArray();
         }
+
+        return $this->fetchRow($select)->toArray();
+    }
+
+    public function getChampsFromParent(int $idParent): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['c' => 'champ'], [])
+            ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP', ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
+            ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP', ['TYPE'])
+            ->where('c.ID_CHAMP = ?', $idParent)
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
@@ -246,5 +261,16 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         ;
 
         return sizeof($this->fetchAll($select)->toArray());
+    }
+
+    public function getInfosParent(int $idChampEnfant): array
+    {
+        $select = $this->select()
+            ->from(['c' => 'champ'], [])
+            ->join(['c2' => 'champ'], 'c.ID_PARENT = c2.ID_CHAMP', ['ID_CHAMP', 'NOM'])
+            ->where('c.ID_CHAMP = ?', $idChampEnfant)
+        ;
+
+        return $this->fetchRow($select)->toArray();
     }
 }

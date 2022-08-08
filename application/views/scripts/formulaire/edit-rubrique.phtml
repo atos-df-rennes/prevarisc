@@ -6,22 +6,28 @@
 <div class="row-fluid">
     <h3>Informations sur la rubrique</h3>
     <div class="span4 infos-rubrique">
+        <!-- TODO: Utiliser le formulaire de Zend -->
         <form action class="form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
-            <label for="nom_rubrique">Nom de la rubrique</label>
-            <input type="text" name="nom_rubrique" id="nom_rubrique" value="<?= htmlspecialchars($this->rubrique['NOM'], ENT_QUOTES) ?>" required>
-            <label for="afficher_rubrique">Afficher la rubrique par défaut</label>
-            <input
-                type="hidden"
-                name="afficher_rubrique"
-                value="0"
-            >
-            <input
-                type="checkbox"
-                name="afficher_rubrique"
-                value="1"
-                <?= $this->rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
-            >
+            <div>
+                <label for="nom_rubrique">Nom de la rubrique</label>
+                <input type="text" name="nom_rubrique" id="nom_rubrique" value="<?= htmlspecialchars($this->rubrique['NOM'], ENT_QUOTES) ?>" required>
+            </div>
+            <div>
+                <label for="afficher_rubrique">Afficher la rubrique par défaut</label>
+                <input
+                    type="hidden"
+                    name="afficher_rubrique"
+                    value="0"
+                >
+                <input
+                    type="checkbox"
+                    name="afficher_rubrique"
+                    value="1"
+                    <?= $this->rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
+                >
+            </div>
+
             <div class="pull-right">
                 <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder la rubrique</button>
@@ -30,39 +36,29 @@
     </div>
 </div>
 
-<div class="row-fluid titles">
-    <div class="span4">
-        <h3>Informations sur le champ</h3>
-    </div>
-
-    <?php if(count($this->champs) > 0): ?>
-        <div class="span6 offset2">
-            <h3>Liste des champs</h3>
-        </div>
-    <?php else :?>
-        <div class="span2 offset4 alert">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Attention ! </strong>Aucun champs de renseigné.
-        </div>
-    <?php endif ?>
-</div>
+<?= $this->partial('formulaire/partials/champ/partial-add-and-list-titles.phtml', [
+    'count' => count($this->champs),
+]); ?>
 
 <div id="edit-rubrique" class="row-fluid">
     <div class="span4 infos-champ">
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
-            <div class = 'flexCol'>
+            <div>
                 <?= $this->fieldForm->nom_champ ?>
+            </div>
+            <div>
                 <?= $this->fieldForm->type_champ ?>
-                <div id="div-list-value">
-                    <h5>Définition des valeurs de la liste</h5>
-                    <div class="row-fluid">
-                        <a href='#' id='add-list-value'>Ajouter une valeur</a>
+            </div>
+
+            <div id="div-list-value">
+                <h5>Définition des valeurs de la liste</h5>
+                <div class="row-fluid">
+                    <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                </div>
+                <div class="row-fluid">
+                    <div id="list-value" class="span10">
                     </div>
-                    <div class="row-fluid">
-                        <div id="list-value" class="span10">
-                        </div>
-                    </div>
-                </div>                
+                </div>
             </div>
 
 
@@ -115,7 +111,7 @@
                                     <?php else : ?>
                                         <div class="alert">
                                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <strong>Attention ! </strong>Aucun champs fils de renseigné.
+                                            <strong>Attention ! </strong>Aucun champ fils renseigné.
                                         </div>
                                     <?php endif ?>
                                 <?php endif ?>
