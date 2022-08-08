@@ -40,7 +40,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
-            ->order('c.idx asc')
+            ->order('ISNULL(c.idx)')
+            ->order('c.idx')
+            ->order('c.NOM')
         ;
 
         if (true === $hasList) {
@@ -60,6 +62,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP', ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP', ['TYPE'])
             ->where('c.ID_CHAMP = ?', $idParent)
+            ->order('ISNULL(c2.idx)')
+            ->order('c2.idx')
+            ->order('c2.NOM')
         ;
 
         return $this->fetchAll($select)->toArray();
