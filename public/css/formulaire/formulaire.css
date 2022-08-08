@@ -27,7 +27,9 @@ div[id^='saved-rubriques-'] a {
     display: none;
 }
 
-#default-display, #actions {
+#default-display,
+#actions,
+td.tdMove {
     vertical-align: middle;
 }
 

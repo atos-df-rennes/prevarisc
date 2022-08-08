@@ -40,7 +40,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['ltcr' => 'listetypechamprubrique'], 'c.ID_TYPECHAMP = ltcr.ID_TYPECHAMP', ['TYPE'])
             ->join(['r' => 'rubrique'], 'c.ID_RUBRIQUE = r.ID_RUBRIQUE', ['ID_RUBRIQUE'])
             ->where('c.ID_CHAMP = ?', $idChamp)
-            ->where('c.ID_PARENT IS NULL')
             ->order('c.idx asc')
         ;
 
