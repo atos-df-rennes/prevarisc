@@ -28,6 +28,7 @@ class Service_Formulaire
             'NOM' => $rubrique['nom_rubrique'],
             'DEFAULT_DISPLAY' => intval($rubrique['afficher_rubrique']),
             'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique,
+            'idx' => $rubrique['idx'],
         ]);
 
         return intval($idRubrique);
@@ -54,6 +55,7 @@ class Service_Formulaire
             'NOM' => $champ[$nomChamp],
             'ID_TYPECHAMP' => $idTypeChamp,
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
+            'idx' => $champ['idx'],
         ];
 
         if (!empty($champ['ID_CHAMP_PARENT'])) {

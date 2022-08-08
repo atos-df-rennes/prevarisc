@@ -4,6 +4,7 @@
 }
 
 .colTableInput {
+    width: auto;
     display: flex;
     flex-flow: column;
     margin: auto 1em;

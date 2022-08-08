@@ -71,17 +71,4 @@ class Form_FormChampFromParent extends Zend_Form
             false
         );
     }
-
-    public function getAllListeTypeChampRubrique(): array
-    {
-        $selectValues = [];
-        $serviceFormulaire = new Service_Formulaire();
-
-        $typesChampRubrique = $serviceFormulaire->getAllListeTypeChampRubrique();
-        foreach ($typesChampRubrique as $typeChampRubrique) {
-            $selectValues[$typeChampRubrique['ID_TYPECHAMP']] = $typeChampRubrique['TYPE'];
-        }
-
-        return $selectValues;
-    }
 }

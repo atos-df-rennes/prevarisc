@@ -70,14 +70,16 @@
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Nom du champ</th>
                         <th>Type du champ</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id='grp1' class="grp">
                     <?php foreach($this->champs as $champ): ?>
-                        <tr>
+                        <tr id=<?=$champ['ID_CHAMP']?>>
+                            <td class='tdMove'><i class="icon-move"></i></td>
                             <td><?= $champ['NOM'] ?></td>
                             <td>
                                 <?= $champ['TYPE'] ?>

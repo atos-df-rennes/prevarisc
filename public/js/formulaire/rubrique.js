@@ -25,22 +25,28 @@ $(document).ready(function() {
             type: 'POST',
             success: function(data) {
                 const jsonParsedData = JSON.parse(data)
+                const parsedData = Array.isArray(jsonParsedData) ? jsonParsedData[0] : jsonParsedData
 
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
-                    savedFieldsDiv.append(getTableElement())
+                    let titleText = 'Liste des champs'
+                    if (isParent) {
+                        titleText += ' enfants'
+                    }
+
                     savedFieldsTitlesDiv.append(`<div class="span6 offset2">
-                        <h3>Liste des champs</h3>
+                        <h3>${titleText}</h3>
                     </div>`)
+                    savedFieldsDiv.append(getTableElement())
                 }
                 
                 const table = savedFieldsDiv.children('table')
-                table.append(getRowElement(jsonParsedData))
+                table.append(getRowElement(parsedData))
 
-                if (jsonParsedData[0].TYPE === 'Liste') {
-                    const typeRow = table.children('tbody').children().children('#type-'+jsonParsedData[0].ID_CHAMP)
+                if (parsedData.TYPE === 'Liste') {
+                    const typeRow = table.children('tbody').children().children('#type-'+parsedData.ID_CHAMP)
 
-                    if (jsonParsedData[0].VALEUR !== null) {
+                    if (parsedData.VALEUR !== null) {
                         typeRow.append(getListElements(jsonParsedData))
                     } else {
                         typeRow.append(`<div class="alert">
@@ -114,6 +120,7 @@ function getTableElement() {
     return `<table class="table table-bordered table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>Nom du champ</th>
                 <th>Type du champ</th>
                 <th></th>
@@ -124,10 +131,9 @@ function getTableElement() {
     </table>`
 }
 
-function getRowElement(jsonParsedData) {
-    const parsedData = Array.isArray(jsonParsedData) ? jsonParsedData[0] : jsonParsedData
-
+function getRowElement(parsedData) {
     return `<tr>
+        <td class="tdMove"><i class="icon-move"></i></td>
         <td>`
         +parsedData.NOM+
         `</td>

@@ -53,9 +53,9 @@
                 <div class="colTableInput">
                     <th><?= $champsFils['NOM'] ?></th>
                     <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                        'champ' => $champsFils,
-                        'champsvaleurliste' => $this->champsvaleurliste,
-                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            'champ' => $champsFils,
+                            'champsvaleurliste' => $this->champsvaleurliste,
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
                         ]);
                     ?>
                 </div>

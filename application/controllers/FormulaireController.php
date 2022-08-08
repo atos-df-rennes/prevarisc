@@ -20,6 +20,8 @@ class FormulaireController extends Zend_Controller_Action
         /** @var Zend_View_Helper_InlineScript */
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
@@ -49,6 +51,7 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
+            $post['idx'] = $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
 
             $idRubrique = $this->serviceFormulaire->insertRubrique($post);
             $insertedRowAsArray = $this->modelRubrique->find($idRubrique)->current()->toArray();
@@ -64,6 +67,8 @@ class FormulaireController extends Zend_Controller_Action
         /** @var Zend_View_Helper_InlineScript */
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
@@ -126,8 +131,11 @@ class FormulaireController extends Zend_Controller_Action
 
         /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $post = $request->getPost();
+            $post['idx'] = $request->getParam('ID_CHAMP_PARENT') ? $this->modelChamp->getNbChampOfParent($request->getParam('ID_CHAMP_PARENT')) : $this->modelChamp->getNbChampOfRubrique($idRubrique);
+
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
             $isParent = filter_var($request->getParam('isParent', false), FILTER_VALIDATE_BOOL);
@@ -150,6 +158,8 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
@@ -201,6 +211,7 @@ class FormulaireController extends Zend_Controller_Action
 
         /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $post = $request->getPost();
 
@@ -257,5 +268,29 @@ class FormulaireController extends Zend_Controller_Action
 
         $valeurListe = $this->modelChampValeurListe->find($idValeurListe)->current();
         $valeurListe->delete();
+    }
+
+    public function updateChampIdxAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        /** @var Zend_Controller_Request_Http */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $this->modelChamp->updateNewIdx($post);
+        }
+    }
+
+    public function updateRubriqueIdxAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        /** @var Zend_Controller_Request_Http */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $this->modelRubrique->updateNewIdx($post);
+        }
     }
 }

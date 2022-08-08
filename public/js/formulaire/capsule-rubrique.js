@@ -72,6 +72,7 @@ function getTableElement() {
     return `<table class="table table-bordered table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>Nom de la rubrique</th>
                 <th>Afficher la rubrique par défaut</th>
                 <th></th>
@@ -91,7 +92,8 @@ function getRowElement(parsedData) {
             </div>`
     }
 
-    return `<tr>
+    return `<tr id=`+parsedData.ID_RUBRIQUE+`>
+        <td class='tdMove'><i class="icon-move"></i></td>
         <td>`
         +parsedData.NOM+
         `</td>
