@@ -135,7 +135,7 @@ class Service_User
             $informations->save();
 
             $user->USERNAME_UTILISATEUR = $data['USERNAME_UTILISATEUR'];
-            $user->NUMINSEE_COMMUNE = array_key_exists('NUMINSEE_COMMUNE', $data) ? $data['NUMINSEE_COMMUNE'] : null;
+            $user->NUMINSEE_COMMUNE = $data['NUMINSEE_COMMUNE'] ?? null;
             $user->ID_GROUPE = $data['ID_GROUPE'];
             $user->ACTIF_UTILISATEUR = $data['ACTIF_UTILISATEUR'];
             $user->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = $data['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'];
@@ -215,7 +215,7 @@ class Service_User
      */
     public function savePreferences($id_utilisateur, array $preferences = [])
     {
-        if (!$id_utilisateur) {
+        if ($id_utilisateur === 0) {
             return false;
         }
 
@@ -376,7 +376,7 @@ class Service_User
      */
     public function logFailedLogin($user)
     {
-        if (!$user) {
+        if ($user === []) {
             return;
         }
         if (!isset($user['ID_UTILISATEUR'])) {

@@ -251,7 +251,7 @@ class Api_Service_Calendar
             );
             $contactsEts = $servEtab->getAllContacts($ets['general']['ID_ETABLISSEMENT']);
             $contacts = array_merge($contactsDossier, $contactsEts);
-            if (count($contacts) > 0) {
+            if ($contacts !== []) {
                 foreach ($contacts as $contact) {
                     $corpus .= $this->formatUtilisateurInformations($contact);
                 }
@@ -285,8 +285,8 @@ class Api_Service_Calendar
                 $serviceInstruct = $dbGroupement->getByLibelle(
                     $commissionEvent['SERVICEINSTRUC_DOSSIER']
                 );
-                $serviceInstruct = !empty($serviceInstruct) ?
-                                    $serviceInstruct[0] : null;
+                $serviceInstruct = empty($serviceInstruct) ?
+                                    null : $serviceInstruct[0];
             }
             if ($maire && count($maire) > 0) {
                 $corpus .= sprintf(
@@ -334,13 +334,13 @@ class Api_Service_Calendar
         $result = '';
         // Si plusieurs préventionnistes liés au dossier
         if (count($preventionnistes) > 1) {
-            for ($i = 0; $i < count($preventionnistes); ++$i) {
+            foreach ($preventionnistes as $i => $preventionniste) {
                 if ($this->isPreventionnisteExist($preventionnistes, $i)) {
                     $result .= sprintf(
                         '- %s%s%s%s',
-                        $preventionnistes[$i]['GRADE_UTILISATEURINFORMATIONS'],
-                        $preventionnistes[$i]['PRENOM_UTILISATEURINFORMATIONS'],
-                        $preventionnistes[$i]['NOM_UTILISATEURINFORMATIONS'],
+                        $preventionniste['GRADE_UTILISATEURINFORMATIONS'],
+                        $preventionniste['PRENOM_UTILISATEURINFORMATIONS'],
+                        $preventionniste['NOM_UTILISATEURINFORMATIONS'],
                         self::LF.self::LF
                     );
                 } else {
@@ -351,22 +351,20 @@ class Api_Service_Calendar
                     );
                 }
             }
+        } elseif ($this->isPreventionnisteExist($preventionnistes, 0)) {
+            $result = sprintf(
+                '- %s%s%s%s',
+                $preventionnistes[0]['GRADE_UTILISATEURINFORMATIONS'].' ',
+                $preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].' ',
+                $preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'],
+                self::LF.self::LF.self::LF
+            );
         } else {
-            if ($this->isPreventionnisteExist($preventionnistes, 0)) {
-                $result = sprintf(
-                    '- %s%s%s%s',
-                    $preventionnistes[0]['GRADE_UTILISATEURINFORMATIONS'].' ',
-                    $preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].' ',
-                    $preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'],
-                    self::LF.self::LF.self::LF
-                );
-            } else {
-                $result .= sprintf(
-                    '- %s%s',
-                    '- Informations du prévisionniste incomplètes ou absentes',
-                    self::LF.self::LF
-                );
-            }
+            $result .= sprintf(
+                '- %s%s',
+                '- Informations du prévisionniste incomplètes ou absentes',
+                self::LF.self::LF
+            );
         }
 
         return $result;
@@ -381,10 +379,7 @@ class Api_Service_Calendar
         if (empty($preventionnistes[$index]['PRENOM_UTILISATEURINFORMATIONS'])) {
             return false;
         }
-        if (empty($preventionnistes[$index]['NOM_UTILISATEURINFORMATIONS'])) {
-            return false;
-        }
-        return true;
+        return !empty($preventionnistes[$index]['NOM_UTILISATEURINFORMATIONS']);
     }
 
     private function formatUtilisateurInformations($user): string

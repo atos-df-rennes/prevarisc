@@ -68,7 +68,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
         $return = array_slice($return, 0, count($primary));
 
         // On rajoute les valeurs de toutes les clé primaires
-        foreach ($return as $pos => $item) {
+        foreach (array_keys($return) as $pos) {
             $return[$pos][$key] = $primary[$pos][$key];
         }
 

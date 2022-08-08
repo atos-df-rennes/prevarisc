@@ -75,11 +75,7 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
         $indent = (null !== $indent) ? $this->getWhitespace($indent) : $this->getIndent();
 
         // Determining the appropriate way to handle inline scripts
-        if ($this->view) {
-            $useCdata = $this->view->doctype()->isXhtml() ? true : false;
-        } else {
-            $useCdata = $this->useCdata ? true : false;
-        }
+        $useCdata = $this->view ? (bool) $this->view->doctype()->isXhtml() : $this->useCdata;
 
         $escapeStart = ($useCdata) ? '//<![CDATA[' : '//<!--';
         $escapeEnd = ($useCdata) ? '//]]>' : '//-->';
@@ -97,14 +93,14 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
                     $scripts = [];
                 }
             } else {
-                if ($scripts) {
+                if ($scripts !== []) {
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }
         }
-        if ($scripts) {
+        if ($scripts !== []) {
             $items[] = $this->_generateMinifyItem($scripts);
         }
 

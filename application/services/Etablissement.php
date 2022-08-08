@@ -190,8 +190,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     if (self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']) {
                         continue;
                     }
-                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
-                        || 0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
                         continue;
                     }
                     if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
@@ -693,7 +695,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
     {
         $DB_information = new Model_DbTable_EtablissementInformations();
 
-        return (null != ($DB_information->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'"))) ? true : false;
+        return null != $DB_information->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'");
     }
 
     /**
@@ -802,7 +804,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = (int) $data['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
-                    $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS ? (int) $data['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] : null;
+                    $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS !== 0 ? (int) $data['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] : null;
                     $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $informations->ID_COMMISSION = $data['ID_COMMISSION'];
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
@@ -903,10 +905,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     if ($key > 0) {
                         $DB_rubrique->createRow([
                             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
-                            'NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : (int) $rubrique['NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : (float) $rubrique['VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : $rubrique['NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : $rubrique['CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
+                            'NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE' => array_key_exists('NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? (int) $rubrique['NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE'] : null,
+                            'VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE' => array_key_exists('VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? (float) $rubrique['VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE'] : null,
+                            'NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE' => $rubrique['NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE'] ?? null,
+                            'CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE' => $rubrique['CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE'] ?? null,
                             'ID_ETABLISSEMENTINFORMATIONS' => $informations->ID_ETABLISSEMENTINFORMATIONS,
                         ])->save();
                     }
@@ -919,9 +921,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     if ($key > 0) {
                         $DB_plans->createRow([
                             'ID_ETABLISSEMENTINFORMATIONS' => $informations->ID_ETABLISSEMENTINFORMATIONS,
-                            'NUMERO_ETABLISSEMENTPLAN' => !array_key_exists('NUMERO_ETABLISSEMENTPLAN', $plan) ? null : $plan['NUMERO_ETABLISSEMENTPLAN'],
-                            'DATE_ETABLISSEMENTPLAN' => !array_key_exists('DATE_ETABLISSEMENTPLAN', $plan) ? null : $plan['DATE_ETABLISSEMENTPLAN'],
-                            'MISEAJOUR_ETABLISSEMENTPLAN' => !array_key_exists('MISEAJOUR_ETABLISSEMENTPLAN', $plan) ? null : $plan['MISEAJOUR_ETABLISSEMENTPLAN'],
+                            'NUMERO_ETABLISSEMENTPLAN' => $plan['NUMERO_ETABLISSEMENTPLAN'] ?? null,
+                            'DATE_ETABLISSEMENTPLAN' => $plan['DATE_ETABLISSEMENTPLAN'] ?? null,
+                            'MISEAJOUR_ETABLISSEMENTPLAN' => $plan['MISEAJOUR_ETABLISSEMENTPLAN'] ?? null,
                             'ID_TYPEPLAN' => $plan['ID_TYPEPLAN'],
                         ])->save();
                     }
@@ -1418,13 +1420,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 if (null !== $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
                     $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()->delete();
                 }
-            } else {
-                if (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
-                    $row = $etsTexteApplicable->createRow();
-                    $row->ID_TEXTESAPPL = $id_texte_applicable;
-                    $row->ID_ETABLISSEMENT = $id_etablissement;
-                    $row->save();
-                }
+            } elseif (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+                $row = $etsTexteApplicable->createRow();
+                $row->ID_TEXTESAPPL = $id_texte_applicable;
+                $row->ID_ETABLISSEMENT = $id_etablissement;
+                $row->save();
             }
         }
     }

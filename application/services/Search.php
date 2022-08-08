@@ -668,7 +668,7 @@ class Service_Search
 
             $sIDsTable = [];
             foreach ($results['results'] as $row) {
-                array_push($sIDsTable, $row['ID_DOSSIER']);
+                $sIDsTable[] = $row['ID_DOSSIER'];
             }
 
             // Si pas de dossier, pas de recherche
@@ -688,7 +688,7 @@ class Service_Search
                         if (!isset($results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'])) {
                             $results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'] = [];
                         }
-                        array_push($results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'], $prev);
+                        $results['results'][$prev['ID_DOSSIER']]['PREVENTIONNISTES'][] = $prev;
                     }
                 }
 
@@ -706,7 +706,7 @@ class Service_Search
                         if (!isset($results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'])) {
                             $results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'] = [];
                         }
-                        array_push($results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'], $pj);
+                        $results['results'][$pj['ID_DOSSIER']]['PIECESJOINTES'][] = $pj;
                     }
                 }
             }
@@ -1077,9 +1077,9 @@ class Service_Search
             ;
 
             // Critères : activité
-            if (true === $actif) {
+            if ($actif) {
                 $this->setCriteria($select, 'u.ACTIF_UTILISATEUR', 1);
-            } elseif (false === $actif) {
+            } elseif (!$actif) {
                 $this->setCriteria($select, 'u.ACTIF_UTILISATEUR', 0);
             }
 
@@ -1153,8 +1153,8 @@ class Service_Search
         $string = null;
 
         if (is_array($value)) {
-            for ($i = 0; $i < count($value); ++$i) {
-                $string .= $key.(($exact) ? '=' : ' LIKE ').$select->getAdapter()->quote((($exact) ? '' : '%').$value[$i].(($exact) ? '' : '%'));
+            foreach ($value as $i => $singleValue) {
+                $string .= $key.(($exact) ? '=' : ' LIKE ').$select->getAdapter()->quote((($exact) ? '' : '%').$singleValue.(($exact) ? '' : '%'));
                 if ($i < count($value) - 1) {
                     $string .= ' OR ';
                 }

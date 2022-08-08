@@ -9,16 +9,12 @@ class View_Helper_Dates
      * Only the two biggest parts are used.
      *
      * @param DateTime      $start
-     * @param null|DateTime $end
+     * @param \DateTime|\DateTimeImmutable $end
      *
      * @return string
      */
-    public function formatDateDiff($start, $end = null)
+    public function formatDateDiff(\DateTimeInterface $start, \DateTimeInterface $end = null)
     {
-        if (!($start instanceof DateTime)) {
-            $start = new DateTime($start);
-        }
-
         if (null === $end) {
             $end = new DateTime();
         }
@@ -45,7 +41,7 @@ class View_Helper_Dates
             $format[] = '%i '.$doPlural($interval->i, 'minute');
         }
         if (0 !== $interval->s) {
-            if (!count($format)) {
+            if (count($format) === 0) {
                 return '<= 1 min';
             }
             $format[] = '%s '.$doPlural($interval->s, 'seconde');

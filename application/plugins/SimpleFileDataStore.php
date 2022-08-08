@@ -75,12 +75,9 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     {
         $directory = $this->getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId);
 
-        if ($createDirIfNotExists && !is_dir($directory)) {
-            if (!@mkdir($directory, 0777, true)) {
-                $error = error_get_last();
-
-                throw new Exception('Cannot create base directory '.$directory.': '.$error['message']);
-            }
+        if ($createDirIfNotExists && !is_dir($directory) && !@mkdir($directory, 0777, true)) {
+            $error = error_get_last();
+            throw new Exception('Cannot create base directory '.$directory.': '.$error['message']);
         }
 
         return implode(DS, [

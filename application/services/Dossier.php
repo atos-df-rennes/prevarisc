@@ -2,6 +2,14 @@
 
 class Service_Dossier
 {
+    /**
+     * @var array<string, mixed[]>|array<string, int>|array<string, mixed>|mixed
+     */
+    public $etablissement;
+    /**
+     * @var mixed[]|mixed
+     */
+    public $listeEtablissement;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
 
@@ -204,20 +212,18 @@ class Service_Dossier
                         }
                     }
                 }
-            } else {
-                if (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
-                    $row = $dossierTexteApplicable->createRow();
-                    $row->ID_TEXTESAPPL = $id_texte_applicable;
-                    $row->ID_DOSSIER = $id_dossier;
-                    $row->save();
-                    if ((self::ID_DOSSIERTYPE_VISITE == $type || self::ID_DOSSIERTYPE_GRPVISITE == $type) && $id_etablissement) {
-                        $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
-                        if (!$exist) {
-                            $row = $etsTexteApplicable->createRow();
-                            $row->ID_TEXTESAPPL = $id_texte_applicable;
-                            $row->ID_ETABLISSEMENT = $id_etablissement;
-                            $row->save();
-                        }
+            } elseif (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
+                $row = $dossierTexteApplicable->createRow();
+                $row->ID_TEXTESAPPL = $id_texte_applicable;
+                $row->ID_DOSSIER = $id_dossier;
+                $row->save();
+                if ((self::ID_DOSSIERTYPE_VISITE == $type || self::ID_DOSSIERTYPE_GRPVISITE == $type) && $id_etablissement) {
+                    $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
+                    if (!$exist) {
+                        $row = $etsTexteApplicable->createRow();
+                        $row->ID_TEXTESAPPL = $id_texte_applicable;
+                        $row->ID_ETABLISSEMENT = $id_etablissement;
+                        $row->save();
                     }
                 }
             }
@@ -334,14 +340,14 @@ class Service_Dossier
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
-                if (sizeof($assoc) > 0) {
-                    array_push($prescriptionArray, $assoc);
+                if (count($assoc) > 0) {
+                    $prescriptionArray[] = $assoc;
                 }
             } else {
                 //cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue['ID_PRESCRIPTION_DOSSIER']);
-                if (sizeof($assoc) > 0) {
-                    array_push($prescriptionArray, $assoc);
+                if (count($assoc) > 0) {
+                    $prescriptionArray[] = $assoc;
                 }
             }
         }
@@ -785,19 +791,14 @@ class Service_Dossier
 
         foreach ($listeEtab as $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
-            $MAJEtab = 0;
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
-            if (isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && null != $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
+            if (property_exists($etabToEdit, 'ID_DOSSIER_DONNANT_AVIS') && $etabToEdit->ID_DOSSIER_DONNANT_AVIS !== null) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
                 $dateAncienAvis = $this->getDateDossier($dossierAncienAvis);
                 $dateNewAvis = $this->getDateDossier($nouveauDossier);
 
-                if ($dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis) {
-                    $MAJEtab = 1;
-                } else {
-                    $MAJEtab = 0;
-                }
+                $MAJEtab = $dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis ? 1 : 0;
             } else {
                 $MAJEtab = 1;
             }

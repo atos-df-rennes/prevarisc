@@ -208,7 +208,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 break;
                         }
 
-                        $resource_imploded = implode($resource_exploded, '_');
+                        $resource_imploded = implode('_', $resource_exploded);
                         $list_resources_finale = [$resource_imploded];
 
                         $resources = new ResourceContainer($list_resources_finale);
@@ -275,10 +275,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                         break;
                                     }
                                 }
-                                if ($resources->hasNonDeveloppedResource('editsite') && 'edit' == $page->get('action')) {
-                                    if ($acl->has('creations') && $acl->isAllowed($role, 'creations', 'add_etablissement')) {
-                                        $access_granted = true;
-                                    }
+                                if ($resources->hasNonDeveloppedResource('editsite') && 'edit' == $page->get('action') && ($acl->has('creations') && $acl->isAllowed($role, 'creations', 'add_etablissement'))) {
+                                    $access_granted = true;
                                 }
                             } elseif ('dossier' == $page->get('controller')) {
                                 if ('add' !== $page->get('action') && 'savenew' !== $page->get('action')) {
@@ -303,10 +301,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                             }
                                         }
                                     }
-                                } else {
-                                    if ($acl->isAllowed($role, 'creations', 'add_dossier')) {
-                                        $access_granted = true;
-                                    }
+                                } elseif ($acl->isAllowed($role, 'creations', 'add_dossier')) {
+                                    $access_granted = true;
                                 }
                             } else {
                                 foreach ($resources as $resource) {
@@ -371,10 +367,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                         $dossier_nature = $model_dossier->getNatureDossier($id_dossier);
                         $etablissements = $model_dossier->getEtablissementDossier2($id_dossier);
                         $resources = [];
-                        if (count((array) $etablissements) > 0) {
-                            foreach ($etablissements as $etablissement) {
-                                $resources = array_merge($resources, $this->getEtablissementPageResourses($etablissement['ID_ETABLISSEMENT']));
-                            }
+                        foreach ($etablissements as $etablissement) {
+                            $resources = array_merge($resources, $this->getEtablissementPageResourses($etablissement['ID_ETABLISSEMENT']));
                         }
                         $resources[] = 'dossier_'.$dossier_nature['ID_NATURE'];
                     }
@@ -634,15 +628,17 @@ class ResourceContainer implements Iterator
      */
     public function develop_resources(&$list_resources_finale)
     {
-        for ($i = 0; $i < count($list_resources_finale); ++$i) {
+        $list_resources_finaleCount = count($list_resources_finale);
+        for ($i = 0; $i < $list_resources_finaleCount; ++$i) {
             $resource_exploded = explode('_', $list_resources_finale[$i]);
-            for ($j = 0; $j < count($resource_exploded); ++$j) {
+            $resource_explodedCount = count($resource_exploded);
+            for ($j = 0; $j < $resource_explodedCount; ++$j) {
                 if (count(explode('-', $resource_exploded[$j])) > 1) {
                     $resource_exploded2 = explode('-', $resource_exploded[$j]);
-                    for ($k = 0; $k < count($resource_exploded2); ++$k) {
+                    foreach ($resource_exploded2 as $singleResource_exploded2) {
                         $name = explode('_', $list_resources_finale[$i]);
-                        $name[$j] = $resource_exploded2[$k];
-                        $list_resources_finale[] = implode($name, '_');
+                        $name[$j] = $singleResource_exploded2;
+                        $list_resources_finale[] = implode('_', $name);
                     }
                     unset($list_resources_finale[$i]);
                     $list_resources_finale = array_unique($list_resources_finale);

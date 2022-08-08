@@ -2,6 +2,11 @@
 
 class Service_Carto
 {
+    public $cache;
+    /**
+     * @var mixed|Model_DbTable_CoucheCarto
+     */
+    public $repository;
     /**
      * Initialisation des ressources exterieures.
      */

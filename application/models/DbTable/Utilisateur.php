@@ -2,6 +2,10 @@
 
 class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 {
+    /**
+     * @var mixed|\Zend_Db_Select
+     */
+    public $select;
     protected $_name = 'utilisateur';
     protected $_primary = 'ID_UTILISATEUR';
 
@@ -220,15 +224,17 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
             * @return array
             */
         function (&$list_resources_finale) use (&$develop_resources) {
-            for ($i = 0; $i < count($list_resources_finale); ++$i) {
+            $list_resources_finaleCount = count($list_resources_finale);
+            for ($i = 0; $i < $list_resources_finaleCount; ++$i) {
                 $resource_exploded = explode('_', $list_resources_finale[$i]);
-                for ($j = 0; $j < count($resource_exploded); ++$j) {
+                $resource_explodedCount = count($resource_exploded);
+                for ($j = 0; $j < $resource_explodedCount; ++$j) {
                     if (count(explode('-', $resource_exploded[$j])) > 1) {
                         $resource_exploded2 = explode('-', $resource_exploded[$j]);
-                        for ($k = 0; $k < count($resource_exploded2); ++$k) {
+                        foreach ($resource_exploded2 as $singleResource_exploded2) {
                             $name = explode('_', $list_resources_finale[$i]);
-                            $name[$j] = $resource_exploded2[$k];
-                            $list_resources_finale[] = implode($name, '_');
+                            $name[$j] = $singleResource_exploded2;
+                            $list_resources_finale[] = implode('_', $name);
                         }
                         unset($list_resources_finale[$i]);
                         $list_resources_finale = array_unique($list_resources_finale);
@@ -302,11 +308,11 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                         break;
                 }
 
-                $resource_imploded = implode($resource_exploded, '_');
+                $resource_imploded = implode('_', $resource_exploded);
                 $resource_tmp = [$resource_imploded];
                 $develop_resources($resource_tmp);
 
-                array_push($privileges, ['name_privilege' => $resource['name_privilege'], 'name_resource' => $resource_imploded]);
+                $privileges[] = ['name_privilege' => $resource['name_privilege'], 'name_resource' => $resource_imploded];
 
                 unset($privileges[$key]);
             }
