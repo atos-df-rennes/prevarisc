@@ -358,12 +358,12 @@ class SearchController extends Zend_Controller_Action
                             ],
                         ],
                     ];
-                    $sheet->getStyle('A1:U1')->applyFromArray($styleArray);
+                    $sheet->getStyle('A1:V1')->applyFromArray($styleArray);
                     unset($styleArray);
-                    $sheet->getStyle('A1:U1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    $sheet->getStyle('A1:U1')->getFont()->setSize(11)->setBold(true);
+                    $sheet->getStyle('A1:V1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A1:V1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'U') as $columnID) {
+                    foreach (range('A', 'V') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
@@ -388,6 +388,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(18, 1, 'Avis commission');
                     $sheet->setCellValueByColumnAndRow(19, 1, 'Préventionniste en charge du dossier');
                     $sheet->setCellValueByColumnAndRow(20, 1, 'Pièces jointes ?');
+                    $sheet->setCellValueByColumnAndRow(21, 1, 'Identifiant PLATAU');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
@@ -439,6 +440,10 @@ class SearchController extends Zend_Controller_Action
                             $sheet->setCellValueByColumnAndRow(20, $ligne, 'Oui');
                         } else {
                             $sheet->setCellValueByColumnAndRow(20, $ligne, 'Non');
+                        }
+
+                        if ('1' === $criteresRecherche['provenance']) {
+                            $sheet->setCellValueByColumnAndRow(21, $ligne, $row['ID_PLATAU']);
                         }
 
                         ++$ligne;

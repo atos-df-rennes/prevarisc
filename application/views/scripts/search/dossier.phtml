@@ -101,8 +101,8 @@
                     <option value='2' <?php if(isset($_GET["avisRapporteur"]) && in_array(2, (array) $_GET["avisRapporteur"])) echo 'selected' ?>>Défavorable</option>
                 </select>
                 <select name='provenance' class="span3 chosen" data-placeholder='Provenance' multiple onchange="masquerBoutonExportCalc()">
-                        <option value='1' <?= isset($_GET["provenance"]) && in_array("1", (array) $_GET["provenance"]) ? 'selected': '' ?> >Provenant de PLATAU</option>
-                        <option value='2' <?= isset($_GET["provenance"]) && in_array("2", (array) $_GET["provenance"]) ? 'selected': '' ?> >Ne provenant pas de PLATAU</option>
+                    <option value='1' <?= isset($_GET["provenance"]) && in_array(1, (array) $_GET["provenance"]) ? 'selected': '' ?> >Provenant de PLATAU</option>
+                    <option value='2' <?= isset($_GET["provenance"]) && in_array(2, (array) $_GET["provenance"]) ? 'selected': '' ?> >Ne provenant pas de PLATAU</option>
                 </select>
             </div>
         </div>

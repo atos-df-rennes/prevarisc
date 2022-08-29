@@ -640,32 +640,20 @@ class Service_Search
                 $select->where("d.DATEREP_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseEnd']);
             }
 
+            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
+                if ('1' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NOT NULL');
+                } elseif ('2' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NULL');
+                }
+            }
+
             // Performance optimisation : avoid sorting on big queries, and sort only if
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 1) {
                 $select->order('d.DATEINSERT_DOSSIER DESC');
             }
 
-            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
-                foreach ($criterias['provenance'] as $value) {
-                    switch ($value) {
-                        case '1':
-                            //Dossier provenant de PLATAU
-                            $select->where('d.ID_PLATAU IS NOT NULL');
-
-                            break;
-
-                        case '2':
-                            //Dossier ne provenant pas de PLATAU
-                            $select->where('d.ID_PLATAU IS NULL');
-
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
             // Gestion des pages et du count
             $select->limitPage($page, $count > self::MAX_LIMIT_PAGES_DOSSIERS ? self::MAX_LIMIT_PAGES_DOSSIERS : $count);
 
