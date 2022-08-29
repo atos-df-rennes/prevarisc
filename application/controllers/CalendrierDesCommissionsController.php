@@ -85,7 +85,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('idDate'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if (!$infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('idDate');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -103,7 +103,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('dateCommId'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if (!$infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('dateCommId');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -320,7 +320,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $DB_prev = new Model_DbTable_DossierPreventionniste();
             $preventionnistes = $DB_prev->getPrevDossier($dossierAffect['ID_DOSSIER']);
-            if (count($preventionnistes) > 0) {
+            if ([] !== $preventionnistes) {
                 $affichage .= ' ('.$preventionnistes[0]['NOM_UTILISATEURINFORMATIONS'].' '.$preventionnistes[0]['PRENOM_UTILISATEURINFORMATIONS'].')';
             }
 
@@ -428,12 +428,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             //Liste des dates selectionnées dans un tableau puis envoyées à la vue
             $listeDates = [];
             while ($dateD->compare($dateF) <= 0) {
-                array_push($listeDates, [
+                $listeDates[] = [
                     'date' => $dateD->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr'),
                     'inputH' => $dateD->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY),
                     'heureD' => $HeureD->get('HH:mm'),
                     'heureF' => $HeureF->get('HH:mm'),
-                ]);
+                ];
                 $dateD->addDay(1);
             }
             //Envoi à la vue la liste des dates selectionnées
@@ -498,11 +498,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $idTypeSelect = $this->_getParam('typeSelect');
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $LigneComm = $dbDateCommission->find($this->_getParam('idDateComm'))->current();
-                    if (null != $LigneComm->DATECOMMISSION_LIEES) {
-                        $idUtile = $LigneComm->DATECOMMISSION_LIEES;
-                    } else {
-                        $idUtile = $LigneComm->ID_DATECOMMISSION;
-                    }
+                    $idUtile = null != $LigneComm->DATECOMMISSION_LIEES ? $LigneComm->DATECOMMISSION_LIEES : $LigneComm->ID_DATECOMMISSION;
                     $dbDateCommission->dateCommUpdateType($idUtile, $idTypeSelect);
                     $dbTypeEvenement = new Model_DbTable_CommissionTypeEvenement();
                     $infoType = $dbTypeEvenement->find($idTypeSelect)->current();
@@ -570,11 +566,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     //verifier si la date liéee contien une date liee. Si oui on récup cette id et on insere si non on prend l'id et on insere
                     $dbDateCommission = new Model_DbTable_DateCommission();
                     $LigneComm = $dbDateCommission->find($this->_getParam('idDateCommLiee'))->current();
-                    if (null != $LigneComm->DATECOMMISSION_LIEES) {
-                        $idUtile = $LigneComm->DATECOMMISSION_LIEES;
-                    } else {
-                        $idUtile = $LigneComm->ID_DATECOMMISSION;
-                    }
+                    $idUtile = null != $LigneComm->DATECOMMISSION_LIEES ? $LigneComm->DATECOMMISSION_LIEES : $LigneComm->ID_DATECOMMISSION;
                     $LigneComm = $dbDateCommission->find($idUtile)->current();
                     $newDate = $dbDateCommission->createRow();
                     $newDate->DATE_COMMISSION = $date->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
@@ -644,7 +636,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                 $dateFin = new Zend_Date($this->_getParam('dateFin'), 'dd.MM.yyyy');
 
-                foreach ($_POST as $var => $val) {
+                foreach (array_keys($_POST) as $var) {
                     $varExplode1 = explode('_', $var);
                     $expectedNumberOfParameters = 2;
 
@@ -676,14 +668,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                                 } else {
                                     $first = 0;
                                 }
-                                array_push($listeDates, [
+                                $listeDates[] = [
                                     'id' => $idCalendrierTab,
                                     'title' => $libelle,
                                     'start' => $dateDb.' '.$heureDebRef,
                                     'end' => $dateDb.' '.$heureFinRef,
                                     'url' => 'calendrier-des-commissions/id/'.$idCalendrierTab,
                                     'className' => 'display-'.$typeComm,
-                                ]);
+                                ];
                                 $dateDebut->addDay(7 * $periodicite);
                             }
                         }
@@ -691,7 +683,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 }
             } else {
                 //Cas de plusieurs dates selectionnées
-                foreach ($_POST as $var => $val) {
+                foreach (array_keys($_POST) as $var) {
                     $varExplode1 = explode('_', $var);
                     $expectedNumberOfParameters = 2;
 
@@ -713,14 +705,14 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                             } //fin $premiereDate && $varExplode1[0]=='D'
 
                             if ('D' == $varExplode1[0]) {
-                                array_push($listeDates, [
+                                $listeDates[] = [
                                     'id' => $idCalendrierTab,
                                     'title' => $libelle,
                                     'start' => $varExplode1[1].' '.$this->_getParam('D_'.$varExplode1[1]),
                                     'end' => $varExplode1[1].' '.$this->_getParam('F_'.$varExplode1[1]),
                                     'url' => 'calendrier-des-commissions/id/'.$idCalendrierTab,
                                     'className' => 'display-'.$typeComm,
-                                ]);
+                                ];
                             } //fin $varExplode1[0]=='D'
                         } //fin count = 3
                     } //fin count = 2
@@ -938,7 +930,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $service_etablissement = new Service_Etablissement();
             foreach ($listeDossiers as $val => $ue) {
                 $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
-                if (count($listePrev) > 0) {
+                if ([] !== $listePrev) {
                     $listeDossiers[$val]['preventionnistes'] = $listePrev;
                 }
                 //On recupere la liste des établissements qui concernent le dossier
@@ -1055,7 +1047,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['infosEtab'] = [];
 
             $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
-            if (count($listePrev) > 0) {
+            if ([] !== $listePrev) {
                 $listeDossiers[$val]['preventionnistes'] = $listePrev;
             }
 

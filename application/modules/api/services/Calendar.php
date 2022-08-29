@@ -266,7 +266,7 @@ class Api_Service_Calendar
 
         $adresseService = new Service_Adresse();
         $maire = $adresseService->getMaire($commissionEvent['NUMINSEE_COMMUNE']);
-        if ($maire && count($maire) > 0) {
+        if ($maire && [] !== $maire) {
             $corpus .= sprintf(
                 'Coordonnées de la mairie :%s%s%s',
                 self::LF,
@@ -288,7 +288,7 @@ class Api_Service_Calendar
                 $serviceInstruct = empty($serviceInstruct) ?
                                     null : $serviceInstruct[0];
             }
-            if ($maire && count($maire) > 0) {
+            if ($maire && [] !== $maire) {
                 $corpus .= sprintf(
                     'Coordonnées du service instructeur :%s%s%s',
                     self::LF,

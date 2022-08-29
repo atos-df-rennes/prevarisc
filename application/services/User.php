@@ -222,7 +222,7 @@ class Service_User
         $DB_userPreferences = new Model_DbTable_UtilisateurPreferences();
         $DB_preferences = $DB_userPreferences->fetchRow(['ID_UTILISATEUR = ?' => $id_utilisateur]);
 
-        if (!$DB_preferences) {
+        if (!$DB_preferences instanceof \Zend_Db_Table_Row_Abstract) {
             return false;
         }
 

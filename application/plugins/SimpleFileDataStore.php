@@ -152,7 +152,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                 $db = new Model_DbTable_EtablissementDossier();
                 $dossiers = $db->getEtablissementListe($linkedObjectId);
                 $default_numeroid = [];
-                if ($dossiers) {
+                if ([] !== $dossiers) {
                     foreach ($dossiers as $dossier) {
                         $service = new Service_Etablissement();
                         $etablissement = $service->get($dossier['ID_ETABLISSEMENT']);

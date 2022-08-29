@@ -159,7 +159,7 @@ class ContactController extends Zend_Controller_Action
             $row = $DB_informations->find($this->_request->id)->current();
             $this->view->user_info = $row;
 
-            if ($_POST) {
+            if ([] !== $_POST) {
                 $this->_helper->viewRenderer->setNoRender(); // On desactive la vue
                 $row->setFromArray(array_intersect_key($_POST, $DB_informations->info('metadata')))->save();
 

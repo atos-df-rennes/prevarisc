@@ -266,7 +266,7 @@ class CommissionController extends Zend_Controller_Action
                 unset($rowset_ets[$key]);
             }
 
-            if ($ets_to_update) {
+            if ([] !== $ets_to_update) {
                 $model_etablissementInformation->update(['ID_COMMISSION' => $id_commission], 'ID_ETABLISSEMENTINFORMATIONS IN ('.implode(',', $ets_to_update).')');
 
                 // removes cache if any changes
