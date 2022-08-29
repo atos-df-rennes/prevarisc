@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
 use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -28,5 +29,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Rules Skipped
     $parameters->set(Option::SKIP, [
         CountOnNullRector::class,
+        RemoveUnusedPromotedPropertyRector::class,
     ]);
 };
