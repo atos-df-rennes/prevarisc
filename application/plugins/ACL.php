@@ -182,11 +182,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 break;
 
                             case 'eic':
-
                             case 'camp':
-
                             case 'temp':
-
                             case 'iop':
                                 if ('1' == $resource_exploded[2]) {
                                     $resource_exploded[2] = $groupements;

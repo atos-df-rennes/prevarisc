@@ -251,7 +251,7 @@ class Api_Service_Calendar
             );
             $contactsEts = $servEtab->getAllContacts($ets['general']['ID_ETABLISSEMENT']);
             $contacts = array_merge($contactsDossier, $contactsEts);
-            if ($contacts !== []) {
+            if ([] !== $contacts) {
                 foreach ($contacts as $contact) {
                     $corpus .= $this->formatUtilisateurInformations($contact);
                 }
@@ -379,6 +379,7 @@ class Api_Service_Calendar
         if (empty($preventionnistes[$index]['PRENOM_UTILISATEURINFORMATIONS'])) {
             return false;
         }
+
         return !empty($preventionnistes[$index]['NOM_UTILISATEURINFORMATIONS']);
     }
 

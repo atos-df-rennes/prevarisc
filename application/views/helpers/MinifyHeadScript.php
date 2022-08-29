@@ -76,14 +76,14 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
                     $scripts = [];
                 }
             } else {
-                if ($scripts !== []) {
+                if ([] !== $scripts) {
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }
         }
-        if ($scripts !== []) {
+        if ([] !== $scripts) {
             $items[] = $this->_generateMinifyItem($scripts);
         }
 

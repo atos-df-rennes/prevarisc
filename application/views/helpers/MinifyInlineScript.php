@@ -93,14 +93,14 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
                     $scripts = [];
                 }
             } else {
-                if ($scripts !== []) {
+                if ([] !== $scripts) {
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }
         }
-        if ($scripts !== []) {
+        if ([] !== $scripts) {
             $items[] = $this->_generateMinifyItem($scripts);
         }
 

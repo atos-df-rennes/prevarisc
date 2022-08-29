@@ -48,6 +48,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      * values to build link.
      *
      * @param string $placement
+     *
      * @return Zend_View_Helper_HeadLink
      */
     public function minifyHeadLink(array $attributes = null, $placement = Zend_View_Helper_Placeholder_Container_Abstract::APPEND)
@@ -89,7 +90,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
                     $minStyles->rel = 'stylesheet';
                     $minStyles->type = 'text/css';
                     $minStyles->href = $this->getMinUrl().'?f='.implode(',', $styles);
-                    if ($trimmedBaseUrl !== '' && $trimmedBaseUrl !== '0') {
+                    if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
                         $minStyles->href .= '&b='.$trimmedBaseUrl;
                     }
                     if ($this->_version) {
@@ -115,7 +116,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
             $minStyles->rel = 'stylesheet';
             $minStyles->type = 'text/css';
             $minStyles->href = $this->getMinUrl().'?f='.implode(',', $styles);
-            if ($trimmedBaseUrl !== '' && $trimmedBaseUrl !== '0') {
+            if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
                 $minStyles->href .= '&b='.$trimmedBaseUrl;
             }
             $minStyles->media = $media;

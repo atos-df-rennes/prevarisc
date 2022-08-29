@@ -7,6 +7,7 @@ class Service_Carto
      * @var mixed|Model_DbTable_CoucheCarto
      */
     public $repository;
+
     /**
      * Initialisation des ressources exterieures.
      */

@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // get parameters
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
-        __DIR__ . '/application',
+        __DIR__.'/application',
     ]);
 
     // Defined PHP version
@@ -27,6 +27,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Rules Skipped
     $parameters->set(Option::SKIP, [
-        CountOnNullRector::class
+        CountOnNullRector::class,
     ]);
 };

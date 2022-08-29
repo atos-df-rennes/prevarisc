@@ -28,7 +28,7 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
         foreach ($rowset_reglesDeLaCommission as $row_regleDeLaCommission) {
             $array_regles[] = [
                 'id_regle' => $row_regleDeLaCommission['ID_REGLE'],
-                'commune' => ($row_regleDeLaCommission['NUMINSEE_COMMUNE'] !== '' && $row_regleDeLaCommission['NUMINSEE_COMMUNE'] !== '0') ? $model_commune->fetchRow('NUMINSEE_COMMUNE = '.$row_regleDeLaCommission['NUMINSEE_COMMUNE']) : null,
+                'commune' => ('' !== $row_regleDeLaCommission['NUMINSEE_COMMUNE'] && '0' !== $row_regleDeLaCommission['NUMINSEE_COMMUNE']) ? $model_commune->fetchRow('NUMINSEE_COMMUNE = '.$row_regleDeLaCommission['NUMINSEE_COMMUNE']) : null,
                 'groupement' => $row_regleDeLaCommission['ID_GROUPEMENT'],
                 'categories' => $this->fullJoinRegle('categorie', 'commissionreglecategorie', 'ID_CATEGORIE', $row_regleDeLaCommission['ID_REGLE']),
                 'classes' => $this->fullJoinRegle('classe', 'commissionregleclasse', 'ID_CLASSE', $row_regleDeLaCommission['ID_REGLE']),

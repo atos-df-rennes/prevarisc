@@ -215,7 +215,7 @@ class Service_User
      */
     public function savePreferences($id_utilisateur, array $preferences = [])
     {
-        if ($id_utilisateur === 0) {
+        if (0 === $id_utilisateur) {
             return false;
         }
 
@@ -376,7 +376,7 @@ class Service_User
      */
     public function logFailedLogin($user)
     {
-        if ($user === []) {
+        if ([] === $user) {
             return;
         }
         if (!isset($user['ID_UTILISATEUR'])) {

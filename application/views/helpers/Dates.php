@@ -8,12 +8,12 @@ class View_Helper_Dates
      * On big intervals, you get months and days.
      * Only the two biggest parts are used.
      *
-     * @param DateTime      $start
+     * @param DateTime                     $start
      * @param \DateTime|\DateTimeImmutable $end
      *
      * @return string
      */
-    public function formatDateDiff(\DateTimeInterface $start, \DateTimeInterface $end = null)
+    public function formatDateDiff(DateTimeInterface $start, DateTimeInterface $end = null)
     {
         if (null === $end) {
             $end = new DateTime();
@@ -41,7 +41,7 @@ class View_Helper_Dates
             $format[] = '%i '.$doPlural($interval->i, 'minute');
         }
         if (0 !== $interval->s) {
-            if (count($format) === 0) {
+            if (0 === count($format)) {
                 return '<= 1 min';
             }
             $format[] = '%s '.$doPlural($interval->s, 'seconde');

@@ -2,16 +2,16 @@
 
 class Service_Dossier
 {
+    public const ID_DOSSIERTYPE_VISITE = 2;
+    public const ID_DOSSIERTYPE_GRPVISITE = 3;
     /**
-     * @var array<string, mixed[]>|array<string, int>|array<string, mixed>|mixed
+     * @var array<string, int>|array<string, mixed>|array<string, mixed[]>|mixed
      */
     public $etablissement;
     /**
-     * @var mixed[]|mixed
+     * @var mixed|mixed[]
      */
     public $listeEtablissement;
-    public const ID_DOSSIERTYPE_VISITE = 2;
-    public const ID_DOSSIERTYPE_GRPVISITE = 3;
 
     /**
      * Récupération de l'ensemble des types.
@@ -751,6 +751,7 @@ class Service_Dossier
                 return new Zend_Date($date, Zend_Date::DATES);
             }
             $date = $dossier->DATEVISITE_DOSSIER;
+
             return new Zend_Date($date, Zend_Date::DATES);
         }
 
@@ -792,7 +793,7 @@ class Service_Dossier
         foreach ($listeEtab as $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
-            if (property_exists($etabToEdit, 'ID_DOSSIER_DONNANT_AVIS') && $etabToEdit->ID_DOSSIER_DONNANT_AVIS !== null) {
+            if (property_exists($etabToEdit, 'ID_DOSSIER_DONNANT_AVIS') && null !== $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
                 $dateAncienAvis = $this->getDateDossier($dossierAncienAvis);
