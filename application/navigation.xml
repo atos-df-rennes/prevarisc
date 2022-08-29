@@ -399,6 +399,11 @@
                         </save>
                     </pages>
                 </gestion-des-communes>
+                <fusion-des-communes>
+                    <label>Fusion des communes</label>
+                    <controller>fusion-des-communes</controller>
+                    <action>index</action>
+                </fusion-des-communes>
                 <gestion-des-documents>
                     <label>Gestion des Documents</label>
                     <controller>gestion-des-documents</controller>
@@ -1223,6 +1228,5 @@
                 </dev>
             </pages>
         </about>
-
     </nav>
 </configdata>

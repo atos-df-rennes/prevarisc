@@ -708,7 +708,18 @@ if ($this->GN == 2) {
 }
 
 try{
-    $chemin = $this->store->getFilePath($this->nouvellePJ, 'dossier', $this->idDossier, true);
+    $chemin = null;
+    
+    if ($this->infosDossier['ID_PLATAU'] !== null) {
+        $chemin = implode(DS, array(
+            REAL_DATA_PATH,
+            'uploads',
+            'pieces-jointes',
+            $this->nouvellePJ->ID_PIECEJOINTE.$this->nouvellePJ->EXTENSION_PIECEJOINTE
+        ));
+    } else {
+        $chemin = $this->store->getFilePath($this->nouvellePJ, 'dossier', $this->idDossier, true);
+    }
     $odf->saveToDisk($chemin);
 } catch (OdfException $e) {
 
