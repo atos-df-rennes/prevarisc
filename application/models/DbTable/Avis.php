@@ -6,6 +6,7 @@ class Model_DbTable_Avis extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_AVIS'; // Clé primaire
 
     //Fonction qui récupère tous les avis existant pour créer un select par exemple
+
     /**
      * @param mixed $tousLesChamps
      *
