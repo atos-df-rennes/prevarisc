@@ -9,3 +9,6 @@
     flex-flow: column;
     margin: auto 1em;
 }
+.colTableInput:first-child {
+    margin-left: 0;
+}
