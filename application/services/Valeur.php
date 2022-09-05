@@ -56,7 +56,7 @@ class Service_Valeur
             $valueInDB->delete();
         } else {
             $typeValeur = $this->getTypeValeur($idChamp);
-
+            var_dump('ID : '.$idChamp.'#'.$typeValeur.'#'.$newValue.'#'.$idx);
             $valueInDB->{$typeValeur} = $newValue;
             $valueInDB->idx = $idx;
             $valueInDB->save();

@@ -75,11 +75,9 @@ abstract class Service_Descriptif
     }
 
     public function  saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
-    {
+    {       
             $explodedChamp = explode('-', $key);
             $idChamp = end($explodedChamp);
-            $idxInput = explode('-',$inputName)[1];
-            $idParent =  explode('-',$inputName)[2];
             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 
@@ -89,30 +87,40 @@ abstract class Service_Descriptif
     //TODO pour delete appeler la route suivante 'deleteRowTable' provenant de serviceFormulaire
 
     public function saveValeursChamp(array $arrayInputValue, int $idObject, string $classObject):void{
+       try {
         $serviceFormulaire = new Service_Formulaire();
-       // $serviceFormulaire->deleteRowTable()
-        foreach ($arrayInputValue as $inputName => $value) {
-            $idxInput = null;
-            $idChamp = null; 
-            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
-                $idxInput = explode('-',$inputName)[1];
-                $idChamp =  explode('-',$inputName)[3];
-            }
-            $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idxInput);
-            echo('<pre>'.var_dump($valueInDB['VALEUR_STR']).'</pre>');
-            echo('<pre>'.var_dump($valueInDB['VALEUR_STR'] === $value).'</pre>');
-            //FIXME des etats false sortent alors qu'ils devraient etre true
+        // $serviceFormulaire->deleteRowTable()
+         foreach ($arrayInputValue as $inputName => $value) {
+             $idxInput = null;
+             $idChamp = null; 
+ 
+             if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+                 var_dump(explode('-',$inputName));
+ 
+                 $idxInput = explode('-',$inputName)[1];
+                 $idChamp =  explode('-',$inputName)[3];
+             }
+ 
+             $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idxInput);
+             var_dump('IDX : '.$idxInput.' Value '.$value);
+             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idxInput);
+ 
+             //FIXME des etats false sortent alors qu'ils devraient etre true
+         }       
+        } catch (\Throwable $th) {
+            var_dump($th);       
         }
+        
+
     }
 
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
-        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
-
-        if (null === $valueInDB) {
-            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value,$idx);
-        } else {
-            $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
-        }
+             $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
+            if (null === $valueInDB) {
+                $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value,$idx);
+            } else {
+                $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
+            }
     }
 }
