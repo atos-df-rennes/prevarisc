@@ -277,8 +277,6 @@ class EtablissementController extends Zend_Controller_Action
         
         foreach ($initialList as $inputName => $value) {
             if( sizeof(explode('-',$inputName)) === 5 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
-
-
                 $idxInput = explode('-',$inputName)[1];
                 $idParent =  explode('-',$inputName)[2];
                 $idInput =  explode('-',$inputName)[3];
@@ -290,15 +288,9 @@ class EtablissementController extends Zend_Controller_Action
                 if(!array_key_exists($idxInput,$newList[$idParent])){
                     $newList[$idParent][$idxInput] = [];
                 }
-                //$newList[$idParent][$idxInput][$idInput] = $value;
-                //$newList[$idParent][$idxInput][$idInput] = [$value,$idValeur];
                 $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
                 $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
-                
-                //$newList[$idParent][$idxInput][$idInput] = $idValeur;
-                
             }
-
         }
 
         $tmpList =[];
@@ -310,19 +302,7 @@ class EtablissementController extends Zend_Controller_Action
             }
         }
         $newList = $tmpList;
-        //var_dump($newList);
-        //die(1);
         return $newList;
-    }
-
-    function filterValueOnly($aValue){
-        $value = [];
-        foreach ($aValue as $key => $val) {
-            if(0 === strpos($key, 'valeur-') && (explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0') ){
-                $value[$key] = $val;
-            }
-        }
-        return $value;
     }
 
     public function editDescriptifPersonnaliseAction(): void
@@ -343,10 +323,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $idEtablissement = $this->getParam('id');
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        //$this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-
         $champValeursInit = ($modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-        //var_dump($champValeursInit);
         $this->descriptifPersonnaliseAction();
 
         $request = $this->getRequest();
@@ -365,41 +342,15 @@ class EtablissementController extends Zend_Controller_Action
                     if (0 === strpos($key, 'champ-')) {
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
-                    //TODO ajouter fonction de filtre permettant de recolter seulement les inputs qui sont saisies dans le tableau
-                    //TODO ajouter fonction saveValeursChamp afin de passer toute la liste en param pour ne plus boucler dans le controller
-                    //Si l element est une valeur d un tableau 
-
-                    
-
-                    /*
-                    if (0 === strpos($key, 'valeur-')) {
-                        if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
-                            foreach($this->groupInputByOrder($post) as $k => $v){
-                                
-                                foreach($v as $idx => $input){
-                                    foreach ($input as $idChamp => $value) {
-                                        $serviceEtablissementDescriptif->saveValeurChamp($idChamp, intval($idEtablissement), get_class($this), $value, $idx);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    */
-                    
-
                 }
-                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $this->groupInputByOrder($post), 'Etablissement', $idEtablissement);
-                var_dump($this->groupInputByOrder($post));
-                //die(1);
-                //var_dump($post);
-                //die(1);
-                //$serviceEtablissementDescriptif->saveValeursChamp($this->filterValueOnly($post), $idEtablissement, get_class($this));
+                //Sauvegarde les changements dans les tableaux 
+                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $this->groupInputByOrder($post), 'Etablissement', $idEtablissement);            
                 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
-
+            
             $this->_helper->redirector('descriptif', null, null, ['id' => $this->_request->id]);
         }
     }

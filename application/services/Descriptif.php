@@ -81,39 +81,6 @@ abstract class Service_Descriptif
             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 
-
-    //TODO Boucler sur toute la liste des input et tester sur chacun si une valeur a etait change que ce soit idx ou valeur propre
-    //TODO Si un seule valeur est change alors on delete toute les valeurs et on recrit tout 
-    //TODO pour delete appeler la route suivante 'deleteRowTable' provenant de serviceFormulaire
-
-    public function saveValeursChamp(array $arrayInputValue, int $idObject, string $classObject):void{
-       try {
-        $serviceFormulaire = new Service_Formulaire();
-        // $serviceFormulaire->deleteRowTable()
-         foreach ($arrayInputValue as $inputName => $value) {
-             $idxInput = null;
-             $idChamp = null; 
- 
-             if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
-                 var_dump(explode('-',$inputName));
- 
-                 $idxInput = explode('-',$inputName)[1];
-                 $idChamp =  explode('-',$inputName)[3];
-             }
- 
-             $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idxInput);
-             var_dump('IDX : '.$idxInput.' Value '.$value);
-             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idxInput);
- 
-             //FIXME des etats false sortent alors qu'ils devraient etre true
-         }       
-        } catch (\Throwable $th) {
-            var_dump($th);       
-        }
-        
-
-    }
-
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
             $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
@@ -136,10 +103,9 @@ abstract class Service_Descriptif
     public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject):void
     {
         array_shift($initArrayValue['RES_TABLEAU']);
-        //var_dump($initArrayValue['RES_TABLEAU']);
 
         $tableauDeComparaison = [];
-        $tableauIDValeurUpdate = [];
+        $tableauIDValeurCheck = [];
         $listTypeValeur = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'];
 
         //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....)
@@ -180,29 +146,13 @@ abstract class Service_Descriptif
         }
 
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
-        var_dump($tableauIDValeurCheck);
-        $listDBModel = [
-            'Dossier' => new Model_DbTable_DossierValeur(),
-            'Etablissement' => new Model_DbTable_EtablissementValeur()
-        ];
-
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
             try {
-            //Suppression de la fk
-            //$listDBModel[$classObject]->delete('ID_VALEUR = ?', $idValueToDelete);
-            //Suppression de la valeur 
-            var_dump($idValueToDelete);
             $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);    
             } catch (\Throwable $th) {
                 var_dump($th);
                 die(1);
             }
-
         }
-        //die(1);
-
-        
-        //array_diff_key($init, array_flip($toDelete))
-        
     }
 }
