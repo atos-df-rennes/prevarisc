@@ -130,6 +130,8 @@ abstract class Service_Descriptif
      * si une valeur a change de valeur reel alors on update 
      * si une valeur n est plus dans l array pousse alors on le supprime 
      * si une valeur est presente dans l array final alors on fait un insert
+     * 
+     * si des id sont restant dans tableauIDValeurUpdate alors cest qu ils n ont pas ete update a la fin des boucles, on procede donc a la suppression de ces valeurs
      */
     public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject):void
     {
@@ -150,27 +152,24 @@ abstract class Service_Descriptif
                         }
                     }
                     $tableauDeComparaison[$value['ID_VALEUR']] = $value;
+                    $tableauIDValeurCheck[] = $value['ID_VALEUR'];
                 }
             }
         }
-        //var_dump($tableauDeComparaison);
         
         //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
         foreach ($newArrayValue as $idParent => $idxFils) {
             foreach ($idxFils as $idx => $arrayFils) {
                 foreach ($arrayFils as $champ =>$newValue) {
-                    var_dump($idx);// -> index de la valeur
-                    var_dump($champ);// -> champ de la valeur 
-                    var_dump($newValue);// -> nouvelle valeur de la newValue['VALEUR'], newValue['ID_VALEUR']
-
                     //Si l ID est definie alors on check s il y a eu un changement
                     if(isset($newValue['ID_VALEUR']) && $newValue['ID_VALEUR'] !== 'NULL'){
                         //Si l idx ou la valeur a change alors on update 
                         if($idx !== $tableauDeComparaison[$newValue['ID_VALEUR']]['IDX_VALEUR'] || $newValue['VALEUR'] !== $tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR']){
                             $this->saveValeur($champ,$idObject, $classObject, $newValue['VALEUR'], $idx);
                         }
+                        //On retire le marquage dans le tableau d update pour bien mentionne qu on est passe sur cette valeur
+                        unset($tableauIDValeurCheck[array_search($newValue['ID_VALEUR'], $tableauIDValeurCheck)]);
                         
-                        //var_dump($tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR'] === $newValue['VALEUR']);
                     }else{
                         //L ID valeur n est pas defini on procede donc a une insertion de la valeur 
                         //Si la valeur est pas null et different de '' alors on insert
@@ -178,7 +177,29 @@ abstract class Service_Descriptif
                     }
                 }
             }
-        }die(1);
+        }
+
+        //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
+        var_dump($tableauIDValeurCheck);
+        $listDBModel = [
+            'Dossier' => new Model_DbTable_DossierValeur(),
+            'Etablissement' => new Model_DbTable_EtablissementValeur()
+        ];
+
+        foreach ($tableauIDValeurCheck as $idValueToDelete) {
+            try {
+            //Suppression de la fk
+            //$listDBModel[$classObject]->delete('ID_VALEUR = ?', $idValueToDelete);
+            //Suppression de la valeur 
+            var_dump($idValueToDelete);
+            $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);    
+            } catch (\Throwable $th) {
+                var_dump($th);
+                die(1);
+            }
+
+        }
+        //die(1);
 
         
         //array_diff_key($init, array_flip($toDelete))

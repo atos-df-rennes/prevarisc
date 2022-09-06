@@ -28,4 +28,9 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select);
     }
+
+    public function deleteValeur(int $idValeur):void
+    {
+        
+    }
 }
