@@ -1,11 +1,16 @@
-<!--<?= isset($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : '' ?> -->
 <?= isset($this->champ["ID_CHAMP"]) ? $this->champ["ID_CHAMP"]: '' ?>
 <?php switch ($this->champ['ID_TYPECHAMP']) {
     // Texte
     case 1: ?>
         <input
             type='text'
-            name= '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
+            name = '<?= isset($this->idxTableau) ? 'valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'        
+            
+            idx = '<?= $this->idxTableau ?>'
+            idparent = '<?= $this->idParent ?>'
+            idchamp = '<?= $this->idChamp ?>'
+            idvaleur = '<?= $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] ?>'
+
             value='<?= !empty($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >

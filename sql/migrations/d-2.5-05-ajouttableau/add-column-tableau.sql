@@ -1,2 +1,3 @@
-alter table champ add column tableau boolean
-alter table valeur add column idx integer
+SET NAMES 'utf8';
+ALTER TABLE `champ` ADD column `tableau` BOOLEAN;
+ALTER TABLE `valeur` ADD column `idx` INTEGER;
