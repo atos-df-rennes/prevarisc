@@ -116,11 +116,72 @@ abstract class Service_Descriptif
 
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
-             $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
+            $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
             if (null === $valueInDB) {
                 $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value,$idx);
             } else {
                 $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
             }
+    }
+
+    /**
+     * compare l array initiale et celui pousse dans le post 
+     * 
+     * si une valeur a change de valeur reel alors on update 
+     * si une valeur n est plus dans l array pousse alors on le supprime 
+     * si une valeur est presente dans l array final alors on fait un insert
+     */
+    public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject):void
+    {
+        array_shift($initArrayValue['RES_TABLEAU']);
+        //var_dump($initArrayValue['RES_TABLEAU']);
+
+        $tableauDeComparaison = [];
+        $tableauIDValeurUpdate = [];
+        $listTypeValeur = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'];
+
+        //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....)
+        foreach ($initArrayValue['RES_TABLEAU'] as $idxLigne => $arrayFils) {
+            foreach ($arrayFils as $idChamp => $values) {
+                foreach ($values as &$value) {
+                    foreach ($listTypeValeur as $typeValeur) {
+                        if(isset($value[$typeValeur])){
+                            $value['VALEUR'] = $value[$typeValeur];
+                        }
+                    }
+                    $tableauDeComparaison[$value['ID_VALEUR']] = $value;
+                }
+            }
+        }
+        //var_dump($tableauDeComparaison);
+        
+        //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
+        foreach ($newArrayValue as $idParent => $idxFils) {
+            foreach ($idxFils as $idx => $arrayFils) {
+                foreach ($arrayFils as $champ =>$newValue) {
+                    var_dump($idx);// -> index de la valeur
+                    var_dump($champ);// -> champ de la valeur 
+                    var_dump($newValue);// -> nouvelle valeur de la newValue['VALEUR'], newValue['ID_VALEUR']
+
+                    //Si l ID est definie alors on check s il y a eu un changement
+                    if(isset($newValue['ID_VALEUR']) && $newValue['ID_VALEUR'] !== 'NULL'){
+                        //Si l idx ou la valeur a change alors on update 
+                        if($idx !== $tableauDeComparaison[$newValue['ID_VALEUR']]['IDX_VALEUR'] || $newValue['VALEUR'] !== $tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR']){
+                            $this->saveValeur($champ,$idObject, $classObject, $newValue['VALEUR'], $idx);
+                        }
+                        
+                        //var_dump($tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR'] === $newValue['VALEUR']);
+                    }else{
+                        //L ID valeur n est pas defini on procede donc a une insertion de la valeur 
+                        //Si la valeur est pas null et different de '' alors on insert
+                        $this->saveValeur($champ,$idObject, $classObject, $newValue['VALEUR'], $idx);
+                    }
+                }
+            }
+        }die(1);
+
+        
+        //array_diff_key($init, array_flip($toDelete))
+        
     }
 }

@@ -274,12 +274,15 @@ class EtablissementController extends Zend_Controller_Action
 
     private function groupInputByOrder(array $initialList){
         $newList = [];
+        
         foreach ($initialList as $inputName => $value) {
-            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+            if( sizeof(explode('-',$inputName)) === 5 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+
 
                 $idxInput = explode('-',$inputName)[1];
                 $idParent =  explode('-',$inputName)[2];
                 $idInput =  explode('-',$inputName)[3];
+                $idValeur =  explode('-',$inputName)[4];
 
                 if(!array_key_exists($idParent,$newList)){
                     $newList[$idParent] = [];
@@ -287,9 +290,17 @@ class EtablissementController extends Zend_Controller_Action
                 if(!array_key_exists($idxInput,$newList[$idParent])){
                     $newList[$idParent][$idxInput] = [];
                 }
-                $newList[$idParent][$idxInput][$idInput] = $value;
+                //$newList[$idParent][$idxInput][$idInput] = $value;
+                //$newList[$idParent][$idxInput][$idInput] = [$value,$idValeur];
+                $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
+                $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
+                
+                //$newList[$idParent][$idxInput][$idInput] = $idValeur;
+                
             }
+
         }
+
         $tmpList =[];
         foreach ($newList as $parent => $listIdx) {
             foreach ($listIdx as $idx => $input) {
@@ -297,9 +308,10 @@ class EtablissementController extends Zend_Controller_Action
                     $tmpList[$parent][intval(array_search($idx,array_keys($listIdx)) +1)][$idChamp] = $valeur;
                 }
             }
-
         }
         $newList = $tmpList;
+        //var_dump($newList);
+        //die(1);
         return $newList;
     }
 
@@ -327,9 +339,14 @@ class EtablissementController extends Zend_Controller_Action
 
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
+        $modelChamp = new Model_DbTable_Champ();
 
         $idEtablissement = $this->getParam('id');
+        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
+        //$this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
 
+        $champValeursInit = ($modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        //var_dump($champValeursInit);
         $this->descriptifPersonnaliseAction();
 
         $request = $this->getRequest();
@@ -349,12 +366,16 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, get_class($this), $value);
                     }
                     //TODO ajouter fonction de filtre permettant de recolter seulement les inputs qui sont saisies dans le tableau
-                    
                     //TODO ajouter fonction saveValeursChamp afin de passer toute la liste en param pour ne plus boucler dans le controller
+                    //Si l element est une valeur d un tableau 
+
                     
+
+                    /*
                     if (0 === strpos($key, 'valeur-')) {
                         if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
                             foreach($this->groupInputByOrder($post) as $k => $v){
+                                
                                 foreach($v as $idx => $input){
                                     foreach ($input as $idChamp => $value) {
                                         $serviceEtablissementDescriptif->saveValeurChamp($idChamp, intval($idEtablissement), get_class($this), $value, $idx);
@@ -363,8 +384,16 @@ class EtablissementController extends Zend_Controller_Action
                             }
                         }
                     }
+                    */
+                    
+
                 }
-                $serviceEtablissementDescriptif->saveValeursChamp($this->filterValueOnly($post), $idEtablissement, get_class($this));
+                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $this->groupInputByOrder($post), 'Etablissement', $idEtablissement);
+                var_dump($this->groupInputByOrder($post));
+                //die(1);
+                //var_dump($post);
+                //die(1);
+                //$serviceEtablissementDescriptif->saveValeursChamp($this->filterValueOnly($post), $idEtablissement, get_class($this));
                 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {

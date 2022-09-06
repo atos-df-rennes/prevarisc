@@ -28,7 +28,7 @@ $(document).ready(function() {
         const newD = Date.now()
         Array.from(inputInTr).forEach(input => {
             if(input.name){
-                input.setAttribute("name",'valeur-'+newD+'-'+input.name.split('-')[input.name.split('-').length - 2]+'-'+input.name.split('-')[input.name.split('-').length - 1])
+                input.setAttribute("name",'valeur-'+newD+'-'+input.name.split('-')[input.name.split('-').length - 3]+'-'+input.name.split('-')[input.name.split('-').length - 2]+'-'+input.name.split('-')[input.name.split('-').length - 1])
             }
         })
 
