@@ -40,7 +40,7 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
+        <input type='number' min='0' name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>

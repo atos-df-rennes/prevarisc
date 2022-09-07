@@ -3213,7 +3213,7 @@ class DossierController extends Zend_Controller_Action
 
 
         $idDossier = $this->getParam('id');
-        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
+        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
         $champValeursInit = $modelChamp->getValeurFormulaire($idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
 
         $this->verificationsTechniquesAction();
@@ -3234,19 +3234,6 @@ class DossierController extends Zend_Controller_Action
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
                         $serviceDossierVerificationsTechniques->saveValeurChamp($key, $idDossier, get_class($this), $value);
-                    }
-
-                    if (0 === strpos($key, 'valeur-')) {
-                        if(explode('-',$key)[sizeof(explode('-',$key)) -3 ] !== '0'){
-                            foreach($this->groupInputByOrder($post) as $k => $v){
-                                foreach($v as $idx => $input){
-                                    foreach ($input as $idChamp => $value) {
-                                        $serviceDossierVerificationsTechniques->saveValeurChamp($idChamp, intval($idDossier), get_class($this), $value, $idx);
-                                    }
-                                }
-                            }
-                        }
-
                     }
                 }
 
