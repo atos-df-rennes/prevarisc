@@ -3209,8 +3209,12 @@ class DossierController extends Zend_Controller_Action
 
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
+        $modelChamp = new Model_DbTable_Champ();
+
 
         $idDossier = $this->getParam('id');
+        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
+        $champValeursInit = $modelChamp->getValeurFormulaire($idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
 
         $this->verificationsTechniquesAction();
 
@@ -3244,8 +3248,11 @@ class DossierController extends Zend_Controller_Action
                         }
 
                     }
-
                 }
+
+                //Sauvegarde les changements dans les tableaux 
+                $serviceDossierVerificationsTechniques->saveChangeTable($champValeursInit, $serviceDossierVerificationsTechniques->groupInputByOrder($post), 'Dossier', $idDossier);            
+                
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
