@@ -72,7 +72,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
-                    ->order('c.idx asc')
+                    ->order('v.idx asc')
                 ;
 
                 break;
@@ -85,7 +85,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     ->join(['r' => 'rubrique'], 'r.ID_RUBRIQUE = c.ID_RUBRIQUE')
                     ->where('dv.ID_DOSSIER = ?', $idEntity)
                     ->where('r.ID_CAPSULERUBRIQUE = ?', $idCapsuleRubrique)
-                    ->order('c.idx asc')
+                    ->order('v.idx asc')
                 ;
 
                 break;
@@ -100,12 +100,13 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $s2 = $this->select()->setIntegrityCheck(false);
         $s2->from(['c' => 'champ'], ['ID_CHAMP', 'NOM_CHAMP' => 'NOM','tableau','ID_PARENT','ID_TYPECHAMP'])
             ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['v.ID_VALEUR','IDX_VALEUR' => 'v.idx','VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
+            ->order('v.idx asc')
             ;
         
         //1 = decriptif technique
         //2 = verifications technique
         switch ($idCapsuleRubrique) {
-            case 'value':
+            case 1:
                 $s2->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR')
                 ->order('IDX_VALEUR')
                 ->where('ev.ID_ETABLISSEMENT = ?', $idEntity)
@@ -120,6 +121,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                 break;
         }
         $res['RES_TABLEAU'] = [];
+
         foreach($this->fetchAll($select)->toArray() as $value){
             if( empty($res['RES_TABLEAU'][$value['ID_CHAMP']])){
                 $res['RES_TABLEAU'][$value['ID_CHAMP']] = [];
@@ -127,23 +129,19 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             foreach(
                 array_filter($this->fetchAll($s2)->toArray(),function($v) use($value){
                     return $v['ID_CHAMP'] === $value['ID_CHAMP'];
-                }) as $val
-            ){
+                }) as $val)
+            {
                 if(empty($res['RES_TABLEAU'][$val['ID_PARENT']][$val['ID_CHAMP']])){
                     $res['RES_TABLEAU']
                             [$val['IDX_VALEUR']]
-                            [$val['ID_PARENT']]
-
+                                [$val['ID_PARENT']]
                                     [$val['ID_CHAMP']] = [];
-                                        //[$val['ID_VALEUR']] = [];
                 }
                 $res['RES_TABLEAU']
                     [$val['IDX_VALEUR']]
-                    [$val['ID_PARENT']]
-
-                    [$val['ID_CHAMP']] = $val;
+                        [$val['ID_PARENT']]
+                            [$val['ID_CHAMP']] = $val;
             }
-
             //Clear la liste des residu
             $tmpRes = [];
             foreach($res["RES_TABLEAU"] as $k=>$entity){
@@ -153,6 +151,8 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             }
             $res["RES_TABLEAU"] = $tmpRes;   
         }
+        //var_dump($res['RES_TABLEAU']);
+        ksort($res['RES_TABLEAU']);
         return $res;
     }
 

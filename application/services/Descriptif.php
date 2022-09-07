@@ -102,6 +102,8 @@ abstract class Service_Descriptif
      */
     public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject):void
     {
+
+        //On enleve les inputs hidden
         array_shift($initArrayValue['RES_TABLEAU']);
 
         $tableauDeComparaison = [];

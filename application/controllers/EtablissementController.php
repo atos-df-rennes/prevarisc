@@ -1,4 +1,4 @@
-<?php
+pre<?php
 
 class EtablissementController extends Zend_Controller_Action
 {
@@ -208,6 +208,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
+
     public function descriptifPersonnaliseAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
@@ -323,7 +324,8 @@ class EtablissementController extends Zend_Controller_Action
 
         $idEtablissement = $this->getParam('id');
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        $champValeursInit = ($modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        $champValeursInit = $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+    
         $this->descriptifPersonnaliseAction();
 
         $request = $this->getRequest();
@@ -350,7 +352,7 @@ class EtablissementController extends Zend_Controller_Action
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
-            
+
             $this->_helper->redirector('descriptif', null, null, ['id' => $this->_request->id]);
         }
     }
