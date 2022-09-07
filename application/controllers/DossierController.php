@@ -3163,38 +3163,6 @@ class DossierController extends Zend_Controller_Action
     }
 
 
-
-
-    private function groupInputByOrder(array $initialList){
-        $newList = [];
-        foreach ($initialList as $inputName => $value) {
-            if( sizeof(explode('-',$inputName)) === 4 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
-
-                $idxInput = explode('-',$inputName)[1];
-                $idParent =  explode('-',$inputName)[2];
-                $idInput =  explode('-',$inputName)[3];
-
-                if(!array_key_exists($idParent,$newList)){
-                    $newList[$idParent] = [];
-                }
-                if(!array_key_exists($idxInput,$newList[$idParent])){
-                    $newList[$idParent][$idxInput] = [];
-                }
-                $newList[$idParent][$idxInput][$idInput] = $value;
-            }
-        }
-        $tmpList =[];
-        foreach ($newList as $parent => $listIdx) {
-            foreach ($listIdx as $idx => $input) {
-                foreach($input as $idChamp => $valeur){
-                    $tmpList[$parent][intval(array_search($idx,array_keys($listIdx)) +1)][$idChamp] = $valeur;
-                }
-            }
-
-        }
-        $newList = $tmpList;
-        return $newList;
-    }
     public function editVerificationsTechniquesAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');

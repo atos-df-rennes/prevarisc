@@ -152,6 +152,7 @@ abstract class Service_Descriptif
             try {
             $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);    
             } catch (\Throwable $th) {
+                var_dump($idValueToDelete);
                 var_dump($th);
                 die(1);
             }
