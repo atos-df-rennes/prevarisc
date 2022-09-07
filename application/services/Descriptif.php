@@ -157,4 +157,38 @@ abstract class Service_Descriptif
             }
         }
     }
+
+    public function groupInputByOrder(array $initialList){
+        $newList = [];
+        
+        foreach ($initialList as $inputName => $value) {
+            if( sizeof(explode('-',$inputName)) === 5 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
+                $idxInput = explode('-',$inputName)[1];
+                $idParent =  explode('-',$inputName)[2];
+                $idInput =  explode('-',$inputName)[3];
+                $idValeur =  explode('-',$inputName)[4];
+
+                if(!array_key_exists($idParent,$newList)){
+                    $newList[$idParent] = [];
+                }
+                if(!array_key_exists($idxInput,$newList[$idParent])){
+                    $newList[$idParent][$idxInput] = [];
+                }
+                $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
+                $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
+            }
+        }
+
+        $tmpList =[];
+        foreach ($newList as $parent => $listIdx) {
+            foreach ($listIdx as $idx => $input) {
+                foreach($input as $idChamp => $valeur){
+                    $tmpList[$parent][intval(array_search($idx,array_keys($listIdx)) +1)][$idChamp] = $valeur;
+                }
+            }
+        }
+        $newList = $tmpList;
+        return $newList;
+    }
+
 }
