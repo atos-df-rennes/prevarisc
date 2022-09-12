@@ -176,7 +176,11 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                         foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
                             addChamp($avisDerogations, 'type', $avisDerogation['TYPE']);
                             addChamp($avisDerogations, 'titre', $avisDerogation['TITRE']);
-                            addChamp($avisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+                            addChamp($avisDerogations, 'objet', $avisDerogation['OBJET']);
+                            addChamp($avisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+                            addChamp($avisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+                            addChamp($avisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+                            addChamp($avisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
                             addChamp($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
                             addChamp($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
