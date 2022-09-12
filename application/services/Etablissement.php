@@ -443,9 +443,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
             $historique[$key][$elem] = [
                 'valeur' => $valueDisplay,
-                'url' => '/dossier/avis-et-derogations/id/'.$value['ID_DOSSIER'],
+                'url' => sprintf('/dossier/avis-et-derogations-edit/id/%d/avis-derogation/%d', $value['ID_DOSSIER'], $value['ID_AVIS_DEROGATION']),
                 'debut' => $date,
                 'author' => null,
+                'type' => $value['TYPE_DOSSIER'],
             ];
         }
 

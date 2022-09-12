@@ -468,7 +468,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
             ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
             ->join(['ad' => 'avisderogations'], 'd.ID_DOSSIER = ad.ID_DOSSIER')
-            ->join(['d2' => 'dossier'], 'd2.ID_DOSSIER = ad.ID_DOSSIER_LIE', ['DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER'])
+            ->join(['d2' => 'dossier'], 'd2.ID_DOSSIER = ad.ID_DOSSIER_LIE', ['TYPE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER'])
             ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
             ->where('ad.DISPLAY_HISTORIQUE = ?', 1)
         ;
