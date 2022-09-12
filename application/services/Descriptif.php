@@ -75,7 +75,7 @@ abstract class Service_Descriptif
     }
 
     public function  saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
-    {       
+    {
             $explodedChamp = explode('-', $key);
             $idChamp = end($explodedChamp);
             $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
@@ -92,12 +92,12 @@ abstract class Service_Descriptif
     }
 
     /**
-     * compare l array initiale et celui pousse dans le post 
-     * 
-     * si une valeur a change de valeur reel alors on update 
-     * si une valeur n est plus dans l array pousse alors on le supprime 
+     * compare l array initiale et celui pousse dans le post
+     *
+     * si une valeur a change de valeur reel alors on update
+     * si une valeur n est plus dans l array pousse alors on le supprime
      * si une valeur est presente dans l array final alors on fait un insert
-     * 
+     *
      * si des id sont restant dans tableauIDValeurUpdate alors cest qu ils n ont pas ete update a la fin des boucles, on procede donc a la suppression de ces valeurs
      */
     public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject):void
@@ -124,7 +124,7 @@ abstract class Service_Descriptif
                 }
             }
         }
-        
+
         var_dump($tableauDeComparaison);
 
         //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
@@ -133,15 +133,15 @@ abstract class Service_Descriptif
                 foreach ($arrayFils as $champ =>$newValue) {
                     //Si l ID est definie alors on check s il y a eu un changement
                     if(isset($newValue['ID_VALEUR']) && $newValue['ID_VALEUR'] !== 'NULL'){
-                        //Si l idx ou la valeur a change alors on update 
+                        //Si l idx ou la valeur a change alors on update
                         if($idx !== $tableauDeComparaison[$newValue['ID_VALEUR']]['IDX_VALEUR'] || $newValue['VALEUR'] !== $tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR']){
                             $this->saveValeur($champ,$idObject, $classObject, $newValue['VALEUR'], $idx);
                         }
                         //On retire le marquage dans le tableau d update pour bien mentionne qu on est passe sur cette valeur
                         unset($tableauIDValeurCheck[array_search($newValue['ID_VALEUR'], $tableauIDValeurCheck)]);
-                        
+
                     }else{
-                        //L ID valeur n est pas defini on procede donc a une insertion de la valeur 
+                        //L ID valeur n est pas defini on procede donc a une insertion de la valeur
                         //Si la valeur est pas null et different de '' alors on insert
                         $this->saveValeur($champ,$idObject, $classObject, $newValue['VALEUR'], $idx);
                     }
@@ -152,9 +152,8 @@ abstract class Service_Descriptif
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
             try {
-            $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);    
+            $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
             } catch (\Throwable $th) {
-                var_dump($idValueToDelete);
                 var_dump($th);
                 die(1);
             }
@@ -163,7 +162,7 @@ abstract class Service_Descriptif
 
     public function groupInputByOrder(array $initialList){
         $newList = [];
-        
+
         foreach ($initialList as $inputName => $value) {
             if( sizeof(explode('-',$inputName)) === 5 && !empty(explode('-',$inputName)[2]) && explode('-',$inputName)[1] !== '0'){
                 $idxInput = explode('-',$inputName)[1];
