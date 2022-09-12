@@ -58,7 +58,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
-    
+
     public function getValeurFormulaire(int $idEntity, int $idCapsuleRubrique)
     {
         $select = $this->select();
@@ -92,9 +92,9 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         }
 
         $res = [];
-        foreach ($this->fetchAll($select)->toArray() as $valeur) {                     
+        foreach ($this->fetchAll($select)->toArray() as $valeur) {
             $res[$valeur['ID_CHAMP']] = $valeur;
-        }  
+        }
 
 
         $s2 = $this->select()->setIntegrityCheck(false);
@@ -102,7 +102,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->join(['v' => 'valeur'], 'v.ID_CHAMP = c.ID_CHAMP', ['v.ID_VALEUR','IDX_VALEUR' => 'v.idx','VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'])
             ->order('v.idx asc')
             ;
-        
+
         //1 = decriptif technique
         //2 = verifications technique
         switch ($idCapsuleRubrique) {
@@ -149,9 +149,8 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                     $tmpRes[$k] = $entity;
                 }
             }
-            $res["RES_TABLEAU"] = $tmpRes;   
+            $res["RES_TABLEAU"] = $tmpRes;
         }
-        //var_dump($res['RES_TABLEAU']);
         ksort($res['RES_TABLEAU']);
         return $res;
     }
@@ -232,7 +231,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
                 ->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR')
                 ->join(['d' => 'dossier'], 'dv.ID_DOSSIER = d.ID_DOSSIER')
                 ->where('d.ID_DOSSIER = ?', $idEntity)
-                
+
                 ;
         }
         if (strpos('Etablissement', $aClass)) {
@@ -282,7 +281,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->order('c.idx asc')
         ;
 
-        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {          
+        foreach ($this->fetchAll($selectRubriqueForm)->toArray() as $champ) {
             if ('Parent' === $champ['TYPE']) {
                 $champ['CHAMP_FILS'] = $this->getChampFromParent($champ['ID_CHAMP']);
                 foreach ($champ['CHAMP_FILS'] as &$champFils) {
