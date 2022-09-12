@@ -125,7 +125,6 @@ abstract class Service_Descriptif
             }
         }
 
-
         //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
         foreach ($newArrayValue as $idParent => $idxFils) {
             foreach ($idxFils as $idx => $arrayFils) {
