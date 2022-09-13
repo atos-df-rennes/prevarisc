@@ -11,18 +11,22 @@
 
     <div class='row-fluid'>
         <div class='span10'>
-            <?php foreach ($this->rubriques as $key => $rubrique): ?>
-                <?=  $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique); ?>
-            <?php endforeach ?>
+            <?php foreach ($this->rubriques as $key => $rubrique):
+                if (($key % 4) === 0): ?>
+                    <div class='row-fluid'>
+                <?php endif;
+
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+
+                if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
+                    </div>
+                <?php endif;
+            endforeach ?>
         </div>
-    </div> 
-    <?= 
-        $this->partial('formulaire/partials/partial-form-custom.phtml', [
-                'corpsformulaire' => $this->corpsformulaire,
-                'valeurformulaire' => $this->valeurformulaire,
-                'rubriquedisplay' => $this->rubriques,
-                'canWrite' => true
-            ]); 
-    ?>
-    
+    </div>
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
+        'canWrite' => true
+    ]); ?>
 </form>

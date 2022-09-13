@@ -23,7 +23,16 @@
 
             <div class="row-fluid">
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
-                    <?= $this->form ?>
+                    <form action class="form-inline" method="post">
+                        <div>
+                            <?= $this->form->nom_rubrique ?>
+                        </div>
+                        <div>
+                            <?= $this->form->afficher_rubrique ?>
+                        </div>
+
+                        <?= $this->form->save ?>
+                    </form>
                 </div>
 
                 <div class="span6 offset2 saved-rubriques">
@@ -37,7 +46,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id=<?=$formulaire['ID_CAPSULERUBRIQUE']?> class="grp">
+                            <tbody id="capsule-rubrique-<?= $formulaire['ID_CAPSULERUBRIQUE']?>" class="grp">
                                 <?php foreach($formulaire['RUBRIQUES'] as $rubrique): ?>
                                     <tr id=<?=$rubrique['ID_RUBRIQUE']?>>
                                         <td class='tdMove'><i class="icon-move"></i></td>

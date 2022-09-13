@@ -1,16 +1,9 @@
-.tableInput{
+.tableInput {
     display: flex;
     flex-wrap: wrap;
 }
 
-.colTableInput{
-    width: auto;
-    display: flex;
-    flex-flow: column;
-    margin: auto 1em;
-}
-
-.colTableInput{
+.colTableInput {
     width: auto;
     display: flex;
     flex-flow: column;

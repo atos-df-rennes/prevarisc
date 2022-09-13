@@ -1,165 +1,157 @@
-<?= isset($this->champ["ID_CHAMP"]) ? $this->champ["ID_CHAMP"]: '' ?>
 <?php switch ($this->champ['ID_TYPECHAMP']) {
     // Texte
     case 1: ?>
         <input
             type='text'
-            name = 
-                '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
-            value='<?= !empty($this->valeurformulaire[intval($this->champ["ID_CHAMP"])]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'], ENT_QUOTES) :'' ?>'
-                <?= $this->canWrite ? '': 'disabled'?>
+            <!-- FIXME Vérifier si les paramètres sont bien passés, et passer l'ID_VALEUR : A modifier dans Service_Descriptif et Service_Valeur -->
+            <!-- FIXME A faire pour tous les champs -->
+            name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
+            value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
+            <?= $this->canWrite ? '': 'disabled'?>
         >
-
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?>><?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]) ? htmlspecialchars($this->valeurformulaire[$this->champ["ID_CHAMP"]]["VALEUR_LONG_STR"], ENT_QUOTES) :'' ?></textarea>
+        <textarea name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL') : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?>><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
-        <select name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'     
-        <?= $this->canWrite ? '': 'disabled'?>>
+        <select name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?>>
             <option selected value>Sélectionnez un élément</option>
-            <?php if (!empty($this->champ['VALEUR']))  :?>
-                <?php foreach($this->champ['VALEUR'] as $valeurListe): ?>
-                    <option
-                        value="<?= htmlspecialchars($valeurListe['VALEUR'], ENT_QUOTES) ?>"
-                        <?php if (!empty( $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'])) :?>
-                            <?= $valeurListe['VALEUR'] === $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_STR'] ? 'selected' : '' ?>
-                        <?php endif?>
-                        >
-                        <?= htmlspecialchars($valeurListe['VALEUR']) ?>
-                    </option>
-                <?php endforeach ?>
-            <?php else:?>
-                <option>
-                    <?= "Aucune valeur de disponible" ?>
+            <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
+                <option
+                    value="<?= htmlspecialchars($champvaleurliste['VALEUR'], ENT_QUOTES) ?>"
+                    <?= $champvaleurliste['VALEUR'] === $this->champ['VALEUR'] ? 'selected' : '' ?>
+                >
+                    <?= $champvaleurliste['VALEUR'] ?>
                 </option>
-            <?php endif ?>
+            <?php endforeach ?>
         </select>
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' min='0' name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= !empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['VALEUR_INT'] : 0 ?>'>
+        <input type='number' name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->champ['VALEUR'] ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
         <input
             type="hidden"
-            name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' 
+            name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value="0"
             <?= $this->canWrite ? '': 'disabled'?>
         >
         <input
             type="checkbox"
-            name= '<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR']) ? $this->valeurformulaire[$this->champ["ID_CHAMP"]]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
+            name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value="1"
             <?= $this->canWrite ? '': 'disabled'?>
-            <?= !empty($this->valeurformulaire[ $this->champ['ID_CHAMP']]['VALEUR_CHECKBOX']) ? 'checked' : '' ?>
+            <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
-    <?php break;   
-
+    <?php break;
+    // Parent
     case 6:?>
-    <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
-        <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
-            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-            <button type='button' class='btn addRow btnAddRowTable' idparent=<?= $this->champ['ID_CHAMP']?> >Ajouter ligne</button>
-        <?php endif ?>
-        <table class='table table-striped '>
-            <thead>
-                <tr>
-                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                        <th>#</th>
-                <?php endif ?>
-                    <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
-                        <th>
-                            <?= $champsFils['NOM'] ?>
-                        </th>
-                    <?php endforeach ?>
+        <!-- TODO Idéalement à déporter dans un partial -->
+        <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
+            <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
+                <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                <button type='button' class='btn addRow btnAddRowTable' idparent=<?= $this->champ['ID_CHAMP']?> >Ajouter ligne</button>
+            <?php endif ?>
+            <table class='table table-striped '>
+                <thead>
+                    <tr>
                     <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                        <th>Supprimer</th>
+                            <th>#</th>
                     <?php endif ?>
-                </tr>
-            </thead>
-            <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
-            
-            <tr class='ligneTableau hidden'>
-                <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                    <td class='tdMove'>
-                        <i class="icon-move"></i>
-                    </td>
-                <?php endif ?>
-                <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
-                        <td>
-                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                'champ' => $champsFils,
-                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                'idxTableau' => 0,
-                                'idParent' => $this->champ['ID_CHAMP']
-                                ]); 
-                            ?>
-                        </td>
-                <?php endforeach ?>
-                <td>
-                    <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
-                        <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
-                    <?php endif?>
-                </td>
-            </tr>
-
-            <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
-                <?php if(isset($k) && $k !== '' && isset($ligneValeur[$this->champ['ID_CHAMP']])): ?>
-                <tr id=<?= 'tr-'.$k ?>>
-                    <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                            <td class='tdMove'>
-                                <i class="icon-move"></i>
-                            </td>
-                    <?php endif ?>
-                    
-                    <!--Construction de la ligne avec les champs-->
-                    <?php foreach($ligneValeur as $idParent => $listValeur): ?>
-                        <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
-                            <?php foreach($this->champ['CHAMP_FILS'] as $champsFils) :?>
-                                <td>
-                                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                        'champ' => $champsFils,
-                                        'valeurformulaire' => $listValeur,
-                                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                        'idxTableau' => $k,
-                                        'idParent' => $idParent
-                                        ]); 
-                                    ?>
-                                </td>
-                            <?php endforeach ?>      
+                        <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                            <th>
+                                <?= $champsFils['NOM'] ?>
+                            </th>
+                        <?php endforeach ?>
+                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                            <th>Supprimer</th>
                         <?php endif ?>
-                    <?php endforeach ?>
-                    
+                    </tr>
+                </thead>
+                <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
+
+                <tr class='ligneTableau hidden'>
                     <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                        <td>
-                            <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                                <button type='button' class='deleteRow btn btn-danger' idParent=<?= $idParent ?> idx=<?= $k ?>><i class='icon-trash'></i></button>
+                        <td class='tdMove'>
+                            <i class="icon-move"></i>
                         </td>
-                    <?php endif?>
+                    <?php endif ?>
+                    <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                            <td>
+                                <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                    'champ' => $champsFils,
+                                    'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                                    'idxTableau' => 0,
+                                    'idParent' => $this->champ['ID_CHAMP']
+                                    ]);
+                                ?>
+                            </td>
+                    <?php endforeach ?>
+                    <td>
+                        <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
+                            <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+                        <?php endif?>
+                    </td>
                 </tr>
-                <?php endif ?>
-            <?php endforeach ?>
-            </tbody>
-        </table>
-    <?php else : ?>
-        <div class="tableInput">
-            <?php foreach ($this->champ["CHAMP_FILS"] as $champsFils): ?>
-                <div class="colTableInput">
-                    <th><?= $champsFils['NOM'] ?></th>
-                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                        'champ' => $champsFils,
-                        'valeurformulaire' => $this->valeurformulaire,
-                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                        ]); 
-                    ?>
-                </div>
-            <?php endforeach;?>
-        </div>
-    <?php endif?>
+
+                <!-- FIXME Utiliser $this->champ['VALEUR'] : Nécessite peut-être d'ajouter des choses côté back -->
+                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
+                    <?php if(isset($k) && $k !== '' && isset($ligneValeur[$this->champ['ID_CHAMP']])): ?>
+                    <tr id=<?= 'tr-'.$k ?>>
+                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                                <td class='tdMove'>
+                                    <i class="icon-move"></i>
+                                </td>
+                        <?php endif ?>
+
+                        <!--Construction de la ligne avec les champs-->
+                        <?php foreach($ligneValeur as $idParent => $listValeur): ?>
+                            <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
+                                <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                                    <td>
+                                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                            'champ' => $champsFils,
+                                            'valeurformulaire' => $listValeur,
+                                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                                            'idxTableau' => $k,
+                                            'idParent' => $idParent
+                                            ]);
+                                        ?>
+                                    </td>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
+
+                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
+                            <td>
+                                <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                                    <button type='button' class='deleteRow btn btn-danger' idParent=<?= $idParent ?> idx=<?= $k ?>><i class='icon-trash'></i></button>
+                            </td>
+                        <?php endif?>
+                    </tr>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <div class="tableInput">
+                <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                    <div class="colTableInput">
+                        <th><?= $champsFils['NOM'] ?></th>
+                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                            'champ' => $champsFils,
+                            'valeurformulaire' => $this->valeurformulaire,
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            ]);
+                        ?>
+                    </div>
+                <?php endforeach;?>
+            </div>
+        <?php endif?>
     <?php break;
     default:
         break;

@@ -6,13 +6,12 @@
     <h3>Descriptifs</h3>
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+
     <div id='affichage-informations' class='form-horizontal'>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
-                    'corpsformulaire' => isset($this->corpsformulaire) ? $this->corpsformulaire : array(),
-                    'valeurformulaire' => isset($this->valeurformulaire) ? $this->valeurformulaire : array(),
-                    'rubriquedisplay' => $this->rubriques,
-                    'canWrite' => false
-                ]); 
-        ?>
+            'rubriques' => $this->rubriques,
+            'champsvaleurliste' => $this->champsvaleurliste,
+            'canWrite' => false
+        ]); ?>
     </div>
 </div>

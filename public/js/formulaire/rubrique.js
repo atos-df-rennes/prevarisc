@@ -1,6 +1,6 @@
 $(document).ready(function() {
     const typeChampSelect = $('#type_champ')
-
+    
     typeChampSelect.on('change', function() {
         if (typeChampSelect.find(":selected").text() === 'Liste') {
             $('#div-list-value').show()
@@ -15,29 +15,39 @@ $(document).ready(function() {
         const idRubrique = $('#rubrique-id').val()
         const savedFieldsTitlesDiv = $('.titles')
 
+        const currentUrl = window.location.href
+        const isParent = currentUrl.includes('edit-champ')
+
         const formData = $(form).serialize()
         $.ajax({
-            url: '/formulaire/add-champ',
+            url: '/formulaire/add-champ?isParent='+isParent,
             data: formData+'&rubrique='+idRubrique,
             type: 'POST',
             success: function(data) {
-                const parsedData = JSON.parse(data)                
+                const jsonParsedData = JSON.parse(data)
+                const parsedData = Array.isArray(jsonParsedData) ? jsonParsedData[0] : jsonParsedData
+
                 // On crée la table uniquement si elle n'existe pas
                 if (savedFieldsDiv.children().length === 0) {
-                    savedFieldsDiv.append(getTableElement())
+                    let titleText = 'Liste des champs'
+                    if (isParent) {
+                        titleText += ' enfants'
+                    }
+
                     savedFieldsTitlesDiv.append(`<div class="span6 offset2">
-                        <h3>Liste des champs</h3>
+                        <h3>${titleText}</h3>
                     </div>`)
+                    savedFieldsDiv.append(getTableElement())
                 }
                 
                 const table = savedFieldsDiv.children('table')
                 table.append(getRowElement(parsedData))
 
-                if (parsedData[0].TYPE === 'Liste') {
-                    const typeRow = table.children('tbody').children().children('#type-'+parsedData[0].ID_CHAMP)
+                if (parsedData.TYPE === 'Liste') {
+                    const typeRow = table.children('tbody').children().children('#type-'+parsedData.ID_CHAMP)
 
-                    if (parsedData[0].VALEUR !== null) {
-                        typeRow.append(getListElements(parsedData))
+                    if (parsedData.VALEUR !== null) {
+                        typeRow.append(getListElements(jsonParsedData))
                     } else {
                         typeRow.append(`<div class="alert">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -78,7 +88,8 @@ $(document).ready(function() {
 
 function deleteChamp(element) {
     const idChamp = element.getAttribute('data-id')
-    const idRubrique = element.getAttribute('data-id')
+    const idRubrique = element.getAttribute('data-rubrique-id')
+    const idParent = element.getAttribute('data-id-parent')
 
     const parentDiv = $(element).parent().parent().parent()
     const parentTable = $(element).closest('table')
@@ -89,6 +100,7 @@ function deleteChamp(element) {
     $.ajax({
         url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
         type: 'POST',
+        data: idParent,
         success: function() {
             if (nbOfRows === 1) {
                 parentTable.remove()
@@ -108,6 +120,7 @@ function getTableElement() {
     return `<table class="table table-bordered table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>Nom du champ</th>
                 <th>Type du champ</th>
                 <th></th>
@@ -119,20 +132,20 @@ function getTableElement() {
 }
 
 function getRowElement(parsedData) {
-    return `<tr id=`+parsedData[0].ID_CHAMP+`>
-        <td class='tdMove'><i class="icon-move"></i></td>
+    return `<tr>
+        <td class="tdMove"><i class="icon-move"></i></td>
         <td>`
-        +parsedData[0].NOM+
+        +parsedData.NOM+
         `</td>
-        <td id='type-`+parsedData[0].ID_CHAMP+`'>`
-        +parsedData[0].TYPE+
+        <td id='type-`+parsedData.ID_CHAMP+`'>`
+        +parsedData.TYPE+
         `</td>
         <td id='actions'>
             <div class='text-center'>
-                <a href='/formulaire/edit-champ/rubrique/`+parsedData[0].ID_RUBRIQUE+`/champ/`+parsedData[0].ID_CHAMP+`'>
+                <a href='/formulaire/edit-champ/rubrique/`+parsedData.ID_RUBRIQUE+`/champ/`+parsedData.ID_CHAMP+`'>
                     <i title='Modifier' class='icon-pencil'></i>
                 </a>
-                <a href='' data-id='`+parsedData[0].ID_CHAMP+`' data-rubrique-id='`+parsedData[0].ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
+                <a href='' data-id='`+parsedData.ID_CHAMP+`' data-rubrique-id='`+parsedData.ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
                     <i title='Supprimer' class='icon-trash'></i>
                 </a>
             </div>
@@ -140,11 +153,11 @@ function getRowElement(parsedData) {
     </tr>`
 }
 
-function getListElements(parsedData) {
+function getListElements(jsonParsedData) {
     let list = '<ul>'
 
-    for (let i = 0; i < parsedData.length; i++) {
-        list += '<li>'+parsedData[i].VALEUR+'</li>'
+    for (let i = 0; i < jsonParsedData.length; i++) {
+        list += '<li>'+jsonParsedData[i].VALEUR+'</li>'
     }
 
     list += '</ul>'

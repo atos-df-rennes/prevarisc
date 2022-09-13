@@ -2185,8 +2185,8 @@ class DossierController extends Zend_Controller_Action
         // Effectifs & Dégagements
         $this->view->effectifDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_EFFECTIF'];
         $this->view->degagementDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_DEGAGEMENT'];
-        $this->view->effectifEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
-        $this->view->degagementEtablissement = $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
+        $this->view->effectifEtablissement = !empty($idEtab) ? $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'] : '';
+        $this->view->degagementEtablissement = !empty($idEtab) ? $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'] : '';
 
         // Avis & Dérogations
         $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
@@ -2587,10 +2587,10 @@ class DossierController extends Zend_Controller_Action
         }
 
         $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
-        $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, get_class($this));
+        $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, 'Dossier');
 
         $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
-        $rubriquesEtablissement = $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
+        $rubriquesEtablissement = !empty($idEtab) ? $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement') : '';
 
         $rubriquesByCapsuleRubrique = [
             'descriptifEtablissement' => $rubriquesEtablissement,
@@ -3135,31 +3135,22 @@ class DossierController extends Zend_Controller_Action
 
     public function verificationsTechniquesAction()
     {
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        /** @var Zend_View_Helper_HeadLink */
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $serviceDossierVerifications = new Service_DossierVerificationsTechniques();
-        $modelChamp = new Model_DbTable_Champ();
+        $modelDossier = new Model_DbTable_Dossier();
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $service_dossier = new Service_Dossier();
 
-        $idDossier = $this->getParam('id');
-
-        $rubriques = $serviceDossierVerifications->getRubriques($idDossier, get_class($this));
-
-        $tmpRubrique = [];
-        foreach ($rubriques as $rubrique) {
-            foreach ($rubrique['CHAMPS'] as $champ) {
-                $tmpRubrique[$rubrique['ID_RUBRIQUE']] = $rubrique;
-            }
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
         }
-        $rubriques = $tmpRubrique;
 
-
-        $this->view->assign('rubriques', $rubriques);
-
-        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
-        $this->view->assign('corpsformulaire', $modelChamp->getCorpFormulaire($ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
-        $this->view->assign('valeurformulaire', $modelChamp->getValeurFormulaire($idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF));
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
 
 
@@ -3168,46 +3159,50 @@ class DossierController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
-
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
-
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
+        $modelDossier = new Model_DbTable_Dossier();
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $service_dossier = new Service_Dossier();
 
-        $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
+        // FIXME A remplacer par les fonctions existantes
         $modelChamp = new Model_DbTable_Champ();
-
-
-        $idDossier = $this->getParam('id');
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
-        $champValeursInit = $modelChamp->getValeurFormulaire($idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+        $champValeursInit = $modelChamp->getValeurFormulaire($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
 
-        $this->verificationsTechniquesAction();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
+        }
 
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+
+        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
-                $post = $request->getPost();
-                $lastKey = null;
+                $post = $request->getParams();
 
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
 
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierVerificationsTechniques->saveRubriqueDisplay($key, $idDossier, intval($value));
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, intval($value));
                     }
 
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceDossierVerificationsTechniques->saveValeurChamp($key, $idDossier, get_class($this), $value);
+                        $serviceDossierDescriptif->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
                     }
                 }
 
-                //Sauvegarde les changements dans les tableaux 
-                $serviceDossierVerificationsTechniques->saveChangeTable($champValeursInit, $serviceDossierVerificationsTechniques->groupInputByOrder($post), 'Dossier', $idDossier);            
-                
+                //Sauvegarde les changements dans les tableaux
+                $serviceDossierDescriptif->saveChangeTable($champValeursInit, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
+
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
@@ -3222,6 +3217,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
         $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
 
         $dbAvisDerogation = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
@@ -3244,7 +3240,6 @@ class DossierController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-
             $dbAvisDerogation->insert($data);
 
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
@@ -3258,6 +3253,8 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction()
     {
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
         $dbDossier = new Model_DbTable_Dossier();
 

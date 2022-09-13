@@ -28,23 +28,31 @@ class Service_Formulaire
             'NOM' => $rubrique['nom_rubrique'],
             'DEFAULT_DISPLAY' => intval($rubrique['afficher_rubrique']),
             'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique,
-            'idx' => intval($rubrique['idx']),
+            'idx' => $rubrique['idx'],
         ]);
 
         return intval($idRubrique);
     }
 
-    public function insertChamp(array $champ, array $rubrique): array
+    public function insertChamp(array $champ, array $rubrique, bool $isParent = false): array
     {
         $modelChamp = new Model_DbTable_Champ();
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
 
-        $idTypeChamp = intval($champ['type_champ']);
+        $typeChamp = 'type_champ';
+        $nomChamp = 'nom_champ';
+
+        if ($isParent) {
+            $typeChamp = 'type_champ_enfant';
+            $nomChamp = 'nom_champ_enfant';
+        }
+
+        $idTypeChamp = intval($champ[$typeChamp]);
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
         $dataToInsert = [
-            'NOM' => $champ['nom_champ'],
+            'NOM' => $champ[$nomChamp],
             'ID_TYPECHAMP' => $idTypeChamp,
             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
             'idx' => $champ['idx'],
@@ -76,9 +84,9 @@ class Service_Formulaire
     public function addRowTable(int $idChamp, int $idEntity, string $nomEntity,$idx = null):void{
         //Recuperation structure ligne tableau
         $modelChamp = new Model_DbTable_Champ();
- 
-        $structureLigneTableau = $modelChamp->getAllFils($idChamp);        
-        
+
+        $structureLigneTableau = $modelChamp->getAllFils($idChamp);
+
         foreach ($structureLigneTableau as $champ) {
             $serviceValeur = new Service_Valeur();
             $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,$nomEntity,NULL,$idx);
@@ -93,7 +101,7 @@ class Service_Formulaire
         switch ($entity) {
             case 'Etablissement':
                 $modelEtablissementValeur = new Model_DbTable_Valeur();
-                $select = 
+                $select =
                     $modelEtablissementValeur->select()
                         ->setIntegrityCheck(false)
                         ->from(['ev' => 'etablissementvaleur'],['ev.ID_ETABLISSEMENT','ev.ID_VALEUR'])
@@ -103,9 +111,9 @@ class Service_Formulaire
                         ->where('ev.ID_ETABLISSEMENT = ? ',$idEntity)
                         ->where('v.idx = ?', $idx)
                         ;
-                        
-                        //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');      
-                    
+
+                        //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
+
                 foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
                     $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
                     $toDelete->delete();
@@ -115,7 +123,7 @@ class Service_Formulaire
                 break;
             case 'Dossier':
                 $modelDossierValeur = new Model_DbTable_Valeur();
-                $select = 
+                $select =
                     $modelDossierValeur->select()
                         ->setIntegrityCheck(false)
                         ->from(['dv' => 'dossiervaleur'],['dv.ID_DOSSIER','dv.ID_VALEUR'])
@@ -126,17 +134,17 @@ class Service_Formulaire
                         ->where('v.idx = ?', $idx)
                         ;
                         //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
-                    
+
                 foreach($modelDossierValeur->fetchAll($select)->toArray() as $ev){
                     $toDelete = $modelDossierValeur->find(['ID_DOSSIER' => $ev['ID_DOSSIER'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
                     $toDelete->delete();
                 }
                 break;
-            
+
         }
 
-        
-        //Suppression des valeurs 
+
+        //Suppression des valeurs
         $modelValeur = new Model_DbTable_Valeur();
         $select = $modelValeur->select()
                     ->setIntegrityCheck(false)
