@@ -15,11 +15,15 @@
                     <?php if (null !== $item["debut"]): ?>
                         Du <?= $item["debut"] ?>
                     <?php else: ?>
-                        Date de commission non renseignée
+                        <?php if ($item['type'] === 1): ?>
+                            Date de commission non renseignée
+                        <?php elseif (in_array($item['type'], [2, 3])): ?>
+                            Date de visite non renseignée
+                        <?php endif ?>
                     <?php endif ?>
                 </td>
                 <td>
-                    <a href="<?= $item['url'] ?>"><?= $item["valeur"] ?></a>
+                    <a href="<?= $item['url'] ?>" target="_blank" title="Ouvrir <?= $item['valeur'] ?> (nouvel onglet)"><?= $item["valeur"] ?></a>
                 </td>
             </tr>
             <?php endforeach ?>

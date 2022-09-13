@@ -25,10 +25,10 @@
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
                     <form action class="form-inline" method="post">
                         <div>
-                            <?= $this->form->nom_rubrique ?>
+                            <?= $this->form->nom_rubrique->setAttrib('id', sprintf('%s-nom_rubrique', $formulaire['NOM_INTERNE'])) ?>
                         </div>
                         <div>
-                            <?= $this->form->afficher_rubrique ?>
+                            <?= $this->form->afficher_rubrique->setAttrib('id', sprintf('%s-afficher_rubrique', $formulaire['NOM_INTERNE'])) ?>
                         </div>
 
                         <?= $this->form->save ?>
