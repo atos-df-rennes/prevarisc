@@ -1,10 +1,10 @@
 <?php switch ($this->champ['ID_TYPECHAMP']) {
     // Texte
+    //<!-- FIXME Vérifier si les paramètres sont bien passés, et passer l ID_VALEUR : A modifier dans Service_Descriptif et Service_Valeur -->
+    //<!-- FIXME A faire pour tous les champs -->
     case 1: ?>
         <input
             type='text'
-            <!-- FIXME Vérifier si les paramètres sont bien passés, et passer l'ID_VALEUR : A modifier dans Service_Descriptif et Service_Valeur -->
-            <!-- FIXME A faire pour tous les champs -->
             name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
             <?= $this->canWrite ? '': 'disabled'?>
@@ -99,6 +99,7 @@
                 </tr>
 
                 <!-- FIXME Utiliser $this->champ['VALEUR'] : Nécessite peut-être d'ajouter des choses côté back -->
+
                 <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
                     <?php if(isset($k) && $k !== '' && isset($ligneValeur[$this->champ['ID_CHAMP']])): ?>
                     <tr id=<?= 'tr-'.$k ?>>

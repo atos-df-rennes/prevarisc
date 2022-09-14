@@ -46,8 +46,14 @@ class Service_Descriptif
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
 
-                    foreach ($champ['FILS'] as &$champFils) {
-                        $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+                    if($champ['tableau'] === 1){
+                        foreach ($champ['FILS'] as &$champFils) {
+                            $champFils['VALEURS'] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
+                        }
+                    }else{
+                        foreach ($champ['FILS'] as &$champFils) {
+                            $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+                        }
                     }
                 } else {
                     $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);

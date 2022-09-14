@@ -299,9 +299,10 @@ class EtablissementController extends Zend_Controller_Action
 
         // FIXME A remplacer par les fonctions existantes
         $modelChamp = new Model_DbTable_Champ();
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        $champValeursInit = $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
-
+        //$champValeursInit = $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+        $champValeursInit = $serviceDescriptifDossier->getRubriques($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
         $this->descriptifPersonnaliseAction();
 
         /** @var Zend_Controller_Request_Http */

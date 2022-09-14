@@ -3169,9 +3169,10 @@ class DossierController extends Zend_Controller_Action
         $service_dossier = new Service_Dossier();
 
         // FIXME A remplacer par les fonctions existantes
-        $modelChamp = new Model_DbTable_Champ();
+        //$modelChamp = new Model_DbTable_Champ();
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
-        $champValeursInit = $modelChamp->getValeurFormulaire($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+        //$champValeursInit = $modelChamp->getValeurFormulaire($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+        $champValeursInit = $serviceDossierDescriptif->getRubriques($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
