@@ -2,6 +2,7 @@ name: Prevarisc Lint
 
 on:
   push:
+    branches: [ 2.5, evol-sdis** ]
   pull_request:
     types: [opened]
 
