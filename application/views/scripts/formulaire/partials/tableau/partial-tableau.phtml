@@ -1,0 +1,19 @@
+<?php foreach($this->colonnesChamp as $colonneChamp) : ?>
+    <h1><?= $colonneChamp['NOM'] ?></h1>
+    <?php foreach($colonneChamp['VALEURS'] as $valeur):?>
+        <div style="margin:10px; height:10px; width:10px; background:chocolate; border-radius:5px;">
+        </div>
+        <tr>
+            <div style="margin:10px; height:10px; width:10px; background:rebeccapurple; border-radius:5px;">
+            </div>
+            <p><?= $valeur['IDX_VALEUR'] ?></p>
+            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                    'champ' => $valeur,
+                    'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                    'idxTableau' => $valeur['IDX_VALEUR'],
+                    'idParent' => $colonneChamp['ID_CHAMP']
+                ]);
+            ?>
+        </tr>
+    <?php endforeach ?>
+<?php endforeach ?>

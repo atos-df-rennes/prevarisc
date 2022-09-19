@@ -64,7 +64,7 @@
                     <?php endif ?>
                         <?php foreach($this->champ['FILS'] as $champsFils) :?>
                             <th>
-                                <?= $champsFils['NOM'] ?>
+                                <?= $champsFils['NOM'] ?> aba
                             </th>
                         <?php endforeach ?>
                         <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
@@ -74,6 +74,7 @@
                 </thead>
                 <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
 
+                <!--
                 <tr class='ligneTableau hidden'>
                     <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
                         <td class='tdMove'>
@@ -97,45 +98,13 @@
                         <?php endif?>
                     </td>
                 </tr>
-
+                        -->
                 <!-- FIXME Utiliser $this->champ['VALEUR'] : Nécessite peut-être d'ajouter des choses côté back -->
-
-                <?php foreach($this->valeurformulaire['RES_TABLEAU'] as $k => $ligneValeur): ?>
-                    <?php if(isset($k) && $k !== '' && isset($ligneValeur[$this->champ['ID_CHAMP']])): ?>
-                    <tr id=<?= 'tr-'.$k ?>>
-                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                                <td class='tdMove'>
-                                    <i class="icon-move"></i>
-                                </td>
-                        <?php endif ?>
-
-                        <!--Construction de la ligne avec les champs-->
-                        <?php foreach($ligneValeur as $idParent => $listValeur): ?>
-                            <?php if($idParent === $this->champ['ID_CHAMP']) : ?>
-                                <?php foreach($this->champ['FILS'] as $champsFils) :?>
-                                    <td>
-                                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                            'champ' => $champsFils,
-                                            'valeurformulaire' => $listValeur,
-                                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                                            'idxTableau' => $k,
-                                            'idParent' => $idParent
-                                            ]);
-                                        ?>
-                                    </td>
-                                <?php endforeach ?>
-                            <?php endif ?>
-                        <?php endforeach ?>
-
-                        <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
-                            <td>
-                                <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                                    <button type='button' class='deleteRow btn btn-danger' idParent=<?= $idParent ?> idx=<?= $k ?>><i class='icon-trash'></i></button>
-                            </td>
-                        <?php endif?>
-                    </tr>
-                    <?php endif ?>
-                <?php endforeach ?>
+                    <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
+                            'colonnesChamp' => $this->champ['FILS'],
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                        ]);
+                    ?>
                 </tbody>
             </table>
         <?php else : ?>

@@ -15,6 +15,9 @@ class Service_Valeur
         return $valeur;
     }
 
+
+
+
     public function getAll(int $idChamp, int $idObject, string $classObject)
     {
         $modelValeur = new Model_DbTable_Valeur();
@@ -23,13 +26,29 @@ class Service_Valeur
         //TODO check valeur tableau
         if (!empty($valeurs)) {
             foreach ($valeurs as $valeur) {
-                $retourValeurs[] = ['VALEUR' => $valeur[$this->getTypeValeur($idChamp)], 'ID_VALEUR' => $valeur['ID_VALEUR'], 'IDX_VALEUR' => $valeur['idx']];
+                $retourValeurs[] =
+                                    [
+                                        'VALEUR' => $valeur[$this->getTypeValeur($idChamp)],
+                                        'ID_VALEUR' => $valeur['ID_VALEUR'],
+                                        'IDX_VALEUR' => $valeur['idx'],
+                                        'ID_PARENT' => $valeur['ID_PARENT'],
+                                        'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
+                                        'ID_CHAMP' => $valeur['ID_CHAMP'],
+
+                                    ];
             }
         }
         $retourValeurs;
+        $tmpList = [];
+
+        foreach ($retourValeurs as $value) {
+            $tmpList[$value['ID_PARENT']][] = [$value];
+        }
 
         return $retourValeurs;
     }
+
+
 
     public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx=null): void
     {
