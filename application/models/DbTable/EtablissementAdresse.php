@@ -69,6 +69,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     }
 
     // Donne la liste des rues
+
     /**
      * @param float|int|string $id
      *
@@ -91,6 +92,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     }
 
     // Donne la liste de ville par rapport é un code postal
+
     /**
      * @param float|int|string $code_postal
      *
@@ -108,6 +110,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     }
 
     // Retourne les types de voie d'une commune
+
     /**
      * @param float|int|string $code_insee
      *
@@ -127,6 +130,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     }
 
     // Retourne les voies par rapport é une ville et un type de voie
+
     /**
      * @param float|int|string $code_insee
      * @param null|mixed       $q

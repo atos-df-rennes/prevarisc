@@ -9,6 +9,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
     private $nb_items = 100;
 
     // On demare la recherche
+
     /**
      * @param mixed      $id_etablissement_parent
      * @param null|mixed $numero_de_page

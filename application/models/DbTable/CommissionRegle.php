@@ -74,6 +74,7 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     }
 
     // Formaliser les resultats envoyés
+
     /**
      * @psalm-return array<int, mixed>
      *

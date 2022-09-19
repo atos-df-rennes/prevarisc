@@ -640,6 +640,14 @@ class Service_Search
                 $select->where("d.DATEREP_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateReponseEnd']);
             }
 
+            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
+                if ('1' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NOT NULL');
+                } elseif ('2' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NULL');
+                }
+            }
+
             // Performance optimisation : avoid sorting on big queries, and sort only if
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 1) {
@@ -929,6 +937,14 @@ class Service_Search
             }
             if (isset($criterias['dateVisiteEnd']) && null !== $criterias['dateVisiteEnd']) {
                 $select->where("d.DATEVISITE_DOSSIER <= STR_TO_DATE (? , '%d/%m/%Y')", $criterias['dateVisiteEnd']);
+            }
+
+            if (isset($criterias['provenance']) && null !== $criterias['provenance']) {
+                if ('1' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NOT NULL');
+                } elseif ('2' === $criterias['provenance']) {
+                    $select->where('d.ID_PLATAU IS NULL');
+                }
             }
 
             $select->order('adressecommune.LIBELLE_COMMUNE ASC')

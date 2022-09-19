@@ -3,6 +3,7 @@
 class Service_Prescriptions
 {
     // GESTION PRESCRIPTION TYPE
+
     /**
      * @psalm-return array<int, mixed>
      *
@@ -88,14 +89,18 @@ class Service_Prescriptions
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
 
         return $dbPrescTextes->getAllTextes();
-    } //FIN getTextesListe
+    }
+
+    //FIN getTextesListe
 
     public function getTexte($id_texte)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
 
         return $dbPrescTextes->getTexte($id_texte);
-    } //FIN getTexte
+    }
+
+    //FIN getTexte
 
     public function saveTexte($post, $idTexte = null)
     {
@@ -111,7 +116,9 @@ class Service_Prescriptions
             $texte->VISIBLE_TEXTE = $post['VISIBLE_TEXTE'];
             $texte->save();
         }
-    } //FIN saveTexte
+    }
+
+    //FIN saveTexte
 
     public function replaceTexte($newId, $oldId)
     {
@@ -131,14 +138,18 @@ class Service_Prescriptions
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
 
         return $dbPrescArticles->getAllArticles();
-    } //FIN getArticlesListe
+    }
+
+    //FIN getArticlesListe
 
     public function getArticle($id_article)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
 
         return $dbPrescArticles->getArticle($id_article);
-    } //FIN getArticle
+    }
+
+    //FIN getArticle
 
     public function saveArticle($post, $idArticle = null)
     {
@@ -154,7 +165,9 @@ class Service_Prescriptions
             $texte->VISIBLE_ARTICLE = $post['VISIBLE_ARTICLE'];
             $texte->save();
         }
-    } //FIN saveArticle
+    }
+
+    //FIN saveArticle
 
     public function replaceArticle($newId, $oldId)
     {
@@ -197,7 +210,9 @@ class Service_Prescriptions
             $newAssoc->ID_ARTICLE = $article;
             $newAssoc->save();
         }
-    } //FIN savePrescription
+    }
+
+    //FIN savePrescription
 
     /**
      * @psalm-return array<int, mixed>
@@ -219,7 +234,9 @@ class Service_Prescriptions
         }
 
         return $prescriptionArray;
-    } //FIN getPrescriptions
+    }
+
+    //FIN getPrescriptions
 
     /**
      * @param string $type
@@ -232,7 +249,9 @@ class Service_Prescriptions
 
             return $dbPrescAssoc->getPrescriptionReglAssoc($idPrescription);
         }
-    } //FIN getPrescriptionInfo
+    }
+
+    //FIN getPrescriptionInfo
 
     public function setOrder($data, $type)
     {
@@ -265,5 +284,7 @@ class Service_Prescriptions
                 $categorie->save();
             }
         }
-    } //FIN setOrder
+    }
+
+    //FIN setOrder
 } //FIN SERVICE
