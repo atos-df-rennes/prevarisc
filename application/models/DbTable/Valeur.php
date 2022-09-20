@@ -39,7 +39,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
                 ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
             ;
         }
-
+        $select;
         return $select;
     }
 

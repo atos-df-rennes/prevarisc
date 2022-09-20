@@ -45,11 +45,53 @@ class Service_Descriptif
             foreach ($rubrique['CHAMPS'] as &$champ) {
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
-
                     if($champ['tableau'] === 1){
+
+                        $listValeurs = [];
+                        $listIdChamp = [];
+                        $tabRetour = [];
+                        $listChampPattern = [];
+
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEURS'] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
+                            $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
+                            $listIdChamp[] = $champFils['ID_CHAMP'];
                         }
+
+                        //Recuperation des champs de la ligne de maniere a mettre des champs vide
+                        foreach($listIdChamp as $IdChamp){
+                            $champDb = $this->modelChamp->getTypeChamp($IdChamp);
+                            $patternParam = [
+                                'VALEUR' => NULL,
+                                'ID_VALEUR' => NULL,
+                                'IDX_VALEUR' => NULL,
+                                'ID_PARENT' => $champ['ID_CHAMP'],
+                                'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
+                                'ID_CHAMP' => $champDb['ID_CHAMP']
+                            ];
+
+                            $listChampPattern[$IdChamp] = $patternParam;
+                        }
+
+                        foreach($listValeurs as $idChampFils => $valeurs){
+                            foreach($valeurs as $valeur){
+                                if(empty($tabRetour[$valeur['IDX_VALEUR']])){
+                                    foreach($listChampPattern as $idChampPattern => $pattern){
+                                        $tabRetour[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
+                                    }
+                                }
+                                $tabRetour[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
+                            }
+                        }
+
+                        /*
+                        foreach($tabRetour as $index){
+                            if(!empty(  array_diff(  array_keys($index)  ))    )
+                        }
+                        */
+                        $champ['FILS']['VALEURS'] = $tabRetour;
+                        //$champ;
+                        //$champ['FILS'] = $this->serviceValeur->getAllValueTable($champ['ID_CHAMP'], $idObject, $classObject);
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);

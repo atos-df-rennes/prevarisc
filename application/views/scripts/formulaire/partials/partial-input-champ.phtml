@@ -64,7 +64,7 @@
                     <?php endif ?>
                         <?php foreach($this->champ['FILS'] as $champsFils) :?>
                             <th>
-                                <?= $champsFils['NOM'] ?> aba
+                                <?= !empty($champsFils['NOM']) ? $champsFils['NOM'] : '' ?>
                             </th>
                         <?php endforeach ?>
                         <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>

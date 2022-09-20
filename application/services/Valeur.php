@@ -27,28 +27,24 @@ class Service_Valeur
         if (!empty($valeurs)) {
             foreach ($valeurs as $valeur) {
                 $retourValeurs[] =
-                                    [
-                                        'VALEUR' => $valeur[$this->getTypeValeur($idChamp)],
-                                        'ID_VALEUR' => $valeur['ID_VALEUR'],
-                                        'IDX_VALEUR' => $valeur['idx'],
-                                        'ID_PARENT' => $valeur['ID_PARENT'],
-                                        'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
-                                        'ID_CHAMP' => $valeur['ID_CHAMP'],
+                    [
+                        'VALEUR' => $valeur[$this->getTypeValeur($idChamp)],
+                        'ID_VALEUR' => $valeur['ID_VALEUR'],
+                        'IDX_VALEUR' => $valeur['idx'],
+                        'ID_PARENT' => $valeur['ID_PARENT'],
+                        'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
+                        'ID_CHAMP' => $valeur['ID_CHAMP'],
 
-                                    ];
+                    ];
             }
         }
-        $retourValeurs;
-        $tmpList = [];
-
-        foreach ($retourValeurs as $value) {
-            $tmpList[$value['ID_PARENT']][] = [$value];
-        }
-
         return $retourValeurs;
     }
 
 
+    public function getAllValueTable(int $idChamp, int $idObject, string $classObject){
+
+    }
 
     public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx=null): void
     {
