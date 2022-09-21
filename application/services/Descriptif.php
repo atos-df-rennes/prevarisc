@@ -12,6 +12,7 @@ class Service_Descriptif
     private $capsuleRubrique;
     private $modelDisplayRubrique;
     private $serviceRubrique;
+    private $serviceFormulaire;
 
     public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique, $serviceRubrique)
     {
@@ -22,6 +23,7 @@ class Service_Descriptif
         $this->modelValeur = new Model_DbTable_Valeur();
 
         $this->serviceValeur = new Service_Valeur();
+        $this->serviceFormulaire = new Service_Formulaire();
 
         // Services spécifiques à l'objet, setter dans le Service correspondant
         $this->capsuleRubrique = $capsuleRubrique;
@@ -46,9 +48,7 @@ class Service_Descriptif
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
                     if($champ['tableau'] === 1){
-
                         $listValeurs = [];
-                        $tabRetour = [];
                         $listChampPattern = [];
 
                         foreach ($champ['FILS'] as &$champFils) {
@@ -56,32 +56,11 @@ class Service_Descriptif
                         }
 
                         //Recuperation des champs de la ligne de maniere a mettre des champs vide
-                        //TODO EXPORTER DANS LE SERVICE CHAMP -> getPatterns(champParent)
-                        //TODO Ajouter la génération du timstamp pour les valeurs non affecté
-                        foreach(array_column($champ['FILS'],'ID_CHAMP') as $IdChamp){
-                            $champDb = $this->modelChamp->getTypeChamp($IdChamp);
-                            $patternParam = [
-                                'VALEUR' => NULL,
-                                'ID_VALEUR' => NULL,
-                                'IDX_VALEUR' => NULL,
-                                'ID_PARENT' => $champ['ID_CHAMP'],
-                                'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
-                                'ID_CHAMP' => $champDb['ID_CHAMP']
-                            ];
-                            $listChampPattern[$IdChamp] = $patternParam;
-                        }
+                        $listChampPattern = $this->serviceFormulaire->getPatterns($champ);
 
-                        foreach($listValeurs as $idChampFils => $valeurs){
-                            foreach($valeurs as $valeur){
-                                if(empty($tabRetour[$valeur['IDX_VALEUR']])){
-                                    foreach($listChampPattern as $idChampPattern => $pattern){
-                                        $tabRetour[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
-                                    }
-                                }
-                                $tabRetour[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
-                            }
-                        }
-                        $champ['FILS']['VALEURS'] = $tabRetour;
+                        //Affectation des valeurs
+                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $listChampPattern);
+
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);

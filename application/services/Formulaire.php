@@ -1,7 +1,12 @@
 <?php
-
 class Service_Formulaire
 {
+    private $modelChamp;
+
+    public function __construct(){
+        $this->modelChamp = new Model_DbTable_Champ();
+    }
+
     public function getAllCapsuleRubrique(): array
     {
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
@@ -160,4 +165,41 @@ class Service_Formulaire
             $toDelete->delete();
         }
     }
+
+    /**
+     * Retourne la liste des pattern des champs fils d un champ parent
+     */
+    //TODO Ajouter la génération du timstamp pour les valeurs non affecté
+    public function getPatterns(array $champParent):array{
+        $listChampPattern = [];
+        foreach(array_column($champParent['FILS'],'ID_CHAMP') as $IdChamp){
+            $champDb = $this->modelChamp->getTypeChamp($IdChamp);
+            $patternParam = [
+                'VALEUR' => NULL,
+                'ID_VALEUR' => NULL,
+                'IDX_VALEUR' => NULL,
+                'ID_PARENT' => $champParent['ID_CHAMP'],
+                'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
+                'ID_CHAMP' => $champDb['ID_CHAMP']
+            ];
+            $listChampPattern[$IdChamp] = $patternParam;
+        }
+        return $listChampPattern;
+    }
+
+    public function getArrayValuesWithPattern(array $listValeurs, array $listChampPattern):array{
+        $arrayReturn = [];
+        foreach($listValeurs as $idChampFils => $valeurs){
+            foreach($valeurs as $valeur){
+                if(empty($arrayReturn[$valeur['IDX_VALEUR']])){
+                    foreach($listChampPattern as $idChampPattern => $pattern){
+                        $arrayReturn[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
+                    }
+                }
+                $arrayReturn[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
+            }
+        }
+        return $arrayReturn;
+    }
+
 }
