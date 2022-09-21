@@ -53,7 +53,6 @@ class Service_Descriptif
                         $listChampPattern = [];
 
                         foreach ($champ['FILS'] as &$champFils) {
-                            $champFils['VALEURS'] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                             $listIdChamp[] = $champFils['ID_CHAMP'];
                         }
@@ -83,15 +82,7 @@ class Service_Descriptif
                                 $tabRetour[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
                             }
                         }
-
-                        /*
-                        foreach($tabRetour as $index){
-                            if(!empty(  array_diff(  array_keys($index)  ))    )
-                        }
-                        */
                         $champ['FILS']['VALEURS'] = $tabRetour;
-                        //$champ;
-                        //$champ['FILS'] = $this->serviceValeur->getAllValueTable($champ['ID_CHAMP'], $idObject, $classObject);
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
