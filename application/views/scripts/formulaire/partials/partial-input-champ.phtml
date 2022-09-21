@@ -116,7 +116,7 @@
                         <th><?= $champsFils['NOM'] ?></th>
                         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                             'champ' => $champsFils,
-                            'valeurformulaire' => $this->valeurformulaire,
+                            'champsvaleurliste' => $this->champsvaleurliste,
                             'canWrite' => isset($this->canWrite) ? $this->canWrite : false
                             ]);
                         ?>
