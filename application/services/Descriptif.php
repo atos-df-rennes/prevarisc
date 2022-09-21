@@ -48,17 +48,17 @@ class Service_Descriptif
                     if($champ['tableau'] === 1){
 
                         $listValeurs = [];
-                        $listIdChamp = [];
                         $tabRetour = [];
                         $listChampPattern = [];
 
                         foreach ($champ['FILS'] as &$champFils) {
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
-                            $listIdChamp[] = $champFils['ID_CHAMP'];
                         }
 
                         //Recuperation des champs de la ligne de maniere a mettre des champs vide
-                        foreach($listIdChamp as $IdChamp){
+                        //TODO EXPORTER DANS LE SERVICE CHAMP -> getPatterns(champParent)
+                        //TODO Ajouter la génération du timstamp pour les valeurs non affecté
+                        foreach(array_column($champ['FILS'],'ID_CHAMP') as $IdChamp){
                             $champDb = $this->modelChamp->getTypeChamp($IdChamp);
                             $patternParam = [
                                 'VALEUR' => NULL,
@@ -68,7 +68,6 @@ class Service_Descriptif
                                 'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
                                 'ID_CHAMP' => $champDb['ID_CHAMP']
                             ];
-
                             $listChampPattern[$IdChamp] = $patternParam;
                         }
 
