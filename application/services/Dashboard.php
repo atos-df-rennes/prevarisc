@@ -174,7 +174,7 @@ class Service_Dashboard
             'width' => 'small',
         ],
 
-        // bloc npsp
+        // bloc plat'au
         'dossierPlatau' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersPlatAUSansEtablissement',
