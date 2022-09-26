@@ -82,7 +82,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['c' => 'champ'], [])
-            ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP', ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP'])
+            ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP', ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP', 'ID_PARENT'])
             ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP', ['TYPE'])
             ->where('c.ID_CHAMP = ?', $idParent)
             ->order('ISNULL(c2.idx)')
