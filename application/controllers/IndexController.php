@@ -46,6 +46,14 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
+        // Executes Plat'AU healthcheck to detect a potential error
+        $currentPath = readlink('/home/prv/current');
+        $command = "/usr/bin/php-platau $currentPath/prevarisc-passerelle-platau/bin/platau --config=../../prevarisc-passerelle-platau/config.json healthcheck";
+        $escapedCommand = escapeshellcmd($command);
+
+        $checkPlatau = shell_exec("$escapedCommand 2>&1; echo $?");
+        var_dump($checkPlatau);
+
         $this->view->user = $user;
         $this->view->blocs = $blocs;
         $this->view->blocsOrder = $blocsOrder;
