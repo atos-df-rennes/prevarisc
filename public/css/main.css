@@ -1270,3 +1270,7 @@ dl.champ_effectif_camping dd input {
 .radio-controls {
     margin-left: 3rem;
 }
+
+.hidden{
+    display:none;
+}

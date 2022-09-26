@@ -1,5 +1,5 @@
 <?php foreach($this->colonnesChamp['VALEURS'] as $colonneChamp) : ?>
-    <tr>
+    <tr class='<?= $this->hidden ?'hidden' : '' ?>' >
         <?php if(isset($this->canWrite) ? $this->canWrite : true) :?>
             <td class='tdMove'>
                 <i class="icon-move"></i>
@@ -7,14 +7,14 @@
         <?php endif ?>
         <?php foreach($colonneChamp as $valeur):?>
             <td>
-                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                            'champ' => $valeur,
-                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
-                            'idxTableau' => $valeur['IDX_VALEUR'],
-                            'idParent' => $valeur['ID_PARENT']
-                        ]);
-                    ?>
-                </td>
+                <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                        'champ' => $valeur,
+                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                        'idxTableau' => $valeur['IDX_VALEUR'],
+                        'idParent' => $valeur['ID_PARENT']
+                    ]);
+                ?>
+            </td>
         <?php endforeach ?>
         <td>
             <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>

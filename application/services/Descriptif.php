@@ -48,19 +48,19 @@ class Service_Descriptif
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
                     if($champ['tableau'] === 1){
+
                         $listValeurs = [];
-                        $listChampPattern = [];
 
                         foreach ($champ['FILS'] as &$champFils) {
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                         }
 
-                        //Recuperation des champs de la ligne de maniere a mettre des champs vide
-                        $listChampPattern = $this->serviceFormulaire->getPatterns($champ);
-
+                        $patterns = $this->serviceFormulaire->getPatterns($champ);
                         //Affectation des valeurs
-                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $listChampPattern);
+                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $patterns);
 
+                        //Affectation patterns
+                        $champ['FILS']['PATTERNS'] = $patterns;
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
