@@ -26,6 +26,9 @@ class Service_Valeur
         //TODO check valeur tableau
         if (!empty($valeurs)) {
             foreach ($valeurs as $valeur) {
+                $strData = 'valeur-'.$valeur['idx'].'-'.$valeur['ID_PARENT'].'-'.$valeur['ID_CHAMP'].'-';
+                isset($valeur['ID_VALEUR']) ? $strData .= $valeur['ID_VALEUR']  : $strData .= 'NULL';
+
                 $retourValeurs[] =
                     [
                         'VALEUR' => $valeur[$this->getTypeValeur($idChamp)],
@@ -34,6 +37,7 @@ class Service_Valeur
                         'ID_PARENT' => $valeur['ID_PARENT'],
                         'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
                         'ID_CHAMP' => $valeur['ID_CHAMP'],
+                        'STR_DATA' => $strData
 
                     ];
             }

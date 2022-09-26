@@ -55,13 +55,14 @@ class Service_Descriptif
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                         }
 
-                        $inputs = $this->serviceFormulaire->getPatterns($champ);
+                        $inputs = $this->serviceFormulaire->getInputs($champ);
 
                         //Affectation des valeurs
                         $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $inputs);
 
                         //Affectation des modeles type des inputs sans valeurs
                         $champ['FILS']['INPUTS'] = $inputs;
+
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);

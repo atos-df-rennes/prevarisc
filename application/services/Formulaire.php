@@ -170,7 +170,7 @@ class Service_Formulaire
      * Retourne la liste des pattern des champs fils d un champ parent
      */
     //TODO Ajouter la génération du timstamp pour les valeurs non affecté
-    public function getPatterns(array $champParent):array{
+    public function getInputs(array $champParent):array{
         $listChampPattern = [];
         foreach(array_column($champParent['FILS'],'ID_CHAMP') as $IdChamp){
             $champDb = $this->modelChamp->getTypeChamp($IdChamp);

@@ -5,7 +5,7 @@
     case 1: ?>
         <input
             type='text'
-            name='<?= isset($this->idxTableau) ? ('valeur-' . $this->idxTableau . '-'.$this->idParent .'-'. $this->champ['ID_CHAMP']) .'-'.(!empty($this->champ["VALEUR"]['ID_VALEUR']) ? $this->champ["VALEUR"]['ID_VALEUR'] : 'NULL')  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
+            name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
             <?= $this->canWrite ? '': 'disabled'?>
         >
