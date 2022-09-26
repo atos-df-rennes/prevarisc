@@ -84,6 +84,7 @@
                     </tr>
                     <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
                             'colonnesChamp' => $this->champ['FILS'],
+                            'champsvaleurliste' => $this->champsvaleurliste,
                             'canWrite' => isset($this->canWrite) ? $this->canWrite : false
                         ]);
                     ?>
