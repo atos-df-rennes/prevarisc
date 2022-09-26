@@ -76,9 +76,9 @@
                 </thead>
                 <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
                     <tr class='ligneTableau hidden'>
-                        <?= $this->partial('formulaire/partials/tableau/partial-ligne-pattern.phtml',
+                        <?= $this->partial('formulaire/partials/tableau/partial-input-tableau.phtml',
                             [
-                                'patterns' => $this->champ['FILS']['PATTERNS'],
+                                'inputs' => $this->champ['FILS']['INPUTS'],
                             ]);
                         ?>
                     </tr>

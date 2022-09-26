@@ -55,12 +55,12 @@ class Service_Descriptif
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                         }
 
-                        $patterns = $this->serviceFormulaire->getPatterns($champ);
+                        $inputs = $this->serviceFormulaire->getPatterns($champ);
                         //Affectation des valeurs
-                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $patterns);
+                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $inputs);
 
-                        //Affectation patterns
-                        $champ['FILS']['PATTERNS'] = $patterns;
+                        //Affectation inputs
+                        $champ['FILS']['INPUTS'] = $inputs;
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);

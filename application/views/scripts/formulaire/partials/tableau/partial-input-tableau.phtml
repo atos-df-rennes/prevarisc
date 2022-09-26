@@ -1,10 +1,10 @@
 <td class='tdMove'>
     <i class="icon-move"></i>
 </td>
-<?php foreach($this->patterns as $pattern) : ?>
+<?php foreach($this->inputs as $input) : ?>
     <td>
         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                'champ' => $pattern,
+                'champ' => $input,
                 'canWrite' => true
             ]);
         ?>
