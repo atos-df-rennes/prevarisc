@@ -248,7 +248,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
-            $champ->tableau = $post['is-tableau'] === 'on' ? 1 : 0 ;
+            $champ->tableau = 'on' === $post['is-tableau'] ? 1 : 0;
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }
@@ -299,7 +299,8 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
-    public function addRowTableAction():void{
+    public function addRowTableAction(): void
+    {
         $this->_helper->viewRenderer->setNoRender(true);
 
         /** @var Zend_Controller_Request_Http */
@@ -310,7 +311,8 @@ class FormulaireController extends Zend_Controller_Action
         }
     }
 
-    public function deleteRowTableAction():void{
+    public function deleteRowTableAction(): void
+    {
         $this->_helper->viewRenderer->setNoRender(true);
 
         /** @var Zend_Controller_Request_Http */

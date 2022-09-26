@@ -1,9 +1,11 @@
 <?php
+
 class Service_Formulaire
 {
     private $modelChamp;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->modelChamp = new Model_DbTable_Champ();
     }
 
@@ -86,7 +88,8 @@ class Service_Formulaire
         return $modelChamp->find($idChamp)->current()->toArray();
     }
 
-    public function addRowTable(int $idChamp, int $idEntity, string $nomEntity,$idx = null):void{
+    public function addRowTable(int $idChamp, int $idEntity, string $nomEntity, $idx = null): void
+    {
         //Recuperation structure ligne tableau
         $modelChamp = new Model_DbTable_Champ();
 
@@ -94,14 +97,13 @@ class Service_Formulaire
 
         foreach ($structureLigneTableau as $champ) {
             $serviceValeur = new Service_Valeur();
-            $res = $serviceValeur->insert($champ['ID_CHAMP'],$idEntity,$nomEntity,NULL,$idx);
+            $res = $serviceValeur->insert($champ['ID_CHAMP'], $idEntity, $nomEntity, null, $idx);
         }
     }
 
-
-    public function deleteRowTable(int $idChampParent, string $entity, int $idEntity,$idx):void{
+    public function deleteRowTable(int $idChampParent, string $entity, int $idEntity, $idx): void
+    {
         //suppression des fk
-
 
         switch ($entity) {
             case 'Etablissement':
@@ -109,97 +111,99 @@ class Service_Formulaire
                 $select =
                     $modelEtablissementValeur->select()
                         ->setIntegrityCheck(false)
-                        ->from(['ev' => 'etablissementvaleur'],['ev.ID_ETABLISSEMENT','ev.ID_VALEUR'])
-                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
-                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
+                        ->from(['ev' => 'etablissementvaleur'], ['ev.ID_ETABLISSEMENT', 'ev.ID_VALEUR'])
+                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR', [])
+                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
                         ->where('c.ID_PARENT = ?', $idChampParent)
-                        ->where('ev.ID_ETABLISSEMENT = ? ',$idEntity)
+                        ->where('ev.ID_ETABLISSEMENT = ? ', $idEntity)
                         ->where('v.idx = ?', $idx)
                         ;
 
                         //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
 
-                foreach($modelEtablissementValeur->fetchAll($select)->toArray() as $ev){
-                    $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
+                foreach ($modelEtablissementValeur->fetchAll($select)->toArray() as $ev) {
+                    $toDelete = $modelEtablissementValeur->find(['ID_ETABLISSEMENT' => $ev['ID_ETABLISSEMENT'], 'ID_VALEUR' => $ev['ID_VALEUR']])->current();
                     $toDelete->delete();
                 }
 
-
                 break;
+
             case 'Dossier':
                 $modelDossierValeur = new Model_DbTable_Valeur();
                 $select =
                     $modelDossierValeur->select()
                         ->setIntegrityCheck(false)
-                        ->from(['dv' => 'dossiervaleur'],['dv.ID_DOSSIER','dv.ID_VALEUR'])
-                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR',[])
-                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP',[])
-                        ->where('dv.ID_DOSSIER = ? ',$idEntity)
+                        ->from(['dv' => 'dossiervaleur'], ['dv.ID_DOSSIER', 'dv.ID_VALEUR'])
+                        ->join(['v' => 'valeur'], 'ev.ID_VALEUR = v.ID_VALEUR', [])
+                        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
+                        ->where('dv.ID_DOSSIER = ? ', $idEntity)
                         ->where('c.ID_PARENT = ?', $idChampParent)
                         ->where('v.idx = ?', $idx)
                         ;
                         //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
 
-                foreach($modelDossierValeur->fetchAll($select)->toArray() as $ev){
-                    $toDelete = $modelDossierValeur->find(['ID_DOSSIER' => $ev['ID_DOSSIER'],'ID_VALEUR' => $ev['ID_VALEUR']])->current();
+                foreach ($modelDossierValeur->fetchAll($select)->toArray() as $ev) {
+                    $toDelete = $modelDossierValeur->find(['ID_DOSSIER' => $ev['ID_DOSSIER'], 'ID_VALEUR' => $ev['ID_VALEUR']])->current();
                     $toDelete->delete();
                 }
+
                 break;
-
         }
-
 
         //Suppression des valeurs
         $modelValeur = new Model_DbTable_Valeur();
         $select = $modelValeur->select()
-                    ->setIntegrityCheck(false)
-                    ->from(['v' => 'valeur'])
-                    ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [''])
-                    ->where('c.ID_CHAMP = ?', $idChampParent)
-                    ->where('v.idx = ?', $idx)
+            ->setIntegrityCheck(false)
+            ->from(['v' => 'valeur'])
+            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [''])
+            ->where('c.ID_CHAMP = ?', $idChampParent)
+            ->where('v.idx = ?', $idx)
                     ;
-                    //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
+        //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
 
-        foreach($modelValeur->fetchAll($select)->toArray() as $ev){
+        foreach ($modelValeur->fetchAll($select)->toArray() as $ev) {
             $toDelete = $modelValeur->find(['ID_VALEUR' => $ev['ID_VALEUR']])->current();
             $toDelete->delete();
         }
     }
 
     /**
-     * Retourne la liste des pattern des champs fils d un champ parent
+     * Retourne la liste des pattern des champs fils d un champ parent.
      */
     //TODO Ajouter la génération du timstamp pour les valeurs non affecté
-    public function getInputs(array $champParent):array{
+    public function getInputs(array $champParent): array
+    {
         $listChampPattern = [];
-        foreach(array_column($champParent['FILS'],'ID_CHAMP') as $IdChamp){
+        foreach (array_column($champParent['FILS'], 'ID_CHAMP') as $IdChamp) {
             $champDb = $this->modelChamp->getTypeChamp($IdChamp);
             $patternParam = [
-                'VALEUR' => NULL,
-                'ID_VALEUR' => NULL,
-                'IDX_VALEUR' => NULL,
+                'VALEUR' => null,
+                'ID_VALEUR' => null,
+                'IDX_VALEUR' => null,
                 'ID_PARENT' => $champParent['ID_CHAMP'],
                 'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
-                'ID_CHAMP' => $champDb['ID_CHAMP']
+                'ID_CHAMP' => $champDb['ID_CHAMP'],
             ];
             $listChampPattern[$IdChamp] = $patternParam;
         }
+
         return $listChampPattern;
     }
 
-    public function getArrayValuesWithPattern(array $listValeurs, array $listChampPattern):array{
+    public function getArrayValuesWithPattern(array $listValeurs, array $listChampPattern): array
+    {
         $arrayReturn = [];
-        foreach($listValeurs as $idChampFils => $valeurs){
-            foreach($valeurs as $valeur){
-                if(empty($arrayReturn[$valeur['IDX_VALEUR']])){
-                    foreach($listChampPattern as $idChampPattern => $pattern){
+        foreach ($listValeurs as $idChampFils => $valeurs) {
+            foreach ($valeurs as $valeur) {
+                if (empty($arrayReturn[$valeur['IDX_VALEUR']])) {
+                    foreach ($listChampPattern as $idChampPattern => $pattern) {
                         $arrayReturn[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
                     }
                 }
                 $arrayReturn[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
             }
         }
+
         return $arrayReturn;
     }
-
 }

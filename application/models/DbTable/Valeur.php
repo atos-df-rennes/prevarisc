@@ -8,7 +8,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, int $idx = null)
     {
         $select = $this->getSelect($idChamp, $idObject, $classObject);
-        $idx === null ? $select->where('v.idx IS NULL') : $select->where('v.idx = ?',$idx) ;
+        null === $idx ? $select->where('v.idx IS NULL') : $select->where('v.idx = ?', $idx);
 
         return $this->fetchRow($select);
     }
@@ -20,13 +20,15 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    private function getSelect(int $idChamp, int $idObject, string $classObject){
+    private function getSelect(int $idChamp, int $idObject, string $classObject)
+    {
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['v' => 'valeur'])
             ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', ['c.ID_PARENT', 'c.ID_TYPECHAMP', 'c.ID_CHAMP'])
             ->where('c.ID_CHAMP = ?', $idChamp)
-            ->order('v.idx');
+            ->order('v.idx')
+        ;
 
         if (false !== strpos($classObject, 'Dossier')) {
             $select->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
@@ -39,12 +41,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
                 ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
             ;
         }
-        $select;
+
         return $select;
-    }
-
-    public function deleteValeur(int $idValeur):void
-    {
-
     }
 }

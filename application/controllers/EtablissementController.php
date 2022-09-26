@@ -2,8 +2,6 @@ pre<?php
 
 class EtablissementController extends Zend_Controller_Action
 {
-
-
     public function init(): void
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
@@ -39,7 +37,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
         $DB_periodicite = new Model_DbTable_Periodicite();
@@ -71,7 +68,6 @@ class EtablissementController extends Zend_Controller_Action
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-
 
         $service_carto = new Service_Carto();
 
@@ -236,7 +232,6 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-
     public function descriptifPersonnaliseAction(): void
     {
         $this->_helper->layout->setLayout('etablissement');
@@ -296,13 +291,8 @@ class EtablissementController extends Zend_Controller_Action
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
         $idEtablissement = $this->getParam('id');
+        $champValeursInit = $serviceEtablissementDescriptif->getRubriques($idEtablissement, 'Etablissement');
 
-        // FIXME A remplacer par les fonctions existantes
-        $modelChamp = new Model_DbTable_Champ();
-        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
-        $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 1;
-        //$champValeursInit = $modelChamp->getValeurFormulaire($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
-        $champValeursInit = $serviceDescriptifDossier->getRubriques($idEtablissement, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
         $this->descriptifPersonnaliseAction();
 
         /** @var Zend_Controller_Request_Http */

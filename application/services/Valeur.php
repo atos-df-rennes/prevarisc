@@ -15,9 +15,6 @@ class Service_Valeur
         return $valeur;
     }
 
-
-
-
     public function getAll(int $idChamp, int $idObject, string $classObject)
     {
         $modelValeur = new Model_DbTable_Valeur();
@@ -27,7 +24,7 @@ class Service_Valeur
         if (!empty($valeurs)) {
             foreach ($valeurs as $valeur) {
                 $strData = 'valeur-'.$valeur['idx'].'-'.$valeur['ID_PARENT'].'-'.$valeur['ID_CHAMP'].'-';
-                isset($valeur['ID_VALEUR']) ? $strData .= $valeur['ID_VALEUR']  : $strData .= 'NULL';
+                isset($valeur['ID_VALEUR']) ? $strData .= $valeur['ID_VALEUR'] : $strData .= 'NULL';
 
                 $retourValeurs[] =
                     [
@@ -37,20 +34,15 @@ class Service_Valeur
                         'ID_PARENT' => $valeur['ID_PARENT'],
                         'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
                         'ID_CHAMP' => $valeur['ID_CHAMP'],
-                        'STR_DATA' => $strData
-
+                        'STR_DATA' => $strData,
                     ];
             }
         }
+
         return $retourValeurs;
     }
 
-
-    public function getAllValueTable(int $idChamp, int $idObject, string $classObject){
-
-    }
-
-    public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx=null): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx = null): void
     {
         if ('' !== $value) {
             $modelValeur = new Model_DbTable_Valeur();
@@ -59,7 +51,7 @@ class Service_Valeur
             $idValeurInsert = $modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
-                'idx' => $idx
+                'idx' => $idx,
             ]);
 
             if (false !== strpos($classObject, 'Dossier')) {

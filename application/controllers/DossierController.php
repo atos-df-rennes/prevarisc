@@ -3153,7 +3153,6 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
     }
 
-
     public function editVerificationsTechniquesAction(): void
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
