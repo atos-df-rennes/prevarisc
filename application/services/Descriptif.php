@@ -208,6 +208,7 @@ class Service_Descriptif
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
+        $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
 
         if (null === $valueInDB) {
             $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value, $idx);
