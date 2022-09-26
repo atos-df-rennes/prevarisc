@@ -56,10 +56,11 @@ class Service_Descriptif
                         }
 
                         $inputs = $this->serviceFormulaire->getPatterns($champ);
+
                         //Affectation des valeurs
                         $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $inputs);
 
-                        //Affectation inputs
+                        //Affectation des modeles type des inputs sans valeurs
                         $champ['FILS']['INPUTS'] = $inputs;
                     }else{
                         foreach ($champ['FILS'] as &$champFils) {
