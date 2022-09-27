@@ -63,11 +63,14 @@ class Service_Descriptif
                         $champ['FILS']['INPUTS'] = $inputs;
                     } else {
                         foreach ($champ['FILS'] as &$champFils) {
-                            $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+                            $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
+                            $champFils['ID_VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
+
                         }
                     }
                 } else {
-                    $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
+                    $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
+                    $champ['ID_VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
                 }
             }
         }
@@ -117,27 +120,70 @@ class Service_Descriptif
     public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject): void
     {
         //On enleve les inputs hidden
-        array_shift($initArrayValue['RES_TABLEAU']);
+        //array_shift($initArrayValue['RES_TABLEAU']);
 
         $tableauDeComparaison = [];
         $tableauIDValeurCheck = [];
         $listTypeValeur = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'];
 
-        //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....)
-        foreach ($initArrayValue['RES_TABLEAU'] as $idxLigne => $arrayFils) {
-            foreach ($arrayFils as $idChamp => $values) {
+        //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....) pour chaque ID valeur
+
+        foreach ($initArrayValue as $idxRubrique => $rubrique) {
+           foreach ($rubrique['CHAMPS'] as $champ) {
+                if($champ['tableau'] === 1){
+                    foreach($champ['FILS']['VALEURS'] as $valeursFils){
+                        foreach($valeursFils as $valeur){
+                            $tableauDeComparaison[$valeur['ID_VALEUR']] = $valeur;
+                            $tableauIDValeurCheck[$valeur['ID_VALEUR']] = $valeur['ID_VALEUR'];
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /*
+        foreach ($initArrayValue as $idxLigne => $arrayFils) {
+            foreach ($arrayFils['CHAMPS'] as $idChamp => $values) {
                 foreach ($values as &$value) {
                     foreach ($listTypeValeur as $typeValeur) {
                         if (isset($value[$typeValeur])) {
                             $value['VALEUR'] = $value[$typeValeur];
                         }
                     }
-                    $tableauDeComparaison[$value['ID_VALEUR']] = $value;
-                    $tableauIDValeurCheck[] = $value['ID_VALEUR'];
+                }
+                $tableauDeComparaison[$values['ID_VALEUR']] = $values;
+                $tableauIDValeurCheck[] = $values['ID_VALEUR'];
+            }
+        }
+        */
+
+
+        foreach($newArrayValue as $champParent){
+            foreach($champParent as $newIdxValeur => $valeurs){
+                foreach($valeurs as $idChamp => $valeur){
+                    //On retire le marquage des valeurs sur lequel on
+                    unset($tableauIDValeurCheck[array_search($valeur['ID_VALEUR'], $tableauIDValeurCheck)]);
+
+                    //Si la valeur vient d etre ajoute alors on insert en DB
+                    //Ou
+                    if(
+                        $valeur['ID_VALEUR'] === 'NULL'
+                        ||
+                        //Si l index a change
+                        $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
+                        ||
+                        //Ou la valeur brut a change
+                        $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
+                        //Alors on update
+                    ){
+                        $this->saveValeur($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
+                    }
                 }
             }
         }
 
+        /*
         //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
         foreach ($newArrayValue as $idParent => $idxFils) {
             foreach ($idxFils as $idx => $arrayFils) {
@@ -158,6 +204,7 @@ class Service_Descriptif
                 }
             }
         }
+        */
 
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
@@ -165,7 +212,6 @@ class Service_Descriptif
                 $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
             } catch (\Throwable $th) {
                 var_dump($th);
-
                 exit(1);
             }
         }
@@ -216,4 +262,5 @@ class Service_Descriptif
             $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
         }
     }
+
 }

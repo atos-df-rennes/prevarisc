@@ -7,12 +7,16 @@ class Service_Valeur
         $modelValeur = new Model_DbTable_Valeur();
         $valeur = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
+        $idValeur = NULL;
+        $idxValeur = NULL;
         if (null !== $valeur) {
             $typeValeur = $this->getTypeValeur($idChamp);
+            $idValeur = $valeur['ID_VALEUR'];
+            $idxValeur = $valeur['idx'];
             $valeur = $valeur[$typeValeur];
         }
 
-        return $valeur;
+        return ['ID_VALEUR' => $idValeur, 'VALEUR' => $valeur, 'IDX_VALEUR' => $idxValeur];
     }
 
     public function getAll(int $idChamp, int $idObject, string $classObject)
