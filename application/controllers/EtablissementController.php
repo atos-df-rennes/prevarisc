@@ -312,8 +312,10 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, 'Etablissement', $value);
                     }
                 }
+
+                $groupInputsPost =  $serviceEtablissementDescriptif->groupInputByOrder($post);
                 //Sauvegarde les changements dans les tableaux
-                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $serviceEtablissementDescriptif->groupInputByOrder($post), 'Etablissement', $idEtablissement);
+                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $groupInputsPost, 'Etablissement', $idEtablissement);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {

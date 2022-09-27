@@ -1,11 +1,17 @@
 <td class='tdMove'>
     <i class="icon-move"></i>
 </td>
-<?php foreach($this->inputs as $input) : ?>
+<?php $genTimesTamp = time(); ?>
+<?php foreach($this->inputs as &$input) : ?>
+
+    <?php
+        $input['STR_DATA'] = 'valeur-'.$genTimesTamp.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
+    ?>
     <td>
         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
                 'champ' => $input,
-                'canWrite' => true
+                'canWrite' => true,
+                'idxTableau' => '0',
             ]);
         ?>
     </td>
