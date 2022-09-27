@@ -5,7 +5,7 @@
 <?php foreach($this->inputs as &$input) : ?>
 
     <?php
-        $input['STR_DATA'] = 'valeur-'.$genTimesTamp.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
+        $input['STR_DATA'] = 'valeur-'.$genTimesTamp.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'];
     ?>
     <td>
         <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
