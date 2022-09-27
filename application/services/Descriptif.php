@@ -141,30 +141,11 @@ class Service_Descriptif
             }
         }
 
-
-        /*
-        foreach ($initArrayValue as $idxLigne => $arrayFils) {
-            foreach ($arrayFils['CHAMPS'] as $idChamp => $values) {
-                foreach ($values as &$value) {
-                    foreach ($listTypeValeur as $typeValeur) {
-                        if (isset($value[$typeValeur])) {
-                            $value['VALEUR'] = $value[$typeValeur];
-                        }
-                    }
-                }
-                $tableauDeComparaison[$values['ID_VALEUR']] = $values;
-                $tableauIDValeurCheck[] = $values['ID_VALEUR'];
-            }
-        }
-        */
-
-
         foreach($newArrayValue as $champParent){
             foreach($champParent as $newIdxValeur => $valeurs){
                 foreach($valeurs as $idChamp => $valeur){
-                    //On retire le marquage des valeurs sur lequel on
+                    //On retire le marquage des valeurs sur lequel on est deja passee
                     unset($tableauIDValeurCheck[array_search($valeur['ID_VALEUR'], $tableauIDValeurCheck)]);
-
                     //Si la valeur vient d etre ajoute alors on insert en DB
                     //Ou
                     if(
@@ -182,29 +163,6 @@ class Service_Descriptif
                 }
             }
         }
-
-        /*
-        //On parcours les valeurs poussee dans le post, de cette maniere on applique le changement de valeur l insertion ou l update
-        foreach ($newArrayValue as $idParent => $idxFils) {
-            foreach ($idxFils as $idx => $arrayFils) {
-                foreach ($arrayFils as $champ => $newValue) {
-                    //Si l ID est definie alors on check s il y a eu un changement
-                    if (isset($newValue['ID_VALEUR']) && 'NULL' !== $newValue['ID_VALEUR']) {
-                        //Si l idx ou la valeur a change alors on update
-                        if ($idx !== $tableauDeComparaison[$newValue['ID_VALEUR']]['IDX_VALEUR'] || $newValue['VALEUR'] !== $tableauDeComparaison[$newValue['ID_VALEUR']]['VALEUR']) {
-                            $this->saveValeur($champ, $idObject, $classObject, $newValue['VALEUR'], $idx);
-                        }
-                        //On retire le marquage dans le tableau d update pour bien mentionne qu on est passe sur cette valeur
-                        unset($tableauIDValeurCheck[array_search($newValue['ID_VALEUR'], $tableauIDValeurCheck)]);
-                    } else {
-                        //L ID valeur n est pas defini on procede donc a une insertion de la valeur
-                        //Si la valeur est pas null et different de '' alors on insert
-                        $this->saveValeur($champ, $idObject, $classObject, $newValue['VALEUR'], $idx);
-                    }
-                }
-            }
-        }
-        */
 
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
