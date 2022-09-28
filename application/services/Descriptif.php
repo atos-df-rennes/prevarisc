@@ -124,7 +124,6 @@ class Service_Descriptif
 
         $tableauDeComparaison = [];
         $tableauIDValeurCheck = [];
-        $listTypeValeur = ['VALEUR_STR', 'VALEUR_LONG_STR', 'VALEUR_INT', 'VALEUR_CHECKBOX'];
 
         //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....) pour chaque ID valeur
 
@@ -148,17 +147,21 @@ class Service_Descriptif
                     unset($tableauIDValeurCheck[array_search($valeur['ID_VALEUR'], $tableauIDValeurCheck)]);
                     //Si la valeur vient d etre ajoute alors on insert en DB
                     //Ou
-                    if(
-                        $valeur['ID_VALEUR'] === 'NULL'
-                        ||
-                        //Si l index a change
-                        $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
-                        ||
-                        //Ou la valeur brut a change
-                        $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
-                        //Alors on update
-                    ){
-                        $this->saveValeur($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
+                    if($valeur['ID_VALEUR'] === 'NULL'){
+                        $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'],$newIdxValeur);
+                    }else{
+                        if(//Si l index a change
+                            $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
+                            ||
+                            //Ou la valeur brut a change
+                            $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
+                            //Alors on update
+
+                            ){
+                                $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']);
+                                $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
+                                $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
+                        }
                     }
                 }
             }
