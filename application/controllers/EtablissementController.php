@@ -294,7 +294,6 @@ class EtablissementController extends Zend_Controller_Action
         $idEtablissement = $this->getParam('id');
         $champValeursInit = $serviceEtablissementDescriptif->getRubriques($idEtablissement, 'Etablissement');
 
-
         $this->descriptifPersonnaliseAction();
 
         /** @var Zend_Controller_Request_Http */
@@ -315,7 +314,7 @@ class EtablissementController extends Zend_Controller_Action
                     }
                 }
 
-                $groupInputsPost =  $serviceEtablissementDescriptif->groupInputByOrder($post);
+                $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post);
                 //Sauvegarde les changements dans les tableaux
                 $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $groupInputsPost, 'Etablissement', $idEtablissement);
 

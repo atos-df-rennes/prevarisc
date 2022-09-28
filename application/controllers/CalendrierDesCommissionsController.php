@@ -1018,8 +1018,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                 $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
-
-
                 $rubriquesByCapsuleRubrique = [
                     'descriptifEtablissement' => $rubriquesEtablissement,
                     'descriptifVerificationsTechniques' => $rubriquesDossier,

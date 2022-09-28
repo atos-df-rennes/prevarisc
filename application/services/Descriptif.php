@@ -47,6 +47,7 @@ class Service_Descriptif
             foreach ($rubrique['CHAMPS'] as &$champ) {
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
+
                     if (1 === $champ['tableau']) {
                         $listValeurs = [];
 
@@ -65,7 +66,6 @@ class Service_Descriptif
                         foreach ($champ['FILS'] as &$champFils) {
                             $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
                             $champFils['ID_VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
-
                         }
                     }
                 } else {
@@ -128,10 +128,10 @@ class Service_Descriptif
         //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....) pour chaque ID valeur
 
         foreach ($initArrayValue as $idxRubrique => $rubrique) {
-           foreach ($rubrique['CHAMPS'] as $champ) {
-                if($champ['tableau'] === 1){
-                    foreach($champ['FILS']['VALEURS'] as $valeursFils){
-                        foreach($valeursFils as $valeur){
+            foreach ($rubrique['CHAMPS'] as $champ) {
+                if (1 === $champ['tableau']) {
+                    foreach ($champ['FILS']['VALEURS'] as $valeursFils) {
+                        foreach ($valeursFils as $valeur) {
                             $tableauDeComparaison[$valeur['ID_VALEUR']] = $valeur;
                             $tableauIDValeurCheck[$valeur['ID_VALEUR']] = $valeur['ID_VALEUR'];
                         }
@@ -140,26 +140,24 @@ class Service_Descriptif
             }
         }
 
-        foreach($newArrayValue as $champParent){
-            foreach($champParent as $newIdxValeur => $valeurs){
-                foreach($valeurs as $idChamp => $valeur){
+        foreach ($newArrayValue as $champParent) {
+            foreach ($champParent as $newIdxValeur => $valeurs) {
+                foreach ($valeurs as $idChamp => $valeur) {
                     //On retire le marquage des valeurs sur lequel on est deja passee
                     unset($tableauIDValeurCheck[array_search($valeur['ID_VALEUR'], $tableauIDValeurCheck)]);
                     //Si la valeur vient d etre ajoute alors on insert en DB
                     //Ou
-                    if($valeur['ID_VALEUR'] === 'NULL'){
-                        $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'],$newIdxValeur);
-                    }else{
-                        if(//Si l index a change
+                    if ('NULL' === $valeur['ID_VALEUR']) {
+                        $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
+                    } else {
+                        if (//Si l index a change
                             $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
-                            ||
                             //Ou la valeur brut a change
-                            $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
+                            || $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
                             //Alors on update
-
-                            ){
-                                $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
-                                $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
+                            ) {
+                            $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
+                            $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
                         }
                     }
                 }
@@ -169,11 +167,12 @@ class Service_Descriptif
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
             try {
-                if($idValueToDelete !== null){
+                if (null !== $idValueToDelete) {
                     $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
                 }
             } catch (\Throwable $th) {
                 var_dump($th);
+
                 exit(1);
             }
         }
@@ -213,6 +212,30 @@ class Service_Descriptif
         return $tmpList;
     }
 
+    public function getValeurFusionDescriptif(int $idEntitie, string $classObject): array
+    {
+        $res = [];
+        $modelValeur = new Model_DbTable_Valeur();
+        $serviceValeur = new Service_Valeur();
+        //Get toutes les valeurs
+        $arrayBrut = $modelValeur->fetchAll($modelValeur->getAllOfParent($idEntitie, $classObject))->toArray();
+
+        foreach ($arrayBrut as $valeur) {
+            $valeurAPush = $valeur[$serviceValeur->getTypeValeur($valeur['ID_CHAMP'])];
+            if (null == $valeur['ID_PARENT']) {
+                $res[$valeur['NOM']] = $valeurAPush;
+            } else {
+                if (null !== $valeur['idx']) {
+                    $res[$valeur['ID_PARENT']][$valeur['idx']] = $valeurAPush;
+                } else {
+                    $res[$valeur['ID_PARENT']][] = $valeurAPush;
+                }
+            }
+        }
+
+        return $res;
+    }
+
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
@@ -223,29 +246,5 @@ class Service_Descriptif
         } else {
             $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
         }
-    }
-
-    public function getValeurFusionDescriptif(int $idEntitie, string $classObject):array{
-        $res = [];
-        $modelValeur = new Model_DbTable_Valeur();
-        $serviceValeur = new Service_Valeur();
-        //Get toutes les valeurs
-        $arrayBrut = $modelValeur->fetchAll($modelValeur->getAllOfParent($idEntitie, $classObject))->toArray() ;
-
-        foreach($arrayBrut as $valeur){
-            $valeurAPush = $valeur[$serviceValeur->getTypeValeur($valeur['ID_CHAMP'])];
-            if($valeur['ID_PARENT'] == null){
-                $res[$valeur['NOM']] = $valeurAPush;
-            }else{
-                if($valeur['idx'] !== null){
-                    $res[$valeur['ID_PARENT']][$valeur['idx']] = $valeurAPush;
-                }else{
-                    $res[$valeur['ID_PARENT']][] = $valeurAPush;
-                }
-
-            }
-        }
-
-        return $res;
     }
 }

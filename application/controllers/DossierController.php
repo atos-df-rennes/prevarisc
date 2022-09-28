@@ -3203,7 +3203,6 @@ class DossierController extends Zend_Controller_Action
                 //Sauvegarde les changements dans les tableaux
                 $serviceDossierDescriptif->saveChangeTable($champValeursInit, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
 
-
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
