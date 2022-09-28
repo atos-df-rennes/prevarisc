@@ -204,6 +204,16 @@ class Service_Formulaire
             }
         }
 
-        return $arrayReturn;
+        //TODO surement optimisable en la faisant passer dans la boucle precedente
+        foreach($arrayReturn as $idxLigne => &$inputs){
+            foreach($inputs as &$input){
+                if($input['ID_VALEUR'] === NULL){
+                    $input['IDX_VALEUR'] = $idxLigne;
+                    $input['STR_DATA'] = 'valeur-'.$idxLigne.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
+                }
+            }
+        }
+        ksort($arrayReturn);
+        return $arrayReturn ;
     }
 }

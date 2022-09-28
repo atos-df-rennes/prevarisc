@@ -3171,7 +3171,7 @@ class DossierController extends Zend_Controller_Action
         //$modelChamp = new Model_DbTable_Champ();
         $ID_CAPSULE_RUBRIQUE_DESCRIPTIF = 2;
         //$champValeursInit = $modelChamp->getValeurFormulaire($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
-        $champValeursInit = $serviceDossierDescriptif->getRubriques($this->idDossier, $ID_CAPSULE_RUBRIQUE_DESCRIPTIF);
+        $champValeursInit = $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier');
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
@@ -3202,6 +3202,7 @@ class DossierController extends Zend_Controller_Action
 
                 //Sauvegarde les changements dans les tableaux
                 $serviceDossierDescriptif->saveChangeTable($champValeursInit, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
+
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {

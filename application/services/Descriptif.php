@@ -158,8 +158,7 @@ class Service_Descriptif
                             //Alors on update
 
                             ){
-                                $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']);
-                                $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
+                                $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
                                 $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
                         }
                     }
@@ -170,7 +169,9 @@ class Service_Descriptif
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
             try {
-                $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
+                if($idValueToDelete !== null){
+                    $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
+                }
             } catch (\Throwable $th) {
                 var_dump($th);
                 exit(1);
