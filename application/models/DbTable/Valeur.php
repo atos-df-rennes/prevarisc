@@ -22,21 +22,23 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
 
     private function getSelect(int $idChamp, int $idObject, string $classObject)
     {
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['v' => 'valeur'])
-            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', ['c.ID_PARENT', 'c.ID_TYPECHAMP', 'c.ID_CHAMP'])
-            ->where('c.ID_CHAMP = ?', $idChamp)
-            ->order('v.idx')
-        ;
+        return $this->getAllOfParent($idObject, $classObject)->where('c.ID_CHAMP = ?',$idChamp);
+    }
 
-        if (false !== strpos($classObject, 'Dossier')) {
+    public function getAllOfParent(int $idObject, string $classObject){
+        $select = $this->select()
+        ->setIntegrityCheck(false)
+        ->from(['v' => 'valeur'])
+        ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', ['c.ID_PARENT', 'c.ID_TYPECHAMP', 'c.ID_CHAMP','c.NOM'])
+        ->order('v.idx');
+
+        if (strpos($classObject, 'Dossier')) {
             $select->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR', ['v.ID_VALEUR'])
                 ->where('dv.ID_DOSSIER = ?', $idObject)
             ;
         }
 
-        if (false !== strpos($classObject, 'Etablissement')) {
+        if (strpos($classObject, 'Etablissement')) {
             $select->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR', ['v.ID_VALEUR'])
                 ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
             ;

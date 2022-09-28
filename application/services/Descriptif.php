@@ -225,4 +225,27 @@ class Service_Descriptif
         }
     }
 
+    public function getValeurFusionDescriptif(int $idEntitie, string $classObject):array{
+        $res = [];
+        $modelValeur = new Model_DbTable_Valeur();
+        $serviceValeur = new Service_Valeur();
+        //Get toutes les valeurs
+        $arrayBrut = $modelValeur->fetchAll($modelValeur->getAllOfParent($idEntitie, $classObject))->toArray() ;
+
+        foreach($arrayBrut as $valeur){
+            $valeurAPush = $valeur[$serviceValeur->getTypeValeur($valeur['ID_CHAMP'])];
+            if($valeur['ID_PARENT'] == null){
+                $res[$valeur['NOM']] = $valeurAPush;
+            }else{
+                if($valeur['idx'] !== null){
+                    $res[$valeur['ID_PARENT']][$valeur['idx']] = $valeurAPush;
+                }else{
+                    $res[$valeur['ID_PARENT']][] = $valeurAPush;
+                }
+
+            }
+        }
+
+        return $res;
+    }
 }

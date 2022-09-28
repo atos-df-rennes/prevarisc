@@ -45,10 +45,6 @@ class Service_Valeur
         return $retourValeurs;
     }
 
-    public function getAllValueTable(int $idChamp, int $idObject, string $classObject){
-
-    }
-
     public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx=null): void
     {
         if ('' !== $value) {
@@ -96,7 +92,7 @@ class Service_Valeur
         }
     }
 
-    private function getTypeValeur(int $idChamp): string
+    public function getTypeValeur(int $idChamp): string
     {
         $modelChamp = new Model_DbTable_Champ();
         $typeValeur = '';
