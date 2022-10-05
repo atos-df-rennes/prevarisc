@@ -3,7 +3,7 @@ $(document).ready(function() {
     let tableauParentChamp =  $('#tableParentChamp')
 
     let ajouterLigneTableau = () => {
-        tableauParentChamp.append(
+        $('#tableParentChamp').append(
             `
             <tr id=`+$('#ID_CHAMP').val()+`>
                 <td class='tdMove'><i class="icon-move"></i></td>
@@ -53,7 +53,6 @@ $(document).ready(function() {
             type: 'POST',
             success: function() {
                 ajouterLigneTableau()
-                form.reset()
             },
             error: function() {
                 return false;

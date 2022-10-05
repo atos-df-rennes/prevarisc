@@ -1,14 +1,10 @@
 $(document).ready(function() {  
     
     $('.addRow').click(function() {
+        const ligneTableauTemplate = $('#tbody-'+$(this).attr('idparent') + ' tr:first-child').clone().removeClass('ligneTableau hidden')    
            
-        //Ajout de la nouvelle ligne au tableau selectionne
-        document.getElementById('tbody-'+$(this).attr('idparent')).innerHTML 
-        +=
-            ( 
-                document.getElementById('tbody-'+$(this).attr('idparent')).children[0].innerHTML
-            )
-        
+        $('#tbody-'+$(this).attr('idparent')).append(ligneTableauTemplate)
+
         const parentTableBody = document.getElementById('tbody-'+$(this).attr('idparent'))
         const parentTableNewLine = parentTableBody.getElementsByTagName('tr')[
             document.getElementById('tbody-'+$(this).attr('idparent'))
