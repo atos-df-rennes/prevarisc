@@ -93,6 +93,26 @@ class Service_Valeur
         }
     }
 
+    /**
+     * Retourne l idx max d un champ tbaleau
+     */
+    public function getMaxIdx(int $idTableau, int $idEntity, string $classObject):int{
+
+        $modelValeur = new Model_DbTable_Valeur();
+
+        $nameIDEntity = 'ID_'.strtoupper($classObject);
+        $intermTable = strtolower($classObject).'valeur';
+
+        $select = $modelValeur->select()
+            ->setIntegrityCheck(false)
+            ->from(['v' => 'valeur'], 'max(v.idx) as maxidx')
+            ->join(['interm' => $intermTable], 'interm.ID_VALEUR = v.ID_VALEUR', [])
+           // ->where($intermTable.'.'.$nameIDEntity.' = '. $idEntity)
+        ;
+
+        return $modelValeur->fetchRow($select)['maxidx'];
+    }
+
     public function getTypeValeur(int $idChamp): string
     {
         $modelChamp = new Model_DbTable_Champ();

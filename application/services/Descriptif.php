@@ -217,6 +217,8 @@ class Service_Descriptif
         $res = [];
         $modelValeur = new Model_DbTable_Valeur();
         $serviceValeur = new Service_Valeur();
+
+
         //Get toutes les valeurs
         $arrayBrut = $modelValeur->fetchAll($modelValeur->getAllOfParent($idEntitie, $classObject))->toArray();
 
@@ -232,7 +234,7 @@ class Service_Descriptif
                 }
             }
         }
-
+        $resIDX = $serviceValeur->getMaxIdx(171, 53414, 'Dossier');
         return $res;
     }
 
