@@ -105,12 +105,17 @@ class Service_Valeur
 
         $select = $modelValeur->select()
             ->setIntegrityCheck(false)
-            ->from(['v' => 'valeur'], 'max(v.idx) as maxidx')
+            ->from(['v' => 'valeur'], [])
+            ->columns(
+                [
+                    'MAX_IDX' => 'max(v.idx)'
+                ]
+            )
             ->join(['interm' => $intermTable], 'interm.ID_VALEUR = v.ID_VALEUR', [])
-           // ->where($intermTable.'.'.$nameIDEntity.' = '. $idEntity)
+           ->where('interm.'.$nameIDEntity.' = '. $idEntity)
         ;
 
-        return $modelValeur->fetchRow($select)['maxidx'];
+        return $modelValeur->fetchRow($select)['MAX_IDX'];
     }
 
     public function getTypeValeur(int $idChamp): string

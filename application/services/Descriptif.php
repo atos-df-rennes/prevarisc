@@ -234,7 +234,7 @@ class Service_Descriptif
                 }
             }
         }
-        $resIDX = $serviceValeur->getMaxIdx(171, 53414, 'Dossier');
+        $resIDX = $serviceValeur->getMaxIdx(171, $idEntitie, $classObject);
         return $res;
     }
 
