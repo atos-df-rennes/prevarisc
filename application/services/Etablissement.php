@@ -430,13 +430,23 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $value['TITRE'],
             ]);
 
-            $date = null !== $value['DATECOMM_DOSSIER'] ? new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES) : null;
+            $date = null;
+            if (null !== $value['DATECOMM_DOSSIER']) {
+                $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
+            } elseif (null !== $value['DATEVISITE_DOSSIER']) {
+                $date = new Zend_Date($value['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+            }
+
+            if (null !== $date) {
+                $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            }
 
             $historique[$key][$elem] = [
                 'valeur' => $valueDisplay,
-                'url' => '/dossier/avis-et-derogations/id/'.$value['ID_DOSSIER'],
-                'debut' => null !== $date ? $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR) : null,
+                'url' => sprintf('/dossier/avis-et-derogations-edit/id/%d/avis-derogation/%d', $value['ID_DOSSIER'], $value['ID_AVIS_DEROGATION']),
+                'debut' => $date,
                 'author' => null,
+                'type' => $value['TYPE_DOSSIER'],
             ];
         }
 
