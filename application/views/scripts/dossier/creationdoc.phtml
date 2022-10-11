@@ -726,7 +726,11 @@ try {
     foreach ($this->avisDerogations as $avisDerogation) {
         addChamp($segmentAvisDerogations, 'type', $avisDerogation['TYPE']);
         addChamp($segmentAvisDerogations, 'titre', $avisDerogation['TITRE']);
-        addChamp($segmentAvisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+        addChamp($segmentAvisDerogations, 'objet', $avisDerogation['OBJET']);
+        addChamp($segmentAvisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+        addChamp($segmentAvisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+        addChamp($segmentAvisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+        addChamp($segmentAvisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
         addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
         addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 

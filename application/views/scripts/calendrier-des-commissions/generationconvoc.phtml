@@ -299,7 +299,11 @@ function retrieveInfoDossier($segment, $dossierInfos) {
             foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
                 setVars($avisDerogations, 'type', $avisDerogation['TYPE']);
                 setVars($avisDerogations, 'titre', $avisDerogation['TITRE']);
-                setVars($avisDerogations, 'informations', $avisDerogation['INFORMATIONS']);
+                setVars($avisDerogations, 'objet', $avisDerogation['OBJET']);
+                setVars($avisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+                setVars($avisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+                setVars($avisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+                setVars($avisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
                 setVars($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
                 setVars($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
