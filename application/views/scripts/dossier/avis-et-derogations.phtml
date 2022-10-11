@@ -25,9 +25,37 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputInformations">Informations</label>
+        <label class="control-label" for="inputObjet">Objet</label>
         <div class="controls">
-            <textarea name="INFORMATIONS"></textarea>
+            <textarea id="inputObjet" name="OBJET"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputJustification">Justification</label>
+        <div class="controls">
+            <textarea id="inputJustification" name="JUSTIFICATION"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputArticlesConcernes">Article(s) concerné(s)</label>
+        <div class="controls">
+            <textarea id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
+        <div class="controls">
+            <textarea id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputAnalyseDeRisque">Analyse de risque</label>
+        <div class="controls">
+            <textarea id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
         </div>
     </div>
 
@@ -54,8 +82,10 @@
         ?>
     </div>
 
+    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
+
     <div class="control-group">
-        <label class="control-label"for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
+        <label class="control-label" for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
         <div class="controls">
             <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
             <input
