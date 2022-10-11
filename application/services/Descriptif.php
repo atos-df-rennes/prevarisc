@@ -37,7 +37,7 @@ class Service_Descriptif
             $userDisplay = $this->modelDisplayRubrique->getUserDisplay($idObject, $rubrique['ID_RUBRIQUE']);
 
             if (!empty($userDisplay)) {
-                $rubrique['DISPLAY'] = $userDisplay;
+                $rubrique['DISPLAY'] = $userDisplay['USER_DISPLAY'];
             }
 
             $rubrique['CHAMPS'] = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
