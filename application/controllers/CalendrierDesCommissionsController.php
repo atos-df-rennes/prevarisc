@@ -1014,6 +1014,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 // Gestion des formulaires personnalisés
                 $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
 
+
+                //TODO recuperer liste des id parents qui sont talbeaux
                 $valeurDescriptifDossier = $this->serviceDescriptifDossier->getValeurFusionDescriptif($dossier['ID_DOSSIER'], 'Dossier');
 
                 $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';

@@ -100,20 +100,16 @@ class Service_Valeur
 
         $modelValeur = new Model_DbTable_Valeur();
 
-        $nameIDEntity = 'ID_'.strtoupper($classObject);
-        $intermTable = strtolower($classObject).'valeur';
-
         $select = $modelValeur->select()
             ->setIntegrityCheck(false)
-            ->from(['v' => 'valeur'], [])
+            ->from(['v' => 'valeur'], ['v.idx'])
+            ->join(['c' => 'champ'], 'c.ID_CHAMP = v.ID_CHAMP', ['c.ID_PARENT'])
             ->columns(
                 [
                     'MAX_IDX' => 'max(v.idx)'
                 ]
             )
-            ->join(['interm' => $intermTable], 'interm.ID_VALEUR = v.ID_VALEUR', [])
-           ->where('interm.'.$nameIDEntity.' = '. $idEntity)
-        ;
+           ->where('c.ID_PARENT = '.$idTableau);
 
         return $modelValeur->fetchRow($select)['MAX_IDX'];
     }

@@ -353,6 +353,20 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     $champFils['VALEUR'] = 'Non';
                                 }
                             }
+
+                            $nomFusion = $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM'],
+                                    $champ['NOM'],
+                                    $champFils['NOM']
+                                ]
+                                );
+
+                            if($champ['tableau'] !== null){
+                                var_dump($nomFusion);
+                                die(1);
+                            }
                             setVars(
                                 $segment,
                                 $serviceUtils->getFullFusionName(

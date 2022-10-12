@@ -214,28 +214,30 @@ class Service_Descriptif
 
     public function getValeurFusionDescriptif(int $idEntitie, string $classObject): array
     {
-        $res = [];
-        $modelValeur = new Model_DbTable_Valeur();
-        $serviceValeur = new Service_Valeur();
+        $serviceDescriptif = new Service_DossierVerificationsTechniques();
+        $rubriques = $serviceDescriptif->getRubriques($idEntitie, $classObject);
 
-
-        //Get toutes les valeurs
-        $arrayBrut = $modelValeur->fetchAll($modelValeur->getAllOfParent($idEntitie, $classObject))->toArray();
-
-        foreach ($arrayBrut as $valeur) {
-            $valeurAPush = $valeur[$serviceValeur->getTypeValeur($valeur['ID_CHAMP'])];
-            if (null == $valeur['ID_PARENT']) {
-                $res[$valeur['NOM']] = $valeurAPush;
-            } else {
-                if (null !== $valeur['idx']) {
-                    $res[$valeur['ID_PARENT']][$valeur['idx']] = $valeurAPush;
-                } else {
-                    $res[$valeur['ID_PARENT']][] = $valeurAPush;
+        foreach($rubriques as &$rubrique){
+            foreach($rubrique['CHAMPS'] as &$champ){
+                if(null !== $champ['tableau']){
+                    $this->setValeurForAllIndex($champ);
                 }
             }
         }
-        $resIDX = $serviceValeur->getMaxIdx(171, $idEntitie, $classObject);
-        return $res;
+
+        return $rubriques;
+    }
+
+    private function setValeurForAllIndex(array &$champTableau):void{
+        foreach($champTableau['FILS'] as &$champFils){
+            foreach ($champTableau['FILS']['VALEURS'] as &$valeur) {
+                foreach ($valeur as $idChamp => &$valeurChamp) {
+                    if (!empty($champFils['ID_CHAMP']) && $idChamp === $champFils['ID_CHAMP']){
+                        $champFils['VALEURS'][$valeurChamp['IDX_VALEUR']] = $valeurChamp['VALEUR'];
+                    }
+                }
+            }
+        }
     }
 
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
