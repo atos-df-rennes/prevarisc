@@ -53,6 +53,7 @@ foreach($this->informationsMembre as $val => $membre){
 
 			//Generation du segment villeDoss
 			$villeODF = $odf->setSegment('villeDoss');
+
 			foreach($this->listeCommunes as $val => $commune){
 				foreach($commune[1] as $comm => $info){
 					setVars($villeODF,'numMairie',$info["NUMEROADRESSE_UTILISATEURINFORMATIONS"]);
@@ -184,6 +185,12 @@ foreach($this->informationsMembre as $val => $membre){
 
 			echo "<span id='notif' class='ui-state-highlight ui-corner-all' style='padding: 0.3em;'>La convocation pour le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." à bien été généré</span><br/><br/><br/>";
 		}
+        foreach($this->descriptifs as $rubrique){
+            //$segmentTableau = $odf->setSegment('rubr');
+
+        }
+
+
 	}else{
 		echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." n'a aucun document renseigné ou il n'a pas les droits pour ces dossiers</span><br/><br/><br/>";
 	}
@@ -345,6 +352,8 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                 foreach ($rubrique['CHAMPS'] as $champ) {
                     //Si le champ est un champ Parent alors ....
                     if($champ['ID_TYPECHAMP'] === 6){
+                        unset($champ['FILS']['INPUTS']);
+                        unset($champ['FILS']['VALEURS']);
                         foreach ($champ['FILS'] as $champFils) {
                             if ('Case à cocher' === $champFils['TYPE']) {
                                 if (true === boolval($champFils['VALEUR'])) {
@@ -354,31 +363,55 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 }
                             }
 
-                            $nomFusion = $serviceUtils->getFullFusionName(
-                                $formulaire['NOM_INTERNE'],
-                                [
-                                    $rubrique['NOM'],
-                                    $champ['NOM'],
-                                    $champFils['NOM']
-                                ]
+                            if ($champ['tableau'] === null){
+                                setVars(
+                                    $segment,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
+                                    ),
+                                    $champFils['VALEUR']
                                 );
-
-                            if($champ['tableau'] !== null){
-                                var_dump($nomFusion);
-                                die(1);
                             }
-                            setVars(
-                                $segment,
-                                $serviceUtils->getFullFusionName(
-                                    $formulaire['NOM_INTERNE'],
-                                    [
-                                        $rubrique['NOM'],
-                                        $champ['NOM'],
-                                        $champFils['NOM']
-                                    ]
-                                ),
-                                $champFils['VALEUR']
-                            );
+                            else{
+                                setVars(
+                                    $segment,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['idx']
+                                        ]
+                                    ),
+                                    $champFils['NOM']
+                                );
+                                $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                    $formulaire['NOM_INTERNE'].' '.
+                                    $rubrique['NOM'].' '.
+                                    $champ['NOM'].' '.
+                                    $champFils['idx'].' '.
+                                    'valeurs'
+                                    );
+                                try {
+                                    //$segmentTableau = $segment->$nomFusion;
+                                    $segmentTableau = $segment->$nomFusion;
+                                } catch (Exception $e) {}
+
+                                if(isset($segmentTableau)){
+                                    if(empty($champFils['VALEURS'])){
+                                        setVars($segmentTableau, 'valeur', 'AUCUNE VALEUR');
+                                    }else{
+                                        foreach ($champFils['VALEURS'] as $valeur) {
+                                            setVars($segmentTableau, 'valeur', $valeur);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }else{
                         // Définition du libellé pour les cases à cocher

@@ -22,4 +22,14 @@ class Service_Utils
 
         return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
     }
+
+    public function getFusionNameMagicalCase(string $name):string{
+        $strings =  preg_split("/[\s,']+/", $name);
+        $res = '';
+        foreach($strings as &$string){
+            $res .= ucfirst(strtolower($string));
+
+        }
+        return $res;
+    }
 }

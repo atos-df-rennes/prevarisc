@@ -204,7 +204,6 @@ class Service_Formulaire
             }
         }
 
-        //TODO surement optimisable en la faisant passer dans la boucle precedente
         foreach ($arrayReturn as $idxLigne => &$inputs) {
             foreach ($inputs as &$input) {
                 if (null === $input['ID_VALEUR']) {
@@ -214,7 +213,6 @@ class Service_Formulaire
             }
         }
         ksort($arrayReturn);
-
         return $arrayReturn;
     }
 }
