@@ -349,11 +349,13 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                     ),
                     $rubrique['NOM']
                 );
+
                 foreach ($rubrique['CHAMPS'] as $champ) {
                     //Si le champ est un champ Parent alors ....
-                    if($champ['ID_TYPECHAMP'] === 6){
+                    if ($champ['ID_TYPECHAMP'] === 6) {
                         unset($champ['FILS']['INPUTS']);
                         unset($champ['FILS']['VALEURS']);
+
                         foreach ($champ['FILS'] as $champFils) {
                             if ('Case à cocher' === $champFils['TYPE']) {
                                 if (true === boolval($champFils['VALEUR'])) {
@@ -363,7 +365,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 }
                             }
 
-                            if ($champ['tableau'] === null){
+                            if ($champ['tableau'] === null) {
                                 setVars(
                                     $segment,
                                     $serviceUtils->getFullFusionName(
@@ -376,8 +378,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     ),
                                     $champFils['VALEUR']
                                 );
-                            }
-                            else{
+                            } else {
                                 setVars(
                                     $segment,
                                     $serviceUtils->getFullFusionName(
@@ -390,30 +391,36 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     ),
                                     $champFils['NOM']
                                 );
+
                                 $nomFusion = $serviceUtils->getFusionNameMagicalCase(
                                     $formulaire['NOM_INTERNE'].' '.
                                     $rubrique['NOM'].' '.
                                     $champ['NOM'].' '.
                                     $champFils['idx'].' '.
                                     'valeurs'
-                                    );
+                                );
+
                                 try {
                                     //$segmentTableau = $segment->$nomFusion;
                                     $segmentTableau = $segment->$nomFusion;
                                 } catch (Exception $e) {}
 
-                                if(isset($segmentTableau)){
-                                    if(empty($champFils['VALEURS'])){
+                                if (isset($segmentTableau)) {
+                                    if (empty($champFils['VALEURS'])) {
                                         setVars($segmentTableau, 'valeur', 'AUCUNE VALEUR');
-                                    }else{
+
+                                        $segmentTableau->merge();
+                                    } else {
                                         foreach ($champFils['VALEURS'] as $valeur) {
                                             setVars($segmentTableau, 'valeur', $valeur);
+
+                                            $segmentTableau->merge();
                                         }
                                     }
                                 }
                             }
                         }
-                    }else{
+                    } else {
                         // Définition du libellé pour les cases à cocher
                         if ('Case à cocher' === $champ['TYPE']) {
                             if (true === boolval($champ['VALEUR'])) {
@@ -422,6 +429,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 $champ['VALEUR'] = 'Non';
                             }
                         }
+
                         setVars(
                             $segment,
                             $serviceUtils->getFullFusionName(
