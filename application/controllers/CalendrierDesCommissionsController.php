@@ -1012,9 +1012,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $dossier['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'] = !empty($dossier['infosEtab']) ? $dbEtablissement->getEffectifEtDegagement($dossier['infosEtab']['general']['ID_ETABLISSEMENT'])['DESCRIPTION_DEGAGEMENT'] : '';
 
                 // Gestion des formulaires personnalisés
-                //$rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
-                $rubriquesDossier = $this->serviceDescriptifDossier->getValeurFusionDescriptif($dossier['ID_DOSSIER'], 'Dossier');
-                $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getValeurFusionDescriptif($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissement = !empty($dossier['infosEtab']) ? $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement') : '';
 
                 $rubriquesByCapsuleRubrique = [
                     'descriptifEtablissement' => $rubriquesEtablissement,

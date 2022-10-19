@@ -185,12 +185,6 @@ foreach($this->informationsMembre as $val => $membre){
 
 			echo "<span id='notif' class='ui-state-highlight ui-corner-all' style='padding: 0.3em;'>La convocation pour le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." à bien été généré</span><br/><br/><br/>";
 		}
-        foreach($this->descriptifs as $rubrique){
-            //$segmentTableau = $odf->setSegment('rubr');
-
-        }
-
-
 	}else{
 		echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le membre : ".$membre['infosFiles'][0]['LIBELLE_COMMISSIONMEMBRE']." n'a aucun document renseigné ou il n'a pas les droits pour ces dossiers</span><br/><br/><br/>";
 	}
@@ -353,32 +347,11 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                 foreach ($rubrique['CHAMPS'] as $champ) {
                     //Si le champ est un champ Parent alors ....
                     if ($champ['ID_TYPECHAMP'] === 6) {
-                        unset($champ['FILS']['INPUTS']);
-                        unset($champ['FILS']['VALEURS']);
+                        // unset($champ['FILS']['INPUTS']);
+                        // unset($champ['FILS']['VALEURS']);
 
-                        foreach ($champ['FILS'] as $champFils) {
-                            if ('Case à cocher' === $champFils['TYPE']) {
-                                if (true === boolval($champFils['VALEUR'])) {
-                                    $champFils['VALEUR'] = 'Oui';
-                                } else {
-                                    $champFils['VALEUR'] = 'Non';
-                                }
-                            }
-
-                            if ($champ['tableau'] === null) {
-                                setVars(
-                                    $segment,
-                                    $serviceUtils->getFullFusionName(
-                                        $formulaire['NOM_INTERNE'],
-                                        [
-                                            $rubrique['NOM'],
-                                            $champ['NOM'],
-                                            $champFils['NOM']
-                                        ]
-                                    ),
-                                    $champFils['VALEUR']
-                                );
-                            } else {
+                        if (1 === $champ['tableau']) {
+                            foreach ($champ['FILS'] as $champFils) {
                                 setVars(
                                     $segment,
                                     $serviceUtils->getFullFusionName(
@@ -391,33 +364,51 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     ),
                                     $champFils['NOM']
                                 );
+                            }
 
-                                $nomFusion = $serviceUtils->getFusionNameMagicalCase(
-                                    $formulaire['NOM_INTERNE'].' '.
-                                    $rubrique['NOM'].' '.
-                                    $champ['NOM'].' '.
-                                    $champFils['idx'].' '.
-                                    'valeurs'
-                                );
+                            $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                $formulaire['NOM_INTERNE'].' '.
+                                $rubrique['NOM'].' '.
+                                $champ['NOM'].' '.
+                                'valeurs'
+                            );
 
-                                try {
-                                    //$segmentTableau = $segment->$nomFusion;
-                                    $segmentTableau = $segment->$nomFusion;
-                                } catch (Exception $e) {}
+                            try {
+                                $segmentTableau = $segment->$nomFusion;
+                            } catch (Exception $e) {}
 
-                                if (isset($segmentTableau)) {
-                                    if (empty($champFils['VALEURS'])) {
-                                        setVars($segmentTableau, 'valeur', 'AUCUNE VALEUR');
+                            if (isset($segmentTableau)) {
+                                // FIXME Parcourir par ligne en utilisant les données des patterns
+                                // foreach $lignes
+                                    setVars($segmentTableau, 'valeur1', empty($ligne['val1'] ? '' : $ligne['val1']));
+                                    setVars($segmentTableau, 'valeur2', empty($ligne['val2'] ? '' : $ligne['val2']));
+                                    setVars($segmentTableau, 'valeur3', empty($ligne['val3'] ? '' : $ligne['val3']));
 
-                                        $segmentTableau->merge();
+                                    $segmentTableau->merge();
+                                // endforeach
+                            }
+                        } else {
+                            foreach ($champ['FILS'] as $champFils) {
+                                if ('Case à cocher' === $champFils['TYPE']) {
+                                    if (true === boolval($champFils['VALEUR'])) {
+                                        $champFils['VALEUR'] = 'Oui';
                                     } else {
-                                        foreach ($champFils['VALEURS'] as $valeur) {
-                                            setVars($segmentTableau, 'valeur', $valeur);
-
-                                            $segmentTableau->merge();
-                                        }
+                                        $champFils['VALEUR'] = 'Non';
                                     }
                                 }
+
+                                setVars(
+                                    $segment,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
+                                    ),
+                                    $champFils['VALEUR']
+                                );
                             }
                         }
                     } else {

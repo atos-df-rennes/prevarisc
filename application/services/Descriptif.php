@@ -212,33 +212,33 @@ class Service_Descriptif
         return $tmpList;
     }
 
-    public function getValeurFusionDescriptif(int $idEntitie, string $classObject): array
-    {
-        $serviceDescriptif = new Service_DossierVerificationsTechniques();
-        $rubriques = $serviceDescriptif->getRubriques($idEntitie, $classObject);
+    // public function getValeurFusionDescriptif(int $idEntitie, string $classObject): array
+    // {
+    //     // $serviceDescriptif = new Service_DossierVerificationsTechniques();
+    //     $rubriques = $this->getRubriques($idEntitie, $classObject);
 
-        foreach($rubriques as &$rubrique){
-            foreach($rubrique['CHAMPS'] as &$champ){
-                if(null !== $champ['tableau']){
-                    $this->setValeurForAllIndex($champ);
-                }
-            }
-        }
+    //     foreach($rubriques as &$rubrique){
+    //         foreach($rubrique['CHAMPS'] as &$champ){
+    //             if(null !== $champ['tableau']){
+    //                 $this->setValeurForAllIndex($champ);
+    //             }
+    //         }
+    //     }
 
-        return $rubriques;
-    }
+    //     return $rubriques;
+    // }
 
-    private function setValeurForAllIndex(array &$champTableau):void{
-        foreach($champTableau['FILS'] as &$champFils){
-            foreach ($champTableau['FILS']['VALEURS'] as &$valeur) {
-                foreach ($valeur as $idChamp => &$valeurChamp) {
-                    if (!empty($champFils['ID_CHAMP']) && $idChamp === $champFils['ID_CHAMP']){
-                        $champFils['VALEURS'][$valeurChamp['IDX_VALEUR']] = $valeurChamp['VALEUR'];
-                    }
-                }
-            }
-        }
-    }
+    // private function setValeurForAllIndex(array &$champTableau):void{
+    //     foreach($champTableau['FILS'] as &$champFils){
+    //         foreach ($champTableau['FILS']['VALEURS'] as &$valeur) {
+    //             foreach ($valeur as $idChamp => &$valeurChamp) {
+    //                 if (!empty($champFils['ID_CHAMP']) && $idChamp === $champFils['ID_CHAMP']){
+    //                     $champFils['VALEURS'][$valeurChamp['IDX_VALEUR']] = $valeurChamp['VALEUR'];
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
