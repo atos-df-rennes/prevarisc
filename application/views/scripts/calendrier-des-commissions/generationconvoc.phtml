@@ -401,6 +401,8 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     $segmentTableau->merge();
                                 }
                             }
+
+                            $segmentTableau = null;
                         } else {
                             foreach ($champ['FILS'] as $champFils) {
                                 if ('Case à cocher' === $champFils['TYPE']) {
