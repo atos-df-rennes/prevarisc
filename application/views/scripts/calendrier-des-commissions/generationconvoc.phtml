@@ -347,23 +347,22 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                 foreach ($rubrique['CHAMPS'] as $champ) {
                     //Si le champ est un champ Parent alors ....
                     if ($champ['ID_TYPECHAMP'] === 6) {
-                        // unset($champ['FILS']['INPUTS']);
-                        // unset($champ['FILS']['VALEURS']);
-
                         if (1 === $champ['tableau']) {
-                            foreach ($champ['FILS'] as $champFils) {
-                                setVars(
-                                    $segment,
-                                    $serviceUtils->getFullFusionName(
-                                        $formulaire['NOM_INTERNE'],
-                                        [
-                                            $rubrique['NOM'],
-                                            $champ['NOM'],
-                                            $champFils['idx']
-                                        ]
-                                    ),
-                                    $champFils['NOM']
-                                );
+                            foreach ($champ['FILS'] as $idx => $champFils) {
+                                if(is_int($idx)){
+                                    setVars(
+                                        $segment,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM'],
+                                                $champ['NOM'],
+                                                $champFils['idx']
+                                            ]
+                                        ),
+                                        $champFils['NOM']
+                                    );
+                                }
                             }
 
                             $nomFusion = $serviceUtils->getFusionNameMagicalCase(
@@ -375,18 +374,41 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 
                             try {
                                 $segmentTableau = $segment->$nomFusion;
+                                //$segmentTableau = $segment->descriptifetablissementRubriqueTab2Valeurs;
+
                             } catch (Exception $e) {}
+
+
 
                             if (isset($segmentTableau)) {
                                 // FIXME Parcourir par ligne en utilisant les données des patterns
-                                // foreach $lignes
-                                    setVars($segmentTableau, 'valeur1', empty($ligne['val1'] ? '' : $ligne['val1']));
-                                    setVars($segmentTableau, 'valeur2', empty($ligne['val2'] ? '' : $ligne['val2']));
-                                    setVars($segmentTableau, 'valeur3', empty($ligne['val3'] ? '' : $ligne['val3']));
 
-                                    $segmentTableau->merge();
-                                // endforeach
+                                foreach($champ['FILS']['VALEURS'] as $ligne){
+                                    $idxCol = 0;
+                                    foreach($ligne as $col){
+
+                                        //TODO passer le bloc if suivant en methode car reutiliser plusieurs fois
+                                        if ('Case à cocher' === $col['ID_TYPECHAMP']) {
+                                            if (true === boolval($col['VALEUR'])) {
+                                                $col['VALEUR'] = 'Oui';
+                                            } else {
+                                                $col['VALEUR'] = 'Non';
+                                            }
+                                        }
+                                        $nomValeurDansSegment = 'valeur'.$idxCol;
+
+                                        var_dump($nomFusion);
+                                        var_dump($col);
+                                        var_dump($nomValeurDansSegment);
+
+                                        setVars($segmentTableau, $nomValeurDansSegment, $col['VALEUR'] ?? '');
+
+                                        $idxCol++;
+                                        $segmentTableau->merge();
+                                    }
+                                }
                             }
+
                         } else {
                             foreach ($champ['FILS'] as $champFils) {
                                 if ('Case à cocher' === $champFils['TYPE']) {
