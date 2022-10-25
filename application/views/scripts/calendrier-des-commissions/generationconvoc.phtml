@@ -378,41 +378,29 @@ function retrieveInfoDossier($segment, $dossierInfos) {
 
                             try {
                                 $segmentTableau = $segment->$nomFusion;
-                                //$segmentTableau = $segment->descriptifetablissementRubriqueTab2Valeurs;
-
                             } catch (Exception $e) {}
 
-
-
                             if (isset($segmentTableau)) {
-                                // FIXME Parcourir par ligne en utilisant les données des patterns
-
-                                foreach($champ['FILS']['VALEURS'] as $ligne){
+                                foreach ($champ['FILS']['VALEURS'] as $ligne) {
                                     $idxCol = 0;
-                                    foreach($ligne as $col){
 
-                                        //TODO passer le bloc if suivant en methode car reutiliser plusieurs fois
-                                        if ('Case à cocher' === $col['ID_TYPECHAMP']) {
+                                    foreach ($ligne as $col) {
+                                        // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
+                                        if (5 === $col['ID_TYPECHAMP']) {
                                             if (true === boolval($col['VALEUR'])) {
                                                 $col['VALEUR'] = 'Oui';
                                             } else {
                                                 $col['VALEUR'] = 'Non';
                                             }
                                         }
-                                        $nomValeurDansSegment = 'valeur'.$idxCol;
 
-                                        var_dump($nomFusion);
-                                        var_dump($col);
-                                        var_dump($nomValeurDansSegment);
-
-                                        setVars($segmentTableau, $nomValeurDansSegment, $col['VALEUR'] ?? '');
-
+                                        setVars($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
                                         $idxCol++;
-                                        $segmentTableau->merge();
                                     }
+
+                                    $segmentTableau->merge();
                                 }
                             }
-
                         } else {
                             foreach ($champ['FILS'] as $champFils) {
                                 if ('Case à cocher' === $champFils['TYPE']) {
