@@ -52,7 +52,7 @@ class IndexController extends Zend_Controller_Action
         }
 
         $checkPlatau = $this->servicePlatau->executeHealthcheck();
-        if (null === $checkPlatau) {
+        if (false === $checkPlatau) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'La connexion Plat\'AU a échouée.',

@@ -3,12 +3,16 @@
 class Service_Platau
 {
     private $platauServiceFilePath;
+    private $platauConfigFilePath;
+    private $pisteClientId;
+    private $pisteClientSecret;
     private const HEALTHCHECK_ENDPOINT = '/healthcheck';
 
-    // FIXME Récupérer les secrets
     public function __construct()
     {
         $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.'src/Service/PlatauAbstract.php');
+        $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.'config.json');
+        [$this->pisteClientId, $this->pisteClientSecret] = $this->getPisteCredentials();
     }
 
     /**
@@ -16,27 +20,47 @@ class Service_Platau
      * 
      * @return null|false|string
      */
-    public function executeHealthcheck()
+    public function executeHealthcheck(): bool
     {
         $pisteToken = $this->requestPisteToken();
+
+        if (null === $pisteToken) {
+            return false;
+        }
+
         $platauHealth = $this->requestPlatauHealthcheck($pisteToken);
+        $platauHealth = json_decode($platauHealth);
+
+        if (true !== $platauHealth->etatGeneral || true !== $platauHealth->etatBdd) {
+            return false;
+        }
+
+        return true;
     }
 
-    // FIXME Utiliser Guzzle (v6.5.8) ?
+    private function getPisteCredentials()
+    {
+        $platauConfigContentAsString = file_get_contents($this->platauConfigFilePath);
+        $decodedContent = json_decode($platauConfigContentAsString, true);
+
+        $platauOptions = $decodedContent['platau.options'];
+
+        return [$platauOptions['PISTE_CLIENT_ID'], $platauOptions['PISTE_CLIENT_SECRET']];
+    }
+
     /**
      * Récupère le token PISTE.
      *
-     * @return string|bool
+     * @return string|bool|null
      */
     private function requestPisteToken()
     {
         $url = $this->getConstInFile($this->platauServiceFilePath, 'PISTE_ACCESS_TOKEN_URL');
 
         $curlHandle = curl_init();
-        // FIXME Utiliser les secrets PISTE en variable
         $options = [
             CURLOPT_URL => $url,
-            CURLOPT_POSTFIELDS => 'scope=openid&grant_type=client_credentials&client_id=<client_id>&client_secret=<client_secret>',
+            CURLOPT_POSTFIELDS => sprintf('scope=openid&grant_type=client_credentials&client_id=%s&client_secret=%s', $this->pisteClientId, $this->pisteClientSecret),
             CURLOPT_RETURNTRANSFER => 1,
         ];
         curl_setopt_array($curlHandle, $options);
@@ -44,14 +68,20 @@ class Service_Platau
         $data = curl_exec($curlHandle);
 
         if (false === $data) {
-            throw new Exception('Une erreur s\'est produite lors de la récupération du token PISTE.');
+            error_log('Une erreur s\'est produite lors de la récupération du token PISTE.');
         }
 
         curl_close($curlHandle);
 
-        $decodedData = json_decode($data);
+        $decodedData = json_decode($data, true);
 
-        return $decodedData->access_token;
+        if (array_key_exists('error', $decodedData)) {
+            error_log(sprintf('Erreur lors de la récupération du token PISTE : %s' ,$decodedData['error']));
+
+            return null;
+        }
+
+        return $decodedData['access_token'];
     }
 
     /**
@@ -77,7 +107,7 @@ class Service_Platau
         $data = curl_exec($curlHandle);
         
         if (false === $data) {
-            throw new Exception('Une erreur s\'est produite lors du healthcheck Plat\'AU.');
+            error_log('Une erreur s\'est produite lors du healthcheck Plat\'AU.');
         }
 
         curl_close($curlHandle);
