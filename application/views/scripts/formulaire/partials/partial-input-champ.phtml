@@ -1,8 +1,5 @@
-<?= $this->champ['ID_CHAMP'] ?>
 <?php switch ($this->champ['ID_TYPECHAMP']) {
     // Texte
-    //<!-- FIXME Vérifier si les paramètres sont bien passés, et passer l ID_VALEUR : A modifier dans Service_Descriptif et Service_Valeur -->
-    //<!-- FIXME A faire pour tous les champs -->
     case 1: ?>
         <input
             type='text'
@@ -51,7 +48,6 @@
     <?php break;
     // Parent
     case 6:?>
-        <!-- TODO Idéalement à déporter dans un partial -->
         <?php if(intval(empty($this->champ['tableau']) ? 0 : $this->champ['tableau']) === 1) : ?>
             <?php if(isset($this->canWrite) ? $this->canWrite : false) :?>
                 <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
