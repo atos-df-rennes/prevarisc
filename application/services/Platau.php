@@ -2,11 +2,11 @@
 
 class Service_Platau
 {
+    private const HEALTHCHECK_ENDPOINT = '/healthcheck';
     private $platauServiceFilePath;
     private $platauConfigFilePath;
     private $pisteClientId;
     private $pisteClientSecret;
-    private const HEALTHCHECK_ENDPOINT = '/healthcheck';
 
     public function __construct()
     {
@@ -16,8 +16,8 @@ class Service_Platau
     }
 
     /**
-     * Vérifie la santé de Plat'AU
-     * 
+     * Vérifie la santé de Plat'AU.
+     *
      * @return null|false|string
      */
     public function executeHealthcheck(): bool
@@ -51,7 +51,7 @@ class Service_Platau
     /**
      * Récupère le token PISTE.
      *
-     * @return string|bool|null
+     * @return null|bool|string
      */
     private function requestPisteToken()
     {
@@ -76,7 +76,7 @@ class Service_Platau
         $decodedData = json_decode($data, true);
 
         if (array_key_exists('error', $decodedData)) {
-            error_log(sprintf('Erreur lors de la récupération du token PISTE : %s' ,$decodedData['error']));
+            error_log(sprintf('Erreur lors de la récupération du token PISTE : %s', $decodedData['error']));
 
             return null;
         }
@@ -87,7 +87,7 @@ class Service_Platau
     /**
      * Effectue le healthcheck sur l'API Plat'AU.
      *
-     * @return string|bool
+     * @return bool|string
      */
     private function requestPlatauHealthcheck(string $pisteToken)
     {
@@ -105,7 +105,7 @@ class Service_Platau
         curl_setopt_array($curlHandle, $options);
 
         $data = curl_exec($curlHandle);
-        
+
         if (false === $data) {
             error_log('Une erreur s\'est produite lors du healthcheck Plat\'AU.');
         }
@@ -117,7 +117,7 @@ class Service_Platau
 
     /**
      * Récupère la valeur d'une constante dans un fichier.
-     * e.g. private const PATH = '/home/user/' renvoie /home/user/
+     * e.g. private const PATH = '/home/user/' renvoie /home/user/.
      */
     private function getConstInFile(string $filepath, string $const): ?string
     {
@@ -125,9 +125,7 @@ class Service_Platau
 
         foreach ($fileContent as $line) {
             if (false !== strpos($line, $const)) {
-                $url = explode('\'', $line)[1];
-
-                return $url;
+                return explode('\'', $line)[1];
             }
         }
 
