@@ -794,8 +794,8 @@ foreach ($this->formulaires as $formulaire) {
                     );
 
                     try {
-                        $segmentTableau = $odf->$nomFusion;
-                    } catch (Exception $e) {}
+                        $segmentTableau = $odf->setSegment($nomFusion);
+                    } catch (OdfException $e) {}
 
                     if (isset($segmentTableau)) {
                         foreach ($champ['FILS']['VALEURS'] as $ligne) {
@@ -819,7 +819,7 @@ foreach ($this->formulaires as $formulaire) {
                         }
                     }
 
-                    $segmentTableau = null;
+                    $odf->mergeSegment($segmentTableau);
                 } else {
                     foreach ($champ['FILS'] as $champFils) {
                         $corpsNomenclature = [];
