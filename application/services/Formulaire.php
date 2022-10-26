@@ -213,6 +213,7 @@ class Service_Formulaire
             }
         }
         ksort($arrayReturn);
+
         return $arrayReturn;
     }
 }

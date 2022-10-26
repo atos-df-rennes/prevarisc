@@ -94,10 +94,10 @@ class Service_Valeur
     }
 
     /**
-     * Retourne l idx max d un champ tbaleau
+     * Retourne l idx max d un champ tbaleau.
      */
-    public function getMaxIdx(int $idTableau, int $idEntity, string $classObject):int{
-
+    public function getMaxIdx(int $idTableau, int $idEntity, string $classObject): int
+    {
         $modelValeur = new Model_DbTable_Valeur();
 
         $select = $modelValeur->select()
@@ -106,10 +106,11 @@ class Service_Valeur
             ->join(['c' => 'champ'], 'c.ID_CHAMP = v.ID_CHAMP', ['c.ID_PARENT'])
             ->columns(
                 [
-                    'MAX_IDX' => 'max(v.idx)'
+                    'MAX_IDX' => 'max(v.idx)',
                 ]
             )
-           ->where('c.ID_PARENT = '.$idTableau);
+            ->where('c.ID_PARENT = '.$idTableau)
+        ;
 
         return $modelValeur->fetchRow($select)['MAX_IDX'];
     }
