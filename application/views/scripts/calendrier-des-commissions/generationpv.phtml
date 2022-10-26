@@ -188,7 +188,7 @@ foreach($this->membresFiles as $val => $membre){
                                 // Permet d'avoir les informations unitairement
                                 foreach ($formulaire['RUBRIQUES'] as $rubrique) {
                                     addChamp(
-                                        $odf,
+                                        $dossInfos,
                                         $serviceUtils->getFullFusionName(
                                             $formulaire['NOM_INTERNE'],
                                             [
@@ -200,26 +200,94 @@ foreach($this->membresFiles as $val => $membre){
                                     foreach ($rubrique['CHAMPS'] as $champ) {
                                         //Si le champ est un champ Parent alors ....
                                         if ($champ['ID_TYPECHAMP'] === 6) {
-                                            foreach ($champ['FILS'] as $champFils) {
-                                                if ('Case à cocher' === $champFils['TYPE']) {
-                                                    if (true === boolval($champFils['VALEUR'])) {
-                                                        $champFils['VALEUR'] = 'Oui';
-                                                    } else {
-                                                        $champFils['VALEUR'] = 'Non';
+                                            if (1 === $champ['tableau']) {
+                                                foreach ($champ['FILS'] as $idx => $champFils) {
+                                                    if(is_int($idx)){
+                                                        addChamp(
+                                                            $dossInfos,
+                                                            $serviceUtils->getFullFusionName(
+                                                                $formulaire['NOM_INTERNE'],
+                                                                [
+                                                                    $rubrique['NOM'],
+                                                                    $champ['NOM'],
+                                                                    $champFils['idx']
+                                                                ]
+                                                            ),
+                                                            $champFils['NOM']
+                                                        );
                                                     }
                                                 }
-                                                addChamp(
-                                                    $odf,
-                                                    $serviceUtils->getFullFusionName(
-                                                        $formulaire['NOM_INTERNE'],
-                                                        [
+
+                                                $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                                    $formulaire['NOM_INTERNE'].' '.
+                                                    $rubrique['NOM'].' '.
+                                                    $champ['NOM'].' '.
+                                                    'valeurs'
+                                                );
+
+                                                try {
+                                                    $segmentTableau = $dossInfos->$nomFusion;
+                                                } catch (Exception $e) {}
+
+                                                if (isset($segmentTableau)) {
+                                                    foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                                        $idxCol = 0;
+
+                                                        foreach ($ligne as $col) {
+                                                            // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
+                                                            if (5 === $col['ID_TYPECHAMP']) {
+                                                                if (true === boolval($col['VALEUR'])) {
+                                                                    $col['VALEUR'] = 'Oui';
+                                                                } else {
+                                                                    $col['VALEUR'] = 'Non';
+                                                                }
+                                                            }
+
+                                                            addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                                            $idxCol++;
+                                                        }
+
+                                                        $segmentTableau->merge();
+                                                    }
+                                                }
+
+                                                $segmentTableau = null;
+                                            } else {
+                                                foreach ($champ['FILS'] as $champFils) {
+                                                    $corpsNomenclature = [];
+
+                                                    //Si le parent est un tableau alors on ajoute l'index du fils dans le nom
+                                                    if ($champ['tableau'] === 1) {
+                                                        $corpsNomenclature = [
+                                                            $rubrique['NOM'],
+                                                            $champ['NOM'],
+                                                            $champFils['NOM'],
+                                                            $champFils['idx']
+                                                        ];
+                                                    } else {
+                                                        $corpsNomenclature = [
                                                             $rubrique['NOM'],
                                                             $champ['NOM'],
                                                             $champFils['NOM']
-                                                        ]
-                                                    ),
-                                                    $champFils['VALEUR']
-                                                );
+                                                        ];
+                                                    }
+
+                                                    if ('Case à cocher' === $champFils['TYPE']) {
+                                                        if (true === boolval($champFils['VALEUR'])) {
+                                                            $champFils['VALEUR'] = 'Oui';
+                                                        } else {
+                                                            $champFils['VALEUR'] = 'Non';
+                                                        }
+                                                    }
+                                                    addChamp(
+                                                        $dossInfos,
+                                                        $serviceUtils->getFullFusionName(
+                                                            $formulaire['NOM_INTERNE'],
+                                                            $corpsNomenclature
+                                                        ),
+                                                        $champFils['VALEUR']
+                                                    );
+                                                }
                                             }
                                         } else {
                                             // Définition du libellé pour les cases à cocher
@@ -231,7 +299,7 @@ foreach($this->membresFiles as $val => $membre){
                                                 }
                                             }
                                             addChamp(
-                                                $odf,
+                                                $dossInfos,
                                                 $serviceUtils->getFullFusionName(
                                                     $formulaire['NOM_INTERNE'],
                                                     [
