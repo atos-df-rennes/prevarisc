@@ -2,70 +2,105 @@
 
 class Service_Platau
 {
-    // TODO Séparer les actions dans des fonctions
+    private $platauServiceFilePath;
+    private const HEALTHCHECK_ENDPOINT = '/healthcheck';
+
+    // FIXME Récupérer les secrets
+    public function __construct()
+    {
+        $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.'src/Service/PlatauAbstract.php');
+    }
+
     /**
+     * Vérifie la santé de Plat'AU
+     * 
      * @return null|false|string
      */
     public function executeHealthcheck()
     {
-        // FIXME Utiliser Guzzle (v6.5.8)
-        $platauServiceFile = realpath(PLATAU_PATH.DS.'src/Service/PlatauAbstract.php');
-        $platauServiceFileContent = file($platauServiceFile);
+        $pisteToken = $this->requestPisteToken();
+        $platauHealth = $this->requestPlatauHealthcheck($pisteToken);
+    }
 
-        // URLs
-        $pisteUrl = null;
-        $pisteUrlFound = false;
-        $platauUrl = null;
-        $platauUrlFound = false;
+    // FIXME Utiliser Guzzle (v6.5.8) ?
+    /**
+     * Récupère le token PISTE.
+     *
+     * @return string|bool
+     */
+    private function requestPisteToken()
+    {
+        $url = $this->getConstInFile($this->platauServiceFilePath, 'PISTE_ACCESS_TOKEN_URL');
 
-        // TODO Récupérer les secrets (PISTE_CLIENT_ID, PISTE_CLIENT_SECRET)
-
-        foreach ($platauServiceFileContent as $line) {
-            if (!$pisteUrlFound && false !== strpos($line, 'PISTE_ACCESS_TOKEN_URL')) {
-                $pisteUrl = $line;
-                $pisteUrlFound = true;
-            }
-
-            if (!$platauUrlFound && false !== strpos($line, 'PLATAU_URL')) {
-                $platauUrl = $line;
-                $platauUrlFound = true;
-            }
-        }
-
-        if (null !== $pisteUrl) {
-            $pisteUrl = explode('\'', $pisteUrl)[1];
-        }
-
-        $pisteCurlHandle = curl_init();
-        // FIXME Récupérer les secrets
+        $curlHandle = curl_init();
+        // FIXME Utiliser les secrets PISTE en variable
         $options = [
-            CURLOPT_URL => $pisteUrl,
+            CURLOPT_URL => $url,
             CURLOPT_POSTFIELDS => 'scope=openid&grant_type=client_credentials&client_id=<client_id>&client_secret=<client_secret>',
+            CURLOPT_RETURNTRANSFER => 1,
         ];
-        curl_setopt_array($pisteCurlHandle, $options);
-        $pisteData = curl_exec($pisteCurlHandle);
+        curl_setopt_array($curlHandle, $options);
 
-        if (false === $pisteData) {
-            throw new Exception('Une erreur s\'est produite lors de la récupération du token.');
-        }
-        curl_close($pisteCurlHandle);
+        $data = curl_exec($curlHandle);
 
-        if (null !== $platauUrl) {
-            $platauUrl = explode('\'', $platauUrl)[1];
+        if (false === $data) {
+            throw new Exception('Une erreur s\'est produite lors de la récupération du token PISTE.');
         }
-        
-        $platauCurlHandle = curl_init();
+
+        curl_close($curlHandle);
+
+        $decodedData = json_decode($data);
+
+        return $decodedData->access_token;
+    }
+
+    /**
+     * Effectue le healthcheck sur l'API Plat'AU.
+     *
+     * @return string|bool
+     */
+    private function requestPlatauHealthcheck(string $pisteToken)
+    {
+        $url = $this->getConstInFile($this->platauServiceFilePath, 'PLATAU_URL').self::HEALTHCHECK_ENDPOINT;
+
+        $curlHandle = curl_init();
         $options = [
-            CURLOPT_URL => $platauUrl,
-            // FIXME Mettre le token récupéré dans la requête à l'API Piste
-            CURLOPT_XOAUTH2_BEARER => $pisteData,
+            CURLOPT_URL => $url,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                sprintf('Authorization: Bearer %s', $pisteToken),
+            ],
+            CURLOPT_RETURNTRANSFER => 1,
         ];
-        curl_setopt($platauCurlHandle, CURLOPT_URL, $platauUrl);
-        $platauData = curl_exec($platauCurlHandle);
+        curl_setopt_array($curlHandle, $options);
 
-        if (false === $platauData) {
+        $data = curl_exec($curlHandle);
+        
+        if (false === $data) {
             throw new Exception('Une erreur s\'est produite lors du healthcheck Plat\'AU.');
         }
-        curl_close($platauCurlHandle);
+
+        curl_close($curlHandle);
+
+        return $data;
+    }
+
+    /**
+     * Récupère la valeur d'une constante dans un fichier.
+     * e.g. private const PATH = '/home/user/' renvoie /home/user/
+     */
+    private function getConstInFile(string $filepath, string $const): ?string
+    {
+        $fileContent = file($filepath);
+
+        foreach ($fileContent as $line) {
+            if (false !== strpos($line, $const)) {
+                $url = explode('\'', $line)[1];
+
+                return $url;
+            }
+        }
+
+        return null;
     }
 }
