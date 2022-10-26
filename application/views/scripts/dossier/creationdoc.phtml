@@ -795,7 +795,7 @@ foreach ($this->formulaires as $formulaire) {
 
                     try {
                         $segmentTableau = $odf->setSegment($nomFusion);
-                    } catch (OdfException $e) {}
+                    } catch (Exception $e) {}
 
                     if (isset($segmentTableau)) {
                         foreach ($champ['FILS']['VALEURS'] as $ligne) {

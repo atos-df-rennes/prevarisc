@@ -226,26 +226,81 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                             foreach ($rubrique['CHAMPS'] as $champ) {
                                 //Si le champ est un champ Parent alors ....
                                 if($champ['ID_TYPECHAMP'] === 6){
-                                    foreach ($champ['FILS'] as $champFils) {
-                                        if ('Case à cocher' === $champFils['TYPE']) {
-                                            if (true === boolval($champFils['VALEUR'])) {
-                                                $champFils['VALEUR'] = 'Oui';
-                                            } else {
-                                                $champFils['VALEUR'] = 'Non';
+                                    if (1 === $champ['tableau']) {
+                                        foreach ($champ['FILS'] as $idx => $champFils) {
+                                            if(is_int($idx)){
+                                                addChamp(
+                                                    $dossInfos,
+                                                    $serviceUtils->getFullFusionName(
+                                                        $formulaire['NOM_INTERNE'],
+                                                        [
+                                                            $rubrique['NOM'],
+                                                            $champ['NOM'],
+                                                            $champFils['idx']
+                                                        ]
+                                                    ),
+                                                    $champFils['NOM']
+                                                );
                                             }
                                         }
-                                        addChamp(
-                                            $dossInfos,
-                                            $serviceUtils->getFullFusionName(
-                                                $formulaire['NOM_INTERNE'],
-                                                [
-                                                    $rubrique['NOM'],
-                                                    $champ['NOM'],
-                                                    $champFils['NOM']
-                                                ]
-                                            ),
-                                            $champFils['VALEUR']
+
+                                        $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                            $formulaire['NOM_INTERNE'].' '.
+                                            $rubrique['NOM'].' '.
+                                            $champ['NOM'].' '.
+                                            'valeurs'
                                         );
+
+                                        try {
+                                            $segmentTableau = $dossInfos->$nomFusion;
+                                        } catch (Exception $e) {}
+
+                                        if (isset($segmentTableau)) {
+                                            foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                                $idxCol = 0;
+
+                                                foreach ($ligne as $col) {
+                                                    // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
+                                                    if (5 === $col['ID_TYPECHAMP']) {
+                                                        if (true === boolval($col['VALEUR'])) {
+                                                            $col['VALEUR'] = 'Oui';
+                                                        } else {
+                                                            $col['VALEUR'] = 'Non';
+                                                        }
+                                                    }
+
+                                                    addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                                    $idxCol++;
+                                                }
+
+                                                $segmentTableau->merge();
+                                            }
+
+                                        }
+
+                                        $segmentTableau = null;
+                                    } else {
+                                        foreach ($champ['FILS'] as $champFils) {
+                                            if ('Case à cocher' === $champFils['TYPE']) {
+                                                if (true === boolval($champFils['VALEUR'])) {
+                                                    $champFils['VALEUR'] = 'Oui';
+                                                } else {
+                                                    $champFils['VALEUR'] = 'Non';
+                                                }
+                                            }
+                                            addChamp(
+                                                $dossInfos,
+                                                $serviceUtils->getFullFusionName(
+                                                    $formulaire['NOM_INTERNE'],
+                                                    [
+                                                        $rubrique['NOM'],
+                                                        $champ['NOM'],
+                                                        $champFils['NOM']
+                                                    ]
+                                                ),
+                                                $champFils['VALEUR']
+                                            );
+                                        }
                                     }
                                 }else{
                                     // Définition du libellé pour les cases à cocher
