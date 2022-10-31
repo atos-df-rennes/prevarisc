@@ -2,6 +2,11 @@
 
 class CouchesCartographiquesController extends Zend_Controller_Action
 {
+    /**
+     * @var mixed|Service_Carto
+     */
+    public $serviceCarto;
+
     public function init(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
@@ -97,7 +102,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
                 $explodedKey = explode('-', $key);
                 $idCoucheCarto = end($explodedKey);
 
-                $this->serviceCarto->save(['ORDRE_COUCHECARTO' => $ordreCoucheCarto], intval($idCoucheCarto));
+                $this->serviceCarto->save(['ORDRE_COUCHECARTO' => $ordreCoucheCarto], (int) $idCoucheCarto);
             }
 
             $this->redirect('/couches-cartographiques/list');

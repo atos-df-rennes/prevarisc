@@ -46,16 +46,16 @@ class SearchController extends Zend_Controller_Action
             if (isset($_GET['Exporter'])) {
                 try {
                     $parameters = $this->_request->getQuery();
-                    $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
+                    $page = $parameters['page'] ?? null;
                     $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
                     $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
-                    $genres = array_key_exists('genres', $parameters) ? $parameters['genres'] : null;
-                    $categories = array_key_exists('categories', $parameters) ? $parameters['categories'] : null;
-                    $classes = array_key_exists('classes', $parameters) ? $parameters['classes'] : null;
-                    $familles = array_key_exists('familles', $parameters) ? $parameters['familles'] : null;
-                    $types_activites = array_key_exists('types_activites', $parameters) ? $parameters['types_activites'] : null;
+                    $genres = $parameters['genres'] ?? null;
+                    $categories = $parameters['categories'] ?? null;
+                    $classes = $parameters['classes'] ?? null;
+                    $familles = $parameters['familles'] ?? null;
+                    $types_activites = $parameters['types_activites'] ?? null;
                     $avis_favorable = array_key_exists('avis', $parameters) && 1 == count($parameters['avis']) ? 'true' == $parameters['avis'][0] : null;
-                    $statuts = array_key_exists('statuts', $parameters) ? $parameters['statuts'] : null;
+                    $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
                     $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
@@ -229,16 +229,16 @@ class SearchController extends Zend_Controller_Action
 
                 try {
                     $parameters = $this->_request->getQuery();
-                    $page = array_key_exists('page', $parameters) ? $parameters['page'] : null;
+                    $page = $parameters['page'] ?? null;
                     $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
                     $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
-                    $genres = array_key_exists('genres', $parameters) ? $parameters['genres'] : null;
-                    $categories = array_key_exists('categories', $parameters) ? $parameters['categories'] : null;
-                    $classes = array_key_exists('classes', $parameters) ? $parameters['classes'] : null;
-                    $familles = array_key_exists('familles', $parameters) ? $parameters['familles'] : null;
-                    $types_activites = array_key_exists('types_activites', $parameters) ? $parameters['types_activites'] : null;
+                    $genres = $parameters['genres'] ?? null;
+                    $categories = $parameters['categories'] ?? null;
+                    $classes = $parameters['classes'] ?? null;
+                    $familles = $parameters['familles'] ?? null;
+                    $types_activites = $parameters['types_activites'] ?? null;
                     $avis_favorable = array_key_exists('avis', $parameters) && 1 == count($parameters['avis']) ? 'true' == $parameters['avis'][0] : null;
-                    $statuts = array_key_exists('statuts', $parameters) ? $parameters['statuts'] : null;
+                    $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
                     $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
@@ -246,17 +246,15 @@ class SearchController extends Zend_Controller_Action
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $groupements_territoriaux = $parameters['groupements_territoriaux'];
-                    } else {
-                        if (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
-                            $groupements_territoriaux = [];
-                            foreach ($this->view->user['groupements'] as $groupement) {
-                                if (null != $groupement['ID_GROUPEMENT']) {
-                                    array_push($groupements_territoriaux, $groupement['ID_GROUPEMENT']);
-                                }
+                    } elseif (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
+                        $groupements_territoriaux = [];
+                        foreach ($this->view->user['groupements'] as $groupement) {
+                            if (null != $groupement['ID_GROUPEMENT']) {
+                                $groupements_territoriaux[] = $groupement['ID_GROUPEMENT'];
                             }
-                        } else {
-                            $groupements_territoriaux = null;
                         }
+                    } else {
+                        $groupements_territoriaux = null;
                     }
 
                     $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, 50, $page);
@@ -315,11 +313,11 @@ class SearchController extends Zend_Controller_Action
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && '' != $parameters['permis'] ? $parameters['permis'] : null;
                     $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' != (string) $parameters['objet'][0] ? $parameters['objet'] : null;
-                    $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
+                    $types = $parameters['types'] ?? null;
                     $criteresRecherche = [];
-                    $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
-                    $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
-                    $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
+                    $criteresRecherche['commissions'] = $parameters['commissions'] ?? null;
+                    $criteresRecherche['avisCommission'] = $parameters['avisCommission'] ?? null;
+                    $criteresRecherche['avisRapporteur'] = $parameters['avisRapporteur'] ?? null;
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
@@ -482,11 +480,11 @@ class SearchController extends Zend_Controller_Action
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && '' != $parameters['permis'] ? $parameters['permis'] : null;
                     $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' != (string) $parameters['objet'][0] ? $parameters['objet'] : null;
-                    $types = array_key_exists('types', $parameters) ? $parameters['types'] : null;
+                    $types = $parameters['types'] ?? null;
                     $criteresRecherche = [];
-                    $criteresRecherche['commissions'] = array_key_exists('commissions', $parameters) ? $parameters['commissions'] : null;
-                    $criteresRecherche['avisCommission'] = array_key_exists('avisCommission', $parameters) ? $parameters['avisCommission'] : null;
-                    $criteresRecherche['avisRapporteur'] = array_key_exists('avisRapporteur', $parameters) ? $parameters['avisRapporteur'] : null;
+                    $criteresRecherche['commissions'] = $parameters['commissions'] ?? null;
+                    $criteresRecherche['avisCommission'] = $parameters['avisCommission'] ?? null;
+                    $criteresRecherche['avisRapporteur'] = $parameters['avisRapporteur'] ?? null;
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
@@ -508,17 +506,15 @@ class SearchController extends Zend_Controller_Action
 
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $criteresRecherche['groupements_territoriaux'] = $parameters['groupements_territoriaux'];
-                    } else {
-                        if (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
-                            $criteresRecherche['groupements_territoriaux'] = [];
-                            foreach ($this->view->user['groupements'] as $groupement) {
-                                if (null != $groupement['ID_GROUPEMENT']) {
-                                    array_push($criteresRecherche['groupements_territoriaux'], $groupement['ID_GROUPEMENT']);
-                                }
+                    } elseif (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
+                        $criteresRecherche['groupements_territoriaux'] = [];
+                        foreach ($this->view->user['groupements'] as $groupement) {
+                            if (null != $groupement['ID_GROUPEMENT']) {
+                                $criteresRecherche['groupements_territoriaux'][] = $groupement['ID_GROUPEMENT'];
                             }
-                        } else {
-                            $criteresRecherche['groupements_territoriaux'] = null;
                         }
+                    } else {
+                        $criteresRecherche['groupements_territoriaux'] = null;
                     }
 
                     $search = $service_search->dossiers($types, $objet, $num_doc_urba, null, null, 50, $page, $criteresRecherche);
@@ -551,7 +547,7 @@ class SearchController extends Zend_Controller_Action
                 $parameters = $this->_request->getQuery();
                 $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                 $name = $parameters['name'];
-                $fonctions = array_key_exists('fonctions', $parameters) ? $parameters['fonctions'] : null;
+                $fonctions = $parameters['fonctions'] ?? null;
 
                 $search = $service_search->users($fonctions, $name, null, true, 50, $page);
 

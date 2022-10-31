@@ -58,17 +58,13 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
         $indent = (null !== $indent) ? $this->getWhitespace($indent) : $this->getIndent();
 
         // Determining the appropriate way to handle inline scripts
-        if ($this->view) {
-            $useCdata = $this->view->doctype()->isXhtml() ? true : false;
-        } else {
-            $useCdata = $this->useCdata ? true : false;
-        }
+        $useCdata = $this->view ? (bool) $this->view->doctype()->isXhtml() : $this->useCdata;
 
         $escapeStart = ($useCdata) ? '//<![CDATA[' : '//<!--';
         $escapeEnd = ($useCdata) ? '//]]>' : '//-->';
 
         $this->getContainer()->ksort();
-        foreach ($this as $i => $item) {
+        foreach ($this as $item) {
             if ($this->_isNeedToMinify($item)) {
                 if (!empty($item->attributes['minify_split_before']) || !empty($item->attributes['minify_split'])) {
                     $items[] = $this->_generateMinifyItem($scripts);
@@ -80,14 +76,14 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
                     $scripts = [];
                 }
             } else {
-                if ($scripts) {
+                if ([] !== $scripts) {
                     $items[] = $this->_generateMinifyItem($scripts);
                     $scripts = [];
                 }
                 $items[] = $this->itemToString($item, $indent, $escapeStart, $escapeEnd);
             }
         }
-        if ($scripts) {
+        if ([] !== $scripts) {
             $items[] = $this->_generateMinifyItem($scripts);
         }
 

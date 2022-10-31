@@ -395,7 +395,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->order('datecommission.DATE_COMMISSION desc')
         ;
 
-        if (count($ids) > 0) {
+        if ([] !== $ids) {
             $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
         }
 
@@ -409,7 +409,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         // Dossiers avec avis différé
         $search = new Model_DbTable_Search();
         $search->setItem('dossier');
-        if (count($ids) > 0) {
+        if ([] !== $ids) {
             $search->setCriteria('d.COMMISSION_DOSSIER', $ids);
         }
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);

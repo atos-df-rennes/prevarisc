@@ -2,6 +2,11 @@
 
 class IndexController extends Zend_Controller_Action
 {
+    /**
+     * @var mixed|\Service_Platau
+     */
+    public $servicePlatau;
+
     public function init()
     {
         $this->servicePlatau = new Service_Platau();

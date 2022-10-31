@@ -56,6 +56,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
      */
     public function replaceId($idOldType, $idNewType)
     {
+        $where = [];
         $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];
         $where[] = 'ID_PRESCRIPTION_TYPE = '.$idOldType;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc

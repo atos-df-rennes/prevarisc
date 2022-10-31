@@ -302,9 +302,9 @@ class EtablissementController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             try {
                 $post = $this->_request->getPost();
-                $name = isset($post['name']) ? $post['name'] : '';
-                $description = isset($post['description']) ? $post['description'] : '';
-                $mise_en_avant = isset($post['mise_en_avant']) ? $post['mise_en_avant'] : 0;
+                $name = $post['name'] ?? '';
+                $description = $post['description'] ?? '';
+                $mise_en_avant = $post['mise_en_avant'] ?? 0;
                 $service_etablissement->addPJ($this->_request->id, $_FILES['file'], $name, $description, $mise_en_avant);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'La pièce jointe a bien été ajoutée.']);
             } catch (Exception $e) {

@@ -25,11 +25,15 @@ class Service_Login
             $model_fonction = new Model_DbTable_Fonction();
 
             // Récupération de l'utilisateur
-            $user = $model_utilisateur->fetchRow($model_utilisateur->select()->where('USERNAME_UTILISATEUR = ?', $username, 'AND PASSWD_UTILISATEUR = ?', $password));
+            $user = $model_utilisateur->fetchRow(
+                $model_utilisateur->select()
+                    ->where('USERNAME_UTILISATEUR = ?', $username)
+                    ->where('PASSWD_UTILISATEUR = ?', $password)
+            );
 
             // Si l'utilisateur n'est pas actif, on renvoie false
             if (
-                null === $user
+                !$user instanceof \Zend_Db_Table_Row_Abstract
                 || !$user->ACTIF_UTILISATEUR
                 || md5($username.getenv('PREVARISC_SECURITY_SALT').$password) != $user->PASSWD_UTILISATEUR
             ) {
@@ -49,8 +53,6 @@ class Service_Login
                 $row_utilisateurInformations = $model_utilisateurInformations->find($user->ID_UTILISATEURINFORMATIONS)->current();
                 $row_groupe = $model_groupe->find($user->ID_GROUPE)->current();
                 $row_fonction = $model_fonction->find($row_utilisateurInformations->ID_FONCTION)->current();
-
-                $secret_key = 'login';
                 $time = time();
 
                 // les informations (ici: id de l'utilisateur et la date de création du jeton)
@@ -59,7 +61,7 @@ class Service_Login
                 $informations = $user->ID_UTILISATEUR;
 
                 // On encode le jeton
-                $token = hash('sha256', $time + $secret_key.$informations);
+                $token = hash('sha256', $time + $informations);
 
                 $results = [
                     'reponse' => $reponse,

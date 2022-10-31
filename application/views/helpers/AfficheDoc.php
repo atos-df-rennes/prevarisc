@@ -37,7 +37,8 @@ class View_Helper_AfficheDoc
         if ($type) {
             $return .= "<textarea name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;width:100%;'>".nl2br($libelle).'</textarea>';
         }
-        $return .= '
+
+        return $return.('
                     <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
                 </div>
                 <div id='div_input_".$natureId.'_'.$id.$type."' class='span7' style='".$styleInput."'>
@@ -62,8 +63,6 @@ class View_Helper_AfficheDoc
                 <br class='clear'/>
             </li>
             <br class='clear'/>
-        ";
-
-        return $return;
+        ");
     }
 }

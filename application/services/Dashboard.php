@@ -372,7 +372,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisNonVerrouilles($user)
     {
-        $dossiers = [];
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -387,8 +386,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisSansAvis($user)
     {
-        $dossiers = [];
-
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -434,11 +431,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
                 if (
                     self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
@@ -467,11 +460,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
                 if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
@@ -497,11 +486,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
                 if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);

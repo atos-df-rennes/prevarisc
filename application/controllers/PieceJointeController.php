@@ -45,6 +45,8 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function getAction()
     {
+        $type = null;
+        $identifiant = null;
         // Modèles
         $DBused = new Model_DbTable_PieceJointe();
 
@@ -355,7 +357,7 @@ class PieceJointeController extends Zend_Controller_Action
             $listePj = [];
         }
 
-        $pj = !empty($listePj) ? $listePj[0] : null;
+        $pj = empty($listePj) ? null : $listePj[0];
 
         if (!$pj) {
             return;

@@ -36,11 +36,9 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
 
         $result = $this->getAdapter()->fetchAll($select);
         if (!empty($result)) {
-            $result = $result[0];
-        } else {
-            $result = null;
+            return $result[0];
         }
 
-        return $result;
+        return null;
     }
 }

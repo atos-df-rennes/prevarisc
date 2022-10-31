@@ -187,15 +187,24 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Periodicite
             if (1 == $informations->ID_GENRE) {
                 foreach ($etablissement_lies as $etablissement) {
-                    if (
-                        self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']
-                        || (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
-                            || 0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS'])
-                        || self::ID_STATUS_OUVERT != $etablissement['ID_STATUT']
-                    ) {
+                    if (self::ID_GENRE_ETABLISSEMENT != $etablissement['ID_GENRE']) {
                         continue;
                     }
-
+                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (null === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (0 === $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
+                        continue;
+                    }
+                    if (self::ID_STATUS_OUVERT != $etablissement['ID_STATUT']) {
+                        continue;
+                    }
                     if (
                         null === $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS']
                         || $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] > $etablissement['PERIODICITE_ETABLISSEMENTINFORMATIONS']
@@ -262,9 +271,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $DB_information = new Model_DbTable_EtablissementInformations();
         $DB_categorie = new Model_DbTable_Categorie();
-        $DB_famille = new Model_DbTable_Famille();
         $DB_type = new Model_DbTable_Type();
-        $DB_classe = new Model_DbTable_Classe();
         $DB_utilisateurs = new Model_DbTable_Utilisateur();
         $DB_utilisateursInfo = new Model_DbTable_UtilisateurInformations();
         $DB_statut = new Model_DbTable_Statut();
@@ -356,8 +363,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
         @usort($dossiers_merged, function ($a, $b) {
             $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-
-            if ($date_a == $date_b || null === $a || null === $b) {
+            if ($date_a == $date_b) {
+                return 0;
+            }
+            if (null === $a) {
+                return 0;
+            }
+            if (null === $b) {
                 return 0;
             }
             if ($date_a < $date_b) {
@@ -412,7 +424,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $dossier_types = $dossier_types->fetchAll()->toArray();
         $i = 0;
         $types_autre = [];
-        foreach ($dossier_types as $key => $type) {
+        foreach ($dossier_types as $type) {
             if (1 != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE != $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE != $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = (int) $type['ID_DOSSIERTYPE'];
                 ++$i;
@@ -683,7 +695,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
     {
         $DB_information = new Model_DbTable_EtablissementInformations();
 
-        return (null != ($DB_information->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'"))) ? true : false;
+        return null != $DB_information->fetchRow("ID_ETABLISSEMENT = '".$id_etablissement."' AND DATE_ETABLISSEMENTINFORMATIONS = '".$date."'");
     }
 
     /**
@@ -792,7 +804,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = (int) $data['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
-                    $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS = $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS ? (int) $data['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] : null;
+                    $informations->EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS = 0 !== $informations->LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS ? (int) $data['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS'] : null;
                     $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $informations->ID_COMMISSION = $data['ID_COMMISSION'];
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
@@ -869,7 +881,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];
             $informations->ID_GENRE = $id_genre;
-            $informations->ID_STATUT = isset($data['ID_STATUT']) ? $data['ID_STATUT'] : 1;
+            $informations->ID_STATUT = $data['ID_STATUT'] ?? 1;
             $informations->UTILISATEUR_ETABLISSEMENTINFORMATIONS = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
             $informations->ID_ETABLISSEMENT = $etablissement->ID_ETABLISSEMENT;
 
@@ -893,10 +905,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     if ($key > 0) {
                         $DB_rubrique->createRow([
                             'ID_RUBRIQUE' => $rubrique['ID_RUBRIQUE'],
-                            'NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : (int) $rubrique['NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : (float) $rubrique['VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : $rubrique['NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
-                            'CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE' => !array_key_exists('CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? null : $rubrique['CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE'],
+                            'NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE' => array_key_exists('NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? (int) $rubrique['NUMERO_ETABLISSEMENTINFORMATIONSRUBRIQUE'] : null,
+                            'VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE' => array_key_exists('VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE', $rubrique) ? (float) $rubrique['VALEUR_ETABLISSEMENTINFORMATIONSRUBRIQUE'] : null,
+                            'NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE' => $rubrique['NOM_ETABLISSEMENTINFORMATIONSRUBRIQUE'] ?? null,
+                            'CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE' => $rubrique['CLASSEMENT_ETABLISSEMENTINFORMATIONSRUBRIQUE'] ?? null,
                             'ID_ETABLISSEMENTINFORMATIONS' => $informations->ID_ETABLISSEMENTINFORMATIONS,
                         ])->save();
                     }
@@ -909,9 +921,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     if ($key > 0) {
                         $DB_plans->createRow([
                             'ID_ETABLISSEMENTINFORMATIONS' => $informations->ID_ETABLISSEMENTINFORMATIONS,
-                            'NUMERO_ETABLISSEMENTPLAN' => !array_key_exists('NUMERO_ETABLISSEMENTPLAN', $plan) ? null : $plan['NUMERO_ETABLISSEMENTPLAN'],
-                            'DATE_ETABLISSEMENTPLAN' => !array_key_exists('DATE_ETABLISSEMENTPLAN', $plan) ? null : $plan['DATE_ETABLISSEMENTPLAN'],
-                            'MISEAJOUR_ETABLISSEMENTPLAN' => !array_key_exists('MISEAJOUR_ETABLISSEMENTPLAN', $plan) ? null : $plan['MISEAJOUR_ETABLISSEMENTPLAN'],
+                            'NUMERO_ETABLISSEMENTPLAN' => $plan['NUMERO_ETABLISSEMENTPLAN'] ?? null,
+                            'DATE_ETABLISSEMENTPLAN' => $plan['DATE_ETABLISSEMENTPLAN'] ?? null,
+                            'MISEAJOUR_ETABLISSEMENTPLAN' => $plan['MISEAJOUR_ETABLISSEMENTPLAN'] ?? null,
                             'ID_TYPEPLAN' => $plan['ID_TYPEPLAN'],
                         ])->save();
                     }
@@ -1087,7 +1099,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
@@ -1123,7 +1135,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || (null !== $id_etablissement_pere && '' != $id_etablissement_pere)) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
@@ -1131,7 +1143,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             default:
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
-                    $results['preventionnistes'] = $model_prev->getPrev(null === $numinsee ? '' : $numinsee, null === $id_etablissement_pere ? '' : $id_etablissement_pere);
+                    $results['preventionnistes'] = $model_prev->getPrev($numinsee ?? '', $id_etablissement_pere ?? '');
                 }
 
                 break;
@@ -1201,23 +1213,20 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             throw new Exception($msg);
-        } else {
-            $DBsave = new Model_DbTable_EtablissementPj();
-
-            $DBsave->createRow([
-                'ID_ETABLISSEMENT' => $id_etablissement,
-                'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-                'PLACEMENT_ETABLISSEMENTPJ' => 0 != (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
-            ])->save();
-
-            if (in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])) {
-                $miniature = $piece_jointe;
-                $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
-                $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
-                GD_Resize::run($file_path, $miniature_path, 450);
-                if (!is_file($miniature_path)) {
-                    throw new Exception("Cannot create miniature file: {$miniature_path}");
-                }
+        }
+        $DBsave = new Model_DbTable_EtablissementPj();
+        $DBsave->createRow([
+            'ID_ETABLISSEMENT' => $id_etablissement,
+            'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
+            'PLACEMENT_ETABLISSEMENTPJ' => 0 != (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
+        ])->save();
+        if (in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])) {
+            $miniature = $piece_jointe;
+            $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
+            $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
+            GD_Resize::run($file_path, $miniature_path, 450);
+            if (!is_file($miniature_path)) {
+                throw new Exception("Cannot create miniature file: {$miniature_path}");
             }
         }
 
@@ -1346,7 +1355,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         // Appartient à d'autre ets ?
         $exist = false;
-        foreach ($DB_contact as $key => $model) {
+        foreach ($DB_contact as $model) {
             if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                 $exist = true;
             }
@@ -1411,13 +1420,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 if (null !== $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
                     $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()->delete();
                 }
-            } else {
-                if (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
-                    $row = $etsTexteApplicable->createRow();
-                    $row->ID_TEXTESAPPL = $id_texte_applicable;
-                    $row->ID_ETABLISSEMENT = $id_etablissement;
-                    $row->save();
-                }
+            } elseif (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+                $row = $etsTexteApplicable->createRow();
+                $row->ID_TEXTESAPPL = $id_texte_applicable;
+                $row->ID_ETABLISSEMENT = $id_etablissement;
+                $row->save();
             }
         }
     }
@@ -1468,20 +1475,16 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
     private function compareActivitesSecondaires($ets, $postData): bool
     {
-        $result = false;
-
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {
             if (!array_key_exists(
                 $typesASecondaires[
                 'ID_ETABLISSEMENTINFORMATIONSTYPESACTIVITESSECONDAIRES'],
                 $postData['TYPES_ACTIVITES_SECONDAIRES']
             )) {
-                $result = true;
-
-                break;
+                return true;
             }
         }
 
-        return $result;
+        return false;
     }
 }
