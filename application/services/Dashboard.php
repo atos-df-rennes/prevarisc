@@ -174,13 +174,13 @@ class Service_Dashboard
             'width' => 'small',
         ],
 
-        // bloc npsp
+        // bloc plat'au
         'dossierPlatau' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersPlatAUSansEtablissement',
             'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
             'title' => 'Dossiers Plat\'AU à traiter',
-            'type' => 'dossierPlatau',
+            'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
         ],
@@ -408,9 +408,12 @@ class Service_Dashboard
      */
     public function getDossiersPlatAUSansEtablissement()
     {
-        $dbDossier = new Model_DbTable_Dossier();
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier');
+        $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
 
-        return $dbDossier->getAllDossierPlatAU();
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getLeveePresc()

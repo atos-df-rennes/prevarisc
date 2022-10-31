@@ -2,6 +2,11 @@
 
 class IndexController extends Zend_Controller_Action
 {
+    public function init()
+    {
+        $this->servicePlatau = new Service_Platau();
+    }
+
     public function indexAction()
     {
         $service_user = new Service_User();
@@ -46,6 +51,15 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
+        $checkPlatau = $this->servicePlatau->executeHealthcheck();
+        if (false === $checkPlatau) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'La connexion Plat\'AU a échouée.',
+                'message' => 'Veuillez suivre les instructions du Manuel Utilisateur §6.17.2',
+            ]);
+        }
+
         $this->view->user = $user;
         $this->view->blocs = $blocs;
         $this->view->blocsOrder = $blocsOrder;
@@ -78,6 +92,7 @@ class IndexController extends Zend_Controller_Action
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],
                 'width' => $blocConfig['width'],
+                'error' => $this->_helper->flashMessenger->getMessages() ? $this->_helper->flashMessenger->getMessages()[0] : null,
             ];
         }
 
