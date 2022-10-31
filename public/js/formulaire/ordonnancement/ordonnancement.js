@@ -43,6 +43,7 @@ window.onload = function() {
 
     for (let i = 0; i < listGrp.length; i++) {
         new Sortable.create(document.getElementById(listGrp[i].id), {
+            handle: '.tdMove',
             group: listGrp[i].id,
             animation: 100
         })
