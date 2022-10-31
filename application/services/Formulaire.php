@@ -43,7 +43,6 @@ class Service_Formulaire
 
     public function insertChamp(array $champ, array $rubrique, bool $isParent = false): array
     {
-        $modelChamp = new Model_DbTable_Champ();
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
 
@@ -69,7 +68,7 @@ class Service_Formulaire
             $dataToInsert['ID_PARENT'] = $champ['ID_CHAMP_PARENT'];
         }
 
-        $idChamp = $modelChamp->insert($dataToInsert);
+        $idChamp = $this->modelChamp->insert($dataToInsert);
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
@@ -85,26 +84,23 @@ class Service_Formulaire
             }
         }
 
-        return $modelChamp->find($idChamp)->current()->toArray();
+        return $this->modelChamp->find($idChamp)->current()->toArray();
     }
 
     public function addRowTable(int $idChamp, int $idEntity, string $nomEntity, $idx = null): void
     {
         //Recuperation structure ligne tableau
-        $modelChamp = new Model_DbTable_Champ();
-
-        $structureLigneTableau = $modelChamp->getAllFils($idChamp);
+        $structureLigneTableau = $this->modelChamp->getAllFils($idChamp);
 
         foreach ($structureLigneTableau as $champ) {
             $serviceValeur = new Service_Valeur();
-            $res = $serviceValeur->insert($champ['ID_CHAMP'], $idEntity, $nomEntity, null, $idx);
+            $serviceValeur->insert($champ['ID_CHAMP'], $idEntity, $nomEntity, null, $idx);
         }
     }
 
     public function deleteRowTable(int $idChampParent, string $entity, int $idEntity, $idx): void
     {
         //suppression des fk
-
         switch ($entity) {
             case 'Etablissement':
                 $modelEtablissementValeur = new Model_DbTable_Valeur();
@@ -158,7 +154,7 @@ class Service_Formulaire
             ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [''])
             ->where('c.ID_CHAMP = ?', $idChampParent)
             ->where('v.idx = ?', $idx)
-                    ;
+        ;
         //is_integer($idx) ? $select->where('v.idx = ?', $idx) : $select->where('v.idx IS NULL');
 
         foreach ($modelValeur->fetchAll($select)->toArray() as $ev) {
