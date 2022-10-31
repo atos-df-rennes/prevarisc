@@ -28,17 +28,25 @@ class Service_Valeur
 
     public function getAll(int $idChamp, int $idObject, string $classObject)
     {
+        $typeChamp = $this->getTypeValeur($idChamp);
         $valeurs = $this->modelValeur->getAllByChampAndObject($idChamp, $idObject, $classObject);
+
         $retourValeurs = [];
-        //TODO check valeur tableau
         if (!empty($valeurs)) {
             foreach ($valeurs as $valeur) {
-                $strData = 'valeur-'.$valeur['idx'].'-'.$valeur['ID_PARENT'].'-'.$valeur['ID_CHAMP'].'-';
-                isset($valeur['ID_VALEUR']) ? $strData .= $valeur['ID_VALEUR'] : $strData .= 'NULL';
+                $strDataValues = [
+                    'valeur',
+                    $valeur['idx'],
+                    $valeur['ID_PARENT'],
+                    $valeur['ID_CHAMP'],
+                    $valeur['ID_VALEUR'] ?? 'NULL',
+                ];
+                $strData = implode('-', $strDataValues);
 
+                // TODO Passer le type en string via $typeChamp plutôt que ou en plus de l'ID_TYPECHAMP ?
                 $retourValeurs[] =
                     [
-                        'VALEUR' => $valeur[$this->getTypeValeur($idChamp)],
+                        'VALEUR' => $valeur[$typeChamp],
                         'ID_VALEUR' => $valeur['ID_VALEUR'],
                         'IDX_VALEUR' => $valeur['idx'],
                         'ID_PARENT' => $valeur['ID_PARENT'],
@@ -52,7 +60,7 @@ class Service_Valeur
         return $retourValeurs;
     }
 
-    public function insert(int $idChamp, int $idObject, string $classObject, $value, $idx = null): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
         if ('' !== $value) {
             $typeValeur = $this->getTypeValeur($idChamp);
@@ -95,26 +103,6 @@ class Service_Valeur
             $valueInDB->idx = $idx;
             $valueInDB->save();
         }
-    }
-
-    /**
-     * Retourne l idx max d un champ tbaleau.
-     */
-    public function getMaxIdx(int $idTableau): int
-    {
-        $select = $this->modelValeur->select()
-            ->setIntegrityCheck(false)
-            ->from(['v' => 'valeur'], ['v.idx'])
-            ->join(['c' => 'champ'], 'c.ID_CHAMP = v.ID_CHAMP', ['c.ID_PARENT'])
-            ->columns(
-                [
-                    'MAX_IDX' => 'max(v.idx)',
-                ]
-            )
-            ->where('c.ID_PARENT = '.$idTableau)
-        ;
-
-        return $this->modelValeur->fetchRow($select)['MAX_IDX'];
     }
 
     private function getTypeValeur(int $idChamp): string

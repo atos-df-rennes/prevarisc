@@ -56,21 +56,17 @@
                     <a href='#' id='add-list-value'>Ajouter une valeur</a>
                 </div>
                 <div class="row-fluid">
-                    <div id="list-value" class="span10">
-                    </div>
-                    <div class="row-fluid">
-                        <div id="list-value" class="span10">
-                        </div>
-                    </div>
+                    <div id="list-value" class="span10"></div>
                 </div>
             </div>
+
             <?= $this->fieldForm->save ?>
         </form>
     </div>
 
     <div id="saved-fields" class="span6 offset2">
         <?php if(count($this->champs) > 0): ?>
-            <table class="table table-bordered table-condensed ">
+            <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
                         <th></th>
@@ -86,22 +82,12 @@
                             <td><?= $champ['NOM'] ?></td>
                             <td>
                                 <?= $champ['TYPE'] ?>
-                                <?= ($champ['TYPE'] === 'Parent' && !empty($champ['tableau'])) ? (intval($champ['tableau']) === 1 ? 'tableau' : '') : ''?>
-                                <?php if($champ['TYPE'] === 'Liste'): ?>
-                                    <?php if(count($champ['VALEURS']) === 0): ?>
-                                        <div class="alert">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <strong>Attention !</strong> La liste ne possède aucune valeur, vous devriez en ajouter.
-                                        </div>
+
+                                <?php if($champ['TYPE'] === 'Parent'): ?>
+                                    <?php if (1 === intval($champ['tableau'])): ?>
+                                        (affiché comme tableau)
                                     <?php endif ?>
 
-                                    <ul>
-                                        <?php foreach($champ['VALEURS'] as $valeur): ?>
-                                            <li><?= htmlspecialchars($valeur['VALEUR']) ?></li>
-                                        <?php endforeach ?>
-                                    </ul>
-                                <?php endif ?>
-                                <?php if($champ['TYPE'] === 'Parent'): ?>
                                     <?php if(!empty($champ['LIST_CHAMP'])) : ?>
                                         <ul>
                                             <?php foreach($champ['LIST_CHAMP'] as $champFils): ?>
@@ -117,6 +103,21 @@
                                             <strong>Attention ! </strong>Aucun champ fils renseigné.
                                         </div>
                                     <?php endif ?>
+                                <?php endif ?>
+
+                                <?php if($champ['TYPE'] === 'Liste'): ?>
+                                    <?php if(count($champ['VALEURS']) === 0): ?>
+                                        <div class="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Attention !</strong> La liste ne possède aucune valeur, vous devriez en ajouter.
+                                        </div>
+                                    <?php endif ?>
+
+                                    <ul>
+                                        <?php foreach($champ['VALEURS'] as $valeur): ?>
+                                            <li><?= htmlspecialchars($valeur['VALEUR']) ?></li>
+                                        <?php endforeach ?>
+                                    </ul>
                                 <?php endif ?>
                             </td>
                             <td id='actions'>
