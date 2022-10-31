@@ -10,7 +10,7 @@ class Service_Platau
 
     public function __construct()
     {
-        $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.'src/Service/PlatauAbstract.php');
+        $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.implode(DS, ['src', 'Service', 'PlatauAbstract.php']));
         $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.'config.json');
         [$this->pisteClientId, $this->pisteClientSecret] = $this->getPisteCredentials();
     }
