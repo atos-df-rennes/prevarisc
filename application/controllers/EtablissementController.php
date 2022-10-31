@@ -284,7 +284,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');

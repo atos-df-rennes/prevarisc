@@ -21,7 +21,7 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
@@ -70,7 +70,7 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
@@ -162,7 +162,7 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
