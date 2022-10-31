@@ -507,30 +507,4 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchRow($select);
     }
-
-    /**
-     * Retourne la liste des dossiers provenant de plat'au et n etant lie a aucun etablissement.
-     */
-    public function getAllDossierPlatAU()
-    {
-        $select = $this->select()->setIntegrityCheck(false)
-            ->from(['d' => 'dossier'])
-            ->columns(
-                [
-                    'NB_URBA' => new Zend_Db_Expr("( SELECT group_concat(dossierdocurba.NUM_DOCURBA, ', ')
-                        FROM dossier
-                        INNER JOIN dossierdocurba ON dossierdocurba.ID_DOSSIER = dossier.ID_DOSSIER
-                        WHERE dossier.ID_DOSSIER = d.ID_DOSSIER
-                        LIMIT 1)"),
-                ]
-            )
-            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE', 'dt.LIBELLE_DOSSIERTYPE')
-            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER')
-            ->join(['dnl' => 'dossiernatureliste'], 'dn.ID_NATURE = dnl.ID_DOSSIERNATURE', 'dnl.LIBELLE_DOSSIERNATURE')
-            ->where('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)')
-            ->where('d.ID_PLATAU IS NOT NULL')
-        ;
-
-        return $this->getAdapter()->fetchAll($select);
-    }
 }
