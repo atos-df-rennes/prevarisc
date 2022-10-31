@@ -18,7 +18,7 @@ defined('DATA_PATH') || define('DATA_PATH', getenv('PREVARISC_DATA_PATH') ? gete
 defined('REAL_DATA_PATH') || define('REAL_DATA_PATH', getenv('PREVARISC_REAL_DATA_PATH') ? getenv('PREVARISC_REAL_DATA_PATH') : dirname(__FILE__).DS.'..'.DS.'public'.DS.'data');
 
 // Define path to plat'au directory
-defined('PLATAU_PATH') || define('PLATAU_PATH', getenv('PREVARISC_PLATAU_PATH') ?: dirname(__FILE__).DS.'../../prevarisc-passerelle-platau');
+defined('PLATAU_PATH') || define('PLATAU_PATH', getenv('PREVARISC_PLATAU_PATH') ?: dirname(__FILE__).DS.'..'.DS.'..'.DS.'prevarisc-passerelle-platau');
 
 // Chargements des librairies
 require APPLICATION_PATH.DS.'..'.DS.'vendor'.DS.'autoload.php';
