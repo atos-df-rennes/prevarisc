@@ -587,16 +587,6 @@
                             <controller>formulaire</controller>
                             <action>delete-valeur-liste</action>
                         </delete-valeur-liste>
-                        <add-row-table>
-                            <label>Ajout ligne tableau</label>
-                            <controller>formulaire</controller>
-                            <action>add-row-table</action>
-                        </add-row-table>
-                        <delete-row-table>
-                            <label>Ajout ligne tableau</label>
-                            <controller>formulaire</controller>
-                            <action>delete-row-table</action>
-                        </delete-row-table>
                     </pages>
                 </formulaire>
             </pages>
@@ -1236,16 +1226,6 @@
                 </avis-derogations-etablissement>
             </pages>
         </etablissement>
-
-
-        <!--Lige ds rubriques - tableau -->
-        <rubrique>
-            <controller>rubrique</controller>
-            <get-row-tableau>
-                <label>get-row-tableau</label>
-                <action>get-row-tableau</action>
-            </get-row-tableau>
-        </rubrique>
 
         <!-- Recherche -->
         <search>

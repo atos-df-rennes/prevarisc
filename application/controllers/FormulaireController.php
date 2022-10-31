@@ -298,28 +298,4 @@ class FormulaireController extends Zend_Controller_Action
             $this->modelRubrique->updateNewIdx($post);
         }
     }
-
-    public function addRowTableAction(): void
-    {
-        $this->_helper->viewRenderer->setNoRender(true);
-
-        /** @var Zend_Controller_Request_Http */
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $post = $request->getPost();
-            $this->serviceFormulaire->addRowTable($post['ID_CHAMP'], $post['ID_ENTITY'], $post['ENTITY'], $post['idx']);
-        }
-    }
-
-    public function deleteRowTableAction(): void
-    {
-        $this->_helper->viewRenderer->setNoRender(true);
-
-        /** @var Zend_Controller_Request_Http */
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $post = $request->getPost();
-            $this->serviceFormulaire->deleteRowTable($post['ID_CHAMP_PARENT'], $post['ENTITY'], $post['ID_ENTITY'], $post['idx']);
-        }
-    }
 }

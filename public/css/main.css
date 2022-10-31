@@ -665,7 +665,10 @@ ul#gestionCommissionMenu li.active {
 	cursor:move;
 }
 
-.confirm-modal-hide {
+.confirm-modal-hide,
+#home .panel,
+#mail-no-bcc,
+.hidden {
 	display: none;
 }
 
@@ -839,10 +842,6 @@ text-decoration: none;
   border-left: none;
   padding: 12px 5px 12px 15px;
   color: #555555;
-}
-
-#home .panel {
-    display: none;
 }
 
 .dashboard .panel {
@@ -1205,10 +1204,6 @@ a.alerte-link:hover {
     font-size: 10px;
 }
 
-#mail-no-bcc {
-    display: none;
-}
-
 #mail-no-bcc p {
     font-style: italic;
 }
@@ -1269,8 +1264,4 @@ dl.champ_effectif_camping dd input {
 
 .radio-controls {
     margin-left: 3rem;
-}
-
-.hidden{
-    display:none;
 }
