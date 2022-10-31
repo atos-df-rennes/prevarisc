@@ -385,12 +385,12 @@ class DossierController extends Zend_Controller_Action
             $DB_user = new Model_DbTable_Utilisateur();
             $DB_informations = new Model_DbTable_UtilisateurInformations();
             $this->view->user_info = '';
-            if ('' !== $this->view->infosDossier['CREATEUR_DOSSIER'] && '0' !== $this->view->infosDossier['CREATEUR_DOSSIER']) {
+            if ('' !== $this->view->infosDossier['CREATEUR_DOSSIER'] && null !== $this->view->infosDossier['CREATEUR_DOSSIER']) {
                 $user = $DB_user->find($this->view->infosDossier['CREATEUR_DOSSIER'])->current();
                 $this->view->user_info = $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
             }
 
-            if ('' !== $this->view->infosDossier['VERROU_USER_DOSSIER'] && '0' !== $this->view->infosDossier['VERROU_USER_DOSSIER']) {
+            if ('' !== $this->view->infosDossier['VERROU_USER_DOSSIER'] && null !== $this->view->infosDossier['VERROU_USER_DOSSIER']) {
                 $user = $DB_user->find($this->view->infosDossier['VERROU_USER_DOSSIER'])->current();
                 $this->view->user_infoVerrou = $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
             }
