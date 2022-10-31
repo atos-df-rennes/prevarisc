@@ -30,8 +30,10 @@ class Service_Platau
 
         $platauHealth = $this->requestPlatauHealthcheck($pisteToken);
         $platauHealth = json_decode($platauHealth);
-
-        if (true !== $platauHealth->etatGeneral || true !== $platauHealth->etatBdd) {
+        if (true !== $platauHealth->etatGeneral) {
+            return false;
+        }
+        if (true !== $platauHealth->etatBdd) {
             return false;
         }
 
