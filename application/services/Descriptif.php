@@ -124,7 +124,7 @@ class Service_Descriptif
         $tableauIDValeurCheck = [];
 
         //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....) pour chaque ID valeur
-        foreach ($initArrayValue as $idxRubrique => $rubrique) {
+        foreach ($initArrayValue as $rubrique) {
             foreach ($rubrique['CHAMPS'] as $champ) {
                 if (1 === $champ['tableau']) {
                     foreach ($champ['FILS']['VALEURS'] as $valeursFils) {
@@ -146,16 +146,11 @@ class Service_Descriptif
                     //Ou
                     if ('NULL' === $valeur['ID_VALEUR']) {
                         $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
-                    } else {
-                        if (//Si l index a change
-                            $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
-                            //Ou la valeur brut a change
-                            || $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
-                            //Alors on update
-                            ) {
-                            $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
-                            $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
-                        }
+                    } elseif ($newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
+                    //Ou la valeur brut a change
+                    || $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']) {
+                        $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
+                        $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
                     }
                 }
             }
@@ -180,7 +175,7 @@ class Service_Descriptif
         $newList = [];
 
         foreach ($initialList as $inputName => $value) {
-            if (5 === sizeof(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+            if (5 === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
                 $idxInput = explode('-', $inputName)[1];
                 $idParent = explode('-', $inputName)[2];
                 $idInput = explode('-', $inputName)[3];
@@ -201,7 +196,7 @@ class Service_Descriptif
         foreach ($newList as $parent => $listIdx) {
             foreach ($listIdx as $idx => $input) {
                 foreach ($input as $idChamp => $valeur) {
-                    $tmpList[$parent][intval(array_search($idx, array_keys($listIdx)) + 1)][$idChamp] = $valeur;
+                    $tmpList[$parent][array_search($idx, array_keys($listIdx)) + 1][$idChamp] = $valeur;
                 }
             }
         }

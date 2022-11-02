@@ -293,7 +293,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
-        $serviceValeur = new Service_Valeur();
         $idEtablissement = $this->getParam('id');
         $champValeursInit = $serviceEtablissementDescriptif->getRubriques($idEtablissement, 'Etablissement');
 
