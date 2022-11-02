@@ -66,7 +66,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
             FROM datecommission d
             LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
             WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-            ".(count($ids) > 0 ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
+            ".([] !== $ids ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
             ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
 
         return $this->getAdapter()->fetchAll($select);
@@ -239,8 +239,8 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         // si des dossiers sont liés, en fonction du type,
         // on update les dates en text dans les différents fields du dossiers pour
         // des cohérences de données
-        if ($dossiersAffecteIds) {
-            if (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [1])) {
+        if ([] !== $dossiersAffecteIds) {
+            if (1 == $datecommission->ID_COMMISSIONTYPEEVENEMENT) {
                 //COMMISSION EN SALLE
                 $dbDossier->update(['DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
             } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [2, 3])) {

@@ -135,7 +135,7 @@ class Service_User
             $informations->save();
 
             $user->USERNAME_UTILISATEUR = $data['USERNAME_UTILISATEUR'];
-            $user->NUMINSEE_COMMUNE = array_key_exists('NUMINSEE_COMMUNE', $data) ? $data['NUMINSEE_COMMUNE'] : null;
+            $user->NUMINSEE_COMMUNE = $data['NUMINSEE_COMMUNE'] ?? null;
             $user->ID_GROUPE = $data['ID_GROUPE'];
             $user->ACTIF_UTILISATEUR = $data['ACTIF_UTILISATEUR'];
             $user->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = $data['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'];
@@ -215,14 +215,14 @@ class Service_User
      */
     public function savePreferences($id_utilisateur, array $preferences = [])
     {
-        if (!$id_utilisateur) {
+        if (0 === $id_utilisateur) {
             return false;
         }
 
         $DB_userPreferences = new Model_DbTable_UtilisateurPreferences();
         $DB_preferences = $DB_userPreferences->fetchRow(['ID_UTILISATEUR = ?' => $id_utilisateur]);
 
-        if (!$DB_preferences) {
+        if (!$DB_preferences instanceof \Zend_Db_Table_Row_Abstract) {
             return false;
         }
 
@@ -376,10 +376,15 @@ class Service_User
      */
     public function logFailedLogin($user)
     {
-        if (!$user || !isset($user['ID_UTILISATEUR']) || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
+        if ([] === $user) {
             return;
         }
-
+        if (!isset($user['ID_UTILISATEUR'])) {
+            return;
+        }
+        if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
+            return;
+        }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser) {
@@ -397,10 +402,13 @@ class Service_User
 
     public function resetFailedLogin($user)
     {
-        if (!$user
-            || !isset($user['ID_UTILISATEUR'])
-            || !isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
-        ) {
+        if (!$user) {
+            return;
+        }
+        if (!isset($user['ID_UTILISATEUR'])) {
+            return;
+        }
+        if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
             return;
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();

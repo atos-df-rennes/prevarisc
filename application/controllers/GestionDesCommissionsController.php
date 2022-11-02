@@ -34,7 +34,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
             $model_commissions = new Model_DbTable_Commission();
 
             // Sauvegarde
-            for ($i = 0; $i < count($this->_request->id_commission); ++$i) {
+            foreach ($this->_request->id_commission as $i => $singleId_commission) {
                 if (0 != $_POST['id_commission'][$i]) {
                     $item = $model_commissions->find($_POST['id_commission'][$i])->current();
                     $item->ID_COMMISSIONTYPE = $_POST['idtype_commission'][$i];

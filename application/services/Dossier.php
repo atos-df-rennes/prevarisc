@@ -4,6 +4,14 @@ class Service_Dossier
 {
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    /**
+     * @var array<string, int>|array<string, mixed>|array<string, mixed[]>|mixed
+     */
+    public $etablissement;
+    /**
+     * @var mixed|mixed[]
+     */
+    public $listeEtablissement;
 
     /**
      * Récupération de l'ensemble des types.
@@ -84,14 +92,13 @@ class Service_Dossier
             }
 
             throw new Exception($msg);
-        } else {
-            $DBsave = new Model_DbTable_DossierPj();
-
-            $DBsave->createRow([
-                'ID_DOSSIER' => $id_dossier,
-                'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-            ])->save();
         }
+
+        $DBsave = new Model_DbTable_DossierPj();
+        $DBsave->createRow([
+            'ID_DOSSIER' => $id_dossier,
+            'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
+        ])->save();
     }
 
     /**
@@ -205,20 +212,18 @@ class Service_Dossier
                         }
                     }
                 }
-            } else {
-                if (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
-                    $row = $dossierTexteApplicable->createRow();
-                    $row->ID_TEXTESAPPL = $id_texte_applicable;
-                    $row->ID_DOSSIER = $id_dossier;
-                    $row->save();
-                    if ((self::ID_DOSSIERTYPE_VISITE == $type || self::ID_DOSSIERTYPE_GRPVISITE == $type) && $id_etablissement) {
-                        $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
-                        if (!$exist) {
-                            $row = $etsTexteApplicable->createRow();
-                            $row->ID_TEXTESAPPL = $id_texte_applicable;
-                            $row->ID_ETABLISSEMENT = $id_etablissement;
-                            $row->save();
-                        }
+            } elseif (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
+                $row = $dossierTexteApplicable->createRow();
+                $row->ID_TEXTESAPPL = $id_texte_applicable;
+                $row->ID_DOSSIER = $id_dossier;
+                $row->save();
+                if ((self::ID_DOSSIERTYPE_VISITE == $type || self::ID_DOSSIERTYPE_GRPVISITE == $type) && $id_etablissement) {
+                    $exist = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
+                    if (!$exist) {
+                        $row = $etsTexteApplicable->createRow();
+                        $row->ID_TEXTESAPPL = $id_texte_applicable;
+                        $row->ID_ETABLISSEMENT = $id_etablissement;
+                        $row->save();
                     }
                 }
             }
@@ -295,7 +300,7 @@ class Service_Dossier
 
         // Appartient à d'autre dossier / ets ?
         $exist = false;
-        foreach ($DB_contact as $key => $model) {
+        foreach ($DB_contact as $model) {
             if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$id_contact)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                 $exist = true;
             }
@@ -331,18 +336,18 @@ class Service_Dossier
 
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $prescriptionArray = [];
-        foreach ($listePrescDossier as $val => $ue) {
+        foreach ($listePrescDossier as $ue) {
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 //cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
-                if (sizeof($assoc) > 0) {
-                    array_push($prescriptionArray, $assoc);
+                if ([] !== $assoc) {
+                    $prescriptionArray[] = $assoc;
                 }
             } else {
                 //cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue['ID_PRESCRIPTION_DOSSIER']);
-                if (sizeof($assoc) > 0) {
-                    array_push($prescriptionArray, $assoc);
+                if ([] !== $assoc) {
+                    $prescriptionArray[] = $assoc;
                 }
             }
         }
@@ -603,7 +608,7 @@ class Service_Dossier
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
         $num = 1;
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -612,7 +617,7 @@ class Service_Dossier
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 1);
         $num = 1;
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -620,7 +625,7 @@ class Service_Dossier
         }
 
         $prescriptionDossier = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 2);
-        foreach ($prescriptionDossier as $val => $ue) {
+        foreach ($prescriptionDossier as $ue) {
             $prescChangePlace = $dbPrescDossier->find($ue['ID_PRESCRIPTION_DOSSIER'])->current();
             $prescChangePlace->NUM_PRESCRIPTION_DOSSIER = $num;
             $prescChangePlace->save();
@@ -633,7 +638,7 @@ class Service_Dossier
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $j = 0;
-        foreach ($prescriptionRegl as $val => $ue) {
+        foreach ($prescriptionRegl as $ue) {
             $prescEdit = $dbPrescDossier->createRow();
             $prescEdit->ID_DOSSIER = $idDossier;
             if (array_key_exists(0, $ue) && array_key_exists('PRESCRIPTIONREGL_LIBELLE', $ue[0])) {
@@ -739,9 +744,15 @@ class Service_Dossier
                 $date = $dossier->DATECOMM_DOSSIER;
             }
         } elseif (self::ID_DOSSIERTYPE_VISITE == $dossier->TYPE_DOSSIER) {
-            if (null != $dossier->DATEVISITE_DOSSIER && '' != $dossier->DATEVISITE_DOSSIER) {
-                $date = $dossier->DATEVISITE_DOSSIER;
+            if (null == $dossier->DATEVISITE_DOSSIER) {
+                return new Zend_Date($date, Zend_Date::DATES);
             }
+            if ('' == $dossier->DATEVISITE_DOSSIER) {
+                return new Zend_Date($date, Zend_Date::DATES);
+            }
+            $date = $dossier->DATEVISITE_DOSSIER;
+
+            return new Zend_Date($date, Zend_Date::DATES);
         }
 
         return new Zend_Date($date, Zend_Date::DATES);
@@ -779,21 +790,16 @@ class Service_Dossier
 
         $updatedEtab = [];
 
-        foreach ($listeEtab as $val => $ue) {
+        foreach ($listeEtab as $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
-            $MAJEtab = 0;
             //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
-            if (isset($etabToEdit->ID_DOSSIER_DONNANT_AVIS) && null != $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
+            if (property_exists($etabToEdit, 'ID_DOSSIER_DONNANT_AVIS') && null !== $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
                 $dateAncienAvis = $this->getDateDossier($dossierAncienAvis);
                 $dateNewAvis = $this->getDateDossier($nouveauDossier);
 
-                if ($dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis) {
-                    $MAJEtab = 1;
-                } else {
-                    $MAJEtab = 0;
-                }
+                $MAJEtab = $dateNewAvis > $dateAncienAvis || $dateNewAvis == $dateAncienAvis ? 1 : 0;
             } else {
                 $MAJEtab = 1;
             }

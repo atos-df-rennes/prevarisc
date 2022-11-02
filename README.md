@@ -1,3 +1,5 @@
+![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg)
+
 # Prevarisc
 
 [Prevarisc](http://sdis62.github.io/prevarisc/) - Application web open-source gérant l'ensemble de l'activité du service prévention au sein d'un SDIS.

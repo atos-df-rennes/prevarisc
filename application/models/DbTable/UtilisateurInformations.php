@@ -74,7 +74,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
         $q = "%{$name}%";
         $select = $this->select()->setIntegrityCheck(false);
         $select->from('utilisateurinformations')
-            ->where('NOM_UTILISATEURINFORMATIONS LIKE ? OR PRENOM_UTILISATEURINFORMATIONS LIKE ? OR SOCIETE_UTILISATEURINFORMATIONS LIKE ?', $q, $q, $q)
+            ->where(sprintf('NOM_UTILISATEURINFORMATIONS LIKE ? OR PRENOM_UTILISATEURINFORMATIONS LIKE ? OR SOCIETE_UTILISATEURINFORMATIONS LIKE ?', $q, $q, $q))
             ->where('ID_UTILISATEURINFORMATIONS NOT IN (SELECT ID_UTILISATEURINFORMATIONS FROM utilisateur)')
         ;
 

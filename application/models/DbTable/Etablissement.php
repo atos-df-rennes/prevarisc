@@ -48,8 +48,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         if (null == $infos) {
             return false;
         }
-
-        if (null == $infos->ID_GENRE || empty($adresses)) {
+        if (null == $infos->ID_GENRE) {
+            return false;
+        }
+        if (empty($adresses)) {
             return false;
         }
 

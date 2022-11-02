@@ -183,9 +183,8 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         $string = null;
 
         if (is_array($value)) {
-            for ($i = 0; $i < count($value); ++$i) {
-                $string .= $key.(($exact) ? '=' : ' LIKE ').$this->getAdapter()->quote((($exact) ? '' : '%').$value[$i].(($exact) ? '' : '%'));
-
+            foreach ($value as $i => $singleValue) {
+                $string .= $key.(($exact) ? '=' : ' LIKE ').$this->getAdapter()->quote((($exact) ? '' : '%').$singleValue.(($exact) ? '' : '%'));
                 if ($i < count($value) - 1) {
                     $string .= ' OR ';
                 }

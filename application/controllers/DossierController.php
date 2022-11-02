@@ -12,6 +12,11 @@ class DossierController extends Zend_Controller_Action
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_CELLULE = 3;
     public const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
+    /**
+     * @var array<string, mixed>|mixed
+     */
+    public $infosDossier;
+    public $listeDossierLies;
     private $id_dossier;
 
     //liste des champs à afficher en fonction de la nature
@@ -161,13 +166,11 @@ class DossierController extends Zend_Controller_Action
             ->initContext()
         ;
 
-        if (!isset($this->view->action)) {
+        if (!(property_exists($this->view, 'action') && null !== $this->view->action)) {
             $this->view->action = $this->_request->getActionName();
         }
 
         $this->view->idDossier = ($this->_getParam('id'));
-
-        $idDossier = null;
         $idDossier = $this->_getParam('id');
         if (null == $idDossier) {
             $idDossier = $this->_getParam('idDossier');
@@ -179,7 +182,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($idDossier)->current();
 
-            $this->view->id_platau = null !== $dossier['ID_PLATAU'] ? $dossier['ID_PLATAU'] : null;
+            $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
 
             $DBdossierType = new Model_DbTable_DossierType();
             $libelleType = $DBdossierType->find($dossier->TYPE_DOSSIER)->current();
@@ -220,6 +223,7 @@ class DossierController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $historiqueEtab = [];
         $this->view->headScript()->appendFile('/js/tinymce.min.js');
 
         $this->view->do = 'new';
@@ -236,7 +240,7 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->idEtablissement = $this->_getParam('id_etablissement');
-        if (isset($this->view->idEtablissement)) {
+        if (property_exists($this->view, 'idEtablissement') && null !== $this->view->idEtablissement) {
             $DBetablissement = new Model_DbTable_Etablissement();
             $this->view->etablissementLibelle = $DBetablissement->getLibelle($this->_getParam('id_etablissement'));
         }
@@ -289,10 +293,10 @@ class DossierController extends Zend_Controller_Action
                 $this->view->avisExploitationEtab = $avisExploitationEtab['AVIS_DOSSIER'];
             }
             $historiqueEtab = $service_etablissement->getHistorique($this->_getParam('id_etablissement'));
-        } elseif ((int) $this->_getParam('id')) {
+        } elseif (0 !== (int) $this->_getParam('id')) {
             $tabEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
             $this->view->listeEtablissement = $tabEtablissement;
-            if (count($tabEtablissement) > 0) {
+            if ([] !== $tabEtablissement) {
                 $DBetab = new Model_DbTable_Etablissement();
                 $etablissement = $DBetab->getInformations($tabEtablissement[0]['ID_ETABLISSEMENT'])->toArray();
                 $this->view->genre = $etablissement['ID_GENRE'];
@@ -319,8 +323,6 @@ class DossierController extends Zend_Controller_Action
         if (isset($commissionEtab)) {
             $this->view->commissionEtab = $commissionEtab;
         }
-
-        $genreInfo = $this->view->genre;
 
         if (isset($idEtablissement)) {
             $this->view->idEtablissement = $idEtablissement;
@@ -350,7 +352,7 @@ class DossierController extends Zend_Controller_Action
         }
         $this->view->array_commissions = $array_commissions;
 
-        if ((int) $this->_getParam('id')) {
+        if (0 !== (int) $this->_getParam('id')) {
             //Cas d'affichage des infos d'un dossier existant
             $this->view->do = 'edit';
             //On récupère l'id du dossier
@@ -383,12 +385,12 @@ class DossierController extends Zend_Controller_Action
             $DB_user = new Model_DbTable_Utilisateur();
             $DB_informations = new Model_DbTable_UtilisateurInformations();
             $this->view->user_info = '';
-            if ($this->view->infosDossier['CREATEUR_DOSSIER']) {
+            if ('' !== $this->view->infosDossier['CREATEUR_DOSSIER'] && null !== $this->view->infosDossier['CREATEUR_DOSSIER']) {
                 $user = $DB_user->find($this->view->infosDossier['CREATEUR_DOSSIER'])->current();
                 $this->view->user_info = $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
             }
 
-            if ($this->view->infosDossier['VERROU_USER_DOSSIER']) {
+            if ('' !== $this->view->infosDossier['VERROU_USER_DOSSIER'] && null !== $this->view->infosDossier['VERROU_USER_DOSSIER']) {
                 $user = $DB_user->find($this->view->infosDossier['VERROU_USER_DOSSIER'])->current();
                 $this->view->user_infoVerrou = $DB_informations->find($user->ID_UTILISATEURINFORMATIONS)->current();
             }
@@ -566,7 +568,7 @@ class DossierController extends Zend_Controller_Action
                     foreach ($tabTemp as $value) {
                         //si la nature contient un champ n'étant pas dans le tableau principal on l'ajoute
                         if (!in_array($value, $afficherChamps)) {
-                            array_push($afficherChamps, $value);
+                            $afficherChamps[] = $value;
                         }
                     }
                 }
@@ -597,7 +599,7 @@ class DossierController extends Zend_Controller_Action
                 }
             } elseif (self::ID_DOSSIERTYPE_VISITE == $this->view->infosDossier['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_GRPVISITE == $this->view->infosDossier['TYPE_DOSSIER']) {
                 // CAS D'UNE VISITE
-                foreach ($listeDateAffectDossier as $val => $ue) {
+                foreach ($listeDateAffectDossier as $ue) {
                     if (1 == $ue['ID_COMMISSIONTYPEEVENEMENT']) {
                         //COMMISSION EN SALLE
                         $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
@@ -615,7 +617,7 @@ class DossierController extends Zend_Controller_Action
 
                         $listeDateValue = '';
                         $listeDateInput = '';
-                        foreach ($dateLiees as $val => $ue) {
+                        foreach ($dateLiees as $ue) {
                             $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
                             $this->view->idDateVisiteAffect = $ue['ID_DATECOMMISSION'];
                             $listeDateValue .= $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
@@ -691,7 +693,7 @@ class DossierController extends Zend_Controller_Action
                     foreach ($tabTemp as $value) {
                         //si la nature contient un champ n'étant pas dans le tableau principal on l'ajoute
                         if (!in_array($value, $afficherChamps)) {
-                            array_push($afficherChamps, $value);
+                            $afficherChamps[] = $value;
                         }
                     }
                 }
@@ -1005,7 +1007,7 @@ class DossierController extends Zend_Controller_Action
                 $dbEtablissementTextAppl = new Model_DbTable_EtsTextesAppl();
                 $listeTexteApplEtab = $dbEtablissementTextAppl->recupTextes($_POST['idEtablissement']);
                 $dbDossierTexteAppl = new Model_DbTable_DossierTextesAppl();
-                foreach ($listeTexteApplEtab as $val => $ue) {
+                foreach ($listeTexteApplEtab as $ue) {
                     $saveTexteAppl = $dbDossierTexteAppl->createRow();
                     $saveTexteAppl->ID_DOSSIER = $idDossier;
                     $saveTexteAppl->ID_TEXTESAPPL = $ue['ID_TEXTESAPPL'];
@@ -1042,14 +1044,14 @@ class DossierController extends Zend_Controller_Action
                     $dblistedocAjout = new Model_DbTable_ListeDocAjout();
 
                     //ici on récupère tous les documents qui ont été renseigné dans la base par un utilisateur (avec id du dossier et de la nature)
-                    $listeDocRenseigne = $dblistedoc->recupDocDossier($idDossierLastVP, $idNature);
+                    $listeDocRenseigne = $dblistedoc->recupDocDossier($idDossierLastVP);
 
                     //ici on récupère tous les documents qui ont été ajoutés par l'utilisateur (document non proposé par défaut)
-                    $listeDocAjout = $dblistedocAjout->getDocAjout($idDossierLastVP, $idNature);
+                    $listeDocAjout = $dblistedocAjout->getDocAjout($idDossierLastVP);
 
                     //on copie les docrenseigne pour la nouvelle visite
                     $dbDocConsulte = new Model_DbTable_DossierDocConsulte();
-                    foreach ($listeDocRenseigne as $val => $ue) {
+                    foreach ($listeDocRenseigne as $ue) {
                         $cpDocConsulte = $dbDocConsulte->createRow();
                         $cpDocConsulte->ID_NATURE = $idNature;
                         $cpDocConsulte->REF_CONSULTE = $ue['REF_CONSULTE'];
@@ -1061,7 +1063,7 @@ class DossierController extends Zend_Controller_Action
                     }
 
                     $dbListeDocAjout = new Model_DbTable_ListeDocAjout();
-                    foreach ($listeDocAjout as $val => $ue) {
+                    foreach ($listeDocAjout as $ue) {
                         $cpDocAjout = $dbListeDocAjout->createRow();
                         $cpDocAjout->LIBELLE_DOCAJOUT = $ue['LIBELLE_DOCAJOUT'];
                         $cpDocAjout->REF_DOCAJOUT = $ue['REF_DOCAJOUT'];
@@ -1079,25 +1081,25 @@ class DossierController extends Zend_Controller_Action
                 $dateDocManquantRecepArray = [];
 
                 if (isset($_POST['docManquant'])) {
-                    foreach ($_POST['docManquant']  as $libelle => $value) {
+                    foreach ($_POST['docManquant']  as $value) {
                         if ('' != $value) {
-                            array_push($docManquantArray, $value);
+                            $docManquantArray[] = $value;
                         }
                     }
                 }
 
                 if (isset($_POST['dateReceptionDocManquant'])) {
-                    foreach ($_POST['dateReceptionDocManquant']  as $libelle => $value) {
+                    foreach ($_POST['dateReceptionDocManquant']  as $value) {
                         if ('' != $value) {
-                            array_push($dateDocManquantRecepArray, $value);
+                            $dateDocManquantRecepArray[] = $value;
                         }
                     }
                 }
 
                 if (isset($_POST['dateDocManquant'])) {
-                    foreach ($_POST['dateDocManquant']  as $libelle => $value) {
+                    foreach ($_POST['dateDocManquant']  as $value) {
                         if ('' != $value) {
-                            array_push($dateDocManquantArray, $value);
+                            $dateDocManquantArray[] = $value;
                         }
                     }
                 }
@@ -1106,7 +1108,7 @@ class DossierController extends Zend_Controller_Action
 
                 $dbDossDocManquant = new Model_DbTable_DossierDocManquant();
                 $cpt = 0;
-                foreach ($docManquantArray  as $libelle => $value) {
+                foreach ($docManquantArray  as $value) {
                     $docEnC = $dbDossDocManquant->getDocManquantDossNum($idDossier, $cpt);
 
                     if ($docEnC) {
@@ -1169,7 +1171,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossierDocUrba->delete($where);
 
             if (isset($_POST['docUrba'])) {
-                foreach ($_POST['docUrba']  as $libelle => $value) {
+                foreach ($_POST['docUrba']  as $value) {
                     $saveDocUrba = $DBdossierDocUrba->createRow();
                     $saveDocUrba->ID_DOSSIER = $idDossier;
                     $saveDocUrba->NUM_DOCURBA = $value;
@@ -1181,7 +1183,7 @@ class DossierController extends Zend_Controller_Action
             $DBdossierPrev = new Model_DbTable_DossierPreventionniste();
             $DBdossierPrev->delete('ID_DOSSIER = '.$idDossier);
             if (isset($_POST['preventionniste'])) {
-                foreach ($_POST['preventionniste'] as $prev => $infos) {
+                foreach ($_POST['preventionniste'] as $infos) {
                     $savePrev = $DBdossierPrev->createRow();
                     $savePrev->ID_DOSSIER = $idDossier;
                     $savePrev->ID_PREVENTIONNISTE = $infos;
@@ -1315,7 +1317,7 @@ class DossierController extends Zend_Controller_Action
                 ) {
                     foreach ($listeEtab as $etab) {
                         $currentEts = $service_ets->get($etab['ID_ETABLISSEMENT']);
-                        if ($currentEts) {
+                        if ([] !== $currentEts) {
                             $arrayEtsAvis[$etab['ID_ETABLISSEMENT']]['avis'] = $currentEts['avis'];
                             $arrayEtsAvis[$etab['ID_ETABLISSEMENT']]['libelle'] = $currentEts['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'];
                         }
@@ -1353,7 +1355,7 @@ class DossierController extends Zend_Controller_Action
                     1 == $this->_getParam('AVIS_DOSSIER_COMMISSION')
                     && in_array($idNature, [47, 48])
                 ) {
-                    foreach ($updatedEtab as $val => $ue) {
+                    foreach ($updatedEtab as $ue) {
                         $etabInformation = $dbEtab->getInformations($ue['ID_ETABLISSEMENT']);
                         // Si l'établissement est en statut projet, et uniquement ce cas
                         if (
@@ -1475,7 +1477,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->listeEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
 
         $service_dossier = new Service_Dossier();
-        if ($idDossier) {
+        if (0 !== $idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
         }
 
@@ -1510,7 +1512,7 @@ class DossierController extends Zend_Controller_Action
         $dbEtablissementDossier = new Model_DbTable_EtablissementDossier();
 
         $idDossier = (int) $this->_getParam('id');
-        if ($idDossier) {
+        if (0 !== $idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
         }
 
@@ -1519,13 +1521,13 @@ class DossierController extends Zend_Controller_Action
         //On place dans un tableau chacun des idEtablissement liés au dossier
         $listeEtab = [];
         foreach ($listeEtablissementTest as $etab) {
-            array_push($listeEtab, $etab['ID_ETABLISSEMENT']);
+            $listeEtab[] = $etab['ID_ETABLISSEMENT'];
         }
 
         //Pour chacun des établissement on va récuperer les dossiers concernés
         $listeDossierEtab = [];
 
-        foreach ($listeEtab as $lib => $val) {
+        foreach ($listeEtab as $val) {
             $etabInfo = $dbEtablissement->getInformations($val);
 
             $listeDossierEtab[$val]['LIBELLE_ETABLISSEMENT'] = $etabInfo['LIBELLE_ETABLISSEMENTINFORMATIONS'];
@@ -1540,12 +1542,12 @@ class DossierController extends Zend_Controller_Action
         $this->listeDossierLies = $dbDossierLie->getDossierLie($idDossier);
 
         $dejaLies = [];
-        foreach ($this->listeDossierLies as $numrez => $attr) {
+        foreach ($this->listeDossierLies as $attr) {
             //on parcour chacun dossiers liers pour en récupérer les informations à afficher
             if ($idDossier == $attr['ID_DOSSIER1']) {
-                array_push($dejaLies, $attr['ID_DOSSIER2']);
+                $dejaLies[] = $attr['ID_DOSSIER2'];
             } elseif ($this->_getParam('idDossier') == $attr['ID_DOSSIER2']) {
-                array_push($dejaLies, $attr['ID_DOSSIER1']);
+                $dejaLies[] = $attr['ID_DOSSIER1'];
             }
         }
         $this->view->dejaLies = $dejaLies;
@@ -1592,7 +1594,7 @@ class DossierController extends Zend_Controller_Action
         $listeDocAjout = null;
         $listeDocConsulte = null;
         $listeDocRenseigne = null;
-        foreach ($this->view->listeNatures as $index => $nature) {
+        foreach ($this->view->listeNatures as $nature) {
             if (in_array($dossierType['TYPE_DOSSIER'], [2, 3])) {
                 if (in_array($nature['ID_NATURE'], [20, 25])) {
                     //cas d'un groupe de visite d'une récption de travaux
@@ -1615,7 +1617,7 @@ class DossierController extends Zend_Controller_Action
                 $listeDocConsulte = 0;
             }
             //ici on récupère tous les documents qui ont été renseigné dans la base par un utilisateur (avec id du dossier et de la nature)
-            $listeDocRenseigne[$nature['ID_NATURE']] = $dblistedoc->recupDocDossier($this->_getParam('id'), $nature['ID_NATURE']);
+            $listeDocRenseigne[$nature['ID_NATURE']] = $dblistedoc->recupDocDossier($this->_getParam('id'));
 
             //ici on récupère tous les documents qui ont été ajoutés par l'utilisateur (document non proposé par défaut)
             $listeDocAjout[$nature['ID_NATURE']] = $dblistedocAjout->getDocAjout((int) $this->_getParam('id'));
@@ -1671,11 +1673,10 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->_getParam('id');
             $idValid = $this->_getParam('idValid');
             $datePost = $this->_getParam('date_'.$idValid);
-
-            if (
-                '' == $idDossier
-                || '' == $idValid
-            ) {
+            if (0 == $idDossier) {
+                return false;
+            }
+            if ('' == $idValid) {
                 return false;
             }
 
@@ -1686,7 +1687,7 @@ class DossierController extends Zend_Controller_Action
                 $date = '0000-00-00';
             }
             $ref = str_replace('"', "''", $_POST['ref_'.$idValid]);
-            $libelle = isset($_POST['libelle_'.$idValid]) ? $_POST['libelle_'.$idValid] : '';
+            $libelle = $_POST['libelle_'.$idValid] ?? '';
 
             //on définit s'il sagid d'un doc ajouté ou nom
             $tabNom = explode('_', $idValid);
@@ -1695,8 +1696,6 @@ class DossierController extends Zend_Controller_Action
             if ($expectedCountIfNotAdded === count($tabNom)) {
                 $dblistedoc = new Model_DbTable_DossierDocConsulte();
                 $listevalid = $dblistedoc->getGeneral($idDossier, $tabNom[1]);
-
-                $liste = $dblistedoc->find($listevalid['ID_DOSSIERDOCCONSULTE'])->current();
                 if ($listevalid) {
                     //si UN enregistrement existe
                     $liste = $dblistedoc->find($listevalid['ID_DOSSIERDOCCONSULTE'])->current();
@@ -1773,7 +1772,7 @@ class DossierController extends Zend_Controller_Action
 
             $dossier = $DB_dossier->find($this->_getParam('idDossier'))->current();
             $idNature = $DB_dossier->getNatureDossier($this->_getParam('idDossier'));
-            $idNature = isset($idNature['ID_NATURE']) ? $idNature['ID_NATURE'] : 0;
+            $idNature = $idNature['ID_NATURE'] ?? 0;
 
             if ($service_dossier->isDossierDonnantAvis($dossier, $idNature)) {
                 $service_dossier->saveDossierDonnantAvis(
@@ -1935,19 +1934,19 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->id_dossier = $idDossier;
 
-        if ($idDossier) {
+        if (0 !== $idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
         }
 
         if (
             isset($idDossier)
-            && '' != $idDossier
+            && 0 != $idDossier
         ) {
             $pathBase = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 
             //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
             $pathVer = $pathBase.DS.'0';
-            $dirVer = opendir($pathVer) or exit('Erreur de listage : le répertoire n\'existe pas');
+            ($dirVer = opendir($pathVer)) || exit('Erreur de listage : le répertoire n\'existe pas');
             $fichierVer = [];
             $dossierVer = [];
             while ($elementVer = readdir($dirVer)) {
@@ -1974,7 +1973,7 @@ class DossierController extends Zend_Controller_Action
 
             foreach ($liste_commission as $var => $commission) {
                 $path = $pathBase.DS.$commission['ID_COMMISSION'];
-                $dir = opendir($path) or exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
+                ($dir = opendir($path)) || exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
                 $fichier = []; // on déclare le tableau contenant le nom des fichiers
                 $dossier = []; // on déclare le tableau contenant le nom des dossiers
 
@@ -2295,7 +2294,7 @@ class DossierController extends Zend_Controller_Action
         $DBdossierCommission = new Model_DbTable_Commission();
 
         $this->view->commissionInfos = 'Aucune commission';
-        if ($this->view->infosDossier['COMMISSION_DOSSIER']) {
+        if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && '0' !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
             $this->view->commissionInfos = $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current();
         }
 
@@ -2334,7 +2333,7 @@ class DossierController extends Zend_Controller_Action
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
         $infosDateComm = $dbDateComm->find($affectDossier['ID_DATECOMMISSION_AFFECT'])->current();
         $this->view->ID_AFFECTATION_DOSSIER_VISITE = $infosDateComm['ID_DATECOMMISSION'];
-        if (!$infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $affectDossier['ID_DATECOMMISSION_AFFECT'];
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -2348,7 +2347,7 @@ class DossierController extends Zend_Controller_Action
         $listeDateInput = '';
         $listeHeureInput = [];
 
-        foreach ($recupCommLiees as $val => $ue) {
+        foreach ($recupCommLiees as $ue) {
             $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
 
             if ($nbDateDecompte == $nbDatesTotal) {
@@ -2404,10 +2403,10 @@ class DossierController extends Zend_Controller_Action
 
         //on recup les docs ajouté pr le dossiers
         $dblistedocAjout = new Model_DbTable_ListeDocAjout();
-        $listeDocAjout = $dblistedocAjout->getDocAjout((int) $idDossier, $dossierNature['ID_NATURE']);
+        $listeDocAjout = $dblistedocAjout->getDocAjout((int) $idDossier);
         $this->view->listeDocsAjout = $listeDocAjout;
 
-        $this->view->dossierDocConsutle = $dblistedoc->recupDocDossier((int) $idDossier, $dossierNature['ID_NATURE']);
+        $this->view->dossierDocConsutle = $dblistedoc->recupDocDossier((int) $idDossier);
 
         $service_dossier = new Service_Dossier();
         $this->view->id_typeactivite = $object_informations['ID_TYPEACTIVITE'];
@@ -2468,7 +2467,7 @@ class DossierController extends Zend_Controller_Action
                             $dossier['ID_DOSSIERNATURE'] == $dossierNature['ID_NATURE']
                             && (isset($dossier['DATECOMM_DOSSIER']) && '' != $dossier['DATECOMM_DOSSIER'])
                         ) {
-                            if (substr($dossier['DATECOMM_DOSSIER'], 0, 10) == $dateCommGen) {
+                            if (substr($dossier['DATECOMM_DOSSIER'], 0, 10) === $dateCommGen) {
                                 ++$nbEtude;
                                 //on pousse les prescriptions
                                 $cellulesListe[$celluleKey]['dossiers']['etudes'][$dossierKey]['regl'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
@@ -2598,7 +2597,7 @@ class DossierController extends Zend_Controller_Action
 
     public function descriptifAction()
     {
-        if ((int) $this->_getParam('id')) {
+        if (0 !== (int) $this->_getParam('id')) {
             //Cas d'affichage des infos d'un dossier existant
             $this->view->do = 'edit';
             //On récupère l'id du dossier
@@ -2753,10 +2752,10 @@ class DossierController extends Zend_Controller_Action
 
             $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
             $prescriptionArray = [];
-            foreach ($listePrescType as $val => $ue) {
+            foreach ($listePrescType as $ue) {
                 $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
-                if (count($assoc) > 0) {
-                    array_push($prescriptionArray, $assoc);
+                if ([] !== $assoc) {
+                    $prescriptionArray[] = $assoc;
                 }
             }
             $this->view->prescriptionType = $prescriptionArray;
@@ -2781,9 +2780,9 @@ class DossierController extends Zend_Controller_Action
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
         $prescriptionArray = [];
 
-        foreach ($listePrescType as $val => $ue) {
+        foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
-            array_push($prescriptionArray, $assoc);
+            $prescriptionArray[] = $assoc;
         }
 
         $this->view->prescriptionType = $prescriptionArray;
@@ -2874,9 +2873,9 @@ class DossierController extends Zend_Controller_Action
         $texteArray = [];
         $articleArray = [];
 
-        foreach ($prescType as $libelle => $value) {
-            array_push($articleArray, $value['LIBELLE_ARTICLE']);
-            array_push($texteArray, $value['LIBELLE_TEXTE']);
+        foreach ($prescType as $value) {
+            $articleArray[] = $value['LIBELLE_ARTICLE'];
+            $texteArray[] = $value['LIBELLE_TEXTE'];
             $this->view->libelle = $value['PRESCRIPTIONTYPE_LIBELLE'];
         }
 

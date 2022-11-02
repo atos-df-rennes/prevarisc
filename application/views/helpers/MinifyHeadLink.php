@@ -47,7 +47,6 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      * Returns current object instance. Optionally, allows passing array of
      * values to build link.
      *
-     * @param array  $attributes
      * @param string $placement
      *
      * @return Zend_View_Helper_HeadLink
@@ -91,7 +90,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
                     $minStyles->rel = 'stylesheet';
                     $minStyles->type = 'text/css';
                     $minStyles->href = $this->getMinUrl().'?f='.implode(',', $styles);
-                    if ($trimmedBaseUrl) {
+                    if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
                         $minStyles->href .= '&b='.$trimmedBaseUrl;
                     }
                     if ($this->_version) {
@@ -117,7 +116,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
             $minStyles->rel = 'stylesheet';
             $minStyles->type = 'text/css';
             $minStyles->href = $this->getMinUrl().'?f='.implode(',', $styles);
-            if ($trimmedBaseUrl) {
+            if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
                 $minStyles->href .= '&b='.$trimmedBaseUrl;
             }
             $minStyles->media = $media;

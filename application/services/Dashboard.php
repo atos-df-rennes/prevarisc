@@ -174,13 +174,13 @@ class Service_Dashboard
             'width' => 'small',
         ],
 
-        // bloc npsp
+        // bloc plat'au
         'dossierPlatau' => [
             'service' => 'Service_Dashboard',
             'method' => 'getDossiersPlatAUSansEtablissement',
             'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
             'title' => 'Dossiers Plat\'AU à traiter',
-            'type' => 'dossierPlatau',
+            'type' => 'dossiers',
             'height' => 'small',
             'width' => 'small',
         ],
@@ -372,7 +372,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisNonVerrouilles($user)
     {
-        $dossiers = [];
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -387,8 +386,6 @@ class Service_Dashboard
 
     public function getDossiersSuivisSansAvis($user)
     {
-        $dossiers = [];
-
         $id_user = $user['ID_UTILISATEUR'];
 
         // Dossiers suivis
@@ -411,9 +408,12 @@ class Service_Dashboard
      */
     public function getDossiersPlatAUSansEtablissement()
     {
-        $dbDossier = new Model_DbTable_Dossier();
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier');
+        $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
 
-        return $dbDossier->getAllDossierPlatAU();
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getLeveePresc()
@@ -431,11 +431,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
                 if (
                     self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
@@ -464,11 +460,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
                 if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
@@ -494,11 +486,7 @@ class Service_Dashboard
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
-                if ($lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER']) {
-                    $idLien = $lien['ID_DOSSIER2'];
-                } else {
-                    $idLien = $lien['ID_DOSSIER1'];
-                }
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
                 if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
