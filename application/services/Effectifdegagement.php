@@ -2,6 +2,26 @@
 
 class Service_Effectifdegagement
 {
+    /**
+     * @var mixed|\Model_DbTable_EffectifDegagement
+     */
+    public $modelEffectifDegagement;
+    /**
+     * @var mixed|\Model_DbTable_DossierEffectifDegagement
+     */
+    public $modelEffectifDegagementDossier;
+    /**
+     * @var mixed|\Model_DbTable_EtablissementEffectifDegagement
+     */
+    public $modelEffectifDegagementEtablissement;
+    /**
+     * @var mixed|\Model_DbTable_Dossier
+     */
+    public $modelDossier;
+    /**
+     * @var mixed|\Model_DbTable_Etablissement
+     */
+    public $modelEtablissement;
     public function __construct()
     {
         $this->modelEffectifDegagement = new Model_DbTable_EffectifDegagement();
@@ -22,7 +42,7 @@ class Service_Effectifdegagement
         $rowEffectifDegagement = $this->modelEffectifDegagement->createRow();
         $rowEffectifDegagement->save();
 
-        $rowDossierEff = $this->modelEffectifDegagementDossier->insert([
+        $this->modelEffectifDegagementDossier->insert([
             'ID_DOSSIER' => $idDossier,
             'ID_EFFECTIF_DEGAGEMENT' => $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT,
         ]);
@@ -35,7 +55,7 @@ class Service_Effectifdegagement
         $rowEffectifDegagement = $this->modelEffectifDegagement->createRow();
         $rowEffectifDegagement->save();
 
-        $rowEtablissementEff = $this->modelEffectifDegagementEtablissement->insert([
+        $this->modelEffectifDegagementEtablissement->insert([
             'ID_ETABLISSEMENT' => $idEtablissement,
             'ID_EFFECTIF_DEGAGEMENT' => $rowEffectifDegagement->ID_EFFECTIF_DEGAGEMENT,
         ]);

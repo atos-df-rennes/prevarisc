@@ -889,11 +889,6 @@ class Service_Dossier
         $modelDossier = new Model_DbTable_Dossier();
 
         $result = $modelDossier->getListAvisDerogationsFromDossier($idDossier);
-
-        if (!empty($result)) {
-            return true;
-        }
-
-        return false;
+        return !empty($result);
     }
 }

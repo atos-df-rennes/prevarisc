@@ -89,7 +89,7 @@ class Service_Descriptif
     {
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
 
-        if (null === $valueInDB) {
+        if (!$valueInDB instanceof \Zend_Db_Table_Row) {
             $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value);
         } else {
             $this->serviceValeur->update($idChamp, $valueInDB, $value);

@@ -45,7 +45,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->order('c.NOM')
         ;
 
-        if (true === $hasList) {
+        if ($hasList) {
             $select->joinLeft(['cvl' => 'champvaleurliste'], 'c.ID_CHAMP = cvl.ID_CHAMP', ['VALEUR']);
 
             return $this->fetchAll($select)->toArray();

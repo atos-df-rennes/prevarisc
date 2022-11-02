@@ -538,8 +538,6 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
             default:
                 throw new Exception(sprintf('Type %s non supporté', $type));
-
-                break;
         }
 
         return $this->getAdapter()->fetchAll($select);
@@ -578,6 +576,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getListeDossierFromDossier($idDossier)
     {
+        $dossEtab = [];
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
             ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
@@ -600,18 +599,18 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             switch ($dossier['TYPE_DOSSIER']) {
                 //Dossier de type Etude
                 case '1':
-                    array_push($dossEtab['Etudes'], $dossier);
+                    $dossEtab['Etudes'][] = $dossier;
 
                     break;
 
                 case '2':                //Dossier de type visite
                 case '3':                //Dossier de type groupe de visite
-                    array_push($dossEtab['Visites'], $dossier);
+                    $dossEtab['Visites'][] = $dossier;
 
                     break;
 
                 default:                //Le reste
-                    array_push($dossEtab['Autres'], $dossier);
+                    $dossEtab['Autres'][] = $dossier;
 
                     break;
             }

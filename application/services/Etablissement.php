@@ -520,7 +520,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
 
-        foreach ($dossier_types as $key => $type) {
+        foreach ($dossier_types as $type) {
             if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;
@@ -548,7 +548,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $i = 0;
         $types_autre = [];
 
-        foreach ($dossier_types as $key => $type) {
+        foreach ($dossier_types as $type) {
             if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
                 $types_autre[$i] = $type['ID_DOSSIERTYPE'];
                 ++$i;

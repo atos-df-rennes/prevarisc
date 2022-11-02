@@ -92,8 +92,6 @@ class Service_Valeur
 
             default:
                 throw new Exception('Type de champ non supporté.');
-
-                break;
         }
 
         return $typeValeur;

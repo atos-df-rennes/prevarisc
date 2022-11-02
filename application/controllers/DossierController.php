@@ -2,6 +2,11 @@
 
 class DossierController extends Zend_Controller_Action
 {
+    public $cache;
+    /**
+     * @var int|mixed
+     */
+    public $idDossier;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
@@ -169,18 +174,18 @@ class DossierController extends Zend_Controller_Action
 
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
-        if (!isset($this->view->action)) {
+        if (!(property_exists($this->view, 'action') && $this->view->action !== null)) {
             $this->view->action = $this->_request->getActionName();
         }
 
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
 
-        $this->idDossier = intval($this->_getParam('id'));
+        $this->idDossier = (int) $this->_getParam('id');
         // FIXME A déplacer dans le 2ème if ?
         $this->view->idDossier = $this->idDossier;
 
         if (null == $this->idDossier) {
-            $this->idDossier = intval($this->_getParam('idDossier'));
+            $this->idDossier = (int) $this->_getParam('idDossier');
         }
 
         if (null != $this->idDossier) {
@@ -2186,8 +2191,8 @@ class DossierController extends Zend_Controller_Action
         // Effectifs & Dégagements
         $this->view->effectifDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_EFFECTIF'];
         $this->view->degagementDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_DEGAGEMENT'];
-        $this->view->effectifEtablissement = !empty($idEtab) ? $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'] : '';
-        $this->view->degagementEtablissement = !empty($idEtab) ? $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'] : '';
+        $this->view->effectifEtablissement = empty($idEtab) ? '' : $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
+        $this->view->degagementEtablissement = empty($idEtab) ? '' : $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
 
         // Avis & Dérogations
         $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
@@ -2591,7 +2596,7 @@ class DossierController extends Zend_Controller_Action
         $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, 'Dossier');
 
         $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
-        $rubriquesEtablissement = !empty($idEtab) ? $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement') : '';
+        $rubriquesEtablissement = empty($idEtab) ? '' : $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
 
         $rubriquesByCapsuleRubrique = [
             'descriptifEtablissement' => $rubriquesEtablissement,
@@ -2609,7 +2614,7 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->assign('formulaires', $capsulesRubriques);
-        $this->view->assign('isDescriptifPersonnalise', 1 === intval(getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
+        $this->view->assign('isDescriptifPersonnalise', 1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'));
 
         // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
@@ -3136,7 +3141,6 @@ class DossierController extends Zend_Controller_Action
 
     public function verificationsTechniquesAction()
     {
-        /** @var Zend_View_Helper_HeadLink */
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
@@ -3172,7 +3176,6 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
         $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
 
-        /** @var Zend_Controller_Request_Http */
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
@@ -3181,7 +3184,7 @@ class DossierController extends Zend_Controller_Action
                 foreach ($post as $key => $value) {
                     // Informations concernant l'affichage des rubriques
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, intval($value));
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
                     }
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
