@@ -25,8 +25,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     /**
      * Initialisation de l'auto-loader.
-     *
-     * @return Zend_Loader_Autoloader
      */
     protected function _initAutoLoader(): Zend_Loader_Autoloader
     {
@@ -112,8 +110,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     /**
      * Initialisation de la vue.
-     *
-     * @return Zend_View
      */
     protected function _initView(): Zend_View
     {
@@ -179,7 +175,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOption('cache');
         $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
-        $namespace = new Zend_Session_Namespace('Zend_Auth');
+        $namespace = new Zend_Session_Namespace(\Zend_Auth::class);
         $namespace->setExpirationSeconds($max_lifetime);
 
         return $namespace;

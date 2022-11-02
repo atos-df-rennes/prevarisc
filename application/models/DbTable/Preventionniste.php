@@ -39,20 +39,18 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
             $model_gpt = new Model_DbTable_Groupement();
             $gpt = $model_gpt->getGroupementParVille($commune);
             $prev_des_gpts = $model_gpt->getPreventionnistesByGpt($gpt);
-            if (count($prev_des_gpts) > 0) {
-                foreach ($prev_des_gpts as $prev_des_gpt) {
-                    foreach ($prev_des_gpt as $uid) {
-                        $array_tmp = [];
-                        $array_tmp['uid'] = $uid['ID_UTILISATEUR'];
-                        $array_tmp['nom'] = $uid['NOM_UTILISATEURINFORMATIONS'];
-                        $array_tmp['prenom'] = $uid['PRENOM_UTILISATEURINFORMATIONS'];
+            foreach ($prev_des_gpts as $prev_des_gpt) {
+                foreach ($prev_des_gpt as $uid) {
+                    $array_tmp = [];
+                    $array_tmp['uid'] = $uid['ID_UTILISATEUR'];
+                    $array_tmp['nom'] = $uid['NOM_UTILISATEURINFORMATIONS'];
+                    $array_tmp['prenom'] = $uid['PRENOM_UTILISATEURINFORMATIONS'];
 
-                        if (in_array($array_tmp, $array_result)) {
-                            continue;
-                        }
-
-                        $array_result[] = $array_tmp;
+                    if (in_array($array_tmp, $array_result)) {
+                        continue;
                     }
+
+                    $array_result[] = $array_tmp;
                 }
             }
 

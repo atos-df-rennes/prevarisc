@@ -28,11 +28,7 @@ class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
         }
 
         // Attributs
-        if ($attribs) {
-            $attribs = $this->_htmlAttribs($attribs);
-        } else {
-            $attribs = '';
-        }
+        $attribs = $attribs ? $this->_htmlAttribs($attribs) : '';
 
         // Affichage
         echo "<select {$attribs}>";

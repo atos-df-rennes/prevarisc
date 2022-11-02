@@ -1,6 +1,9 @@
 name: Prevarisc Lint
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [ 2.5, evol-sdis** ]
 
 jobs:
   validate-composer:
@@ -26,6 +29,19 @@ jobs:
 
     - name: PHP-CS-Fixer
       run: ./vendor/bin/php-cs-fixer fix --diff --dry-run
+
+  rector:
+    needs: validate-composer
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.1'
+    - run: composer install --prefer-dist --no-progress
+
+    - name: Rector
+      run: ./vendor/bin/rector process --dry-run
 
   var-dump-check:
     needs: validate-composer

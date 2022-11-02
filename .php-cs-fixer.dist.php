@@ -12,5 +12,4 @@ return $config->setRules([
         '@PhpCsFixer' => true,
     ])
     ->setFinder($finder)
-    ->setUsingCache(false)
 ;

@@ -15,7 +15,7 @@
             ob_end_clean();
             $this->_helper->layout->setLayout('dashboard');
             // On prépare me XML pour l'extraction et la génération
-            while (list($key, $val) = each($this->liste)) {
+            while ([$key, $val] = each($this->liste)) {
                 $this->_helper->contextSwitch()->addActionContext($key, ['json', 'xml']);
             }
 

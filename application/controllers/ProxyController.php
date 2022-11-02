@@ -16,7 +16,7 @@ class ProxyController extends Zend_Controller_Action
             }
         }
 
-        if ($params) {
+        if ('' !== $params && '0' !== $params) {
             $params = '?'.$params;
         }
 
