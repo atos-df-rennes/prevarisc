@@ -86,12 +86,12 @@
         <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
         <li>
             <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) : ?>
-                <a id="suppressionDossier" href="#">
+                <a id="retablissementDossier" href="#">
                     <em class="icon-ok icon-black"></em>
                     Rétablir le dossier
                 </a>
             <?php else :?>
-                <a id="retablissementDossier" href="#">
+                <a id="suppressionDossier" href="#">
                     <em class="icon-remove icon-black"></em>
                     Supprimer le dossier
                 </a>
@@ -104,163 +104,174 @@ endif; ?>
 
 <?php $this->placeholder('page_header')->captureStart();  // Capture du 'before_content' ?>
 
-<?php
-    if($this->action == "add" || $this->do == "new" ){
-        //Cas d'ajout d'un nouveau dossier
-        echo "
-            <h2 class='page-header'>Création d'un nouveau dossier</h2>
-            <h3 class='page-header'>
-                <div style='margin:10px;' id='infosEtablissement'>
-        ";
-        if($this->enteteEtab){
-            echo "Etablissement(s) concerné(s) : &nbsp;";
-            echo "<a href='/etablissement/descriptif/id/".$this->enteteEtab['ID_ETABLISSEMENT']."' data-target='#modal-desc' data-toggle='modal' id='descEtab' title='Afficher le descriptif'><i class='icon-list-alt icon-black'></i></a>&nbsp;";
-            echo "&nbsp;&nbsp;<a href='/etablissement/dossiers/id/".$this->enteteEtab['ID_ETABLISSEMENT']."' title='Se rendre à la liste des dossiers' ><i class='icon-folder-open icon-black'></i></a>&nbsp;&nbsp;";
-            echo "
-                <a href='/etablissement/index/id/".$this->enteteEtab['ID_ETABLISSEMENT']."' class='etab'>
-                            ".$this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'];
-            if($this->enteteEtab['adresses']){
-                echo "&nbsp;(".$this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'].")";
-            }
-            $etablissementInfos = $this->enteteEtab['etablissementInfos'];
-            if(isset($etablissementInfos['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
-                echo " [ ".$etablissementInfos['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS']." ]";
-            }
-            echo "
-                </a>
-            ";
-            if(isset($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) && $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS'] != null){
-                if($etablissementInfos['avisExploitation']['LIBELLE_AVIS'] == "Favorable"){
-                    echo "<span class='avis F'>".$etablissementInfos['avisExploitation']['LIBELLE_AVIS']."</span>&nbsp;";
-                }else if($etablissementInfos['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"){
-                    echo "<span class='avis D'>".$etablissementInfos['avisExploitation']['LIBELLE_AVIS']."</span>&nbsp;";
-                }else if($etablissementInfos['infosEtab']['presence_avis_differe']){
-                    echo "<span class='label label-info'>Avis différé</span>&nbsp;";
-                }else{
-                    echo "<span class='avis'>Avis indisponible</span>&nbsp;";
-                }
-            }else{
-                echo "<span class='avis'>Avis indisponible</span>&nbsp;";
-            }
-
-            $nbPrev = count($etablissementInfos['preventionnistes']);
-            if($nbPrev >0){
-                echo "<span style='font-size:10px'>(";
-                foreach($etablissementInfos['preventionnistes'] as $prev){
-                    echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-                    if($nbPrev > 1)
-                        echo ", ";
-                    $nbPrev--;
-                }
-                echo ")</span>";
-            }
-
-            echo " <span style='font-size:10px'>#".$etablissementInfos['general']['NUMEROID_ETABLISSEMENT']."</span>";
-        }
-        echo "
-                </div>
-            </h3>
-        ";
-    }else{
-        //Lorsqu'il s'agit d'un dossier existant
-        echo "
-            <h2 class='page-header'>
-                <span style='color: #333333'>".$this->libelleType."</span>
-                <small><br/>".nl2br($this->objetDossier)."</small>
-        ";
-
-	    if($this->id_platau !== null) {
-            echo "<p style='font-size: medium;' class='label label-info'><strong>CONSULTATION PLATAU : " . $this->id_platau . "</strong></p>";
-        }
-
-        echo "
-            <div style='margin:10px;' id='infosEtabs'>
-        ";
-
-        $nbEtab = count($this->enteteEtab);
-        if($nbEtab > 0){
-            if($nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site"){
-                echo "Site concerné : &nbsp;";
-
-                echo "
-                    <a href='/etablissement/index/id/".$this->enteteEtab[0]['ID_ETABLISSEMENT']."' class='etab'>
-                        ".$this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS']."
+<?php if($this->action == "add" || $this->do == "new" ) :?>
+    <h2 class='page-header'>Création d'un nouveau dossier</h2>
+        <h3 class='page-header'>
+            <div style='margin:10px;' id='infosEtablissement'>
+                <?= $this->enteteEtab['ID_ETABLISSEMENT'] ?>
+                <?php if($this->enteteEtab) : ?>
+                    Etablissement(s) concerné(s) : &nbsp;
+                    <a
+                        href= <?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT']?>
+                        data-target='#modal-desc'
+                        data-toggle='modal'
+                        id='descEtab'
+                        title='Afficher le descriptif'>
+                        <i class='icon-list-alt icon-black'></i>
                     </a>
-                ";
+                    <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
+                        title='Se rendre à la liste des dossiers' >
+                        <i class='icon-folder-open icon-black'></i>
+                    </a>;
 
-                echo " <span style='font-size:10px'>#".$this->enteteEtab[0]['infosEtab']['general']['NUMEROID_ETABLISSEMENT']."</span>";
-            }else{
-                echo "Etablissement(s) concerné(s) : &nbsp;";
-                $i = 0;
-                $idEtabEnCour = null;
-                $compteur = 0;
+                    <a href=<?= '/etablissement/index/id/'.$this->enteteEtab['ID_ETABLISSEMENT'] ?> class='etab'>
 
-                foreach($this->enteteEtab as $etab => $value){
-                    if($value['ID_ETABLISSEMENTDOSSIER'] != $idEtabEnCour){
-                        $compteur++;
-                        $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
-                        echo "<a href='/etablissement/descriptif/id/".$value['ID_ETABLISSEMENT']."' data-target='#modal-desc' data-toggle='modal' id='descEtab' title='Afficher le descriptif'><i class='icon-list-alt icon-black'></i></a>&nbsp;";
-                        echo "&nbsp;&nbsp;<a href='/etablissement/dossiers/id/".$value['ID_ETABLISSEMENT']."' title='Se rendre à la liste des dossiers' ><i class='icon-folder-open icon-black'></i></a>&nbsp;&nbsp;";
-                        echo "<a href='/etablissement/index/id/".$value['ID_ETABLISSEMENT']."' class='etab'>".$value['LIBELLE_ETABLISSEMENTINFORMATIONS'];
-                        $nbAdresse = count($value['infosEtab']['adresses']);
-                        if($nbAdresse != 0){
-                            echo " (";
-                            foreach($value['infosEtab']['adresses'] as $commune){
-                                echo $commune['LIBELLE_COMMUNE'];
-                                if($nbAdresse != 1)
-                                    echo ", ";
-                                $nbAdresse--;
-                            }
-                            echo ") ";
-                        }else{
-                            echo " (adresse non renseignée)";
-                        }
-                        if(isset($value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])){
-                            echo " [ ".$value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS']." ]";
-                        }
-                        echo "
+                        <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+
+                        <?php if($this->enteteEtab['adresses']) : ?>
+                            &nbsp; <?= "(". $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'].")" ?>
+                        <?php endif; ?>
+
+                        <?php if(isset($this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])) :?>
+                            [<?= $this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                        <?php endif; ?>
+                    </a>
+
+                    <?php if(isset($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) && null !== ($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'])) :?>
+                        <?php if($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Favorable") :?>
+                            <span class='avis F'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                        <?php elseif($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Défavorable") :?>
+                            <span class='avis D'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                        <?php elseif($this->enteteEtab['etablissementInfos']['infosEtab']['presence_avis_differe']) :?>
+                            <span class='label label-info'>Avis différé</span>&nbsp;
+                        <?php else :?>
+                            <span class='avis'>Avis indisponible</span>&nbsp;
+                        <?php endif; ?>
+                        <?php else:?>
+                            <span class='avis'>Avis indisponible</span>&nbsp;
+                    <?php endif; ?>
+
+                    <?php $this->nbPrev = sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) ?>
+                    <?php if(sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) > 0) : ?>
+                        <span style='font-size:10px'>(
+                            <?php foreach($this->enteteEtab['etablissementInfos']['preventionnistes'] as $prev ): ?>
+                                <?= $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'] ?>
+                                <?php if($this->nbPrev > 1) :?>
+                                    <?php $this->nbPrev-- ?>
+                                    ,
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        )</span>
+                    <?php endif ?>
+                    <span style='font-size:10px'>#<?= $this->enteteEtab['etablissementInfos']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
+                <?php endif; ?>
+            </div>
+        </h3>
+
+<?php else :?>
+    <h2 class='page-header'>
+        <span style='color: #333333'><?= $this->libelleType ?></span>
+        <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) :?>
+            <span class='label label-important'>
+                DOSSIER SUPPRIME
+            </span>
+        <?php endif; ?>
+        <small><br/><?= nl2br($this->objetDossier) ?></small>
+        <?php if(null !== $this->id_platau) :?>
+            <p style='font-size: medium;' class='label label-info'>
+                <strong>CONSULTATION PLATAU : <?= $this->id_platau ?></strong>
+            </p>
+        <?php endif; ?>
+        <div style='margin:10px;' id='infosEtabs'>
+            <?php if(count($this->enteteEtab)> 0) :?>
+                <?php if($this->nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site") :?>
+                    Site concerné :
+                    <a href=<?='/etablissement/index/id/'.$this->enteteEtab[0]['ID_ETABLISSEMENT'] ?> class='etab'>
+                        <?= $this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                    </a>
+                    <span style='font-size:10px'>#<?=$this->enteteEtab[0]['infosEtab']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
+                <?php else:?>
+                    Etablissement(s) concerné(s) :
+                    <?php foreach($this->enteteEtab as $etab => $value) :?>
+                        <?php if(true || $value['ID_ETABLISSEMENTDOSSIER'] !== $idEtabEnCour) :?>
+                            <a
+                                href=<?= '/etablissement/descriptif/id/'.strval($value['ID_ETABLISSEMENT']) ?>
+                                data-target='#modal-desc'
+                                data-toggle='modal'
+                                id='descEtab'
+                                title='Afficher le descriptif'>
+                                <i class='icon-list-alt icon-black'></i>
                             </a>
-                        ";
-                        if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null){
-                            if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"){
-                                echo "<span class='avis F'>".$value['avisExploitation']['LIBELLE_AVIS']."</span>&nbsp;";
-                            }else if($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"){
-                                echo "<span class='avis D'>".$value['avisExploitation']['LIBELLE_AVIS']."</span>&nbsp;";
-                            }else if($value['infosEtab']['presence_avis_differe']){
-                                echo "<span class='label label-info'>Avis différé</span>&nbsp;";
-                            }else{
-                                echo "<span class='avis'>Avis indisponible</span>&nbsp;";
-                            }
-                        }else{
-                            echo "<span class='avis'>Avis indisponible</span>&nbsp;";
-                        }
-                        //affichage preventionniste(s)
-                        $nbPrev = count($value['infosEtab']['preventionnistes']);
-                        if ($nbPrev > 0) {
-                            echo "<span style='font-size:10px'>(";
-                            foreach ($value['infosEtab']['preventionnistes'] as $prev) {
-                                echo $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'];
-                                if ($nbPrev > 1) {
-                                    echo ", ";
-                                }
-                                $nbPrev--;
-                            }
-                            echo ")</span>";
-                        }
+                            &nbsp;
+                            <a
+                                href='/etablissement/dossiers/id/'.<?=$value['ID_ETABLISSEMENT']?>
+                                title='Se rendre à la liste des dossiers' >
+                                <i class='icon-folder-open icon-black'></i>
+                            </a>
+                            &nbsp;
+                            <a
+                                href=  <?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                class='etab'>
+                                <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS']?>
+                                <?php $this->nbAdresse = count($value['infosEtab']['adresses']) ?>
+                                <?php if($this->nbAdresse != 0):?>
+                                    (
+                                        <?php foreach($value['infosEtab']['adresses'] as $commune):?>
+                                            <?= $commune['LIBELLE_COMMUNE'] ?>
+                                            <?php if($this->nbAdresse > 1) :?>
+                                                <?php $this->nbAdresse-- ?>
+                                            <?php endif ?>
+                                        <?php endforeach; ?>
+                                    )
+                                <?php else :?>
+                                 (adresse non renseignée)
+                                <?php endif ?>
+                                <?php if(isset($value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])): ?>
+                                    [<?= $value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                                <?php endif; ?>
+                            </a>
+                            <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null) :?>
+                                <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"):?>
+                                    <span class='avis F'><?= $value['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                                <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"):?>
+                                    <span class='avis D'><?=$value['avisExploitation']['LIBELLE_AVIS']?></span>&nbsp;
+                                <?php elseif($value['infosEtab']['presence_avis_differe']):?>
+                                    <span class='label label-info'>Avis différé</span>&nbsp;
+                                <?php else:?>
+                                    <span class='avis'>Avis indisponible</span>&nbsp;
+                                <?php endif;?>
+                            <?php else : ?>
+                                <span class='avis'>Avis indisponible</span>&nbsp;
+                            <?php endif; ?>
 
-                        echo " <span style='font-size:10px'>#".$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']."</span>";
+                            <?php $this->nbPrev = count($value['infosEtab']['preventionnistes']) ?>
+                            <?php if($this->nbPrev > 0) :?>
+                                <span style='font-size:10px'>
+                                (
 
-                        $i++;
-                    }
-                }
-            }
-        }
-        echo "
-                </div>
-            </h2>
-        ";
-    }
-?>
+                                    <?php foreach($value['infosEtab']['preventionnistes'] as $prev) : ?>
+                                        <?=
+                                            $prev['NOM_UTILISATEURINFORMATIONS']
+                                            ." ".
+                                            $prev['PRENOM_UTILISATEURINFORMATIONS']
+                                        ?>
+                                        <?php if($this->nbPrev > 1) :?>
+                                            <?php $this->nbPrev-- ?>
+                                            ,
+                                        <?php endif ?>
+                                    <?php endforeach ?>
+                                )
+                            <?php endif ?>
+                            <span style='font-size:10px'>#<?=$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']?></span>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </h2>
+<?php endif; ?>
+
+
 <div class='grid_16' >
 
 <?php echo "<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />"; ?>
