@@ -158,14 +158,8 @@ class Service_Descriptif
 
         //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
         foreach ($tableauIDValeurCheck as $idValueToDelete) {
-            try {
-                if (null !== $idValueToDelete) {
-                    $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
-                }
-            } catch (\Throwable $th) {
-                var_dump($th);
-
-                exit(1);
+            if (null !== $idValueToDelete) {
+                $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
             }
         }
     }
@@ -173,9 +167,10 @@ class Service_Descriptif
     public function groupInputByOrder(array $initialList)
     {
         $newList = [];
+        $expectedNumberOfArguments = 5;
 
         foreach ($initialList as $inputName => $value) {
-            if (5 === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
                 $idxInput = explode('-', $inputName)[1];
                 $idParent = explode('-', $inputName)[2];
                 $idInput = explode('-', $inputName)[3];
