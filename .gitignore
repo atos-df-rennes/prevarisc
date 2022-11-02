@@ -13,3 +13,4 @@ vendor
 /public/data/uploads/commission
 HashedFileDataStore.php
 .php-cs-fixer.cache
+.vscode

@@ -7,8 +7,6 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_ETABLISSEMENT';
 
     private $ets_date;
-    private $ets_dateDebut;
-    private $ets_dateFin;
 
     // Début : liste des ERP
     public function listeDesERP($date): self
@@ -73,9 +71,6 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         if (null == $dateFin) {
             $dateFin = date('31/12/'.date('Y'), time());
         }
-
-        $this->ets_dateDebut = $dateDebut;
-        $this->ets_dateFin = $dateFin;
 
         $this->etablissements = $this->select()
             ->setIntegrityCheck(false)

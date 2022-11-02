@@ -33,12 +33,12 @@ class Service_Formulaire
 
         $idRubrique = $modelRubrique->insert([
             'NOM' => $rubrique['nom_rubrique'],
-            'DEFAULT_DISPLAY' => intval($rubrique['afficher_rubrique']),
+            'DEFAULT_DISPLAY' => (int) $rubrique['afficher_rubrique'],
             'ID_CAPSULERUBRIQUE' => $idCapsuleRubrique,
             'idx' => $rubrique['idx'],
         ]);
 
-        return intval($idRubrique);
+        return (int) $idRubrique;
     }
 
     public function insertChamp(array $champ, array $rubrique, bool $isParent = false): array
@@ -54,7 +54,7 @@ class Service_Formulaire
             $nomChamp = 'nom_champ_enfant';
         }
 
-        $idTypeChamp = intval($champ[$typeChamp]);
+        $idTypeChamp = (int) $champ[$typeChamp];
         $idListe = $modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
         $dataToInsert = [

@@ -25,7 +25,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
         //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
         $pathVer = $this->path.'/0';
-        $dirVer = opendir($pathVer) or exit('Erreur de listage : le répertoire n\'existe pas');
+        ($dirVer = opendir($pathVer)) || exit('Erreur de listage : le répertoire n\'existe pas');
         $fichierVer = [];
         $dossierVer = [];
         while ($elementVer = readdir($dirVer)) {
@@ -49,7 +49,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         //Récupération de l'ensemble des documents des différentes commissions
         foreach ($liste_commission as $var => $commission) {
             $path = $this->path.DS.$commission['ID_COMMISSION'];
-            $dir = opendir($path) or exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
+            ($dir = opendir($path)) || exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
             $fichier = []; // on déclare le tableau contenant le nom des fichiers
             $dossier = []; // on déclare le tableau contenant le nom des dossiers
 
@@ -92,7 +92,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             // Extension du fichier
             $filename = str_replace(DS, '', $_FILES['fichier']['name']);
             $extension = strtolower(strrchr($filename, '.'));
-            if (!in_array($extension, ['.odt'])) {
+            if ('.odt' != $extension) {
                 throw new Exception('Seuls les fichiers .odt sont autorisés en upload.');
             }
 
@@ -134,7 +134,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             unlink($path.DS.$filename);
             $exist2 = file_exists($path.DS.$filename);
 
-            if ($exist == $exist2) {
+            if ($exist === $exist2) {
                 throw new Exception('Impossible de supprimer le fichier '.$filename);
             }
         } catch (Exception $e) {

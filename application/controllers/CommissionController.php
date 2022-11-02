@@ -266,7 +266,7 @@ class CommissionController extends Zend_Controller_Action
                 unset($rowset_ets[$key]);
             }
 
-            if ($ets_to_update) {
+            if ([] !== $ets_to_update) {
                 $model_etablissementInformation->update(['ID_COMMISSION' => $id_commission], 'ID_ETABLISSEMENTINFORMATIONS IN ('.implode(',', $ets_to_update).')');
 
                 // removes cache if any changes
@@ -460,13 +460,11 @@ class CommissionController extends Zend_Controller_Action
                 }
 
                 // On sauvegarde les natures du dossier
-                if (count($_POST[$id_membre.'_ID_DOSSIERNATURE']) > 0) {
-                    foreach ($_POST[$id_membre.'_ID_DOSSIERNATURE'] as $type) {
-                        $model_membresDossierNatures->insert([
-                            'ID_COMMISSIONMEMBRE' => $id_membre,
-                            'ID_DOSSIERNATURE' => $type,
-                        ]);
-                    }
+                foreach ($_POST[$id_membre.'_ID_DOSSIERNATURE'] as $type) {
+                    $model_membresDossierNatures->insert([
+                        'ID_COMMISSIONMEMBRE' => $id_membre,
+                        'ID_DOSSIERNATURE' => $type,
+                    ]);
                 }
             }
 

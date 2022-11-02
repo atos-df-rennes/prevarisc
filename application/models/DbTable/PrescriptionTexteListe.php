@@ -42,6 +42,7 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
      */
     public function replace($idOldTexte, $idNewTexte)
     {
+        $where = [];
         $data = ['ID_TEXTE' => $idNewTexte];
         $where[] = 'ID_TEXTE = '.$idOldTexte;
         //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc

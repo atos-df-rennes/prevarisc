@@ -52,7 +52,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      */
     public function getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId): string
     {
-        $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
+        $type = $this->types[$linkedObjectType] ?? $linkedObjectType;
 
         return implode(DS, [
             REAL_DATA_PATH,
@@ -75,12 +75,10 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     {
         $directory = $this->getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId);
 
-        if ($createDirIfNotExists && !is_dir($directory)) {
-            if (!@mkdir($directory, 0777, true)) {
-                $error = error_get_last();
+        if ($createDirIfNotExists && !is_dir($directory) && !@mkdir($directory, 0777, true)) {
+            $error = error_get_last();
 
-                throw new Exception('Cannot create base directory '.$directory.': '.$error['message']);
-            }
+            throw new Exception('Cannot create base directory '.$directory.': '.$error['message']);
         }
 
         return implode(DS, [
@@ -104,7 +102,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             return null;
         }
 
-        $type = isset($this->types[$linkedObjectType]) ? $this->types[$linkedObjectType] : $linkedObjectType;
+        $type = $this->types[$linkedObjectType] ?? $linkedObjectType;
 
         return implode(DS, [
             DATA_PATH,
@@ -146,7 +144,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
             case 'etablissement':
                 $service = new Service_Etablissement();
                 $etablissement = $service->get($linkedObjectId);
-                $tokens[] = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
+                $tokens[] = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ?: $linkedObjectId;
 
                 break;
 
@@ -154,11 +152,11 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
                 $db = new Model_DbTable_EtablissementDossier();
                 $dossiers = $db->getEtablissementListe($linkedObjectId);
                 $default_numeroid = [];
-                if ($dossiers) {
+                if ([] !== $dossiers) {
                     foreach ($dossiers as $dossier) {
                         $service = new Service_Etablissement();
                         $etablissement = $service->get($dossier['ID_ETABLISSEMENT']);
-                        $numero_id = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ? $etablissement['general']['NUMEROID_ETABLISSEMENT'] : $linkedObjectId;
+                        $numero_id = $etablissement['general']['NUMEROID_ETABLISSEMENT'] ?: $linkedObjectId;
                         if (false !== stripos($piece_jointe['DESCRIPTION_PIECEJOINTE'], $numero_id)) {
                             $tokens['%NUMEROID_ETABLISSEMENT%'] = $numero_id;
 

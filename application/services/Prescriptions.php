@@ -19,9 +19,9 @@ class Service_Prescriptions
         $dbPrescAssoc = new Model_DbTable_PrescriptionTypeAssoc();
         $prescriptionArray = [];
 
-        foreach ($listePrescType as $val => $ue) {
+        foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
-            array_push($prescriptionArray, $assoc);
+            $prescriptionArray[] = $assoc;
         }
 
         return $prescriptionArray;
@@ -71,18 +71,10 @@ class Service_Prescriptions
             $newAssoc->ID_PRESCRIPTIONTYPE = $prescType->ID_PRESCRIPTIONTYPE;
             $newAssoc->NUM_PRESCRIPTIONASSOC = $i + 1;
 
-            if (0 == $post['texte'][$i] || '' == $post['texte'][$i]) {
-                $texe = 1;
-            } else {
-                $texe = $post['texte'][$i];
-            }
+            $texe = 0 == $post['texte'][$i] || '' == $post['texte'][$i] ? 1 : $post['texte'][$i];
 
             $newAssoc->ID_TEXTE = $texe;
-            if (0 == $post['article'][$i] || '' == $post['article'][$i]) {
-                $article = 1;
-            } else {
-                $article = $post['article'][$i];
-            }
+            $article = 0 == $post['article'][$i] || '' == $post['article'][$i] ? 1 : $post['article'][$i];
 
             $newAssoc->ID_ARTICLE = $article;
             $newAssoc->save();
@@ -131,9 +123,13 @@ class Service_Prescriptions
     public function replaceTexte($newId, $oldId)
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
-        if ('' != $newId && '' != $oldId) {
-            $dbPrescTextes->replace($newId, $oldId);
+        if ('' == $newId) {
+            return;
         }
+        if ('' == $oldId) {
+            return;
+        }
+        $dbPrescTextes->replace($newId, $oldId);
     }
 
     // GESTION DES ARTICLES
@@ -176,9 +172,13 @@ class Service_Prescriptions
     public function replaceArticle($newId, $oldId)
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
-        if ('' != $newId && '' != $oldId) {
-            $dbPrescArticles->replace($newId, $oldId);
+        if ('' == $newId) {
+            return;
         }
+        if ('' == $oldId) {
+            return;
+        }
+        $dbPrescArticles->replace($newId, $oldId);
     }
 
     // GESTION DES PRESCRIPTIONS
@@ -187,11 +187,7 @@ class Service_Prescriptions
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
-        if (null == $idPrescription) {
-            $prescRegl = $dbPrescRegl->createRow();
-        } else {
-            $prescRegl = $dbPrescRegl->find($idPrescription)->current();
-        }
+        $prescRegl = null == $idPrescription ? $dbPrescRegl->createRow() : $dbPrescRegl->find($idPrescription)->current();
 
         $prescRegl->PRESCRIPTIONREGL_LIBELLE = $post['PRESCRIPTION_LIBELLE'];
         $prescRegl->PRESCRIPTIONREGL_TYPE = $post['PRESCRIPTIONREGL_TYPE'];
@@ -208,17 +204,9 @@ class Service_Prescriptions
             $newAssoc = $dbPrescReglAssoc->createRow();
             $newAssoc->ID_PRESCRIPTIONREGL = $prescRegl->ID_PRESCRIPTIONREGL;
             $newAssoc->NUM_PRESCRIPTIONASSOC = $i + 1;
-            if (0 == $post['texte'][$i] || '' == $post['texte'][$i]) {
-                $texe = 1;
-            } else {
-                $texe = $post['texte'][$i];
-            }
+            $texe = 0 == $post['texte'][$i] || '' == $post['texte'][$i] ? 1 : $post['texte'][$i];
             $newAssoc->ID_TEXTE = $texe;
-            if (0 == $post['article'][$i] || '' == $post['article'][$i]) {
-                $article = 1;
-            } else {
-                $article = $post['article'][$i];
-            }
+            $article = 0 == $post['article'][$i] || '' == $post['article'][$i] ? 1 : $post['article'][$i];
             $newAssoc->ID_ARTICLE = $article;
             $newAssoc->save();
         }
@@ -240,9 +228,9 @@ class Service_Prescriptions
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
 
         $prescriptionArray = [];
-        foreach ($listePrescDossier as $val => $ue) {
+        foreach ($listePrescDossier as $ue) {
             $assoc = $dbPrescReglAssoc->getPrescriptionReglAssoc($ue['ID_PRESCRIPTIONREGL']);
-            array_push($prescriptionArray, $assoc);
+            $prescriptionArray[] = $assoc;
         }
 
         return $prescriptionArray;

@@ -429,7 +429,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
         $texteInfo = $service_prescTextes->getTexte($this->_getParam('id'));
         $this->view->texteInfo = $texteInfo;
 
-        $liste_textes = $service_prescTextes->getTextesListe($this->_getParam('id'));
+        $liste_textes = $service_prescTextes->getTextesListe();
         $this->view->liste_textes = $liste_textes;
     }
 

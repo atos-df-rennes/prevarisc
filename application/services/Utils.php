@@ -5,7 +5,7 @@ class Service_Utils
     public function getFullFusionName(string $capsuleRubrique, array $options): string
     {
         $params = [];
-        array_push($params, $capsuleRubrique);
+        $params[] = $capsuleRubrique;
 
         $options = array_map(function (string $option): string {
             return $this->formatFusionName($option);

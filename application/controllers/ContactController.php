@@ -115,7 +115,7 @@ class ContactController extends Zend_Controller_Action
             }
 
             $id_item = $this->_request->id;
-            $exist = isset($_POST['exist']) ? $_POST['exist'] : false;
+            $exist = $_POST['exist'] ?? false;
 
             $id = null;
             if (!$exist) {
@@ -159,7 +159,7 @@ class ContactController extends Zend_Controller_Action
             $row = $DB_informations->find($this->_request->id)->current();
             $this->view->user_info = $row;
 
-            if ($_POST) {
+            if ([] !== $_POST) {
                 $this->_helper->viewRenderer->setNoRender(); // On desactive la vue
                 $row->setFromArray(array_intersect_key($_POST, $DB_informations->info('metadata')))->save();
 
@@ -234,7 +234,7 @@ class ContactController extends Zend_Controller_Action
 
             // Appartient à d'autre ets ?
             $exist = false;
-            foreach ($DB_contact as $key => $model) {
+            foreach ($DB_contact as $model) {
                 if (count($model->fetchAll('ID_UTILISATEURINFORMATIONS = '.$this->_request->id)->toArray()) > (($model == $DB_current) ? 1 : 0)) {
                     $exist = true;
                 }
