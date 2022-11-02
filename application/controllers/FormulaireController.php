@@ -22,6 +22,7 @@ class FormulaireController extends Zend_Controller_Action
      * @var mixed|\Service_Formulaire
      */
     public $serviceFormulaire;
+
     public function init()
     {
         $this->modelChamp = new Model_DbTable_Champ();

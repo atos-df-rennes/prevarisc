@@ -22,6 +22,7 @@ class Service_Effectifdegagement
      * @var mixed|\Model_DbTable_Etablissement
      */
     public $modelEtablissement;
+
     public function __construct()
     {
         $this->modelEffectifDegagement = new Model_DbTable_EffectifDegagement();

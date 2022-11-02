@@ -2,11 +2,6 @@
 
 class DossierController extends Zend_Controller_Action
 {
-    public $cache;
-    /**
-     * @var int|mixed
-     */
-    public $idDossier;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
@@ -17,6 +12,11 @@ class DossierController extends Zend_Controller_Action
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_CELLULE = 3;
     public const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
+    public $cache;
+    /**
+     * @var int|mixed
+     */
+    public $idDossier;
     /**
      * @var array<string, mixed>|mixed
      */
@@ -174,7 +174,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
 
-        if (!(property_exists($this->view, 'action') && $this->view->action !== null)) {
+        if (!(property_exists($this->view, 'action') && null !== $this->view->action)) {
             $this->view->action = $this->_request->getActionName();
         }
 

@@ -8,13 +8,14 @@ class EtablissementController extends Zend_Controller_Action
      */
     public $serviceEtablissement;
     /**
-     * @var mixed[]|array<string, mixed>|mixed
+     * @var array<string, mixed>|mixed|mixed[]
      */
     public $etablissement;
     /**
      * @var array<string, mixed>|mixed
      */
     public $etablissement_parent;
+
     public function init(): void
     {
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');

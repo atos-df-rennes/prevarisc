@@ -14,6 +14,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
      * @var mixed|\Service_Formulaire
      */
     public $serviceFormulaire;
+
     public function init()
     {
         $this->_helper->layout->setLayout('dashboard');
