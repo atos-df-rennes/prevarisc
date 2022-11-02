@@ -430,4 +430,11 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select);
     }
+
+    public function getDeleteEtablissement():array{
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'])
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ');
+        return $this->fetchAll($select)->toArray();
+    }
 }

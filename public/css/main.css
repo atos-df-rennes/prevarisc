@@ -1255,3 +1255,9 @@ dl.champ_effectif_camping dd input {
 #ign-accordion select[name='FORMAT_COUCHECARTO'] {
     width: fit-content;
 }
+
+.gridRetablir{
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+    text-align: end;
+}

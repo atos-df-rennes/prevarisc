@@ -1,0 +1,23 @@
+<h2>Rétablir</h2>
+<h2 class='label label-important'>Dossier supprimé</h2>
+<ul class='gridRetablir'>
+    <?php foreach($this->dossierSupprimer as $dossier) : ?>
+        <?= $this->partial('search/results/dossier.phtml', $dossier) ?>
+        <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/idDossier/". $dossier['ID_DOSSIER'] ?>>
+            <em class="icon-ok icon-black"></em>
+            Rétablir le dossier
+        </a>
+    <?php endforeach ?>
+</ul>
+
+<h2 class='label label-important'>Etablissement supprimé</h2>
+<ul class='gridRetablir'>
+    <?php foreach($this->etablissementSupprimer as $etablissement) : ?>
+        <?= $etablissement ?>
+        <?= $this->partial('search/results/etablissement.phtml', $etablissement) ?>
+        <a id="retablissementEtablissement" href=<?= "/etablissement/retablir-etablissement/idEtablissement/". $etablissement['ID_ETABLISSEMENT'] ?>>
+            <em class="icon-ok icon-black"></em>
+            Rétablir l'établissement
+        </a>
+    <?php endforeach ?>
+</ul>
