@@ -86,7 +86,7 @@
         <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
         <li>
             <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) : ?>
-                <a id="retablissementDossier" href="#">
+                <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/idDossier/". $this->idDossier ?>>
                     <em class="icon-ok icon-black"></em>
                     Rétablir le dossier
                 </a>
@@ -248,7 +248,6 @@ endif; ?>
                             <?php if($this->nbPrev > 0) :?>
                                 <span style='font-size:10px'>
                                 (
-
                                     <?php foreach($value['infosEtab']['preventionnistes'] as $prev) : ?>
                                         <?=
                                             $prev['NOM_UTILISATEURINFORMATIONS']

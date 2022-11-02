@@ -3041,6 +3041,11 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-
+    public function retablirDossierAction(): void{
+        $this->_helper->viewRenderer->setNoRender();
+        $serviceDossier = new Service_Dossier();
+        $serviceDossier->retablirDossier($this->_getParam('idDossier'));
+        $this->_redirect('/dossier/index/id/'.$this->_getParam('idDossier'));
+    }
 
 }
