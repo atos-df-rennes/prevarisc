@@ -1487,4 +1487,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         return false;
     }
+
+    public function retablirEtablissement($idEtablissement):void{
+        $DB_etablissement = new Model_DbTable_Etablissement();
+        $etablissement = $DB_etablissement->find($idEtablissement)->current();
+        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->save();
+    }
 }
