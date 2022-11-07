@@ -855,7 +855,8 @@ class Service_Dossier
         }
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
-
+            $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+            $dossier->DELETE_BY = $idDeleteBy;
             //suppression de la date de passage en commission
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
             $dbAffectDossier->deleteDateDossierAffect($idDossier);

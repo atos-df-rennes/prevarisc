@@ -1468,8 +1468,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $date = new DateTime();
         $DB_Etab = new Model_DbTable_Etablissement();
 
+        $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+
         $etablissement = $DB_Etab->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
+        $etablissement->DELETE_BY = $idDeleteBy;
         $etablissement->save();
     }
 
