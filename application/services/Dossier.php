@@ -888,6 +888,7 @@ class Service_Dossier
         $DB_dossier = new Model_DbTable_Dossier();
         $dossier = $DB_dossier->find($idDossier)->current();
         $dossier->DATESUPPRESSION_DOSSIER = null;
+        $dossier->DELETE_BY = null;
         $dossier->save();
     }
 }

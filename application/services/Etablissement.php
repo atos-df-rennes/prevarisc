@@ -1495,6 +1495,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DB_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $DB_etablissement->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->DELETE_BY = null;
         $etablissement->save();
     }
 }
