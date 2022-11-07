@@ -483,6 +483,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
         $serviceEtablissement = new Service_Etablissement();
         $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
-        $this->_redirect('/etablissement/index/id/'.$this->_getParam('idEtablissement'));
+        $this->_getParam('redirect') ? $this->_redirect('/etablissement/index/id/'.$this->_getParam('idEtablissement')) : $this->_redirect('/retablir');
     }
 }
