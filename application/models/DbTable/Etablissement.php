@@ -432,9 +432,22 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     }
 
     public function getDeleteEtablissement():array{
-        $select = $this->select()->setIntegrityCheck(false)
+
+        $select = $this->select()->distinct()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
+            ->distinct('e.ID_ETABLISSEMENT')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ');
-        return $this->fetchAll($select)->toArray();
+
+        $res = [];
+
+        /*
+        TODO trouver une solution plus propre via la requete sql
+        */
+        foreach ($this->getAdapter()->fetchAll($select) as $row) {
+            $res[$row['ID_ETABLISSEMENT']] = $row;
+        }
+
+        return $res;
     }
 }
