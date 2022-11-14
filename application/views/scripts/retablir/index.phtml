@@ -15,7 +15,9 @@
 <ul class='gridRetablir'>
     <?php foreach($this->etablissementSupprimer as $etablissement) : ?>
         <p><?= $etablissement['USERNAME_UTILISATEUR'] ?></p>
-        <?= $this->partial('search/results/etablissement.phtml', $etablissement) ?>
+        <div class='linkDisabled'>
+            <?= $this->partial('search/results/etablissement.phtml', $etablissement) ?>
+        </div>
         <a id="retablissementEtablissement" class='btn-small ' href=<?= "/etablissement/retablir-etablissement/idEtablissement/". $etablissement['ID_ETABLISSEMENT'] ?>>
             <em class="icon-ok icon-black"></em>
             Rétablir l'établissement

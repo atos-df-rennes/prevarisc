@@ -1261,3 +1261,7 @@ dl.champ_effectif_camping dd input {
     grid-template-columns: 1fr 10fr 2fr;
     text-align: center;
 }
+
+.linkDisabled{
+    pointer-events: none;
+}
