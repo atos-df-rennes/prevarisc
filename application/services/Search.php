@@ -32,10 +32,11 @@ class Service_Search
      * @param null|mixed   $familles
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
+     * @param null|mixed   $preventionniste
      *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null,$preventionniste = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -208,7 +209,7 @@ class Service_Search
             }
 
             //Critère : preventionniste
-            if (null !== $preventionniste){
+            if (null !== $preventionniste) {
                 $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
             }
 
@@ -463,7 +464,7 @@ class Service_Search
             }
 
             //Critère : preventionniste
-            if (null !== $preventionniste){
+            if (null !== $preventionniste) {
                 $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
             }
 
