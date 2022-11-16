@@ -2294,7 +2294,7 @@ class DossierController extends Zend_Controller_Action
         $DBdossierCommission = new Model_DbTable_Commission();
 
         $this->view->commissionInfos = 'Aucune commission';
-        if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && '0' !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
+        if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && null !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
             $this->view->commissionInfos = $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current();
         }
 
@@ -2333,7 +2333,7 @@ class DossierController extends Zend_Controller_Action
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
         $infosDateComm = $dbDateComm->find($affectDossier['ID_DATECOMMISSION_AFFECT'])->current();
         $this->view->ID_AFFECTATION_DOSSIER_VISITE = $infosDateComm['ID_DATECOMMISSION'];
-        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || null === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $affectDossier['ID_DATECOMMISSION_AFFECT'];
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
