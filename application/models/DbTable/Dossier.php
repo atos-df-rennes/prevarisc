@@ -508,11 +508,14 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
-    public function getDeleteDossier():array{
+    public function getDeleteDossier(): array
+    {
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
-            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = d.DELETE_BY','USERNAME_UTILISATEUR')
-            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL ');
+            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = d.DELETE_BY', 'USERNAME_UTILISATEUR')
+            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL ')
+        ;
+
         return $this->fetchAll($select)->toArray();
     }
 }

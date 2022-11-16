@@ -272,7 +272,6 @@ class DossierController extends Zend_Controller_Action
         //Autorisation a retablir
         $this->view->is_allowed_retablir = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'rétablissement', 'rétablir');
 
-
         $service_etablissement = new Service_Etablissement();
 
         if ($this->_getParam('idEtablissement')) {
@@ -3045,11 +3044,11 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function retablirDossierAction(): void{
+    public function retablirDossierAction(): void
+    {
         $this->_helper->viewRenderer->setNoRender();
         $serviceDossier = new Service_Dossier();
         $serviceDossier->retablirDossier($this->_getParam('idDossier'));
         $this->_getParam('redirect') ? $this->_redirect('/dossier/index/id/'.$this->_getParam('idDossier')) : $this->_redirect('/retablir');
     }
-
 }

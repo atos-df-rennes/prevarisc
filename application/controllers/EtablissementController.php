@@ -479,7 +479,8 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function retablirEtablissementAction():void{
+    public function retablirEtablissementAction(): void
+    {
         $this->_helper->viewRenderer->setNoRender();
         $serviceEtablissement = new Service_Etablissement();
         $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));

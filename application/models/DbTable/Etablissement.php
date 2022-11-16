@@ -431,20 +431,19 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $this->fetchRow($select);
     }
 
-    public function getDeleteEtablissement():array{
-
+    public function getDeleteEtablissement(): array
+    {
         $select = $this->select()->distinct()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'])
             ->joinLeft(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
-            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETE_BY','USERNAME_UTILISATEUR')
+            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETE_BY', 'USERNAME_UTILISATEUR')
             ->distinct('e.ID_ETABLISSEMENT')
-            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ');
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ')
+        ;
 
         $res = [];
 
-        /*
-        TODO trouver une solution plus propre via la requete sql
-        */
+        // TODO trouver une solution plus propre via la requete sql
         foreach ($this->getAdapter()->fetchAll($select) as $row) {
             $res[$row['ID_ETABLISSEMENT']] = $row;
         }

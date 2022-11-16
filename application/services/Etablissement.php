@@ -1476,6 +1476,15 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $etablissement->save();
     }
 
+    public function retablirEtablissement($idEtablissement): void
+    {
+        $DB_etablissement = new Model_DbTable_Etablissement();
+        $etablissement = $DB_etablissement->find($idEtablissement)->current();
+        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->DELETE_BY = null;
+        $etablissement->save();
+    }
+
     private function compareActivitesSecondaires($ets, $postData): bool
     {
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {
@@ -1489,13 +1498,5 @@ class Service_Etablissement implements Service_Interface_Etablissement
         }
 
         return false;
-    }
-
-    public function retablirEtablissement($idEtablissement):void{
-        $DB_etablissement = new Model_DbTable_Etablissement();
-        $etablissement = $DB_etablissement->find($idEtablissement)->current();
-        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
-        $etablissement->DELETE_BY = null;
-        $etablissement->save();
     }
 }

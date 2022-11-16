@@ -884,7 +884,8 @@ class Service_Dossier
         return $DB_prev->getPrevDossier($idDossier);
     }
 
-    public function retablirDossier($idDossier){
+    public function retablirDossier($idDossier)
+    {
         $DB_dossier = new Model_DbTable_Dossier();
         $dossier = $DB_dossier->find($idDossier)->current();
         $dossier->DATESUPPRESSION_DOSSIER = null;
