@@ -54,9 +54,11 @@
         <a href='/changement' ><em class="icon-th-list icon-black"></em> Messages des alertes</a>
     </li>
 
+    <?php if($this->is_allowed_retablir) : ?>
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'retablir') echo "class='active'" ?> >
         <a href='/retablir' ><em class="icon-ok icon-black"></em> Rétablir</a>
     </li>
+    <?php endif; ?>
 </ul>
 
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>

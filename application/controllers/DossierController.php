@@ -269,6 +269,10 @@ class DossierController extends Zend_Controller_Action
         // Autorisation de suppression du dossier
         $this->view->is_allowed_delete_dossier = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_dossier');
 
+        //Autorisation a retablir
+        $this->view->is_allowed_retablir = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'rétablissement', 'rétablir');
+
+
         $service_etablissement = new Service_Etablissement();
 
         if ($this->_getParam('idEtablissement')) {

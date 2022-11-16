@@ -1,6 +1,6 @@
 SET NAMES 'utf8';
 
-insert into resources values (NULL, 'rétablissement', 'Rétablissemnt des dossier set établissements supprimés');
+insert into resources values (NULL, 'rétablissement', 'Rétablissement des dossier set établissements supprimés');
 
 insert into `privileges`(`name`, `text`, `id_resource`)
 values (
