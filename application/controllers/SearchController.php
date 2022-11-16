@@ -36,6 +36,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_commission = $service_commission->getAll();
         $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
+        $this->view->liste_prev = $service_search->listePrevActifs();
 
         if (
             $this->_request->isGet()
@@ -62,8 +63,9 @@ class SearchController extends Zend_Controller_Action
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $groupements_territoriaux = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
+                    $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
 
-                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux);
+                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste);
 
                     $objPHPExcel = new PHPExcel();
                     $objPHPExcel->setActiveSheetIndex(0);
@@ -244,6 +246,8 @@ class SearchController extends Zend_Controller_Action
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
+                    $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
+
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $groupements_territoriaux = $parameters['groupements_territoriaux'];
                     } elseif (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
@@ -257,7 +261,8 @@ class SearchController extends Zend_Controller_Action
                         $groupements_territoriaux = null;
                     }
 
-                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, 50, $page);
+
+                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste,50, $page);
 
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
