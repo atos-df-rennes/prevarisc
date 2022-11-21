@@ -17,17 +17,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchRow($select);
     }
 
-    public function getAllFils(int $idParent)
-    {
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'NOM', 'ID_TYPECHAMP', 'tableau'])
-            ->where('c.ID_PARENT = ?', $idParent)
-        ;
-
-        return $this->fetchAll($select)->toArray();
-    }
-
     public function getChampsByRubrique($idRubrique): array
     {
         $select = $this->select()
@@ -65,20 +54,6 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    public function getChampFromParent(int $idParent): array
-    {
-        $select = $this->select()
-            ->setIntegrityCheck(false)
-            ->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
-            ->join(['c2' => 'champ'], 'c2.ID_PARENT = c.ID_CHAMP')
-            ->join(['ltcr' => 'listetypechamprubrique'], 'ltcr.ID_TYPECHAMP = c2.ID_TYPECHAMP')
-            ->where('c.ID_CHAMP = ?', $idParent)
-            ->order('c2.idx asc')
-        ;
-
-        return $this->fetchRow($select)->toArray();
-    }
-
     public function getChampsFromParent(int $idParent): array
     {
         $select = $this->select()
@@ -95,7 +70,13 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    //postParam => ['idx' = nouvelle idx champ, 'ID_CHAMP' => ID du champ]
+    /**
+     * @param array $postParam
+     * `Format : ['ID', 'idx']`
+     *
+     * `ID` correspond à l'identifiant de la rubrique ou du champ.
+     * `idx` correspond au nouvel index de la rubrique ou du champ.
+     */
     public function updateNewIdx(array $postParam): void
     {
         $champ = $this->find($postParam['ID'])->current();
@@ -107,7 +88,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
+        $select->from(['c' => 'champ'], [])
             ->where('c.ID_PARENT IS NULL')
             ->where('c.ID_RUBRIQUE = ?', $idRubrique)
         ;
@@ -119,7 +100,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], ['ID_CHAMP', 'ID_PARENT'])
+        $select->from(['c' => 'champ'], [])
             ->where('c.ID_PARENT = ?', $idParent)
         ;
 
