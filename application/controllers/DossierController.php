@@ -3162,24 +3162,15 @@ class DossierController extends Zend_Controller_Action
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        $modelDossier = new Model_DbTable_Dossier();
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
-        $service_dossier = new Service_Dossier();
-        $champValeursInit = $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier');
 
-        if ($this->idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
-        }
-
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
-        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+        $this->verificationsTechniquesAction();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -3200,11 +3191,11 @@ class DossierController extends Zend_Controller_Action
                 }
 
                 //Sauvegarde les changements dans les tableaux
-                $serviceDossierDescriptif->saveChangeTable($champValeursInit, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
+                $serviceDossierDescriptif->saveChangeTable($this->view->rubriques, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
 
-                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
             $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);

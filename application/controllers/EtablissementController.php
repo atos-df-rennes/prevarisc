@@ -1,4 +1,4 @@
-pre<?php
+<?php
 
 class EtablissementController extends Zend_Controller_Action
 {
@@ -45,9 +45,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
-
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
@@ -285,7 +282,6 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
@@ -294,7 +290,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
         $idEtablissement = $this->getParam('id');
-        $champValeursInit = $serviceEtablissementDescriptif->getRubriques($idEtablissement, 'Etablissement');
 
         $this->descriptifPersonnaliseAction();
 
@@ -317,7 +312,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post);
                 //Sauvegarde les changements dans les tableaux
-                $serviceEtablissementDescriptif->saveChangeTable($champValeursInit, $groupInputsPost, 'Etablissement', $idEtablissement);
+                $serviceEtablissementDescriptif->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {

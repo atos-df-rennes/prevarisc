@@ -2,8 +2,7 @@
     <i class="icon-move"></i>
 </td>
 <?php $genTimesTamp = time(); ?>
-<?php foreach($this->inputs as &$input) : ?>
-
+<?php foreach ($this->inputs as &$input) : ?>
     <?php
         $input['STR_DATA'] = 'valeur-'.$genTimesTamp.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'];
     ?>

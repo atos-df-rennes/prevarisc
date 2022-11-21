@@ -69,7 +69,6 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-            $post['idx'] = $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
 
             $post['idx'] = (int) $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
             $idRubrique = $this->serviceFormulaire->insertRubrique($post);
@@ -257,7 +256,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
-            $champ->tableau = 'on' === $post['is-tableau'] ? 1 : 0;
+            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }
