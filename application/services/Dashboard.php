@@ -216,9 +216,6 @@ class Service_Dashboard
 
     public function getBlocConfig()
     {
-
-        $this->blocsConfig['ERPOuvertsSousAvisDefavorable']['count'] = 42;
-
         return $this->blocsConfig;
     }
 
