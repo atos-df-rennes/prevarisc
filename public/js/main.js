@@ -118,7 +118,7 @@ function bindEtsPopup($elem) {
                     {
                         const nomPrenom = preventionniste.NOM_UTILISATEURINFORMATIONS+''+preventionniste.PRENOM_UTILISATEURINFORMATIONS
                         html += nomPrenom
-                        if(data.response.preventionnistes.indexOf(preventionniste) + 1< data.response.preventionnistes)
+                        if(data.response.preventionnistes.indexOf(preventionniste) + 1< data.response.preventionnistes.length)
                             html += ',' 
                     }
                 )
