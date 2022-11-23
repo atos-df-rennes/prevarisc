@@ -6,19 +6,11 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_VALEUR'; // Clé primaire
 
     /**
-     * @param integer $idChamp
-     * @param integer $idObject
-     * @param string $classObject
-     * @param integer|null $idx
-     * @return Zend_Db_Table_Row_Abstract|null
-     *
      * Retourne l'unique valeur d'un champ n'étant pas un enfant d'un champ `tableau`
-     *
      *  OU
-     *
-     * Retourne la valeur à l'index spécifié d'un champ étant un enfant d'un champ `tableau`
+     * Retourne la valeur à l'index spécifié d'un champ étant un enfant d'un champ `tableau`.
      */
-    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, int $idx = null)
+    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, int $idx = null): ?Zend_Db_Table_Row_Abstract
     {
         $select = $this->getSelect($idChamp, $idObject, $classObject);
         null === $idx ? $select->where('v.idx IS NULL') : $select->where('v.idx = ?', $idx);
@@ -27,14 +19,9 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param integer $idChamp
-     * @param integer $idObject
-     * @param string $classObject
-     * @return Zend_Db_Table_Rowset_Abstract
-     *
-     * Retourne toutes les valeurs d'un champ étant un enfant d'un champ `tableau`
+     * Retourne toutes les valeurs d'un champ étant un enfant d'un champ `tableau`.
      */
-    public function getAllByChampAndObject(int $idChamp, int $idObject, string $classObject)
+    public function getAllByChampAndObject(int $idChamp, int $idObject, string $classObject): Zend_Db_Table_Rowset_Abstract
     {
         $select = $this->getSelect($idChamp, $idObject, $classObject);
 

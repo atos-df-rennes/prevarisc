@@ -8,11 +8,11 @@ class Service_Descriptif
     private $modelValeur;
 
     private $serviceValeur;
+    private $serviceFormulaire;
 
     private $capsuleRubrique;
     private $modelDisplayRubrique;
     private $serviceRubrique;
-    private $serviceFormulaire;
 
     public function __construct(string $capsuleRubrique, Zend_Db_Table_Abstract $modelDisplayRubrique, $serviceRubrique)
     {
@@ -64,8 +64,10 @@ class Service_Descriptif
                         $champ['FILS']['INPUTS'] = $inputs;
                     } else {
                         foreach ($champ['FILS'] as &$champFils) {
-                            $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
-                            $champFils['ID_VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
+                            $valeur = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+
+                            $champFils['VALEUR'] = $valeur['VALEUR'];
+                            $champFils['ID_VALEUR'] = $valeur['ID_VALEUR'];
                         }
                     }
                 } else {
@@ -106,62 +108,19 @@ class Service_Descriptif
     }
 
     /**
-     * compare l array initiale et celui pousse dans le post.
-     *
-     * si une valeur a change de valeur reel alors on update
-     * si une valeur n est plus dans l array pousse alors on le supprime
-     * si une valeur est presente dans l array final alors on fait un insert
-     *
-     * si des id sont restant dans tableauIDValeurUpdate alors cest qu ils n ont pas ete update a la fin des boucles, on procede donc a la suppression de ces valeurs
-     *
-     * @param mixed $classObject
-     * @param mixed $idObject
+     * Compare l'array initial et celui final dans le post :
+     * - Si une valeur est présente dans l'array final alors qu'elle ne l'était pas dans l'array initial alors on insert
+     * - Si une valeur a changé de valeur ou d'index alors on update
+     * - Si une valeur était dans l'array initial et ne l'est plus dans l'array final alors on le supprime.
      */
-    public function saveChangeTable(array $initArrayValue, array $newArrayValue, $classObject, $idObject): void
+    public function saveChangeTable(array $initArrayValue, array $newArrayValue, string $classObject, int $idObject): void
     {
-        //On enleve les inputs hidden
-        $tableauDeComparaison = [];
-        $tableauIDValeurCheck = [];
+        $serviceUtilsDescriptif = new Service_Utils_Descriptif();
 
-        //On mets dans le tableau de comparaison toutes les valeurs initiale (ID_VALEUR, STR_VALEUR, STR_LONG_VALEUR etc ....) pour chaque ID valeur
-        foreach ($initArrayValue as $rubrique) {
-            foreach ($rubrique['CHAMPS'] as $champ) {
-                if (1 === $champ['tableau']) {
-                    foreach ($champ['FILS']['VALEURS'] as $valeursFils) {
-                        foreach ($valeursFils as $valeur) {
-                            $tableauDeComparaison[$valeur['ID_VALEUR']] = $valeur;
-                            $tableauIDValeurCheck[$valeur['ID_VALEUR']] = $valeur['ID_VALEUR'];
-                        }
-                    }
-                }
-            }
-        }
+        $tableauDeComparaison = $serviceUtilsDescriptif->initTableValues($initArrayValue);
+        $tableauDeComparaison = $serviceUtilsDescriptif->updateTableValues($tableauDeComparaison, $newArrayValue, $classObject, $idObject);
 
-        foreach ($newArrayValue as $champParent) {
-            foreach ($champParent as $newIdxValeur => $valeurs) {
-                foreach ($valeurs as $idChamp => $valeur) {
-                    //On retire le marquage des valeurs sur lequel on est deja passee
-                    unset($tableauIDValeurCheck[array_search($valeur['ID_VALEUR'], $tableauIDValeurCheck)]);
-                    //Si la valeur vient d etre ajoute alors on insert en DB
-                    //Ou
-                    if ('NULL' === $valeur['ID_VALEUR']) {
-                        $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
-                    } elseif ($newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
-                    //Ou la valeur brut a change
-                    || $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']) {
-                        $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
-                        $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
-                    }
-                }
-            }
-        }
-
-        //On supprime les valeurs via les identifiants restant dans tableauIDValeurCheck
-        foreach ($tableauIDValeurCheck as $idValueToDelete) {
-            if (null !== $idValueToDelete) {
-                $this->modelValeur->delete('ID_VALEUR  = '.$idValueToDelete);
-            }
-        }
+        $serviceUtilsDescriptif->deleteTableValues($tableauDeComparaison);
     }
 
     public function groupInputByOrder(array $initialList)

@@ -90,10 +90,10 @@ class Service_Formulaire
     /**
      * Retourne la liste des pattern des champs fils d un champ parent.
      */
-    //TODO Ajouter la génération du timstamp pour les valeurs non affecté
     public function getInputs(array $champParent): array
     {
         $listChampPattern = [];
+
         foreach (array_column($champParent['FILS'], 'ID_CHAMP') as $IdChamp) {
             $champDb = $this->modelChamp->getTypeChamp($IdChamp);
             $patternParam = [
@@ -113,6 +113,7 @@ class Service_Formulaire
     public function getArrayValuesWithPattern(array $listValeurs, array $listChampPattern): array
     {
         $arrayReturn = [];
+
         foreach ($listValeurs as $idChampFils => $valeurs) {
             foreach ($valeurs as $valeur) {
                 if (empty($arrayReturn[$valeur['IDX_VALEUR']])) {
@@ -132,6 +133,7 @@ class Service_Formulaire
                 }
             }
         }
+
         ksort($arrayReturn);
 
         return $arrayReturn;
