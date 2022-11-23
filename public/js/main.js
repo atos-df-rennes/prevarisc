@@ -114,6 +114,16 @@ function bindEtsPopup($elem) {
                 if(ets_adresse != null) html += "<br><span>" + (ets_adresse.NUMERO_ADRESSE == null ? '' : ets_adresse.NUMERO_ADRESSE) + " " + ets_adresse.LIBELLE_RUE + " " + ets_adresse.CODEPOSTAL_COMMUNE + " " + ets_adresse.LIBELLE_COMMUNE + "</span>";
 
                 html += "<br><br>";
+                data.response.preventionnistes.forEach(preventionniste => 
+                    {
+                        const nomPrenom = preventionniste.NOM_UTILISATEURINFORMATIONS+''+preventionniste.PRENOM_UTILISATEURINFORMATIONS
+                        html += nomPrenom
+                        if(data.response.preventionnistes.indexOf(preventionniste) + 1< data.response.preventionnistes)
+                            html += ',' 
+                    }
+                )
+
+                html += "<br><br>";
                 html += "<a href='/etablissement/index/id/" + ets_id + "' class='btn btn-small btn-primary btn-block'>Voir la fiche</a>";
 
                 e.popover('destroy');
