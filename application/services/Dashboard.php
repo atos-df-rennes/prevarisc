@@ -186,11 +186,13 @@ class Service_Dashboard
         ],
     ];
 
+
     /**
      * @param array $options
      */
     public function __construct($options = [])
     {
+
         // default options
         $this->options = array_merge([
             'next_commissions_days' => 15,
@@ -214,8 +216,12 @@ class Service_Dashboard
 
     public function getBlocConfig()
     {
+
+        $this->blocsConfig['ERPOuvertsSousAvisDefavorable']['count'] = 42;
+
         return $this->blocsConfig;
     }
+
 
     /**
      * @psalm-return array<int, array{id:mixed, LIBELLE_COMMISSION:mixed, LIBELLE_DATECOMMISSION:mixed, ID_COMMISSIONTYPEEVENEMENT:mixed, DATE_COMMISSION:mixed, HEUREDEB_COMMISSION:mixed, HEUREFIN_COMMISSION:mixed, heure:string, odj:mixed}>

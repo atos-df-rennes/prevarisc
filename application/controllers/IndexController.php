@@ -33,6 +33,7 @@ class IndexController extends Zend_Controller_Action
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],
+                    'count' => $blocConfig['count'],
                     'height' => $blocConfig['height'],
                     'width' => $blocConfig['width'],
                 ];
@@ -94,6 +95,7 @@ class IndexController extends Zend_Controller_Action
                 'id' => $id,
                 'data' => $service->{$method}($user),
                 'type' => $blocConfig['type'],
+                'count' => $blocConfig['count'],
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],
                 'width' => $blocConfig['width'],
