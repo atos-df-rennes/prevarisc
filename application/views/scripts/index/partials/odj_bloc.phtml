@@ -2,8 +2,10 @@
   <div class="panel-heading">
     <i class="icon icon-chevron-right"></i>
     Ordre du jour des prochaines commissions
+    <?= $this->title.'('.($this->count ?? 'NA').')' ?>
+
   </div>
-  <div class="panel-body" style="font-size: .85em;display:none"> 
+  <div class="panel-body" style="font-size: .85em;display:none">
       <img src="/images/load.gif" />
   </div>
 </div>

@@ -352,10 +352,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
     }
 
-    public function listeDesERPOuvertsSousAvisDefavorable($idsCommission = null, $numInseeCommune = null, $idUtilisateur = null)
+    public function listeDesERPOuvertsSousAvisDefavorable($idsCommission = null, $numInseeCommune = null, $idUtilisateur = null, $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('avis.ID_AVIS', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
@@ -372,10 +372,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeERPSansPreventionniste()
+    public function listeERPSansPreventionniste($getCount = null)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         $search->setCriteria('utilisateur.ID_UTILISATEUR IS NULL');
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
@@ -383,10 +383,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission)
+    public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission, $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->columns([
             'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
         ]);

@@ -52,7 +52,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
     }
 
     // On set le type d'entité avec ce que l'on recherche
-    public function setItem($item): self
+    public function setItem($item, $getCount = false): self
     {
         $this->item = $item;
         $this->select = $this->select()->setIntegrityCheck(false);
@@ -60,9 +60,16 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         switch ($item) {
             // Pour les établissements
             case 'etablissement':
-                $this->select
-                    ->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT'])
-                    ->columns([
+                if($getCount){
+                    $this->select
+                    ->from(['e' => 'etablissement'], ['COUNT(*)']);
+
+                }else{
+                    $this->select
+                    ->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT']);
+                }
+
+                    $this->select->columns([
                         'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(etablissementlie.ID_FILS_ETABLISSEMENT)
                             FROM etablissement
                             INNER JOIN etablissementlie ON etablissement.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT

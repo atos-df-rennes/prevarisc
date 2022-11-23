@@ -370,12 +370,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      *
      * @return array
      */
-    public function listeDesDossierDateCommissionEchu($idsCommission, $sinceDays = 10, $untilDays = 100)
+    public function listeDesDossierDateCommissionEchu($idsCommission, $sinceDays = 10, $untilDays = 100, $getCount = false)
     {
         $ids = (array) $idsCommission;
 
-        $select = $this->select()->setIntegrityCheck(false)
-            ->from(['d' => 'dossier'])
+        $select = $this->select()->setIntegrityCheck(false);
+        if($getCount){
+            $select->from(['d' => 'dossier'], ['COUNT(*)']);
+        }else{
+            $select->from(['d' => 'dossier']);
+        }
+        $select
             ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
             ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
             ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
@@ -402,13 +407,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function listeDossierAvecAvisDiffere($idsCommission)
+    public function listeDossierAvecAvisDiffere($idsCommission, $getCount = false)
     {
         $ids = (array) $idsCommission;
 
         // Dossiers avec avis différé
         $search = new Model_DbTable_Search();
-        $search->setItem('dossier');
+        $search->setItem('dossier', $getCount);
         if ([] !== $ids) {
             $search->setCriteria('d.COMMISSION_DOSSIER', $ids);
         }
@@ -417,10 +422,10 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeDesCourrierSansReponse($duree_en_jour = 5)
+    public function listeDesCourrierSansReponse($duree_en_jour = 5, $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('dossier');
+        $search->setItem('dossier', $getCount);
         $search->setCriteria('d.TYPE_DOSSIER', 5);
         $search->setCriteria('d.DATEREP_DOSSIER IS NULL');
         $search->setCriteria('d.OBJET_DOSSIER IS NOT NULL');
@@ -479,8 +484,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_DOSSIER from (
                 (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -491,8 +496,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 limit 1)
             UNION
                 (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'

@@ -20,6 +20,7 @@ class IndexController extends Zend_Controller_Action
 
         $identity = Zend_Auth::getInstance()->getIdentity();
         $user = $service_user->find($identity['ID_UTILISATEUR']);
+
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $acl = unserialize($cache->load('acl'));
         $profil = $user['group']['LIBELLE_GROUPE'];
@@ -36,7 +37,7 @@ class IndexController extends Zend_Controller_Action
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],
-                    'count' => sizeof($service->{$method}($user)),
+                    'count' => $service->{$method}($user),
                     'height' => $blocConfig['height'],
                     'width' => $blocConfig['width'],
                 ];

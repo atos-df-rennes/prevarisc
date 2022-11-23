@@ -35,12 +35,16 @@ class Service_Feed
      *
      * @return array
      */
-    public function getFeeds($user, $count = 5)
+    public function getFeeds($user, $count = 5, $getCount = false)
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
-        $select->from('news')
-            ->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
+        if($getCount){
+            $select->from('news', ['COUNT(*)']);
+        }else{
+            $select->from('news');
+        }
+        $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
