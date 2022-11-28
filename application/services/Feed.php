@@ -48,8 +48,8 @@ class Service_Feed
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
-            ->group('ID_NEWS')
-            ->order('ID_NEWS DESC')
+            ->group('news.ID_NEWS')
+            ->order('news.ID_NEWS DESC')
             ->limit($count)
         ;
 

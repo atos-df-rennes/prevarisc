@@ -419,7 +419,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         }
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     public function listeDesCourrierSansReponse($duree_en_jour = 5, $getCount = false)
@@ -432,7 +438,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', (int) $duree_en_jour);
         $search->order('d.DATEINSERT_DOSSIER desc');
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     //Fonction qui récup tous les établissements liés au dossier LAST VERSION

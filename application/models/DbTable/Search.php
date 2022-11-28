@@ -17,7 +17,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
      *
      * @return Zend_Db_Table_Rowset_Abstract|Zend_Paginator
      */
-    public function run($id_etablissement_parent = false, $numero_de_page = null, $paginator = true)
+    public function run($id_etablissement_parent = false, $numero_de_page = null, $paginator = true, $getCount = false)
     {
         // Recherche par niveaux
         if (false !== $id_etablissement_parent) {
@@ -26,6 +26,10 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
             } elseif ('dossier' == $this->item) {
                 $this->select->where(true === $id_etablissement_parent || 0 == $id_etablissement_parent ? 'dossierlie.ID_DOSSIER1 IS NULL' : 'dossierlie.ID_DOSSIER1 = '.$id_etablissement_parent);
             }
+        }
+
+        if ($getCount) {
+            return $this->fetchRow($this->select)['count'];
         }
 
         if (!$paginator) {
@@ -62,18 +66,18 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
             case 'etablissement':
                 if($getCount){
                     $this->select
-                    ->from(['e' => 'etablissement'], ['COUNT(*)']);
+                    ->from(['e' => 'etablissement'], ['COUNT(DISTINCT e.ID_ETABLISSEMENT) as count']);
 
                 }else{
                     $this->select
                     ->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT']);
                 }
 
-                    $this->select->columns([
-                        'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(etablissementlie.ID_FILS_ETABLISSEMENT)
-                            FROM etablissement
-                            INNER JOIN etablissementlie ON etablissement.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT
-                            WHERE etablissement.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
+                $this->select->columns([
+                    'NB_ENFANTS' => new Zend_Db_Expr('( SELECT COUNT(etablissementlie.ID_FILS_ETABLISSEMENT)
+                        FROM etablissement
+                        INNER JOIN etablissementlie ON etablissement.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT
+                        WHERE etablissement.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
                     ])
                     ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                     ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER'])
@@ -92,14 +96,26 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                     ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                     ->order('CAST(etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS AS UNSIGNED)')
                     ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS')
-                    ->group('e.ID_ETABLISSEMENT')
                 ;
+
+                if (!$getCount) {
+                    $this->select
+                        ->group('e.ID_ETABLISSEMENT')
+                    ;
+                }
 
                 break;
             // Pour les dossiers
             case 'dossier':
+                if ($getCount) {
+                    $this->select
+                    ->from(['d' => 'dossier'], ['COUNT(DISTINCT d.ID_DOSSIER) as count']);
+                } else {
+                    $this->select
+                        ->from(['d' => 'dossier']);
+                }
+
                 $this->select
-                    ->from(['d' => 'dossier'])
                     ->columns([
                         'NB_PJ' => new Zend_Db_Expr('(SELECT COUNT(dossierpj.ID_DOSSIER)
                                 FROM dossierpj
@@ -148,8 +164,12 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                         'LIBELLE_ETABLISSEMENTINFORMATIONS'
                     )
                     ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
-                    ->group('d.ID_DOSSIER')
                 ;
+
+                if (!$getCount) {
+                    $this->select
+                        ->group('d.ID_DOSSIER');
+                }
 
                 break;
             // Pour les utilisateurs

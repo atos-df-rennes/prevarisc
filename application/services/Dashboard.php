@@ -264,21 +264,21 @@ class Service_Dashboard
         return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorable($user, $getCount)
+    public function getERPOuvertsSousAvisDefavorable($user, $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, null, null, $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorableSuivis($user, $getCount)
+    public function getERPOuvertsSousAvisDefavorableSuivis($user, $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, null, $user['ID_UTILISATEUR'], $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorableSurCommune($user, $getCount)
+    public function getERPOuvertsSousAvisDefavorableSurCommune($user, $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
@@ -297,7 +297,7 @@ class Service_Dashboard
         return $dbEtablissement->listeErpOuvertsSansProchainesVisitePeriodiques($commissionsUser, $getCount);
     }
 
-    public function getERPSansPreventionniste($user, $getCount)
+    public function getERPSansPreventionniste($user, $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
@@ -384,7 +384,13 @@ class Service_Dashboard
         $search->setCriteria('d.VERROU_DOSSIER', 0);
         $search->order('IFNULL(d.DATEVISITE_DOSSIER, d.DATEINSERT_DOSSIER) desc');
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     public function getDossiersSuivisSansAvis($user, $getCount = false)
@@ -403,7 +409,13 @@ class Service_Dashboard
 
         $search->order('d.DATEINSERT_DOSSIER desc');
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     /**
@@ -416,7 +428,13 @@ class Service_Dashboard
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
         $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     public function getLeveePresc($user, $getCount = false)

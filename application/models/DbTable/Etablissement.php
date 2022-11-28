@@ -369,7 +369,13 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $search->setCriteria('utilisateur.ID_UTILISATEUR', $idUtilisateur);
         }
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     public function listeERPSansPreventionniste($getCount = null)
@@ -380,7 +386,13 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->setCriteria('utilisateur.ID_UTILISATEUR IS NULL');
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission, $getCount = false)
@@ -406,7 +418,13 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
         $search->having('nextvisiteyear <= YEAR(NOW())');
 
-        return $search->run(false, null, false)->toArray();
+        if ($getCount) {
+            $searchToRun = $search->run(false, null, false, true);
+        } else {
+            $searchToRun = $search->run(false, null, false)->toArray();
+        }
+
+        return $searchToRun;
     }
 
     /**

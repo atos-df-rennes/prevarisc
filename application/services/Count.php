@@ -1,27 +1,9 @@
 <?php
     class Service_Count{
-
-        public function getNextCommission($idsCommission, $date, $next_date){
-
-            $DB_dateCommission = new Model_DbTable_DateCommission();
-
-            $ids = (array) $idsCommission;
-            $select = "SELECT COUNT(*)
-                FROM datecommission d
-                LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
-                WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-                ".([] !== $ids ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
-                ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
-
-            $res = $DB_dateCommission->getAdapter()->fetchAll($select);
-            return $res;
+        public function getNextCommission($user){
+            return 0;
         }
 
-
-
-        /*
-        TODO TOPO Lundi
-        */
         public function getERPSuivis($user){
             $serviceDashboard = new Service_Dashboard();
             return $serviceDashboard->getERPSuivis($user, true);
@@ -100,6 +82,11 @@
         public function getDossiersPlatAUSansEtablissement($user){
             $serviceDashboard = new Service_Dashboard();
             return $serviceDashboard->getDossiersPlatAUSansEtablissement($user, true);
+        }
+
+        public function getDossierAvecAvisDiffere($user)
+        {
+            return 0;
         }
     }
 ?>
