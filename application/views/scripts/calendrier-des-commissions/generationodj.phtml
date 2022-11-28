@@ -272,7 +272,11 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         } else {
             addChamp($avisDerogations, 'type', '');
             addChamp($avisDerogations, 'titre', '');
-            addChamp($avisDerogations, 'informations', '');
+            addChamp($avisDerogations, 'objet', '');
+            addChamp($avisDerogations, 'justification', '');
+            addChamp($avisDerogations, 'articles_concernes', '');
+            addChamp($avisDerogations, 'mesures_compensatoires_proposees', '');
+            addChamp($avisDerogations, 'analyse_de_risque', '');
             addChamp($avisDerogations, 'avis', '');
             addChamp($avisDerogations, 'identifiantdossierleve', '');
             addChamp($avisDerogations, 'affichagehistorique', '');
@@ -289,7 +293,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
             // Permet d'avoir les informations unitairement
             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
                 addChamp(
-                    $segment,
+                    $segment->infosDoss,
                     $serviceUtils->getFullFusionName(
                         $formulaire['NOM_INTERNE'],
                         [
@@ -304,7 +308,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             foreach ($champ['FILS'] as $idx => $champFils) {
                                 if(is_int($idx)){
                                     addChamp(
-                                        $segment,
+                                        $segment->infosDoss,
                                         $serviceUtils->getFullFusionName(
                                             $formulaire['NOM_INTERNE'],
                                             [
@@ -326,7 +330,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             );
 
                             try {
-                                $segmentTableau = $segment->$nomFusion;
+                                $segmentTableau = $segment->infosDoss->$nomFusion;
                             } catch (Exception $e) {}
 
                             if (isset($segmentTableau)) {
@@ -353,24 +357,6 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             $segmentTableau = null;
                         } else {
                             foreach ($champ['FILS'] as $champFils) {
-                                $corpsNomenclature = [];
-
-                                //Si le parent est un tableau alors on ajoute l'index du fils dans le nom
-                                if ($champ['tableau'] === 1) {
-                                    $corpsNomenclature = [
-                                        $rubrique['NOM'],
-                                        $champ['NOM'],
-                                        $champFils['NOM'],
-                                        $champFils['idx']
-                                    ];
-                                } else {
-                                    $corpsNomenclature = [
-                                        $rubrique['NOM'],
-                                        $champ['NOM'],
-                                        $champFils['NOM']
-                                    ];
-                                }
-
                                 if ('Case à cocher' === $champFils['TYPE']) {
                                     if (true === boolval($champFils['VALEUR'])) {
                                         $champFils['VALEUR'] = 'Oui';
@@ -379,10 +365,14 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                     }
                                 }
                                 addChamp(
-                                    $segment,
+                                    $segment->infosDoss,
                                     $serviceUtils->getFullFusionName(
                                         $formulaire['NOM_INTERNE'],
-                                        $corpsNomenclature
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
                                     ),
                                     $champFils['VALEUR']
                                 );
@@ -398,7 +388,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             }
                         }
                         addChamp(
-                            $segment,
+                            $segment->infosDoss,
                             $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
                                 [

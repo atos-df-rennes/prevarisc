@@ -168,7 +168,11 @@ foreach($this->membresFiles as $val => $membre){
                             } else {
                                 addChamp($avisDerogations, 'type', '');
                                 addChamp($avisDerogations, 'titre', '');
-                                addChamp($avisDerogations, 'informations', '');
+                                addChamp($avisDerogations, 'objet', '');
+                                addChamp($avisDerogations, 'justification', '');
+                                addChamp($avisDerogations, 'articles_concernes', '');
+                                addChamp($avisDerogations, 'mesures_compensatoires_proposees', '');
+                                addChamp($avisDerogations, 'analyse_de_risque', '');
                                 addChamp($avisDerogations, 'avis', '');
                                 addChamp($avisDerogations, 'identifiantdossierleve', '');
                                 addChamp($avisDerogations, 'affichagehistorique', '');
@@ -198,8 +202,7 @@ foreach($this->membresFiles as $val => $membre){
                                         $rubrique['NOM']
                                     );
                                     foreach ($rubrique['CHAMPS'] as $champ) {
-                                        //Si le champ est un champ Parent alors ....
-                                        if ($champ['ID_TYPECHAMP'] === 6) {
+                                        if ('Parent' === $champ['TYPE']) {
                                             if (1 === $champ['tableau']) {
                                                 foreach ($champ['FILS'] as $idx => $champFils) {
                                                     if(is_int($idx)){
@@ -234,8 +237,7 @@ foreach($this->membresFiles as $val => $membre){
                                                         $idxCol = 0;
 
                                                         foreach ($ligne as $col) {
-                                                            // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
-                                                            if (5 === $col['ID_TYPECHAMP']) {
+                                                            if ('Case à cocher' === $col['TYPE']) {
                                                                 if (true === boolval($col['VALEUR'])) {
                                                                     $col['VALEUR'] = 'Oui';
                                                                 } else {
@@ -254,24 +256,6 @@ foreach($this->membresFiles as $val => $membre){
                                                 $segmentTableau = null;
                                             } else {
                                                 foreach ($champ['FILS'] as $champFils) {
-                                                    $corpsNomenclature = [];
-
-                                                    //Si le parent est un tableau alors on ajoute l'index du fils dans le nom
-                                                    if ($champ['tableau'] === 1) {
-                                                        $corpsNomenclature = [
-                                                            $rubrique['NOM'],
-                                                            $champ['NOM'],
-                                                            $champFils['NOM'],
-                                                            $champFils['idx']
-                                                        ];
-                                                    } else {
-                                                        $corpsNomenclature = [
-                                                            $rubrique['NOM'],
-                                                            $champ['NOM'],
-                                                            $champFils['NOM']
-                                                        ];
-                                                    }
-
                                                     if ('Case à cocher' === $champFils['TYPE']) {
                                                         if (true === boolval($champFils['VALEUR'])) {
                                                             $champFils['VALEUR'] = 'Oui';
@@ -283,7 +267,11 @@ foreach($this->membresFiles as $val => $membre){
                                                         $dossInfos,
                                                         $serviceUtils->getFullFusionName(
                                                             $formulaire['NOM_INTERNE'],
-                                                            $corpsNomenclature
+                                                            [
+                                                                $rubrique['NOM'],
+                                                                $champ['NOM'],
+                                                                $champFils['NOM']
+                                                            ]
                                                         ),
                                                         $champFils['VALEUR']
                                                     );
