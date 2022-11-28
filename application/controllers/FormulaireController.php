@@ -41,10 +41,11 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/capsule-rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $form = new Form_CustomForm();
 
@@ -68,8 +69,8 @@ class FormulaireController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-            $post['idx'] = $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
 
+            $post['idx'] = (int) $this->modelRubrique->getNbRubriqueOfDesc($post['capsule_rubrique']);
             $idRubrique = $this->serviceFormulaire->insertRubrique($post);
             $insertedRowAsArray = $this->modelRubrique->find($idRubrique)->current()->toArray();
 
@@ -84,10 +85,11 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript = $this->view;
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $fieldForm = new Form_CustomFormField();
 
@@ -170,10 +172,11 @@ class FormulaireController extends Zend_Controller_Action
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/rubrique.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/champ.js', 'text/javascript');
         $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
-        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.js', 'text/javascript');
+        $viewInlineScript->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
         $idChamp = (int) $this->getParam('champ');
         $champ = $this->modelChamp->find($idChamp)->current();
@@ -253,6 +256,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
+            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }

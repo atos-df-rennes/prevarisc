@@ -60,6 +60,13 @@
                         </option>
                     <?php endforeach ?>
                 </select>
+                <?php if('Parent' === $this->type) :?>
+                    <div>
+                        <label for='is-tableau'>Afficher comme tableau
+                            <input name='is-tableau' type='checkbox' <?= 1 === $this->champ['tableau'] ? 'checked' : '' ?> />
+                        </label>
+                    </div>
+                <?php endif ?>
             </div>
 
             <?php if($this->valeursChamp !== null): ?>
@@ -78,7 +85,7 @@
                             <a href='#' id='add-list-value'>Ajouter une valeur</a>
                         </div>
                         <div class="row-fluid">
-                            <div id="valeurs-liste" class="span10">
+                            <div id="list-value" class="span10">
                             </div>
                         </div>
                     </div>

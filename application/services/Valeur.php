@@ -2,28 +2,75 @@
 
 class Service_Valeur
 {
+    private $modelValeur;
+
+    public function __construct()
+    {
+        $this->modelValeur = new Model_DbTable_Valeur();
+    }
+
     public function get(int $idChamp, int $idObject, string $classObject)
     {
-        $modelValeur = new Model_DbTable_Valeur();
-        $valeur = $modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+        $valeur = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+
+        $idValeur = null;
+        $idxValeur = null;
 
         if (null !== $valeur) {
             $typeValeur = $this->getTypeValeur($idChamp);
+            $idValeur = $valeur['ID_VALEUR'];
+            $idxValeur = $valeur['idx'];
             $valeur = $valeur[$typeValeur];
         }
 
-        return $valeur;
+        return ['ID_VALEUR' => $idValeur, 'VALEUR' => $valeur, 'IDX_VALEUR' => $idxValeur];
     }
 
-    public function insert(int $idChamp, int $idObject, string $classObject, $value): void
+    public function getAll(int $idChamp, int $idObject, string $classObject)
+    {
+        $modelChamp = new Model_DbTable_Champ();
+
+        $typeChamp = $modelChamp->getTypeChamp($idChamp)['TYPE'];
+        $typeValeur = $this->getTypeValeur($idChamp);
+        $valeurs = $this->modelValeur->getAllByChampAndObject($idChamp, $idObject, $classObject);
+
+        $retourValeurs = [];
+        if (!empty($valeurs)) {
+            foreach ($valeurs as $valeur) {
+                $strDataValues = [
+                    'valeur',
+                    $valeur['idx'],
+                    $valeur['ID_PARENT'],
+                    $valeur['ID_CHAMP'],
+                    $valeur['ID_VALEUR'] ?? 'NULL',
+                ];
+                $strData = implode('-', $strDataValues);
+
+                $retourValeurs[] =
+                    [
+                        'VALEUR' => $valeur[$typeValeur],
+                        'ID_VALEUR' => $valeur['ID_VALEUR'],
+                        'IDX_VALEUR' => $valeur['idx'],
+                        'ID_PARENT' => $valeur['ID_PARENT'],
+                        'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
+                        'TYPE' => $typeChamp,
+                        'ID_CHAMP' => $valeur['ID_CHAMP'],
+                        'STR_DATA' => $strData,
+                    ];
+            }
+        }
+
+        return $retourValeurs;
+    }
+
+    public function insert(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
     {
         if ('' !== $value) {
-            $modelValeur = new Model_DbTable_Valeur();
-
             $typeValeur = $this->getTypeValeur($idChamp);
-            $idValeurInsert = $modelValeur->insert([
+            $idValeurInsert = $this->modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
+                'idx' => $idx,
             ]);
 
             if (false !== strpos($classObject, 'Dossier')) {
@@ -49,14 +96,14 @@ class Service_Valeur
         }
     }
 
-    public function update(int $idChamp, $valueInDB, $newValue): void
+    public function update(int $idChamp, $valueInDB, $newValue, int $idx = null): void
     {
         if ('' === $newValue) {
             $valueInDB->delete();
         } else {
             $typeValeur = $this->getTypeValeur($idChamp);
-
             $valueInDB->{$typeValeur} = $newValue;
+            $valueInDB->idx = $idx;
             $valueInDB->save();
         }
     }

@@ -57,6 +57,7 @@ foreach($this->informationsMembre as $val => $membre){
 
 			//Generation du segment villeDoss
 			$villeODF = $odf->setSegment('villeDoss');
+
 			foreach($this->listeCommunes as $val => $commune){
 				foreach($commune[1] as $comm => $info){
 					setVars($villeODF,'numMairie',$info["NUMEROADRESSE_UTILISATEURINFORMATIONS"]);
@@ -336,7 +337,11 @@ function retrieveInfoDossier($segment, $dossierInfos) {
         } else {
             setVars($avisDerogations, 'type', '');
             setVars($avisDerogations, 'titre', '');
-            setVars($avisDerogations, 'informations', '');
+            setVars($avisDerogations, 'objet', '');
+            setVars($avisDerogations, 'justification', '');
+            setVars($avisDerogations, 'articles_concernes', '');
+            setVars($avisDerogations, 'mesures_compensatoires_proposees', '');
+            setVars($avisDerogations, 'analyse_de_risque', '');
             setVars($avisDerogations, 'avis', '');
             setVars($avisDerogations, 'identifiantdossierleve', '');
             setVars($avisDerogations, 'affichagehistorique', '');
@@ -362,31 +367,85 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                     ),
                     $rubrique['NOM']
                 );
+
                 foreach ($rubrique['CHAMPS'] as $champ) {
-                    //Si le champ est un champ Parent alors ....
-                    if($champ['ID_TYPECHAMP'] === 6){
-                        foreach ($champ['FILS'] as $champFils) {
-                            if ('Case à cocher' === $champFils['TYPE']) {
-                                if (true === boolval($champFils['VALEUR'])) {
-                                    $champFils['VALEUR'] = 'Oui';
-                                } else {
-                                    $champFils['VALEUR'] = 'Non';
+                    if ('Parent' === $champ['TYPE']) {
+                        if (1 === $champ['tableau']) {
+                            foreach ($champ['FILS'] as $idx => $champFils) {
+                                if(is_int($idx)){
+                                    setVars(
+                                        $segment,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM'],
+                                                $champ['NOM'],
+                                                $champFils['idx']
+                                            ]
+                                        ),
+                                        $champFils['NOM']
+                                    );
                                 }
                             }
-                            setVars(
-                                $segment,
-                                $serviceUtils->getFullFusionName(
-                                    $formulaire['NOM_INTERNE'],
-                                    [
-                                        $rubrique['NOM'],
-                                        $champ['NOM'],
-                                        $champFils['NOM']
-                                    ]
-                                ),
-                                $champFils['VALEUR']
+
+                            $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                $formulaire['NOM_INTERNE'].' '.
+                                $rubrique['NOM'].' '.
+                                $champ['NOM'].' '.
+                                'valeurs'
                             );
+
+                            try {
+                                $segmentTableau = $segment->$nomFusion;
+                            } catch (Exception $e) {}
+
+                            if (isset($segmentTableau)) {
+                                foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                    $idxCol = 0;
+
+                                    foreach ($ligne as $col) {
+                                        if ('Case à cocher' === $col['TYPE']) {
+                                            if (true === boolval($col['VALEUR'])) {
+                                                $col['VALEUR'] = 'Oui';
+                                            } else {
+                                                $col['VALEUR'] = 'Non';
+                                            }
+                                        }
+
+                                        setVars($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                        $idxCol++;
+                                    }
+
+                                    $segmentTableau->merge();
+                                }
+                            }
+
+                            $segmentTableau = null;
+                        } else {
+                            foreach ($champ['FILS'] as $champFils) {
+                                if ('Case à cocher' === $champFils['TYPE']) {
+                                    if (true === boolval($champFils['VALEUR'])) {
+                                        $champFils['VALEUR'] = 'Oui';
+                                    } else {
+                                        $champFils['VALEUR'] = 'Non';
+                                    }
+                                }
+
+                                setVars(
+                                    $segment,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
+                                    ),
+                                    $champFils['VALEUR']
+                                );
+                            }
                         }
-                    }else{
+                    } else {
                         // Définition du libellé pour les cases à cocher
                         if ('Case à cocher' === $champ['TYPE']) {
                             if (true === boolval($champ['VALEUR'])) {
@@ -395,6 +454,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 $champ['VALEUR'] = 'Non';
                             }
                         }
+
                         setVars(
                             $segment,
                             $serviceUtils->getFullFusionName(

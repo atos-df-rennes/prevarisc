@@ -766,30 +766,82 @@ foreach ($this->formulaires as $formulaire) {
         );
 
         foreach ($rubrique['CHAMPS'] as $champ) {
-            //Si le champ est un champ Parent alors ....
-            if($champ['ID_TYPECHAMP'] === 6){
-                foreach ($champ['FILS'] as $champFils) {
-                    if ('Case à cocher' === $champFils['TYPE']) {
-                        if (true === boolval($champFils['VALEUR'])) {
-                            $champFils['VALEUR'] = 'Oui';
-                        } else {
-                            $champFils['VALEUR'] = 'Non';
+            if ('Parent' === $champ['TYPE']) {
+                if (1 === $champ['tableau']) {
+                    foreach ($champ['FILS'] as $idx => $champFils) {
+                        if(is_int($idx)){
+                            addChamp(
+                                $odf,
+                                $serviceUtils->getFullFusionName(
+                                    $formulaire['NOM_INTERNE'],
+                                    [
+                                        $rubrique['NOM'],
+                                        $champ['NOM'],
+                                        $champFils['idx']
+                                    ]
+                                ),
+                                $champFils['NOM']
+                            );
                         }
                     }
-                    addChamp(
-                        $odf,
-                        $serviceUtils->getFullFusionName(
-                            $formulaire['NOM_INTERNE'],
-                            [
-                                $rubrique['NOM'],
-                                $champ['NOM'],
-                                $champFils['NOM']
-                            ]
-                        ),
-                        $champFils['VALEUR']
+
+                    $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                        $formulaire['NOM_INTERNE'].' '.
+                        $rubrique['NOM'].' '.
+                        $champ['NOM'].' '.
+                        'valeurs'
                     );
+
+                    try {
+                        $segmentTableau = $odf->setSegment($nomFusion);
+                    } catch (Exception $e) {}
+
+                    if (isset($segmentTableau)) {
+                        foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                            $idxCol = 0;
+
+                            foreach ($ligne as $col) {
+                                if ('Case à cocher' === $col['TYPE']) {
+                                    if (true === boolval($col['VALEUR'])) {
+                                        $col['VALEUR'] = 'Oui';
+                                    } else {
+                                        $col['VALEUR'] = 'Non';
+                                    }
+                                }
+
+                                addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                $idxCol++;
+                            }
+
+                            $segmentTableau->merge();
+                        }
+                    }
+
+                    $odf->mergeSegment($segmentTableau);
+                } else {
+                    foreach ($champ['FILS'] as $champFils) {
+                        if ('Case à cocher' === $champFils['TYPE']) {
+                            if (true === boolval($champFils['VALEUR'])) {
+                                $champFils['VALEUR'] = 'Oui';
+                            } else {
+                                $champFils['VALEUR'] = 'Non';
+                            }
+                        }
+                        addChamp(
+                            $odf,
+                            $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM'],
+                                    $champ['NOM'],
+                                    $champFils['NOM']
+                                ]
+                            ),
+                            $champFils['VALEUR']
+                        );
+                    }
                 }
-            }else{
+            } else {
                 // Définition du libellé pour les cases à cocher
                 if ('Case à cocher' === $champ['TYPE']) {
                     if (true === boolval($champ['VALEUR'])) {
@@ -798,7 +850,6 @@ foreach ($this->formulaires as $formulaire) {
                         $champ['VALEUR'] = 'Non';
                     }
                 }
-
                 addChamp(
                     $odf,
                     $serviceUtils->getFullFusionName(

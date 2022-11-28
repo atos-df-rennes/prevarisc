@@ -29,7 +29,7 @@ div[id^='saved-rubriques-'] a {
 
 #default-display,
 #actions,
-td.tdMove {
+.table td {
     vertical-align: middle;
 }
 

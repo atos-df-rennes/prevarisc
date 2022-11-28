@@ -45,7 +45,6 @@ class EtablissementController extends Zend_Controller_Action
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         $service_groupement_communes = new Service_GroupementCommunes();
         $service_carto = new Service_Carto();
@@ -281,12 +280,15 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifPersonnaliseAction(): void
     {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
         $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
-        $this->view->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
-
         $idEtablissement = $this->getParam('id');
 
         $this->descriptifPersonnaliseAction();
@@ -307,6 +309,10 @@ class EtablissementController extends Zend_Controller_Action
                         $serviceEtablissementDescriptif->saveValeurChamp($key, $idEtablissement, 'Etablissement', $value);
                     }
                 }
+
+                $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post);
+                //Sauvegarde les changements dans les tableaux
+                $serviceEtablissementDescriptif->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
             } catch (Exception $e) {

@@ -7,6 +7,7 @@ if(count($this->membresFiles) == 0){
 }
 foreach($this->informationsMembre as $val => $membre){
 	//On boucle sur les membres
+
 	if($membre['infosFiles'][0]['ID_GROUPEMENT'] == NULL) {
 		//génération du document par commune pour les maires par exemple
 		//si le document concernant ce membre existe alors on rentre dans la boucle
@@ -14,6 +15,7 @@ foreach($this->informationsMembre as $val => $membre){
 
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
+
             //Generation du segment membres
             $membreLoop = $odf->setSegment('membresComm');
 
@@ -95,7 +97,6 @@ foreach($this->informationsMembre as $val => $membre){
         $nomFichier = $membre['infosFiles'][0]['ID_COMMISSIONMEMBRE']."ODJ_".$membre['infosFiles'][0]['COURRIER_ODJ'];
         if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier)){
             $odf = new Odf(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."courriers".DIRECTORY_SEPARATOR.$nomFichier);
-
             $model_groupement = new Model_DbTable_Groupement();
             $infosGroupement = $model_groupement->get($membre['infosFiles'][0]['ID_GROUPEMENT']);
 
@@ -271,7 +272,11 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         } else {
             addChamp($avisDerogations, 'type', '');
             addChamp($avisDerogations, 'titre', '');
-            addChamp($avisDerogations, 'informations', '');
+            addChamp($avisDerogations, 'objet', '');
+            addChamp($avisDerogations, 'justification', '');
+            addChamp($avisDerogations, 'articles_concernes', '');
+            addChamp($avisDerogations, 'mesures_compensatoires_proposees', '');
+            addChamp($avisDerogations, 'analyse_de_risque', '');
             addChamp($avisDerogations, 'avis', '');
             addChamp($avisDerogations, 'identifiantdossierleve', '');
             addChamp($avisDerogations, 'affichagehistorique', '');
@@ -288,7 +293,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
             // Permet d'avoir les informations unitairement
             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
                 addChamp(
-                    $segment,
+                    $segment->infosDoss,
                     $serviceUtils->getFullFusionName(
                         $formulaire['NOM_INTERNE'],
                         [
@@ -298,28 +303,80 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                     $rubrique['NOM']
                 );
                 foreach ($rubrique['CHAMPS'] as $champ) {
-                    //Si le champ est un champ Parent alors ....
-                    if ($champ['ID_TYPECHAMP'] === 6) {
-                        foreach ($champ['FILS'] as $champFils) {
-                            if ('Case à cocher' === $champFils['TYPE']) {
-                                if (true === boolval($champFils['VALEUR'])) {
-                                    $champFils['VALEUR'] = 'Oui';
-                                } else {
-                                    $champFils['VALEUR'] = 'Non';
+                    if ('Parent' === $champ['TYPE']) {
+                        if (1 === $champ['tableau']) {
+                            foreach ($champ['FILS'] as $idx => $champFils) {
+                                if(is_int($idx)){
+                                    addChamp(
+                                        $segment->infosDoss,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM'],
+                                                $champ['NOM'],
+                                                $champFils['idx']
+                                            ]
+                                        ),
+                                        $champFils['NOM']
+                                    );
                                 }
                             }
-                            addChamp(
-                                $segment,
-                                $serviceUtils->getFullFusionName(
-                                    $formulaire['NOM_INTERNE'],
-                                    [
-                                        $rubrique['NOM'],
-                                        $champ['NOM'],
-                                        $champFils['NOM']
-                                    ]
-                                ),
-                                $champFils['VALEUR']
+
+                            $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                $formulaire['NOM_INTERNE'].' '.
+                                $rubrique['NOM'].' '.
+                                $champ['NOM'].' '.
+                                'valeurs'
                             );
+
+                            try {
+                                $segmentTableau = $segment->infosDoss->$nomFusion;
+                            } catch (Exception $e) {}
+
+                            if (isset($segmentTableau)) {
+                                foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                    $idxCol = 0;
+
+                                    foreach ($ligne as $col) {
+                                        if ('Case à cocher' === $col['TYPE']) {
+                                            if (true === boolval($col['VALEUR'])) {
+                                                $col['VALEUR'] = 'Oui';
+                                            } else {
+                                                $col['VALEUR'] = 'Non';
+                                            }
+                                        }
+
+                                        addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                        $idxCol++;
+                                    }
+
+                                    $segmentTableau->merge();
+                                }
+                            }
+
+                            $segmentTableau = null;
+                        } else {
+                            foreach ($champ['FILS'] as $champFils) {
+                                if ('Case à cocher' === $champFils['TYPE']) {
+                                    if (true === boolval($champFils['VALEUR'])) {
+                                        $champFils['VALEUR'] = 'Oui';
+                                    } else {
+                                        $champFils['VALEUR'] = 'Non';
+                                    }
+                                }
+                                addChamp(
+                                    $segment->infosDoss,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
+                                    ),
+                                    $champFils['VALEUR']
+                                );
+                            }
                         }
                     } else {
                         // Définition du libellé pour les cases à cocher
@@ -331,7 +388,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             }
                         }
                         addChamp(
-                            $segment,
+                            $segment->infosDoss,
                             $serviceUtils->getFullFusionName(
                                 $formulaire['NOM_INTERNE'],
                                 [

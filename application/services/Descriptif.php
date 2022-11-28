@@ -8,6 +8,7 @@ class Service_Descriptif
     private $modelValeur;
 
     private $serviceValeur;
+    private $serviceFormulaire;
 
     private $capsuleRubrique;
     private $modelDisplayRubrique;
@@ -22,6 +23,7 @@ class Service_Descriptif
         $this->modelValeur = new Model_DbTable_Valeur();
 
         $this->serviceValeur = new Service_Valeur();
+        $this->serviceFormulaire = new Service_Formulaire();
 
         // Services spécifiques à l'objet, setter dans le Service correspondant
         $this->capsuleRubrique = $capsuleRubrique;
@@ -46,11 +48,31 @@ class Service_Descriptif
                 if ('Parent' === $champ['TYPE']) {
                     $champ['FILS'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
 
-                    foreach ($champ['FILS'] as &$champFils) {
-                        $champFils['VALEUR'] = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+                    if (1 === $champ['tableau']) {
+                        $listValeurs = [];
+
+                        foreach ($champ['FILS'] as &$champFils) {
+                            $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
+                        }
+
+                        $inputs = $this->serviceFormulaire->getInputs($champ);
+
+                        //Affectation des valeurs
+                        $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $inputs);
+
+                        //Affectation des modeles type des inputs sans valeurs
+                        $champ['FILS']['INPUTS'] = $inputs;
+                    } else {
+                        foreach ($champ['FILS'] as &$champFils) {
+                            $valeur = $this->serviceValeur->get($champFils['ID_CHAMP'], $idObject, $classObject);
+
+                            $champFils['VALEUR'] = $valeur['VALEUR'];
+                            $champFils['ID_VALEUR'] = $valeur['ID_VALEUR'];
+                        }
                     }
                 } else {
-                    $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject);
+                    $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
+                    $champ['ID_VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
                 }
             }
         }
@@ -78,21 +100,73 @@ class Service_Descriptif
         $this->serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
-    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value): void
+    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
     {
         $explodedChamp = explode('-', $key);
         $idChamp = end($explodedChamp);
-        $this->saveValeur($idChamp, $idObject, $classObject, $value);
+        $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 
-    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value): void
+    /**
+     * Compare l'array initial et celui final dans le post :
+     * - Si une valeur est présente dans l'array final alors qu'elle ne l'était pas dans l'array initial alors on insert
+     * - Si une valeur a changé de valeur ou d'index alors on update
+     * - Si une valeur était dans l'array initial et ne l'est plus dans l'array final alors on le supprime.
+     */
+    public function saveChangeTable(array $initArrayValue, array $newArrayValue, string $classObject, int $idObject): void
     {
-        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject);
+        $serviceUtilsDescriptif = new Service_Utils_Descriptif();
 
-        if (!$valueInDB instanceof \Zend_Db_Table_Row) {
-            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value);
+        $tableauDeComparaison = $serviceUtilsDescriptif->initTableValues($initArrayValue);
+        $tableauDeComparaison = $serviceUtilsDescriptif->updateTableValues($tableauDeComparaison, $newArrayValue, $classObject, $idObject);
+
+        $serviceUtilsDescriptif->deleteTableValues($tableauDeComparaison);
+    }
+
+    public function groupInputByOrder(array $initialList)
+    {
+        $newList = [];
+        $expectedNumberOfArguments = 5;
+
+        foreach ($initialList as $inputName => $value) {
+            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+                $idxInput = explode('-', $inputName)[1];
+                $idParent = explode('-', $inputName)[2];
+                $idInput = explode('-', $inputName)[3];
+                $idValeur = explode('-', $inputName)[4];
+
+                if (!array_key_exists($idParent, $newList)) {
+                    $newList[$idParent] = [];
+                }
+                if (!array_key_exists($idxInput, $newList[$idParent])) {
+                    $newList[$idParent][$idxInput] = [];
+                }
+                $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
+                $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
+            }
+        }
+
+        $tmpList = [];
+        foreach ($newList as $parent => $listIdx) {
+            foreach ($listIdx as $idx => $input) {
+                foreach ($input as $idChamp => $valeur) {
+                    $tmpList[$parent][array_search($idx, array_keys($listIdx)) + 1][$idChamp] = $valeur;
+                }
+            }
+        }
+
+        return $tmpList;
+    }
+
+    private function saveValeur(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
+    {
+        $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
+        $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
+
+        if (null === $valueInDB) {
+            $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value, $idx);
         } else {
-            $this->serviceValeur->update($idChamp, $valueInDB, $value);
+            $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);
         }
     }
 }

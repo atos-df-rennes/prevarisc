@@ -3,18 +3,18 @@
     case 1: ?>
         <input
             type='text'
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
             value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
-            <?= $this->canWrite ? '': 'disabled'?>
+            <?= $this->canWrite ? '' : 'disabled' ?>
         >
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"])  ?>'<?= $this->canWrite ? '': 'disabled'?>><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
+        <textarea name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA'] : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '' : 'disabled' ?>><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
     <?php break;
     // Liste
     case 3: ?>
-        <select name='champ-<?= $this->champ["ID_CHAMP"] ?>'<?= $this->canWrite ? '': 'disabled'?>>
+        <select name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']: 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '' : 'disabled' ?>>
             <option selected value>Sélectionnez un élément</option>
             <?php foreach($this->champsvaleurliste[$this->champ['ID_CHAMP']] as $champvaleurliste): ?>
                 <option
@@ -28,39 +28,83 @@
     <?php break;
     // Nombre
     case 4: ?>
-        <input type='number' name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'<?= $this->canWrite ? '': 'disabled'?> min='0' value='<?= $this->champ['VALEUR'] ?>'>
+        <input type='number' name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>' <?= $this->canWrite ? '' : 'disabled' ?> min='0' value='<?= $this->champ['VALEUR'] ?>'>
     <?php break;
     // Case à cocher
     case 5: ?>
         <input
             type="hidden"
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value="0"
-            <?= $this->canWrite ? '': 'disabled'?>
+            <?= $this->canWrite ? '' : 'disabled' ?>
         >
         <input
             type="checkbox"
-            name='champ-<?= htmlspecialchars($this->champ["ID_CHAMP"]) ?>'
+            name='<?= isset($this->idxTableau) ? $this->champ['STR_DATA']  : 'champ-'.htmlspecialchars($this->champ["ID_CHAMP"])?>'
             value="1"
-            <?= $this->canWrite ? '': 'disabled'?>
+            <?= $this->canWrite ? '' : 'disabled' ?>
             <?= $this->champ['VALEUR'] ? 'checked' : '' ?>
         >
     <?php break;
     // Parent
     case 6:?>
-        <div class="tableInput">
-            <?php foreach ($this->champ["FILS"] as $champsFils): ?>
-                <div class="colTableInput">
-                    <th><?= $champsFils['NOM'] ?></th>
-                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                            'champ' => $champsFils,
+        <?php if(1 === $this->champ['tableau']) : ?>
+            <table class='table table-hover'>
+                <thead>
+                    <tr>
+                        <?php if ($this->canWrite): ?>
+                            <th></th>
+                        <?php endif ?>
+                        <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                            <?php if(!empty($champsFils['NOM'])) : ?>
+                                <th>
+                                    <?= $champsFils['NOM'] ?>
+                                </th>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        <?php if($this->canWrite) :?>
+                            <th>Supprimer</th>
+                        <?php endif ?>
+                    </tr>
+                </thead>
+                <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
+                    <?php if ($this->canWrite): ?>
+                        <tr class='ligneTableau hidden'>
+                            <?= $this->partial('formulaire/partials/tableau/partial-input-tableau.phtml',
+                                [
+                                    'inputs' => $this->champ['FILS']['INPUTS'],
+                                    'champsvaleurliste' => $this->champsvaleurliste
+                                ]);
+                            ?>
+                        </tr>
+                    <?php endif ?>
+                    <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
+                            'colonnesChamp' => $this->champ['FILS'],
                             'champsvaleurliste' => $this->champsvaleurliste,
                             'canWrite' => isset($this->canWrite) ? $this->canWrite : false
                         ]);
                     ?>
-                </div>
-            <?php endforeach;?>
-        </div>
+                </tbody>
+            </table>
+            <?php if ($this->canWrite): ?>
+                <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                <button type='button' class='btn btn-info addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
+            <?php endif ?>
+        <?php else : ?>
+            <div class="tableInput">
+                <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                    <div class="colTableInput">
+                        <th><?= $champsFils['NOM'] ?></th>
+                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                            'champ' => $champsFils,
+                            'champsvaleurliste' => $this->champsvaleurliste,
+                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            ]);
+                        ?>
+                    </div>
+                <?php endforeach;?>
+            </div>
+        <?php endif?>
     <?php break;
     default:
         break;

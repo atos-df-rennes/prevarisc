@@ -2,6 +2,13 @@
 
 class Service_Formulaire
 {
+    private $modelChamp;
+
+    public function __construct()
+    {
+        $this->modelChamp = new Model_DbTable_Champ();
+    }
+
     public function getAllCapsuleRubrique(): array
     {
         $modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
@@ -36,7 +43,6 @@ class Service_Formulaire
 
     public function insertChamp(array $champ, array $rubrique, bool $isParent = false): array
     {
-        $modelChamp = new Model_DbTable_Champ();
         $modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
 
@@ -62,7 +68,7 @@ class Service_Formulaire
             $dataToInsert['ID_PARENT'] = $champ['ID_CHAMP_PARENT'];
         }
 
-        $idChamp = $modelChamp->insert($dataToInsert);
+        $idChamp = $this->modelChamp->insert($dataToInsert);
 
         if ($idTypeChamp === $idListe) {
             // On récupère les valeurs de la liste séparément des autres champs
@@ -78,6 +84,58 @@ class Service_Formulaire
             }
         }
 
-        return $modelChamp->find($idChamp)->current()->toArray();
+        return $this->modelChamp->find($idChamp)->current()->toArray();
+    }
+
+    /**
+     * Retourne la liste des pattern des champs fils d un champ parent.
+     */
+    public function getInputs(array $champParent): array
+    {
+        $listChampPattern = [];
+
+        foreach (array_column($champParent['FILS'], 'ID_CHAMP') as $IdChamp) {
+            $champDb = $this->modelChamp->getTypeChamp($IdChamp);
+            $patternParam = [
+                'VALEUR' => null,
+                'ID_VALEUR' => null,
+                'IDX_VALEUR' => null,
+                'ID_PARENT' => $champParent['ID_CHAMP'],
+                'ID_TYPECHAMP' => $champDb['ID_TYPECHAMP'],
+                'ID_CHAMP' => $champDb['ID_CHAMP'],
+            ];
+            $listChampPattern[$IdChamp] = $patternParam;
+        }
+
+        return $listChampPattern;
+    }
+
+    public function getArrayValuesWithPattern(array $listValeurs, array $listChampPattern): array
+    {
+        $arrayReturn = [];
+
+        foreach ($listValeurs as $idChampFils => $valeurs) {
+            foreach ($valeurs as $valeur) {
+                if (empty($arrayReturn[$valeur['IDX_VALEUR']])) {
+                    foreach ($listChampPattern as $idChampPattern => $pattern) {
+                        $arrayReturn[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
+                    }
+                }
+                $arrayReturn[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
+            }
+        }
+
+        foreach ($arrayReturn as $idxLigne => &$inputs) {
+            foreach ($inputs as &$input) {
+                if (null === $input['ID_VALEUR']) {
+                    $input['IDX_VALEUR'] = $idxLigne;
+                    $input['STR_DATA'] = 'valeur-'.$idxLigne.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
+                }
+            }
+        }
+
+        ksort($arrayReturn);
+
+        return $arrayReturn;
     }
 }

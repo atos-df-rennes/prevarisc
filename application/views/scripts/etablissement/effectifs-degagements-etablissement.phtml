@@ -1,3 +1,4 @@
+<!-- TODO Mettre le descriptif personnalisé -->
 <div class='pull-right'>
     <a href="<?= $this->url(array('controller' => 'etablissement', 'action' => 'effectifs-degagements-etablissement-edit', 'id' => $this->idEtablissement), false, true) ?>" class="btn">Modifier les effectifs et dégagements</a>
 </div>
@@ -5,16 +6,17 @@
 <h3>Effectifs :</h3>
 <?php
     if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]) {
-        echo $this->EffectifDegagement["DESCRIPTION_EFFECTIF"];
+        echo htmlspecialchars($this->EffectifDegagement["DESCRIPTION_EFFECTIF"]);
     } else {
         echo "Aucune description";
     }
 ?>
 
 <h3>Dégagements :</h3>
+
 <?php
     if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]) {
-        echo $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"];
+        echo htmlspecialchars($this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]);
     } else {
         echo "Aucune description";
     }

@@ -16,6 +16,18 @@ class Service_Utils
         return implode('-', $params);
     }
 
+    public function getFusionNameMagicalCase(string $name): string
+    {
+        $fusionName = '';
+        $strings = preg_split("/[\\s'\"]+/", $name);
+
+        foreach ($strings as $string) {
+            $fusionName .= ucfirst(strtolower($string));
+        }
+
+        return $fusionName;
+    }
+
     private function formatFusionName(string $name): string
     {
         $loweredName = strtolower($name);
