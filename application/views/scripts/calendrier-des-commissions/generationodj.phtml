@@ -1,7 +1,5 @@
 <?php
 
-use PhpCsFixer\Tokenizer\Transformer\ConstructorPromotionTransformer;
-
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
@@ -297,8 +295,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                     $rubrique['NOM']
                 );
                 foreach ($rubrique['CHAMPS'] as $champ) {
-                    //Si le champ est un champ Parent alors ....
-                    if ($champ['ID_TYPECHAMP'] === 6) {
+                    if ('Parent' === $champ['TYPE']) {
                         if (1 === $champ['tableau']) {
                             foreach ($champ['FILS'] as $idx => $champFils) {
                                 if(is_int($idx)){
@@ -333,8 +330,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                     $idxCol = 0;
 
                                     foreach ($ligne as $col) {
-                                        // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
-                                        if (5 === $col['ID_TYPECHAMP']) {
+                                        if ('Case à cocher' === $col['TYPE']) {
                                             if (true === boolval($col['VALEUR'])) {
                                                 $col['VALEUR'] = 'Oui';
                                             } else {

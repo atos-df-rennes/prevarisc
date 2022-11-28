@@ -349,8 +349,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                 );
 
                 foreach ($rubrique['CHAMPS'] as $champ) {
-                    //Si le champ est un champ Parent alors ....
-                    if ($champ['ID_TYPECHAMP'] === 6) {
+                    if ('Parent' === $champ['TYPE']) {
                         if (1 === $champ['tableau']) {
                             foreach ($champ['FILS'] as $idx => $champFils) {
                                 if(is_int($idx)){
@@ -385,8 +384,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                     $idxCol = 0;
 
                                     foreach ($ligne as $col) {
-                                        // FIXME Avoir le type en texte et pas l'ID, comme pour les autres endroits où cette condition est appelée
-                                        if (5 === $col['ID_TYPECHAMP']) {
+                                        if ('Case à cocher' === $col['TYPE']) {
                                             if (true === boolval($col['VALEUR'])) {
                                                 $col['VALEUR'] = 'Oui';
                                             } else {

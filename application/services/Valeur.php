@@ -28,7 +28,10 @@ class Service_Valeur
 
     public function getAll(int $idChamp, int $idObject, string $classObject)
     {
-        $typeChamp = $this->getTypeValeur($idChamp);
+        $modelChamp = new Model_DbTable_Champ();
+
+        $typeChamp = $modelChamp->getTypeChamp($idChamp)['TYPE'];
+        $typeValeur = $this->getTypeValeur($idChamp);
         $valeurs = $this->modelValeur->getAllByChampAndObject($idChamp, $idObject, $classObject);
 
         $retourValeurs = [];
@@ -43,14 +46,14 @@ class Service_Valeur
                 ];
                 $strData = implode('-', $strDataValues);
 
-                // TODO Passer le type en string via $typeChamp plutôt que ou en plus de l'ID_TYPECHAMP ?
                 $retourValeurs[] =
                     [
-                        'VALEUR' => $valeur[$typeChamp],
+                        'VALEUR' => $valeur[$typeValeur],
                         'ID_VALEUR' => $valeur['ID_VALEUR'],
                         'IDX_VALEUR' => $valeur['idx'],
                         'ID_PARENT' => $valeur['ID_PARENT'],
                         'ID_TYPECHAMP' => $valeur['ID_TYPECHAMP'],
+                        'TYPE' => $typeChamp,
                         'ID_CHAMP' => $valeur['ID_CHAMP'],
                         'STR_DATA' => $strData,
                     ];
