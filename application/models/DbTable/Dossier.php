@@ -376,7 +376,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $select = $this->select()->setIntegrityCheck(false);
         if($getCount){
-            $select->from(['d' => 'dossier'], ['COUNT(*)']);
+            $select->from(['d' => 'dossier'], ['COUNT(*) as count']);
         }else{
             $select->from(['d' => 'dossier']);
         }
@@ -402,6 +402,11 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         if ([] !== $ids) {
             $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
+        }
+
+        if($getCount){
+            $res = $this->getAdapter()->fetchRow($select);
+            return $res['count'];
         }
 
         return $this->getAdapter()->fetchAll($select);

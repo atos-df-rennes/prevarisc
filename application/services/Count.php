@@ -1,90 +1,75 @@
 <?php
-    class Service_Count{
-        public function getNextCommission($user){
+    class Service_Count extends Service_Dashboard{
+        public function getNextCommissionCount($user){
             return 0;
         }
 
-        public function getERPSuivis($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPSuivis($user, true);
+        public function getERPSuivisCount($user){
+            return $this->getERPSuivis($user, true);
         }
 
-        public function getERPOuvertsSousAvisDefavorable($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPOuvertsSousAvisDefavorable($user, true);
+        public function getERPOuvertsSousAvisDefavorableCount($user){
+            return $this->getERPOuvertsSousAvisDefavorable($user, true);
         }
 
-        public function getERPOuvertsSousAvisDefavorableSuivis($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPOuvertsSousAvisDefavorableSuivis($user, true);
+        public function getERPOuvertsSousAvisDefavorableSuivisCount($user){
+            return $this->getERPOuvertsSousAvisDefavorableSuivis($user, true);
         }
 
-        public function getERPOuvertsSousAvisDefavorableSurCommune($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPOuvertsSousAvisDefavorableSurCommune($user, true);
+        public function getERPOuvertsSousAvisDefavorableSurCommuneCount($user){
+            return $this->getERPOuvertsSousAvisDefavorableSurCommune($user, true);
         }
 
-        public function getERPSansPreventionniste($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPSansPreventionniste($user, true);
+        public function getERPSansPreventionnisteCount($user){
+            return $this->getERPSansPreventionniste($user, true);
         }
 
-        public function getERPOuvertsSansProchainesVisitePeriodiques($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
+        public function getERPOuvertsSansProchainesVisitePeriodiquesCount($user){
+            return $this->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
         }
 
-        public function getDossiersSuivisSansAvis($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getDossiersSuivisSansAvis($user, true);
+        public function getDossiersSuivisSansAvisCount($user){
+            return $this->getDossiersSuivisSansAvis($user, true);
         }
 
-        public function getDossiersSuivisNonVerrouilles($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getDossiersSuivisNonVerrouilles($user, true);
+        public function getDossiersSuivisNonVerrouillesCount($user){
+            return $this->getDossiersSuivisNonVerrouilles($user, true);
         }
 
-        public function getDossierDateCommissionEchu($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getDossierDateCommissionEchu($user, true);
+        public function getDossierDateCommissionEchuCount($user){
+            return $this->getDossierDateCommissionEchu($user, true);
         }
 
-        public function getDossierAvecAvisDifferer($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getDossierAvecAvisDiffere($user, true);
+        public function getDossierAvecAvisDiffererCount($user){
+            return $this->getDossierAvecAvisDiffere($user, true);
         }
 
-        public function getCourrierSansReponse($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getCourrierSansReponse($user, true);
+        public function getCourrierSansReponseCount($user){
+            return $this->getCourrierSansReponse($user, true);
         }
 
-        public function getFeeds($user){
+        public function getFeedsCount($user){
             $serviceFeed = new Service_Feed();
             return $serviceFeed->getFeeds($user, null, true);
         }
 
-        public function getLeveePresc($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getLeveePresc($user, true);
+        public function getLeveePrescCount($user){
+            return $this->getLeveePresc($user, true);
         }
 
-        public function getAbsenceQuorum($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getAbsenceQuorum($user, true);
+        public function getAbsenceQuorumCount($user){
+            return $this->getAbsenceQuorum($user, true);
         }
 
-        public function getNpsp($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getNpsp($user, true);
+        public function getNpspCount($user){
+            return $this->getNpsp($user, true);
         }
 
-        public function getDossiersPlatAUSansEtablissement($user){
-            $serviceDashboard = new Service_Dashboard();
-            return $serviceDashboard->getDossiersPlatAUSansEtablissement($user, true);
+        public function getDossiersPlatAUSansEtablissementCount($user){
+            return $this->getDossiersPlatAUSansEtablissement($user, true);
         }
 
-        public function getDossierAvecAvisDiffere($user)
+        public function getDossierAvecAvisDiffereCount($user)
         {
             return 0;
         }

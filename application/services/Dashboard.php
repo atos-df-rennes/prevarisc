@@ -261,7 +261,7 @@ class Service_Dashboard
         $dbDossier = new Model_DbTable_Dossier();
         $commissionsUser = $this->getCommissionUser($user);
 
-        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], $getCount);
+        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], null ,$getCount);
     }
 
     public function getERPOuvertsSousAvisDefavorable($user, $getCount = false)
@@ -322,6 +322,9 @@ class Service_Dashboard
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', ['1', '2', '3', '4']);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
+        if($getCount){
+            return $search->run(false, null, false)->toArray()[0]['count'];
+        }
         $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
         // 5ème catégorie defavorable
@@ -447,20 +450,28 @@ class Service_Dashboard
         $search->setCriteria('DELAIPRESC_DOSSIER IS NOT NULL');
         $dossiers = $search->run(false, null, false)->toArray();
 
+        if($getCount){
+            return $dossiers[0]['count'];
+        }
+
+
         $valCpt = 0;
 
         foreach ($dossiers as $dossier) {
-            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
-            foreach ($listeDossiersLies as $lien) {
-                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
-                $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
-                if (
-                    self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
-                    || self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature
-                    || self::ID_NATURE_ECHEANCIER_TRAVAUX == $idNature) {
-                    unset($dossiers[$valCpt]);
+            if((null !== $dossier['ID_DOSSIER'])){
+                $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+                foreach ($listeDossiersLies as $lien) {
+                    $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
+                    $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
+                    if (
+                        self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
+                        || self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature
+                        || self::ID_NATURE_ECHEANCIER_TRAVAUX == $idNature) {
+                        unset($dossiers[$valCpt]);
+                    }
                 }
             }
+
             ++$valCpt;
         }
 
@@ -475,7 +486,11 @@ class Service_Dashboard
 
         $search->setItem('dossier',$getCount);
         $search->setCriteria('ABSQUORUM_DOSSIER = 1');
-        $dossiers = $search->run(false, null, false)->toArray();
+        $resRun = $search->run(false, null, false);
+        $dossiers = $resRun->toArray();
+        if($getCount){
+            return $resRun[0]['count'];
+        }
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {
@@ -501,7 +516,11 @@ class Service_Dashboard
 
         $search->setItem('dossier', $getCount);
         $search->setCriteria('NPSP_DOSSIER = 1');
-        $dossiers = $search->run(false, null, false)->toArray();
+        $resRun = $search->run(false, null, false);
+        $dossiers = $resRun->toArray();
+        if($getCount){
+            return $resRun[0]['count'];
+        }
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {

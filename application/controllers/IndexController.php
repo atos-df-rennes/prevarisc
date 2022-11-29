@@ -33,11 +33,13 @@ class IndexController extends Zend_Controller_Action
             ) {
                 $user = $service_user->find($identity['ID_UTILISATEUR']);
                 $method = $blocConfig['method'];
+                $methodCount = $method.'Count';
+                $service = new $blocConfig['service']();
                 $serviceCount = new Service_Count();
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],
-                    'count' => $serviceCount->{$method}($user),
+                    'count' => $serviceCount->{$methodCount}($user),
                     'height' => $blocConfig['height'],
                     'width' => $blocConfig['width'],
                 ];
@@ -87,6 +89,7 @@ class IndexController extends Zend_Controller_Action
         $bloc = [];
         $service_user = new Service_User();
         $service_dashboard = new Service_Dashboard();
+        $serviceCount = new Service_Count();
         $blocsConfig = $service_dashboard->getBlocConfig();
 
         if (isset($blocsConfig[$id])) {
@@ -95,9 +98,11 @@ class IndexController extends Zend_Controller_Action
             $user = $service_user->find($identity['ID_UTILISATEUR']);
             $service = new $blocConfig['service']();
             $method = $blocConfig['method'];
+            $methodCount = $method.'Count';
             $bloc = [
                 'id' => $id,
                 'data' => $service->{$method}($user),
+                'count' => $serviceCount->{$methodCount}($user),
                 'type' => $blocConfig['type'],
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],
