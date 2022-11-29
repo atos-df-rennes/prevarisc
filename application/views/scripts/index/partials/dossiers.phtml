@@ -15,8 +15,3 @@
         <small class='muted'>Aucun dossier.</small>
     <?php endif ?>
 <?php endif ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#<?php echo $this->id ?> .panel-heading").append(' (<?php echo count($this->data) ?>)');
-    });
-</script>
