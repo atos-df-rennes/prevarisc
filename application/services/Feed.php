@@ -38,9 +38,9 @@ class Service_Feed
     public function getFeeds($user, $count = 5, $getCount = false)
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-
+        $dbNews = new Model_DbTable_News();
         if($getCount){
-            $select->from('news', ['COUNT(*)']);
+            $select->from('news', ['COUNT(*) as count']);
         }else{
             $select->from('news');
         }
@@ -53,7 +53,12 @@ class Service_Feed
             ->limit($count)
         ;
 
-        return $select->query()->fetchAll();
+        if($getCount){
+            $resQuery = $select->fetchRow();
+        }else{
+            $resQuery = $select->query()->fetchAll();
+        }
+        return $resQuery;
     }
 
     /**
