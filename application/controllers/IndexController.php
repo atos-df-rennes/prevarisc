@@ -34,7 +34,6 @@ class IndexController extends Zend_Controller_Action
                 $user = $service_user->find($identity['ID_UTILISATEUR']);
                 $method = $blocConfig['method'];
                 $methodCount = $method.'Count';
-                $service = new $blocConfig['service']();
                 $serviceCount = new Service_Count();
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
@@ -98,11 +97,9 @@ class IndexController extends Zend_Controller_Action
             $user = $service_user->find($identity['ID_UTILISATEUR']);
             $service = new $blocConfig['service']();
             $method = $blocConfig['method'];
-            $methodCount = $method.'Count';
             $bloc = [
                 'id' => $id,
                 'data' => $service->{$method}($user),
-                'count' => $serviceCount->{$methodCount}($user),
                 'type' => $blocConfig['type'],
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],

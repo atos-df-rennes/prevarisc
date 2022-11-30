@@ -38,7 +38,12 @@ class Service_Feed
     public function getFeeds($user, $count = 5, $getCount = false)
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-        $dbNews = new Model_DbTable_News();
+
+        if ($getCount) {
+            $modelNews = new Model_DbTable_News();
+            $select = $modelNews->select()->setIntegrityCheck(false);
+        }
+
         if($getCount){
             $select->from('news', ['COUNT(*) as count']);
         }else{
@@ -48,17 +53,16 @@ class Service_Feed
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
-            ->group('news.ID_NEWS')
             ->order('news.ID_NEWS DESC')
             ->limit($count)
         ;
 
-        if($getCount){
-            $resQuery = $select->fetchRow();
-        }else{
-            $resQuery = $select->query()->fetchAll();
+        if (!$getCount) {
+            $select
+                ->group('news.ID_NEWS');
         }
-        return $resQuery;
+
+        return $getCount ? $modelNews->fetchRow($select)['count'] : $select->query()->fetchAll();
     }
 
     /**

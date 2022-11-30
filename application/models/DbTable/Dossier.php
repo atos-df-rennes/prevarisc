@@ -425,7 +425,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true)[0]['count'];
+            $searchToRun = $search->run(false, null, false, true);
         } else {
             $searchToRun = $search->run(false, null, false)->toArray();
         }
@@ -444,7 +444,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->order('d.DATEINSERT_DOSSIER desc');
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true)[0]['count'];
+            $searchToRun = $search->run(false, null, false, true);
         } else {
             $searchToRun = $search->run(false, null, false)->toArray();
         }
