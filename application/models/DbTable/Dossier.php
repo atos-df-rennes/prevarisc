@@ -425,7 +425,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true);
+            $searchToRun = $search->run(false, null, false, true)[0]['count'];
         } else {
             $searchToRun = $search->run(false, null, false)->toArray();
         }

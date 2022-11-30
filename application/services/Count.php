@@ -71,7 +71,7 @@
 
         public function getDossierAvecAvisDiffereCount($user)
         {
-            return 0;
+            return $this->getDossierAvecAvisDiffere($user, true);
         }
     }
 ?>
