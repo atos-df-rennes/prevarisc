@@ -488,24 +488,23 @@ class Service_Dashboard
         $search->setCriteria('ABSQUORUM_DOSSIER = 1');
         $resRun = $search->run(false, null, false);
         $dossiers = $resRun->toArray();
-        if($getCount){
-            return $resRun[0]['count'];
-        }
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {
-            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
-            foreach ($listeDossiersLies as $lien) {
-                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
-                $tabType = $DBdossier->getTypeDossier($idLien);
-                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
-                    unset($dossiers[$valCpt]);
+            if(isset($dossier['ID_DOSSIER'])){
+                $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+                foreach ($listeDossiersLies as $lien) {
+                    $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
+                    $tabType = $DBdossier->getTypeDossier($idLien);
+                    if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
+                        unset($dossiers[$valCpt]);
+                    }
                 }
             }
             ++$valCpt;
         }
 
-        return $dossiers;
+        return $getCount ? $dossiers[0]['count'] : $dossiers;
     }
 
     public function getNpsp($user, $getCount = false)
