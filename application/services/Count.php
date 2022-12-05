@@ -1,7 +1,7 @@
 <?php
     class Service_Count extends Service_Dashboard{
         public function getNextCommissionCount($user){
-            return 0;
+            return $this->getNextCommission($user, true)[0]['count'];
         }
 
         public function getERPSuivisCount($user){

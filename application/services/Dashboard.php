@@ -227,9 +227,19 @@ class Service_Dashboard
      *
      * @return array[]
      */
-    public function getNextCommission($user): array
+    public function getNextCommission($user, $getCount = false): array
     {
         $dbDateCommission = new Model_DbTable_DateCommission();
+
+        if($getCount){
+            $nbProchainesCommission = $dbDateCommission->getNextCommission(
+                $this->getCommissionUser($user),
+                time(),
+                time() + 3600 * 24 * $this->options['next_commissions_days'],
+                $getCount
+            );
+            return $nbProchainesCommission;
+        }
 
         $prochainesCommission = $dbDateCommission->getNextCommission(
             $this->getCommissionUser($user),
