@@ -1,4 +1,4 @@
-![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg)
+![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg?event=push)
 
 # Prevarisc
 

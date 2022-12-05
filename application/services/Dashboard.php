@@ -180,7 +180,7 @@ class Service_Dashboard
             'method' => 'getDossiersPlatAUSansEtablissement',
             'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
             'title' => 'Dossiers Plat\'AU à traiter',
-            'type' => 'dossiers',
+            'type' => 'dossiers_platau',
             'height' => 'small',
             'width' => 'small',
         ],
