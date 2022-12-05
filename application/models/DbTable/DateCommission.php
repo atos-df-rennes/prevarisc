@@ -68,8 +68,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
             WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
             ".([] !== $ids ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
             ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
-        $res = $this->getAdapter()->fetchAll($select);
-        return $res;
+        return $this->getAdapter()->fetchAll($select);
     }
 
     /**
