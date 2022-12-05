@@ -396,12 +396,10 @@ class Service_Dashboard
         $search->order('IFNULL(d.DATEVISITE_DOSSIER, d.DATEINSERT_DOSSIER) desc');
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true);
-        } else {
-            $searchToRun = $search->run(false, null, false)->toArray();
+            return $search->run(false, null, false, true);
         }
 
-        return $searchToRun;
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getDossiersSuivisSansAvis($user, $getCount = false)
@@ -421,12 +419,10 @@ class Service_Dashboard
         $search->order('d.DATEINSERT_DOSSIER desc');
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true);
-        } else {
-            $searchToRun = $search->run(false, null, false)->toArray();
+            return $search->run(false, null, false, true);
         }
 
-        return $searchToRun;
+        return $search->run(false, null, false)->toArray();
     }
 
     /**
@@ -443,12 +439,10 @@ class Service_Dashboard
         $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
 
         if ($getCount) {
-            $searchToRun = $search->run(false, null, false, true);
-        } else {
-            $searchToRun = $search->run(false, null, false)->toArray();
+            return $search->run(false, null, false, true);
         }
 
-        return $searchToRun;
+        return $search->run(false, null, false)->toArray();
     }
 
     public function getLeveePresc($user, $getCount = false)

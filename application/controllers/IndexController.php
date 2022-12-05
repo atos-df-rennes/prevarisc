@@ -88,7 +88,7 @@ class IndexController extends Zend_Controller_Action
         $bloc = [];
         $service_user = new Service_User();
         $service_dashboard = new Service_Dashboard();
-        $serviceCount = new Service_Count();
+        new Service_Count();
         $blocsConfig = $service_dashboard->getBlocConfig();
 
         if (isset($blocsConfig[$id])) {
