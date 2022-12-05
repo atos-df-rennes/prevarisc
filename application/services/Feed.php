@@ -32,6 +32,7 @@ class Service_Feed
     /**
      * @param null|int $count
      * @param mixed    $user
+     * @param mixed    $getCount
      *
      * @return array
      */
@@ -44,9 +45,9 @@ class Service_Feed
             $select = $modelNews->select()->setIntegrityCheck(false);
         }
 
-        if($getCount){
+        if ($getCount) {
             $select->from('news', ['COUNT(*) as count']);
-        }else{
+        } else {
             $select->from('news');
         }
         $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
@@ -59,7 +60,8 @@ class Service_Feed
 
         if (!$getCount) {
             $select
-                ->group('news.ID_NEWS');
+                ->group('news.ID_NEWS')
+            ;
         }
 
         return $getCount ? $modelNews->fetchRow($select)['count'] : $select->query()->fetchAll();

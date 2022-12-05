@@ -367,6 +367,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      * @param mixed $idsCommission
      * @param mixed $sinceDays
      * @param mixed $untilDays
+     * @param mixed $getCount
      *
      * @return array
      */
@@ -375,9 +376,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $ids = (array) $idsCommission;
 
         $select = $this->select()->setIntegrityCheck(false);
-        if($getCount){
+        if ($getCount) {
             $select->from(['d' => 'dossier'], ['COUNT(*) as count']);
-        }else{
+        } else {
             $select->from(['d' => 'dossier']);
         }
         $select
@@ -404,8 +405,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
         }
 
-        if($getCount){
+        if ($getCount) {
             $res = $this->getAdapter()->fetchRow($select);
+
             return $res['count'];
         }
 

@@ -186,13 +186,11 @@ class Service_Dashboard
         ],
     ];
 
-
     /**
      * @param array $options
      */
     public function __construct($options = [])
     {
-
         // default options
         $this->options = array_merge([
             'next_commissions_days' => 15,
@@ -219,11 +217,11 @@ class Service_Dashboard
         return $this->blocsConfig;
     }
 
-
     /**
      * @psalm-return array<int, array{id:mixed, LIBELLE_COMMISSION:mixed, LIBELLE_DATECOMMISSION:mixed, ID_COMMISSIONTYPEEVENEMENT:mixed, DATE_COMMISSION:mixed, HEUREDEB_COMMISSION:mixed, HEUREFIN_COMMISSION:mixed, heure:string, odj:mixed}>
      *
      * @param mixed $user
+     * @param mixed $getCount
      *
      * @return array[]
      */
@@ -231,14 +229,13 @@ class Service_Dashboard
     {
         $dbDateCommission = new Model_DbTable_DateCommission();
 
-        if($getCount){
-            $nbProchainesCommission = $dbDateCommission->getNextCommission(
+        if ($getCount) {
+            return $dbDateCommission->getNextCommission(
                 $this->getCommissionUser($user),
                 time(),
                 time() + 3600 * 24 * $this->options['next_commissions_days'],
                 $getCount
             );
-            return $nbProchainesCommission;
         }
 
         $prochainesCommission = $dbDateCommission->getNextCommission(
@@ -271,7 +268,7 @@ class Service_Dashboard
         $dbDossier = new Model_DbTable_Dossier();
         $commissionsUser = $this->getCommissionUser($user);
 
-        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], null ,$getCount);
+        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], null, $getCount);
     }
 
     public function getERPOuvertsSousAvisDefavorable($user, $getCount = false)
@@ -316,6 +313,7 @@ class Service_Dashboard
 
     /**
      * @param mixed $user
+     * @param mixed $getCount
      *
      * @return array
      */
@@ -332,7 +330,7 @@ class Service_Dashboard
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', ['1', '2', '3', '4']);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
-        if($getCount){
+        if ($getCount) {
             return $search->run(false, null, false)->toArray()[0]['count'];
         }
         $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
@@ -433,6 +431,9 @@ class Service_Dashboard
 
     /**
      * Retourne la liste des dossiers Plat'AU non associé à un etablissement.
+     *
+     * @param mixed $user
+     * @param mixed $getCount
      */
     public function getDossiersPlatAUSansEtablissement($user, $getCount = false)
     {
@@ -460,15 +461,14 @@ class Service_Dashboard
         $search->setCriteria('DELAIPRESC_DOSSIER IS NOT NULL');
         $dossiers = $search->run(false, null, false)->toArray();
 
-        if($getCount){
+        if ($getCount) {
             return $dossiers[0]['count'];
         }
-
 
         $valCpt = 0;
 
         foreach ($dossiers as $dossier) {
-            if((null !== $dossier['ID_DOSSIER'])){
+            if ((null !== $dossier['ID_DOSSIER'])) {
                 $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
                 foreach ($listeDossiersLies as $lien) {
                     $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
@@ -494,14 +494,14 @@ class Service_Dashboard
         $DBdossier = new Model_DbTable_Dossier();
         $DBdossierLie = new Model_DbTable_DossierLie();
 
-        $search->setItem('dossier',$getCount);
+        $search->setItem('dossier', $getCount);
         $search->setCriteria('ABSQUORUM_DOSSIER = 1');
         $resRun = $search->run(false, null, false);
         $dossiers = $resRun->toArray();
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {
-            if(isset($dossier['ID_DOSSIER'])){
+            if (isset($dossier['ID_DOSSIER'])) {
                 $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
                 foreach ($listeDossiersLies as $lien) {
                     $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
@@ -527,7 +527,7 @@ class Service_Dashboard
         $search->setCriteria('NPSP_DOSSIER = 1');
         $resRun = $search->run(false, null, false);
         $dossiers = $resRun->toArray();
-        if($getCount){
+        if ($getCount) {
             return $resRun[0]['count'];
         }
 

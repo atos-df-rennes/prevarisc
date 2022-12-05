@@ -14,6 +14,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
      * @param mixed      $id_etablissement_parent
      * @param null|mixed $numero_de_page
      * @param mixed      $paginator
+     * @param mixed      $getCount
      *
      * @return Zend_Db_Table_Rowset_Abstract|Zend_Paginator
      */
@@ -64,13 +65,14 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         switch ($item) {
             // Pour les établissements
             case 'etablissement':
-                if($getCount){
+                if ($getCount) {
                     $this->select
-                    ->from(['e' => 'etablissement'], ['COUNT(DISTINCT e.ID_ETABLISSEMENT) as count']);
-
-                }else{
+                        ->from(['e' => 'etablissement'], ['COUNT(DISTINCT e.ID_ETABLISSEMENT) as count'])
+                    ;
+                } else {
                     $this->select
-                    ->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT']);
+                        ->from(['e' => 'etablissement'], ['NUMEROID_ETABLISSEMENT', 'DUREEVISITE_ETABLISSEMENT', 'NBPREV_ETABLISSEMENT'])
+                    ;
                 }
 
                 $this->select->columns([
@@ -78,7 +80,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                         FROM etablissement
                         INNER JOIN etablissementlie ON etablissement.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT
                         WHERE etablissement.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)'),
-                    ])
+                ])
                     ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                     ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER'])
                     ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
@@ -109,10 +111,12 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
             case 'dossier':
                 if ($getCount) {
                     $this->select
-                    ->from(['d' => 'dossier'], ['COUNT(DISTINCT d.ID_DOSSIER) as count']);
+                        ->from(['d' => 'dossier'], ['COUNT(DISTINCT d.ID_DOSSIER) as count'])
+                    ;
                 } else {
                     $this->select
-                        ->from(['d' => 'dossier']);
+                        ->from(['d' => 'dossier'])
+                    ;
                 }
 
                 $this->select
@@ -168,7 +172,8 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
 
                 if (!$getCount) {
                     $this->select
-                        ->group('d.ID_DOSSIER');
+                        ->group('d.ID_DOSSIER')
+                    ;
                 }
 
                 break;
