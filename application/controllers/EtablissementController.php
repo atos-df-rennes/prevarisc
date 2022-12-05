@@ -549,35 +549,67 @@ class EtablissementController extends Zend_Controller_Action
     public function effectifsDegagementsEtablissementAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
 
-        $modelEtablissement = new Model_DbTable_Etablissement();
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        $service_etablissement = new Service_Etablissement();
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
 
         $idEtablissement = $this->getParam('id');
 
-        $this->view->idEtablissement = $idEtablissement;
-        $this->view->EffectifDegagement = $modelEtablissement->getEffectifEtDegagement($idEtablissement);
+        $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
+        $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
+
+        $rubriques = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $this->view->assign('rubriques', $rubriques);
+        $this->view->assign('champsvaleurliste', $serviceEtablissementEffectifsDegagements->getValeursListe());
     }
 
     public function effectifsDegagementsEtablissementEditAction()
     {
-        $this->_helper->layout->setLayout('etablissement');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
-        $serviceEffectifdegagement = new Service_Effectifdegagement();
-        $modelEtablissement = new Model_DbTable_Etablissement();
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
         $idEtablissement = $this->getParam('id');
 
-        $this->view->idEtablissement = $idEtablissement;
-        $this->view->EffectifDegagement = $modelEtablissement->getEffectifEtDegagement($idEtablissement);
+        $this->effectifsDegagementsEtablissementAction();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = $request->getPost();
+            try {
+                $post = $request->getPost();
 
-            $serviceEffectifdegagement->saveFromEtablissement($idEtablissement, $data);
-            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $idEtablissement]);
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceEtablissementEffectifsDegagements->saveRubriqueDisplay($key, $idEtablissement, (int) $value);
+                    }
+
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceEtablissementEffectifsDegagements->saveValeurChamp($key, $idEtablissement, 'Etablissement', $value);
+                    }
+                }
+
+                $groupInputsPost = $serviceEtablissementEffectifsDegagements->groupInputByOrder($post);
+                //Sauvegarde les changements dans les tableaux
+                $serviceEtablissementEffectifsDegagements->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
+
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+
+            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $this->_request->id]);
         }
     }
 

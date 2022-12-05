@@ -3103,39 +3103,62 @@ class DossierController extends Zend_Controller_Action
 
     public function effectifsDegagementsDossierAction()
     {
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $modelDossier = new Model_DbTable_Dossier();
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $service_dossier = new Service_Dossier();
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
-            $this->view->idDossier = $this->idDossier;
         }
+
+        $this->view->assign('rubriques', $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierEffectifsDegagements->getValeursListe());
     }
 
     public function effectifsDegagementsDossierEditAction()
     {
-        $this->_helper->layout->setLayout('dossier');
-        $this->view->headScript()->appendFile('/js/tinymce.min.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
 
-        $modelDossier = new Model_DbTable_Dossier();
-        $serviceEffectifdegagement = new Service_Effectifdegagement();
-        $service_dossier = new Service_Dossier();
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        if ($this->idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
-        }
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+
+        $this->effectifsDegagementsDossierAction();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = $request->getPost();
+            try {
+                $post = $request->getParams();
 
-            $serviceEffectifdegagement->saveFromDossier($this->idDossier, $data);
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->idDossier]);
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceDossierEffectifsDegagements->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
+                    }
+
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceDossierEffectifsDegagements->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
+                    }
+                }
+
+                //Sauvegarde les changements dans les tableaux
+                $serviceDossierEffectifsDegagements->saveChangeTable($this->view->rubriques, $serviceDossierEffectifsDegagements->groupInputByOrder($post), 'Dossier', $this->idDossier);
+
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->_request->id]);
         }
     }
 
@@ -3145,13 +3168,11 @@ class DossierController extends Zend_Controller_Action
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $modelDossier = new Model_DbTable_Dossier();
         $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
         $service_dossier = new Service_Dossier();
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
-            $this->view->EffectifDegagement = $modelDossier->getEffectifEtDegagement($this->idDossier);
         }
 
         $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
