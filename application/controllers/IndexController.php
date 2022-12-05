@@ -104,7 +104,6 @@ class IndexController extends Zend_Controller_Action
                 'title' => $blocConfig['title'],
                 'height' => $blocConfig['height'],
                 'width' => $blocConfig['width'],
-                'error' => $this->_helper->flashMessenger->getMessages() ? $this->_helper->flashMessenger->getMessages()[0] : null,
             ];
         }
 

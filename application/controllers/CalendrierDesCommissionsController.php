@@ -85,7 +85,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('idDate'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || null === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('idDate');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -103,7 +103,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('dateCommId'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || null === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('dateCommId');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
