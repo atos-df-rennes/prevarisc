@@ -2188,12 +2188,6 @@ class DossierController extends Zend_Controller_Action
         $DBdossier = new Model_DbTable_Dossier();
         $this->view->infosDossier = $DBdossier->find($idDossier)->current();
 
-        // Effectifs & Dégagements
-        $this->view->effectifDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_EFFECTIF'];
-        $this->view->degagementDossier = $DBdossier->getEffectifEtDegagement($idDossier)['DESCRIPTION_DEGAGEMENT'];
-        $this->view->effectifEtablissement = empty($idEtab) ? '' : $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_EFFECTIF'];
-        $this->view->degagementEtablissement = empty($idEtab) ? '' : $model_etablissement->getEffectifEtDegagement($idEtab)['DESCRIPTION_DEGAGEMENT'];
-
         // Avis & Dérogations
         $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
 
@@ -2598,9 +2592,17 @@ class DossierController extends Zend_Controller_Action
         $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
         $rubriquesEtablissement = empty($idEtab) ? '' : $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
 
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossierEffectifsDegagements = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubriquesEtablissementEffectifsDegagements = empty($idEtab) ? '' : $serviceEtablissementEffectifsDegagements->getRubriques($idEtab, 'Etablissement');
+
         $rubriquesByCapsuleRubrique = [
-            'descriptifEtablissement' => $rubriquesEtablissement,
             'descriptifVerificationsTechniques' => $rubriquesDossier,
+            'descriptifEtablissement' => $rubriquesEtablissement,
+            'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+            'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
         ];
 
         $serviceFormulaire = new Service_Formulaire();
