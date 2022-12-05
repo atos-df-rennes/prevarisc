@@ -267,19 +267,19 @@ if (!function_exists('addPrescriptionCC')) {
         //TYPE_PRESCRIPTION_DOSSIER
         if ($type == 0) {
             try{
-                $prescription = $odf->listeReg;
+                $prescription = $odf->listeRegCellule;
             } catch (Exception $e) {
 
             }
         } else if ($type == 1) {
             try{
-                $prescription = $odf->listeExploitation;
+                $prescription = $odf->listeExploitationCellule;
             } catch (Exception $e) {
 
             }
         } else if ($type == 2) {
             try{
-                $prescription = $odf->listeAmelioration;
+                $prescription = $odf->listeAmeliorationCellule;
             } catch (Exception $e) {
 
             }
@@ -346,11 +346,15 @@ if (!function_exists('addPrescriptionCC')) {
         }
     }
 }
+try {
+    $cellulesPresc = $odf->setSegment('cellulesPresc');
+} catch (Exception $e) {}
 
 if ($this->id_typeactivite == 29) {
     try{
-        if (isset($this->celluleDossier)) {
-            $cellulesPresc = $odf->setSegment('cellulesPresc');
+        // TODO Faire la même chose que {cellulesPresc} sur les autres segments
+        // FIXME Voir avec Karen les règles fonctionnelles dans ces cas
+        if (isset($this->celluleDossier) && isset($cellulesPresc)) {
             foreach($this->celluleDossier as $cellulesInfos => $cellule) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
                 if ($this->idDossier == $cellule['ID_DOSSIER']) {
@@ -365,8 +369,7 @@ if ($this->id_typeactivite == 29) {
                 $cellulesPresc->merge();
             }
             $odf->mergeSegment($cellulesPresc);
-        } else if (isset($this->celluleDossierLevee)) {
-            $cellulesPresc = $odf->setSegment('cellulesPresc');
+        } else if (isset($this->celluleDossierLevee) && isset($cellulesPresc)) {
             foreach($this->celluleDossierLevee as $celluleKey => $cellule) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
                 foreach($cellule['dossiers']['etudes'] as $dossierKey => $dossier) {
@@ -381,6 +384,8 @@ if ($this->id_typeactivite == 29) {
             addPrescription($this->prescriptionReglDossier,0,$odf);
             addPrescription($this->prescriptionExploitation,1,$odf);
             addPrescription($this->prescriptionAmelioration,2,$odf);
+
+            $odf->mergeSegment($cellulesPresc);
         }
     } catch (OdfException $e) {
         echo "<span class='label label-warning'>Le document que vous avez sélectionné pour la génération ne correspond pas à un centre commercial</span><br/><br/>";
@@ -389,6 +394,8 @@ if ($this->id_typeactivite == 29) {
     addPrescription($this->prescriptionReglDossier,0,$odf);
     addPrescription($this->prescriptionExploitation,1,$odf);
     addPrescription($this->prescriptionAmelioration,2,$odf);
+
+    $odf->mergeSegment($cellulesPresc);
 }
 
 //PARTIE TEXTE APPLICABLE
