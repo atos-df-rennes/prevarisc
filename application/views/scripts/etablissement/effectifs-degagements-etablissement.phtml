@@ -1,23 +1,18 @@
-<!-- TODO Mettre le descriptif personnalisé -->
-<div class='pull-right'>
-    <a href="<?= $this->url(array('controller' => 'etablissement', 'action' => 'effectifs-degagements-etablissement-edit', 'id' => $this->idEtablissement), false, true) ?>" class="btn">Modifier les effectifs et dégagements</a>
+<div class='pull-right' >
+    <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-etablissement-edit')) ?>">Modifier les effectifs et dégagements</a>
 </div>
 
-<h3>Effectifs :</h3>
-<?php
-    if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]) {
-        echo htmlspecialchars($this->EffectifDegagement["DESCRIPTION_EFFECTIF"]);
-    } else {
-        echo "Aucune description";
-    }
-?>
+<div id='descriptif-personnalise'>
+    <h3>Effectifs et Dégagements</h3>
 
-<h3>Dégagements :</h3>
+    <h4 class='h4_subtitle'>Rubriques</h4>
+    <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
 
-<?php
-    if (isset($this->EffectifDegagement) && '' !== $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]) {
-        echo htmlspecialchars($this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]);
-    } else {
-        echo "Aucune description";
-    }
-?>
+    <div id='affichage-informations' class='form-horizontal'>
+        <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+            'rubriques' => $this->rubriques,
+            'champsvaleurliste' => $this->champsvaleurliste,
+            'canWrite' => false
+        ]); ?>
+    </div>
+</div>

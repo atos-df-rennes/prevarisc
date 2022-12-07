@@ -1,16 +1,32 @@
-<form action="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier-edit', 'id' => $this->idDossier), false, true) ?>" method="post">
-    <div class='pull-right'>
-        <a href="<?= $this->url(array('controller' => 'dossier', 'action' => 'effectifs-degagements-dossier', 'id' => $this->idDossier), false, true) ?>" class='btn'>Annuler la modification</a>
-        <input type='submit' class="btn btn-success" value="Sauvegarder">
-    </div>      
+<form action='<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>' method='post' class='form-horizontal'>
+    <div class='pull-right' >
+        <div class="btn-group">
+            <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>">Annuler la modification</a>
+            <input type='submit' class="btn btn-success" value='Sauvegarder'>
+        </div>
+    </div>
 
-    <h3>
-        Effectifs
-    </h3>
-    <textarea name='DESCRIPTION_EFFECTIF'><?php if (isset($this->EffectifDegagement["DESCRIPTION_EFFECTIF"])) { echo $this->EffectifDegagement["DESCRIPTION_EFFECTIF"]; } ?></textarea>
-    
-    <h3>
-        Dégagements
-    </h3>
-    <textarea name='DESCRIPTION_DEGAGEMENT'><?php if (isset($this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"])) { echo $this->EffectifDegagement["DESCRIPTION_DEGAGEMENT"]; } ?></textarea>
+    <h3>Modification des effectifs et dégagements</h3>
+    <h4 class='h4_subtitle'>Rubriques</h4>
+
+    <div class='row-fluid'>
+        <div class='span10'>
+            <?php foreach ($this->rubriques as $key => $rubrique):
+                if (($key % 4) === 0): ?>
+                    <div class='row-fluid'>
+                <?php endif;
+
+                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+
+                if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
+                    </div>
+                <?php endif;
+            endforeach ?>
+        </div>
+    </div>
+    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+        'rubriques' => $this->rubriques,
+        'champsvaleurliste' => $this->champsvaleurliste,
+        'canWrite' => true
+    ]); ?>
 </form>

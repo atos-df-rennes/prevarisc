@@ -815,9 +815,9 @@ foreach ($this->formulaires as $formulaire) {
 
                             $segmentTableau->merge();
                         }
-                    }
 
-                    $odf->mergeSegment($segmentTableau);
+                        $odf->mergeSegment($segmentTableau);
+                    }
                 } else {
                     foreach ($champ['FILS'] as $champFils) {
                         if ('Case à cocher' === $champFils['TYPE']) {
