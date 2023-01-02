@@ -83,7 +83,7 @@
             <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><em class='icon-calendar icon-black'></em> Afficher ordre du jour</a>
         </li>
         <?php endif; ?>
-        <?php if($this->is_allowed_retablir) : ?>
+        <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
         <li>
             <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) : ?>
                 <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/redirect/true/idDossier/". $this->idDossier ?>>

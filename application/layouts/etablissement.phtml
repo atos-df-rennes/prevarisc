@@ -13,19 +13,19 @@
         <li class="nav-header">Actions</li>
         <li><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true)?> '><em class="icon-plus icon-black"></em> Ajouter un dossier</a></li>
 		<?php if($this->is_allowed_delete_etablissement): ?>
-        <li>
-            <?php if(null !== $this->etablissement['informations']['DATESUPPRESSION_ETABLISSEMENT']) : ?>
-                <a id="retablissementEtablissement" href=<?= "/etablissement/retablir-etablissement/idEtablissement/". $this->etablissement['ID_ETABLISSEMENT'] ?>>
-                    <em class="icon-ok icon-black"></em>
-                    Rétablir l'établissement
-                </a>
-            <?php else :?>
-                <a id="suppressionEtablissement" href="#">
-                    <em class="icon-remove icon-black"></em>
-                    Supprimer l'établissement
-                </a>
-            <?php endif; ?>
-        </li>
+            <li>
+                <?php if(null !== $this->etablissement['informations']['DATESUPPRESSION_ETABLISSEMENT']) : ?>
+                    <a id="retablissementEtablissement" href=<?= "/etablissement/retablir-etablissement/idEtablissement/". $this->etablissement['ID_ETABLISSEMENT'] ?>>
+                        <em class="icon-ok icon-black"></em>
+                        Rétablir l'établissement
+                    </a>
+                <?php else :?>
+                    <a id="suppressionEtablissement" href="#">
+                        <em class="icon-remove icon-black"></em>
+                        Supprimer l'établissement
+                    </a>
+                <?php endif; ?>
+            </li>
         <?php endif ?>
 	</ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>

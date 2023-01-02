@@ -1,6 +1,7 @@
-<?php if($this->is_allowed_retablir === 0 || empty($this->is_allowed_retablir)): ?>
+<!-- TODO: Si juste un des 2 autorisé, permettre l'édition uniquement sur ce dernier -->
+<?php if (!$this->is_allowed_delete_dossier && !$this->is_allowed_delete_etablissement): ?>
     <?= $this->partial('error/not-allowed.phtml') ?>
-<?php else:?>
+<?php else: ?>
     <h2>Rétablir</h2>
     <h2 class='label label-important'>Dossier supprimé</h2>
     <ul class='gridRetablir'>
@@ -28,4 +29,4 @@
             </a>
         <?php endforeach ?>
     </ul>
-<?php endif;?>
+<?php endif ?>
