@@ -856,7 +856,7 @@ class Service_Dossier
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
             $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
-            $dossier->DELETE_BY = $idDeleteBy;
+            $dossier->DELETED_BY = $idDeleteBy;
             //suppression de la date de passage en commission
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
             $dbAffectDossier->deleteDateDossierAffect($idDossier);
@@ -889,7 +889,7 @@ class Service_Dossier
         $DB_dossier = new Model_DbTable_Dossier();
         $dossier = $DB_dossier->find($idDossier)->current();
         $dossier->DATESUPPRESSION_DOSSIER = null;
-        $dossier->DELETE_BY = null;
+        $dossier->DELETED_BY = null;
         $dossier->save();
     }
 }

@@ -436,7 +436,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $select = $this->select()->distinct()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'])
             ->joinLeft(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
-            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETE_BY', 'USERNAME_UTILISATEUR')
+            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->distinct('e.ID_ETABLISSEMENT')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ')
         ;

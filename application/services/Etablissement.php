@@ -1472,7 +1472,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $etablissement = $DB_Etab->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
-        $etablissement->DELETE_BY = $idDeleteBy;
+        $etablissement->DELETED_BY = $idDeleteBy;
         $etablissement->save();
     }
 
@@ -1481,7 +1481,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DB_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $DB_etablissement->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
-        $etablissement->DELETE_BY = null;
+        $etablissement->DELETED_BY = null;
         $etablissement->save();
     }
 

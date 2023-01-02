@@ -512,7 +512,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
-            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = d.DELETE_BY', 'USERNAME_UTILISATEUR')
+            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL ')
         ;
 
