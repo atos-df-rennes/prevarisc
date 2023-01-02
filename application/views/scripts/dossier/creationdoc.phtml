@@ -369,8 +369,6 @@ if ($this->id_typeactivite == 29) {
 
                 $cellulesPresc->merge();
             }
-
-            $odf->mergeSegment($cellulesPresc);
         } else if (isset($this->celluleDossierLevee) && isset($cellulesPresc)) {
             foreach($this->celluleDossierLevee as $celluleKey => $cellule) {
                 addChamp($cellulesPresc, 'libelleCellule', $cellule['LIBELLE_ETABLISSEMENTINFORMATIONS']);
@@ -383,15 +381,11 @@ if ($this->id_typeactivite == 29) {
                     $cellulesPresc->merge();
                 }
             }
-
-            $odf->mergeSegment($cellulesPresc);
         }
 
         addPrescription($this->prescriptionReglDossier,0,$odf);
         addPrescription($this->prescriptionExploitation,1,$odf);
         addPrescription($this->prescriptionAmelioration,2,$odf);
-
-        $odf->mergeSegment($cellulesPresc);
     } catch (OdfException $e) {
         echo "<span class='label label-warning'>Le document que vous avez sélectionné pour la génération ne correspond pas à un centre commercial</span><br/><br/>";
     }
@@ -399,9 +393,9 @@ if ($this->id_typeactivite == 29) {
     addPrescription($this->prescriptionReglDossier,0,$odf);
     addPrescription($this->prescriptionExploitation,1,$odf);
     addPrescription($this->prescriptionAmelioration,2,$odf);
-
-    $odf->mergeSegment($cellulesPresc);
 }
+
+$odf->mergeSegment($cellulesPresc);
 
 //PARTIE TEXTE APPLICABLE
 try{
