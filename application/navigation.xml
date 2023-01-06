@@ -541,6 +541,10 @@
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
                 </changement>
+                <retablir>
+                    <label>Rétablir un élémént supprimé</label>
+                    <controller>retablir</controller>
+                </retablir>
             </pages>
         </admin>
 
@@ -1000,7 +1004,7 @@
                 </index>
                 <delete>
                     <controller>etablissement</controller>
-                    <action>delete</action> 
+                    <action>delete</action>
                     <resource>suppression</resource>
                     <privilege>delete_etablissement</privilege>
                 </delete>
