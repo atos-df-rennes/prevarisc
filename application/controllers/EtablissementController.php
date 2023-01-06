@@ -479,6 +479,7 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
+    // FIXME Il faut que ça vide le cache de la recherche
     public function retablirEtablissementAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();

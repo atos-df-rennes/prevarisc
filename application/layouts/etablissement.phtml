@@ -48,13 +48,6 @@
         <?php endif ?>
         <?php echo file_exists(APPLICATION_PATH . DS . '..' . DS . 'public' . DS . 'images' . DS . 'types' . DS . 'b' . DS . 'icone-type-' . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . '.png') ? "<img src='/images/types/b/icone-type-" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . ".png' title='" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . "' />" : ''; ?>
         <?php echo $this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"] ?>
-        <li>
-            <?php if(null !== $this->etablissement['informations']['DATESUPPRESSION_ETABLISSEMENT']) : ?>
-                <span class='label label-important'>
-                    ETALBISSEMENT SUPPRIME
-                </span>
-            <?php endif; ?>
-        </li>
         <?php if ($this->etablissement['general']['NUMEROID_ETABLISSEMENT']): ?>
             <span class="pull-right">
                 <small>

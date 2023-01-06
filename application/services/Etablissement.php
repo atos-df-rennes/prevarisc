@@ -50,7 +50,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
-            // Si l'établissement n'existe pas, on généère une erreur
+            // Si l'établissement n'existe pas, on génère une erreur
             if (null === $general
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
