@@ -11,6 +11,7 @@
 
     <?= $this->partial('retablir/partials/partial-deleted-elements.phtml', [
         'element' => 'etablissement',
-        'data' => $this->etablissementsSupprimes
+        'data' => $this->etablissementsSupprimes,
+        'disableLink' => true
     ]) ?>
 <?php endif ?>

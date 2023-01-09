@@ -512,8 +512,29 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
-            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
-            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL ')
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
+            ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
+            ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
+            ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+            ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+            ->joinLeft(
+                'etablissementinformations',
+                'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS =
+                IFNULL(
+                    (CASE
+                    WHEN d.DATECOMM_DOSSIER IS NOT NULL THEN (SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS <= d.DATEINSERT_DOSSIER)
+                    WHEN d.DATEVISITE_DOSSIER IS NOT NULL THEN (SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS <= d.DATEVISITE_DOSSIER)
+                    WHEN d.DATEINSERT_DOSSIER IS NOT NULL THEN (SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS <= d.DATEINSERT_DOSSIER)
+                    ELSE (SELECT MIN(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)
+                    END),
+                    (SELECT MIN(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)
+                )',
+                'LIBELLE_ETABLISSEMENTINFORMATIONS'
+            )
+            ->join(['u' => 'utilisateur'], 'u.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL')
+            ->group('d.ID_DOSSIER')
         ;
 
         return $this->fetchAll($select)->toArray();

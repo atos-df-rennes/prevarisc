@@ -5,7 +5,7 @@
 <ul class='gridRetablir'>
     <?php foreach($this->data as $deletedElement) : ?>
         <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
-        <div class='linkDisabled'>
+        <div class=<?= $this->disableLink ? 'linkDisabled' : '' ?>>
             <?= $this->partial("search/results/{$this->element}.phtml", $deletedElement) ?>
         </div>
         <a
