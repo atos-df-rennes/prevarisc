@@ -8,82 +8,82 @@
     </li>
 
 	<?php
-            if($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
-                echo "<li class='".(( $this->action == "descriptif") ? "active" : "read" )."'>
-                        <a "
-                        . "href='".$this->url(array("controller" => "dossier", "action"=>"descriptif", "id" => $this->idDossier), false, true)."'><i class=\"icon-book icon-black\"></i> Descriptif ".(( $this->natureDossier == 1 || $this->natureDossier == 2 ) ? " des travaux" : "")."</a>
-                    </li>";
-            }
+        if($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9) {
+            echo "<li class='".(( $this->action == "descriptif") ? "active" : "read" )."'>
+                    <a "
+                    . "href='".$this->url(array("controller" => "dossier", "action"=>"descriptif", "id" => $this->idDossier), false, true)."'><i class=\"icon-book icon-black\"></i> Descriptif ".(( $this->natureDossier == 1 || $this->natureDossier == 2 ) ? " des travaux" : "")."</a>
+                </li>";
+        }
 
-            if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3 ) {
-                echo "<li class='".( ( $this->action == "textes-applicables" ) ? "active" : "read" )."'>
-                        <a "
-                        . "href='".$this->url(array("controller" => "dossier", "action"=>"textes-applicables", "id" => $this->idDossier), false, true)."'><i class=\"icon-align-center icon-black\"></i> Textes applicables</a>
-                    </li>";
-            }
+        if ($this->idTypeDossier == 1 || $this->idTypeDossier == 2 || $this->idTypeDossier == 3 ) {
+            echo "<li class='".( ( $this->action == "textes-applicables" ) ? "active" : "read" )."'>
+                    <a "
+                    . "href='".$this->url(array("controller" => "dossier", "action"=>"textes-applicables", "id" => $this->idDossier), false, true)."'><i class=\"icon-align-center icon-black\"></i> Textes applicables</a>
+                </li>";
+        }
 
-            if ($this->idTypeDossier != 5) {
-                echo "<li class='".( ( $this->action == "docconsulte" ) ? "active" : "read" )."'>
-                        <a  "
-                            . "href='".$this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true)."'><i class=\"icon-file icon-black\"></i> Documents consultés</a>
-                    </li>";
-            }
+        if ($this->idTypeDossier != 5) {
+            echo "<li class='".( ( $this->action == "docconsulte" ) ? "active" : "read" )."'>
+                    <a  "
+                        . "href='".$this->url(array("controller" => "dossier", "action"=>"docconsulte", "id" => $this->idDossier), false, true)."'><i class=\"icon-file icon-black\"></i> Documents consultés</a>
+                </li>";
+        }
 
-            if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
-                echo "<li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
-                        <a  "
-                        . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
-                    </li>";
-            }
+        if($this->natureDossier != 3 && $this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44 && $this->natureDossier != 31 && $this->natureDossier != 32 && $this->idTypeDossier != 5) {
+            echo "<li class='".( ( $this->action == "prescription" ) ? "active" : "read" )."'>
+                    <a  "
+                    . "href='".$this->url(array("controller" => "dossier", "action"=>"prescription", "id" => $this->idDossier), false, true)."'><i class=\"icon-flag icon-black\"></i> Prescriptions</a>
+                </li>";
+        }
 	?>
 
-        <li class='<?php echo ( $this->action == "liees" ) ? "active" : "read" ?>'>
-            <a
-                href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'><em class="icon-folder-open icon-black"></em> Établissements et dossiers liés</a>
-        </li>
+    <li class='<?php echo ( $this->action == "liees" ) ? "active" : "read" ?>'>
+        <a
+            href='<?php echo $this->url(array("controller" => "dossier", "action"=>"liees", "id" => $this->idDossier), false, true) ?>'><em class="icon-folder-open icon-black"></em> Établissements et dossiers liés</a>
+    </li>
 
 	<?php
-            if($this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44) {
-                echo "<li class='".( ( $this->action == "contact" ) ? "active" : "read" )."'>
-                        <a  "
-                        . "href='".$this->url(array("controller" => "dossier", "action"=>"contact", "id" => $this->idDossier), false, true)."'><i class=\"icon-user icon-black\"></i> Contacts</a>
-                    </li>";
-            }
+        if($this->natureDossier != 40 && $this->natureDossier != 41 && $this->natureDossier != 42 && $this->natureDossier != 44) {
+            echo "<li class='".( ( $this->action == "contact" ) ? "active" : "read" )."'>
+                    <a  "
+                    . "href='".$this->url(array("controller" => "dossier", "action"=>"contact", "id" => $this->idDossier), false, true)."'><i class=\"icon-user icon-black\"></i> Contacts</a>
+                </li>";
+        }
 	?>
 
-        <li class='<?php echo ( $this->action == "piece-jointe" ) ? "active" : "read" ?>'>
-            <a
-               href='<?php echo $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'><em class="icon-share icon-black"></em> Pièces jointes</a>
-        </li>
-        <li class="nav-header">Actions</li>
-        <?php
-                $verrou = true;
-                if ($this->verrou == 1  || (isset($action) && $action == 'new')) {
-                        $label = "Déverrouiller";
-                        $idLink = "DEVERROU";
-                } else {
-                        $label = "Verrouiller";
-                        $idLink = "VERROU";
-                        $verrou = false;
-                }
-        ?>
-        <li>
-            <a class="sep" id="<?php echo $idLink; ?>" style='cursor:pointer;'><em class="icon-lock icon-black"></em> <?php echo $label; ?></a>
-        </li>
-        <?php
-            echo "
-                <li class='".( ( $this->action == "rapport" ) ? "active" : "read" )."'>
-                    <a  "
-                    . "href='".$this->url(array("controller" => "dossier", "action"=>"rapport", "id" => $this->idDossier), false, true)."'><i class=\"icon-refresh icon-black\"></i> Rapport</a>
-                </li>
-            ";
-        ?>
-        <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
+    <li class='<?php echo ( $this->action == "piece-jointe" ) ? "active" : "read" ?>'>
+        <a
+            href='<?php echo $this->url(array("controller" => "dossier", "action"=>"piece-jointe", "id" => $this->idDossier), false, true) ?>'><em class="icon-share icon-black"></em> Pièces jointes</a>
+    </li>
+    <li class="nav-header">Actions</li>
+    <?php
+        $verrou = true;
+        if ($this->verrou == 1  || (isset($action) && $action == 'new')) {
+            $label = "Déverrouiller";
+            $idLink = "DEVERROU";
+        } else {
+            $label = "Verrouiller";
+            $idLink = "VERROU";
+            $verrou = false;
+        }
+    ?>
+    <li>
+        <a class="sep" id="<?php echo $idLink; ?>" style='cursor:pointer;'><em class="icon-lock icon-black"></em> <?php echo $label; ?></a>
+    </li>
+    <?php
+        echo "
+            <li class='".( ( $this->action == "rapport" ) ? "active" : "read" )."'>
+                <a  "
+                . "href='".$this->url(array("controller" => "dossier", "action"=>"rapport", "id" => $this->idDossier), false, true)."'><i class=\"icon-refresh icon-black\"></i> Rapport</a>
+            </li>
+        ";
+    ?>
+    <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
         <li>
             <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?php echo $this->idDateCommissionAffect; ?>'><em class='icon-calendar icon-black'></em> Afficher ordre du jour</a>
         </li>
-        <?php endif; ?>
-        <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
+    <?php endif; ?>
+    <?php if(!$verrou && $this->is_allowed_delete_dossier) : ?>
         <li>
             <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) : ?>
                 <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/idDossier/". $this->idDossier ?>>
@@ -97,8 +97,8 @@
                 </a>
             <?php endif; ?>
         </li>
-        <?php endif; ?>
-    </ul>
+    <?php endif; ?>
+</ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd();
 endif; ?>
 
@@ -106,68 +106,65 @@ endif; ?>
 
 <?php if($this->action == "add" || $this->do == "new" ) :?>
     <h2 class='page-header'>Création d'un nouveau dossier</h2>
-        <h3 class='page-header'>
-            <div style='margin:10px;' id='infosEtablissement'>
-                <?= $this->enteteEtab['ID_ETABLISSEMENT'] ?>
-                <?php if($this->enteteEtab) : ?>
-                    Etablissement(s) concerné(s) : &nbsp;
-                    <a
-                        href= <?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT']?>
-                        data-target='#modal-desc'
-                        data-toggle='modal'
-                        id='descEtab'
-                        title='Afficher le descriptif'>
-                        <i class='icon-list-alt icon-black'></i>
-                    </a>
-                    <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
-                        title='Se rendre à la liste des dossiers' >
-                        <i class='icon-folder-open icon-black'></i>
-                    </a>;
+    <h3 class='page-header'>
+        <div style='margin:10px;' id='infosEtablissement'>
+            <?php if($this->enteteEtab) : ?>
+                Etablissement(s) concerné(s) : &nbsp;
+                <a
+                    href= <?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT']?>
+                    data-target='#modal-desc'
+                    data-toggle='modal'
+                    id='descEtab'
+                    title='Afficher le descriptif'>
+                    <i class='icon-list-alt icon-black'></i>
+                </a>
+                <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
+                    title='Se rendre à la liste des dossiers' >
+                    <i class='icon-folder-open icon-black'></i>
+                </a>
 
-                    <a href=<?= '/etablissement/index/id/'.$this->enteteEtab['ID_ETABLISSEMENT'] ?> class='etab'>
+                <a href=<?= '/etablissement/index/id/'.$this->enteteEtab['ID_ETABLISSEMENT'] ?> class='etab'>
+                    <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
 
-                        <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
-
-                        <?php if($this->enteteEtab['adresses']) : ?>
-                            &nbsp; <?= "(". $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'].")" ?>
-                        <?php endif; ?>
-
-                        <?php if(isset($this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])) :?>
-                            [<?= $this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
-                        <?php endif; ?>
-                    </a>
-
-                    <?php if(isset($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) && null !== ($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'])) :?>
-                        <?php if($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Favorable") :?>
-                            <span class='avis F'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
-                        <?php elseif($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Défavorable") :?>
-                            <span class='avis D'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
-                        <?php elseif($this->enteteEtab['etablissementInfos']['infosEtab']['presence_avis_differe']) :?>
-                            <span class='label label-info'>Avis différé</span>&nbsp;
-                        <?php else :?>
-                            <span class='avis'>Avis indisponible</span>&nbsp;
-                        <?php endif; ?>
-                        <?php else:?>
-                            <span class='avis'>Avis indisponible</span>&nbsp;
+                    <?php if($this->enteteEtab['adresses']) : ?>
+                        &nbsp; <?= "(". $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'].")" ?>
                     <?php endif; ?>
 
-                    <?php $this->nbPrev = sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) ?>
-                    <?php if(sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) > 0) : ?>
-                        <span style='font-size:10px'>(
-                            <?php foreach($this->enteteEtab['etablissementInfos']['preventionnistes'] as $prev ): ?>
-                                <?= $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'] ?>
-                                <?php if($this->nbPrev > 1) :?>
-                                    <?php $this->nbPrev-- ?>
-                                    ,
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        )</span>
-                    <?php endif ?>
-                    <span style='font-size:10px'>#<?= $this->enteteEtab['etablissementInfos']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
-                <?php endif; ?>
-            </div>
-        </h3>
+                    <?php if(isset($this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])) :?>
+                        [<?= $this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
+                    <?php endif; ?>
+                </a>
 
+                <?php if(isset($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) && null !== ($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'])) :?>
+                    <?php if($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Favorable") :?>
+                        <span class='avis F'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                    <?php elseif($this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] == "Défavorable") :?>
+                        <span class='avis D'><?= $this->enteteEtab['etablissementInfos']['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                    <?php elseif($this->enteteEtab['etablissementInfos']['infosEtab']['presence_avis_differe']) :?>
+                        <span class='label label-info'>Avis différé</span>&nbsp;
+                    <?php else :?>
+                        <span class='avis'>Avis indisponible</span>&nbsp;
+                    <?php endif; ?>
+                    <?php else:?>
+                        <span class='avis'>Avis indisponible</span>&nbsp;
+                <?php endif; ?>
+
+                <?php $nbPrev = sizeof($this->enteteEtab['etablissementInfos']['preventionnistes']) ?>
+                <?php if($nbPrev > 0) : ?>
+                    <span style='font-size:10px'>(
+                        <?php foreach($this->enteteEtab['etablissementInfos']['preventionnistes'] as $prev ): ?>
+                            <?= $prev['NOM_UTILISATEURINFORMATIONS']." ".$prev['PRENOM_UTILISATEURINFORMATIONS'] ?>
+                            <?php if($nbPrev > 1) :?>
+                                <?php $nbPrev-- ?>
+                                ,
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    )</span>
+                <?php endif ?>
+                <span style='font-size:10px'>#<?= $this->enteteEtab['etablissementInfos']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
+            <?php endif; ?>
+        </div>
+    </h3>
 <?php else :?>
     <h2 class='page-header'>
         <span style='color: #333333'><?= $this->libelleType ?></span>
@@ -183,19 +180,25 @@ endif; ?>
             </p>
         <?php endif; ?>
         <div style='margin:10px;' id='infosEtabs'>
-            <?php if(count($this->enteteEtab)> 0) :?>
-                <?php if($this->nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site") :?>
+            <?php
+            $nbEtab = count($this->enteteEtab)> 0;
+            if($nbEtab > 0) :?>
+                <?php if($nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site") :?>
                     Site concerné :
                     <a href=<?='/etablissement/index/id/'.$this->enteteEtab[0]['ID_ETABLISSEMENT'] ?> class='etab'>
                         <?= $this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
                     </a>
                     <span style='font-size:10px'>#<?=$this->enteteEtab[0]['infosEtab']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
-                <?php else:?>
+                <?php else:
+                    $idEtabEnCour = null;
+                ?>
                     Etablissement(s) concerné(s) :
                     <?php foreach($this->enteteEtab as $etab => $value) :?>
-                        <?php if(true || $value['ID_ETABLISSEMENTDOSSIER'] !== $idEtabEnCour) :?>
+                        <?php if($value['ID_ETABLISSEMENTDOSSIER'] !== $idEtabEnCour) :
+                            $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
+                        ?>
                             <a
-                                href=<?= '/etablissement/descriptif/id/'.strval($value['ID_ETABLISSEMENT']) ?>
+                                href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 data-target='#modal-desc'
                                 data-toggle='modal'
                                 id='descEtab'
@@ -204,27 +207,30 @@ endif; ?>
                             </a>
                             &nbsp;
                             <a
-                                href='/etablissement/dossiers/id/'.<?=$value['ID_ETABLISSEMENT']?>
+                                href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 title='Se rendre à la liste des dossiers' >
                                 <i class='icon-folder-open icon-black'></i>
                             </a>
                             &nbsp;
                             <a
-                                href=  <?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
-                                class='etab'>
+                                href=<?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                class='etab'
+                            >
                                 <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS']?>
-                                <?php $this->nbAdresse = count($value['infosEtab']['adresses']) ?>
-                                <?php if($this->nbAdresse != 0):?>
+                                <?php
+                                    $nbAdresse = count($value['infosEtab']['adresses']);
+                                    if($nbAdresse != 0): ?>
                                     (
                                         <?php foreach($value['infosEtab']['adresses'] as $commune):?>
                                             <?= $commune['LIBELLE_COMMUNE'] ?>
-                                            <?php if($this->nbAdresse > 1) :?>
-                                                <?php $this->nbAdresse-- ?>
+                                            <?php if($nbAdresse != 1) :?>
+                                                ,
+                                                <?php $nbAdresse-- ?>
                                             <?php endif ?>
                                         <?php endforeach; ?>
                                     )
                                 <?php else :?>
-                                 (adresse non renseignée)
+                                    (adresse non renseignée)
                                 <?php endif ?>
                                 <?php if(isset($value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])): ?>
                                     [<?= $value['infosEtab']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
@@ -244,8 +250,8 @@ endif; ?>
                                 <span class='avis'>Avis indisponible</span>&nbsp;
                             <?php endif; ?>
 
-                            <?php $this->nbPrev = count($value['infosEtab']['preventionnistes']) ?>
-                            <?php if($this->nbPrev > 0) :?>
+                            <?php $nbPrev = count($value['infosEtab']['preventionnistes']) ?>
+                            <?php if($nbPrev > 0) :?>
                                 <span style='font-size:10px'>
                                 (
                                     <?php foreach($value['infosEtab']['preventionnistes'] as $prev) : ?>
@@ -254,11 +260,11 @@ endif; ?>
                                             ." ".
                                             $prev['PRENOM_UTILISATEURINFORMATIONS']
                                         ?>
-                                        <?php if($this->nbPrev > 1) :?>
-                                            <?php $this->nbPrev-- ?>
+                                        <?php if($nbPrev > 1) :?>
                                             ,
-                                        <?php endif ?>
-                                    <?php endforeach ?>
+                                        <?php endif;
+                                        $nbPrev--;
+                                    endforeach ?>
                                 )
                             <?php endif ?>
                             <span style='font-size:10px'>#<?=$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']?></span>
