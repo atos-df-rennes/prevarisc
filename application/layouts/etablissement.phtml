@@ -14,29 +14,18 @@
         <li><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true)?> '><em class="icon-plus icon-black"></em> Ajouter un dossier</a></li>
 		<?php if($this->is_allowed_delete_etablissement): ?>
             <li>
-                <?php if(null !== $this->etablissement['informations']['DATESUPPRESSION_ETABLISSEMENT']) : ?>
-                    <a id="retablissementEtablissement" href=<?= "/etablissement/retablir-etablissement/idEtablissement/". $this->etablissement['ID_ETABLISSEMENT'] ?>>
-                        <em class="icon-ok icon-black"></em>
-                        Rétablir l'établissement
-                    </a>
-                <?php else :?>
-                    <a id="suppressionEtablissement" href="#">
-                        <em class="icon-remove icon-black"></em>
-                        Supprimer l'établissement
-                    </a>
-                <?php endif; ?>
+                <a id="suppressionEtablissement" href="#">
+                    <em class="icon-remove icon-black"></em>
+                    Supprimer l'établissement
+                </a>
             </li>
         <?php endif ?>
 	</ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
 <?php $this->placeholder('before_content')->captureStart(); // Capture du 'before_content' ?>
 
-
-
-
 <!-- Contenu -->
 <div id='ligne_informations'>
-
     <!-- Libelle -->
     <h2 class="page-header">
         <?php if( $this->etablissement['parents'] > 0 ) : ?>
@@ -63,7 +52,6 @@
             Présence d'un dossier avec avis differé
         </p>
     <?php elseif($this->etablissement['avis'] != null) : ?>
-
          <?php if($this->etablissement['avis'] == 1 && $this->avis == "avisDoss") : ?>
             <p class="avis F">Favorable <?php echo $this->etablissement['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation " ?></p>
          <?php elseif($this->etablissement['avis'] == 2  && $this->avis == "avisDoss") : ?>
@@ -76,7 +64,6 @@
          <?php else : ?>
             <p class="avis">Avis d'exploitation indisponible</p>
          <?php endif ?>
-
     <?php endif ?>
 
     <!-- Présence de risques naturels ou technologiques-->
@@ -104,19 +91,12 @@
 
     <!-- Statut -->
     <p>Statut : <?php echo $this->etablissement['informations']['LIBELLE_STATUT'] ?></p>
-
 </div>
 
 <div id='fiche_etablissement'>
-
-<?php $this->placeholder('before_content')->captureEnd() ?>
-
-
-<?php $this->placeholder('after_content')->captureStart() // Capture du 'after_content' ?>
-
+    <?php $this->placeholder('before_content')->captureEnd() ?>
+    <?php $this->placeholder('after_content')->captureStart() // Capture du 'after_content' ?>
 </div>
 
 <?php $this->placeholder('after_content')->captureEnd() ?>
-
-
 <?php echo $this->render('dashboard.phtml') // Rendu du layout par défaut avec les placeholders ?>

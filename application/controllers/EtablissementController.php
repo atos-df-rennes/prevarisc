@@ -479,12 +479,15 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    // FIXME Il faut que ça vide le cache de la recherche
     public function retablirEtablissementAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
+
+        $previousUrl = $_SERVER['HTTP_REFERER'];
         $serviceEtablissement = new Service_Etablissement();
+
         $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
-        $this->_getParam('redirect') ? $this->_redirect('/etablissement/index/id/'.$this->_getParam('idEtablissement')) : $this->_redirect('/retablir');
+
+        $this->redirect($previousUrl);
     }
 }
