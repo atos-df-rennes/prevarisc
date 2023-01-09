@@ -438,7 +438,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
             ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->distinct('e.ID_ETABLISSEMENT')
-            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL ')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
         ;
 
         $res = [];

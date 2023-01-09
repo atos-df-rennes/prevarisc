@@ -1,0 +1,58 @@
+<h2 class='label label-important'>Dossiers supprimés</h2>
+<div class="muted">
+    <small>Nombre total d'éléments : <?= count($this->data) ?></small>
+</div>
+<ul>
+    <?php foreach($this->data as $deletedElement) : ?>
+        <li class='gridRetablir'>
+            <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
+
+            <span class="doss-nom">
+                <?php if (!empty($deletedElement['OBJET_DOSSIER'])):
+                    if (strlen($deletedElement['OBJET_DOSSIER']) > 70):
+                        $deletedElement['OBJET_DOSSIER'] = substr($deletedElement['OBJET_DOSSIER'], 0, 70).'(...)';
+                    endif;
+                else:
+                    $deletedElement['OBJET_DOSSIER'] = '';
+                endif;
+
+                $linkTitleVariables = array_values(
+                    array_filter(
+                        array(
+                            $deletedElement['LIBELLE_DOSSIERTYPE'],
+                            $deletedElement['LIBELLE_DOSSIERNATURE'],
+                            $deletedElement['OBJET_DOSSIER']
+                        )
+                    )
+                );
+
+                $fulltext = '';
+                for ($i = 0; $i < count($linkTitleVariables); $i++):
+                    $fulltext .= $linkTitleVariables[$i];
+
+                    if ($i !== (count($linkTitleVariables) - 1)):
+                        $fulltext .= ' - ';
+                    endif;
+                endfor;
+                ?>
+
+                <a href='/dossier/index/id/<?php echo $deletedElement['ID_DOSSIER'] ?>' title='<?php echo htmlspecialchars($fulltext, ENT_QUOTES) ?>'>
+                    <?php if (null !== $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS']): ?>
+                        <?php echo '[' . $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS'] . '] ' ?>
+                    <?php endif;
+
+                    echo $fulltext;
+                    ?>
+                </a>
+            </span>
+
+            <a
+                class='btn-small'
+                href=<?= '/dossier/retablir-dossier/idDossier/'.$deletedElement['ID_DOSSIER'] ?>
+            >
+                <em class="icon-ok icon-black"></em>
+                Rétablir le dossier
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>

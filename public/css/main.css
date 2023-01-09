@@ -1252,13 +1252,15 @@ dl.champ_effectif_camping dd input {
     width: fit-content;
 }
 
-.gridRetablir{
+.gridRetablir {
     display: grid;
     grid-template-columns: 1fr 10fr 2fr;
-    text-align: center;
     list-style: none;
 }
+.gridRetablir a {
+    width: fit-content;
+}
 
-.linkDisabled{
+.linkDisabled {
     pointer-events: none;
 }
