@@ -6,12 +6,6 @@
 <div class="row-fluid">
     <h3>Informations sur la rubrique</h3>
     <div class="span4 infos-rubrique">
-        <?= $this->partial(
-            'formulaire/partials/partial-champ-nom-fusion.phtml',
-            [
-                'champFusionName' => $this->champFusionName
-            ]
-        ) ?>
         <!-- TODO: Utiliser le formulaire de Zend -->
         <form action class="form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">

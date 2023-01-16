@@ -105,7 +105,6 @@ class FormulaireController extends Zend_Controller_Action
 
         $idRubrique = (int) $this->getParam('rubrique');
         $rubrique = $this->modelRubrique->find($idRubrique)->current();
-        $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
 
         $champs = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
         foreach ($champs as &$champ) {
@@ -117,16 +116,8 @@ class FormulaireController extends Zend_Controller_Action
             }
         }
 
-        $champFusionName = $this->serviceUtils->getFullFusionName(
-            $capsuleRubrique['NOM_INTERNE'],
-            [
-                $rubrique['NOM']
-            ]
-        );
-
         $this->view->assign('fieldForm', $fieldForm);
         $this->view->assign('rubrique', $rubrique);
-        $this->view->assign('champFusionName', $champFusionName);
         $this->view->assign('champs', $champs);
 
         $request = $this->getRequest();
@@ -233,10 +224,10 @@ class FormulaireController extends Zend_Controller_Action
             );
         }
 
-        $champFusionName = null;
+        $champFusionValue = null;
         if ('Parent' !== $champType['TYPE']) {
             if (null === $champ['ID_PARENT']) {
-                $champFusionName = $this->serviceUtils->getFullFusionName(
+                $champFusionValue = $this->serviceUtils->getFullFusionName(
                     $capsuleRubrique['NOM_INTERNE'],
                     [
                         $rubrique['NOM'],
@@ -247,7 +238,7 @@ class FormulaireController extends Zend_Controller_Action
                 $infosParent = $this->modelChamp->getInfosParent($champ['ID_CHAMP']);
 
                 $this->view->assign('infosParent', $infosParent);
-                $champFusionName = $this->serviceUtils->getFullFusionName(
+                $champFusionValue = $this->serviceUtils->getFullFusionName(
                     $capsuleRubrique['NOM_INTERNE'],
                     [
                         $rubrique['NOM'],
@@ -259,7 +250,7 @@ class FormulaireController extends Zend_Controller_Action
         }
 
         $this->view->assign('champ', $champ);
-        $this->view->assign('champFusionName', $champFusionName);
+        $this->view->assign('champFusionValue', $champFusionValue);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);

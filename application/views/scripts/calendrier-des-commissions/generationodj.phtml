@@ -292,16 +292,6 @@ function retrieveInfoDoss($segment, $dossierInfos) {
         if (is_array($formulaire['RUBRIQUES'])) {
             // Permet d'avoir les informations unitairement
             foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-                addChamp(
-                    $segment->infosDoss,
-                    $serviceUtils->getFullFusionName(
-                        $formulaire['NOM_INTERNE'],
-                        [
-                            $rubrique['NOM']
-                        ]
-                    ),
-                    $rubrique['NOM']
-                );
                 foreach ($rubrique['CHAMPS'] as $champ) {
                     if ('Parent' === $champ['TYPE']) {
                         if (1 === $champ['tableau']) {
