@@ -105,6 +105,7 @@ class FormulaireController extends Zend_Controller_Action
 
         $idRubrique = (int) $this->getParam('rubrique');
         $rubrique = $this->modelRubrique->find($idRubrique)->current();
+        $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
 
         $champs = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
         foreach ($champs as &$champ) {
@@ -116,8 +117,16 @@ class FormulaireController extends Zend_Controller_Action
             }
         }
 
+        $champFusionName = $this->serviceUtils->getFullFusionName(
+            $capsuleRubrique['NOM_INTERNE'],
+            [
+                $rubrique['NOM']
+            ]
+        );
+
         $this->view->assign('fieldForm', $fieldForm);
         $this->view->assign('rubrique', $rubrique);
+        $this->view->assign('champFusionName', $champFusionName);
         $this->view->assign('champs', $champs);
 
         $request = $this->getRequest();

@@ -42,9 +42,12 @@
     </div>
 
     <div class="span6 offset2 infos-champ">
-        <div class="span12 text-info">
-            Champ de fusion : {<?= $this->champFusionName ?>}
-        </div>
+        <?= $this->partial(
+            'formulaire/partials/partial-champ-nom-fusion.phtml',
+            [
+                'champFusionName' => $this->champFusionName
+            ]
+        ) ?>
         <form action class="span12 form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
             <div>
