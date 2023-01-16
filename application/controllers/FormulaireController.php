@@ -237,16 +237,18 @@ class FormulaireController extends Zend_Controller_Action
             );
         }
 
-        $champFusionName = $this->serviceUtils->getFullFusionName(
-            $capsuleRubrique['NOM_INTERNE'],
-            [
-                $rubrique['NOM'],
-                $champ['NOM']
-            ]
-        );
+        if ('Parent' !== $champType['TYPE']) {
+            $champFusionName = $this->serviceUtils->getFullFusionName(
+                $capsuleRubrique['NOM_INTERNE'],
+                [
+                    $rubrique['NOM'],
+                    $champ['NOM']
+                ]
+            );
+        }
 
         $this->view->assign('champ', $champ);
-        $this->view->assign('champFusionName', $champFusionName);
+        $this->view->assign('champFusionName', $champFusionName ?? null);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
