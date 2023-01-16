@@ -30,9 +30,15 @@ class Service_Platau
 
         $platauHealth = $this->requestPlatauHealthcheck($pisteToken);
         $platauHealth = json_decode($platauHealth);
+
+        if (null === $platauHealth) {
+            return false;
+        }
+
         if (true !== $platauHealth->etatGeneral) {
             return false;
         }
+
         if (true !== $platauHealth->etatBdd) {
             return false;
         }
@@ -76,6 +82,10 @@ class Service_Platau
         curl_close($curlHandle);
 
         $decodedData = json_decode($data, true);
+
+        if (null === $decodedData) {
+            return null;
+        }
 
         if (array_key_exists('error', $decodedData)) {
             error_log(sprintf('Erreur lors de la récupération du token PISTE : %s', $decodedData['error']));
