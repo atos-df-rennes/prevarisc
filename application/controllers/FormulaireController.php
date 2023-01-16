@@ -19,9 +19,17 @@ class FormulaireController extends Zend_Controller_Action
      */
     public $modelRubrique;
     /**
+     * @var mixed|\Model_DbTable_CapsuleRubrique
+     */
+    public $modelCapsuleRubrique;
+    /**
      * @var mixed|\Service_Formulaire
      */
     public $serviceFormulaire;
+    /**
+     * @var mixed|\Service_Utils
+     */
+    public $serviceUtils;
 
     public function init()
     {
@@ -29,8 +37,10 @@ class FormulaireController extends Zend_Controller_Action
         $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $this->modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
         $this->modelRubrique = new Model_DbTable_Rubrique();
+        $this->modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
 
         $this->serviceFormulaire = new Service_Formulaire();
+        $this->serviceUtils = new Service_Utils();
     }
 
     public function indexAction(): void
@@ -193,6 +203,7 @@ class FormulaireController extends Zend_Controller_Action
         }
 
         $rubrique = $this->modelRubrique->find($champ['ID_RUBRIQUE'])->current();
+        $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
         if ('Parent' === $champType['TYPE']) {
@@ -217,7 +228,16 @@ class FormulaireController extends Zend_Controller_Action
             );
         }
 
+        $champFusionName = $this->serviceUtils->getFullFusionName(
+            $capsuleRubrique['NOM_INTERNE'],
+            [
+                $rubrique['NOM'],
+                $champ['NOM']
+            ]
+        );
+
         $this->view->assign('champ', $champ);
+        $this->view->assign('champFusionName', $champFusionName);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);

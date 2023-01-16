@@ -41,8 +41,11 @@
         <?php endif ?>
     </div>
 
-    <div class="span4 offset2 infos-champ">
-        <form action class="form-inline" method="post">
+    <div class="span6 offset2 infos-champ">
+        <div class="span12 text-info">
+            Champ de fusion : {<?= $this->champFusionName ?>}
+        </div>
+        <form action class="span12 form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
             <div>
                 <label for="nom_champ">Nom du champ</label>
@@ -93,7 +96,7 @@
             <?php endif ?>
 
 
-            <div class="pull-right">
+            <div class="pull-left">
                 <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>"" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder le champ</button>
             </div>
