@@ -2,6 +2,17 @@ form #save-element {
     margin: 0;
 }
 
+.alert.alert-info {
+    color: black;
+}
+.champFusionTable {
+    margin: 0;
+    border-color: black;
+}
+.champFusionTable td {
+    border-color: black;
+}
+
 .form-inline input:not([type="submit"]),
 .form-inline select {
     margin-bottom: 10px;

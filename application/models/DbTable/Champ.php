@@ -88,23 +88,23 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], [])
+        $select->from(['c' => 'champ'])
             ->where('c.ID_PARENT IS NULL')
             ->where('c.ID_RUBRIQUE = ?', $idRubrique)
         ;
 
-        return count($this->fetchAll($select)->toArray());
+        return count($this->fetchAll($select));
     }
 
     public function getNbChampOfParent(int $idParent): int
     {
         $select = $this->select();
 
-        $select->from(['c' => 'champ'], [])
+        $select->from(['c' => 'champ'])
             ->where('c.ID_PARENT = ?', $idParent)
         ;
 
-        return count($this->fetchAll($select)->toArray());
+        return count($this->fetchAll($select));
     }
 
     public function getInfosParent(int $idChampEnfant): array
