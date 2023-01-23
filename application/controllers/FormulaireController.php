@@ -197,6 +197,7 @@ class FormulaireController extends Zend_Controller_Action
         $champ = $this->modelChamp->find($idChamp)->current();
         $champType = $this->modelChamp->getTypeChamp($idChamp);
 
+        // Cas d'une liste
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
         if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
@@ -207,6 +208,11 @@ class FormulaireController extends Zend_Controller_Action
         $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
+        $backUrlOptions = [
+            'controller' => 'formulaire',
+            'action' => 'edit-rubrique',
+            'rubrique' => $champ['ID_RUBRIQUE'],
+        ];
         $champFusionValue = null;
         if ('Parent' === $champType['TYPE']) {
             $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
@@ -271,9 +277,7 @@ class FormulaireController extends Zend_Controller_Action
                     ]
                 )
             );
-        }
-
-        if ('Parent' !== $champType['TYPE']) {
+        } else {
             if (null === $champ['ID_PARENT']) {
                 $champFusionValue = $this->serviceUtils->getFullFusionName(
                     $capsuleRubrique['NOM_INTERNE'],
@@ -300,18 +304,10 @@ class FormulaireController extends Zend_Controller_Action
                         ]
                     );
                 }
+
+                $backUrlOptions['action'] = 'edit-champ';
+                $backUrlOptions['champ'] = $champ['ID_PARENT'];
             }
-        }
-
-        $backUrlOptions = [
-            'controller' => 'formulaire',
-            'action' => 'edit-rubrique',
-            'rubrique' => $champ['ID_RUBRIQUE'],
-        ];
-
-        if (null !== $champ['ID_PARENT']) {
-            $backUrlOptions['action'] = 'edit-rubrique';
-            $backUrlOptions['champ'] = $champ['ID_PARENT'];
         }
 
         $this->view->assign('champ', $champ);
