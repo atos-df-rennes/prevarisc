@@ -1,20 +1,12 @@
-<?php if (null !== $this->champ['ID_PARENT']): ?>
-    <a href="<?= $this->url([
-        'controller' => 'formulaire',
-        'action' => 'edit-champ',
-        'rubrique' => $this->champ['ID_RUBRIQUE'],
-        'champ' => $this->champ['ID_PARENT']
-        ], null, true) ?>"
-    >
-        <i class="icon-arrow-left"></i>
+<a href="<?= $this->backUrl ?>">
+    <i class="icon-arrow-left"></i>
+
+    <?php if (null !== $this->champ['ID_PARENT']): ?>
         Retourner sur le champ parent "<?= $this->infosParent['NOM'] ?>"
-    </a>
-<?php else: ?>
-    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>">
-        <i class="icon-arrow-left"></i>
+    <?php else: ?>
         Retourner sur la rubrique "<?= $this->rubrique['NOM'] ?>"
-    </a>
-<?php endif ?>
+    <?php endif ?>
+</a>
 
 <div class="row-fluid">
     <div class="span4">
@@ -101,9 +93,8 @@
                 </div>
             <?php endif ?>
 
-
             <div class="pull-left">
-                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>"" type="button" class="btn">Annuler</a>
+                <a href="<?= $this->backUrl ?>" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder le champ</button>
             </div>
         </form>

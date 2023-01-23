@@ -303,11 +303,23 @@ class FormulaireController extends Zend_Controller_Action
             }
         }
 
+        $backUrlOptions = [
+            'controller' => 'formulaire',
+            'action' => 'edit-rubrique',
+            'rubrique' => $champ['ID_RUBRIQUE'],
+        ];
+
+        if (null !== $champ['ID_PARENT']) {
+            $backUrlOptions['action'] = 'edit-rubrique';
+            $backUrlOptions['champ'] = $champ['ID_PARENT'];
+        }
+
         $this->view->assign('champ', $champ);
         $this->view->assign('champFusionValue', $champFusionValue);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
+        $this->view->assign('backUrl', $this->view->url($backUrlOptions, null, true));
 
         $request = $this->getRequest();
 
