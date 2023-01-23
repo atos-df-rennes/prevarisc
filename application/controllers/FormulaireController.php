@@ -19,9 +19,21 @@ class FormulaireController extends Zend_Controller_Action
      */
     public $modelRubrique;
     /**
+     * @var mixed|\Model_DbTable_CapsuleRubrique
+     */
+    public $modelCapsuleRubrique;
+    /**
      * @var mixed|\Service_Formulaire
      */
     public $serviceFormulaire;
+    /**
+     * @var mixed|\Service_Utils
+     */
+    public $serviceUtils;
+    /**
+     * @var mixed|\Service_Champ
+     */
+    public $serviceChamp;
 
     public function init()
     {
@@ -29,8 +41,11 @@ class FormulaireController extends Zend_Controller_Action
         $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();
         $this->modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
         $this->modelRubrique = new Model_DbTable_Rubrique();
+        $this->modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
 
         $this->serviceFormulaire = new Service_Formulaire();
+        $this->serviceUtils = new Service_Utils();
+        $this->serviceChamp = new Service_Champ();
     }
 
     public function indexAction(): void
@@ -182,26 +197,69 @@ class FormulaireController extends Zend_Controller_Action
         $champ = $this->modelChamp->find($idChamp)->current();
         $champType = $this->modelChamp->getTypeChamp($idChamp);
 
-        if (null !== $champ['ID_PARENT']) {
-            $this->view->assign('infosParent', $this->modelChamp->getInfosParent($champ['ID_CHAMP']));
-        }
-
+        // Cas d'une liste
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+
         if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             $this->view->assign('valeursChamp', $valeursChamp);
         }
 
         $rubrique = $this->modelRubrique->find($champ['ID_RUBRIQUE'])->current();
+        $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
+        $backUrlOptions = [
+            'controller' => 'formulaire',
+            'action' => 'edit-rubrique',
+            'rubrique' => $champ['ID_RUBRIQUE'],
+        ];
+        $champFusionValue = null;
+
         if ('Parent' === $champType['TYPE']) {
+            if ($this->serviceChamp->isTableau($champ)) {
+                $fieldNames = [];
+                $loopName = $this->serviceUtils->getFusionNameMagicalCase(
+                    implode(
+                        ' ',
+                        [
+                            $capsuleRubrique['NOM_INTERNE'],
+                            $rubrique['NOM'],
+                            $champ['NOM'],
+                            'valeurs',
+                        ]
+                    )
+                );
+                $fieldValues = [];
+            }
+
             $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
 
             foreach ($listChamps as &$listChamp) {
                 if ('Liste' === $listChamp['TYPE']) {
                     $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
                 }
+
+                if ($this->serviceChamp->isTableau($champ)) {
+                    $fieldNames[] = $this->serviceUtils->getFullFusionName(
+                        $capsuleRubrique['NOM_INTERNE'],
+                        [
+                            $rubrique['NOM'],
+                            $champ['NOM'],
+                            $listChamp['idx'],
+                        ]
+                    );
+
+                    $fieldValues[] = sprintf('valeur%d', $listChamp['idx']);
+                }
+            }
+
+            if ($this->serviceChamp->isTableau($champ)) {
+                $champFusionValue = [
+                    'fieldNames' => $fieldNames,
+                    'loopName' => $loopName,
+                    'fieldValues' => $fieldValues,
+                ];
             }
 
             $this->view->assign('listChamp', $listChamps);
@@ -215,12 +273,43 @@ class FormulaireController extends Zend_Controller_Action
                     ]
                 )
             );
+        } elseif (null === $champ['ID_PARENT']) {
+            $champFusionValue = $this->serviceUtils->getFullFusionName(
+                $capsuleRubrique['NOM_INTERNE'],
+                [
+                    $rubrique['NOM'],
+                    $champ['NOM'],
+                ]
+            );
+        } else {
+            $infosParent = $this->modelChamp->getInfosParent($champ['ID_CHAMP']);
+            $this->view->assign('infosParent', $infosParent);
+
+            if (
+                !$this->serviceChamp->isTableau(
+                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()
+                )
+            ) {
+                $champFusionValue = $this->serviceUtils->getFullFusionName(
+                    $capsuleRubrique['NOM_INTERNE'],
+                    [
+                        $rubrique['NOM'],
+                        $infosParent['NOM'],
+                        $champ['NOM'],
+                    ]
+                );
+            }
+
+            $backUrlOptions['action'] = 'edit-champ';
+            $backUrlOptions['champ'] = $champ['ID_PARENT'];
         }
 
         $this->view->assign('champ', $champ);
+        $this->view->assign('champFusionValue', $champFusionValue);
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
+        $this->view->assign('backUrl', $this->view->url($backUrlOptions, null, true));
 
         $request = $this->getRequest();
 
@@ -256,7 +345,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
-            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }

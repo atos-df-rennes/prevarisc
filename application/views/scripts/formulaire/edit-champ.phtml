@@ -1,20 +1,12 @@
-<?php if (null !== $this->champ['ID_PARENT']): ?>
-    <a href="<?= $this->url([
-        'controller' => 'formulaire',
-        'action' => 'edit-champ',
-        'rubrique' => $this->champ['ID_RUBRIQUE'],
-        'champ' => $this->champ['ID_PARENT']
-        ], null, true) ?>"
-    >
-        <i class="icon-arrow-left"></i>
+<a href="<?= $this->backUrl ?>">
+    <i class="icon-arrow-left"></i>
+
+    <?php if (null !== $this->champ['ID_PARENT']): ?>
         Retourner sur le champ parent "<?= $this->infosParent['NOM'] ?>"
-    </a>
-<?php else: ?>
-    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>">
-        <i class="icon-arrow-left"></i>
+    <?php else: ?>
         Retourner sur la rubrique "<?= $this->rubrique['NOM'] ?>"
-    </a>
-<?php endif ?>
+    <?php endif ?>
+</a>
 
 <div class="row-fluid">
     <div class="span4">
@@ -41,8 +33,17 @@
         <?php endif ?>
     </div>
 
-    <div class="span4 offset2 infos-champ">
-        <form action class="form-inline" method="post">
+    <div class="span6 offset2 infos-champ">
+        <?php if (null !== $this->champFusionValue && !is_array($this->champFusionValue)): ?>
+            <?= $this->partial(
+                'formulaire/partials/partial-champ-nom-fusion.phtml',
+                [
+                    'champFusionValue' => $this->champFusionValue
+                ]
+            ) ?>
+        <?php endif ?>
+
+        <form action class="span12 form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
             <div>
                 <label for="nom_champ">Nom du champ</label>
@@ -92,9 +93,8 @@
                 </div>
             <?php endif ?>
 
-
-            <div class="pull-right">
-                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $this->champ['ID_RUBRIQUE']], null, true) ?>"" type="button" class="btn">Annuler</a>
+            <div class="pull-left">
+                <a href="<?= $this->backUrl ?>" type="button" class="btn">Annuler</a>
                 <button type="submit" class="btn btn-success">Sauvegarder le champ</button>
             </div>
         </form>
@@ -140,6 +140,15 @@ endif ?>
 
     <div id="saved-fields" class="span6 offset2">
         <?php if(count($this->listChamp) > 0): ?>
+            <?php if (null !== $this->champFusionValue && is_array($this->champFusionValue)): ?>
+                <?= $this->partial(
+                    'formulaire/partials/partial-champ-nom-fusion.phtml',
+                    [
+                        'champFusionValue' => $this->champFusionValue
+                    ]
+                ) ?>
+            <?php endif ?>
+
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>

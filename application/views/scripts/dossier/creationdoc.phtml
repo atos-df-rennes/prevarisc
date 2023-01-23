@@ -754,17 +754,6 @@ $serviceUtils = new Service_Utils();
 foreach ($this->formulaires as $formulaire) {
     // Permet d'avoir les informations unitairement
     foreach ($formulaire['RUBRIQUES'] as $rubrique) {
-        addChamp(
-            $odf,
-            $serviceUtils->getFullFusionName(
-                $formulaire['NOM_INTERNE'],
-                [
-                    $rubrique['NOM']
-                ]
-            ),
-            $rubrique['NOM']
-        );
-
         foreach ($rubrique['CHAMPS'] as $champ) {
             if ('Parent' === $champ['TYPE']) {
                 if (1 === $champ['tableau']) {
