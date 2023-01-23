@@ -12,6 +12,11 @@
         Adresse postale
     </td>
     <td>
+        <small>
+            <a class="modifierAdresse" data-id=<?= $this->adresse['ID_ADRESSE'] ?> data-toggle="modal" data-backdrop="false" href="#adresse-modal">Modifier</a>
+        </small>
+    </td>
+    <td>
         <small><a href="#" onclick='$(this).parent().parent().parent().remove(); return false;' >Retirer</a></small>
     </td>
 </tr>

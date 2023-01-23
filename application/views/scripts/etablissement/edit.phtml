@@ -1130,6 +1130,11 @@
             }
         });
 
+
+        /**
+         * TODO Appel ajax c.onClick
+         */
+
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
                 initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
