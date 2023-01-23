@@ -199,6 +199,7 @@ class FormulaireController extends Zend_Controller_Action
 
         // Cas d'une liste
         $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
+
         if ($champ['ID_TYPECHAMP'] === $idListe) {
             $valeursChamp = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             $this->view->assign('valeursChamp', $valeursChamp);
@@ -214,9 +215,8 @@ class FormulaireController extends Zend_Controller_Action
             'rubrique' => $champ['ID_RUBRIQUE'],
         ];
         $champFusionValue = null;
-        if ('Parent' === $champType['TYPE']) {
-            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
 
+        if ('Parent' === $champType['TYPE']) {
             if ($this->serviceChamp->isTableau($champ)) {
                 $fieldNames = [];
                 $loopName = $this->serviceUtils->getFusionNameMagicalCase(
@@ -226,12 +226,14 @@ class FormulaireController extends Zend_Controller_Action
                             $capsuleRubrique['NOM_INTERNE'],
                             $rubrique['NOM'],
                             $champ['NOM'],
-                            'valeurs'
+                            'valeurs',
                         ]
                     )
                 );
                 $fieldValues = [];
             }
+
+            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
 
             foreach ($listChamps as &$listChamp) {
                 if ('Liste' === $listChamp['TYPE']) {
@@ -239,22 +241,16 @@ class FormulaireController extends Zend_Controller_Action
                 }
 
                 if ($this->serviceChamp->isTableau($champ)) {
-                    array_push(
-                        $fieldNames,
-                        $this->serviceUtils->getFullFusionName(
-                            $capsuleRubrique['NOM_INTERNE'],
-                            [
-                                $rubrique['NOM'],
-                                $champ['NOM'],
-                                $listChamp['idx']
-                            ]
-                        )
+                    $fieldNames[] = $this->serviceUtils->getFullFusionName(
+                        $capsuleRubrique['NOM_INTERNE'],
+                        [
+                            $rubrique['NOM'],
+                            $champ['NOM'],
+                            $listChamp['idx'],
+                        ]
                     );
 
-                    array_push(
-                        $fieldValues,
-                        sprintf('valeur%d', $listChamp['idx'])
-                    );
+                    $fieldValues[] = sprintf('valeur%d', $listChamp['idx']);
                 }
             }
 
@@ -262,7 +258,7 @@ class FormulaireController extends Zend_Controller_Action
                 $champFusionValue = [
                     'fieldNames' => $fieldNames,
                     'loopName' => $loopName,
-                    'fieldValues' => $fieldValues
+                    'fieldValues' => $fieldValues,
                 ];
             }
 
@@ -277,37 +273,35 @@ class FormulaireController extends Zend_Controller_Action
                     ]
                 )
             );
+        } elseif (null === $champ['ID_PARENT']) {
+            $champFusionValue = $this->serviceUtils->getFullFusionName(
+                $capsuleRubrique['NOM_INTERNE'],
+                [
+                    $rubrique['NOM'],
+                    $champ['NOM'],
+                ]
+            );
         } else {
-            if (null === $champ['ID_PARENT']) {
+            $infosParent = $this->modelChamp->getInfosParent($champ['ID_CHAMP']);
+            $this->view->assign('infosParent', $infosParent);
+
+            if (
+                !$this->serviceChamp->isTableau(
+                    $this->modelChamp->find($infosParent['ID_CHAMP'])->current()
+                )
+            ) {
                 $champFusionValue = $this->serviceUtils->getFullFusionName(
                     $capsuleRubrique['NOM_INTERNE'],
                     [
                         $rubrique['NOM'],
-                        $champ['NOM']
+                        $infosParent['NOM'],
+                        $champ['NOM'],
                     ]
                 );
-            } else {
-                $infosParent = $this->modelChamp->getInfosParent($champ['ID_CHAMP']);
-                $this->view->assign('infosParent', $infosParent);
-
-                if (
-                    !$this->serviceChamp->isTableau(
-                        $this->modelChamp->find($infosParent['ID_CHAMP'])->current()
-                    )
-                ) {
-                    $champFusionValue = $this->serviceUtils->getFullFusionName(
-                        $capsuleRubrique['NOM_INTERNE'],
-                        [
-                            $rubrique['NOM'],
-                            $infosParent['NOM'],
-                            $champ['NOM']
-                        ]
-                    );
-                }
-
-                $backUrlOptions['action'] = 'edit-champ';
-                $backUrlOptions['champ'] = $champ['ID_PARENT'];
             }
+
+            $backUrlOptions['action'] = 'edit-champ';
+            $backUrlOptions['champ'] = $champ['ID_PARENT'];
         }
 
         $this->view->assign('champ', $champ);
