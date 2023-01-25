@@ -17,6 +17,8 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->view->headLink()->appendStylesheet('/css/pieces-jointes.css', 'all');
+
         // Modèles
         $DBused = new Model_DbTable_PieceJointe();
 

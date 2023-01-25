@@ -16,10 +16,11 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('piecejointe')
-            ->join($table, "piecejointe.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
+            ->from(['pj' => 'piecejointe'])
+            ->join($table, "pj.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
+            ->joinLeft(['pjs' => 'piecejointestatut'], 'pj.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT', ['NOM_STATUT'])
             ->where($champ.' = '.$identifiant)
-            ->order('piecejointe.ID_PIECEJOINTE DESC')
+            ->order('pj.ID_PIECEJOINTE DESC')
         ;
 
         return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
