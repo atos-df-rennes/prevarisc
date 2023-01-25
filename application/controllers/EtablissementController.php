@@ -478,4 +478,5 @@ class EtablissementController extends Zend_Controller_Action
             $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
     }
+
 }

@@ -148,4 +148,10 @@ class Api_Service_Etablissement
 
         return $service_etablissement->getDefaultValues($genre, $numinsee, $type, $categorie, $local_sommeil, $classe, $id_etablissement_pere, $ids_etablissements_enfants);
     }
+
+
+    public function getAdresse($id){
+        $serviceAdresse = new Service_Adresse();
+        return $serviceAdresse->getAdresseById($id);
+    }
 }

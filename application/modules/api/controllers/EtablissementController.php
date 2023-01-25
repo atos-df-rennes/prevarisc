@@ -13,4 +13,6 @@ class Api_EtablissementController extends Zend_Controller_Action
         $server->setClass('Api_Service_Etablissement');
         $server->handle($this->_request->getParams());
     }
+
+
 }

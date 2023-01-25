@@ -85,4 +85,11 @@ class Service_Adresse
 
         return $select->query()->fetch();
     }
+
+
+    public function getAdresseById($idAdresse){
+        $dbEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
+        $adresse = $dbEtablissementAdresse->getAdresse($idAdresse);
+        return json_encode($adresse);
+    }
 }

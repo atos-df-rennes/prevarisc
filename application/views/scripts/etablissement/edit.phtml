@@ -1130,10 +1130,44 @@
             }
         });
 
+         //Appelle ajax + modification du modal
+         $('.modifierAdresse').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/api/1.0/etablissement/get_adresse/?id="+$(this).attr('data-id'),
+                type: "get",
+                success: function (reception) {
+                    console.log('Data', reception.response)
+                    console.log('Data', JSON.parse(reception.response))
+                    const data = JSON.parse(reception.response)
 
-        /**
-         * TODO Appel ajax c.onClick
-         */
+                    //commune_ac
+                    document.getElementsByName('commune_ac').value = data.LIBELLE_COMMUNE
+
+                    //voie_ac
+                    document.getElementsByName('voie_ac').value = data.LIBELLE_RUE
+
+                    //numero
+                    document.getElementsByName('numero').value = data.NUMERO_ADRESSE
+
+                    //complement
+                    document.getElementsByName('complement').value = data.COMPLEMENT_ADRESSE
+
+                    //lon
+                    document.getElementsByName('lon').value = data.LON_ETABLISSEMENTADRESSE
+
+                    //lat
+                    document.getElementsByName('lat').value = data.LAT_ETABLISSEMENTADRESSE
+
+                    //code_insee
+                    document.getElementsByName('code_insee').value = data.NUMINSEE_COMMUNE
+
+                    //code_insee
+                    document.getElementsByName('code_postal').value = data.CODEPOSTAL_COMMUNE
+
+                }
+            });
+         });
 
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
