@@ -483,13 +483,8 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $postData = $this->_request->getPost();
-        $postData2 = $this->getRequest()->getPost();
+        $postData = $this->getRequest()->getPost();
 
-        var_dump($postData);
-        var_dump($postData2);
-
-        return $postData;
-
+        echo json_encode($postData);
     }
 }

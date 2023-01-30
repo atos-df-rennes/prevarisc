@@ -87,39 +87,20 @@
 </form>
 
 <script>
-    /*FIXME*/
     window.onload = function(){
-
         $('#submit-adresse-edit').click(function (e) {
-
             e.preventDefault()
-            const dataToPush = []
+            const dataToPush = {}
 
             $('#adresse-modal-edit :input').each(idx => {
                 dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
             })
-
-            console.log(dataToPush)
 
             $.post("/etablissement/update-adresse", dataToPush,
                 function (data, textStatus, jqXHR) {
                     console.log("Response is ",data)
                 }
             );
-
-            /*
-            $.ajax({
-                type: "post",
-                url: "/etablissement/update-adresse",
-                data: {dataToPush},
-
-                success: function (response) {
-                    console.log(response)
-                }
-            });
-                    */
         });
-
-
     }
 </script>
