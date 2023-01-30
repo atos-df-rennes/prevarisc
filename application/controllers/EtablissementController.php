@@ -478,4 +478,18 @@ class EtablissementController extends Zend_Controller_Action
             $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
     }
+
+    public function updateAdresseAction(){
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $postData = $this->_request->getPost();
+        $postData2 = $this->getRequest()->getPost();
+
+        var_dump($postData);
+        var_dump($postData2);
+
+        return $postData;
+
+    }
 }
