@@ -709,6 +709,11 @@
                             <action>check</action>
                             <privilege>modification_odj</privilege>
                         </check>
+                        <export-platau>
+                            <controller>piece-jointe</controller>
+                            <action>exportPlatau</action>
+                            <privilege>modification_odj</privilege>
+                        </export-platau>
                     </pages>
                 </piece-jointe>
             </pages>
@@ -1000,7 +1005,7 @@
                 </index>
                 <delete>
                     <controller>etablissement</controller>
-                    <action>delete</action> 
+                    <action>delete</action>
                     <resource>suppression</resource>
                     <privilege>delete_etablissement</privilege>
                 </delete>

@@ -10,7 +10,9 @@ class PieceJointeController extends Zend_Controller_Action
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('check', 'json')
+        $ajaxContext
+            ->addActionContext('check', 'json')
+            ->addActionContext('export-platau', 'json')
             ->initContext()
         ;
     }
@@ -393,5 +395,27 @@ class PieceJointeController extends Zend_Controller_Action
                 'id' => $this->_request->id,
             ]);
         }
+    }
+
+    public function exportPlatauAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $dbPj = new Model_DbTable_PieceJointe();
+        $post = $this->getRequest()->getPost();
+
+        $formData = $post['formData'];
+        $toBeExported = [];
+
+        $toBeExported = array_filter($formData, function ($v) {
+            $checkboxValue = filter_var($v['value'], FILTER_VALIDATE_BOOLEAN);
+
+            return $checkboxValue === true;
+        });
+
+        array_map(function ($value) use ($dbPj) {
+            $dbPj->updatePlatauStatus($value['id'], 2);
+        }, $toBeExported);
     }
 }

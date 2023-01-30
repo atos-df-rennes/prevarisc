@@ -34,4 +34,9 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
 
         return $this->getAdapter()->fetchRow($select);
     }
+
+    public function updatePlatauStatus(int $id, int $status): void
+    {
+        $this->update(["ID_PIECEJOINTESTATUT" => $status], "ID_PIECEJOINTE = $id");
+    }
 }
