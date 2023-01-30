@@ -98,7 +98,15 @@
 
             $.post("/etablissement/update-adresse", dataToPush,
                 function (data, textStatus, jqXHR) {
-                    console.log("Response is ",data)
+                    dataParse = JSON.parse(data)
+                    const nouveauLibelle =
+                        dataParse.numero + ' ' +
+                        dataParse.voie_ac + ' ' +
+                        dataParse.complement + ' ' +
+                        dataParse.code_postal + ' ' +
+                        dataParse.commune_ac
+                    $('#adresse'+JSON.parse(data).idAdresse+'>span').text(nouveauLibelle)
+                    $('#adresse-modal-edit .close').click()
                 }
             );
         });
