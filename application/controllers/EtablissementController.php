@@ -40,6 +40,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        $this->view->headScript()->appendFile('/js/etablissement/edit/geolocaliseIGN.js', 'text/javascript');
 
         $service_etablissement = new Service_Etablissement();
         $service_carto = new Service_Carto();

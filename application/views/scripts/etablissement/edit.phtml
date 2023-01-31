@@ -1143,6 +1143,22 @@
             }
         });
 
+
+
+        let $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+        $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+        /* TEST */
+        const optionsGeo = {
+            key_ign: <?= $this->key_ign ?>,
+            default_lat:<?= $this->default_lat ?>,
+            default_lon:<?= $this->default_lon ?>,
+            autoconf_path:<?= $autoconf_path ?>,
+            couches_cartographiques:<?= json_encode($this->couches_cartographiques) ?>
+        }
+
+        //geolocaliseIGN("#adresse-modal-ajout", optionsGeo)
+        //geolocaliseIGN("#adresse-modal-edit", optionsGeo)
+
          //Appelle ajax + modification du modal
          $('.modifierAdresse').click(function (e) {
             e.preventDefault();
