@@ -91,4 +91,27 @@ class Service_Adresse
 
         return $dbEtablissementAdresse->getAdresse($idAdresse);
     }
+
+    public function updateAdresse($adresseToUpdate){
+        $dbEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
+        $where = $dbEtablissementAdresse->getAdapter()->quoteInto('ID_ADRESSE = ?', $adresseToUpdate['idAdresse']);
+
+        /*
+        $newData = [
+            'ID_ADRESSE' => $adresseToUpdate['idAdresse'],
+            //FIXME Faire passer l'id de la rue en request param 'ID_RUE' => $adresseToUpdate['idAdresse'],
+            'NUMINSEE_COMMUNE' => $adresseToUpdate['code_insee'],
+            'NUMERO_ADRESSE' => $adresseToUpdate['numero'],
+            'COMPLEMENT_ADRESSE' => $adresseToUpdate['complement'],
+            'LON_ETABLISSEMENTADRESSE' => $adresseToUpdate['lon'],
+            'LAT_ETABLISSEMENTADRESSE' => $adresseToUpdate['lat'],
+        ];
+
+        $dbEtablissementAdresse->update($newData, $where);
+        */
+
+        return;
+
+    }
+
 }

@@ -106,6 +106,18 @@
                         dataParse.code_postal + ' ' +
                         dataParse.commune_ac
                     $('#adresse'+JSON.parse(data).idAdresse+'>span').text(nouveauLibelle)
+                    //$('#adresse'+JSON.parse(data).idAdresse+'').text(nouveauLibelle)
+                    console.table(dataParse)
+                    console.log($('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val())
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val(dataParse.code_insee)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][LON_ETABLISSEMENTADRESSE]"]').val(dataParse.lon)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][LAT_ETABLISSEMENTADRESSE]"]').val(dataParse.lat)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMERO_ADRESSE]"]').val(dataParse.numero)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][ID_RUE]"]').val(dataParse.code_insee)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.code_insee)
+                    console.log($('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val())
+
+
                     $('#adresse-modal-edit .close').click()
                 }
             );
