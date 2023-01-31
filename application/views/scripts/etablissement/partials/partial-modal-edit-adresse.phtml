@@ -1,4 +1,4 @@
-<form id="adresse-modal-edit" class="modal hide adresse fase adresse-modal-edit" method='post'>
+<form id="adresse-modal-edit" class="modal hide adresse fade adresse-modal-edit" method='post'>
     <input type='hidden' name='idAdresse' value=""/>
 
     <div class="modal-header">
@@ -41,9 +41,8 @@
 
             <dt>Géolocalisation</dt>
             <dd>
+                <!-- FIXME On doit avoir la géolocalisation IGN -->
                 <?php if ($this->key_ign != null) : ?><button id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                <?php if ($this->geoconcept_url != null) : ?><button id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
-                <button id="geolocme_nominatim" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)</button>
                 <br/>
                 <small>Résultat : <span class='result'>Inconnu</span></small>
             </dd>
@@ -65,18 +64,6 @@
             <style>
                 .ol-full-screen {right:9px; top:49px}
             </style>
-        <?php endif ?>
-
-        <?php if ($this->geoconcept_url != null) : ?>
-            <div id='geoconcept-container' style="height: 400px; width: 100%"></div>
-            <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
-            <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
-            <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
-            <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
-            <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
-            <?php endif ?>
-            <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
-            <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
         <?php endif ?>
     </div>
 
@@ -114,7 +101,7 @@
                     $('input[name="ADRESSES['+dataParse.idAdresse+'][LAT_ETABLISSEMENTADRESSE]"]').val(dataParse.lat)
                     $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMERO_ADRESSE]"]').val(dataParse.numero)
                     $('input[name="ADRESSES['+dataParse.idAdresse+'][ID_RUE]"]').val(dataParse.voie)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.code_insee)
+                    $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.complement)
 
                     $('#adresse-modal-edit .close').click()
                 }

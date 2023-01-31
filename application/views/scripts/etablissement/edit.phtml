@@ -505,7 +505,7 @@
 </div>
 
 <!-- Boite de construction d'adresse-->
-<form id="adresse-modal-ajout" class="modal hide adresse fase" action='#' method='post'>
+<form id="adresse-modal-ajout" class="modal hide adresse fade" action='#' method='post'>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -592,9 +592,7 @@
     </div>
 </form>
 
-<?= $this->partial('etablissement/partials/partial-modal-edit-adresse.phtml') ?>
-
-
+<?= $this->partial('etablissement/partials/partial-modal-edit-adresse.phtml', ['key_ign' => $this->key_ign]) ?>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -992,20 +990,27 @@
                 return item.LIBELLE_COMMUNE + " (" + item.NUMINSEE_COMMUNE + ")";
             }
         }).result(function(e, item) {
-            $("#adresse-modal-ajout input[name='code_insee']").val( item.NUMINSEE_COMMUNE );
-            $("#adresse-modal-ajout input[name='code_postal']").val( item.CODEPOSTAL_COMMUNE );
-            $("#adresse-modal-ajout input[name='voie_ac']").removeAttr('disabled');
+            const modalId = $(this).closest('form')[0].id
+
+            $(`#${modalId} input[name='code_insee']`).val( item.NUMINSEE_COMMUNE );
+            $(`#${modalId} input[name='code_postal']`).val( item.CODEPOSTAL_COMMUNE );
+            $(`#${modalId} input[name='voie_ac']`).removeAttr('disabled');
         }).click(function() {
+            const modalId = $(this).closest('form')[0].id
+
             $(this).val("");
-            $("#adresse-modal-ajout input[name='voie_ac'], #adresse-modal-ajout input[name='numero'], #adresse-modal-ajout input[name='complement']").val("").attr("disabled", true).blur();
-            $("#adresse-modal-ajout input[name='voie']").val("").blur();
+            $(`#${modalId} input[name='voie_ac'], #${modalId} input[name='numero'], #${modalId} input[name='complement']`).val("").attr("disabled", true).blur();
+            $(`#${modalId} input[name='voie']`).val("").blur();
         });
 
         // Auto complétion de la rue
         $("input[name='voie_ac']").autocomplete('/api/1.0/adresse/get_voies', {
             minChars: 2,
             cacheLength: 0,
-            extraParams: { code_insee: function(){ return $("#adresse-modal-ajout input[name='code_insee']").val() } },
+            extraParams: { code_insee: function(){
+                const modalId = $("input[name='voie_ac']").closest('form.in')[0].id
+                return $(`#${modalId} input[name='code_insee']`).val()
+            } },
             parse: function(data) {
                 return $.map(data["response"], function(row) { return {data: row,value: row.LIBELLE_RUE,result: row.LIBELLE_RUE} });
             },
@@ -1013,12 +1018,16 @@
                 return item.LIBELLE_RUE + ' (code insee : ' + item.NUMINSEE_COMMUNE + ')';
             }
         }).result(function(e, item) {
-            $("#adresse-modal-ajout input[name='voie']").val( item.ID_RUE );
-            $("#adresse-modal-ajout input[name='type_voie']").val( item.ID_RUETYPE );
-            $("#adresse-modal-ajout input[name='numero'], #adresse-modal-ajout input[name='complement']").removeAttr("disabled");
+            const modalId = $(this).closest('form')[0].id
+
+            $(`#${modalId} input[name='voie']`).val( item.ID_RUE );
+            $(`#${modalId} input[name='type_voie']`).val( item.ID_RUETYPE );
+            $(`#${modalId} input[name='numero'], #${modalId} input[name='complement']`).removeAttr("disabled");
         }).click(function() {
+            const modalId = $(this).closest('form')[0].id
+
             $(this).val("");
-            $("#adresse-modal-ajout input[name='numero'], #adresse-modal-ajout input[name='complement']").val("").attr("disabled", true).blur();
+            $(`#${modalId} input[name='numero'], #${modalId} input[name='complement']`).val("").attr("disabled", true).blur();
         });
 
         $('#adresse-modal-ajout').on('shown.bs.modal', function () {
