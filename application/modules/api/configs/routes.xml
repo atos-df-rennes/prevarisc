@@ -103,6 +103,10 @@
                         <route>get_voies</route>
                         <defaults method="getVoies" />
                     </get_voies>
+                    <get_libelle_commune type="Zend_Controller_Router_Route">
+                        <route>get_libelle_commune</route>
+                        <defaults method="getLibelleCommune" />
+                    </get_libelle_commune>
                 </chains>
             </adresse>
 

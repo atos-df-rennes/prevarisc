@@ -44,4 +44,15 @@ class Api_Service_Adresse
 
         return $service_adresse->getVoies($code_insee, $q);
     }
+
+
+    public function getLibelleCommune($code_insee){
+        $service_adresse = new Service_Adresse();
+        return $service_adresse->getLibelleCommune($code_insee);
+    }
+
+    public function getLibelleRue($idRue){
+        $service_adresse = new Service_Adresse();
+        return $service_adresse->getLibelleRue($idRue);
+    }
 }

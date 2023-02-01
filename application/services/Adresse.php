@@ -91,4 +91,16 @@ class Service_Adresse
 
         return $dbEtablissementAdresse->getAdresse($idAdresse);
     }
+
+    public function getLibelleCommune($code_insee){
+        $dbAdresseCommune = new Model_DbTable_AdresseCommune();
+
+        return $dbAdresseCommune->getLibelleCommune($code_insee);
+    }
+
+    public function getLibelleRue($idRue){
+        $dbAdresseRue = new Model_DbTable_AdresseRue();
+
+        return $dbAdresseRue->getLibelleRue($idRue);
+    }
 }
