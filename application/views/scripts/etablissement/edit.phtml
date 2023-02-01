@@ -1145,9 +1145,12 @@
 
 
 
-        <?= $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF') ?>
-        <?= $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : ""; ?>
-        /* TEST */
+
+        <?php
+            $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+            $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+        ?>
+
         const optionsGeo = {
             key_ign: <?= $this->key_ign ?>,
             default_lat:<?= $this->default_lat ?>,
