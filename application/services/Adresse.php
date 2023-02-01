@@ -86,19 +86,22 @@ class Service_Adresse
         return $select->query()->fetch();
     }
 
-    public function getAdresseById($idAdresse){
+    public function getAdresseById($idAdresse)
+    {
         $dbEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
 
         return $dbEtablissementAdresse->getAdresse($idAdresse);
     }
 
-    public function getLibelleCommune($code_insee){
+    public function getLibelleCommune($code_insee)
+    {
         $dbAdresseCommune = new Model_DbTable_AdresseCommune();
 
         return $dbAdresseCommune->getLibelleCommune($code_insee);
     }
 
-    public function getLibelleRue($idRue){
+    public function getLibelleRue($idRue)
+    {
         $dbAdresseRue = new Model_DbTable_AdresseRue();
 
         return $dbAdresseRue->getLibelleRue($idRue);

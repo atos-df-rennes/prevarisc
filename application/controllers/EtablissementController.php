@@ -480,7 +480,8 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function updateAdresseAction(){
+    public function updateAdresseAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 

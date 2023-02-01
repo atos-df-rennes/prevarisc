@@ -63,11 +63,13 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                     ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'])
                     ->where("etablissementadresse.ID_ETABLISSEMENT = '{$id_etablissement}'")
                 ;
+
                 return $this->fetchAll($select)->toArray();
         }
     }
 
-    public function getAdresse($idAdresse){
+    public function getAdresse($idAdresse)
+    {
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('etablissementadresse')
