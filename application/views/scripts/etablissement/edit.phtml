@@ -692,6 +692,7 @@
         $("form.adresse a#submit-adresse").live('click', function() {
             time = Date.now();
             node = $('#prototype_adresse').clone().prependTo( $('table.champ_adresse') ).removeClass('hide prototypes').addClass('adresse').attr('id', '');
+
             node.find('input[name="ADRESSES[-1][LON_ETABLISSEMENTADRESSE]"]').val($('form.adresse').find('input[name="lon"]').val());
             node.find('input[name="ADRESSES[-1][LAT_ETABLISSEMENTADRESSE]"]').val($('form.adresse').find('input[name="lat"]').val());
             node.find('input[name="ADRESSES[-1][NUMERO_ADRESSE]"]').val($('form.adresse').find('input[name="numero"]').val());
@@ -700,6 +701,12 @@
             node.find('input[name="ADRESSES[-1][COMPLEMENT_ADRESSE]"]').val($('form.adresse').find('input[name="complement"]').val());
             node.find('span').text($('form.adresse').find('input[name="numero"]').val() + " " + $('form.adresse').find('input[name="voie_ac"]').val() + " " + $('form.adresse').find('input[name="code_postal"]').val() + " " + $('form.adresse').find('input[name="commune_ac"]').val());
             node.find('input').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); });
+
+
+            node.find('#adresseNA').attr('id','adresse'+time)
+            node.find('.modifierAdresse').attr('data-id',time)
+
+
             $('form.adresse').find('button.close').click();
             setTriggerEventModalAdresseEdit()
             return false;
@@ -1098,6 +1105,14 @@
                         }else{
                             console.log(dataId)
                             console.log($(`#adresse${dataId} input`))
+                            const dataObj = {}
+
+                            $(`#adresse${dataId} input`).each(idx => {
+                                dataObj[$(`#adresse${dataId} :input`)[idx].name] = $(`#adresse${dataId} :input`)[idx].value
+                            })
+
+                            console.table(dataObj)
+
                         }
                     }
             });
