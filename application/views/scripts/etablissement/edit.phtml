@@ -1064,87 +1064,90 @@
             geolocaliseIGN("#adresse-modal-edit", optionsGeo)
         })
 
+        function setModalEditAdresseInputValue(data){
+            console.table(data)
+            //On set les valeurs reçu
+            // Ville
+            $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
+            // Voie
+            $("input[name='voie_ac']").removeAttr('disabled')
+            $("input[name='voie_ac']").val(data.LIBELLE_RUE)
+
+            // Numéro
+            $("input[name='numero']").removeAttr('disabled')
+            $("input[name='numero']").val(data.NUMERO_ADRESSE)
+
+            // Complément d'adresse
+            $("input[name='complement']")
+            $("input[name='complement']").val(data.COMPLEMENT_ADRESSE)
+
+            // Coordonnées
+            $("input[name='lon']").val(data.LON_ETABLISSEMENTADRESSE)
+            $("input[name='lat']").val(data.LAT_ETABLISSEMENTADRESSE)
+
+            // Code INSEE
+            $("input[name='code_insee']").val(data.NUMINSEE_COMMUNE)
+
+            // Code Postal
+            $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
+
+            //Id de l'adrese
+            $("input[name='idAdresse']").val(data.ID_ADRESSE)
+        }
+
+        function getValueOfNewAdresse(dataId){
+            let data = {}
+                $(`#adresse${dataId} input`).each(idx => {
+                    data[
+                        $(`#adresse${dataId} :input`)[idx].name.split(`ADRESSES[${dataId}]`)[1]
+                        .replaceAll('[','')
+                        .replaceAll(']','')
+                        ]
+                    = $(`#adresse${dataId} :input`)[idx].value
+                })
+                //On recupere le libelle de la commune
+                $.ajax({
+                    type: "get",
+                    url: "/api/1.0/adresse/get_libelle_commune",
+                    data: {code_insee: data.NUMINSEE_COMMUNE},
+                    async: false,
+                    success: function (recieveLibelleCommune) {
+                        console.log(recieveLibelleCommune.response.LIBELLE_COMMUNE)
+                        data.LIBELLE_COMMUNE = recieveLibelleCommune.response.LIBELLE_COMMUNE
+                    }
+                })
+                $.ajax({
+                        type: "get",
+                        url: "/api/1.0/adresse/get_libelle_rue",
+                        data: {idRue: data.ID_RUE},
+                        async: false,
+                        success: function (recieveRue) {
+                            console.log(recieveRue.response.LIBELLE_RUE)
+                            data.LIBELLE_RUE = recieveRue.response.LIBELLE_RUE
+                        }
+                    })
+
+            console.log("Data :",data)
+            return data
+
+        }
+
          function setTriggerEventModalAdresseEdit(){
             $('.modifierAdresse').click(function (e) {
                 e.preventDefault();
                 const dataId = $(this).attr('data-id')
+                let data = null
                 $.ajax({
                     url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
                     type: "get",
-                    success: function (reception) {
-                        let data = null
-                        //Si l'établissement existe
-                        if(reception?.response){
-                            data = reception.response
-                        }else{
-                            data = {}
-
-                            $(`#adresse${dataId} input`).each(idx => {
-                                data[
-                                    $(`#adresse${dataId} :input`)[idx].name.split(`ADRESSES[${dataId}]`)[1]
-                                    .replaceAll('[','')
-                                    .replaceAll(']','')
-                                    ]
-                                = $(`#adresse${dataId} :input`)[idx].value
-                            })
-                            //On recupere le libelle de la commune
-                            $.ajax({
-                                type: "get",
-                                url: "/api/1.0/adresse/get_libelle_commune",
-                                data: {code_insee: data.NUMINSEE_COMMUNE},
-                                success: function (recieveLibelleCommune) {
-                                    if(recieveLibelleCommune?.response){
-                                        data.LIBELLE_COMMUNE = recieveLibelleCommune?.response?.LIBELLE_COMMUNE
-                                    }
-                                }
-                            });
-
-                            //On recupere le libelle de la voie
-                            $.ajax({
-                                type: "get",
-                                url: "/api/1.0/adresse/get_libelle_rue",
-                                data: {idRue: data.ID_RUE},
-                                success: function (recieveRue) {
-                                    if(recieveRue?.response){
-                                        data.LIBELLE_RUE = recieveRue?.response?.LIBELLE_RUE
-                                    }
-                                }
-                            });
-                        }
-
-
-                        console.log("DATA before write : ")
-                        console.table(data)
-                        //On set les valeurs reçu
-                        // Ville
-                        $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
-                        // Voie
-                        $("input[name='voie_ac']").removeAttr('disabled')
-                        $("input[name='voie_ac']").val(data.LIBELLE_RUE)
-
-                        // Numéro
-                        $("input[name='numero']").removeAttr('disabled')
-                        $("input[name='numero']").val(data.NUMERO_ADRESSE)
-
-                        // Complément d'adresse
-                        $("input[name='complement']")
-                        $("input[name='complement']").val(data.COMPLEMENT_ADRESSE)
-
-                        // Coordonnées
-                        $("input[name='lon']").val(data.LON_ETABLISSEMENTADRESSE)
-                        $("input[name='lat']").val(data.LAT_ETABLISSEMENTADRESSE)
-
-                        // Code INSEE
-                        $("input[name='code_insee']").val(data.NUMINSEE_COMMUNE)
-
-                        // Code Postal
-                        $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
-
-                        //Id de l'adrese
-                        $("input[name='idAdresse']").val(data.ID_ADRESSE)
+                    success: async function (reception) {
+                        setModalEditAdresseInputValue(reception?.response)
                     }
-            });
+            }).fail(
+                setModalEditAdresseInputValue(getValueOfNewAdresse(dataId))
+            );
          });
+
          }
 
          setTriggerEventModalAdresseEdit()

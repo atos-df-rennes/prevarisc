@@ -107,6 +107,10 @@
                         <route>get_libelle_commune</route>
                         <defaults method="getLibelleCommune" />
                     </get_libelle_commune>
+                    <get_libelle_rue type="Zend_Controller_Router_Route">
+                        <route>get_libelle_rue</route>
+                        <defaults method="getLibelleRue" />
+                    </get_libelle_rue>
                 </chains>
             </adresse>
 
