@@ -1112,8 +1112,7 @@
                     data: {code_insee: data.NUMINSEE_COMMUNE},
                     async: false,
                     success: function (recieveLibelleCommune) {
-                        console.log(recieveLibelleCommune.response.LIBELLE_COMMUNE)
-                        data.LIBELLE_COMMUNE = recieveLibelleCommune.response.LIBELLE_COMMUNE
+                        data.LIBELLE_COMMUNE = recieveLibelleCommune?.response?.LIBELLE_COMMUNE
                     }
                 })
                 $.ajax({
@@ -1122,12 +1121,9 @@
                         data: {idRue: data.ID_RUE},
                         async: false,
                         success: function (recieveRue) {
-                            console.log(recieveRue.response.LIBELLE_RUE)
-                            data.LIBELLE_RUE = recieveRue.response.LIBELLE_RUE
+                            data.LIBELLE_RUE = recieveRue?.response?.LIBELLE_RUE
                         }
                     })
-
-            console.log("Data :",data)
             return data
 
         }
