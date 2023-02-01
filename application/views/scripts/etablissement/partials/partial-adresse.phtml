@@ -1,5 +1,6 @@
+<?php $timestamp = time() ?>
 <tr <?= $this->adresse === null ? "id='prototype_adresse' class='prototypes hide'" : "class='adresse'" ?>>
-    <td id=<?= 'adresse'.$this->adresse['ID_ADRESSE'] ?>>
+    <td id=<?= 'adresse'. ($this->adresse['ID_ADRESSE'] ?? $timestamp) ?>>
         <input type='hidden' value='<?php echo $this->adresse["NUMINSEE_COMMUNE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][NUMINSEE_COMMUNE]' />
         <input type='hidden' value='<?php echo $this->adresse["LON_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LON_ETABLISSEMENTADRESSE]' />
         <input type='hidden' value='<?php echo $this->adresse["LAT_ETABLISSEMENTADRESSE"] ?>' name='ADRESSES[<?php echo $this->adresse === null ? -1 : $this->adresse['ID_ADRESSE'] ?>][LAT_ETABLISSEMENTADRESSE]' />
@@ -13,7 +14,7 @@
     </td>
     <td>
         <small>
-            <a class="modifierAdresse" data-id=<?= $this->adresse['ID_ADRESSE'] ?> data-toggle="modal" data-backdrop="false" href="#adresse-modal-edit">Modifier</a>
+            <a class="modifierAdresse" data-id=<?= $this->adresse['ID_ADRESSE'] ?? $timestamp ?> data-toggle="modal" data-backdrop="false" href="#adresse-modal-edit">Modifier</a>
         </small>
     </td>
     <td>

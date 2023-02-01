@@ -701,6 +701,7 @@
             node.find('span').text($('form.adresse').find('input[name="numero"]').val() + " " + $('form.adresse').find('input[name="voie_ac"]').val() + " " + $('form.adresse').find('input[name="code_postal"]').val() + " " + $('form.adresse').find('input[name="commune_ac"]').val());
             node.find('input').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); });
             $('form.adresse').find('button.close').click();
+            setTriggerEventModalAdresseEdit()
             return false;
         });
 
@@ -1056,45 +1057,54 @@
             geolocaliseIGN("#adresse-modal-edit", optionsGeo)
         })
 
-         //Appelle ajax + modification du modal
-         $('.modifierAdresse').click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
-                type: "get",
-                success: function (reception) {
-                    const data = reception.response
+         function setTriggerEventModalAdresseEdit(){
+            $('.modifierAdresse').click(function (e) {
+                e.preventDefault();
+                const dataId = $(this).attr('data-id')
+                $.ajax({
+                    url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
+                    type: "get",
+                    success: function (reception) {
+                        //Si l'établissement existe
+                        if(reception?.response){
+                            const data = reception.response
+                            // Ville
+                            $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
 
-                    // Ville
-                    $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
+                            // Voie
+                            $("input[name='voie_ac']").removeAttr('disabled')
+                            $("input[name='voie_ac']").val(data.LIBELLE_RUE)
 
-                    // Voie
-                    $("input[name='voie_ac']").removeAttr('disabled')
-                    $("input[name='voie_ac']").val(data.LIBELLE_RUE)
+                            // Numéro
+                            $("input[name='numero']").removeAttr('disabled')
+                            $("input[name='numero']").val(data.NUMERO_ADRESSE)
 
-                    // Numéro
-                    $("input[name='numero']").removeAttr('disabled')
-                    $("input[name='numero']").val(data.NUMERO_ADRESSE)
+                            // Complément d'adresse
+                            $("input[name='complement']")
+                            $("input[name='complement']").val(data.COMPLEMENT_ADRESSE)
 
-                    // Complément d'adresse
-                    $("input[name='complement']")
-                    $("input[name='complement']").val(data.COMPLEMENT_ADRESSE)
+                            // Coordonnées
+                            $("input[name='lon']").val(data.LON_ETABLISSEMENTADRESSE)
+                            $("input[name='lat']").val(data.LAT_ETABLISSEMENTADRESSE)
 
-                    // Coordonnées
-                    $("input[name='lon']").val(data.LON_ETABLISSEMENTADRESSE)
-                    $("input[name='lat']").val(data.LAT_ETABLISSEMENTADRESSE)
+                            // Code INSEE
+                            $("input[name='code_insee']").val(data.NUMINSEE_COMMUNE)
 
-                    // Code INSEE
-                    $("input[name='code_insee']").val(data.NUMINSEE_COMMUNE)
+                            // Code Postal
+                            $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
 
-                    // Code Postal
-                    $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
-
-                    //Id de l'adrese
-                    $("input[name='idAdresse']").val(data.ID_ADRESSE)
-                }
+                            //Id de l'adrese
+                            $("input[name='idAdresse']").val(data.ID_ADRESSE)
+                        }else{
+                            console.log(dataId)
+                            console.log($(`#adresse${dataId} input`))
+                        }
+                    }
             });
          });
+         }
+
+         setTriggerEventModalAdresseEdit()
 
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
