@@ -91,6 +91,7 @@ function geolocaliseIGN (idModal, options) {
 
             $("span.result").text("Géolocalisation en cours...");
             geocodeWithJsAutoconf(
+                options.geo_container_id,
                 adresse,
                 'StreetAddress',
                 'EPSG:4326',
