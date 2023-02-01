@@ -74,38 +74,36 @@
 </form>
 
 <script>
-    //TODO exporter le fichier js
-    window.onload = function(){
-        $('#submit-adresse-edit').click(function (e) {
-            e.preventDefault()
-            const dataToPush = {}
+    $('#submit-adresse-edit').click(function (e) {
+        e.preventDefault()
+        const dataToPush = {}
 
-            $('#adresse-modal-edit :input').each(idx => {
-                dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
-            })
+        $('#adresse-modal-edit :input').each(idx => {
+            dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
+        })
 
-            $.post("/etablissement/update-adresse", dataToPush,
-                function (data, textStatus, jqXHR) {
-                    dataParse = JSON.parse(data)
-                    const nouveauLibelle =
-                        dataParse.numero + ' ' +
-                        dataParse.voie_ac + ' ' +
-                        dataParse.complement + ' ' +
-                        dataParse.code_postal + ' ' +
-                        dataParse.commune_ac
+        $.post("/etablissement/update-adresse", dataToPush,
+            function (data, textStatus, jqXHR) {
+                dataParse = JSON.parse(data)
 
-                    $('#adresse'+JSON.parse(data).idAdresse+'>span').text(nouveauLibelle)
+                const nouveauLibelle =
+                    dataParse.numero + ' ' +
+                    dataParse.voie_ac + ' ' +
+                    dataParse.complement + ' ' +
+                    dataParse.code_postal + ' ' +
+                    dataParse.commune_ac
 
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val(dataParse.code_insee)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][LON_ETABLISSEMENTADRESSE]"]').val(dataParse.lon)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][LAT_ETABLISSEMENTADRESSE]"]').val(dataParse.lat)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMERO_ADRESSE]"]').val(dataParse.numero)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][ID_RUE]"]').val(dataParse.voie)
-                    $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.complement)
+                $('#adresse'+JSON.parse(data).idAdresse+'>span').text(nouveauLibelle)
 
-                    $('#adresse-modal-edit .close').click()
-                }
-            );
-        });
-    }
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val(dataParse.code_insee)
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][LON_ETABLISSEMENTADRESSE]"]').val(dataParse.lon)
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][LAT_ETABLISSEMENTADRESSE]"]').val(dataParse.lat)
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMERO_ADRESSE]"]').val(dataParse.numero)
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][ID_RUE]"]').val(dataParse.voie)
+                $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.complement)
+
+                $('#adresse-modal-edit .close').click()
+            }
+        );
+    });
 </script>

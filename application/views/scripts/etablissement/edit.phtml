@@ -1064,7 +1064,7 @@
             geolocaliseIGN("#adresse-modal-edit", optionsGeo)
         })
 
-        function setModalEditAdresseInputValue(data){
+        function setModalEditAdresseInputValue(data, dataId){
             console.table(data)
             //On set les valeurs reçu
             // Ville
@@ -1092,7 +1092,7 @@
             $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
 
             //Id de l'adrese
-            $("input[name='idAdresse']").val(data.ID_ADRESSE)
+            $("input[name='idAdresse']").val(dataId)
         }
 
         function getValueOfNewAdresse(dataId){
@@ -1141,10 +1141,11 @@
                     url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
                     type: "get",
                     success: async function (reception) {
-                        setModalEditAdresseInputValue(reception?.response)
+                        //TODO trouver une autre maniere pour faire plus propre
+                        setModalEditAdresseInputValue(reception?.response, dataId)
                     }
             }).fail(
-                setModalEditAdresseInputValue(getValueOfNewAdresse(dataId))
+                setModalEditAdresseInputValue(getValueOfNewAdresse(dataId), dataId)
             );
          });
 
