@@ -2,22 +2,37 @@
 <div class="muted">
     <small>Nombre total d'éléments : <?= count($this->data) ?></small>
 </div>
-<ul class='gridRetablir'>
-    <?php foreach($this->data as $deletedElement) : ?>
-        <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Supprimé par</th>
+            <th>Nom de l'établissement</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($this->data as $deletedElement) : ?>
+            <tr>
+                <td>
+                    <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
+                </td>
 
-        <div class='linkDisabled'>
-            <?= $this->partial('search/results/etablissement.phtml', [
-                $deletedElement
-            ]) ?>
-        </div>
+                <td class='linkDisabled'>
+                    <?= $this->partial('search/results/etablissement.phtml', [
+                        $deletedElement
+                    ]) ?>
+                </td>
 
-        <a
-            class='btn-small'
-            href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
-        >
-            <em class="icon-ok icon-black"></em>
-            Rétablir l'établissement
-        </a>
-    <?php endforeach ?>
-</ul>
+                <td>
+                    <a
+                        class='btn-small'
+                        href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
+                    >
+                        <em class="icon-ok icon-black"></em>
+                        Rétablir l'établissement
+                    </a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
