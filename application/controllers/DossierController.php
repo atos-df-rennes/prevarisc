@@ -2513,11 +2513,11 @@ class DossierController extends Zend_Controller_Action
                 }
             }
             $this->view->celluleDossierLevee = $cellulesListe;
-        } else {
-            $this->view->prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
-            $this->view->prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
-            $this->view->prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
         }
+
+        $this->view->prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
+        $this->view->prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
+        $this->view->prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
 
         // GESTION DES DATES
         //Conversion de la date de dépot en mairie pour l'afficher

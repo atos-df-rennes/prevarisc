@@ -133,7 +133,7 @@
                     </table>
                 <?php endif ?>
             <?php endif ?>
-            
+
             <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(7))) : ?>
                 <h4 class='h4_subtitle'>Nombre d'emplacements</h4>
                 <dl class='dl-horizontal champ_effectif_camping index_camping'>
@@ -141,24 +141,24 @@
                     <dd>
                         <p><?php echo $this->etablissement['informations']['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'] ?></p>
                     </dd>
-                    
+
                     <dt>Autocaravanes</dt>
                     <dd>
                         <p><?php echo $this->etablissement['informations']['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS'] ?></p>
                     </dd>
-                    
+
                     <dt>Emplacements nus</dt>
                     <dd>
                         <p><?php echo $this->etablissement['informations']['EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS'] ?></p>
                     </dd>
-                    
+
                     <dt>Autres emplacements</dt>
                     <dd>
                         <p><?php echo $this->etablissement['informations']['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'] ?></p>
                     </dd>
-                    
+
                     <dt>&nbsp;</dt><dd><hr></dd>
-                    
+
                     <dt>Total</dt>
                     <dd>
                         <p><?php echo (int) $this->etablissement['informations']['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'] + (int) $this->etablissement['informations']['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS']
@@ -305,7 +305,7 @@
                             $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
                             $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
                         ?>
-			
+
                         viewer = initViewer('geoportail-container',
                                             '<?php echo $this->key_ign ?>',
                                             [<?php echo $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] ?>,
@@ -313,10 +313,10 @@
                                             "<b><?php echo htmlspecialchars($this->etablissement['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'], ENT_QUOTES) ?></b><br/>"+
                                                 "<?php echo $this->etablissement['adresses'][0]['NUMERO_ADRESSE'] ?>, "
                                                 +"<?php echo htmlspecialchars($this->etablissement['adresses'][0]['LIBELLE_RUE'], ENT_QUOTES) ?><br/>"+
-                                                "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+ 
+                                                "<?php echo $this->etablissement['adresses'][0]['CODEPOSTAL_COMMUNE'] ?> "+
                                                 "<?php echo $this->etablissement['adresses'][0]['LIBELLE_COMMUNE'] ?>",
                                                 '<?php echo $autoconf_path ?>');
-                            
+
                         viewer.listen('mapLoaded', afterInitMap);
                         viewer.listen('azimuthChanged', onRotation);
 
@@ -326,7 +326,6 @@
                             viewer.getLibMap().addControl(fsControl);
 
                             viewer = addUserLayers(viewer,
-                                                   '<?php echo $this->key_ign ?>',
                                                    <?php echo json_encode($this->couches_cartographiques) ?>);
                             $('.ol-rotate').css('display', 'none');
                         };
@@ -337,7 +336,7 @@
                         </script>
                     </div>
                 <?php endif ?>
-                
+
                 <?php if (count($this->etablissement['adresses']) > 0 && $this->geoconcept_url != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
                 <div id='geoconcept' class="tab-pane in" style="height: 350px; max-height: 350px;width: 100%">
                     <div id='geoconcept-container'  style="height: 100%; max-height: 100%;width: 100%"></div>
@@ -354,7 +353,7 @@
                             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
                                 initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
                             <?php endif ?>
-                                
+
                             var points = [];
                             <?php foreach ($this->etablissement['adresses'] as $adresse): ?>
                                 <?php if ($adresse['LAT_ETABLISSEMENTADRESSE'] && $adresse['LON_ETABLISSEMENTADRESSE']): ?>
@@ -366,7 +365,7 @@
                                     });
                                 <?php endif ?>
                             <?php endforeach ?>
-                            map = initGeoConceptViewer('geoconcept-container', 
+                            map = initGeoConceptViewer('geoconcept-container',
                                 "<?php echo $this->geoconcept_url ?>",
                                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                                 points,
@@ -641,7 +640,7 @@
             var idEts = "<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>";
             var changement = $(this).attr("data-value");
             var dialogAlerte = $('<div style="display:none;"></div>').appendTo('body');
-    
+
             dialogAlerte.dialog({
                 title: "Alerte",
                 modal: true,
@@ -701,13 +700,13 @@
                     dialogAlerte.dialog("open");
                 },
             });
-            
+
             return false;
         });
 
         // fenetre de confirmation de la suppression
         $("#suppressionEtablissement").click(function(){
             $('#confirm-modal').modal({show:true});
-        }); 
+        });
     });
 </script>
