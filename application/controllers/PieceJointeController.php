@@ -398,6 +398,7 @@ class PieceJointeController extends Zend_Controller_Action
                 'droit_ecriture' => true,
                 'type' => $this->_request->type,
                 'id' => $this->_request->id,
+                'isPlatau' => $modelDossier->isPlatau($dossier['ID_DOSSIER']),
             ]);
         }
     }
