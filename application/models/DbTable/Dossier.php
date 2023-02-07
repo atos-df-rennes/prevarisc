@@ -479,8 +479,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_DOSSIER from (
                 (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -491,8 +491,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 limit 1)
             UNION
                 (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -506,5 +506,16 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ";
 
         return $this->getAdapter()->fetchRow($select);
+    }
+
+    public function isPlatau(int $idDossier): bool
+    {
+        $select = $this->select(self::SELECT_WITH_FROM_PART)
+            ->where('ID_DOSSIER = ?', $idDossier)
+        ;
+
+        $result = $this->fetchRow($select);
+
+        return null !== $result['ID_PLATAU'];
     }
 }
