@@ -1242,6 +1242,10 @@ dl.champ_effectif_camping dd input {
     margin-bottom: 10px;
 }
 
+#dossierInfos li:focus {
+    outline: solid 2px blue;
+}
+
 #ign-accordion span > i {
     cursor: pointer;
 }
