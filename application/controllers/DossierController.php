@@ -3061,6 +3061,7 @@ class DossierController extends Zend_Controller_Action
         header('Content-disposition: attachment; filename='.$zipname);
         header('Content-Length: ' . filesize($zipPath));
         readfile($zipPath);
+        unlink($zipPath);
     }
 
 }
