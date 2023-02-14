@@ -1166,7 +1166,6 @@ $("#validModification").live('click', function() {
         $("#addNumDoc").click();
     }
 
-    // TODO Mettre un name contenant l'ID de la PJ et filtrer dans l'action de sauvegarde
     var data = $("#editDossier").serialize();
     $.ajax({
         url: "/dossier/save",
@@ -1213,6 +1212,7 @@ $(".delaipresc").live('click', function() {
     }
 });
 
+// TODO Il faut mettre un filtre sur le type => Etude
 function afficheInfosPlatau(parentRow) {
     $.post(
         '/piece-jointe/display-pj-platau',

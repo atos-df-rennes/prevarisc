@@ -811,6 +811,7 @@ class DossierController extends Zend_Controller_Action
                 'servInstGrp',
                 'repercuterAvis',
                 'INCOMPLET_DOSSIER',
+                'export-pj-platau',
             ];
 
             $includes = [
@@ -866,6 +867,12 @@ class DossierController extends Zend_Controller_Action
                 }
             }
 
+            if ($pjs = $this->_getParam('export-pj-platau')) {
+                $servicePj = new Service_PieceJointe();
+
+                $servicePj->exportPlatau($pjs);
+            }
+
             $nouveauDossier->HORSDELAI_DOSSIER = 0;
             if ($this->_getParam('HORSDELAI_DOSSIER')) {
                 $nouveauDossier->HORSDELAI_DOSSIER = 1;
@@ -888,7 +895,7 @@ class DossierController extends Zend_Controller_Action
 
             $nouveauDossier->CNE_DOSSIER = 0;
             if ($this->_getParam('CNE_DOSSIER')) {
-                $nouveauDossier->CNE_DOSSIER = 0;
+                $nouveauDossier->CNE_DOSSIER = 1;
             }
 
             if (!in_array('OBJET', $this->listeChamps[$this->_getParam('selectNature')])) {
