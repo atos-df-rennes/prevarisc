@@ -3040,4 +3040,27 @@ class DossierController extends Zend_Controller_Action
             ]);
         }
     }
+
+    public function getZipAllPjAction(){
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $idDossier = $this->getRequest()->getParam('id');
+        $serviceDossier = new Service_Dossier();
+        $pjs = $serviceDossier->getAllPJ($idDossier);
+        $zipname = $idDossier.".zip";
+        $zipPath = REAL_DATA_PATH.DS.$zipname;
+        $zip = new ZipArchive();
+        $zip->open($zipPath, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
+        foreach ($pjs as $pj) {
+            $pjPath = Service_Utils::getPjPath($pj);
+            $zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE']);
+        }
+        $zip->close();
+        ob_get_clean();
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zipname);
+        header('Content-Length: ' . filesize($zipPath));
+        readfile($zipPath);
+    }
+
 }

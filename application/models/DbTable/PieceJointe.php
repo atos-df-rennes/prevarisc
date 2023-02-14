@@ -25,6 +25,20 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
         return (null != $this->fetchAll($select)) ? $this->fetchAll($select)->toArray() : null;
     }
 
+    public function affichagePieceJointePLATAU(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('piecejointe')
+            ->join('dossierpj', "piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE", [])
+            ->join('dossier', "dossierpj.ID_DOSSIER = dossier.ID_DOSSIER", ['ID_DOSSIER', 'ID_PLATAU'])
+            ->where('dossier.ID_DOSSIER = ?', $idDossier)
+            ->order('piecejointe.ID_PIECEJOINTE DESC')
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function maxPieceJointe()
     {
         $select = 'SELECT MAX(ID_PIECEJOINTE)
