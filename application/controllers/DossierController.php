@@ -158,6 +158,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/dossier/platau.js', 'text/javascript');
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
