@@ -1997,7 +1997,7 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='AVIS_DOSSIER_COMMISSION' id='AVIS_DOSSIER_COMMISSION'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?>>
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?>>
                         <option value='0'></option>
                         <?php foreach ($this->listeAvis as $avis) : ?>
                         <option value='<?php echo $avis["ID_AVIS"] ?>'
@@ -2008,7 +2008,7 @@ $(".delaipresc").live('click', function() {
                     </select>
                     &nbsp;&nbsp;&nbsp;
                     <input type='checkbox' name='repercuterAvis' id='repercuterAvis'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
                     établissements enfants
                 </div>
             </li>
