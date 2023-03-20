@@ -102,8 +102,6 @@ if( isset($_POST['upload']) ) // si formulaire soumis
     {
         //exit("Impossible de copier le fichier dans $content_dir");
     }
-
-    //echo "Le fichier a bien été uploadé";
 }
 
 if( !isset($_POST['do']))
@@ -172,10 +170,6 @@ if( !isset($_POST['do']))
 			</div>
 	";
 
-	//$testHelper = $this->_helper->fctTest('DossierPj');
-	//$this->DossierPj('listing');
-
-	//echo $this->listing();
 	echo listing("pj/dossier/".$this->id_dossier,$this->id_dossier);
 	echo "
 		</div>

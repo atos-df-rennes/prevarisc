@@ -3041,13 +3041,14 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    public function getZipAllPjAction(){
+    public function getZipAllPjAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $idDossier = $this->getRequest()->getParam('id');
         $serviceDossier = new Service_Dossier();
         $pjs = $serviceDossier->getAllPJ($idDossier);
-        $zipname = $idDossier.".zip";
+        $zipname = $idDossier.'.zip';
         $zipPath = REAL_DATA_PATH.DS.$zipname;
         $zip = new ZipArchive();
         $zip->open($zipPath, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
@@ -3059,9 +3060,8 @@ class DossierController extends Zend_Controller_Action
         ob_get_clean();
         header('Content-Type: application/zip');
         header('Content-disposition: attachment; filename='.$zipname);
-        header('Content-Length: ' . filesize($zipPath));
+        header('Content-Length: '.filesize($zipPath));
         readfile($zipPath);
         unlink($zipPath);
     }
-
 }
