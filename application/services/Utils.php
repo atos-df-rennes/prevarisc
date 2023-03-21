@@ -4,6 +4,7 @@ class Service_Utils
 {
     public static function getPjPath($pjData)
     {
+        // FIXME Vérifier que la valeur n'est pas nulle plutôt
         if (array_key_exists('ID_PLATAU', $pjData)) {
             return
                 implode(DS, [
