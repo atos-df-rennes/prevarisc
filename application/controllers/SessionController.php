@@ -29,7 +29,9 @@ class SessionController extends Zend_Controller_Action
                     }
                     [$domain, $username] = $cred;
                 }
-            } elseif ($this->_request->isPost()) { // Cas par défaut
+            }
+
+            if ($this->_request->isPost()) { // Cas par défaut
                 if (!$form->isValid($this->_request->getPost())) {
                     error_log('Auth: formulaire classique invalide');
 
