@@ -28,13 +28,6 @@ class Service_Utils
         return $fusionName;
     }
 
-    private function formatFusionName(string $name): string
-    {
-        $loweredName = strtolower($name);
-
-        return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
-    }
-
     public static function getPjPath($pjData)
     {
         if (null !== $pjData['ID_PLATAU']) {
@@ -50,5 +43,12 @@ class Service_Utils
         $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
 
         return $store->getFilePath($pjData, 'dossier', $pjData['ID_DOSSIER']);
+    }
+
+    private function formatFusionName(string $name): string
+    {
+        $loweredName = strtolower($name);
+
+        return preg_replace(['/\s+/', '/\'+/', '/\"+/'], '_', $loweredName);
     }
 }
