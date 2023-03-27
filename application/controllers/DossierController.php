@@ -3050,14 +3050,13 @@ class DossierController extends Zend_Controller_Action
         $serviceDossier = new Service_Dossier();
         $zip = new ZipArchive();
 
-        $pjs = $serviceDossier->getAllPJ($idDossier);
+        $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
 
         $zipname = $idDossier.'.zip';
         $zipPath = REAL_DATA_PATH.DS.'uploads'.DS.$zipname;
         $zip->open($zipPath, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
 
         foreach ($pjs as $pj) {
-            // FIXME Les pièces jointes n'ont pas l'air d'être au bon endroit pour une consultation Plat'AU
             $pjPath = Service_Utils::getPjPath($pj);
             $zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE']);
         }
