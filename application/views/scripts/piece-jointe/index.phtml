@@ -9,6 +9,10 @@
 </h3>
 <div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
 
+<?php if(!empty($this->listePj)) :?>
+    <a href="/dossier/get-zip-all-pj/id/<?= $this->identifiant ?>" class="btn btn-success">Télécharger les pièces jointes</a>
+<?php endif ?>
+
 <form id="export-pj-platau">
     <div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
         <table id='tabPieceJointe' class='table table-striped'>
@@ -127,6 +131,8 @@
             'transitionOut'	:	'elastic',
             'speedIn'		:	600,
             'speedOut'		:	200,
+            'speedIn'		:	600,
+            'speedOut'		:	200,
         });
 
         $(".select").live('click',function(){
@@ -138,11 +144,8 @@
                 url: "/dossier/fonction",
                 data: "do=pjPassageCommission&idPjCommission="+id+"&idDossier="+$("#idDossier").val()+"&checked="+checked,
                 type:"POST",
-                beforeSend: function(){
-
-                },
+                beforeSend: function(){},
                 success: function(affichageResultat){
-                    //alert(checked);
                     if(checked == true){
                         $(".select").each(function(){
                             $(this).attr('disabled','disabled');
@@ -155,7 +158,6 @@
                     }
                 },
                 error: function()	{
-
                     return false;
                 }
             });
@@ -167,8 +169,8 @@
                 if($(this).attr('checked')){
                     test = 1;
                 }
-
             });
+
             if(test == 1){
                 $(".select").each(function(){
                     if(!$(this).attr('checked')){
@@ -176,8 +178,8 @@
                     }
                 });
             }
-
         }
+
         disabledTest();
 
         $('#export-platau').click(function() {
