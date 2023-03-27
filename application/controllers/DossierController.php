@@ -3040,4 +3040,45 @@ class DossierController extends Zend_Controller_Action
             ]);
         }
     }
+
+    public function getZipAllPjAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = $this->getRequest()->getParam('id');
+        $serviceDossier = new Service_Dossier();
+        $zip = new ZipArchive();
+
+        $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
+
+        $zipname = $idDossier.'.zip';
+        $zipPath = REAL_DATA_PATH.DS.'uploads'.DS.$zipname;
+        $zip->open($zipPath, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
+
+        foreach ($pjs as $pj) {
+            $pjPath = Service_Utils::getPjPath($pj);
+
+            if (!$zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
+                error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");
+            }
+        }
+
+        if (!$zip->close()) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Erreur lors de la création du fichier ZIP',
+                'message' => 'Le fichier est vide',
+            ]);
+
+            return $this->redirect("/dossier/piece-jointe/id/{$idDossier}");
+        }
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zipname);
+        header('Content-Length: '.filesize($zipPath));
+
+        readfile($zipPath);
+        unlink($zipPath);
+    }
 }

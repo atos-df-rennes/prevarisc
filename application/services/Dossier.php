@@ -52,6 +52,25 @@ class Service_Dossier
     }
 
     /**
+     * Similaire à la fonction getAllPJ() mais permet d'avoir l'ID_PLATAU pour connaître le chemin où sont sauvegardées les PJs.
+     */
+    public function getAllPiecesJointes(int $idDossier): array
+    {
+        $DBused = new Model_DbTable_PieceJointe();
+
+        $select = $DBused->select()
+            ->setIntegrityCheck(false)
+            ->from('piecejointe')
+            ->join('dossierpj', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', [])
+            ->join('dossier', 'dossierpj.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'ID_PLATAU'])
+            ->where('dossier.ID_DOSSIER = ?', $idDossier)
+            ->order('piecejointe.ID_PIECEJOINTE DESC')
+        ;
+
+        return $DBused->fetchAll($select)->toArray();
+    }
+
+    /**
      * Ajout d'une pièce jointe pour un dossier.
      *
      * @param int    $id_dossier
