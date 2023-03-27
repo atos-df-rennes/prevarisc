@@ -3058,10 +3058,22 @@ class DossierController extends Zend_Controller_Action
 
         foreach ($pjs as $pj) {
             $pjPath = Service_Utils::getPjPath($pj);
-            $zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE']);
+
+            if (false === $zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
+                error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");
+            }
         }
 
-        $zip->close();
+        if (false === $zip->close()) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Erreur lors de la création du fichier ZIP',
+                'message' => 'Le fichier est vide'
+            ]);
+
+            return $this->redirect("/dossier/piece-jointe/id/{$idDossier}");
+        }
+
         ob_get_clean();
 
         header('Content-Type: application/zip');
