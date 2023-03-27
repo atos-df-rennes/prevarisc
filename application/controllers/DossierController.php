@@ -3074,8 +3074,6 @@ class DossierController extends Zend_Controller_Action
             return $this->redirect("/dossier/piece-jointe/id/{$idDossier}");
         }
 
-        ob_get_clean();
-
         header('Content-Type: application/zip');
         header('Content-disposition: attachment; filename='.$zipname);
         header('Content-Length: '.filesize($zipPath));
