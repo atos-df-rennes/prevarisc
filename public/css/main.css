@@ -832,8 +832,6 @@ text-decoration: none;
     box-shadow: none;
 }
 
-
-
 .nav-tabs.nav-stacked.menu_dashboard>li>a {
   border-radius: 0px;
   border-top: 1px solid #fff;
@@ -875,7 +873,6 @@ text-decoration: none;
   width: 1%;
 }
 
-
 .sidebar {
   background-color: #f4f4f4;
   display: inline-block;
@@ -901,7 +898,6 @@ text-decoration: none;
 {
   background: #f9f9f9;
 }
-
 
 .list-group {
   padding-left: 0;
@@ -1260,6 +1256,13 @@ dl.champ_effectif_camping dd input {
 
 #ign-accordion select[name='FORMAT_COUCHECARTO'] {
     width: fit-content;
+}
+
+.linkDisabled {
+    pointer-events: none;
+}
+.linkDisabled li {
+    list-style: none;
 }
 
 .radio-controls {

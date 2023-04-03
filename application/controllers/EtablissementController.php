@@ -618,4 +618,16 @@ class EtablissementController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('etablissement');
         $this->view->historiqueAvisDerogations = $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? [];
     }
+
+    public function retablirEtablissementAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        $previousUrl = $_SERVER['HTTP_REFERER'];
+        $serviceEtablissement = new Service_Etablissement();
+
+        $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
+
+        $this->redirect($previousUrl);
+    }
 }

@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   check-pr:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checks non-draft PR has label
         uses: ryanvade/enforce-active-pr-labeled-action@v1

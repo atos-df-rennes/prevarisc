@@ -40,6 +40,10 @@
                     <resource>gestion_parametrages</resource>
                     <privilege>admin</privilege>
                 </index>
+                <retablir>
+                    <label>Gestion des éléménts supprimés</label>
+                    <controller>retablir</controller>
+                </retablir>
                 <users>
                     <label>Gestion des utilisateurs</label>
                     <controller>users</controller>

@@ -47,7 +47,6 @@
         </li>
     <?php endif ?>
 
-
     <li class="<?= $action_name == 'pieces-jointes' ? 'active' : '' ?>">
         <a href='<?= $this->url(array("action"=>"pieces-jointes")) ?>'>
             <em class="icon-share icon-black"></em>
@@ -121,7 +120,6 @@
             Présence d'un dossier avec avis differé
         </p>
     <?php elseif ($this->etablissement['avis'] != null) : ?>
-
          <?php if ($this->etablissement['avis'] == 1 && $this->avis == "avisDoss") : ?>
             <p class="avis F">Favorable <?= $this->etablissement['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation " ?></p>
          <?php elseif ($this->etablissement['avis'] == 2  && $this->avis == "avisDoss") : ?>
@@ -134,7 +132,6 @@
          <?php else : ?>
             <p class="avis">Avis d'exploitation indisponible</p>
          <?php endif ?>
-
     <?php endif ?>
 
     <!-- Présence de risques naturels ou technologiques-->

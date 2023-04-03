@@ -52,7 +52,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
-            // Si l'établissement n'existe pas, on généère une erreur
+            // Si l'établissement n'existe pas, on génère une erreur
             if (null === $general
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
@@ -1612,8 +1612,20 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $date = new DateTime();
         $DB_Etab = new Model_DbTable_Etablissement();
 
+        $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+
         $etablissement = $DB_Etab->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
+        $etablissement->DELETED_BY = $idDeleteBy;
+        $etablissement->save();
+    }
+
+    public function retablirEtablissement($idEtablissement): void
+    {
+        $DB_etablissement = new Model_DbTable_Etablissement();
+        $etablissement = $DB_etablissement->find($idEtablissement)->current();
+        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->DELETED_BY = null;
         $etablissement->save();
     }
 
