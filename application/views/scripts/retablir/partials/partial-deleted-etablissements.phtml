@@ -1,38 +1,40 @@
-<h2 class='label label-important'>Etablissements supprimés</h2>
 <div class="muted">
     <small>Nombre total d'éléments : <?= count($this->data) ?></small>
 </div>
-<table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th>Supprimé par</th>
-            <th>Nom de l'établissement</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($this->data as $deletedElement) : ?>
+
+<?php if (count($this->data) > 0): ?>
+    <table class="table table-hover table-bordered">
+        <thead>
             <tr>
-                <td>
-                    <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
-                </td>
-
-                <td class='linkDisabled'>
-                    <?= $this->partial('search/results/etablissement.phtml', [
-                        $deletedElement
-                    ]) ?>
-                </td>
-
-                <td>
-                    <a
-                        class='btn-small'
-                        href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
-                    >
-                        <em class="icon-ok icon-black"></em>
-                        Rétablir l'établissement
-                    </a>
-                </td>
+                <th>Supprimé par</th>
+                <th>Nom de l'établissement</th>
+                <th></th>
             </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach($this->data as $deletedElement) : ?>
+                <tr>
+                    <td>
+                        <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
+                    </td>
+
+                    <td class='linkDisabled'>
+                        <?= $this->partial('search/results/etablissement.phtml', [
+                            $deletedElement
+                        ]) ?>
+                    </td>
+
+                    <td>
+                        <a
+                            class='btn-small'
+                            href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
+                        >
+                            <em class="icon-ok icon-black"></em>
+                            Rétablir l'établissement
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>
