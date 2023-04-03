@@ -1,0 +1,139 @@
+<a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>">
+    <i class="icon-arrow-left"></i>
+    Retourner sur la liste des formulaires
+</a>
+
+<div class="row-fluid">
+    <h3>Informations sur la rubrique</h3>
+    <div class="span4 infos-rubrique">
+        <!-- TODO: Utiliser le formulaire de Zend -->
+        <form action class="form-inline" method="post">
+            <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
+            <div>
+                <label for="nom_rubrique">Nom de la rubrique</label>
+                <input type="text" name="nom_rubrique" id="nom_rubrique" value="<?= htmlspecialchars($this->rubrique['NOM'], ENT_QUOTES) ?>" required>
+            </div>
+            <div>
+                <label for="afficher_rubrique">Afficher la rubrique par défaut</label>
+                <input
+                    type="hidden"
+                    name="afficher_rubrique"
+                    value="0"
+                >
+                <input
+                    type="checkbox"
+                    name="afficher_rubrique"
+                    value="1"
+                    <?= $this->rubrique['DEFAULT_DISPLAY'] ? 'checked' : '' ?>
+                >
+            </div>
+
+            <div class="pull-left">
+                <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'index'], null, true) ?>" type="button" class="btn">Annuler</a>
+                <button type="submit" class="btn btn-success">Sauvegarder la rubrique</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?= $this->partial('formulaire/partials/champ/partial-add-and-list-titles.phtml', [
+    'count' => count($this->champs),
+]); ?>
+
+<div id="edit-rubrique" class="row-fluid">
+    <div class="span4 infos-champ">
+        <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
+            <div>
+                <?= $this->fieldForm->nom_champ ?>
+            </div>
+            <div>
+                <?= $this->fieldForm->type_champ ?>
+            </div>
+
+            <div id="div-list-value">
+                <h5>Définition des valeurs de la liste</h5>
+                <div class="row-fluid">
+                    <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                </div>
+                <div class="row-fluid">
+                    <div id="list-value" class="span10"></div>
+                </div>
+            </div>
+
+            <?= $this->fieldForm->save ?>
+        </form>
+    </div>
+
+    <div id="saved-fields" class="span6 offset2">
+        <?php if(count($this->champs) > 0): ?>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nom du champ</th>
+                        <th>Type du champ</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id='grp1' class="grp">
+                    <?php foreach($this->champs as $champ): ?>
+                        <tr id=<?=$champ['ID_CHAMP']?>>
+                            <td class='tdMove'><i class="icon-move"></i></td>
+                            <td><?= $champ['NOM'] ?></td>
+                            <td>
+                                <?= $champ['TYPE'] ?>
+
+                                <?php if($champ['TYPE'] === 'Parent'): ?>
+                                    <?php if (1 === intval($champ['tableau'])): ?>
+                                        (affiché comme tableau)
+                                    <?php endif ?>
+
+                                    <?php if(!empty($champ['LIST_CHAMP'])) : ?>
+                                        <ul>
+                                            <?php foreach($champ['LIST_CHAMP'] as $champFils): ?>
+                                                <li>
+                                                    <?= $champFils['NOM']?>
+                                                    <i><?= $champFils['TYPE']?></i>
+                                                </li>
+                                            <?php endforeach ?>
+                                        </ul>
+                                    <?php else : ?>
+                                        <div class="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Attention ! </strong>Aucun champ fils renseigné.
+                                        </div>
+                                    <?php endif ?>
+                                <?php endif ?>
+
+                                <?php if($champ['TYPE'] === 'Liste'): ?>
+                                    <?php if(count($champ['VALEURS']) === 0): ?>
+                                        <div class="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Attention !</strong> La liste ne possède aucune valeur, vous devriez en ajouter.
+                                        </div>
+                                    <?php endif ?>
+
+                                    <ul>
+                                        <?php foreach($champ['VALEURS'] as $valeur): ?>
+                                            <li><?= htmlspecialchars($valeur['VALEUR']) ?></li>
+                                        <?php endforeach ?>
+                                    </ul>
+                                <?php endif ?>
+                            </td>
+                            <td id='actions'>
+                                <div class='text-center'>
+                                    <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
+                                        <i title='Modifier' class='icon-pencil'></i>
+                                    </a>
+                                    <a href="" data-id="<?= $champ['ID_CHAMP'] ?>" data-rubrique-id="<?= $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">
+                                        <i title='Supprimer' class='icon-trash'></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php endif ?>
+    </div>
+</div>

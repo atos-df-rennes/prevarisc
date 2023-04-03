@@ -508,6 +508,135 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
+    // Récupère les dossiers d'un établissement par type
+    public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
+
+        switch ($type) {
+            case 'etudes':
+                $select->where('dt.ID_DOSSIERTYPE = 1');
+
+                break;
+
+            case 'visites':
+                $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+
+                break;
+
+            case 'autres':
+                $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+
+                break;
+
+            default:
+                throw new Exception(sprintf('Type %s non supporté', $type));
+        }
+
+        return $this->getAdapter()->fetchAll($select);
+    }
+
+    public function getEffectifEtDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], [])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['d' => 'dossier'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListeDossierFromDossier($idDossier)
+    {
+        $dossEtab = [];
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
+
+        $dossiers = $this->getAdapter()->fetchAll($select);
+
+        $dossEtab['Visites'] = [];
+        $dossEtab['Etudes'] = [];
+        $dossEtab['Autres'] = [];
+
+        foreach ($dossiers as $dossier) {
+            switch ($dossier['TYPE_DOSSIER']) {
+                //Dossier de type Etude
+                case '1':
+                    $dossEtab['Etudes'][] = $dossier;
+
+                    break;
+
+                case '2':                //Dossier de type visite
+                case '3':                //Dossier de type groupe de visite
+                    $dossEtab['Visites'][] = $dossier;
+
+                    break;
+
+                default:                //Le reste
+                    $dossEtab['Autres'][] = $dossier;
+
+                    break;
+            }
+        }
+
+        return $dossEtab;
+    }
+
+    /**
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListAvisDerogationsFromDossier($idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ad' => 'avisderogations'])
+            ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
+            ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function getDeleteDossier(): array
     {
         $select = $this->select()->setIntegrityCheck(false)

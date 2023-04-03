@@ -2,6 +2,27 @@
 
 class CalendrierDesCommissionsController extends Zend_Controller_Action
 {
+    /**
+     * @var mixed|\Service_DossierVerificationsTechniques
+     */
+    public $serviceDescriptifDossier;
+    /**
+     * @var mixed|\Service_EtablissementDescriptif
+     */
+    public $serviceDescriptifEtablissement;
+    /**
+     * @var mixed|\Service_DossierEffectifsDegagements
+     */
+    public $serviceDossierEffectifsDegagements;
+    /**
+     * @var mixed|\Service_EtablissementEffectifsDegagements
+     */
+    public $serviceEtablissementEffectifsDegagements;
+    /**
+     * @var mixed|\Service_Formulaire
+     */
+    public $serviceFormulaire;
+
     public function init()
     {
         $this->_helper->layout->setLayout('dashboard');
@@ -12,6 +33,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ->addActionContext('recupdateliee', 'json')
             ->initContext()
         ;
+
+        $this->serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $this->serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $this->serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $this->serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $this->serviceFormulaire = new Service_Formulaire();
     }
 
     public function indexAction()
@@ -85,7 +112,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('idDate'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || null === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('idDate');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -103,7 +130,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $infosDateComm = $dbDateComm->find($this->_getParam('dateCommId'))->current();
 
         //Une fois les infos de la date récupérées on peux aller chercher les date liées à cette commission pour les afficher
-        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || '0' === $infosDateComm['DATECOMMISSION_LIEES']) {
+        if ('' === $infosDateComm['DATECOMMISSION_LIEES'] || null === $infosDateComm['DATECOMMISSION_LIEES']) {
             $commPrincipale = $this->_getParam('dateCommId');
         } else {
             $commPrincipale = $infosDateComm['DATECOMMISSION_LIEES'];
@@ -887,17 +914,28 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     public function generationconvocAction()
     {
         try {
+            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
+            $model_membres = new Model_DbTable_CommissionMembre();
+            $model_commission = new Model_DbTable_Commission();
+            $model_adresseCommune = new Model_DbTable_AdresseCommune();
+            $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
+            $dbDossier = new Model_DbTable_Dossier();
+            $dbDocUrba = new Model_DbTable_DossierDocUrba();
+
+            $service_etablissement = new Service_Etablissement();
+
             $dateCommId = $this->_getParam('dateCommId');
             $this->view->idComm = $dateCommId;
+
             //on recupere le type de commission (salle / visite / groupe de visite)
             $dbDateComm = new Model_DbTable_DateCommission();
             $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
+
             //1 = salle . 2 = visite . 3 = groupe de visite
             $this->view->typeCommission = $commissionInfo['ID_COMMISSIONTYPEEVENEMENT'];
+
             //On récupère la liste des dossiers
             //Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
-            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
-
             if (1 == $commissionInfo['GESTION_HEURES']) {
                 //prise en compte heures
                 $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
@@ -907,7 +945,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
 
             //Récupération des membres de la commission
-            $model_membres = new Model_DbTable_CommissionMembre();
             $listeMembres = $model_membres->get($commissionInfo['COMMISSION_CONCERNE']);
             foreach ($listeMembres as $var => $membre) {
                 $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
@@ -918,21 +955,20 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
 
             //On récupère le nom de la commission
-            $model_commission = new Model_DbTable_Commission();
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
 
+            // FIXME Grouper les foreach en un seul, là c'est débile de faire 3 fois le même
             //afin de récuperer les informations des communes (adresse des mairies etc)
-            $model_adresseCommune = new Model_DbTable_AdresseCommune();
-            $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
-
-            $dbDossier = new Model_DbTable_Dossier();
-            $dbDocUrba = new Model_DbTable_DossierDocUrba();
-            $service_etablissement = new Service_Etablissement();
             foreach ($listeDossiers as $val => $ue) {
                 $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
+
+                //Ajoute les avis derogations provenant du dossier
+                $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
                 if ([] !== $listePrev) {
                     $listeDossiers[$val]['preventionnistes'] = $listePrev;
                 }
+
                 //On recupere la liste des établissements qui concernent le dossier
                 $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
                 //on recupere la liste des infos des établissement
@@ -981,6 +1017,33 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     ++$numCommune;
                 }
             }
+
+            foreach ($listeDossiers as &$dossier) {
+                // Gestion des formulaires personnalisés
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissement = empty($dossier['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissementEffectifsDegagements = empty($dossier['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+                $rubriquesByCapsuleRubrique = [
+                    'descriptifVerificationsTechniques' => $rubriquesDossier,
+                    'descriptifEtablissement' => $rubriquesEtablissement,
+                    'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                    'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+                ];
+
+                // Gestion des rubriques/champs personnalisés
+                $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+                // Récupération des rubriques pour chaque objet global
+                // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+                foreach ($capsulesRubriques as &$capsuleRubrique) {
+                    $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                }
+
+                $dossier['FORMULAIRES'] = $capsulesRubriques;
+            }
+
             $this->view->listeCommunes = $tabCommune;
             $this->view->dossierComm = $listeDossiers;
 
@@ -1107,9 +1170,41 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
         }
 
+        $dbDossier = new Model_DbTable_Dossier();
+
+        foreach ($listeDossiers as &$dossier) {
+            $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
+
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissement = empty($dossier['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissementEffectifsDegagements = empty($dossier['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $dossier['FORMULAIRES'] = $capsulesRubriques;
+        }
+
         $this->view->informationsMembre = $listeMembres;
         $this->view->listeCommunes = $tabCommune;
+
         $this->view->dossierComm = $listeDossiers;
+
         $this->view->dateComm = $listeDossiers[0]['DATE_COMMISSION'];
         $this->view->heureDeb = $listeDossiers[0]['HEUREDEB_COMMISSION'];
     }
@@ -1141,6 +1236,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1153,12 +1249,39 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-
             $service_dossier = new Service_Dossier();
             $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
+            // FIXME Remplacer les $listeDossiers[$val] par $ue
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
+
         $this->view->dossierComm = $listeDossiers;
     }
 
@@ -1191,6 +1314,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
         $service_etablissement = new Service_Etablissement();
+
         foreach ($listeDossiers as $val => $ue) {
             //On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
@@ -1201,7 +1325,34 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
+
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
+            // Gestion des formulaires personnalisés
+            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+            $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+            $rubriquesByCapsuleRubrique = [
+                'descriptifVerificationsTechniques' => $rubriquesDossier,
+                'descriptifEtablissement' => $rubriquesEtablissement,
+                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+            ];
+
+            // Gestion des rubriques/champs personnalisés
+            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+            // Récupération des rubriques pour chaque objet global
+            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+            foreach ($capsulesRubriques as &$capsuleRubrique) {
+                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            }
+
+            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
         }
+
         $this->view->dossierComm = $listeDossiers;
     }
 
