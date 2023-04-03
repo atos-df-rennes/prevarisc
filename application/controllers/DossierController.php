@@ -204,12 +204,13 @@ class DossierController extends Zend_Controller_Action
 
             $natureDossier = $DBdossier->getDossierTypeNature($this->idDossier);
             $this->view->natureDossier = $natureDossier[0]['ID_NATURE'];
+            // FIXME Il faut en virer un des 2, ils font la même chose : Attention aux impacts dans les services et les vues
             $this->view->verrouDossier = $dossier['VERROU_DOSSIER'];
-
             $this->view->verrou = $dossier->VERROU_DOSSIER;
 
             $serviceDossier = new Service_Dossier();
             $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
+            $this->view->dossierSupprime = null !== $dossier['DATESUPPRESSION_DOSSIER'];
 
             // Définition des autorisations
             $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');

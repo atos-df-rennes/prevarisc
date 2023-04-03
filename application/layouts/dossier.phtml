@@ -136,7 +136,7 @@
 
         <?php if (!$verrou && $this->is_allowed_delete_dossier) : ?>
             <li>
-                <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER) : ?>
+                <?php if ($this->dossierSupprime) : ?>
                     <a id="retablissementDossier" href=<?= "/dossier/retablir-dossier/idDossier/". $this->idDossier ?>>
                         <i class="icon-ok icon-black"></i>
                         Rétablir le dossier
@@ -222,7 +222,7 @@ endif; ?>
     <h2 class='page-header'>
         <span style='color: #333333'><?= $this->libelleType ?></span>
 
-        <?php if(null !== $this->infosDossier->DATESUPPRESSION_DOSSIER): ?>
+        <?php if ($this->dossierSupprime): ?>
             <span class='label label-important'>
                 DOSSIER SUPPRIME
             </span>
