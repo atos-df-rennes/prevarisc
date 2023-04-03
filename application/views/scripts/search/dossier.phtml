@@ -212,7 +212,7 @@
     	// Si le champ de recherche est vide, on empêche l'envoi d'une recherche
     	$("input[name='num_doc_urba']").focus().keyup(function() {$('input[type="submit"]').attr('disabled', $(this).val() == '')}).keyup();
 
-	// Gestion des select et multiselect
+	    // Gestion des select et multiselect
         $(".chosen").chosen({
             allow_single_deselect: true
         });

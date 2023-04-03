@@ -57,6 +57,7 @@ foreach($this->informationsMembre as $val => $membre){
 
 			//Generation du segment villeDoss
 			$villeODF = $odf->setSegment('villeDoss');
+
 			foreach($this->listeCommunes as $val => $commune){
 				foreach($commune[1] as $comm => $info){
 					setVars($villeODF,'numMairie',$info["NUMEROADRESSE_UTILISATEURINFORMATIONS"]);
@@ -77,7 +78,7 @@ foreach($this->informationsMembre as $val => $membre){
 				$heureCommTab = explode(":",$this->heureDeb);
 				$heureComm = $heureCommTab[0].":".$heureCommTab[1];
 				setVars($villeODF,'heureDebutComm',$heureComm);
-                                
+
 				$heureDebut = '';
 				foreach($this->dossierComm as $val => $dossierInfos){
 					if(
@@ -100,7 +101,7 @@ foreach($this->informationsMembre as $val => $membre){
 					}
 				}
 				setVars($villeODF, 'heureDeb1erDossier', $heureDebut);
-                                
+
 				//ICI FOREACH SUR LES DOSSIERS DE LA COMMUNE
 				//Generation du segment pour l'affichage des différentes infos du dossier
 				$infosDoss = $villeODF->infosDoss;
@@ -248,7 +249,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
-	
+
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["CODEPOSTAL_COMMUNE"]." ";
@@ -292,6 +293,173 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     }
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+
+	// Gestion des effectifs & dégagements
+	$tabEffDegKV = array(
+		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
+		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
+		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
+		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
+	);
+
+	foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
+		setVars($segment, $nomChamp, $valeurChamp);
+	}
+
+    // Gestion des avis & dérogations
+    try {
+        $avisDerogations = $segment->avisDerogations;
+    } catch (Exception $e) {}
+
+    if (isset($avisDerogations)) {
+        if (!empty($dossierInfos["AVIS_DEROGATIONS"])) {
+            foreach ($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+                setVars($avisDerogations, 'type', $avisDerogation['TYPE']);
+                setVars($avisDerogations, 'titre', $avisDerogation['TITRE']);
+                setVars($avisDerogations, 'objet', $avisDerogation['OBJET']);
+                setVars($avisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+                setVars($avisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+                setVars($avisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+                setVars($avisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
+                setVars($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                setVars($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+                if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+                    $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                } else {
+                    $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                }
+
+                setVars($avisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+                $avisDerogations->merge();
+            }
+        } else {
+            setVars($avisDerogations, 'type', '');
+            setVars($avisDerogations, 'titre', '');
+            setVars($avisDerogations, 'objet', '');
+            setVars($avisDerogations, 'justification', '');
+            setVars($avisDerogations, 'articles_concernes', '');
+            setVars($avisDerogations, 'mesures_compensatoires_proposees', '');
+            setVars($avisDerogations, 'analyse_de_risque', '');
+            setVars($avisDerogations, 'avis', '');
+            setVars($avisDerogations, 'identifiantdossierleve', '');
+            setVars($avisDerogations, 'affichagehistorique', '');
+
+            $avisDerogations->merge();
+        }
+    }
+
+    // Gestion des formulaires personnalisés
+    $serviceUtils = new Service_Utils();
+
+    foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
+        if (is_array($formulaire['RUBRIQUES'])) {
+            // Permet d'avoir les informations unitairement
+            foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+                foreach ($rubrique['CHAMPS'] as $champ) {
+                    if ('Parent' === $champ['TYPE']) {
+                        if (1 === $champ['tableau']) {
+                            foreach ($champ['FILS'] as $idx => $champFils) {
+                                if(is_int($idx)){
+                                    setVars(
+                                        $segment,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM'],
+                                                $champ['NOM'],
+                                                $champFils['idx']
+                                            ]
+                                        ),
+                                        $champFils['NOM']
+                                    );
+                                }
+                            }
+
+                            $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                $formulaire['NOM_INTERNE'].' '.
+                                $rubrique['NOM'].' '.
+                                $champ['NOM'].' '.
+                                'valeurs'
+                            );
+
+                            try {
+                                $segmentTableau = $segment->$nomFusion;
+                            } catch (Exception $e) {}
+
+                            if (isset($segmentTableau)) {
+                                foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                    $idxCol = 0;
+
+                                    foreach ($ligne as $col) {
+                                        if ('Case à cocher' === $col['TYPE']) {
+                                            if (true === boolval($col['VALEUR'])) {
+                                                $col['VALEUR'] = 'Oui';
+                                            } else {
+                                                $col['VALEUR'] = 'Non';
+                                            }
+                                        }
+
+                                        setVars($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                        $idxCol++;
+                                    }
+
+                                    $segmentTableau->merge();
+                                }
+                            }
+
+                            $segmentTableau = null;
+                        } else {
+                            foreach ($champ['FILS'] as $champFils) {
+                                if ('Case à cocher' === $champFils['TYPE']) {
+                                    if (true === boolval($champFils['VALEUR'])) {
+                                        $champFils['VALEUR'] = 'Oui';
+                                    } else {
+                                        $champFils['VALEUR'] = 'Non';
+                                    }
+                                }
+
+                                setVars(
+                                    $segment,
+                                    $serviceUtils->getFullFusionName(
+                                        $formulaire['NOM_INTERNE'],
+                                        [
+                                            $rubrique['NOM'],
+                                            $champ['NOM'],
+                                            $champFils['NOM']
+                                        ]
+                                    ),
+                                    $champFils['VALEUR']
+                                );
+                            }
+                        }
+                    } else {
+                        // Définition du libellé pour les cases à cocher
+                        if ('Case à cocher' === $champ['TYPE']) {
+                            if (true === boolval($champ['VALEUR'])) {
+                                $champ['VALEUR'] = 'Oui';
+                            } else {
+                                $champ['VALEUR'] = 'Non';
+                            }
+                        }
+
+                        setVars(
+                            $segment,
+                            $serviceUtils->getFullFusionName(
+                                $formulaire['NOM_INTERNE'],
+                                [
+                                    $rubrique['NOM'],
+                                    $champ['NOM']
+                                ]
+                            ),
+                            $champ['VALEUR']
+                        );
+                    }
+                }
+            }
+        }
+    }
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {

@@ -402,7 +402,7 @@ ul.no_slide li.slide {
     border-left: none;
 }
 
-ul.recherche_liste li + li {
+ul.recherche_liste li + li, .voir-plus {
     margin-top: 3px;
 }
 
@@ -665,7 +665,10 @@ ul#gestionCommissionMenu li.active {
 	cursor:move;
 }
 
-.confirm-modal-hide {
+.confirm-modal-hide,
+#home .panel,
+#mail-no-bcc,
+.hidden {
 	display: none;
 }
 
@@ -839,10 +842,6 @@ text-decoration: none;
   border-left: none;
   padding: 12px 5px 12px 15px;
   color: #555555;
-}
-
-#home .panel {
-    display: none;
 }
 
 .dashboard .panel {
@@ -1205,10 +1204,6 @@ a.alerte-link:hover {
     font-size: 10px;
 }
 
-#mail-no-bcc {
-    display: none;
-}
-
 #mail-no-bcc p {
     font-style: italic;
 }
@@ -1237,6 +1232,17 @@ dl.champ_effectif_camping dd input {
     width: 139px;
 }
 
+.flexCol {
+    display: flex;
+    flex-flow: column;
+}
+
+.buttonOpenClose {
+    margin: auto;
+    width: fit-content;
+    margin-bottom: 1rem;
+}
+
 #dossierInfos form .btn,
 #ign-accordion .row-fluid {
     margin-bottom: 10px;
@@ -1254,4 +1260,8 @@ dl.champ_effectif_camping dd input {
 
 #ign-accordion select[name='FORMAT_COUCHECARTO'] {
     width: fit-content;
+}
+
+.radio-controls {
+    margin-left: 3rem;
 }

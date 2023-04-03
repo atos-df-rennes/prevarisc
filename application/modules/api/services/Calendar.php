@@ -221,6 +221,7 @@ class Api_Service_Calendar
                 $avis = 'Dossier avec avis differé';
             } elseif (1 === $ets['avis']) {
                 $avis = 'Favorable';
+
                 if (self::ID_GENRE_CELLULE === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
