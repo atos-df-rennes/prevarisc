@@ -7,7 +7,7 @@ on:
 
 jobs:
   validate-composer:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: shivammathur/setup-php@v2
@@ -19,7 +19,7 @@ jobs:
 
   php-cs-fixer:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: shivammathur/setup-php@v2
@@ -32,7 +32,7 @@ jobs:
 
   rector:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: shivammathur/setup-php@v2
@@ -45,7 +45,7 @@ jobs:
 
   var-dump-check:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: shivammathur/setup-php@v2
@@ -69,7 +69,7 @@ jobs:
 
   magical-number-check:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: shivammathur/setup-php@v2
