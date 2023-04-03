@@ -542,7 +542,7 @@
                     <privilege>alerte_classement</privilege>
                 </changement>
                 <retablir>
-                    <label>Rétablir un élémént supprimé</label>
+                    <label>Gestion des éléménts supprimés</label>
                     <controller>retablir</controller>
                 </retablir>
             </pages>
