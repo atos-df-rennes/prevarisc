@@ -433,21 +433,14 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
     public function getDeleteEtablissement(): array
     {
-        $select = $this->select()->distinct()->setIntegrityCheck(false)
+        $select = $this->select()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'])
-            ->joinLeft(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
-            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
-            ->distinct('e.ID_ETABLISSEMENT')
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
+            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
         ;
 
-        $res = [];
-
-        // TODO trouver une solution plus propre via la requete sql
-        foreach ($this->getAdapter()->fetchAll($select) as $row) {
-            $res[$row['ID_ETABLISSEMENT']] = $row;
-        }
-
-        return $res;
+        return $this->fetchAll($select)->toArray();
     }
 }
