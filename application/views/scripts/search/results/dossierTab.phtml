@@ -70,7 +70,7 @@
         <?php elseif($this->TYPE_DOSSIER == 5 && is_null($this->DATEREP_DOSSIER)) : ?>
         <span class="avis">Réponse à faire
             <?php if (!is_null($this->DATESDIS_DOSSIER)): ?>
-                (<?php echo $this->formatDateDiff($this->DATESDIS_DOSSIER) ?>)
+                (<?php echo $this->formatDateDiff(new DateTime($this->DATESDIS_DOSSIER)) ?>)
             <?php endif ?>
         </span>
         <?php elseif($this->ID_AVIS == 1) : ?>

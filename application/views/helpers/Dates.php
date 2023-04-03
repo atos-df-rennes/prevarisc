@@ -7,13 +7,8 @@ class View_Helper_Dates
      * On small intervals, you get minutes and seconds.
      * On big intervals, you get months and days.
      * Only the two biggest parts are used.
-     *
-     * @param DateTime                     $start
-     * @param \DateTime|\DateTimeImmutable $end
-     *
-     * @return string
      */
-    public function formatDateDiff(DateTimeInterface $start, DateTimeInterface $end = null)
+    public function formatDateDiff(DateTimeInterface $start, ?DateTimeInterface $end = null): string
     {
         if (null === $end) {
             $end = new DateTime();
