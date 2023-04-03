@@ -19,9 +19,10 @@
                     </td>
 
                     <td class='linkDisabled'>
-                        <?= $this->partial('search/results/etablissement.phtml', [
-                            $deletedElement
-                        ]) ?>
+                        <?= $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                        <?php if ('' !== $deletedElement['LIBELLE_COMMUNE']): ?>
+                            - <?= $deletedElement['LIBELLE_COMMUNE'] ?>
+                        <?php endif ?>
                     </td>
 
                     <td>

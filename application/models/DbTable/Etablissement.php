@@ -436,6 +436,8 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'])
             ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
+            ->join(['ea' => 'etablissementadresse'], 'e.ID_ETABLISSEMENT = ea.ID_ETABLISSEMENT', [])
+            ->join(['ac' => 'adressecommune'], 'ea.NUMINSEE_COMMUNE = ac.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE')
             ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
