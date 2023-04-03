@@ -20,8 +20,10 @@ class Service_Utils_Descriptif
                 if (1 === $champ['tableau']) {
                     foreach ($champ['FILS']['VALEURS'] as $valeursFils) {
                         foreach ($valeursFils as $valeur) {
-                            $tableauDeComparaison[$valeur['ID_VALEUR']] = $valeur;
-                            $tableauDeComparaison[$valeur['ID_VALEUR']]['CHECKED'] = false;
+                            if (null !== $valeur['ID_VALEUR']) {
+                                $tableauDeComparaison[$valeur['ID_VALEUR']] = $valeur;
+                                $tableauDeComparaison[$valeur['ID_VALEUR']]['CHECKED'] = false;
+                            }
                         }
                     }
                 }
