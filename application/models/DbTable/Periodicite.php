@@ -29,6 +29,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         if (!in_array($informations['ID_GENRE'], [2, 5])) {
             return null;
         }
+
         $type = self::ID_GENRE_ETABLISSEMENT == $informations['ID_GENRE'] ? $informations['ID_TYPE'] : $informations['ID_CLASSE'];
 
         return $this->gn4($informations['ID_CATEGORIE'], $type, $informations['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 1 : 0);

@@ -1,0 +1,41 @@
+<div class="muted">
+    <small>Nombre total d'éléments : <?= count($this->data) ?></small>
+</div>
+
+<?php if (count($this->data) > 0): ?>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Supprimé par</th>
+                <th>Nom de l'établissement</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->data as $deletedElement) : ?>
+                <tr>
+                    <td>
+                        <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
+                    </td>
+
+                    <td class='linkDisabled'>
+                        <?= $deletedElement['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
+                        <?php if ('' !== $deletedElement['LIBELLE_COMMUNE']): ?>
+                            - <?= $deletedElement['LIBELLE_COMMUNE'] ?>
+                        <?php endif ?>
+                    </td>
+
+                    <td>
+                        <a
+                            class='btn-small'
+                            href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>
+                        >
+                            <em class="icon-ok icon-black"></em>
+                            Rétablir l'établissement
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>
