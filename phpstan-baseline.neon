@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Model_DbTable_Groupe\\:\\:delete\\(\\) should return int but return statement is missing\\.$#"
+			count: 1
+			path: application/models/DbTable/Groupe.php
+
