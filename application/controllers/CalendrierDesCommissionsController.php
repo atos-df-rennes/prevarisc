@@ -729,9 +729,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                                 } else {
                                     $idCalendrierTab = $dbDateCommission->addDateCommLiee($varExplode1[1], $this->_getParam('D_'.$varExplode1[1]), $this->_getParam('F_'.$varExplode1[1]), $idOrigine, $this->_getParam('typeCom'), $this->_getParam('idComm'), $this->_getParam('libelle_comm'));
                                 }
-                            } //fin $premiereDate && $varExplode1[0]=='D'
 
-                            if ('D' == $varExplode1[0]) {
                                 $listeDates[] = [
                                     'id' => $idCalendrierTab,
                                     'title' => $libelle,
@@ -740,7 +738,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                                     'url' => 'calendrier-des-commissions/id/'.$idCalendrierTab,
                                     'className' => 'display-'.$typeComm,
                                 ];
-                            } //fin $varExplode1[0]=='D'
+                            } //fin $premiereDate && $varExplode1[0]=='D'
                         } //fin count = 3
                     } //fin count = 2
                 } //fin foreach
@@ -1420,7 +1418,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $commissionEvent = $dbDateCommission->find($idDateComm)->toArray();
 
-            if (null != $commissionEvent || !empty($commissionEvent)) {
+            if ([] !== $commissionEvent) {
                 $row = $commissionEvent[0];
                 $dateStart = str_replace('-', '', $row['DATE_COMMISSION']);
                 $dateStart .= 'T'.str_replace(':', '', $row['HEUREDEB_COMMISSION']);
