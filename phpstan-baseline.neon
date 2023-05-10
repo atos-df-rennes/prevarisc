@@ -1,7 +1,122 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Variable \\$idOrigine might not be defined\\.$#"
+			count: 1
+			path: application/controllers/CalendrierDesCommissionsController.php
+
+		-
+			message: "#^Variable \\$absQuorum in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$affectDossier in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$dateVisite in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$differeAvis in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$horsDelai in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$idDossier in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$npsp in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Variable \\$fieldNames might not be defined\\.$#"
+			count: 1
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: "#^Variable \\$fieldValues might not be defined\\.$#"
+			count: 1
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: "#^Variable \\$loopName might not be defined\\.$#"
+			count: 1
+			path: application/controllers/FormulaireController.php
+
+		-
+			message: "#^Variable \\$piece_jointe in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: application/controllers/PieceJointeController.php
+
+		-
+			message: "#^Variable \\$adresses in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 2
+			path: application/models/DbTable/Etablissement.php
+
+		-
 			message: "#^Method Model_DbTable_Groupe\\:\\:delete\\(\\) should return int but return statement is missing\\.$#"
 			count: 1
 			path: application/models/DbTable/Groupe.php
+
+		-
+			message: "#^Class Zend_Mail_Transport_Sendmail constructor invoked with 2 parameters, 0\\-1 required\\.$#"
+			count: 1
+			path: application/services/Mail.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadLink\\:\\:getIndent\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadLink.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadLink\\:\\:getSeparator\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadLink.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadLink\\:\\:getWhitespace\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadLink.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadScript\\:\\:getIndent\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadScript.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadScript\\:\\:getSeparator\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadScript.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyHeadScript\\:\\:getWhitespace\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyHeadScript.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyInlineScript\\:\\:getIndent\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyInlineScript.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyInlineScript\\:\\:getSeparator\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyInlineScript.php
+
+		-
+			message: "#^Call to an undefined method View_Helper_MinifyInlineScript\\:\\:getWhitespace\\(\\)\\.$#"
+			count: 1
+			path: application/views/helpers/MinifyInlineScript.php
 

@@ -7,3 +7,5 @@ parameters:
         - application
     scanFiles:
         - public/index.php
+    excludePaths:
+        - application/cache
