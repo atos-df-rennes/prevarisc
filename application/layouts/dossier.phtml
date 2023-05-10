@@ -334,13 +334,13 @@ endif ?>
                                 href=<?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 class='etab'
                             >
-                                <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS']?>
+                                <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
                                 <?php
                                     $nbAdresse = count($value['infosEtab']['adresses']);
 
                                     if($nbAdresse != 0): ?>
                                     (
-                                        <?php foreach($value['infosEtab']['adresses'] as $commune):?>
+                                        <?php foreach($value['infosEtab']['adresses'] as $commune): ?>
                                             <?= $commune['LIBELLE_COMMUNE'] ?>
 
                                             <?php if($nbAdresse != 1): ?>
@@ -349,7 +349,7 @@ endif ?>
                                             <?php endif ?>
                                         <?php endforeach ?>
                                     )
-                                <?php else :?>
+                                <?php else: ?>
                                     (adresse non renseignée)
                                 <?php endif ?>
 
@@ -359,16 +359,16 @@ endif ?>
                             </a>
 
                             <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null): ?>
-                                <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"):?>
+                                <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"): ?>
                                     <span class='avis F'><?= $value['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
-                                <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"):?>
+                                <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"): ?>
                                     <span class='avis D'><?=$value['avisExploitation']['LIBELLE_AVIS']?></span>&nbsp;
-                                <?php elseif($value['infosEtab']['presence_avis_differe']):?>
+                                <?php elseif($value['infosEtab']['presence_avis_differe']): ?>
                                     <span class='label label-info'>Avis différé</span>&nbsp;
-                                <?php else:?>
+                                <?php else: ?>
                                     <span class='avis'>Avis indisponible</span>&nbsp;
-                                <?php endif;?>
-                            <?php else : ?>
+                                <?php endif ?>
+                            <?php else: ?>
                                 <span class='avis'>Avis indisponible</span>&nbsp;
                             <?php endif ?>
 

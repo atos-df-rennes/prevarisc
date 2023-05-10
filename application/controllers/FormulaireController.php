@@ -240,6 +240,8 @@ class FormulaireController extends Zend_Controller_Action
                     $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
                 }
 
+                // FIXME Extraire la condition et mettre un foreach dedans
+                // pour pouvoir ajouter le code qu'il y a ligne 260
                 if ($this->serviceChamp->isTableau($champ)) {
                     $fieldNames[] = $this->serviceUtils->getFullFusionName(
                         $capsuleRubrique['NOM_INTERNE'],
