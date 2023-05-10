@@ -2,7 +2,7 @@
 
 class Service_Platau
 {
-    private const HEALTHCHECK_ENDPOINT = '/healthcheck';
+    private const HEALTHCHECK_ENDPOINT = 'healthcheck';
     private $platauServiceFilePath;
     private $platauConfigFilePath;
     private $pisteClientId;
@@ -17,8 +17,6 @@ class Service_Platau
 
     /**
      * Vérifie la santé de Plat'AU.
-     *
-     * @return null|false|string
      */
     public function executeHealthcheck(): bool
     {
@@ -46,7 +44,7 @@ class Service_Platau
         return true;
     }
 
-    private function getPisteCredentials()
+    private function getPisteCredentials(): array
     {
         $platauConfigContentAsString = file_get_contents($this->platauConfigFilePath);
         $decodedContent = json_decode($platauConfigContentAsString, true);
@@ -58,12 +56,16 @@ class Service_Platau
 
     /**
      * Récupère le token PISTE.
-     *
-     * @return null|bool|string
      */
-    private function requestPisteToken()
+    private function requestPisteToken(): ?string
     {
         $url = $this->getConstInFile($this->platauServiceFilePath, 'PISTE_ACCESS_TOKEN_URL');
+
+        if (null === $url) {
+            error_log("L'URL de PISTE n'a pas pu être récupérée correctement.");
+
+            return null;
+        }
 
         $curlHandle = curl_init();
         $options = [
@@ -74,12 +76,13 @@ class Service_Platau
         curl_setopt_array($curlHandle, $options);
 
         $data = curl_exec($curlHandle);
+        curl_close($curlHandle);
 
         if (false === $data) {
             error_log('Une erreur s\'est produite lors de la récupération du token PISTE.');
-        }
 
-        curl_close($curlHandle);
+            return null;
+        }
 
         $decodedData = json_decode($data, true);
 
@@ -103,7 +106,15 @@ class Service_Platau
      */
     private function requestPlatauHealthcheck(string $pisteToken)
     {
-        $url = $this->getConstInFile($this->platauServiceFilePath, 'PLATAU_URL').self::HEALTHCHECK_ENDPOINT;
+        $url = $this->getConstInFile($this->platauServiceFilePath, 'PLATAU_URL');
+
+        if (null === $url) {
+            error_log("L'URL de Plat'AU n'a pas pu être récupérée correctement.");
+
+            return false;
+        }
+
+        $url .= self::HEALTHCHECK_ENDPOINT;
 
         $curlHandle = curl_init();
         $options = [
@@ -117,12 +128,15 @@ class Service_Platau
         curl_setopt_array($curlHandle, $options);
 
         $data = curl_exec($curlHandle);
+        curl_close($curlHandle);
 
         if (false === $data) {
-            error_log('Une erreur s\'est produite lors du healthcheck Plat\'AU.');
+            error_log("Une erreur s'est produite lors du healthcheck Plat'AU.");
         }
 
-        curl_close($curlHandle);
+        if ('' === $data) {
+            error_log("Le healthcheck n'a rien renvoyé. Vérifiez que l'URL de Plat'AU est correctement renseignée (environnement, version).");
+        }
 
         return $data;
     }
