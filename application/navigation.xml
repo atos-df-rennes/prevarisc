@@ -40,6 +40,10 @@
                     <resource>gestion_parametrages</resource>
                     <privilege>admin</privilege>
                 </index>
+                <retablir>
+                    <label>Gestion des éléménts supprimés</label>
+                    <controller>retablir</controller>
+                </retablir>
                 <users>
                     <label>Gestion des utilisateurs</label>
                     <controller>users</controller>
@@ -541,6 +545,54 @@
                     <privilege>alerte_avis</privilege>
                     <privilege>alerte_classement</privilege>
                 </changement>
+                <formulaire>
+                    <label>Formulaires</label>
+                    <controller>formulaire</controller>
+                    <resource>gestion_parametrages</resource>
+                    <privilege>gestion_formulaires</privilege>
+                    <pages>
+                        <index>
+                            <label>Index</label>
+                            <controller>formulaire</controller>
+                            <action>index</action>
+                        </index>
+                        <add-rubrique>
+                            <label>Ajout d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>add-rubrique</action>
+                        </add-rubrique>
+                        <edit-rubrique>
+                            <label>Édition d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>edit-rubrique</action>
+                        </edit-rubrique>
+                        <delete-rubrique>
+                            <label>Suppression d'une rubrique</label>
+                            <controller>formulaire</controller>
+                            <action>delete-rubrique</action>
+                        </delete-rubrique>
+                        <add-champ>
+                            <label>Ajout d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>add-champ</action>
+                        </add-champ>
+                        <edit-champ>
+                            <label>Édition d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>edit-champ</action>
+                        </edit-champ>
+                        <delete-champ>
+                            <label>Suppression d'un champ</label>
+                            <controller>formulaire</controller>
+                            <action>delete-champ</action>
+                        </delete-champ>
+                        <delete-valeur-liste>
+                            <label>Suppression d'une valeur d'une liste</label>
+                            <controller>formulaire</controller>
+                            <action>delete-valeur-liste</action>
+                        </delete-valeur-liste>
+                    </pages>
+                </formulaire>
             </pages>
         </admin>
 
@@ -727,10 +779,6 @@
                  <delete>
                     <controller>dossier</controller>
                     <action>delete</action>
-                    <!--
-                    <resource>suppression</resource>
-                    <privilege>delete_dossier</privilege>
-                    -->
                 </delete>
                 <verrou>
                     <controller>dossier</controller>
@@ -977,7 +1025,43 @@
                     <action>prescriptionchangepos</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionchangepos>
+                <avis-et-derogations>
+                    <label>Avis et dérogations</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations</action>
+                </avis-et-derogations>
+                <avis-et-derogations-edit>
+                    <label>Édition des avis et dérogations</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-edit</action>
+                </avis-et-derogations-edit>
+                <avis-et-derogations-delete>
+                    <label>Suppression d un avis derogation</label>
+                    <controller>dossier</controller>
+                    <action>avis-et-derogations-delete</action>
+                </avis-et-derogations-delete>
+                <effectifs-degagements-dossier>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
+                    <action>effectifs-degagements-dossier</action>
+                </effectifs-degagements-dossier>
+                <effectifs-degagements-dossier-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>dossier</controller>
+                    <action>effectifs-degagements-dossier-edit</action>
+                </effectifs-degagements-dossier-edit>
+                <verifications-techniques>
+                    <label>Vérifications techniques</label>
+                    <controller>dossier</controller>
+                    <action>verifications-techniques</action>
+                </verifications-techniques>
+                <edit-verifications-techniques>
+                    <label>Edition vérifications techniques</label>
+                    <controller>dossier</controller>
+                    <action>edit-verifications-techniques</action>
+                </edit-verifications-techniques>
             </pages>
+
         </dossier>
 
         <!-- Gestion des erreurs -->
@@ -1000,7 +1084,7 @@
                 </index>
                 <delete>
                     <controller>etablissement</controller>
-                    <action>delete</action> 
+                    <action>delete</action>
                     <resource>suppression</resource>
                     <privilege>delete_etablissement</privilege>
                 </delete>
@@ -1017,6 +1101,10 @@
                     <resource>creations</resource>
                     <privilege>add_etablissement</privilege>
                 </add>
+                <get-dossiers-after-n>
+                    <controller>etablissement</controller>
+                    <action>getDossiersAfterN</action>
+                </get-dossiers-after-n>
                 <descriptif>
                     <label>Descriptifs</label>
                     <controller>etablissement</controller>
@@ -1119,6 +1207,27 @@
                     <action>alerteform</action>
                     <privilege>view_ets</privilege>
                 </alerteform>
+                <effectifs-degagements-etablissement>
+                    <label>Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-degagements-etablissement</action>
+                    <resource>effectifs_degagements</resource>
+                    <privilege>effectifs_degagements_ets</privilege>
+                </effectifs-degagements-etablissement>
+                <effectifs-degagements-etablissement-edit>
+                    <label>Modification Effectifs et Dégagements</label>
+                    <controller>etablissement</controller>
+                    <action>effectifs-degagements-etablissement-edit</action>
+                    <resource>effectifs_degagements</resource>
+                    <privilege>effectifs_degagements_ets</privilege>
+                </effectifs-degagements-etablissement-edit>
+                 <avis-derogations-etablissement>
+                    <label>Avis et dérogations</label>
+                    <controller>etablissement</controller>
+                    <action>avis-derogations-etablissement</action>
+                    <resource>avisderogations</resource>
+                    <privilege>avis_derogations</privilege>
+                </avis-derogations-etablissement>
             </pages>
         </etablissement>
 

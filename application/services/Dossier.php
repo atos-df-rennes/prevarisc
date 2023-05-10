@@ -52,6 +52,25 @@ class Service_Dossier
     }
 
     /**
+     * Similaire à la fonction getAllPJ() mais permet d'avoir l'ID_PLATAU pour connaître le chemin où sont sauvegardées les PJs.
+     */
+    public function getAllPiecesJointes(int $idDossier): array
+    {
+        $DBused = new Model_DbTable_PieceJointe();
+
+        $select = $DBused->select()
+            ->setIntegrityCheck(false)
+            ->from('piecejointe')
+            ->join('dossierpj', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', [])
+            ->join('dossier', 'dossierpj.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'ID_PLATAU'])
+            ->where('dossier.ID_DOSSIER = ?', $idDossier)
+            ->order('piecejointe.ID_PIECEJOINTE DESC')
+        ;
+
+        return $DBused->fetchAll($select)->toArray();
+    }
+
+    /**
      * Ajout d'une pièce jointe pour un dossier.
      *
      * @param int    $id_dossier
@@ -739,6 +758,7 @@ class Service_Dossier
     public function getDateDossier($dossier): Zend_Date
     {
         $date = $dossier->DATEINSERT_DOSSIER;
+
         if (1 == $dossier->TYPE_DOSSIER || self::ID_DOSSIERTYPE_GRPVISITE == $dossier->TYPE_DOSSIER) {
             if (null != $dossier->DATECOMM_DOSSIER && '' != $dossier->DATECOMM_DOSSIER) {
                 $date = $dossier->DATECOMM_DOSSIER;
@@ -855,7 +875,8 @@ class Service_Dossier
         }
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
-
+            $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+            $dossier->DELETED_BY = $idDeleteBy;
             //suppression de la date de passage en commission
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
             $dbAffectDossier->deleteDateDossierAffect($idDossier);
@@ -881,5 +902,23 @@ class Service_Dossier
         $DB_prev = new Model_DbTable_DossierPreventionniste();
 
         return $DB_prev->getPrevDossier($idDossier);
+    }
+
+    public function hasAvisDerogation(int $idDossier): bool
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $result = $modelDossier->getListAvisDerogationsFromDossier($idDossier);
+
+        return !empty($result);
+    }
+
+    public function retablirDossier($idDossier)
+    {
+        $DB_dossier = new Model_DbTable_Dossier();
+        $dossier = $DB_dossier->find($idDossier)->current();
+        $dossier->DATESUPPRESSION_DOSSIER = null;
+        $dossier->DELETED_BY = null;
+        $dossier->save();
     }
 }

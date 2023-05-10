@@ -48,6 +48,7 @@ $(document).ready(function() {
                 dialogAlerte.html(msg);
                 tinymce.init({
                     selector: '.tinyarea',
+                    language: 'fr_FR',
                     height: 220,
                     menubar: false,
                     statusbar: false,
@@ -547,9 +548,9 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
             // Boite de dialogue en ajoutant en callback le traitement du formulaire
             var nomEtab = "";
             if ($("#infosEtabs > .etab").length > 0) {
-                nomEtab = $("#infosEtabs > .etab").text().trim();
+                nomEtab = document.querySelector('#infosEtabs > .etab').innerText.trim();
             } else if ($("#infosEtablissement > .etab").length > 0) {
-                nomEtab = $("#infosEtablissement > .etab").text().trim();
+                nomEtab = document.querySelector('#infosEtablissement > .etab').innerText.trim();
             }
             nomEtab = nomEtab.replace('&nbsp;', ' ');
             nomEtab = nomEtab.replace("'", " ");

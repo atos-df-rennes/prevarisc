@@ -1,19 +1,9 @@
-<?php if ($this->error): ?>
-    <ul class='unstyled'>
-        <li class='alert alert-error'>
-            <button class='close' data-dismiss='alert'>&times;</button>
-            <strong class='alert-error'><?= $this->error['title'] ?></strong>
-            <?= $this->error['message'] ?>
-        </li>
+<?php if (count($this->data) > 0): ?>
+    <ul class='recherche_liste unstyled no_slide scroll-bloc-medium'>
+        <?php echo $this->partialLoop('search/results/dossier.phtml', $this->data)?>
     </ul>
 <?php else: ?>
-    <?php if (count($this->data) > 0): ?>
-        <ul class='recherche_liste unstyled no_slide scroll-bloc-medium'>
-            <?php echo $this->partialLoop('search/results/dossier.phtml', $this->data)?>
-        </ul>
-    <?php else: ?>
-        <small class='muted'>Aucun dossier.</small>
-    <?php endif ?>
+    <small class='muted'>Aucun dossier.</small>
 <?php endif ?>
 <script type="text/javascript">
     $(document).ready(function() {

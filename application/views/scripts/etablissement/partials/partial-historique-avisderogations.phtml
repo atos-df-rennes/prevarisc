@@ -1,0 +1,32 @@
+<?php if (empty($this->array)) : ?>
+    <p class='muted'>Pas d'historique disponible.</p>
+<?php else : ?>
+    <table class='table table-bordered table-hover'>
+        <thead>
+            <tr>
+                <th style='width: 250px' >Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->array as $item) : ?>
+            <tr>
+                <td>
+                    <?php if (null !== $item["debut"]): ?>
+                        Du <?= $item["debut"] ?>
+                    <?php else: ?>
+                        <?php if ($item['type'] === 1): ?>
+                            Date de commission non renseignée
+                        <?php elseif (in_array($item['type'], [2, 3])): ?>
+                            Date de visite non renseignée
+                        <?php endif ?>
+                    <?php endif ?>
+                </td>
+                <td>
+                    <a href="<?= $item['url'] ?>" target="_blank" title="Ouvrir <?= $item['valeur'] ?> (nouvel onglet)"><?= $item["valeur"] ?></a>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>

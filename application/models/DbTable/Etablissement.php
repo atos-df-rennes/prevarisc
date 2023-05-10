@@ -430,4 +430,66 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select);
     }
+
+    public function getEffectifEtDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], [])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'e.ID_ETABLISSEMENT = eed.ID_ETABLISSEMENT', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['e' => 'etablissement'], 'eed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des avis et derogations d un etablissement.
+     *
+     * @param mixed $idEtablissement
+     */
+    public function getListAvisDerogationsEtablissement($idEtablissement)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['ID_DOSSIER'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->join(['ad' => 'avisderogations'], 'd.ID_DOSSIER = ad.ID_DOSSIER')
+            ->join(['d2' => 'dossier'], 'd2.ID_DOSSIER = ad.ID_DOSSIER_LIE', ['TYPE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER'])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+            ->where('ad.DISPLAY_HISTORIQUE = ?', 1)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getDeleteEtablissement(): array
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
+            ->join(['ea' => 'etablissementadresse'], 'e.ID_ETABLISSEMENT = ea.ID_ETABLISSEMENT', [])
+            ->join(['ac' => 'adressecommune'], 'ea.NUMINSEE_COMMUNE = ac.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE')
+            ->join('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
 }

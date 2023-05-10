@@ -90,7 +90,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
                     $minStyles->rel = 'stylesheet';
                     $minStyles->type = 'text/css';
                     $minStyles->href = $this->getMinUrl().'?f='.implode(',', $styles);
-                    if ('' !== $trimmedBaseUrl && '0' !== $trimmedBaseUrl) {
+                    if ('' !== $trimmedBaseUrl && null !== $trimmedBaseUrl) {
                         $minStyles->href .= '&b='.$trimmedBaseUrl;
                     }
                     if ($this->_version) {

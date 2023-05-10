@@ -1,0 +1,26 @@
+<?php foreach ($this->colonnesChamp['VALEURS'] as $colonneChamp) : ?>
+    <tr class='<?= $this->hidden ? 'hidden' : '' ?>' >
+        <?php if ($this->canWrite) :?>
+            <td class='tdMove'>
+                <i class="icon-move"></i>
+            </td>
+        <?php endif ?>
+        <?php foreach ($colonneChamp as $valeur):?>
+            <td>
+                <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                        'champ' => $valeur,
+                        'champsvaleurliste' => $this->champsvaleurliste,
+                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false,
+                        'idxTableau' => $valeur['IDX_VALEUR'],
+                        'idParent' => $valeur['ID_PARENT']
+                    ]);
+                ?>
+            </td>
+        <?php endforeach ?>
+        <?php if ($this->canWrite) :?>
+            <td>
+                <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+            </td>
+        <?php endif?>
+    </tr>
+<?php endforeach ?>
