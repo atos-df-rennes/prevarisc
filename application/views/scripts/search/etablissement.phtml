@@ -1,7 +1,6 @@
 <!-- Onglets permettant de selectionner les entités à rechercher -->
 <h2 class="page-header">Etablissements</h2>
 <form method='get'>
-
 	<div class='navbar-form form-search well well-small' style='margin-bottom: 5px;'>
         <div class="input-append pull-left">
             <input type="text" name='label' class="input-xlarge search-query" placeholder="Libellé de l'établissement ou son #ID ..." value="<?php if(isset($_GET["label"])) echo htmlentities($_GET["label"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
@@ -35,93 +34,98 @@
 	</div>
 
     <div id="filterContainer" class="well span12" style="margin-left: 0;">
-        <div>
-            <select name='statuts[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_statut as $statut ) : ?>
+        <div class="row-fluid">
+            <div>
+                <select name='statuts[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_statut as $statut ) : ?>
                         <option value='<?php echo $statut["ID_STATUT"] ?>' <?php if(isset($_GET["statuts"]) && in_array($statut["ID_STATUT"], (array) $_GET["statuts"])) echo 'selected' ?>><?php echo $statut["LIBELLE_STATUT"] ?></option>
+                    <?php endforeach ?>
+                </select>
+                <select name='presences_local_sommeil[]' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='true' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('true', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Avec</option>
+                    <option value='false' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('false', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Sans</option>
+                </select>
+                <select name='avis[]' multiple onchange="masquerBoutonExportCalc()">
+                    <option value='true' <?php if(isset($_GET["avis"]) && in_array('true', (array) $_GET["avis"])) echo 'selected' ?>>Favorable</option>
+                    <option value='false' <?php if(isset($_GET["avis"]) && in_array('false', (array) $_GET["avis"])) echo 'selected' ?>>Défavorable</option>
+                </select>
+                <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_commission as $commission ) : ?>
+                        <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div id='criteres_plus' style='margin-top: 4px;'>
+                <select name='genres[]' multiple onchange="masquerBoutonExportCalc()">
+                <?php foreach( $this->DB_genre as $genre ) : ?>
+                        <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if(array_key_exists('genres', $_GET) && in_array($genre["ID_GENRE"], (array) $_GET["genres"])) echo 'selected' ?>><?php echo $genre["LIBELLE_GENRE"] ?></option>
                 <?php endforeach ?>
-            </select>
-
-            <select name='presences_local_sommeil[]' multiple onchange="masquerBoutonExportCalc()">
-                <option value='true' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('true', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Avec</option>
-                <option value='false' <?php if(isset($_GET["presences_local_sommeil"]) && in_array('false', (array) $_GET["presences_local_sommeil"])) echo 'selected' ?>>Sans</option>
-            </select>
-
-            <select name='avis[]' multiple onchange="masquerBoutonExportCalc()">
-                <option value='true' <?php if(isset($_GET["avis"]) && in_array('true', (array) $_GET["avis"])) echo 'selected' ?>>Favorable</option>
-                <option value='false' <?php if(isset($_GET["avis"]) && in_array('false', (array) $_GET["avis"])) echo 'selected' ?>>Défavorable</option>
-            </select>
-
-            <select name='commissions[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_commission as $commission ) : ?>
-                    <option value='<?php echo $commission["ID_COMMISSION"] ?>' <?php if(isset($_GET["commissions"]) && in_array($commission["ID_COMMISSION"], (array) $_GET["commissions"])) echo 'selected' ?>><?php echo $commission["LIBELLE_COMMISSION"] ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-
-        <div id='criteres_plus' style='margin-top: 4px;'>
-            <select name='genres[]' multiple onchange="masquerBoutonExportCalc()">
-            <?php foreach( $this->DB_genre as $genre ) : ?>
-                    <option value='<?php echo $genre["ID_GENRE"] ?>' <?php if(array_key_exists('genres', $_GET) && in_array($genre["ID_GENRE"], (array) $_GET["genres"])) echo 'selected' ?>><?php echo $genre["LIBELLE_GENRE"] ?></option>
-            <?php endforeach ?>
-            </select>
-
-            <span id='categorie_span' class='hide'>
-                <select name='categories[]' multiple onchange="masquerBoutonExportCalc()">
-                    <?php foreach( $this->DB_categorie as $categorie ) : ?>
-                        <option value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if(array_key_exists('categories', $_GET) && in_array($categorie["ID_CATEGORIE"], (array) $_GET["categories"])) echo 'selected' ?>><?php echo $categorie["LIBELLE_CATEGORIE"] ?></option>
-                    <?php endforeach ?>
                 </select>
-            </span>
-
-            <span id='classe_span' class='hide' >
-                <select name='classes[]' multiple onchange="masquerBoutonExportCalc()">
-                    <?php foreach( $this->DB_classe as $classe ) : ?>
-                        <option value='<?php echo $classe["ID_CLASSE"] ?>' <?php if(array_key_exists('classes', $_GET) && in_array($classe["ID_CLASSE"], (array) $_GET["classes"])) echo 'selected' ?>><?php echo $classe["LIBELLE_CLASSE"] ?></option>
-                    <?php endforeach ?>
-                </select>
-            </span>
-
-            <span id='famille_span' class='hide'>
-                <select name='familles[]' multiple onchange="masquerBoutonExportCalc()">
-                    <?php foreach( $this->DB_famille as $famille ) : ?>
-                                <option value='<?php echo $famille["ID_FAMILLE"] ?>' <?php if(array_key_exists('familles', $_GET) && in_array($famille["ID_FAMILLE"], (array) $_GET["familles"])) echo 'selected' ?>><?php echo $famille["LIBELLE_FAMILLE"] ?></option>
-                    <?php endforeach ?>
-                </select>
-            </span>
-
-            <span id='type_span' class='hide'>
-                <select name='types_activites[]' multiple onchange="masquerBoutonExportCalc()">
-                    <?php foreach( $this->DB_typeactivite as $type ) : ?>
-						<optgroup label="<?php echo $type["LIBELLE_TYPE"] ?>">
-	                        <option value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if(array_key_exists('types_activites', $_GET) && in_array($type["ID_TYPEACTIVITE"], (array) $_GET["types_activites"])) echo 'selected' ?>><?php echo $type["LIBELLE_TYPE"] . ' - ' . $type["LIBELLE_ACTIVITE"] ?></option>
-						</optgroup>
-                    <?php endforeach ?>
-                </select>
-            </span>
-        </div>
-
-        <div style='margin-top: 4px;'>
-            <select name='groupements_territoriaux[]' multiple onchange="masquerBoutonExportCalc()">
-                <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
-                    <?php $selected = false; ?>                    
-                    <?php if ($this->user['groupements'] != null): ?>
-                        <?php foreach($this->user['groupements'] as $user_groupement): ?>
-                            <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
-                                <?php $selected = true; ?>
-                                <?php break; ?>
-                            <?php endif ?>
+                <span id='categorie_span' class='hide'>
+                    <select name='categories[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_categorie as $categorie ) : ?>
+                            <option value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if(array_key_exists('categories', $_GET) && in_array($categorie["ID_CATEGORIE"], (array) $_GET["categories"])) echo 'selected' ?>><?php echo $categorie["LIBELLE_CATEGORIE"] ?></option>
                         <?php endforeach ?>
-                    <?php endif ?>
-                    <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
-                        <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
-                    </option>
+                    </select>
+                </span>
+                <span id='classe_span' class='hide' >
+                    <select name='classes[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_classe as $classe ) : ?>
+                            <option value='<?php echo $classe["ID_CLASSE"] ?>' <?php if(array_key_exists('classes', $_GET) && in_array($classe["ID_CLASSE"], (array) $_GET["classes"])) echo 'selected' ?>><?php echo $classe["LIBELLE_CLASSE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='famille_span' class='hide'>
+                    <select name='familles[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_famille as $famille ) : ?>
+                                    <option value='<?php echo $famille["ID_FAMILLE"] ?>' <?php if(array_key_exists('familles', $_GET) && in_array($famille["ID_FAMILLE"], (array) $_GET["familles"])) echo 'selected' ?>><?php echo $famille["LIBELLE_FAMILLE"] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+                <span id='type_span' class='hide'>
+                    <select name='types_activites[]' multiple onchange="masquerBoutonExportCalc()">
+                        <?php foreach( $this->DB_typeactivite as $type ) : ?>
+                                    <optgroup label="<?php echo $type["LIBELLE_TYPE"] ?>">
+                                        <option value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if(array_key_exists('types_activites', $_GET) && in_array($type["ID_TYPEACTIVITE"], (array) $_GET["types_activites"])) echo 'selected' ?>><?php echo $type["LIBELLE_TYPE"] . ' - ' . $type["LIBELLE_ACTIVITE"] ?></option>
+                                    </optgroup>
+                        <?php endforeach ?>
+                    </select>
+                </span>
+            </div>
+
+            <div style='margin-top: 4px;'>
+                <select name='groupements_territoriaux[]' multiple onchange="masquerBoutonExportCalc()">
+                    <?php foreach( $this->DB_groupementterritorial as $groupement ) : ?>
+                        <?php $selected = false; ?>
+                        <?php if ($this->user['groupements'] != null): ?>
+                            <?php foreach($this->user['groupements'] as $user_groupement): ?>
+                                <?php if ($groupement['ID_GROUPEMENT'] == $user_groupement['ID_GROUPEMENT']): ?>
+                                    <?php $selected = true; ?>
+                                    <?php break; ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                        <option value='<?php echo $groupement["ID_GROUPEMENT"] ?>' <?php if((isset($_GET["groupements_territoriaux"]) && in_array($groupement["ID_GROUPEMENT"], (array) $_GET["groupements_territoriaux"])) || $selected) echo 'selected' ?>>
+                            <?php echo $groupement["LIBELLE_GROUPEMENT"] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="span12"></div>
+
+        <div class="row-fluid">
+            <select name="preventionniste" class='chosen' data-placeholder='Sélectionnez un préventionniste' onchange="masquerBoutonExportCalc()">
+                <option value=''></option>
+                <?php foreach($this->liste_prev as $prev) : ?>
+                    <option value='<?php echo $prev["ID_PREVENTIONNISTE"] ?>' <?php if(isset($_GET["preventionniste"]) && $prev["ID_PREVENTIONNISTE"] == $_GET["preventionniste"]) echo 'selected' ?>><?php echo $prev["NOM_UTILISATEURINFORMATIONS"]." ".$prev["PRENOM_UTILISATEURINFORMATIONS"] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
     </div>
 
-<hr/>
+    <hr/>
 
 <?php if( count($this->results) > 0 ) : ?>
     <div style='display:inline-block;width: 100%;' >
@@ -201,7 +205,7 @@
 		$("select[name='familles[]']").multiselect({header: false, noneSelectedText: "Toutes les familles"});
 		$("select[name='types_activites[]']").multiselect({header: false, noneSelectedText: "Tous les types d'activités"});
 		$("select[name='avis[]']").multiselect({header: false, noneSelectedText: "Tous les avis"});
-		$("select[name='presences_local_sommeil[]']").multiselect({header: false, noneSelectedText: "Qu'importe la présence de local à sommeil", minWidth: 300});
+        $("select[name='presences_local_sommeil[]']").multiselect({header: false, noneSelectedText: "Qu'importe la présence de local à sommeil", minWidth: 300});
         $("select[name='commissions[]']").multiselect({header: false, noneSelectedText: "Toutes les commissions"});
         $("select[name='groupements_territoriaux[]']").multiselect({header: false, noneSelectedText: "Tous les groupements territoriaux", minWidth: 300});
 
@@ -322,6 +326,11 @@
             $('form#zone_de_recherche_modal').modal('hide');
         });
 	});
+
+    // Gestion des select et multiselect
+    $(".chosen").chosen({
+        allow_single_deselect: true
+    });
 
     function masquerBoutonExportCalc ()
     {
