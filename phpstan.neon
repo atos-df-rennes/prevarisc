@@ -1,0 +1,11 @@
+includes:
+	- phpstan-baseline.neon
+
+parameters:
+    level: 1
+    paths:
+        - application
+    scanFiles:
+        - public/index.php
+    excludePaths:
+        - application/cache

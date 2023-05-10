@@ -293,11 +293,11 @@ class Api_Service_Calendar
                 $corpus .= sprintf(
                     'Coordonnées du service instructeur :%s%s%s',
                     self::LF,
-                    $this->formatUtilisateurInformations($serviceInstruct)
-                    .self::LF.self::LF
+                    $this->formatUtilisateurInformations($serviceInstruct),
+                    self::LF.self::LF
                 );
             } else {
-                $corpus .= 'Aucune coordonées pour le service instructeur.'.self::LF.self::LF;
+                $corpus .= 'Aucunes coordonées pour le service instructeur.'.self::LF.self::LF;
             }
         }
 

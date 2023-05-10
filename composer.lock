@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcb22226c685be215bb13e68fddf2c56",
+    "content-hash": "2dad756b618f0f198c79f9193c060d07",
     "packages": [
         {
             "name": "cybermonde/odtphp",
@@ -1599,6 +1599,10 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.4.10"
+            },
             "funding": [
                 {
                     "url": "https://github.com/ondrejmirtes",
@@ -3787,5 +3791,5 @@
         "php": "^7.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }
