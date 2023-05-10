@@ -264,7 +264,7 @@ class Service_Search
      * @param null|mixed   $number
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
-     * @param null|int     $preventionniste
+     * @param null|mixed   $preventionniste
      *
      * @return array
      */
