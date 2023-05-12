@@ -41,21 +41,6 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Variable \\$fieldNames might not be defined\\.$#"
-			count: 1
-			path: application/controllers/FormulaireController.php
-
-		-
-			message: "#^Variable \\$fieldValues might not be defined\\.$#"
-			count: 1
-			path: application/controllers/FormulaireController.php
-
-		-
-			message: "#^Variable \\$loopName might not be defined\\.$#"
-			count: 1
-			path: application/controllers/FormulaireController.php
-
-		-
 			message: "#^Variable \\$piece_jointe in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: application/controllers/PieceJointeController.php

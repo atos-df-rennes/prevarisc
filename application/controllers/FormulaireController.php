@@ -217,8 +217,18 @@ class FormulaireController extends Zend_Controller_Action
         $champFusionValue = null;
 
         if ('Parent' === $champType['TYPE']) {
+            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
+
+            foreach ($listChamps as &$listChamp) {
+                if ('Liste' === $listChamp['TYPE']) {
+                    $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
+                }
+            }
+
             if ($this->serviceChamp->isTableau($champ)) {
                 $fieldNames = [];
+                $fieldValues = [];
+
                 $loopName = $this->serviceUtils->getFusionNameMagicalCase(
                     implode(
                         ' ',
@@ -230,19 +240,8 @@ class FormulaireController extends Zend_Controller_Action
                         ]
                     )
                 );
-                $fieldValues = [];
-            }
 
-            $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
-
-            foreach ($listChamps as &$listChamp) {
-                if ('Liste' === $listChamp['TYPE']) {
-                    $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
-                }
-
-                // FIXME Extraire la condition et mettre un foreach dedans
-                // pour pouvoir ajouter le code qu'il y a ligne 260
-                if ($this->serviceChamp->isTableau($champ)) {
+                foreach ($listChamps as &$listChamp) {
                     $fieldNames[] = $this->serviceUtils->getFullFusionName(
                         $capsuleRubrique['NOM_INTERNE'],
                         [
@@ -254,9 +253,7 @@ class FormulaireController extends Zend_Controller_Action
 
                     $fieldValues[] = sprintf('valeur%d', $listChamp['idx']);
                 }
-            }
 
-            if ($this->serviceChamp->isTableau($champ)) {
                 $champFusionValue = [
                     'fieldNames' => $fieldNames,
                     'loopName' => $loopName,
