@@ -1,0 +1,55 @@
+form #save-element {
+    margin: 0;
+}
+
+.alert.alert-info {
+    color: black;
+}
+.champFusionTable {
+    margin: 0;
+    border-color: black;
+    word-wrap: anywhere;
+}
+.champFusionTable td {
+    border-color: black;
+}
+
+.form-inline input:not([type="submit"]),
+.form-inline select {
+    margin-bottom: 10px;
+}
+
+label.optional {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+div[id^='saved-rubriques-'] a {
+    display: block;
+}
+
+.infos-rubrique,
+.infos-champ {
+	border: 1px dotted #818183;
+	padding: 20px 20px 20px 20px;
+	margin-bottom: 20px;
+}
+
+.infos-champ #div-list-value {
+    display: none;
+}
+
+#default-display,
+#actions,
+.table td {
+    vertical-align: middle;
+}
+
+td.tdMove {
+    text-align: center;
+}
+
+#actions a {
+    padding: 0.5rem;
+    text-decoration: none;
+}
