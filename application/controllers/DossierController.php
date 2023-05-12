@@ -391,11 +391,11 @@ class DossierController extends Zend_Controller_Action
             //Debut mise en place avec service (voir pour récup le type)
             $afficheAvis = 1;
             if (
-                true === $absQuorum
-                || true === $horsDelai
-                || true === $npsp
-                || true === $differeAvis
-                || true === $incompletDossier
+                $absQuorum
+                || $horsDelai
+                || $npsp
+                || $differeAvis
+                || $incompletDossier
             ) {
                 $afficheAvis = 0;
             }
