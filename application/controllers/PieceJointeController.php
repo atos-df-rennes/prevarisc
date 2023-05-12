@@ -67,8 +67,8 @@ class PieceJointeController extends Zend_Controller_Action
         }
 
         if (
-            !$piece_jointe
-            || empty($piece_jointe)
+            null === $piece_jointe
+            || [] === $piece_jointe
         ) {
             throw new Zend_Controller_Action_Exception('Cannot find piece jointe for id '.$this->_request->idpj, 404);
         }
