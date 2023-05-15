@@ -165,16 +165,12 @@ class Service_Platau
     private function setCurlProxyOptions(array $options): array
     {
         if (true === filter_var(getenv('PREVARISC_PROXY_ENABLED'), FILTER_VALIDATE_BOOL)) {
-            $options = array_merge($options, [
-                CURLOPT_PROXYTYPE => getenv('PREVARISC_PROXY_PROTOCOL'),
-                CURLOPT_PROXYPORT => getenv('PREVARISC_PROXY_PORT'),
-                CURLOPT_PROXY => getenv('PREVARISC_PROXY_HOST'),
-            ]);
+            $options[CURLOPT_PROXYTYPE] = getenv('PREVARISC_PROXY_PROTOCOL');
+            $options[CURLOPT_PROXYPORT] = getenv('PREVARISC_PROXY_PORT');
+            $options[CURLOPT_PROXY] = getenv('PREVARISC_PROXY_HOST');
 
             if (getenv('PREVARISC_PROXY_USERNAME')) {
-                $options = array_merge($options, [
-                    CURLOPT_PROXYUSERPWD => getenv('PREVARISC_PROXY_USERNAME').':'.getenv('PREVARISC_PROXY_PASSWORD'),
-                ]);
+                $options[CURLOPT_PROXYUSERPWD] = getenv('PREVARISC_PROXY_USERNAME').':'.getenv('PREVARISC_PROXY_PASSWORD');
             }
         }
 
