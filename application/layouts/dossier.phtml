@@ -159,9 +159,9 @@ endif; ?>
 <?php if($this->action == "add" || $this->do == "new" ): ?>
     <h2 class='page-header'>Création d'un nouveau dossier</h2>
     <h3 class='page-header'>
-        <div style='margin:10px;' id='infosEtablissement'>
+        <div style='margin:10px; line-height: 20px;' id='infosEtablissement'>
             <?php if($this->enteteEtab) : ?>
-                Etablissement(s) concerné(s) : &nbsp;
+                Etablissement(s) concerné(s) :
                 <a
                     href= <?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT']?>
                     data-target='#modal-desc'
@@ -179,12 +179,12 @@ endif; ?>
                     <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
 
                     <?php if($this->enteteEtab['adresses']) : ?>
-                        &nbsp;(<?= $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'] ?>)
-                    <?php endif; ?>
+                        (<?= $this->enteteEtab['adresses'][0]['LIBELLE_COMMUNE'] ?>)
+                    <?php endif ?>
 
                     <?php if(isset($this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'])): ?>
                         [<?= $this->enteteEtab['etablissementInfos']['parents'][0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>]
-                    <?php endif; ?>
+                    <?php endif ?>
                 </a>
 
                 <?php if(isset($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) && null !== ($this->enteteEtab['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS'])): ?>
@@ -209,13 +209,13 @@ endif; ?>
                             <?php if($nbPrev > 1): ?>
                                 <?php $nbPrev-- ?>
                                 ,
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
                     )</span>
                 <?php endif ?>
 
                 <span style='font-size:10px'>#<?= $this->enteteEtab['etablissementInfos']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
-            <?php endif; ?>
+            <?php endif ?>
         </div>
     </h3>
 <?php else :?>
@@ -226,7 +226,7 @@ endif; ?>
             <span class='label label-important'>
                 DOSSIER SUPPRIME
             </span>
-        <?php endif; ?>
+        <?php endif ?>
 
         <small><br/><?= nl2br($this->objetDossier) ?></small>
 
@@ -234,9 +234,9 @@ endif; ?>
             <p style='font-size: medium;' class='label label-info'>
                 <strong>CONSULTATION PLATAU : <?= $this->id_platau ?></strong>
             </p>
-        <?php endif; ?>
+        <?php endif ?>
 
-        <div style='margin:10px;' id='infosEtabs'>
+        <div style='margin:10px; line-height: 20px;' id='infosEtabs'>
             <?php
             $nbEtab = count($this->enteteEtab)> 0;
 
@@ -263,13 +263,11 @@ endif; ?>
                                 title='Afficher le descriptif'>
                                 <i class='icon-list-alt icon-black'></i>
                             </a>
-                            &nbsp;
                             <a
                                 href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 title='Se rendre à la liste des dossiers' >
                                 <i class='icon-folder-open icon-black'></i>
                             </a>
-                            &nbsp;
                             <a
                                 href=<?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 class='etab'
@@ -279,16 +277,7 @@ endif; ?>
                                     $nbAdresse = count($value['infosEtab']['adresses']);
 
                                     if($nbAdresse != 0): ?>
-                                    (
-                                        <?php foreach($value['infosEtab']['adresses'] as $commune): ?>
-                                            <?= $commune['LIBELLE_COMMUNE'] ?>
-
-                                            <?php if($nbAdresse != 1): ?>
-                                                ,
-                                                <?php $nbAdresse-- ?>
-                                            <?php endif ?>
-                                        <?php endforeach ?>
-                                    )
+                                    (<?php foreach($value['infosEtab']['adresses'] as $commune): ?><?= $commune['LIBELLE_COMMUNE'] ?><?php if($nbAdresse != 1): ?>,<?php $nbAdresse-- ?><?php endif ?><?php endforeach ?>)
                                 <?php else: ?>
                                     (adresse non renseignée)
                                 <?php endif ?>
@@ -331,10 +320,10 @@ endif; ?>
                                 )
                             <?php endif ?>
                             <span style='font-size:10px'>#<?=$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']?></span>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            <?php endif; ?>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                <?php endif ?>
+            <?php endif ?>
         </div>
     </h2>
 <?php endif; ?>
