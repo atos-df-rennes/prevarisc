@@ -791,12 +791,12 @@
                     <privilege>verrouillage_dossier</privilege>
                 </deverrou>
                 <piece-jointe>
-                    <label>Piece Jointe</label>
+                    <label>Pièces Jointes</label>
                     <controller>piece-jointe</controller>
                     <params><type>dossier</type></params>
                     <pages>
                         <index>
-                            <label>Gestion des Piece Jointe</label>
+                            <label>Gestion des Pièces Jointes</label>
                             <controller>piece-jointe</controller>
                             <action>index</action>
                             <privilege>view_doss</privilege>
@@ -863,11 +863,13 @@
                     <action>selectionetab</action>
                 </selectionetab>
                 <liees>
+                    <label>Etablissements et dossiers liés</label>
                     <controller>dossier</controller>
                     <action>liees</action>
                     <privilege>view_doss</privilege>
                 </liees>
                 <contact>
+                    <label>Contacts</label>
                     <controller>dossier</controller>
                     <action>contact</action>
                     <privilege>view_doss</privilege>
@@ -948,7 +950,7 @@
                     <privilege>view_doss</privilege>
                 </textesapplicables>
                 <edit-textesapplicables>
-                     <label>Édition des textes applicables</label>
+                    <label>Édition des textes applicables</label>
                     <controller>dossier</controller>
                     <action>edit-textes-applicables</action>
                     <privilege>edit_doss</privilege>
@@ -964,6 +966,7 @@
                     <privilege>view_doss</privilege>
                 </selectionarticle>
                 <prescription>
+                    <label>Prescriptions</label>
                     <controller>dossier</controller>
                     <action>prescription</action>
                     <privilege>view_doss</privilege>
@@ -1036,17 +1039,17 @@
                     <action>avis-et-derogations-edit</action>
                 </avis-et-derogations-edit>
                 <avis-et-derogations-delete>
-                    <label>Suppression d un avis derogation</label>
+                    <label>Suppression d'un avis ou d'une dérogation</label>
                     <controller>dossier</controller>
                     <action>avis-et-derogations-delete</action>
                 </avis-et-derogations-delete>
                 <effectifs-degagements-dossier>
-                    <label>Effectifs et Dégagements</label>
+                    <label>Effectifs et dégagements</label>
                     <controller>dossier</controller>
                     <action>effectifs-degagements-dossier</action>
                 </effectifs-degagements-dossier>
                 <effectifs-degagements-dossier-edit>
-                    <label>Modification Effectifs et Dégagements</label>
+                    <label>Édition des effectifs et dégagements</label>
                     <controller>dossier</controller>
                     <action>effectifs-degagements-dossier-edit</action>
                 </effectifs-degagements-dossier-edit>
@@ -1056,12 +1059,11 @@
                     <action>verifications-techniques</action>
                 </verifications-techniques>
                 <edit-verifications-techniques>
-                    <label>Edition vérifications techniques</label>
+                    <label>Édition des vérifications techniques</label>
                     <controller>dossier</controller>
                     <action>edit-verifications-techniques</action>
                 </edit-verifications-techniques>
             </pages>
-
         </dossier>
 
         <!-- Gestion des erreurs -->
