@@ -12,11 +12,11 @@
 </h3>
 <div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
 
-<?php if(!empty($this->listePj)) :?>
+<?php if (null !== $this->listePj && [] !== $this->listePj) :?>
     <a href="/dossier/get-zip-all-pj/id/<?= $this->identifiant ?>" class="btn btn-success">Télécharger les pièces jointes</a>
 <?php endif ?>
 
-<div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
+<div id='listePieceJointe' class='<?php if(count($this->listePj)===0) echo "ui-helper-hidden"?>' >
 	<table id='tabPieceJointe' class='table table-striped'>
 		<thead>
 			<tr>
