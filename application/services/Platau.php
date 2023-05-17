@@ -78,7 +78,7 @@ class Service_Platau
         curl_setopt_array($curlHandle, $platauClient->getOptions());
         $data = curl_exec($curlHandle);
 
-        if ('' !== $error = curl_error($curlHandle)) {
+        if ('' !== ($error = curl_error($curlHandle))) {
             error_log($error);
 
             return null;
@@ -132,7 +132,7 @@ class Service_Platau
         curl_setopt_array($curlHandle, $platauClient->getOptions());
         $data = curl_exec($curlHandle);
 
-        if ('' !== $error = curl_error($curlHandle)) {
+        if ('' !== ($error = curl_error($curlHandle))) {
             error_log($error);
 
             return false;
@@ -162,20 +162,5 @@ class Service_Platau
         }
 
         return null;
-    }
-
-    private function setCurlProxyOptions(array $options): array
-    {
-        if (true === filter_var(getenv('PREVARISC_PROXY_ENABLED'), FILTER_VALIDATE_BOOL)) {
-            $options[CURLOPT_PROXYTYPE] = getenv('PREVARISC_PROXY_PROTOCOL');
-            $options[CURLOPT_PROXYPORT] = getenv('PREVARISC_PROXY_PORT');
-            $options[CURLOPT_PROXY] = getenv('PREVARISC_PROXY_HOST');
-
-            if (getenv('PREVARISC_PROXY_USERNAME')) {
-                $options[CURLOPT_PROXYUSERPWD] = getenv('PREVARISC_PROXY_USERNAME').':'.getenv('PREVARISC_PROXY_PASSWORD');
-            }
-        }
-
-        return $options;
     }
 }
