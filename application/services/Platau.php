@@ -67,24 +67,24 @@ class Service_Platau
             return null;
         }
 
+        $platauClient = new Service_PlatauClient();
+        $platauClient->addOption(CURLOPT_URL, $url);
+        $platauClient->addOption(
+            CURLOPT_POSTFIELDS,
+            sprintf('scope=openid&grant_type=client_credentials&client_id=%s&client_secret=%s', $this->pisteClientId, $this->pisteClientSecret)
+        );
+
         $curlHandle = curl_init();
-        $options = [
-            CURLOPT_URL => $url,
-            CURLOPT_POSTFIELDS => sprintf('scope=openid&grant_type=client_credentials&client_id=%s&client_secret=%s', $this->pisteClientId, $this->pisteClientSecret),
-            CURLOPT_RETURNTRANSFER => 1,
-        ];
-        $options = $this->setCurlProxyOptions($options);
-
-        curl_setopt_array($curlHandle, $options);
-
+        curl_setopt_array($curlHandle, $platauClient->getOptions());
         $data = curl_exec($curlHandle);
-        curl_close($curlHandle);
 
-        if (false === $data) {
-            error_log('Une erreur s\'est produite lors de la récupération du token PISTE.');
+        if ('' !== $error = curl_error($curlHandle)) {
+            error_log($error);
 
             return null;
         }
+
+        curl_close($curlHandle);
 
         $decodedData = json_decode($data, true);
 
@@ -118,25 +118,27 @@ class Service_Platau
 
         $url .= self::HEALTHCHECK_ENDPOINT;
 
-        $curlHandle = curl_init();
-        $options = [
-            CURLOPT_URL => $url,
-            CURLOPT_HTTPHEADER => [
+        $platauClient = new Service_PlatauClient();
+        $platauClient->addOption(CURLOPT_URL, $url);
+        $platauClient->addOption(
+            CURLOPT_HTTPHEADER,
+            [
                 'Content-Type: application/json',
                 sprintf('Authorization: Bearer %s', $pisteToken),
-            ],
-            CURLOPT_RETURNTRANSFER => 1,
-        ];
-        $options = $this->setCurlProxyOptions($options);
+            ]
+        );
 
-        curl_setopt_array($curlHandle, $options);
-
+        $curlHandle = curl_init();
+        curl_setopt_array($curlHandle, $platauClient->getOptions());
         $data = curl_exec($curlHandle);
-        curl_close($curlHandle);
 
-        if (false === $data) {
-            error_log("Une erreur s'est produite lors du healthcheck Plat'AU.");
+        if ('' !== $error = curl_error($curlHandle)) {
+            error_log($error);
+
+            return false;
         }
+
+        curl_close($curlHandle);
 
         if ('' === $data) {
             error_log("Le healthcheck n'a rien renvoyé. Vérifiez que l'URL de Plat'AU est correctement renseignée (environnement, version).");
