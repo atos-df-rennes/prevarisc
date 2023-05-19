@@ -1,21 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Bootstrap\\:\\:_initCache\\(\\) has invalid return type Cache\\.$#"
-			count: 1
-			path: application/Bootstrap.php
-
-		-
-			message: "#^Method Bootstrap\\:\\:_initCacheSearch\\(\\) has invalid return type Cache\\.$#"
-			count: 1
-			path: application/Bootstrap.php
-
-		-
-			message: "#^Method Bootstrap\\:\\:getCache\\(\\) has invalid return type Zend_Cache_Frontend\\.$#"
-			count: 1
-			path: application/Bootstrap.php
-
-		-
 			message: "#^Method Zend_View_Helper_HeadMeta\\:\\:appendHttpEquiv\\(\\) invoked with 2 parameters, 3 required\\.$#"
 			count: 1
 			path: application/Bootstrap.php
