@@ -4,8 +4,3 @@ parameters:
 			message: "#^Variable \\$idOrigine might not be defined\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Method Model_DbTable_Groupe\\:\\:delete\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Groupe.php
