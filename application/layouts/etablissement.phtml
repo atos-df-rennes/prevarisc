@@ -124,10 +124,21 @@
             <p class="avis F">Favorable <?= $this->etablissement['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation " ?></p>
          <?php elseif ($this->etablissement['avis'] == 2  && $this->avis == "avisDoss") : ?>
             <p class="avis D">
-               Défavorable <?= $this->etablissement['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation " ?>
-               <?php if ($this->etablissement['facteur_dangerosite'] > 0) : ?>
-                  &nbsp;-&nbsp;Facteur de criticité : <?= $this->etablissement['facteur_dangerosite'] ?>
-               <?php endif ?>
+                Défavorable <?= $this->etablissement['informations']['ID_GENRE'] == 3 ? '' : " à l'exploitation " ?>
+                <?php
+                    $thirdPartyPlugins = explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'));
+                    $isSignalement = in_array('Plugin_FacteurCriticite', $thirdPartyPlugins, true);
+                ?>
+                <?php if ($isSignalement): ?>
+                    &nbsp;-&nbsp;Signalement :
+                    <?php if ($this->etablissement['facteur_dangerosite'] === 0): ?>Non
+                    <?php elseif ($this->etablissement['facteur_dangerosite'] > 0): ?>Oui
+                    <?php endif ?>
+                <?php else: ?>
+                    <?php if ($this->etablissement['facteur_dangerosite'] > 0) : ?>
+                        &nbsp;-&nbsp;Facteur de criticité : <?= $this->etablissement['facteur_dangerosite'] ?>
+                    <?php endif ?>
+                <?php endif ?>
             </p>
          <?php else : ?>
             <p class="avis">Avis d'exploitation indisponible</p>
