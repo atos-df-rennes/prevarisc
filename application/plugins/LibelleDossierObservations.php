@@ -2,7 +2,7 @@
 
 class Plugin_LibelleDossierObservations extends Zend_Controller_Plugin_Abstract
 {
-    public function postDispatch(Zend_Controller_Request_Abstract $request)
+    public function postDispatch(Zend_Controller_Request_Abstract $request): void
     {
         if ($request->getControllerName() !== 'dossier' || $request->getActionName() !== 'index') {
             return;
