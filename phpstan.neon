@@ -8,4 +8,7 @@ parameters:
     scanFiles:
         - public/index.php
     excludePaths:
-        - application/cache
+        analyseAndScan:
+            - application/cache
+        analyse:
+            - application/views/helpers/Minify*
