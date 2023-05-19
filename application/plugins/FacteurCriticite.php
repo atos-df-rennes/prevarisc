@@ -5,10 +5,10 @@ class Plugin_FacteurCriticite extends Zend_Controller_Plugin_Abstract
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
         if (
-            $request->getControllerName() !== 'etablissement'
+            'etablissement' !== $request->getControllerName()
             && (
-                $request->getControllerName() !== 'dossier'
-                || $request->getActionName() !== 'index'
+                'dossier' !== $request->getControllerName()
+                || 'index' !== $request->getActionName()
             )
         ) {
             return;
@@ -16,10 +16,11 @@ class Plugin_FacteurCriticite extends Zend_Controller_Plugin_Abstract
 
         $view = Zend_Controller_Front::getInstance()
             ->getParam('bootstrap')
-            ->getResource('view');
+            ->getResource('view')
+        ;
 
         $view->inlineScript()->appendScript(
-<<<EOS
+            <<<'EOS'
 $(document).ready(function() {
     $('#FACTDANGE .libelle').text('Signalement')
 })
