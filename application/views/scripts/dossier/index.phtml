@@ -1949,7 +1949,16 @@ $(".delaipresc").live('click', function() {
                 $isSignalement = in_array('Plugin_FacteurCriticite', $thirdPartyPlugins, true);
             ?>
             <li class='row-fluid' id='FACTDANGE'
-                style='margin-bottom:20px;<?php echo ($action != 'new' && $this->infosDossier['FACTDANGE_DOSSIER'] !== null && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2) ? "" : "display:none;" ?>'>
+                style='margin-bottom:20px;
+                <?php echo (
+                    $action != 'new'
+                    && $this->infosDossier['FACTDANGE_DOSSIER'] !== null
+                    && (
+                        ($isSignalement && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2)
+                        || $this->infosDossier['FACTDANGE_DOSSIER'] > 0
+                    )
+                ) ? "" : "display:none;" ?>'
+            >
                 <div class='left libelle span3' style='float:left;'>Facteur de criticité</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <span class='factDange'>
