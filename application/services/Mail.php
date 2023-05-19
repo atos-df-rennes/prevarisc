@@ -30,7 +30,7 @@ class Service_Mail
                 case 'mail':
                     $transport = new Zend_Mail_Transport_Sendmail([
                         getenv('PREVARISC_MAIL_HOST'),
-                        $config
+                        $config,
                     ]);
 
                     break;
