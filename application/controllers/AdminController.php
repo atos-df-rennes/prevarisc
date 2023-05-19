@@ -19,53 +19,56 @@ class AdminController extends Zend_Controller_Action
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 3]);
                 $response = json_decode($client->request()->getBody());
                 $revision_prevarisc_github = $response->object->sha;
-                $this->view->is_uptodate = $revision_prevarisc_github == $revision_prevarisc_local;
+                $this->view->assign('is_uptodate', $revision_prevarisc_github == $revision_prevarisc_local);
             } catch (Exception $e) {
             }
         }
 
-        $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
-        $this->view->key_googlemap = getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY');
-        $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
-        $this->view->geoconcept_infos = [
-            'Url' => $this->view->geoconcept_url,
-            'Layer' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER'),
-            'App ID' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID'),
-            'Projection' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION') ?: 'Non paramétrée',
-            'Token' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN'),
-            'Geocoder Url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER'),
-        ];
-        $this->view->dbname = getenv('PREVARISC_DB_DBNAME');
-        $this->view->db_url = getenv('PREVARISC_DB_HOST').(getenv('PREVARISC_DB_PORT') ? ':'.getenv('PREVARISC_DB_PORT') : '');
-        $this->view->api_enabled = '' != getenv('PREVARISC_SECURITY_KEY');
-        $this->view->proxy_enabled = getenv('PREVARISC_PROXY_ENABLED');
-        $this->view->third_party_plugins = implode(', ', explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS')));
+        $this->view->assign([
+            'key_ign' => getenv('PREVARISC_PLUGIN_IGNKEY'),
+            'key_googlemap' => getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY'),
+            'geoconcept_url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'),
+            'geoconcept_infos' => [
+                'Url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'),
+                'Layer' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER'),
+                'App ID' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID'),
+                'Projection' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION') ?: 'Non paramétrée',
+                'Token' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN'),
+                'Geocoder Url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER'),
+            ],
+            'dbname' => getenv('PREVARISC_DB_DBNAME'),
+            'db_url' => getenv('PREVARISC_DB_HOST').(getenv('PREVARISC_DB_PORT') ? ':'.getenv('PREVARISC_DB_PORT') : ''),
+            'api_enabled' => '' != getenv('PREVARISC_SECURITY_KEY'),
+            'proxy_enabled' => getenv('PREVARISC_PROXY_ENABLED'),
+            'third_party_plugins' => implode(', ', explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'))),
+        ]);
 
         if (getenv('PREVARISC_CAS_ENABLED')) {
-            $this->view->authentification = 'CAS';
+            $this->view->assign('authentification', 'CAS');
         } elseif (getenv('PREVARISC_NTLM_ENABLED')) {
-            $this->view->authentification = 'NTLM + BDD';
+            $this->view->assign('authentification', 'NTLM + BDD');
         } elseif (getenv('PREVARISC_LDAP_ENABLED')) {
-            $this->view->authentification = sprintf(
+            $this->view->assign('authentification', sprintf(
                 'LDAP + BDD : %s:%d/%s',
                 getenv('PREVARISC_LDAP_HOST'),
                 getenv('PREVARISC_LDAP_PORT') ?: '389',
                 getenv('PREVARISC_LDAP_BASEDN')
-            );
+            ));
         } else {
-            $this->view->authentification = 'BDD';
+            $this->view->assign('authentification', 'BDD');
         }
 
-        $this->view->cache_adapter = $cache_config['adapter'];
-        $this->view->cache_url = $cache_config['host'].($cache_config['port'] ? ':'.$cache_config['port'] : '');
-        $this->view->cache_lifetime = $cache_config['lifetime'];
-        $this->view->cache_enabled = $cache_config['enabled'];
-
-        $this->view->enforce_security = 1 == getenv('PREVARISC_ENFORCE_SECURITY');
+        $this->view->assign([
+            'cache_adapter' => $cache_config['adapter'],
+            'cache_url' => $cache_config['host'].($cache_config['port'] ? ':'.$cache_config['port'] : ''),
+            'cache_lifetime' => $cache_config['lifetime'],
+            'cache_enabled' => $cache_config['enabled'],
+            'enforce_security' => 1 == getenv('PREVARISC_ENFORCE_SECURITY'),
+        ]);
 
         $service_search = new Service_Search();
         $users = $service_search->users(null, null, null, true, 1000)['results'];
-        $this->view->users = [];
+        $this->view->assign('users', []);
 
         foreach ($users as $user) {
             if (time() - strtotime($user['LASTACTION_UTILISATEUR']) < ini_get('session.gc_maxlifetime')) {
