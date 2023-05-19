@@ -727,6 +727,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                                     $idCalendrierTab = $idOrigine;
                                     $premiereDate = false;
                                 } else {
+                                    if (!isset($idOrigine)) {
+                                        throw new Exception("L'identifiant de la date de commission d'origine n'existe pas.");
+                                    }
+
                                     $idCalendrierTab = $dbDateCommission->addDateCommLiee($varExplode1[1], $this->_getParam('D_'.$varExplode1[1]), $this->_getParam('F_'.$varExplode1[1]), $idOrigine, $this->_getParam('typeCom'), $this->_getParam('idComm'), $this->_getParam('libelle_comm'));
                                 }
 

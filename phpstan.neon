@@ -2,10 +2,13 @@ includes:
 	- phpstan-baseline.neon
 
 parameters:
-    level: 1
+    level: 2
     paths:
         - application
     scanFiles:
         - public/index.php
     excludePaths:
-        - application/cache
+        analyseAndScan:
+            - application/cache
+        analyse:
+            - application/views/helpers/Minify*

@@ -47,7 +47,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      * @param array $frontendOptions surcharge des options de configuration du front
      * @param array $backendOptions  surcharge des options de configuration du back
      *
-     * @return Zend_Cache_Core|Zend_Cache_Frontend une instance de cache
+     * @return Zend_Cache_Core une instance de cache
      */
     protected function getCache(array $frontendOptions = [], array $backendOptions = [])
     {
@@ -90,20 +90,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     /**
      * Initialisation du cache objet de l'application.
-     *
-     * @return Cache
      */
-    protected function _initCache()
+    protected function _initCache(): Zend_Cache_Core
     {
         return $this->getCache();
     }
 
     /**
      * Initialisation du cache spécial recherches.
-     *
-     * @return Cache
      */
-    protected function _initCacheSearch()
+    protected function _initCacheSearch(): Zend_Cache_Core
     {
         return $this->getCache();
     }
@@ -128,10 +124,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     /**
      * Initialisation du layout.
-     *
-     * @return Zend_Layout
      */
-    protected function _initLayout()
+    protected function _initLayout(): Zend_Layout
     {
         return Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
     }
