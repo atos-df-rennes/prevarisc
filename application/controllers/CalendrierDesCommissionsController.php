@@ -954,7 +954,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $this->view->informationsMembre = $listeMembres;
 
-            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
+            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']);
 
             //On récupère le nom de la commission
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
