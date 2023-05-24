@@ -67,9 +67,8 @@ class FormulaireController extends Zend_Controller_Action
         $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
         // Récupération des rubriques pour chaque objet global
-        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-        foreach ($capsulesRubriques as &$capsuleRubrique) {
-            $capsuleRubrique['RUBRIQUES'] = $this->modelRubrique->getRubriquesByCapsuleRubrique($capsuleRubrique['NOM_INTERNE']);
+        foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+            $capsulesRubriques[$key]['RUBRIQUES'] = $this->modelRubrique->getRubriquesByCapsuleRubrique($capsuleRubrique['NOM_INTERNE']);
         }
 
         // Assignation des variables à la vue
@@ -112,12 +111,12 @@ class FormulaireController extends Zend_Controller_Action
         $rubrique = $this->modelRubrique->find($idRubrique)->current();
 
         $champs = $this->modelChamp->getChampsByRubrique($rubrique['ID_RUBRIQUE']);
-        foreach ($champs as &$champ) {
+        foreach ($champs as $key => $champ) {
             if ('Liste' === $champ['TYPE']) {
-                $champ['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
+                $champs[$key]['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
             if ('Parent' === $champ['TYPE']) {
-                $champ['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
+                $champs[$key]['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
             }
         }
 
@@ -219,9 +218,9 @@ class FormulaireController extends Zend_Controller_Action
         if ('Parent' === $champType['TYPE']) {
             $listChamps = $this->modelChamp->getChampsFromParent($idChamp);
 
-            foreach ($listChamps as &$listChamp) {
+            foreach ($listChamps as $key => $listChamp) {
                 if ('Liste' === $listChamp['TYPE']) {
-                    $listChamp['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
+                    $listChamps[$key]['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($listChamp['ID_CHAMP']);
                 }
             }
 
@@ -241,7 +240,7 @@ class FormulaireController extends Zend_Controller_Action
                     )
                 );
 
-                foreach ($listChamps as &$listChamp) {
+                foreach ($listChamps as $listChamp) {
                     $fieldNames[] = $this->serviceUtils->getFullFusionName(
                         $capsuleRubrique['NOM_INTERNE'],
                         [

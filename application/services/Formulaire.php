@@ -125,11 +125,11 @@ class Service_Formulaire
             }
         }
 
-        foreach ($arrayReturn as $idxLigne => &$inputs) {
-            foreach ($inputs as &$input) {
+        foreach ($arrayReturn as $idxLigne => $inputs) {
+            foreach ($inputs as $key => $input) {
                 if (null === $input['ID_VALEUR']) {
-                    $input['IDX_VALEUR'] = $idxLigne;
-                    $input['STR_DATA'] = 'valeur-'.$idxLigne.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
+                    $inputs[$key]['IDX_VALEUR'] = $idxLigne;
+                    $inputs[$key]['STR_DATA'] = 'valeur-'.$idxLigne.'-'.$input['ID_PARENT'].'-'.$input['ID_CHAMP'].'-NULL';
                 }
             }
         }
