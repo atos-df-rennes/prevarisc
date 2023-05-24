@@ -954,7 +954,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $this->view->informationsMembre = $listeMembres;
 
-            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
+            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']);
 
             //On récupère le nom de la commission
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
@@ -1089,14 +1089,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers = $dbDateCommPj->getDossiersInfosByOrder($dateCommId);
         }
 
-        //Récupération des membres de la commission
-        $model_membres = new Model_DbTable_CommissionMembre();
-
-        $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
-
         //On récupère le nom de la commission
         $model_commission = new Model_DbTable_Commission();
-        $this->view->commissionInfos = $model_commission->find($listeDossiers[0]['COMMISSION_DOSSIER'])->toArray();
+        $this->view->commissionInfos = $model_commission->find($commSelect['COMMISSION_CONCERNE'])->toArray();
+
+        //Récupération des membres de la commission
+        $model_membres = new Model_DbTable_CommissionMembre();
+        $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commSelect['COMMISSION_CONCERNE']);
 
         //afin de récuperer les informations des communes (adresse des mairies etc)
         $model_adresseCommune = new Model_DbTable_AdresseCommune();
@@ -1167,7 +1166,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
         }
 
-        $listeMembres = $model_membres->get($listeDossiers[0]['COMMISSION_DOSSIER']);
+        $listeMembres = $model_membres->get($commSelect['COMMISSION_CONCERNE']);
         foreach ($listeMembres as $var => $membre) {
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
         }
