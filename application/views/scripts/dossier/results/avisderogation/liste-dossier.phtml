@@ -4,22 +4,36 @@
             <?= $type ?>
             <?php if(empty($dossiers)): ?>
                 : <strong>Aucun dossier de ce type disponible</strong>
-            <?php else: ?>
-                <button class='btn deploy' type='button' type-dossier="<?= 'dossType'.$type ?>">
-                    <i class='icon-minus'></i>
-                </button>
             <?php endif ?>
         </p>
-        <div id="<?= 'dossType'.$type ?>">
-            <?=
-                $this->partial(
-                    'dossier/results/avisderogation/dossier.phtml',
-                    [
-                        'DOSSIERS_ETAB' => $dossiers,
-                        'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE ?? null
-                    ]
-                );
-            ?>
-        </div>
+            <div>
+                <?=
+                    $this->partial(
+                        'dossier/results/avisderogation/dossier.phtml',
+                        [
+                            'DOSSIERS_ETAB' => $dossiers,
+                            'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE ?? null
+                        ]
+                    );
+                ?>
+            </div>
+            <?php if(count($this->listeDossierParTypeN[$type])>0): ?>
+            <div id="<?= 'dossTypeN'.$type ?>" class='hide'>
+                <?=
+                    $this->partial(
+                        'dossier/results/avisderogation/dossier.phtml',
+                        [
+                            'DOSSIERS_ETAB' => $this->listeDossierParTypeN[$type],
+                            'ID_DOSSIER_LIE' => $this->ID_DOSSIER_LIE ?? null
+                        ]
+                    );
+                ?>
+            </div>
+            <button class='btn deploy' type='button' type-dossier="<?= 'dossTypeN'.$type ?>">
+            Voir plus
+            </button>
+              <?php endif ?>
     </div>
 <?php endforeach ?>
+
+

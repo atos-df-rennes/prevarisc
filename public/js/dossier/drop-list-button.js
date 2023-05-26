@@ -1,12 +1,11 @@
 window.onload = function() {
     $('.deploy').click(function () {
-        const btnIcon = $(this).children('i').first()
-
-        if (btnIcon[0].className === 'icon-minus') {
-            btnIcon.removeClass().addClass('icon-plus')
+        const btnIcon = $(this)
+        if (btnIcon[0].innerText === 'Voir moins') {
+            btnIcon[0].innerText = 'Voir plus'
             $('#'+($(this).attr('type-dossier'))).hide()
         } else {
-            btnIcon.removeClass().addClass('icon-minus')
+            btnIcon[0].innerText = 'Voir moins'
             $('#'+($(this).attr('type-dossier'))).show()
         }
     });
