@@ -36,7 +36,7 @@ class Service_Search
      *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $periodicite = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -80,6 +80,7 @@ class Service_Search
                 ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
                 ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
                 ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
+                ->join('periodicite','periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 // Vincent MICHEL le 12/11/2014 : retrait de cette clause qui tue les performances
                 // sur la recherche. Je n'ai pas vu d'impact sur le retrait du group by.
@@ -87,7 +88,6 @@ class Service_Search
                 // problème de duplicité d'établissements dans les résultats de recherche (#1300)
                 ->group('e.ID_ETABLISSEMENT')
                 ;
-
             // Critères : nom de l'établissement
             if (null !== $label) {
                 $cleanLabel = trim($label);
@@ -149,6 +149,11 @@ class Service_Search
             // Critères : local à sommeil
             if (null !== $local_sommeil) {
                 $this->setCriteria($select, 'LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', $local_sommeil);
+            }
+
+            // Critères : periodicite
+            if (null !== $periodicite) {
+                $this->periodicite($select, 'PERIODICITE_ETABLISSEMENTINFORMATIONS', $periodicite);
             }
 
             // Critères : numéro de rue
@@ -268,7 +273,7 @@ class Service_Search
      *
      * @return array
      */
-    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
+    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $periodicite = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -276,7 +281,7 @@ class Service_Search
         // Identifiant de la recherche
         $search_id = 'extract_etablissements_'.md5(serialize(func_get_args()));
 
-        if (($results = unserialize($cache->load($search_id))) === false) {
+        if (($results = unserialize($cache->load($search_id))) === false || true) {
             // Création de l'objet recherche
             $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
@@ -334,6 +339,7 @@ class Service_Search
                 ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
                 ->joinLeft('utilisateur', 'etablissementinformationspreventionniste.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
                 ->joinLeft('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
+                ->join('periodicite','periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 ->order('adressecommune.LIBELLE_COMMUNE ASC')
                 ->order('categorie.LIBELLE_CATEGORIE ASC')
@@ -342,7 +348,7 @@ class Service_Search
                 ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
                 ->group('e.ID_ETABLISSEMENT')
             ;
-
+            var_dump($select);
             // Critères : nom de l'établissement
             if (null !== $label) {
                 $cleanLabel = trim($label);
@@ -404,6 +410,11 @@ class Service_Search
             // Critères : statuts
             if (null !== $local_sommeil) {
                 $this->setCriteria($select, 'etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', $local_sommeil);
+            }
+
+            // Critères : statuts
+            if (null !== $periodicite) {
+                $this->periodicite($select, 'etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', $periodicite);
             }
 
             // Critères : numéro de rue
@@ -1191,6 +1202,16 @@ class Service_Search
         } else {
             $string = $key.(($exact) ? '=' : ' LIKE ').$select->getAdapter()->quote((($exact) ? '' : '%').$value.(($exact) ? '' : '%'));
         }
+
+        $select->{$clause}($string);
+
+        return $this;
+    }
+    private function periodicite(Zend_Db_Select &$select, $key, $value, $clause = 'where')
+    {
+        $string = null;
+
+            $string = $key.(($value) ? '=' : '!=').'periodicite.PERIODICITE_PERIODICITE';
 
         $select->{$clause}($string);
 
