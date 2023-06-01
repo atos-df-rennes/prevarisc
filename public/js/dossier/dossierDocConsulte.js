@@ -89,11 +89,36 @@ $(document).ready(function(){
 				$.ajax({
 					url: "/dossier/suppdoc",
 					data: "docInfos="+$("#docInfos").val()+"&idDossier="+$("#idDossier").val(),
-					type:"POST",			
+					type:"POST",
 					beforeSend: function(){
 						//VERIFICATION SUR L'integrité des données
 					},
 					success: function(affichageResultat){
+						var nomTab = $("#edit_"+$("#docInfos").val()).parent().attr('id').split('_');
+						//alert(nomTab.length);
+						var nature = nomTab[1];
+						if(nomTab.length == 3){
+							var nom = nomTab[2];
+						}else{
+							var nom = nomTab[2]+"_aj";
+						}
+						//alert(nom);
+						nom = nature+"_"+nom;
+						$("#tmpRef").attr('value',$("#ref_"+nom).val());
+						$("#tmpDate").attr('value',$("#date_"+nom).val());
+						$("#tmp").attr('value','edit');
+						
+						$("#ref_"+nom).removeAttr('readonly');
+						$("#date_"+nom).removeAttr('readonly').removeAttr('disabled');
+						 
+						$("#modif_"+nom).hide();
+						$("#valid_"+nom).fadeIn();
+				
+						$("#libelleView_"+nom).hide();
+						$("#libelle_"+nom).show();
+				
+						$("#dossier_Pdroite").hideModif(nom);
+						$("#dossier_Pdroite").blockCheck(nom); 
 						//$("#"+$("#docInfos").val());
 						var tabInfos = $("#docInfos").val().split('_');
 						if(tabInfos.length == 2){
