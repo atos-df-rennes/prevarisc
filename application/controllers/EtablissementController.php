@@ -28,13 +28,6 @@ class EtablissementController extends Zend_Controller_Action
 
         if ($this->getParam('id')) {
             $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
-            if(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES')){
-                $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS']/12;
-                $unite = 'ans';
-            }else{
-                $unite = 'mois';
-            }
-            $this->view->unite=$unite;
             $this->view->etablissement = $this->etablissement;
             $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
             $this->view->hasAvisDerogations = array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id));
