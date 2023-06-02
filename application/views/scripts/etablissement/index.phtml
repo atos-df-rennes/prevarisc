@@ -59,7 +59,7 @@
                         <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 5)) && $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] <> $this->default_periodicite): ?>
                             <i class="icon-exclamation-sign" title="Periodicite non standard"></i>
                         <?php endif ?>
-                        <?php echo $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] ?> mois
+                        <?php echo $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'].' '.$this->unite?>
                     </p>
 
                 </dd>
