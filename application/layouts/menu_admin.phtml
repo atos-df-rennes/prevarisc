@@ -61,6 +61,10 @@
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
         <a href='/formulaire' ><em class="icon-th-list icon-black"></em> Formulaires</a>
     </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'liste-des-evolutions') echo "class='active'" ?> >
+        <a href='/liste-des-evolutions' ><em class="icon-th-list icon-black"></em> Listes des évolutions</a>
+    </li>
 </ul>
 
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>

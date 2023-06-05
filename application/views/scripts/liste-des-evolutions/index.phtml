@@ -1,0 +1,12 @@
+<!-- Titre -->
+<h3 class='page-header'>Liste des évolutions</h3>
+<form method='get'>
+<ul>
+<?php
+        foreach($this->datas as $key=>$data){
+        $check = $data ? 'checked' : null;
+        echo '<li><input type="checkbox" name="'.$key.'"'.$check.'> '.$key.'</li>';
+        } ?>
+</ul>
+<input type='submit' value="activer"/>
+</form>
