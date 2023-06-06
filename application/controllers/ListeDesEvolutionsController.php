@@ -9,7 +9,7 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
         $parsjson = json_decode($json);
         $datas = (array) $parsjson;
         if (!empty($_GET)) {
-            foreach(array_keys($datas) as $key) {
+            foreach (array_keys($datas) as $key) {
                 $datas[$key] = isset($_GET[$key]);
             }
         }
@@ -17,4 +17,3 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
         $this->view->datas = $datas;
     }
 }
-
