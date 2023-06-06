@@ -33,13 +33,13 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
                 $result[$tableau[$i++]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
             }
         }
-        if(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES')){
-        foreach( $cat_model->fetchAll()->toArray() as $categorie) :
-        foreach( $activite_model->fetchAll()->toArray() as $type) :
-        $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][0] = $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][0]/12;
-        $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][1] = $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][1]/12;
-        endforeach;
-        endforeach;
+        if (getenv('PREVARISC_UNITE_PERIODICITE_ANNEES')) {
+            foreach ($cat_model->fetchAll()->toArray() as $categorie) {
+                foreach ($activite_model->fetchAll()->toArray() as $type) {
+                    $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][0] /= 12;
+                    $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][1] /= 12;
+                }
+            }
         }
         $this->view->tableau = $result;
     }
