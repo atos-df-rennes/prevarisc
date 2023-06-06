@@ -36,8 +36,8 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
         if (getenv('PREVARISC_UNITE_PERIODICITE_ANNEES')) {
             foreach ($cat_model->fetchAll()->toArray() as $categorie) {
                 foreach ($activite_model->fetchAll()->toArray() as $type) {
-                    $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][0] /= 12;
-                    $result[$categorie["ID_CATEGORIE"]][$type["ID_TYPE"]][1] /= 12;
+                    $result[$categorie['ID_CATEGORIE']][$type['ID_TYPE']][0] /= 12;
+                    $result[$categorie['ID_CATEGORIE']][$type['ID_TYPE']][1] /= 12;
                 }
             }
         }
