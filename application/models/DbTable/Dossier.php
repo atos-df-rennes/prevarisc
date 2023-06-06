@@ -683,7 +683,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                         $dossEtab['Autres'][] = $dossier;
                     }
 
-                    $nbdosssierautre++;
+                    ++$nbdosssierautre;
 
                     break;
             }
