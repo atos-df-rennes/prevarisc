@@ -603,31 +603,32 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             switch ($dossier['TYPE_DOSSIER']) {
                 //Dossier de type Etude
                 case '1':
-                    if($nbdosssieretude<$nbdossiermax){
-                    $dossEtab['Etudes'][] = $dossier;
-                    $nbdosssieretude++;
+                    if ($nbdosssieretude < $nbdossiermax) {
+                        $dossEtab['Etudes'][] = $dossier;
+                        ++$nbdosssieretude;
                     }
 
                     break;
 
                 case '2':                //Dossier de type visite
                 case '3':                //Dossier de type groupe de visite
-                    if($nbdosssiervisite<$nbdossiermax){
-                    $dossEtab['Visites'][] = $dossier;
-                    $nbdosssiervisite++;
+                    if ($nbdosssiervisite < $nbdossiermax) {
+                        $dossEtab['Visites'][] = $dossier;
+                        ++$nbdosssiervisite;
                     }
 
                     break;
 
                 default:                //Le reste
-                    if($nbdosssierautre<$nbdossiermax){
-                    $dossEtab['Autres'][] = $dossier;
-                    $nbdosssierautre++;
+                    if ($nbdosssierautre < $nbdossiermax) {
+                        $dossEtab['Autres'][] = $dossier;
+                        ++$nbdosssierautre;
                     }
 
                     break;
             }
         }
+
         return $dossEtab;
     }
 
@@ -660,25 +661,26 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             switch ($dossier['TYPE_DOSSIER']) {
                 //Dossier de type Etude
                 case '1':
-                    if($nbdosssieretude>=$nbdossierenmoins){
-                    $dossEtab['Etudes'][] = $dossier;
+                    if ($nbdosssieretude >= $nbdossierenmoins) {
+                        $dossEtab['Etudes'][] = $dossier;
                     }
-                    $nbdosssieretude++;
+                    ++$nbdosssieretude;
 
                     break;
+
                 case '2':                //Dossier de type visite
                 case '3':                //Dossier de type groupe de visite
-                    if($nbdosssiervisite>=$nbdossierenmoins){
-                    $dossEtab['Visites'][] = $dossier;
+                    if ($nbdosssiervisite >= $nbdossierenmoins) {
+                        $dossEtab['Visites'][] = $dossier;
                     }
 
-                    $nbdosssiervisite++;
+                    ++$nbdosssiervisite;
 
                     break;
 
                 default:                //Le reste
-                    if($nbdosssierautre>=$nbdossierenmoins){
-                    $dossEtab['Autres'][] = $dossier;
+                    if ($nbdosssierautre >= $nbdossierenmoins) {
+                        $dossEtab['Autres'][] = $dossier;
                     }
 
                     $nbdosssierautre++;
@@ -689,6 +691,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         return $dossEtab;
     }
+
     /**
      * Retourne la liste des avis derogations d un dossier en passant l id dossier en param.
      *
