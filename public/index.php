@@ -28,7 +28,7 @@ $json = file_get_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.js
 $parsjson = json_decode($json);
 $datas = (array) $parsjson;
 foreach ($datas as $key => $data) {
-    putenv("{$key}={$data}"); 
+    putenv("{$key}={$data}");
 }
 
 // Création de l'application avec les fichiers config
