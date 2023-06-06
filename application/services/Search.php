@@ -33,6 +33,7 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
+     * @param null|mixed   $periodicite
      *
      * @return array
      */
@@ -80,7 +81,7 @@ class Service_Search
                 ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
                 ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
                 ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
-                ->join('periodicite','periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
+                ->join('periodicite', 'periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 // Vincent MICHEL le 12/11/2014 : retrait de cette clause qui tue les performances
                 // sur la recherche. Je n'ai pas vu d'impact sur le retrait du group by.
@@ -270,6 +271,7 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
+     * @param null|mixed   $periodicite
      *
      * @return array
      */
@@ -339,7 +341,7 @@ class Service_Search
                 ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
                 ->joinLeft('utilisateur', 'etablissementinformationspreventionniste.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
                 ->joinLeft('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
-                ->join('periodicite','periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
+                ->join('periodicite', 'periodicite.ID_TYPE=etablissementinformations.ID_TYPE AND periodicite.ID_CATEGORIE=etablissementinformations.ID_CATEGORIE AND periodicite.LOCALSOMMEIL_PERIODICITE=etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 ->order('adressecommune.LIBELLE_COMMUNE ASC')
                 ->order('categorie.LIBELLE_CATEGORIE ASC')
@@ -348,7 +350,6 @@ class Service_Search
                 ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS ASC')
                 ->group('e.ID_ETABLISSEMENT')
             ;
-            var_dump($select);
             // Critères : nom de l'établissement
             if (null !== $label) {
                 $cleanLabel = trim($label);
@@ -1207,11 +1208,10 @@ class Service_Search
 
         return $this;
     }
+
     private function periodicite(Zend_Db_Select &$select, $key, $value, $clause = 'where')
     {
-        $string = null;
-
-            $string = $key.(($value) ? '=' : '!=').'periodicite.PERIODICITE_PERIODICITE';
+        $string = $key.(($value) ? '=' : '!=').'periodicite.PERIODICITE_PERIODICITE';
 
         $select->{$clause}($string);
 

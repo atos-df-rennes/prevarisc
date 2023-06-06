@@ -243,7 +243,7 @@ class SearchController extends Zend_Controller_Action
                     $avis_favorable = array_key_exists('avis', $parameters) && 1 == count($parameters['avis']) ? 'true' == $parameters['avis'][0] : null;
                     $statuts = $parameters['statuts'] ?? null;
                     $local_sommeil = array_key_exists('presences_local_sommeil', $parameters) && 1 == count($parameters['presences_local_sommeil']) ? 'true' == $parameters['presences_local_sommeil'][0] : null;
-                    $periodicite = array_key_exists('periodicite', $parameters) && 1 == count($parameters['periodicite'])  ? 'true' == $parameters['periodicite'][0] : null;
+                    $periodicite = array_key_exists('periodicite', $parameters) && 1 == count($parameters['periodicite']) ? 'true' == $parameters['periodicite'][0] : null;
                     $city = array_key_exists('city', $parameters) && '' != $parameters['city'] ? $parameters['city'] : null;
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;

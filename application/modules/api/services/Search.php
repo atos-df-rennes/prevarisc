@@ -22,6 +22,7 @@ class Api_Service_Search
      * @param null|mixed   $groupements_territoriaux
      * @param int          $count                    Par défaut 10, max 1000
      * @param int          $page                     par défaut = 1
+     * @param null|mixed   $periodicite
      *
      * @return array
      */
