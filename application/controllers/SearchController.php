@@ -293,6 +293,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : [];
+        $this->view->array_numeros = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : [];
         $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
@@ -325,6 +326,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
@@ -492,6 +494,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;

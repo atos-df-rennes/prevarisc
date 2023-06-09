@@ -629,6 +629,10 @@ class Service_Search
                 $this->setCriteria($select, 'ea.ID_RUE', $criterias['voie']);
             }
 
+            if (isset($criterias['numero']) && null !== $criterias['numero']) {
+                $this->setCriteria($select, 'ea.NUMERO_ADRESSE', $criterias['numero']);
+            }
+
             // Critère : groupement territorial
             if (isset($criterias['groupements_territoriaux']) && null !== $criterias['groupements_territoriaux']) {
                 $this->setCriteria($select, 'groupement.ID_GROUPEMENT', $criterias['groupements_territoriaux']);
@@ -891,6 +895,10 @@ class Service_Search
 
             if (isset($criterias['voie']) && null !== $criterias['voie']) {
                 $this->setCriteria($select, 'ea.ID_RUE', $criterias['voie']);
+            }
+
+            if (isset($criterias['numero']) && null !== $criterias['numero']) {
+                $this->setCriteria($select, 'ea.NUMERO_ADRESSE', $criterias['numero']);
             }
 
             // Critère : groupement territorial

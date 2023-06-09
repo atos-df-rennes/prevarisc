@@ -40,7 +40,7 @@
                 <input type='submit' class="btn" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()" />
                 <input type='hidden' name='page' value="1" />
         </div>
-    
+
         <div class="pull-left" style='margin: 9px 0 0 5px'>
             <small>
                 <a href="/search/dossier?label=&page=1">
@@ -140,7 +140,14 @@
             <div class='span4'>
                 <input type="text" name='permis' class='span12' value="<?php echo isset($_GET["permis"])?htmlentities($_GET["permis"]):'' ?>" placeholder="Numéro de permis" onkeypress="masquerBoutonExportCalc()" />
             </div>
-            <div class='span3'>&nbsp;</div>
+            <div class='span3'>
+                <select name='numero' class="span12 chosen" data-placeholder='Sélectionner un numéro de rue' onchange="masquerBoutonExportCalc()">
+                    <option value=''></option>
+                    <?php foreach( $this->array_numeros as $numero ) : ?>
+                        <option value='<?php echo $numero["NUMERO_ADRESSE"] ?>' <?php if(isset($_GET["numero"]) && $numero["NUMERO_ADRESSE"] == $_GET["numero"]) echo 'selected' ?>><?php echo $numero["NUMERO_ADRESSE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
             <div class='span5'>
                 <span class='span1'>&nbsp;</span>
                 <span class='span2'>Réception</span>
@@ -257,6 +264,30 @@
             }
         });
 
+        $('select[name=voie]').change(function(){
+            var selectedValue = $(this).val()
+            if (selectedValue != ""){
+                $.ajax({
+                    url: "/api/1.0/adresse/get_numeros",
+                    type: 'post',
+                    data: {
+                        code_insee: selectedValue
+                    },
+                    success: function (result) {
+                        numeros = [];
+                        var selectNumero = $('select[name=numero]');
+                        selectNumero.empty();
+                        selectNumero.append("<option value=''></option>");
+                        $.each(result.response, function (i, numero) {
+                            selectNumero.append($("<option></option>")
+                                .attr("value",numero.NUMERO_ADRESSE).text(numero.NUMERO_ADRESSE));
+                        });
+                        $('.chosen').trigger("chosen:updated");
+                    }
+                });
+            }
+        });
+
 
         $(".datepicker").datepicker({
             dateFormat:"dd/mm/yy",
@@ -289,7 +320,7 @@
     });
 
     function masquerBoutonExportCalc ()
-    {   
+    {
         <?php if(count($this->results) > 0 && $this->results->getTotalItemCount() <= 10000 && $this->is_allowed_export_calc) :?>
             document.getElementById('exporter').style.display = "none"
         <?php endif ?>

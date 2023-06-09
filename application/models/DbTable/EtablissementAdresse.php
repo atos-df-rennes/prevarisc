@@ -151,4 +151,27 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
+    // Retourne les numeros par rapport a une voie
+
+    /**
+     * @param float|int|string $code_insee
+     * @param null|mixed       $q
+     *
+     * @return array
+     */
+    public function getNumeros($code_insee, $q = null)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('etablissementadresse')
+            ->where("ID_RUE = '{$code_insee}'")
+        ;
+
+        if (null != $q) {
+            $select->where('NUMERO_ADRESSE LIKE ?', '%'.$q.'%');
+        }
+
+        return $this->fetchAll($select)->toArray();
+    }
 }
