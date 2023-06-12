@@ -17,7 +17,11 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $this->_helper->viewRenderer->setNoRender();
+        $viewRenderer = $this->getHelper('viewRenderer');
+        if (!$viewRenderer instanceof Zend_Controller_Action_Helper_ViewRenderer) {
+            throw new Exception('View Renderer does not have the correct type.');
+        }
+        $viewRenderer->setNoRender();
         $json = file_get_contents(CONFIG_PATH.DS.'liste-evols.json');
         $parsjson = json_decode($json);
         $datas = (array) $parsjson;
