@@ -27,7 +27,7 @@ defined('CONFIG_PATH') || define('CONFIG_PATH', getenv('PREVARISC_CONFIG_PATH') 
 require APPLICATION_PATH.DS.'..'.DS.'vendor'.DS.'autoload.php';
 
 //chargement evolutions
-$json = file_get_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.json');
+$json = file_get_contents(CONFIG_PATH.DS.'liste-evols.json');
 $parsjson = json_decode($json);
 $datas = (array) $parsjson;
 foreach ($datas as $key => $data) {
