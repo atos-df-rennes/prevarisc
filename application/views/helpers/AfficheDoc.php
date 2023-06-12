@@ -56,7 +56,6 @@ class View_Helper_AfficheDoc
                         <span id='valid_".$natureId.'_'.$id.$type."' style='".$styleValid."'>
                                 <button class='validDoc btn'><i class='icon-ok'></i>&nbsp;</button>
                                 <button class='cancelDoc btn'><i class='icon-remove'></i>&nbsp;</button>
-                                <button class='deleteDoc btn' name='".$natureId.'_'.$id.$type."'><i class='icon-trash'></i>&nbsp;</button>
                             </a>
                         </span>
                     </div>

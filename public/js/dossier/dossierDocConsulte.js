@@ -107,18 +107,18 @@ $(document).ready(function(){
 						$("#tmpRef").attr('value',$("#ref_"+nom).val());
 						$("#tmpDate").attr('value',$("#date_"+nom).val());
 						$("#tmp").attr('value','edit');
-						
+
 						$("#ref_"+nom).removeAttr('readonly');
 						$("#date_"+nom).removeAttr('readonly').removeAttr('disabled');
-						 
+
 						$("#modif_"+nom).hide();
 						$("#valid_"+nom).fadeIn();
-				
+
 						$("#libelleView_"+nom).hide();
 						$("#libelle_"+nom).show();
-				
+
 						$("#dossier_Pdroite").hideModif(nom);
-						$("#dossier_Pdroite").blockCheck(nom); 
+						$("#dossier_Pdroite").blockCheck(nom);
 						//$("#"+$("#docInfos").val());
 						var tabInfos = $("#docInfos").val().split('_');
 						if(tabInfos.length == 2){
