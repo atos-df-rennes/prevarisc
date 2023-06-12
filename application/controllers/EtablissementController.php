@@ -34,7 +34,7 @@ class EtablissementController extends Zend_Controller_Action
             } else {
                 $unite = 'mois';
             }
-            $this->view->unite = $unite;
+            $this->view->assign('unite',$unite);
             $this->view->etablissement = $this->etablissement;
             $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
             $this->view->hasAvisDerogations = array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id));
