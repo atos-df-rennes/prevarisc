@@ -3278,7 +3278,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
-        $this->view->assign('listDossierEtabN',$dbDossier->getListeDossierFromDossierN($idDossier));
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
         $DBlisteAvis = new Model_DbTable_Avis();
         $this->view->listeAvis = $DBlisteAvis->getAvis();
