@@ -4,8 +4,8 @@
 <ul>
 <?php
         foreach($this->datas as $key=>$data){
-        $check = $data ? 'checked' : null;
-        echo '<li><input type="checkbox" name="'.$key.'"'.$check.'> '.$key.'</li>';
+        $check = $data[0] ? 'checked' : null;
+        echo '<li><input type="checkbox" name="'.$key.'"'.$check.'> '.$data[1].'</li>';
         } ?>
 </ul>
 <input type='submit' value="activer"/>

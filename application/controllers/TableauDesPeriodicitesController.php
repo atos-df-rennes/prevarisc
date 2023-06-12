@@ -33,6 +33,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
                 $result[$tableau[$i++]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
             }
         }
+
         $this->view->tableau = $result;
     }
 
