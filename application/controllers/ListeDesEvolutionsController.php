@@ -10,7 +10,7 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
         }
         $layout->getLayoutInstance()->setLayout('menu_admin');
 
-        $json = file_get_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.json');
+        $json = file_get_contents(CONFIG_PATH.DS.'liste-evols.json');
         $parsjson = json_decode($json);
         $datas = (array) $parsjson;
         if (!empty($_GET)) {
@@ -18,7 +18,7 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
                 $datas[$key][0] = isset($_GET[$key]);
             }
         }
-        file_put_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.json', json_encode($datas));
+        file_put_contents(CONFIG_PATH.DS.'liste-evols.json', json_encode($datas));
         $this->view->assign('datas', $datas);
     }
 }
