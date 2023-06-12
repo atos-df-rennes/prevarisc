@@ -601,8 +601,6 @@ class CommissionController extends Zend_Controller_Action
 
             $error = 'null';
 
-            echo 'ok';
-
             // Extension du fichier uploadé
             $string_extension = strrchr($_FILES['COURRIER']['name'], '.');
 
@@ -617,7 +615,7 @@ class CommissionController extends Zend_Controller_Action
                     $row = 'COURRIER_'.$this->_request->type;
 
                     // Si il y a déjà un courrier, on le supprime
-                    if (null != $row_membre->{$row}) {
+                    if (null != $row_membre->{$row} && $row_membre->{$row} !== $_FILES['COURRIER']['name']) {
                         unlink(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->_request->id_membre.$this->_request->type.'_'.$row_membre->{$row});
                     }
 
