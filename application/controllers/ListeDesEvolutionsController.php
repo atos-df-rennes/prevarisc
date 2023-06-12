@@ -4,8 +4,10 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        /** @var Zend_Layout */
         $layout = $this->getHelper('layout');
+        if (!$layout instanceof Zend_Layout) {
+            throw new Exception('Layout does not have the correct type.');
+        }
         $layout->setLayout('menu_admin');
 
         $json = file_get_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.json');
