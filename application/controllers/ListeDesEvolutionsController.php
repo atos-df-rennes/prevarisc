@@ -17,6 +17,6 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
             }
         }
         file_put_contents('/home/prv/current/httpd/conf/prevarisc/liste-evols.json', json_encode($datas));
-        $this->view->assign('datas',$datas);
+        $this->view->assign('datas', $datas);
     }
 }
