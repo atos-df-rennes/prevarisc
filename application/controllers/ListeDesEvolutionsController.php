@@ -4,7 +4,6 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        // $this->_helper->getLayoutInstance()->setLayout('menu_admin');
         /** @var Zend_Layout */
         $layout = $this->getHelper('layout');
         $layout->setLayout('menu_admin');
