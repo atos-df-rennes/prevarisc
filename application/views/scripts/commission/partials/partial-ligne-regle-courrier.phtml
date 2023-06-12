@@ -2,7 +2,7 @@
 
 	<p style='line-height: 37px; padding-top: 16px;' >
 
-		<?php if($this->name_courrier != null && is_readable(getenv('PREVARISC_REAL_DATA_PATH') . '/uploads/courriers/' . $this->id_membre . $this->type . "_". $this->name_courrier)) : ?>
+		<?php if($this->name_courrier != null && is_readable(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->id_membre.$this->type.'_'.$this->name_courrier)) : ?>
 			<span><img src='/images/file.gif' alt='' /></span>
 			<span style='vertical-align: top;'>
 				<strong style='font-size: 1.3em;' >
