@@ -577,6 +577,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListeDossierFromDossier($idDossier)
     {
         $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
             ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
@@ -591,43 +593,15 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Visites'] = [];
-        $dossEtab['Etudes'] = [];
-        $dossEtab['Autres'] = [];
-
-        $nbdossiermax = 5;
-        $nbdosssieretude = 0;
-        $nbdosssiervisite = 0;
-        $nbdosssierautre = 0;
-        foreach ($dossiers as $dossier) {
-            switch ($dossier['TYPE_DOSSIER']) {
-                //Dossier de type Etude
-                case '1':
-                    if ($nbdosssieretude < $nbdossiermax) {
-                        $dossEtab['Etudes'][] = $dossier;
-                        ++$nbdosssieretude;
-                    }
-
-                    break;
-
-                case '2':                //Dossier de type visite
-                case '3':                //Dossier de type groupe de visite
-                    if ($nbdosssiervisite < $nbdossiermax) {
-                        $dossEtab['Visites'][] = $dossier;
-                        ++$nbdosssiervisite;
-                    }
-
-                    break;
-
-                default:                //Le reste
-                    if ($nbdosssierautre < $nbdossiermax) {
-                        $dossEtab['Autres'][] = $dossier;
-                        ++$nbdosssierautre;
-                    }
-
-                    break;
-            }
-        }
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return $dossier['TYPE_DOSSIER'] === 2 || $dossier['TYPE_DOSSIER'] === 3;
+        }), 0, $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return $dossier['TYPE_DOSSIER'] === 1;
+        }), 0, $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [1, 2, 3], true);
+        }), 0, $nbdossiermax);
 
         return $dossEtab;
     }
@@ -635,6 +609,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListeDossierFromDossierN($idDossier)
     {
         $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
             ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
@@ -649,45 +625,15 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Visites'] = [];
-        $dossEtab['Etudes'] = [];
-        $dossEtab['Autres'] = [];
-
-        $nbdossierenmoins = 5;
-        $nbdosssieretude = 0;
-        $nbdosssiervisite = 0;
-        $nbdosssierautre = 0;
-        foreach ($dossiers as $dossier) {
-            switch ($dossier['TYPE_DOSSIER']) {
-                //Dossier de type Etude
-                case '1':
-                    if ($nbdosssieretude >= $nbdossierenmoins) {
-                        $dossEtab['Etudes'][] = $dossier;
-                    }
-                    ++$nbdosssieretude;
-
-                    break;
-
-                case '2':                //Dossier de type visite
-                case '3':                //Dossier de type groupe de visite
-                    if ($nbdosssiervisite >= $nbdossierenmoins) {
-                        $dossEtab['Visites'][] = $dossier;
-                    }
-
-                    ++$nbdosssiervisite;
-
-                    break;
-
-                default:                //Le reste
-                    if ($nbdosssierautre >= $nbdossierenmoins) {
-                        $dossEtab['Autres'][] = $dossier;
-                    }
-
-                    ++$nbdosssierautre;
-
-                    break;
-            }
-        }
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return $dossier['TYPE_DOSSIER'] === 2 || $dossier['TYPE_DOSSIER'] === 3;
+        }), $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return $dossier['TYPE_DOSSIER'] === 1;
+        }), $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [1, 2, 3], true);
+        }), $nbdossiermax);
 
         return $dossEtab;
     }
