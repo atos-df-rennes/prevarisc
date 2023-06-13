@@ -1,12 +1,13 @@
 <!-- Titre -->
 <h3 class='page-header'>Liste des évolutions</h3>
 <form action="/liste-des-evolutions/edit" method='post'>
-<ul>
-<?php
-        foreach($this->datas as $key=>$data){
-        $check = $data[0] ? 'checked' : null;
-        echo '<li><input type="checkbox" name="'.$key.'"'.$check.'> '.$data[1].'</li>';
-        } ?>
-</ul>
-<input type='submit' value="activer"/>
+    <ul>
+        <?php foreach ($this->datas as $key => $data):
+            $check = $data['value'] ? 'checked' : null; ?>
+            <li>
+                <input type="checkbox" name="<?= $key ?>" <?= $check ?>><?= $data['label'] ?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+    <input type='submit' value="activer"/>
 </form>

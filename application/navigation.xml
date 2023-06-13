@@ -593,6 +593,12 @@
                         </delete-valeur-liste>
                     </pages>
                 </formulaire>
+                <liste-des-evolutions>
+                    <label>Liste des évolutions activables</label>
+                    <controller>liste-des-evolutions</controller>
+                    <resource>gestion_parametrages</resource>
+                    <privilege>gestion_evolutions</privilege>
+                </liste-des-evolutions>
             </pages>
         </admin>
 

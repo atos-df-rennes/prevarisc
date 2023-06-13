@@ -9,10 +9,11 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
             throw new Exception('Layout does not have the correct type.');
         }
         $layout->getLayoutInstance()->setLayout('menu_admin');
+
         $json = file_get_contents(CONFIG_PATH.DS.'liste-evols.json');
-        $parsjson = json_decode($json);
-        $datas = (array) $parsjson;
-        $this->view->assign('datas', $datas);
+        $parsedJson = json_decode($json, true);
+
+        $this->view->assign('datas', $parsedJson);
     }
 
     public function editAction()
@@ -22,15 +23,17 @@ class ListeDesEvolutionsController extends Zend_Controller_Action
             throw new Exception('View Renderer does not have the correct type.');
         }
         $viewRenderer->setNoRender();
+
         $json = file_get_contents(CONFIG_PATH.DS.'liste-evols.json');
-        $parsjson = json_decode($json);
-        $datas = (array) $parsjson;
+        $parsedJson = json_decode($json, true);
+
         if (!empty($_POST)) {
-            foreach (array_keys($datas) as $key) {
-                $datas[$key][0] = isset($_POST[$key]);
+            foreach (array_keys($parsedJson) as $key) {
+                $parsedJson[$key]['value'] = isset($_POST[$key]);
             }
-            file_put_contents(CONFIG_PATH.DS.'liste-evols.json', json_encode($datas));
+            file_put_contents(CONFIG_PATH.DS.'liste-evols.json', json_encode($parsedJson));
         }
+
         $this->_helper->redirector('index', null, null, []);
     }
 }
