@@ -452,124 +452,124 @@ addChamp($odf, 'dateLastVP',$this->dateLastVP);
 addChamp($odf, 'avisLastVP',$this->avisLastVP);
 
 //Informations du maire de l'adresse de l'établissement
-addChamp($odf, 'nomMaire',$this->maire['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomMaire',$this->maire['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailMaire',$this->maire['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeMaire',$this->maire['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortMaire',$this->maire['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxMaire',$this->maire['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numeroMaire',$this->maire['NUMEROADRESSE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'rueMaire',$this->maire['RUEADRESSE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'cpMaire',$this->maire['CPADRESSE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'villeMaire',$this->maire['VILLEADRESSE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomMaire',$this->maire['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaire',$this->maire['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaire',$this->maire['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaire',$this->maire['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaire',$this->maire['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaire',$this->maire['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numeroMaire',$this->maire['NUMEROADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'rueMaire',$this->maire['RUEADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'cpMaire',$this->maire['CPADRESSE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'villeMaire',$this->maire['VILLEADRESSE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations du DUS du dossier
-addChamp($odf, 'nomDus',$this->dusDossier['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomDus',$this->dusDossier['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailDus',$this->dusDossier['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeDus',$this->dusDossier['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortDus',$this->dusDossier['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxDus',$this->dusDossier['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeDus',$this->dusDossier['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomDus',$this->dusDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomDus',$this->dusDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailDus',$this->dusDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeDus',$this->dusDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortDus',$this->dusDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxDus',$this->dusDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeDus',$this->dusDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations de l'exploitant du dossier
-addChamp($odf, 'nomExploitant',$this->exploitantDossier['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomExploitant',$this->exploitantDossier['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailExploitant',$this->exploitantDossier['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeExploitant',$this->exploitantDossier['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortExploitant',$this->exploitantDossier['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxExploitant',$this->exploitantDossier['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeExploitant',$this->exploitantDossier['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomExploitant',$this->exploitantDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomExploitant',$this->exploitantDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailExploitant',$this->exploitantDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeExploitant',$this->exploitantDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortExploitant',$this->exploitantDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxExploitant',$this->exploitantDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeExploitant',$this->exploitantDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations du responsable sécurité du dossier
-addChamp($odf, 'nomRespSecu',$this->respsecuDossier['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomRespSecu',$this->respsecuDossier['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailRespSecu',$this->respsecuDossier['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeRespSecu',$this->respsecuDossier['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortRespSecu',$this->respsecuDossier['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxRespSecu',$this->respsecuDossier['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeRespSecu',$this->respsecuDossier['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomRespSecu',$this->respsecuDossier['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomRespSecu',$this->respsecuDossier['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailRespSecu',$this->respsecuDossier['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeRespSecu',$this->respsecuDossier['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortRespSecu',$this->respsecuDossier['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxRespSecu',$this->respsecuDossier['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeRespSecu',$this->respsecuDossier['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations du proprietaire de l'établissement
-addChamp($odf, 'nomProprio',$this->proprioInfos['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomProprio',$this->proprioInfos['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailProprio',$this->proprioInfos['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeProprio',$this->proprioInfos['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortProprio',$this->proprioInfos['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxProprio',$this->proprioInfos['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeProprio',$this->proprioInfos['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomProprio',$this->proprioInfos['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomProprio',$this->proprioInfos['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailProprio',$this->proprioInfos['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeProprio',$this->proprioInfos['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortProprio',$this->proprioInfos['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxProprio',$this->proprioInfos['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeProprio',$this->proprioInfos['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le maitre d'oeuvre
-addChamp($odf, 'nomMaitreOeuvre',$this->maiteOeuvre['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomMaitreOeuvre',$this->maiteOeuvre['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailMaitreOeuvre',$this->maiteOeuvre['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeMaitreOeuvre',$this->maiteOeuvre['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomMaitreOeuvre',$this->maiteOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOeuvre',$this->maiteOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOeuvre',$this->maiteOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOeuvre',$this->maiteOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations du prefet
-addChamp($odf, 'nomPrefet',$this->prefetInfos['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomPrefet',$this->prefetInfos['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailPrefet',$this->prefetInfos['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixePrefet',$this->prefetInfos['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortPrefet',$this->prefetInfos['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxPrefet',$this->prefetInfos['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societePrefet',$this->prefetInfos['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomPrefet',$this->prefetInfos['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomPrefet',$this->prefetInfos['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailPrefet',$this->prefetInfos['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixePrefet',$this->prefetInfos['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortPrefet',$this->prefetInfos['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxPrefet',$this->prefetInfos['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societePrefet',$this->prefetInfos['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le maitre d'ouvrage
-addChamp($odf, 'nomMaitreOuvrage',$this->maitreOuvrage['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomMaitreOuvrage',$this->maitreOuvrage['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailMaitreOuvrage',$this->maitreOuvrage['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeMaitreOuvrage',$this->maitreOuvrage['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortMaitreOuvrage',$this->maitreOuvrage['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxMaitreOuvrage',$this->maitreOuvrage['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeMaitreOuvrage',$this->maitreOuvrage['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomMaitreOuvrage',$this->maitreOuvrage['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOuvrage',$this->maitreOuvrage['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOuvrage',$this->maitreOuvrage['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOuvrage',$this->maitreOuvrage['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOuvrage',$this->maitreOuvrage['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOuvrage',$this->maitreOuvrage['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOuvrage',$this->maitreOuvrage['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le maitre d'oeuvre
-addChamp($odf, 'nomMaitreOeuvre',$this->maitreOeuvre['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomMaitreOeuvre',$this->maitreOeuvre['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailMaitreOeuvre',$this->maitreOeuvre['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeMaitreOeuvre',$this->maitreOeuvre['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortMaitreOeuvre',$this->maitreOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxMaitreOeuvre',$this->maitreOeuvre['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeMaitreOeuvre',$this->maitreOeuvre['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomMaitreOeuvre',$this->maitreOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOeuvre',$this->maitreOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOeuvre',$this->maitreOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOeuvre',$this->maitreOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOeuvre',$this->maitreOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOeuvre',$this->maitreOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOeuvre',$this->maitreOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le Pétitionnaire demandeur
-addChamp($odf, 'nomPetitionaireDemandeur',$this->petitionaireDemandeur['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomPetitionaireDemandeur',$this->petitionaireDemandeur['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailPetitionaireDemandeur',$this->petitionaireDemandeur['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixePetitionaireDemandeur',$this->petitionaireDemandeur['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortPetitionaireDemandeur',$this->petitionaireDemandeur['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxPetitionaireDemandeur',$this->petitionaireDemandeur['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societePetitionaireDemandeur',$this->petitionaireDemandeur['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomPetitionaireDemandeur',$this->petitionaireDemandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomPetitionaireDemandeur',$this->petitionaireDemandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailPetitionaireDemandeur',$this->petitionaireDemandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixePetitionaireDemandeur',$this->petitionaireDemandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortPetitionaireDemandeur',$this->petitionaireDemandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxPetitionaireDemandeur',$this->petitionaireDemandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societePetitionaireDemandeur',$this->petitionaireDemandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le Controller Technique
-addChamp($odf, 'nomControllerTechnique',$this->controllerTechnique['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomControllerTechnique',$this->controllerTechnique['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailControllerTechnique',$this->controllerTechnique['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeControllerTechnique',$this->controllerTechnique['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortControllerTechnique',$this->controllerTechnique['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxControllerTechnique',$this->controllerTechnique['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeControllerTechnique',$this->controllerTechnique['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomControllerTechnique',$this->controllerTechnique['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomControllerTechnique',$this->controllerTechnique['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailControllerTechnique',$this->controllerTechnique['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeControllerTechnique',$this->controllerTechnique['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortControllerTechnique',$this->controllerTechnique['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxControllerTechnique',$this->controllerTechnique['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeControllerTechnique',$this->controllerTechnique['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur participant
-addChamp($odf, 'nomParticipant',$this->participant['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomParticipant',$this->participant['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailParticipant',$this->participant['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeParticipant',$this->participant['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortParticipant',$this->participant['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxParticipant',$this->participant['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeParticipant',$this->participant['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomParticipant',$this->participant['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomParticipant',$this->participant['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailParticipant',$this->participant['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeParticipant',$this->participant['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortParticipant',$this->participant['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxParticipant',$this->participant['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeParticipant',$this->participant['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur demandeur
-addChamp($odf, 'nomDemandeur',$this->demandeur['NOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'prenomDemandeurt',$this->demandeur['PRENOM_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'mailDemandeur',$this->demandeur['MAIL_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telFixeDemandeur',$this->demandeur['TELFIXE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'telPortDemandeur',$this->demandeur['TELPORTABLE_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'numFaxDemandeur',$this->demandeur['TELFAX_UTILISATEURINFORMATIONS']);
-addChamp($odf, 'societeDemandeur',$this->demandeur['SOCIETE_UTILISATEURINFORMATIONS']);
+addChamp($odf, 'nomDemandeur',$this->demandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomDemandeurt',$this->demandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailDemandeur',$this->demandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeDemandeur',$this->demandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortDemandeur',$this->demandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxDemandeur',$this->demandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeDemandeur',$this->demandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 // Descriptif standard de l'établissement
 addChamp($odf, 'historiqueDescriptifEtab',$this->etabDesc['DESCRIPTIF_HISTORIQUE_ETABLISSEMENT']);
