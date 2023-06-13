@@ -163,7 +163,7 @@ class Service_Dossier
         return $DB_contact->getContact('dossier', $id_dossier);
     }
 
-    public function getCntactInfo(int $idDossier, int $idEtab, int $idFonction): array
+    public function getContactInfo(int $idDossier, int $idEtab, int $idFonction): array
     {
         $dbDossierContact = new Model_DbTable_DossierContact();
         $contactInfos = $dbDossierContact->recupInfoContact($idDossier, $idFonction);
