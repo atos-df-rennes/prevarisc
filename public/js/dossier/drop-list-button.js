@@ -1,5 +1,5 @@
 window.onload = function() {
-    $('.deploy').click(function (event) {
+    $('.buttonOpenClose').click(function (event) {
         const clickedButton = event.target
 
         if (clickedButton.innerText === 'Voir moins') {
