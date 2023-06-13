@@ -2,6 +2,7 @@
 
 class Service_Dossier
 {
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     /**
