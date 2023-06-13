@@ -175,6 +175,8 @@ class Service_Dossier
         if (!empty($contactInfos)) {
             return $contactInfos[0];
         }
+
+        return[];
     }
 
     /**
