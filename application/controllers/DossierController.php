@@ -2264,62 +2264,31 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurNomContact = $servInstructeurNomContact;
         $this->view->servInstructeurMail = $servInstructeurMail;
 
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un maitre d'oeuvre existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 4);
-        if (1 === count($contactInfos)) {
-            $this->view->maiteOeuvre = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 4);
-            if (!empty($contactInfos)) {
-                $this->view->maiteOeuvre = $contactInfos[0];
-            }
-        }
+        $serviceDossier = new Service_Dossier();
+        $this->view->maiteOeuvre = $serviceDossier->getContactInfo($idDossier,$idEtab,4);
 
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un directeur unique de sécurité existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 8);
-        if (1 === count($contactInfos)) {
-            $this->view->dusDossier = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 8);
-            if (!empty($contactInfos)) {
-                $this->view->dusDossier = $contactInfos[0];
-            }
-        }
+        $this->view->maitreOuvrage = $serviceDossier->getContactInfo($idDossier,$idEtab,3);
 
-        //un exploitant existe
-        $exploitantInfos = $dbDossierContact->recupInfoContact($idDossier, 7);
-        if (1 === count($exploitantInfos)) {
-            $this->view->exploitantDossier = $exploitantInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 7);
-            if (!empty($contactInfos)) {
-                $this->view->exploitantDossier = $contactInfos[0];
-            }
-        }
+        $this->view->dusDossier = $serviceDossier->getContactInfo($idDossier,$idEtab,8);
 
-        //un responsable de sécurité existe
-        $respsecuInfos = $dbDossierContact->recupInfoContact($idDossier, 9);
-        if (1 === count($respsecuInfos)) {
-            $this->view->respsecuDossier = $respsecuInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 9);
-            if (!empty($contactInfos)) {
-                $this->view->respsecuDossier = $contactInfos[0];
-            }
-        }
+        $this->view->exploitantDossier = $serviceDossier->getContactInfo($idDossier,$idEtab,7);
 
-        //un proprietaire
-        $proprioInfos = $dbDossierContact->recupInfoContact($idDossier, 17);
-        if (1 === count($proprioInfos)) {
-            $this->view->proprioInfos = $proprioInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 17);
-            if (!empty($contactInfos)) {
-                $this->view->proprioInfos = $contactInfos[0];
-            }
-        }
+        $this->view->respsecuDossier = $serviceDossier->getContactInfo($idDossier,$idEtab,9);
+
+        $this->view->proprioInfos = $serviceDossier->getContactInfo($idDossier,$idEtab,17);
+
+        $this->view->petitionaireDemandeur = $serviceDossier->getContactInfo($idDossier,$idEtab,5);
+
+        $this->view->controllerTechnique = $serviceDossier->getContactInfo($idDossier,$idEtab,6);
+
+        $this->view->participant = $serviceDossier->getContactInfo($idDossier,$idEtab,10);
+
+        $this->view->demandeur = $serviceDossier->getContactInfo($idDossier,$idEtab,11);
+
+        $this->view->prefetInfos= $serviceDossier->getContactInfo($idDossier,$idEtab,1);
+
+        $this->view->maire = $serviceDossier->getContactInfo($idDossier,$idEtab,2);
+
 
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
