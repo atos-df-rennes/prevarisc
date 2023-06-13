@@ -28,13 +28,6 @@ class EtablissementController extends Zend_Controller_Action
 
         if ($this->getParam('id')) {
             $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
-            if (getenv('PREVARISC_UNITE_PERIODICITE_ANNEES')) {
-                $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] /= 12;
-                $unite = 'ans';
-            } else {
-                $unite = 'mois';
-            }
-            $this->view->assign('unite', $unite);
             $this->view->etablissement = $this->etablissement;
             $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
             $this->view->hasAvisDerogations = array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id));
@@ -63,6 +56,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
 
         $this->view->default_periodicite = $DB_periodicite->gn4ForEtablissement($this->etablissement);
+        $this->view->assign('periodicity', $this->serviceEtablissement->getDisplayedPeriodicity($this->etablissement));
         $this->view->groupements_de_communes = 0 == count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']);
 
         $this->view->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
