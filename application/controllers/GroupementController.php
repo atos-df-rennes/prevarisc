@@ -226,4 +226,9 @@ class GroupementController extends Zend_Controller_Action
         // On desactive la vue
         $this->_helper->viewRenderer->setNoRender();
     }
+
+    public function preventionisteAction(){
+        $service_groupement = new Service_GroupementCommunes();
+        $service_groupement->reaffectationPreventioniste();
+    }
 }

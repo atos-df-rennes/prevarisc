@@ -47,4 +47,15 @@ class Service_GroupementCommunes
 
         return $model_groupement->getByGroupementType($types_groupement);
     }
+
+    public function reaffectationPreventioniste(){
+        $model_groupement = new Model_DbTable_EtablissementInformationsPreventionniste();
+        $model_groupement->deletePreventioniste();
+        $valeur1 = $model_groupement->getEtablissementsPreventioniste();
+        $model_groupement->addPreventioniste($valeur1);
+        $valeur2 = $model_groupement->getCellulesPreventioniste();
+        $model_groupement->addPreventioniste( $valeur2);
+        $valeur3 = $model_groupement->getSitesPreventioniste();
+        $model_groupement->addPreventioniste( $valeur3);
+    }
 }

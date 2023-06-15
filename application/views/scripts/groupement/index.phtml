@@ -19,6 +19,7 @@
     <div class="btn-group" style='margin-bottom: 10px;'>
         <a id='save' href='#' class='btn btn-success' class='save' >Sauvegarder le groupement</a>
         <a id='delete' href='#' class='btn' >Supprimer le groupement</a>
+        <a id='preventioniste' class='btn' >Preventioniste</a>
     </div>
 
 </div>
@@ -59,6 +60,11 @@
 
 <script type="text/javascript">
 
+    $("#preventioniste").click( function() {
+        $.ajax({url: "/groupement/preventioniste"
+        })
+	});
+
 	$("#confirm").dialog({
 		resizable: false,
 		draggable: false,
@@ -76,11 +82,11 @@
 						$("#remove").button("enable");
 						$("#notif").html("Le groupement a bien été supprimé.").show();
 						setTimeout( function() { $("#notif").fadeOut(); }, 2500);
-						
+
 						$("#gpt option:selected").remove();
 						$("#gpt option:first").attr("selected", "selected");
 						$("#gpt").change();
-						
+
 						$("#confirm").dialog( "close" );
 					}
 				});
@@ -90,7 +96,7 @@
 			}
 		}
 	});
-	
+
 	$("#add").dialog({
 		title: "Création d'un nouveau groupement",
 		resizable: false,
@@ -120,7 +126,7 @@
 			}
 		}
 	});
-	
+
 	// Boutons de la toolbar
 	// Selection de l'option "nouveau groupement"
 	$("#new").button({
@@ -131,11 +137,11 @@
 		$("#add").dialog("open");
 	// Sauvegarder
 	});
-	
+
 	$( "#save" ).click( function() {
 		// Selection de toutes les villes pour les passer dans le formulaire
 		$("#villes_groupement option").each(function(){ $(this).attr("selected", true);	});
-		
+
 		// On envoit le tout en ajax
 		$.ajax({
 			url: "/groupement/add?format=json",
@@ -153,26 +159,26 @@
 				setTimeout( function() { $("#notif").fadeOut(); }, 2500);
 			}
 		});
-		
+
 		// On deselectionne les villes
 		$("#villes_groupement option").each(function(){ $(this).attr("selected", false); });
 	// Suppression d'un groupement
 	});
-    
+
     $( "#delete" ).click( function() {
 		$("#confirm").dialog("open");
 	});
-	
+
 	// Gestion des évenements de la liste déroulante
 	$("#gpt").change( function() {
-    
+
         if($("#gpt").val() != null)
         {
             if( $("#gpt").val() == 0 )
                 $("#delete").button("disable");
             else
                 $("#delete").button("enable");
-            
+
             $.ajax({
                 url: "/groupement/display?id=" + $("#gpt").val(),
                 beforeSend: function() {
@@ -183,7 +189,7 @@
                     $("#form > #content").css( "opacity", 1 );
                 }
             });
-            
+
             $("#id_gpt").val( $("#gpt").val() ); // On change la valeur de l'id en cours
             $("#save").button("enable");
         }
@@ -192,7 +198,7 @@
             $("#save").button("disable");
         }
 	});
-	
+
 	$("#gpt").change(); // Initalisation
 
 
