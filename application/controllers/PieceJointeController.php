@@ -21,8 +21,10 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->headScript()->appendFile('/js/dossier/pieceJointe.js', 'text/javascript');
-        $this->view->headLink()->appendStylesheet('/css/pieces-jointes.css', 'all');
+        /** @var Zend_View */
+        $view = $this->view;
+        $view->headScript()->appendFile('/js/dossier/pieceJointe.js', 'text/javascript');
+        $view->headLink()->appendStylesheet('/css/pieces-jointes.css', 'all');
 
         // Modèles
         $DBused = new Model_DbTable_PieceJointe();
@@ -37,7 +39,7 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->pjcomm = $this->_request->pjcomm;
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             $this->view->verrou = $this->_request->verrou;
-            $this->view->isPlatau = $modelDossier->isPlatau($this->getRequest()->getParam('id'));
+            $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement
             $this->view->type = 'etablissement';
             $this->view->identifiant = $this->_request->id;
@@ -411,7 +413,9 @@ class PieceJointeController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $idPj = filter_var($this->getRequest()->getPost()['idPj'], FILTER_VALIDATE_INT);
+        /** @var Zend_Controller_Request_Http */
+        $request = $this->getRequest();
+        $idPj = filter_var($request->getPost()['idPj'], FILTER_VALIDATE_INT);
 
         $this->dbPj->updatePlatauStatus($idPj, 'to_be_exported');
     }

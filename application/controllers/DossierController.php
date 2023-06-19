@@ -199,16 +199,16 @@ class DossierController extends Zend_Controller_Action
             if (null !== $dossier['ID_PLATAU']) {
                 $platauConsultationMapper = new Model_PlatauConsultationMapper();
                 $platauConsultationModel = new Model_PlatauConsultation();
-                $this->view->enumStatutsPec = new Model_Enum_PlatauStatutPec();
-                $this->view->enumStatutsAvis = new Model_Enum_PlatauStatutAvis();
+                $this->view->assign('enumStatutsPec', new Model_Enum_PlatauStatutPec());
+                $this->view->assign('enumStatutsAvis', new Model_Enum_PlatauStatutAvis());
 
                 $platauConsultation = $platauConsultationMapper->find($dossier['ID_PLATAU'], $platauConsultationModel);
 
                 if (null !== $platauConsultation) {
-                    $this->view->statutPec = $platauConsultation->getStatutPec();
-                    $this->view->datePec = $platauConsultation->getDatePec();
-                    $this->view->statutAvis = $platauConsultation->getStatutAvis();
-                    $this->view->dateAvis = $platauConsultation->getDateAvis();
+                    $this->view->assign('statutPec', $platauConsultation->getStatutPec());
+                    $this->view->assign('datePec', $platauConsultation->getDatePec());
+                    $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
+                    $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
                 }
             }
 
