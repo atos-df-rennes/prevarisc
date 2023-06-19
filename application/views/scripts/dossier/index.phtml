@@ -1326,6 +1326,70 @@ $(".delaipresc").live('click', function() {
             <div id='chargement'></div>
         </div>
         <h3>Informations générales</h3>
+        <?php if (null !== $this->id_platau): ?>
+            <h4 class="title">Informations sur Plat'AU</h4>
+            <ul class="list unstyled">
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <div class="left span3">Identifiant de la consultation</div>
+                    <div class="right span9"><?= $this->id_platau ?></div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classPec = '';
+                    if ($this->enumStatutsPec::EN_ATTENTE === $this->statutPec):
+                        $classPec = 'text-info';
+                    elseif ($this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec):
+                        $classPec = 'text-success';
+                    elseif ($this->enumStatutsPec::A_RENVOYER === $this->statutPec):
+                        $classPec = 'text-warning';
+                    elseif ($this->enumStatutsPec::EN_ERREUR === $this->statutPec):
+                        $classPec = 'text-error';
+                    endif ?>
+                    <div class="left span3">Prise en compte métier</div>
+                    <div class="right span9">
+                        <span id="statut-pec" class="<?= $classPec ?>"><?= $this->enumStatutsPec->getLabel($this->statutPec) ?></span>
+                        <?php if ($this->datePec): ?>
+                            le <?= $this->datePec ?>
+                        <?php endif ?>
+
+                        <?php if (
+                                $this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec &&
+                                null === $this->dateAvis
+                            ): ?>
+                            <a id="retry-export-pec" href="#" title="Renvoyer la prise en compte métier" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classAvis = '';
+                    if ($this->enumStatutsAvis::EN_COURS === $this->statutAvis):
+                        $classAvis = 'text-info';
+                    elseif ($this->enumStatutsAvis::TRAITE === $this->statutAvis):
+                        $classAvis = 'text-success';
+                    elseif ($this->enumStatutsAvis::A_RENVOYER === $this->statutAvis):
+                        $classAvis = 'text-warning';
+                    elseif ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis):
+                        $classAvis = 'text-error';
+                    endif ?>
+                    <div class="left span3">Avis</div>
+                    <div class="right span9">
+                        <span id="statut-avis" class="<?= $classAvis ?>"><?= $this->enumStatutsAvis->getLabel($this->statutAvis) ?></span>
+                        <?php if ($this->dateAvis): ?>
+                            le <?= $this->dateAvis ?>
+                        <?php endif ?>
+
+                        <?php if ($this->enumStatutsAvis::TRAITE === $this->statutAvis): ?>
+                            <a id="retry-export-avis" href="#" title="Renvoyer l'avis" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+            </ul>
+        <?php endif ?>
         <!-- BEGIN UL Type/Nature -->
         <h4>Type et nature du dossier</h4>
         <ul class='list unstyled'>
