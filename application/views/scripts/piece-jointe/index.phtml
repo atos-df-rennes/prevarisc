@@ -5,32 +5,32 @@
     <button id='addPJ' class='btn' >Ajouter une piece jointe</button>
     <button id='addPJQuick' class='btn' >Ajout rapide</button>
 
+    <?php if (
+        $this->displayDownloadButton
+        && null !== $this->listePj
+        && [] !== $this->listePj
+    ): ?>
+        <a href="/dossier/get-zip-all-pj/id/<?= $this->identifiant ?>" class="btn btn-success pull-right">Télécharger les pièces jointes</a>
+    <?php endif ?>
+
     <div id='dropzone' class='dropzone' style='display:none'></div>
 </h3>
 <div id='formAddPJ' title='Ajouter une pièce jointe' class='ui-helper-hidden' ></div>
 
-<?php if(!empty($this->listePj)) :?>
-    <a href="/dossier/get-zip-all-pj/id/<?= $this->identifiant ?>" class="btn btn-success">Télécharger les pièces jointes</a>
-<?php endif ?>
-
 <form id="export-pj-platau">
-    <div id='listePieceJointe' class='<?php if(count($this->listePj)==0) echo "ui-helper-hidden"?>' >
+    <div id='listePieceJointe' class='<?php if(count($this->listePj)===0) echo "ui-helper-hidden"?>' >
         <table id='tabPieceJointe' class='table table-striped'>
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Description</th>
                     <th>Date d'ajout</th>
-                    <?php if ($this->isPlatau): ?>
-                        <th>Statut Plat'AU</th>
-                    <?php endif ?>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <?php
-                    echo $this->partial("piece-jointe/display.phtml", array("path" => $this->path, "listePj" => $this->listePj, "type" => $this->type, "id" => $this->identifiant, "verrou" => $this->verrou, "isPlatau" => $this->isPlatau))
-                ?>
+            <?=
+                $this->partial("piece-jointe/display.phtml", array("path" => $this->path, "listePj" => $this->listePj, "type" => $this->type, "id" => $this->identifiant, "verrou" => $this->verrou, "isPlatau" => $this->isPlatau))
+            ?>
             </tbody>
         </table>
     </div>

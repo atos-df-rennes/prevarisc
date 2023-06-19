@@ -1272,3 +1272,7 @@ dl.champ_effectif_camping dd input {
 .radio-controls {
     margin-left: 3rem;
 }
+
+.control-label.no-top-padding {
+    padding-top: 0;
+}

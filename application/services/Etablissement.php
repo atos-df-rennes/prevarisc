@@ -1629,6 +1629,39 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $etablissement->save();
     }
 
+    public function getDisplayedPeriodicity(array $etablissement): string
+    {
+        $numberOfMonthsInAYear = 12;
+
+        $periodicity = $etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
+        $periodicityUnit = 'mois';
+        $periodicityString = "{$periodicity} {$periodicityUnit}";
+
+        if (
+            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOL)
+        ) {
+            return $periodicityString;
+        }
+
+        if ($periodicity < $numberOfMonthsInAYear) {
+            return $periodicityString;
+        }
+
+        $periodicityYear = intdiv($periodicity, $numberOfMonthsInAYear);
+        $periodicityUnit = 1 === $periodicityYear ? 'an' : 'ans';
+
+        $periodicityString = "{$periodicityYear} {$periodicityUnit}";
+
+        $remainder = $periodicity % $numberOfMonthsInAYear;
+        $remainderUnit = 'mois';
+
+        if (0 !== $remainder) {
+            $periodicityString = "{$periodicityString} et {$remainder} {$remainderUnit}";
+        }
+
+        return $periodicityString;
+    }
+
     private function compareActivitesSecondaires($ets, $postData): bool
     {
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {

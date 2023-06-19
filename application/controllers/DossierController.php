@@ -399,19 +399,20 @@ class DossierController extends Zend_Controller_Action
 
             //On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             //document manquant - absence de quorum - hors delai - ne peut se prononcer - differe l'avis
-            $absQuorum = $this->view->infosDossier['ABSQUORUM_DOSSIER'];
-            $horsDelai = $this->view->infosDossier['HORSDELAI_DOSSIER'];
-            $npsp = $this->view->infosDossier['NPSP_DOSSIER'];
-            $differeAvis = $this->view->infosDossier['DIFFEREAVIS_DOSSIER'];
+            $absQuorum = filter_var($this->view->infosDossier['ABSQUORUM_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $horsDelai = filter_var($this->view->infosDossier['HORSDELAI_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $npsp = filter_var($this->view->infosDossier['NPSP_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $differeAvis = filter_var($this->view->infosDossier['DIFFEREAVIS_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $incompletDossier = filter_var($this->view->infosDossier['INCOMPLET_DOSSIER'], FILTER_VALIDATE_BOOL);
 
             //Debut mise en place avec service (voir pour récup le type)
             $afficheAvis = 1;
             if (
-                (!isset($absQuorum) || 0 != $absQuorum)
-                || (!isset($horsDelai) || 0 != $horsDelai)
-                || !isset($npsp)
-                || (!isset($differeAvis) || 0 != $differeAvis)
-                || (0 != $this->view->infosDossier['INCOMPLET_DOSSIER'])
+                $absQuorum
+                || $horsDelai
+                || $npsp
+                || $differeAvis
+                || $incompletDossier
             ) {
                 $afficheAvis = 0;
             }
@@ -1980,12 +1981,7 @@ class DossierController extends Zend_Controller_Action
 
         if (0 !== $idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
-        }
 
-        if (
-            isset($idDossier)
-            && 0 != $idDossier
-        ) {
             $pathBase = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 
             //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
@@ -2468,7 +2464,6 @@ class DossierController extends Zend_Controller_Action
         if (
             self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCC)
-            && isset($affectDossier)
             && !$this->_getParam('repriseCC')
         ) {
             //On récupère toutes les cellules
@@ -2596,10 +2591,8 @@ class DossierController extends Zend_Controller_Action
 
         //DATE DE LA DERNIERE VISITE PERIODIQUE
         $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
-        if (
-            '' != $dateVisite
-            && isset($dateVisite)
-        ) {
+
+        if ('' !== $dateVisite) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
 
             $this->view->dateLastVP = null;
@@ -3271,6 +3264,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->arrayAvisDerogations = $dbDossier->getListAvisDerogationsFromDossier($idDossier);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
         $DBlisteAvis = new Model_DbTable_Avis();
         $this->view->listeAvis = $DBlisteAvis->getAvis();
@@ -3308,6 +3302,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
         $DBlisteAvis = new Model_DbTable_Avis();
         $this->view->listeAvis = $DBlisteAvis->getAvis();

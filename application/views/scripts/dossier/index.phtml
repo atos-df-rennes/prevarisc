@@ -2021,32 +2021,58 @@ $(".delaipresc").live('click', function() {
                     établissements enfants
                 </div>
             </li>
+            <?php
+                $thirdPartyPlugins = explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'));
+                $isSignalement = in_array('Plugin_FacteurCriticite', $thirdPartyPlugins, true);
+            ?>
             <li class='row-fluid' id='FACTDANGE'
-                style='margin-bottom:20px;<?php echo ($action != 'new' && $this->infosDossier['FACTDANGE_DOSSIER'] != null && $this->infosDossier['FACTDANGE_DOSSIER'] != 0) ? "" : "display:none;" ?>'>
+                style='margin-bottom:20px;
+                <?php echo (
+                    $action != 'new'
+                    && $this->infosDossier['FACTDANGE_DOSSIER'] !== null
+                    && (
+                        ($isSignalement && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2)
+                        || $this->infosDossier['FACTDANGE_DOSSIER'] > 0
+                    )
+                ) ? "" : "display:none;" ?>'
+            >
                 <div class='left libelle span3' style='float:left;'>Facteur de criticité</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
-                    <span class='factDange <?php echo $this->infosDossier['FACTDANGE_DOSSIER'] ?>'>
-                        <?php echo $this->infosDossier['FACTDANGE_DOSSIER'] ?>
+                    <span class='factDange'>
+                        <?php if ($isSignalement) {
+                            if ($this->infosDossier['FACTDANGE_DOSSIER'] === 0) {
+                                echo 'Non';
+                            } else {
+                                echo 'Oui';
+                            }
+                        } else {
+                            echo $this->infosDossier['FACTDANGE_DOSSIER'];
+                        } ?>
                     </span>
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='FACTDANGE_DOSSIER' id='FACTDANGE_DOSSIER'>
-                        <option value='0'>-</option>
-                        <option value='1'
-                            <?php echo (1 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>1
-                        </option>
-                        <option value='2'
-                            <?php echo (2 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>2
-                        </option>
-                        <option value='3'
-                            <?php echo (3 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>3
-                        </option>
-                        <option value='4'
-                            <?php echo (4 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>4
-                        </option>
-                        <option value='5'
-                            <?php echo (5 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>5
-                        </option>
+                        <?php if ($isSignalement): ?>
+                            <option value='0' <?php if ($this->infosDossier['FACTDANGE_DOSSIER'] === 0) echo "selected='selected'" ?>>Non</option>
+                            <option value='1' <?php if ($this->infosDossier['FACTDANGE_DOSSIER'] > 0) echo "selected='selected'" ?>>Oui</option>
+                        <?php else: ?>
+                            <option value='0'>-</option>
+                            <option value='1'
+                                <?php echo (1 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>1
+                            </option>
+                            <option value='2'
+                                <?php echo (2 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>2
+                            </option>
+                            <option value='3'
+                                <?php echo (3 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>3
+                            </option>
+                            <option value='4'
+                                <?php echo (4 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>4
+                            </option>
+                            <option value='5'
+                                <?php echo (5 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>5
+                            </option>
+                        <?php endif ?>
                     </select>
                 </div>
             </li>

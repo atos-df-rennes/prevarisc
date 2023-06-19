@@ -589,6 +589,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListeDossierFromDossier($idDossier)
     {
         $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
             ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
@@ -603,30 +605,47 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Visites'] = [];
-        $dossEtab['Etudes'] = [];
-        $dossEtab['Autres'] = [];
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), 0, $nbdossiermax);
 
-        foreach ($dossiers as $dossier) {
-            switch ($dossier['TYPE_DOSSIER']) {
-                //Dossier de type Etude
-                case '1':
-                    $dossEtab['Etudes'][] = $dossier;
+        return $dossEtab;
+    }
 
-                    break;
+    public function getListeDossierFromDossierN($idDossier)
+    {
+        $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
 
-                case '2':                //Dossier de type visite
-                case '3':                //Dossier de type groupe de visite
-                    $dossEtab['Visites'][] = $dossier;
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
 
-                    break;
+        $dossiers = $this->getAdapter()->fetchAll($select);
 
-                default:                //Le reste
-                    $dossEtab['Autres'][] = $dossier;
-
-                    break;
-            }
-        }
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), $nbdossiermax);
 
         return $dossEtab;
     }
