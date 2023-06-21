@@ -10,8 +10,7 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'], [])
             ->join(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
-            ->join(['ei' =>'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'ID_ETABLISSEMENTINFORMATIONS')
-            ->join(['gc' => 'groupementcommune'], 'gc.NUMINSEE_COMMUNE = ea.NUMINSEE_COMMUNE', [])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'ID_ETABLISSEMENTINFORMATIONS')            ->join(['gc' => 'groupementcommune'], 'gc.NUMINSEE_COMMUNE = ea.NUMINSEE_COMMUNE', [])
             ->join(['g' => 'groupement'], 'g.ID_GROUPEMENT = gc.ID_GROUPEMENT', [])
             ->join(['gt' => 'groupementtype'], 'g.ID_GROUPEMENTTYPE = gt.ID_GROUPEMENTTYPE', [])
             ->join(['gp' => 'groupementpreventionniste'], 'gp.ID_GROUPEMENT = g.ID_GROUPEMENT', [])
@@ -29,7 +28,7 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'], [])
             ->join(['el' => 'etablissementlie'], 'el.ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
-            ->join(['pere' =>'etablissement'], 'pere.ID_ETABLISSEMENT = el.ID_ETABLISSEMENT', [])
+            ->join(['pere' => 'etablissement'], 'pere.ID_ETABLISSEMENT = el.ID_ETABLISSEMENT', [])
             ->join(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = pere.ID_ETABLISSEMENT', [])
             ->join(['ei' => 'etablissementinformations'], 'ei.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'ID_ETABLISSEMENTINFORMATIONS')
             ->join(['gc' => 'groupementcommune'], 'gc.NUMINSEE_COMMUNE = ea.NUMINSEE_COMMUNE', [])
@@ -50,7 +49,7 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'], [])
             ->join(['el' => 'etablissementlie'], 'el.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
-            ->join(['fils' =>'etablissement'], 'fils.ID_ETABLISSEMENT = el.ID_FILS_ETABLISSEMENT', [])
+            ->join(['fils' => 'etablissement'], 'fils.ID_ETABLISSEMENT = el.ID_FILS_ETABLISSEMENT', [])
             ->join(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = fils.ID_ETABLISSEMENT', [])
             ->join(['ei' => 'etablissementinformations'], 'ei.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'ID_ETABLISSEMENTINFORMATIONS')
             ->join(['gc' => 'groupementcommune'], 'gc.NUMINSEE_COMMUNE = ea.NUMINSEE_COMMUNE', [])
@@ -75,7 +74,6 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
         INNER JOIN `groupement` AS `g` ON g.ID_GROUPEMENT = gc.ID_GROUPEMENT
         WHERE g.LIBELLE_GROUPEMENT = '".$groupement."';";
         $this->getAdapter()->query($delete1);
-
     }
 
     public function deleteCellulesPreventioniste($groupement)
@@ -106,7 +104,7 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
 
     public function addPreventioniste(array $valeur)
     {
-        foreach($valeur as $val) {
+        foreach ($valeur as $val) {
             $this->insert($val);
         }
     }
