@@ -110,4 +110,3 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
         }
     }
 }
-?>
