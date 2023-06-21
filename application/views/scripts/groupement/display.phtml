@@ -69,6 +69,9 @@
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
+        <a style='margin-bottom: 10px;' id='preventioniste' class='btn' >Affecter aux etablissements</a>
+
+
 		<hr class='clear' />
 
 		<!-- Afficher la liste des prev. -->
@@ -99,6 +102,12 @@
 </div>
 
 <script type="text/javascript">
+
+    //réaffecter un préventioiste
+    $("#preventioniste").click( function() {
+        $.ajax({url: "/groupement/preventioniste?groupement="+$("#gpt option:selected").text()/*+",idgroupement="+$("#gpt option:selected").val()*/
+        })
+	});
 
 	// Onglets
 	$( "#tabs" ).tabs();
