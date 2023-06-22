@@ -390,6 +390,9 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->columns([
             'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
         ]);
+        $search->columns([
+            'nextvisitemonth' => new Zend_Db_Expr('MONTH(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
+        ]);
         $search->joinEtablissementDossier();
         $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
                 .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
@@ -404,7 +407,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         if ($idsCommission) {
             $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
         }
-        $search->having('nextvisiteyear <= YEAR(NOW())');
+        $search->having('nextvisiteyear > YEAR(NOW()) OR nextvisiteyear < YEAR(NOW()) OR (nextvisiteyear = YEAR(NOW()) AND nextvisitemonth < MONTH(NOW()))');
 
         return $search->run(false, null, false)->toArray();
     }
