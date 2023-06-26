@@ -51,13 +51,13 @@
 						));
 					}
 				?>
-			
+
 			</tr>
-			
+
 		</tbody>
 	</table>
-	
-	<iframe id='iframe' name="iframe" marginheight="0" marginwidth="0" height="0" width="0"></iframe>
+
+	<iframe id='iframe' name="iframe" marginheight="0" marginwidth="0" height="0" width="0" hidden></iframe>
 
 <?php endforeach ?>
 
@@ -74,16 +74,16 @@
 			$("#<?php echo $_GET["id_commission"] ?>_tabs").tabs('load',current_index);
 		}
 	}
-	
+
 	// Gestion de l'envoi auto du formulaire
 	$("form.courrier input[type=file]").change(function() {
 		$(this).parent().submit();
 	});
-	
+
 	// Gestion de la suppression d'un courrier
 	$("a.delete-courrier").click(function() {
 		var a = this;
-		
+
 		$.ajax({
 			url: a.href,
 			success: function(result) {
