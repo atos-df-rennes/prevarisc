@@ -176,7 +176,7 @@ class Service_Dossier
             return $contactInfos[0];
         }
 
-        return[];
+        return [];
     }
 
     /**
