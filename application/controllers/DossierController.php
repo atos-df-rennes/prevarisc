@@ -2190,7 +2190,7 @@ class DossierController extends Zend_Controller_Action
             if ('' != $array_adresses[0]['LIBELLE_COMMUNE']) {
                 $adresse .= strtoupper($array_adresses[0]['LIBELLE_COMMUNE']).' ';
             }
-            $this->view->maire = $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']);
+            $this->view->assign('maire', $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']));
             $this->view->etablissementAdresse = $adresse;
         }
 
@@ -2265,29 +2265,29 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurMail = $servInstructeurMail;
 
         $serviceDossier = new Service_Dossier();
-        $this->view->maiteOeuvre = $serviceDossier->getContactInfo($idDossier, $idEtab, 4);
+        $this->view->assign('maiteOeuvre', $serviceDossier->getContactInfo($idDossier, $idEtab, 4));
 
-        $this->view->maitreOuvrage = $serviceDossier->getContactInfo($idDossier, $idEtab, 3);
+        $this->view->assign('maitreOuvrage', $serviceDossier->getContactInfo($idDossier, $idEtab, 3));
 
-        $this->view->dusDossier = $serviceDossier->getContactInfo($idDossier, $idEtab, 8);
+        $this->view->assign('dusDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 8));
 
-        $this->view->exploitantDossier = $serviceDossier->getContactInfo($idDossier, $idEtab, 7);
+        $this->view->assign('exploitantDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 7));
 
-        $this->view->respsecuDossier = $serviceDossier->getContactInfo($idDossier, $idEtab, 9);
+        $this->view->assign('respsecuDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 9));
 
-        $this->view->proprioInfos = $serviceDossier->getContactInfo($idDossier, $idEtab, 17);
+        $this->view->assign('proprioInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 17));
 
-        $this->view->petitionaireDemandeur = $serviceDossier->getContactInfo($idDossier, $idEtab, 5);
+        $this->view->assign('petitionaireDemandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 5));
 
-        $this->view->controllerTechnique = $serviceDossier->getContactInfo($idDossier, $idEtab, 6);
+        $this->view->assign('controllerTechnique', $serviceDossier->getContactInfo($idDossier, $idEtab, 6));
 
-        $this->view->participant = $serviceDossier->getContactInfo($idDossier, $idEtab, 10);
+        $this->view->assign('participant', $serviceDossier->getContactInfo($idDossier, $idEtab, 10));
 
-        $this->view->demandeur = $serviceDossier->getContactInfo($idDossier, $idEtab, 11);
+        $this->view->assign('demandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 11));
 
-        $this->view->prefetInfos = $serviceDossier->getContactInfo($idDossier, $idEtab, 1);
+        $this->view->assign('prefetInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 1));
 
-        $this->view->maire = $serviceDossier->getContactInfo($idDossier, $idEtab, 2);
+        $this->view->assign('maire', $serviceDossier->getContactInfo($idDossier, $idEtab, 2));
 
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
