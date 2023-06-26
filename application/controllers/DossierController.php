@@ -2600,13 +2600,11 @@ class DossierController extends Zend_Controller_Action
         ];
 
         $serviceFormulaire = new Service_Formulaire();
-        // Gestion des rubriques/champs personnalisés
         $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
 
         // Récupération des rubriques pour chaque objet global
-        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-        foreach ($capsulesRubriques as &$capsuleRubrique) {
-            $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+        foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+            $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
         }
 
         $this->view->assign('formulaires', $capsulesRubriques);
@@ -3240,6 +3238,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->arrayAvisDerogations = $dbDossier->getListAvisDerogationsFromDossier($idDossier);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
         $DBlisteAvis = new Model_DbTable_Avis();
         $this->view->listeAvis = $DBlisteAvis->getAvis();
@@ -3277,6 +3276,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
         $DBlisteAvis = new Model_DbTable_Avis();
         $this->view->listeAvis = $DBlisteAvis->getAvis();

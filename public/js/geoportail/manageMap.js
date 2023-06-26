@@ -298,8 +298,8 @@ function putMarkerAt(viewer, center, nbCouches) {
 
 function updateCoordinates(center, sourceProj, destProj) {
     var lonlat = new ol.proj.transform(center, sourceProj, destProj);
-    $("input[name='lon']").val(lonlat[0]);
-    $("input[name='lat']").val(lonlat[1]);
+    $("input[name='lon']").val(parseFloat(lonlat[0].toFixed(6)));
+    $("input[name='lat']").val(parseFloat(lonlat[1].toFixed(6)));
 
     return lonlat;
 }
