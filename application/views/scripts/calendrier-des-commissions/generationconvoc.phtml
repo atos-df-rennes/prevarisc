@@ -77,7 +77,7 @@ foreach($this->informationsMembre as $val => $membre){
 				$heureCommTab = explode(":",$this->heureDeb);
 				$heureComm = $heureCommTab[0].":".$heureCommTab[1];
 				setVars($villeODF,'heureDebutComm',$heureComm);
-                                
+
 				$heureDebut = '';
 				foreach($this->dossierComm as $val => $dossierInfos){
 					if(
@@ -100,7 +100,7 @@ foreach($this->informationsMembre as $val => $membre){
 					}
 				}
 				setVars($villeODF, 'heureDeb1erDossier', $heureDebut);
-                                
+
 				//ICI FOREACH SUR LES DOSSIERS DE LA COMMUNE
 				//Generation du segment pour l'affichage des différentes infos du dossier
 				$infosDoss = $villeODF->infosDoss;
@@ -248,7 +248,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'numWinPrev', $dossierInfos['infosEtab']['general']['NUMEROID_ETABLISSEMENT']);
     setVars($segment, 'mailEtab', $dossierInfos['infosEtab']['general']["COURRIEL_ETABLISSEMENT"]);
 	setVars($segment, 'communeEtab', $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_COMMUNE"]);
-	
+
     $adresse = $dossierInfos['infosEtab']["adresses"][0]["NUMERO_ADRESSE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["LIBELLE_RUE"]." ";
 	$adresse .= $dossierInfos['infosEtab']["adresses"][0]["CODEPOSTAL_COMMUNE"]." ";
@@ -288,10 +288,12 @@ function retrieveInfoDossier($segment, $dossierInfos) {
         foreach($dossierInfos["preventionnistes"] as $va => $preventioniste){
             $listePreventioniste[] = $preventioniste['GRADE_UTILISATEURINFORMATIONS']. " " .$preventioniste['NOM_UTILISATEURINFORMATIONS']. " ".$preventioniste['PRENOM_UTILISATEURINFORMATIONS'];
             $listeTelPreventioniste[] = $preventioniste['TELFIXE_UTILISATEURINFORMATIONS'];
+            $listeMailPreventionniste[] = $preventioniste['MAIL_UTILISATEURINFORMATIONS'];
         }
     }
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+    setVars($segment, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
 }
 
 function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $dateComm, $infosGroupement, $listeCommunes) {
