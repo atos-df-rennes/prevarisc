@@ -395,7 +395,7 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->_getParam('id');
             $this->view->idDossier = $idDossier;
             //Récupération de tous les champs de la table dossier
-            $this->view->infosDossier = $DBdossier->find($idDossier)->current();
+            $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
 
             //On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             //document manquant - absence de quorum - hors delai - ne peut se prononcer - differe l'avis
@@ -2077,7 +2077,7 @@ class DossierController extends Zend_Controller_Action
 
         //RECUPERATIONS DES INFORMATIONS SUR L'ETABLISSEMENT
         $service_etablissement = new Service_Etablissement();
-        $this->view->etablissementInfos = $service_etablissement->get($idEtab);
+        $this->view->assign('etablissementInfos', $service_etablissement->get($idEtab));
 
         $model_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $model_etablissement->find($idEtab)->current();
@@ -2306,7 +2306,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->commissionInfos = 'Aucune commission';
         if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && null !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
-            $this->view->commissionInfos = $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current();
+            $this->view->assign('commissionInfos', $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current());
         }
 
         $this->view->etatDossier = 'Complet';
