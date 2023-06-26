@@ -26,14 +26,14 @@
 	$("#button-gdc").click(function() {
 		dialog_gdc();
 	});
-	
+
 	function dialog_gdc() {
 
 		// $('#dialog-gdc').dialog("destroy");
 		$("#dialog-gdc").remove();
-		
+
 		var dialog_gdc = $("<div id='dialog-gdc'></div>").appendTo("body");
-	
+
 		dialog_gdc.dialog({
 			title: "Gestions des commissions",
 			width: 650,
@@ -43,30 +43,38 @@
 			create: function() {
 				dialog_gdc.load( "/gestion-des-commissions/form" );
 			},
-			buttons: {
-				"Sauvegarder" : function() {
-					$.ajax({
-						url: "/gestion-des-commissions/save",
-						data: $("#form-gdc").serialize(),
-						type: "POST",
-						success: function () {
-                                                        $("#dialog-gdc").html('');
-							dialog_gdc.dialog("destroy");
-							window.location.reload();
-						}
-					});
-				},
-				Cancel: function() {
-                                        $("#dialog-gdc").html('');
-					dialog_gdc.dialog("destroy");
-				}
-			}
+			buttons: [
+                {
+                    text: 'Sauvegarder',
+                    class: 'btn btn-success',
+                    click: function() {
+                        $.ajax({
+                            url: "/gestion-des-commissions/save",
+                            data: $("#form-gdc").serialize(),
+                            type: "POST",
+                            success: function () {
+                                $("#dialog-gdc").html('');
+                                dialog_gdc.dialog("destroy");
+                                window.location.reload();
+                            }
+                        });
+                    },
+                },
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        $("#dialog-gdc").html('');
+                        dialog_gdc.dialog("destroy");
+                    },
+                }
+            ]
 		});
 	}
 
 	// Affichage des commissions
 	$("ul#gestionCommissionMenu a").click(function() {
-		
+
 		$("#content_commissions").load( $(this).attr("href") );
 		$("ul#gestionCommissionMenu li").removeClass("active");
 		$(this).parent().addClass("active");

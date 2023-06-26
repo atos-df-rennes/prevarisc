@@ -6,25 +6,25 @@
     </li>
     <li class="nav-header">Actions</li>
     <li>
-        <a id='exportCom'  href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><em class='icon-calendar'></em> Exporter pour Outlook</a>
+        <a id='exportCom' href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><em class='icon-calendar'></em> Exporter pour Outlook</a>
     </li>
     <li>
         <a href="#" id='createConvoc'><em class="icon-file"></em> Générer Convocations</a>
     </li>
     <li>
-        <a href="#" id='createOdj'><em class="icon-list-alt"></em> Génerer l'ordre du jour</a>
+        <a href="#" id='createOdj'><em class="icon-list-alt"></em> Générer l'ordre du jour</a>
     </li>
     <li>
-        <a href="#" id='createPv'><em class="icon-file"></em> Génerer PV</a>
+        <a href="#" id='createPv'><em class="icon-file"></em> Générer PV</a>
     </li>
     <li>
-        <a href="#" id='creationCompteRendu'><em class="icon-book"></em> Génerer le compte rendu</a>
+        <a href="#" id='creationCompteRendu'><em class="icon-book"></em> Générer le compte rendu</a>
     </li>
     <li>
         <?php if($this->infosDateComm['GESTION_HEURES'] == 1): ?>
-                <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><em class="icon-time"></em> Ne pas prendre en compte les heures</a>
+            <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><em class="icon-time"></em> Ne pas prendre en compte les heures</a>
         <?php else : ?>
-                <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><em class="icon-time"></em> Prendre en compte les heures</a>
+            <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><em class="icon-time"></em> Prendre en compte les heures</a>
         <?php endif ?>
     </li>
 </ul>
@@ -237,11 +237,10 @@ $(document).ready(function() {
 		}
 	});
 
-
 	$("#commissionPj").click(function(){
 		$.ajax({
 			type: "POST",
-			url: "/piece-jointe?type=dateCommission&id="+$("#dateCommId").val(),
+			url: "/piece-jointe?type=dateCommission&id="+$("#dateCommId").val()+"&displayDownloadButton=false",
 			success: function(msg){
 				dialogDateCommission.html(msg);
 				dialogDateCommission.dialog("open");

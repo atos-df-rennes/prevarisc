@@ -110,10 +110,8 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
 
     /**
      * @param int|string $idDossier
-     *
-     * @return int
      */
-    public function deleteDateDossierAffect($idDossier)
+    public function deleteDateDossierAffect($idDossier): void
     {
         $this->delete("ID_DOSSIER_AFFECT = '".$idDossier."'");
     }

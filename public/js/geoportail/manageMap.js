@@ -49,14 +49,14 @@ function initViewer(divId, ignKeys, center, description, autoconfPath) {
     return viewer;
 }
 
-function addUserLayers(viewer, ignKey, layers) {
+function addUserLayers(viewer, layers) {
     layers.forEach(function(layer) {
         switch (layer.TYPE_COUCHECARTO) {
             case 'WMS':
                 addWmsLayer(viewer, layer)
                 break
             case 'WMTS':
-                addWmtsLayer(viewer, layer, ignKey)
+                addWmtsLayer(viewer, layer)
                 break
             default:
                 console.error('Type de couche non supporté: ' + layer.TYPE_COUCHECARTO)
@@ -93,7 +93,12 @@ function addWmsLayer(viewer, wmsLayer) {
     .attr('title', wmsLayer.NOM_COUCHECARTO)
 }
 
-function addWmtsLayer(viewer, wmtsLayer, ignKey) {
+function addWmtsLayer(viewer, wmtsLayer) {
+    const domaineRegex = /http(s):\/\/([a-z]+\.?)+\//
+    
+    let ignKey = wmtsLayer.URL_COUCHECARTO.replace(domaineRegex, '')
+    ignKey = ignKey.split('/')[0]
+
     const wmtsCapabilities = getCapabilities(ignKey, 'wmts')
 
     // Projection EPSG:3857
@@ -293,8 +298,8 @@ function putMarkerAt(viewer, center, nbCouches) {
 
 function updateCoordinates(center, sourceProj, destProj) {
     var lonlat = new ol.proj.transform(center, sourceProj, destProj);
-    $("input[name='lon']").val(lonlat[0]);
-    $("input[name='lat']").val(lonlat[1]);
+    $("input[name='lon']").val(parseFloat(lonlat[0].toFixed(6)));
+    $("input[name='lat']").val(parseFloat(lonlat[1].toFixed(6)));
 
     return lonlat;
 }

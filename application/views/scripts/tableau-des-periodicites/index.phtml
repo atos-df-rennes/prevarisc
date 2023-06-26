@@ -1,8 +1,7 @@
 <!-- Titre -->
-<h3 class='page-header'>Tableau des périodicités</h3>
+<h3 class='page-header'>Tableau des périodicités <small>(Les valeurs sont affichées et à saisir en mois)</small></h3>
 
 <form id='form_periodicite' action='/tableau-des-periodicites/save' method='post' >
-
 	<h3>ERP</h3>
         <!-- Types pour lesquels on ne définit pas la périodicité sans hebergement -->
         <?php
@@ -84,7 +83,7 @@
 
     <p class='text-center'>
 		<input type='submit' id='submit' value='Sauvegarder' class='btn btn-success' />
-        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-success'>Appliquer sur TOUS les établissements</a>	
+        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-success'>Appliquer sur TOUS les établissements</a>
     </p>
 
 </form>

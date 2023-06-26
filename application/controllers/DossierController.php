@@ -12,6 +12,11 @@ class DossierController extends Zend_Controller_Action
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_CELLULE = 3;
     public const ID_ACTIVITE_CENTRE_COMMERCIAL = 29;
+    public $cache;
+    /**
+     * @var int|mixed
+     */
+    public $idDossier;
     /**
      * @var array<string, mixed>|mixed
      */
@@ -158,6 +163,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -166,21 +172,26 @@ class DossierController extends Zend_Controller_Action
             ->initContext()
         ;
 
+        $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+
         if (!(property_exists($this->view, 'action') && null !== $this->view->action)) {
             $this->view->action = $this->_request->getActionName();
         }
 
-        $this->view->idDossier = ($this->_getParam('id'));
-        $idDossier = $this->_getParam('id');
-        if (null == $idDossier) {
-            $idDossier = $this->_getParam('idDossier');
-        }
         $this->view->idUser = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
 
-        if (null != $idDossier) {
+        $this->idDossier = (int) $this->_getParam('id');
+        // FIXME A déplacer dans le 2ème if ?
+        $this->view->idDossier = $this->idDossier;
+
+        if (null == $this->idDossier) {
+            $this->idDossier = (int) $this->_getParam('idDossier');
+        }
+
+        if (null != $this->idDossier) {
             //Si on à l'id d'un dossier, on récupére tous les établissements liés à ce dossier
             $DBdossier = new Model_DbTable_Dossier();
-            $dossier = $DBdossier->find($idDossier)->current();
+            $dossier = $DBdossier->find($this->idDossier)->current();
 
             $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
 
@@ -191,12 +202,20 @@ class DossierController extends Zend_Controller_Action
             $this->view->idTypeDossier = $dossier->TYPE_DOSSIER;
             $this->view->libelleType = $libelleType['LIBELLE_DOSSIERTYPE'];
 
-            $natureDossier = $DBdossier->getDossierTypeNature($idDossier);
+            $natureDossier = $DBdossier->getDossierTypeNature($this->idDossier);
             $this->view->natureDossier = $natureDossier[0]['ID_NATURE'];
+            // FIXME Il faut en virer un des 2, ils font la même chose : Attention aux impacts dans les services et les vues
             $this->view->verrouDossier = $dossier['VERROU_DOSSIER'];
-            $this->view->idDossier = ($this->_getParam('id'));
-
             $this->view->verrou = $dossier->VERROU_DOSSIER;
+
+            $serviceDossier = new Service_Dossier();
+            $this->view->hasAvisDerogation = $serviceDossier->hasAvisDerogation($this->idDossier);
+            $this->view->dossierSupprime = null !== $dossier['DATESUPPRESSION_DOSSIER'];
+
+            // Définition des autorisations
+            $this->view->isAllowedAvisDerogation = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
+            $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_doss');
+            $this->view->isAllowedVerificationsTechniques = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'verificationstechniques', 'verifications_techniques');
         }
     }
 
@@ -204,8 +223,8 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
         $this->_forward('index', 'piece-jointe', null, [
@@ -233,8 +252,8 @@ class DossierController extends Zend_Controller_Action
         }
 
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         } elseif ($this->_getParam('id_etablissement')) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
         }
@@ -363,19 +382,20 @@ class DossierController extends Zend_Controller_Action
 
             //On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             //document manquant - absence de quorum - hors delai - ne peut se prononcer - differe l'avis
-            $absQuorum = $this->view->infosDossier['ABSQUORUM_DOSSIER'];
-            $horsDelai = $this->view->infosDossier['HORSDELAI_DOSSIER'];
-            $npsp = $this->view->infosDossier['NPSP_DOSSIER'];
-            $differeAvis = $this->view->infosDossier['DIFFEREAVIS_DOSSIER'];
+            $absQuorum = filter_var($this->view->infosDossier['ABSQUORUM_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $horsDelai = filter_var($this->view->infosDossier['HORSDELAI_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $npsp = filter_var($this->view->infosDossier['NPSP_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $differeAvis = filter_var($this->view->infosDossier['DIFFEREAVIS_DOSSIER'], FILTER_VALIDATE_BOOL);
+            $incompletDossier = filter_var($this->view->infosDossier['INCOMPLET_DOSSIER'], FILTER_VALIDATE_BOOL);
 
             //Debut mise en place avec service (voir pour récup le type)
             $afficheAvis = 1;
             if (
-                (!isset($absQuorum) || 0 != $absQuorum)
-                || (!isset($horsDelai) || 0 != $horsDelai)
-                || !isset($npsp)
-                || (!isset($differeAvis) || 0 != $differeAvis)
-                || (0 != $this->view->infosDossier['INCOMPLET_DOSSIER'])
+                $absQuorum
+                || $horsDelai
+                || $npsp
+                || $differeAvis
+                || $incompletDossier
             ) {
                 $afficheAvis = 0;
             }
@@ -1477,8 +1497,8 @@ class DossierController extends Zend_Controller_Action
         $this->view->listeEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
 
         $service_dossier = new Service_Dossier();
-        if (0 !== $idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $service_etablissement = new Service_Etablissement();
@@ -1512,8 +1532,8 @@ class DossierController extends Zend_Controller_Action
         $dbEtablissementDossier = new Model_DbTable_EtablissementDossier();
 
         $idDossier = (int) $this->_getParam('id');
-        if (0 !== $idDossier) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $listeEtablissementTest = $dbEtablissementDossier->getEtablissementListe($idDossier);
@@ -1557,8 +1577,8 @@ class DossierController extends Zend_Controller_Action
     {
         $this->view->idDossier = (int) $this->_getParam('id');
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         $DBdossier = new Model_DbTable_Dossier();
         $this->view->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
@@ -1571,8 +1591,8 @@ class DossierController extends Zend_Controller_Action
 
         //récupération du type de dossier (etude / visite)
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $dbdossier = new Model_DbTable_Dossier();
@@ -1907,6 +1927,7 @@ class DossierController extends Zend_Controller_Action
     {
         $idDossier = (int) $this->_getParam('id');
         $DBdossier = new Model_DbTable_Dossier();
+
         $this->view->infosDossier = $DBdossier->find($idDossier)->current();
     }
 
@@ -1936,12 +1957,7 @@ class DossierController extends Zend_Controller_Action
 
         if (0 !== $idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($idDossier);
-        }
 
-        if (
-            isset($idDossier)
-            && 0 != $idDossier
-        ) {
             $pathBase = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 
             //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
@@ -2168,6 +2184,9 @@ class DossierController extends Zend_Controller_Action
         //Récupération de tous les champs de la table dossier
         $DBdossier = new Model_DbTable_Dossier();
         $this->view->infosDossier = $DBdossier->find($idDossier)->current();
+
+        // Avis & Dérogations
+        $this->view->avisDerogations = $DBdossier->getListAvisDerogationsFromDossier($idDossier);
 
         //Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
@@ -2421,7 +2440,6 @@ class DossierController extends Zend_Controller_Action
         if (
             self::ID_ACTIVITE_CENTRE_COMMERCIAL == $this->view->id_typeactivite
             && in_array($dossierNature['ID_NATURE'], $natureCC)
-            && isset($affectDossier)
             && !$this->_getParam('repriseCC')
         ) {
             //On récupère toutes les cellules
@@ -2491,11 +2509,11 @@ class DossierController extends Zend_Controller_Action
                 }
             }
             $this->view->celluleDossierLevee = $cellulesListe;
-        } else {
-            $this->view->prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
-            $this->view->prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
-            $this->view->prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
         }
+
+        $this->view->prescriptionReglDossier = $service_dossier->getPrescriptions((int) $idDossier, 0);
+        $this->view->prescriptionExploitation = $service_dossier->getPrescriptions((int) $idDossier, 1);
+        $this->view->prescriptionAmelioration = $service_dossier->getPrescriptions((int) $idDossier, 2);
 
         // GESTION DES DATES
         //Conversion de la date de dépot en mairie pour l'afficher
@@ -2542,11 +2560,64 @@ class DossierController extends Zend_Controller_Action
             $this->view->dateDelaipresc = $dateComm->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
 
+        //PARTIE TEXTES APPLICABLES
+        //on recupere tout les textes applicables qui ont été cochés dans le dossier
+        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
+        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
+
+        //DATE DE LA DERNIERE VISITE PERIODIQUE
+        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
+
+        if ('' !== $dateVisite) {
+            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
+
+            $this->view->dateLastVP = null;
+            if ($dateLastVP) {
+                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
+                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
+                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
+            }
+        }
+
+        $serviceDescriptifDossier = new Service_DossierVerificationsTechniques();
+        $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, 'Dossier');
+
+        $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
+        $rubriquesEtablissement = empty($idEtab) ? '' : $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossierEffectifsDegagements = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubriquesEtablissementEffectifsDegagements = empty($idEtab) ? '' : $serviceEtablissementEffectifsDegagements->getRubriques($idEtab, 'Etablissement');
+
+        $rubriquesByCapsuleRubrique = [
+            'descriptifVerificationsTechniques' => $rubriquesDossier,
+            'descriptifEtablissement' => $rubriquesEtablissement,
+            'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+            'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+        ];
+
+        $serviceFormulaire = new Service_Formulaire();
+        // Gestion des rubriques/champs personnalisés
+        $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
+
+        // Récupération des rubriques pour chaque objet global
+        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
+        foreach ($capsulesRubriques as &$capsuleRubrique) {
+            $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+        }
+
+        $this->view->assign('formulaires', $capsulesRubriques);
+        $this->view->assign('isDescriptifPersonnalise', 1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'));
+
+        // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $nouvellePJ = $DBpieceJointe->createRow();
         $nouvellePJ->ID_PIECEJOINTE = $this->view->idPieceJointe;
-        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 3);
+        $nouvellePJ->NOM_PIECEJOINTE = substr(basename($this->view->fichierSelect), 0, strlen(basename($this->view->fichierSelect)) - 4);
         $nouvellePJ->EXTENSION_PIECEJOINTE = '.odt';
         $nouvellePJ->DESCRIPTION_PIECEJOINTE = sprintf(
             "Rapport de l'établissement %s (%s) généré le %s à %s",
@@ -2571,27 +2642,6 @@ class DossierController extends Zend_Controller_Action
         $linkPj->ID_PIECEJOINTE = $nouvellePJ->ID_PIECEJOINTE;
         $linkPj->save();
 
-        //PARTIE TEXTES APPLICABLES
-        //on recupere tout les textes applicables qui ont été cochés dans le dossier
-        $dbDossierTextesAppl = new Model_DbTable_DossierTextesAppl();
-        $this->view->listeTextesAppl = $dbDossierTextesAppl->recupTextesDossierGenDoc($this->_getParam('idDossier'));
-
-        //DATE DE LA DERNIERE VISITE PERIODIQUE
-        $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
-        if (
-            '' != $dateVisite
-            && isset($dateVisite)
-        ) {
-            $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
-
-            $this->view->dateLastVP = null;
-            if ($dateLastVP) {
-                $ZendDateLastVP = new Zend_Date($dateLastVP['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-                $this->view->dateLastVP = $ZendDateLastVP->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
-                $avisLastVP = $DBdossier->getAvisDossier($dateLastVP['ID_DOSSIER']);
-                $this->view->avisLastVP = $avisLastVP['LIBELLE_AVIS'];
-            }
-        }
         $this->render('creationdoc');
     }
 
@@ -2611,6 +2661,12 @@ class DossierController extends Zend_Controller_Action
             $this->view->natureConcerne = $DBdossierNature->getDossierNaturesLibelle($idDossier);
         }
 
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
+
         if ($this->_request->DESCRIPTIF_DOSSIER) {
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($this->_request->id)->current();
@@ -2627,8 +2683,8 @@ class DossierController extends Zend_Controller_Action
 
         $service_dossier = new Service_Dossier();
 
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
         $this->view->textes_applicables_dossier = $service_dossier->getAllTextesApplicables($this->_request->id);
@@ -2709,8 +2765,8 @@ class DossierController extends Zend_Controller_Action
     public function prescriptionAction()
     {
         $service_dossier = new Service_Dossier();
-        if ($this->_getParam('id')) {
-            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->_getParam('id'));
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
         if ($this->_request->isPost()) {
             try {
@@ -3039,5 +3095,264 @@ class DossierController extends Zend_Controller_Action
                 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')',
             ]);
         }
+    }
+
+    public function effectifsDegagementsDossierAction()
+    {
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
+
+        $this->view->assign('rubriques', $serviceDossierEffectifsDegagements->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierEffectifsDegagements->getValeursListe());
+    }
+
+    public function effectifsDegagementsDossierEditAction()
+    {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+
+        $this->effectifsDegagementsDossierAction();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getParams();
+
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceDossierEffectifsDegagements->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
+                    }
+
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceDossierEffectifsDegagements->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
+                    }
+                }
+
+                //Sauvegarde les changements dans les tableaux
+                $serviceDossierEffectifsDegagements->saveChangeTable($this->view->rubriques, $serviceDossierEffectifsDegagements->groupInputByOrder($post), 'Dossier', $this->idDossier);
+
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+
+            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $this->_request->id]);
+        }
+    }
+
+    public function verificationsTechniquesAction()
+    {
+        $viewHeadLink = $this->view;
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
+        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $service_dossier = new Service_Dossier();
+
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        }
+
+        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+    }
+
+    public function editVerificationsTechniquesAction(): void
+    {
+        $this->view->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
+        $this->view->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
+
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/Sortable.min.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+
+        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+
+        $this->verificationsTechniquesAction();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getParams();
+
+                foreach ($post as $key => $value) {
+                    // Informations concernant l'affichage des rubriques
+
+                    if (0 === strpos($key, 'afficher_rubrique-')) {
+                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
+                    }
+
+                    // Informations concernant les valeurs des champs
+                    if (0 === strpos($key, 'champ-')) {
+                        $serviceDossierDescriptif->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
+                    }
+                }
+
+                //Sauvegarde les changements dans les tableaux
+                $serviceDossierDescriptif->saveChangeTable($this->view->rubriques, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
+
+                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
+            } catch (Exception $e) {
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
+            }
+
+            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $this->_request->id]);
+        }
+    }
+
+    //Avis et derogations action donne une vue du/des avis et derogations donne sur ce dossier
+    public function avisEtDerogationsAction()
+    {
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+
+        $dbAvisDerogation = new Model_DbTable_AvisDerogations();
+        $dbDossier = new Model_DbTable_Dossier();
+
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
+
+        $idDossier = $this->getParam('id');
+
+        $this->view->arrayAvisDerogations = $dbDossier->getListAvisDerogationsFromDossier($idDossier);
+        $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
+
+        $DBlisteAvis = new Model_DbTable_Avis();
+        $this->view->listeAvis = $DBlisteAvis->getAvis();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $dbAvisDerogation->insert($data);
+
+            $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
+        }
+    }
+
+    /**
+     * Retourne les informations d'une liste d avis et derogations selon l id d une etude
+     * +
+     * retourne vers la page d edition de ces avis + derogations.
+     */
+    public function avisEtDerogationsEditAction()
+    {
+        $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
+
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+        $dbDossier = new Model_DbTable_Dossier();
+
+        $service_dossier = new Service_Dossier();
+        if ($this->idDossier) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
+        } elseif ($this->_getParam('id_etablissement')) {
+            $this->view->enteteEtab = $service_dossier->getEtabInfos(null, $this->_getParam('id_etablissement'));
+        }
+
+        $idDossier = $this->getParam('id');
+        $idAvisDerogation = $this->getParam('avis-derogation');
+
+        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
+        $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
+        $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
+
+        $DBlisteAvis = new Model_DbTable_Avis();
+        $this->view->listeAvis = $DBlisteAvis->getAvis();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+
+            //Recuperation de l entite a mettre a jour
+            $where = $dbAvisDerogations->getAdapter()->quoteInto('ID_AVIS_DEROGATION = ?', $idAvisDerogation);
+
+            $dbAvisDerogations->update($data, $where);
+
+            $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
+        }
+    }
+
+    public function avisEtDerogationsDeleteAction()
+    {
+        $dbAvisDerogations = new Model_DbTable_AvisDerogations();
+
+        $dbAvisDerogations->delete('ID_AVIS_DEROGATION = '.$this->getParam('avis-derogation'));
+    }
+
+    public function getZipAllPjAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = $this->getRequest()->getParam('id');
+        $serviceDossier = new Service_Dossier();
+        $zip = new ZipArchive();
+
+        $pjs = $serviceDossier->getAllPiecesJointes($idDossier);
+
+        $zipname = $idDossier.'.zip';
+        $zipPath = REAL_DATA_PATH.DS.'uploads'.DS.$zipname;
+        $zip->open($zipPath, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
+
+        foreach ($pjs as $pj) {
+            $pjPath = Service_Utils::getPjPath($pj);
+
+            if (!$zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
+                error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");
+            }
+        }
+
+        if (!$zip->close()) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Erreur lors de la création du fichier ZIP',
+                'message' => 'Le fichier est vide',
+            ]);
+
+            $this->redirect("/dossier/piece-jointe/id/{$idDossier}");
+        }
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zipname);
+        header('Content-Length: '.filesize($zipPath));
+
+        readfile($zipPath);
+        unlink($zipPath);
+    }
+
+    public function retablirDossierAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        $previousUrl = $_SERVER['HTTP_REFERER'];
+        $serviceDossier = new Service_Dossier();
+
+        $serviceDossier->retablirDossier($this->_getParam('idDossier'));
+
+        $this->redirect($previousUrl);
     }
 }

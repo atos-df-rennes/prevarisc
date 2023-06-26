@@ -221,6 +221,7 @@ class Api_Service_Calendar
                 $avis = 'Dossier avec avis differé';
             } elseif (1 === $ets['avis']) {
                 $avis = 'Favorable';
+
                 if (self::ID_GENRE_CELLULE === $ets['informations']['ID_GENRE']) {
                     $avis .= " à l'exploitation";
                 }
@@ -292,11 +293,11 @@ class Api_Service_Calendar
                 $corpus .= sprintf(
                     'Coordonnées du service instructeur :%s%s%s',
                     self::LF,
-                    $this->formatUtilisateurInformations($serviceInstruct)
-                    .self::LF.self::LF
+                    $this->formatUtilisateurInformations($serviceInstruct),
+                    self::LF.self::LF
                 );
             } else {
-                $corpus .= 'Aucune coordonées pour le service instructeur.'.self::LF.self::LF;
+                $corpus .= 'Aucunes coordonées pour le service instructeur.'.self::LF.self::LF;
             }
         }
 

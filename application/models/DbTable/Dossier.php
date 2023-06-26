@@ -479,8 +479,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_DOSSIER from (
                 (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -491,8 +491,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 limit 1)
             UNION
                 (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -506,5 +506,176 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ";
 
         return $this->getAdapter()->fetchRow($select);
+    }
+
+    // Récupère les dossiers d'un établissement par type
+    public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
+
+        switch ($type) {
+            case 'etudes':
+                $select->where('dt.ID_DOSSIERTYPE = 1');
+
+                break;
+
+            case 'visites':
+                $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+
+                break;
+
+            case 'autres':
+                $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+
+                break;
+
+            default:
+                throw new Exception(sprintf('Type %s non supporté', $type));
+        }
+
+        return $this->getAdapter()->fetchAll($select);
+    }
+
+    public function getEffectifEtDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], [])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['d' => 'dossier'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListeDossierFromDossier($idDossier)
+    {
+        $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
+
+        $dossiers = $this->getAdapter()->fetchAll($select);
+
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), 0, $nbdossiermax);
+
+        return $dossEtab;
+    }
+
+    public function getListeDossierFromDossierN($idDossier)
+    {
+        $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
+
+        $dossiers = $this->getAdapter()->fetchAll($select);
+
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), $nbdossiermax);
+
+        return $dossEtab;
+    }
+
+    /**
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListAvisDerogationsFromDossier($idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ad' => 'avisderogations'])
+            ->join(['d' => 'dossier'], 'ad.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
+            ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getDeleteDossier(): array
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
+            ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
+            ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', null)
+            ->join(
+                ['ei' => 'etablissementinformations'],
+                'ed.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT',
+                'LIBELLE_ETABLISSEMENTINFORMATIONS'
+            )
+            ->join(['u' => 'utilisateur'], 'u.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
+            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL')
+        ;
+
+        return $this->fetchAll($select)->toArray();
     }
 }

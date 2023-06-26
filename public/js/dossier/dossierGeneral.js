@@ -1,4 +1,3 @@
-
 $(document).ready(function(){	
 	//CHARGEMENT DE L'ENTETE DES DOSSIERS AVEC L'INFORMATIONS DES ETABS
 	//Affichage et affectation des différents champs !
@@ -57,75 +56,4 @@ $(document).ready(function(){
 	$(".hideCalendar").live('click',function(){
 		return false;
 	});
-
-	/*
-	$("#AVIS_DOSSIER").live('change',function(){
-		alert('');
-		var genre = $('#genreInfo').val();
-		var typeDossier = $("#TYPE_DOSSIER").val();
-		var natureDossier = $("#selectNature").val();
-		
-		if($(this).val() == 2){
-			if(genre == 2 && (typeDossier == 2 || typeDossier == 3))
-			{
-				if(natureDossier == 21 || natureDossier == 23 || natureDossier == 24 || natureDossier == 26 || natureDossier == 28 || natureDossier == 29 )
-				{
-					$("#FACTDANGE").show();
-				}		
-			}
-		}else{
-			$("#FACTDANGE").hide();
-		}
-	});
-		GESTION DES PRESCRIPTIONS MOTIVANT UN AVIS DEFAVORABLE
-	*/
-	/*
-	var dialogMAD = $('<div style="display:none"></div>').appendTo('body');
-	
-	dialogMAD.dialog({
-		title: "Motive avis défavorable",
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			"Valider": function() {
-				dialogMAD.dialog("close");
-				return false;
-			},
-			"annuler": function() {
-				dialogMAD.dialog("close");
-			}
-		},
-		close: function(event, ui){
-			
-		}
-	});
-	
-	
-	$(".motiveAvisDef").live('click',function(){
-		//motive avis défavorable clickage de check
-		if($(this).attr('checked')){
-			//aficher une boite dialogue en disant que ça changera l'avis du dossier en défavo
-			//puis faire apparaitre croix de suppression ou alors avec la modif ?
-			var numPresc = $(this).val();
-			
-			$.ajax({
-				type: "POST",
-				url: "/dossier/fonction?do=showMadContent&numPresc="+numPresc,
-				success: function(msg){				
-					dialogMAD.html(msg);
-					dialogMAD.dialog("open");
-				}
-			});
-			
-		}else{
-
-		}
-	});
-	*/
-	
 }); //FIN DOCUMENT READY FUNCTION
-	
-	
-	
-	
-

@@ -4,11 +4,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
     public const CLASSEMENT_CHANGE = 3;
+    public const NB_DOSSIERS_A_AFFICHER = 5;
     public const ID_FONCTION_DUS = 8;
     public const ID_GENRE_CELLULE = 3;
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_EIC = 6;
     public const ID_STATUS_OUVERT = 2;
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     public const ID_5EME_CAT = 5;
@@ -50,7 +52,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
-            // Si l'établissement n'existe pas, on généère une erreur
+            // Si l'établissement n'existe pas, on génère une erreur
             if (null === $general
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
@@ -87,24 +89,48 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $facteur_dangerosite = $dossier_donnant_avis->FACTDANGE_DOSSIER;
             }
 
-            $last_visite = $search->setItem('dossier')
-                    // Dossier correspondant à l'établissement dont l'ID est donné
+            $search->setItem('dossier')
+                // Dossier correspondant à l'établissement dont l'ID est donné
                 ->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)
-                    // Dossier type "Visite de commission" et "Groupe de visite"
+                // Dossier type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('d.TYPE_DOSSIER', [2, 3])
-                        // Dossier ayant un avis de commission rendu
+                // Dossier ayant un avis de commission rendu
                 ->setCriteria('d.AVIS_DOSSIER_COMMISSION > 0')
-                    // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
+                // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('ID_NATURE', [21, 26, 47, 48])
-                ->order('DATEVISITE_DOSSIER DESC')
+            ;
+
+            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOL);
+            if ($use_date_commission_for_periodicity) {
+                $search->columns([
+                    'DATE_RELANCE_PERIODICITE' => new Zend_Db_Expr(
+                        'CASE WHEN
+                            DATECOMM_DOSSIER >= DATEVISITE_DOSSIER THEN DATECOMM_DOSSIER
+                            ELSE DATEVISITE_DOSSIER
+                        END'
+                    ),
+                ]);
+                $search->order('DATE_RELANCE_PERIODICITE DESC');
+            } else {
+                $search->order('DATEVISITE_DOSSIER DESC');
+            }
+
+            $last_visite = $search
                 ->limit(1)
                 ->run(false, null, false)->toArray();
 
             $next_visite = null;
 
             if (null !== $last_visite && !empty($last_visite)) {
-                if (null !== $last_visite[0]['DATEVISITE_DOSSIER']) {
+                if (
+                    (!$use_date_commission_for_periodicity && null !== $last_visite[0]['DATEVISITE_DOSSIER'])
+                    || ($use_date_commission_for_periodicity && null !== $last_visite[0]['DATE_RELANCE_PERIODICITE'])
+                ) {
                     $tmp_date = new Zend_Date($last_visite[0]['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                    if ($use_date_commission_for_periodicity) {
+                        $tmp_date = new Zend_Date($last_visite[0]['DATE_RELANCE_PERIODICITE'], Zend_Date::DATES);
+                    }
+
                     $last_visite = $tmp_date->get(Zend_date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
 
                     if (0 != $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS) {
@@ -402,6 +428,40 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
+        /**
+         * Ajout de la partie avis derogations.
+         */
+        $key = 'AVIS_DEROGATIONS';
+        $dbEtablissement = new Model_DbTable_Etablissement();
+
+        $avisDerogations = $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement);
+
+        foreach ($avisDerogations as $elem => $value) {
+            $valueDisplay = implode(' - ', [
+                $value['TYPE'],
+                $value['TITRE'],
+            ]);
+
+            $date = null;
+            if (null !== $value['DATECOMM_DOSSIER']) {
+                $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
+            } elseif (null !== $value['DATEVISITE_DOSSIER']) {
+                $date = new Zend_Date($value['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+            }
+
+            if (null !== $date) {
+                $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            }
+
+            $historique[$key][$elem] = [
+                'valeur' => $valueDisplay,
+                'url' => sprintf('/dossier/avis-et-derogations-edit/id/%d/avis-derogation/%d', $value['ID_DOSSIER'], $value['ID_AVIS_DEROGATION']),
+                'debut' => $date,
+                'author' => null,
+                'type' => $value['TYPE_DOSSIER'],
+            ];
+        }
+
         return $historique;
     }
 
@@ -436,6 +496,91 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
         $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
         $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
+
+        return $results;
+    }
+
+    public function getNbDossierTypeEtablissement(int $idEtablissement, string $type): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+        $result = $modelDossier->getDossiersEtablissementByType($idEtablissement, $type);
+
+        return count($result);
+    }
+
+    public function getNLastDossiers(int $idEtablissement, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = [];
+
+        foreach ($dossier_types as $type) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = [];
+        $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+
+        return $results;
+    }
+
+    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = [];
+
+        foreach ($dossier_types as $type) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = [];
+
+        switch ($typeDossier) {
+            case 'etudes':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+            case 'visites':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+           case 'autres':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+            default:
+                $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+        }
 
         return $results;
     }
@@ -876,7 +1021,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $etablissement->save();
 
             $etablissement->NUMEROID_ETABLISSEMENT = null != $data['NUMEROID_ETABLISSEMENT'] ? $data['NUMEROID_ETABLISSEMENT'] : $etablissement->ID_ETABLISSEMENT;
-
             $etablissement->save();
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];
@@ -1468,9 +1612,54 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $date = new DateTime();
         $DB_Etab = new Model_DbTable_Etablissement();
 
+        $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+
         $etablissement = $DB_Etab->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
+        $etablissement->DELETED_BY = $idDeleteBy;
         $etablissement->save();
+    }
+
+    public function retablirEtablissement($idEtablissement): void
+    {
+        $DB_etablissement = new Model_DbTable_Etablissement();
+        $etablissement = $DB_etablissement->find($idEtablissement)->current();
+        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->DELETED_BY = null;
+        $etablissement->save();
+    }
+
+    public function getDisplayedPeriodicity(array $etablissement): string
+    {
+        $numberOfMonthsInAYear = 12;
+
+        $periodicity = $etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
+        $periodicityUnit = 'mois';
+        $periodicityString = "{$periodicity} {$periodicityUnit}";
+
+        if (
+            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOL)
+        ) {
+            return $periodicityString;
+        }
+
+        if ($periodicity < $numberOfMonthsInAYear) {
+            return $periodicityString;
+        }
+
+        $periodicityYear = intdiv($periodicity, $numberOfMonthsInAYear);
+        $periodicityUnit = 1 === $periodicityYear ? 'an' : 'ans';
+
+        $periodicityString = "{$periodicityYear} {$periodicityUnit}";
+
+        $remainder = $periodicity % $numberOfMonthsInAYear;
+        $remainderUnit = 'mois';
+
+        if (0 !== $remainder) {
+            $periodicityString = "{$periodicityString} et {$remainder} {$remainderUnit}";
+        }
+
+        return $periodicityString;
     }
 
     private function compareActivitesSecondaires($ets, $postData): bool
