@@ -127,9 +127,9 @@ try{
 }
 
 foreach ($this->preventionnistes as $prev) {
-    $mailsPreventionnistes[] = $prev['MAIL_UTILISATEURINFORMATIONS'];
+    $listeMailPreventionniste[] = $prev['MAIL_UTILISATEURINFORMATIONS'];
 }
-addChamp($odf, 'mailPreventionnistes', implode(', ', $mailsPreventionnistes));
+addChamp($odf, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
 
 // PARTIE DOC CONSULTE
 //Generation du segment listeDocs
