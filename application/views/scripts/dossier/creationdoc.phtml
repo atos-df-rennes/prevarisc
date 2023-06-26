@@ -126,24 +126,10 @@ try{
 
 }
 
-try{
-    $preventionnisteMail = $odf->setSegment('preventionnistesMail');
-    $nbPrev = count($this->preventionnistes);
-    foreach($this->preventionnistes as $prev) {
-        if ($nbPrev > 1) {
-            $sep = ", ";
-        } else {
-            $sep = " ";
-        }
-        addChamp($preventionnisteMail, 'mail', $prev['MAIL_UTILISATEURINFORMATIONS'].$sep);
-        $preventionnisteMail->merge();
-        $nbPrev--;
-    }
-    $odf->mergeSegment($preventionnisteMail);
-
-}catch(OdfException $e){
-
+foreach ($this->preventionnistes as $prev) {
+    $mailsPreventionnistes[] = $prev['MAIL_UTILISATEURINFORMATIONS'];
 }
+addChamp($odf, 'mailPreventionnistes', implode(', ', $mailsPreventionnistes));
 
 // PARTIE DOC CONSULTE
 //Generation du segment listeDocs
