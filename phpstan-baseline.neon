@@ -3466,6 +3466,11 @@ parameters:
 			path: application/controllers/SearchController.php
 
 		-
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_numeros\\.$#"
+			count: 1
+			path: application/controllers/SearchController.php
+
+		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_voies\\.$#"
 			count: 1
 			path: application/controllers/SearchController.php
@@ -3512,12 +3517,12 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getQuery\\(\\)\\.$#"
-			count: 12
+			count: 16
 			path: application/controllers/SearchController.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isGet\\(\\)\\.$#"
-			count: 4
+			count: 5
 			path: application/controllers/SearchController.php
 
 		-
@@ -4329,7 +4334,42 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$page\\)\\: Unexpected token \"\\$page\", expected type at offset 61$#"
 			count: 1
 			path: application/plugins/ACL.php
-			
+
+		-
+			message: "#^Method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid return type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^PHPDoc tag @return with type string\\|type is not subtype of native type string\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^Parameter \\$linkedObjectId of method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^Parameter \\$linkedObjectId of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^Parameter \\$linkedObjectType of method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^Parameter \\$linkedObjectType of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
+		-
+			message: "#^Parameter \\$piece_jointe of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
+			count: 1
+			path: application/plugins/HashedFileDataStore.php
+
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoRouteAndExit\\(\\)\\.$#"
 			count: 1
