@@ -3026,6 +3026,9 @@ class DossierController extends Zend_Controller_Action
 
         $service_dossier = new Service_Dossier();
 
+        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);
+        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, (int) $this->_getParam('idDossier'));
+
         $prescriptionExploitation = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 1);
         $service_dossier->copyPrescriptionDossier($prescriptionExploitation, (int) $this->_getParam('idDossier'));
 
