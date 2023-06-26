@@ -2600,13 +2600,11 @@ class DossierController extends Zend_Controller_Action
         ];
 
         $serviceFormulaire = new Service_Formulaire();
-        // Gestion des rubriques/champs personnalisés
         $capsulesRubriques = $serviceFormulaire->getAllCapsuleRubrique();
 
         // Récupération des rubriques pour chaque objet global
-        // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-        foreach ($capsulesRubriques as &$capsuleRubrique) {
-            $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+        foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+            $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
         }
 
         $this->view->assign('formulaires', $capsulesRubriques);
