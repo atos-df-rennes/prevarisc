@@ -3,6 +3,7 @@
 class PieceJointeController extends Zend_Controller_Action
 {
     public $store;
+    private $dbPj;
 
     public function init()
     {
@@ -10,15 +11,24 @@ class PieceJointeController extends Zend_Controller_Action
 
         // Actions à effectuées en AJAX
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('check', 'json')
+        $ajaxContext
+            ->addActionContext('check', 'json')
             ->initContext()
         ;
+
+        $this->dbPj = new Model_DbTable_PieceJointe();
     }
 
     public function indexAction()
     {
+        /** @var Zend_View $view */
+        $view = $this->view;
+        $view->headScript()->appendFile('/js/dossier/pieceJointe.js', 'text/javascript');
+        $view->headLink()->appendStylesheet('/css/pieces-jointes.css', 'all');
+
         // Modèles
         $DBused = new Model_DbTable_PieceJointe();
+        $modelDossier = new Model_DbTable_Dossier();
 
         $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOL);
 
@@ -29,6 +39,7 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->pjcomm = $this->_request->pjcomm;
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             $this->view->verrou = $this->_request->verrou;
+            $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement
             $this->view->type = 'etablissement';
             $this->view->identifiant = $this->_request->id;
@@ -392,7 +403,40 @@ class PieceJointeController extends Zend_Controller_Action
                 'droit_ecriture' => true,
                 'type' => $this->_request->type,
                 'id' => $this->_request->id,
+                'isPlatau' => $modelDossier->isPlatau($dossier['ID_DOSSIER']),
             ]);
         }
+    }
+
+    public function retryExportPlatauAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        /** @var Zend_Controller_Request_Http $request */
+        $request = $this->getRequest();
+        $idPj = filter_var($request->getPost()['idPj'], FILTER_VALIDATE_INT);
+
+        $this->dbPj->updatePlatauStatus($idPj, 'to_be_exported');
+    }
+
+    /**
+     * @return null|void
+     */
+    public function displayPjPlatauAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = $this->getRequest()->getParam('idDossier');
+        $canBeExported = $this->dbPj->getWithStatus($idDossier, 'not_exported');
+
+        if (0 === count($canBeExported)) {
+            return null;
+        }
+
+        $html = Zend_Layout::getMvcInstance()->getView()->partial('piece-jointe/export.phtml', ['piecesJointes' => $canBeExported]);
+
+        echo $html;
     }
 }

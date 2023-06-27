@@ -244,16 +244,23 @@ $(document).ready(function() {
         $("#InfosDossier > li").hide();
         $("#creationDossier").hide();
         $(".docurba").remove();
+
         if (idType == 0) {
             $("#nature").hide();
         } else {
             //Modif de la dénomination de l'avis
             if (idType == 1 || idType == 2) {
-                //dans le cas d'une étude
+                //dans le cas d'une étude ou d'une visite
                 $("#AVIS_DOSSIER").parent().prev().prev().html("Avis du rapporteur");
             } else if (idType == 3) {
-                //cas d'une visite ou d'un groupe de visite
+                //cas d'un groupe de visite
                 $("#AVIS_DOSSIER").parent().prev().prev().html("Avis du groupe de visite");
+            }
+
+            if (idType == 1) {
+                gestionAffichageInfosPlatau()
+            } else {
+                gestionMasquageInfosPlatau()
             }
 
             $.ajax({
@@ -1015,8 +1022,74 @@ $("#modificationDossier").live('click', function() {
 
     //Gestion des cas calendrier comm visite en fonction du type de dossier
     $(".hideCalendar").hide();
+
+    if ($('#TYPE_DOSSIER').val() === '1') {
+        gestionAffichageInfosPlatau()
+    }
+
     return false;
 });
+
+function gestionAffichageInfosPlatau() {
+    $('.incomplet').live('click.platau', function() {
+        afficheInfosPlatau($('#INCOMPLET'))
+    })
+    $('.cancelIncomplet').live('click.platau', function() {
+        masqueInfosPlatau()
+    })
+
+    $('#AVIS_DOSSIER_COMMISSION').live('change.platau', function() {
+        const avis = $('#AVIS_DOSSIER_COMMISSION').val()
+        const infosPlatauExists = !!document.getElementById('PIECESJOINTES')
+
+        if (avis !== '0') {
+            if (!infosPlatauExists) {
+                afficheInfosPlatau($('#AVIS_COMMISSION'))
+            }
+        } else {
+            masqueInfosPlatau()
+        }
+    })
+
+    $('#select-platau').live('click.platau', function(e) {
+        e.preventDefault()
+        document.getElementById('PIECESJOINTES').scrollIntoView()
+        $('#PIECESJOINTES').focus()
+    })
+
+    if ($('#statut-pec').hasClass('text-warning')) {
+        afficheInfosPlatau($('#INCOMPLET'))
+    }
+
+    if ($('#statut-avis').hasClass('text-warning')) {
+        afficheInfosPlatau($('#AVIS_COMMISSION'))
+    }
+}
+
+function gestionMasquageInfosPlatau() {
+    $('.incomplet').die('click.platau')
+    $('.cancelIncomplet').die('click.platau')
+    $('#AVIS_DOSSIER_COMMISSION').die('change.platau')
+    $('#select-platau').die('click.platau')
+}
+
+function afficheInfosPlatau(parentRow) {
+    $.post(
+        '/piece-jointe/display-pj-platau',
+        { idDossier: $('#idDossier').val() },
+        function(data) {
+            if ('' !== data) {
+                parentRow.after(data)
+                $('.label.label-warning').removeClass('ui-helper-hidden')
+            }
+        }
+    )
+}
+
+function masqueInfosPlatau() {
+    $('#PIECESJOINTES').remove()
+    $('.label.label-warning').addClass('ui-helper-hidden')
+}
 
 //Selection d'une nature et affichage des champs en fonction de la ou des natures
 $("#selectNature").live('change', function() {
@@ -1214,6 +1287,10 @@ $(".delaipresc").live('click', function() {
 });
 </script>
 
+<span class="label label-warning ui-helper-hidden">
+    N'oubliez pas de <a href="#" id="select-platau">sélectionner les documents</a> à envoyer vers Plat'AU
+</span>
+
 <?php
 	$action = $this->do;
 	if ($this->verrouDossier != 1 && 'edit' == $action): ?>
@@ -1249,6 +1326,76 @@ $(".delaipresc").live('click', function() {
             <div id='chargement'></div>
         </div>
         <h3>Informations générales</h3>
+        <?php if (null !== $this->id_platau): ?>
+            <h4 class="title">Informations sur Plat'AU</h4>
+            <ul class="list unstyled">
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <div class="left span3">Identifiant de la consultation</div>
+                    <div class="right span9"><?= $this->id_platau ?></div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classPec = 'muted';
+                    if ($this->enumStatutsPec::EN_ATTENTE === $this->statutPec):
+                        $classPec = 'text-info';
+                    elseif ($this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec):
+                        $classPec = 'text-success';
+                    elseif ($this->enumStatutsPec::A_RENVOYER === $this->statutPec):
+                        $classPec = 'text-warning';
+                    elseif ($this->enumStatutsPec::EN_ERREUR === $this->statutPec):
+                        $classPec = 'text-error';
+                    endif ?>
+                    <div class="left span3">Prise en compte métier</div>
+                    <div class="right span9">
+                        <?php if ($this->enumStatutsPec::EN_ERREUR === $this->statutPec): ?>
+                            <i class="icon-warning-sign"></i>
+                        <?php endif ?>
+                        <span id="statut-pec" class="<?= $classPec ?>"><?= $this->enumStatutsPec->getLabel($this->statutPec) ?></span>
+                        <?php if ($this->datePec): ?>
+                            le <?= $this->datePec ?>
+                        <?php endif ?>
+
+                        <?php if (
+                                $this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec &&
+                                null === $this->dateAvis
+                            ): ?>
+                            <a id="retry-export-pec" href="#" title="Renvoyer la prise en compte métier" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classAvis = 'muted';
+                    if ($this->enumStatutsAvis::EN_COURS === $this->statutAvis):
+                        $classAvis = 'text-info';
+                    elseif ($this->enumStatutsAvis::TRAITE === $this->statutAvis):
+                        $classAvis = 'text-success';
+                    elseif ($this->enumStatutsAvis::A_RENVOYER === $this->statutAvis):
+                        $classAvis = 'text-warning';
+                    elseif ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis):
+                        $classAvis = 'text-error';
+                    endif ?>
+                    <div class="left span3">Avis</div>
+                    <div class="right span9">
+                        <?php if ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis): ?>
+                            <i class="icon-warning-sign"></i>
+                        <?php endif ?>
+                        <span id="statut-avis" class="<?= $classAvis ?>"><?= $this->enumStatutsAvis->getLabel($this->statutAvis) ?></span>
+                        <?php if ($this->dateAvis): ?>
+                            le <?= $this->dateAvis ?>
+                        <?php endif ?>
+
+                        <?php if ($this->enumStatutsAvis::TRAITE === $this->statutAvis): ?>
+                            <a id="retry-export-avis" href="#" title="Renvoyer l'avis" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+            </ul>
+        <?php endif ?>
         <!-- BEGIN UL Type/Nature -->
         <h4>Type et nature du dossier</h4>
         <ul class='list unstyled'>
@@ -1929,7 +2076,7 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='AVIS_DOSSIER_COMMISSION' id='AVIS_DOSSIER_COMMISSION'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?>>
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?>>
                         <option value='0'></option>
                         <?php foreach ($this->listeAvis as $avis) : ?>
                         <option value='<?php echo $avis["ID_AVIS"] ?>'
@@ -1940,7 +2087,7 @@ $(".delaipresc").live('click', function() {
                     </select>
                     &nbsp;&nbsp;&nbsp;
                     <input type='checkbox' name='repercuterAvis' id='repercuterAvis'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
                     établissements enfants
                 </div>
             </li>
@@ -2265,7 +2412,7 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <ul class='unstyled'>
-                        <li style='liste-style-type:none' id='liste_prev'>
+                        <li style='list-style-type:none' id='liste_prev'>
                             <?php if (count($this->preventionnistes) > 0) :
 								foreach ($this->preventionnistes as $prev) : ?>
 								<span class='ui-state-highlight'

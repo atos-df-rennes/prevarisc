@@ -132,7 +132,7 @@
                     <i class='icon-calendar icon-black'></i> Afficher ordre du jour
                 </a>
             </li>
-        <?php endif; ?>
+        <?php endif ?>
 
         <?php if (!$verrou && $this->is_allowed_delete_dossier) : ?>
             <li>
@@ -146,13 +146,13 @@
                         <i class="icon-remove icon-black"></i>
                         Supprimer le dossier
                     </a>
-                <?php endif; ?>
+                <?php endif ?>
             </li>
-        <?php endif; ?>
+        <?php endif ?>
     </ul>
 
     <?php $this->placeholder('lateral_navigation')->captureEnd();
-endif; ?>
+endif ?>
 
 <?php $this->placeholder('page_header')->captureStart();  // Capture du 'before_content'?>
 
@@ -230,7 +230,7 @@ endif; ?>
 
         <small><br/><?= nl2br($this->objetDossier) ?></small>
 
-        <?php if(null !== $this->id_platau): ?>
+	    <?php if (null !== $this->id_platau): ?>
             <p style='font-size: medium;' class='label label-info'>
                 <strong>CONSULTATION PLATAU : <?= $this->id_platau ?></strong>
             </p>
@@ -238,7 +238,7 @@ endif; ?>
 
         <div style='margin:10px; line-height: 20px;' id='infosEtabs'>
             <?php
-            $nbEtab = count($this->enteteEtab)> 0;
+            $nbEtab = count($this->enteteEtab);
 
             if($nbEtab > 0): ?>
                 <?php if($nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site"): ?>
@@ -326,7 +326,7 @@ endif; ?>
             <?php endif ?>
         </div>
     </h2>
-<?php endif; ?>
+<?php endif ?>
 
 <div class='grid_16' >
     <?= "<input type='hidden' name='idDossier' id='idDossier' value='".$this->idDossier."' />"; ?>

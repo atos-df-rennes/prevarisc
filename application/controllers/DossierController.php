@@ -163,6 +163,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/dossier/platau.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         // Actions à effectuées en AJAX
@@ -194,6 +195,22 @@ class DossierController extends Zend_Controller_Action
             $dossier = $DBdossier->find($this->idDossier)->current();
 
             $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
+
+            if (null !== $dossier['ID_PLATAU']) {
+                $platauConsultationMapper = new Model_PlatauConsultationMapper();
+                $platauConsultationModel = new Model_PlatauConsultation();
+                $this->view->assign('enumStatutsPec', new Model_Enum_PlatauStatutPec());
+                $this->view->assign('enumStatutsAvis', new Model_Enum_PlatauStatutAvis());
+
+                $platauConsultation = $platauConsultationMapper->find($dossier['ID_PLATAU'], $platauConsultationModel);
+
+                if (null !== $platauConsultation) {
+                    $this->view->assign('statutPec', $platauConsultation->getStatutPec());
+                    $this->view->assign('datePec', $platauConsultation->getDatePec());
+                    $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
+                    $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
+                }
+            }
 
             $DBdossierType = new Model_DbTable_DossierType();
             $libelleType = $DBdossierType->find($dossier->TYPE_DOSSIER)->current();
@@ -831,6 +848,7 @@ class DossierController extends Zend_Controller_Action
                 'servInstGrp',
                 'repercuterAvis',
                 'INCOMPLET_DOSSIER',
+                'export-pj-platau',
             ];
 
             $includes = [
@@ -886,6 +904,12 @@ class DossierController extends Zend_Controller_Action
                 }
             }
 
+            if ($pjs = $this->_getParam('export-pj-platau')) {
+                $servicePj = new Service_PieceJointe();
+
+                $servicePj->exportPlatau($pjs);
+            }
+
             $nouveauDossier->HORSDELAI_DOSSIER = 0;
             if ($this->_getParam('HORSDELAI_DOSSIER')) {
                 $nouveauDossier->HORSDELAI_DOSSIER = 1;
@@ -908,7 +932,7 @@ class DossierController extends Zend_Controller_Action
 
             $nouveauDossier->CNE_DOSSIER = 0;
             if ($this->_getParam('CNE_DOSSIER')) {
-                $nouveauDossier->CNE_DOSSIER = 0;
+                $nouveauDossier->CNE_DOSSIER = 1;
             }
 
             if (!in_array('OBJET', $this->listeChamps[$this->_getParam('selectNature')])) {

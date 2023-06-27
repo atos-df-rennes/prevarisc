@@ -508,6 +508,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
+    public function isPlatau(int $idDossier): bool
+    {
+        $select = $this->select(self::SELECT_WITH_FROM_PART)
+            ->where('ID_DOSSIER = ?', $idDossier)
+        ;
+
+        $result = $this->fetchRow($select);
+
+        return null !== $result['ID_PLATAU'];
+    }
+
     // Récupère les dossiers d'un établissement par type
     public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
     {
@@ -543,6 +554,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
+    // FIXME Supprimer une des deux fonctions
     public function getEffectifEtDegagement(int $idDossier)
     {
         $select = $this->select()
