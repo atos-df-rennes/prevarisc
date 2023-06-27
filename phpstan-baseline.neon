@@ -4336,41 +4336,6 @@ parameters:
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid return type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^PHPDoc tag @return with type string\\|type is not subtype of native type string\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_HashedFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_HashedFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/HashedFileDataStore.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoRouteAndExit\\(\\)\\.$#"
 			count: 1
 			path: application/plugins/Security.php
