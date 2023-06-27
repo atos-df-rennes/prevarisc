@@ -21,7 +21,7 @@ class PieceJointeController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        /** @var Zend_View */
+        /** @var Zend_View $view */
         $view = $this->view;
         $view->headScript()->appendFile('/js/dossier/pieceJointe.js', 'text/javascript');
         $view->headLink()->appendStylesheet('/css/pieces-jointes.css', 'all');
@@ -413,7 +413,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        /** @var Zend_Controller_Request_Http */
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
         $idPj = filter_var($request->getPost()['idPj'], FILTER_VALIDATE_INT);
 

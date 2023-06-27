@@ -19,7 +19,7 @@ class PlatauController extends Zend_Controller_Action
 
     public function init()
     {
-        /** @var Zend_Controller_Action_Helper_ContextSwitch */
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('selectionabreviation', 'json')
             ->addActionContext('retryExportPec', 'json')
