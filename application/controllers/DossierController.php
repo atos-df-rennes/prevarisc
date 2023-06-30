@@ -2592,7 +2592,7 @@ class DossierController extends Zend_Controller_Action
         //DATE DE LA DERNIERE VISITE PERIODIQUE
         $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
 
-        if ('' !== $dateVisite) {
+        if (null !== $dateVisite) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
 
             $this->view->dateLastVP = null;
