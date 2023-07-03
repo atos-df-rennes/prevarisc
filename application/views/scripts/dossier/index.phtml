@@ -454,8 +454,18 @@ function majAvisSelect() {
 
 $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar, mois, annee) {
     var calendar = $("#" + divInfo).fullCalendar({
+        buttonIcons:{
+            prevYear: 'seek-prev',
+            nextYear: 'seek-next'
+        },
+        buttonText: {
+            month: 'Mois',
+            day: 'Jour',
+            week: 'Semaine',
+            today: 'Aujourd\'hui'
+        },
         header: {
-            left: 'prev,next today',
+            left: 'prevYear prev,next nextYear today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },

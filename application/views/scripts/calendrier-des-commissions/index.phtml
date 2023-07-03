@@ -79,7 +79,7 @@
 			$(".commissionLink[data-value='"+$("#idCommission").val()+"'").click();
 			$("#calendar").html('').afficheCalendar(null, 'calendrierComm');
 			$('#syncCal').show();
-			$('#syncCom').hide();                
+			$('#syncCom').hide();
 		}
 
 		$('.menu_dashboard').on({
@@ -120,6 +120,10 @@
 				datas = { format: 'json', idComm: idComm };
 			}
 			var calendar = $('#calendar').fullCalendar( {
+                buttonIcons:{
+                    prevYear: 'seek-prev',
+                    nextYear: 'seek-next'
+                },
 				buttonText: {
 					month: 'Mois',
 					day: 'Jour',
@@ -127,7 +131,7 @@
 					today: 'Aujourd\'hui'
 				},
 				header: {
-					left: 'prev,next today',
+					left: 'prevYear prev,next nextYear today',
 					center: 'title',
 					right: 'month,agendaWeek,agendaDay'
 				},
@@ -313,7 +317,7 @@
 					var date = $("#calendar").fullCalendar('getDate');
 					var month_int = date.getMonth()+1;
 					var year_int = date.getFullYear();
-					$('#exportCom').attr('href', '/calendrier-des-commissions/exportoutlookmois/CommId/'+ $("#commissionId").val()+"/Mois/"+month_int+"/Annee/"+year_int);                            
+					$('#exportCom').attr('href', '/calendrier-des-commissions/exportoutlookmois/CommId/'+ $("#commissionId").val()+"/Mois/"+month_int+"/Annee/"+year_int);
 					var host = window.location.host;
 					$('#syncCal').hide();
 					$('#syncCom').show();
