@@ -115,7 +115,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(20, 1, 'Libellé du père/site');
                     $sheet->setCellValueByColumnAndRow(21, 1, 'Genre');
                     $sheet->setCellValueByColumnAndRow(22, 1, 'Préventionniste');
-                    $sheet->setCellValueByColumnAndRow(23, 1, 'Presences local sommeil');
+                    $sheet->setCellValueByColumnAndRow(23, 1, 'Présence de locaux à sommeil');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
