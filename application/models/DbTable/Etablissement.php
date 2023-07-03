@@ -387,12 +387,26 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
-        $search->columns([
-            'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
-        ]);
-        $search->columns([
-            'nextvisitemonth' => new Zend_Db_Expr('MONTH(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
-        ]);
+
+        $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOL);
+        if ($use_date_commission_for_periodicity) {
+            $search->columns([
+                'nextvisiteyearmonth' => new Zend_Db_Expr(
+                    "CASE WHEN
+                            dossiers.DATECOMM_DOSSIER >= dossiers.DATEVISITE_DOSSIER
+                        THEN
+                            DATE_FORMAT(DATE_ADD(dossiers.DATECOMM_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')
+                        ELSE
+                            DATE_FORMAT(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')
+                    END"
+                ),
+            ]);
+        } else {
+            $search->columns([
+                'nextvisiteyearmonth' => "DATE_FORMAT(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')",
+            ]);
+        }
+
         $search->joinEtablissementDossier();
         $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
                 .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
@@ -404,10 +418,12 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
+
         if ($idsCommission) {
             $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
         }
-        $search->having('nextvisiteyear > YEAR(NOW()) OR nextvisiteyear < YEAR(NOW()) OR (nextvisiteyear = YEAR(NOW()) AND nextvisitemonth < MONTH(NOW()))');
+
+        $search->having("nextvisiteyearmonth < DATE_FORMAT(CURDATE(), '%Y-%m')");
 
         return $search->run(false, null, false)->toArray();
     }
