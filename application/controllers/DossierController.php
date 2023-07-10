@@ -2287,8 +2287,6 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->assign('prefetInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 1));
 
-        $this->view->assign('maire', $serviceDossier->getContactInfo($idDossier, $idEtab, 2));
-
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
         $dbDossDocManquant = new Model_DbTable_DossierDocManquant();
