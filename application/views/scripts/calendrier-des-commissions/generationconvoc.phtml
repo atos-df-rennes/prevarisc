@@ -294,18 +294,6 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
 
-	// Gestion des effectifs & dégagements
-	$tabEffDegKV = array(
-		'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
-		'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
-		'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
-		'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
-	);
-
-	foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
-		setVars($segment, $nomChamp, $valeurChamp);
-	}
-
     // Gestion des avis & dérogations
     try {
         $avisDerogations = $segment->avisDerogations;

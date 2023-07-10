@@ -230,18 +230,6 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
     addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
 
-    // Gestion des effectifs & dégagements
-    $tabEffDegKV = array(
-        'descriptionEffectifDossier' => $dossierInfos['DESCRIPTION_EFFECTIF_DOSSIER'],
-        'descriptionDegagementDossier' => $dossierInfos['DESCRIPTION_DEGAGEMENT_DOSSIER'],
-        'descriptionEffectifEtablissement' => $dossierInfos['DESCRIPTION_EFFECTIF_ETABLISSEMENT'],
-        'descriptionDegagementEtablissement' => $dossierInfos['DESCRIPTION_DEGAGEMENT_ETABLISSEMENT'],
-    );
-
-    foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
-        addChamp($segment->infosDoss, $nomChamp, $valeurChamp);
-    }
-
     try {
         $avisDerogations = $segment->infosDoss->avisDerogations;
     } catch (Exception $e) {}
