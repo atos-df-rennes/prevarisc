@@ -500,13 +500,13 @@ addChamp($odf, 'numFaxProprio',$this->proprioInfos['TELFAX_UTILISATEURINFORMATIO
 addChamp($odf, 'societeProprio',$this->proprioInfos['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le maitre d'oeuvre
-addChamp($odf, 'nomMaitreOeuvre',$this->maiteOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'prenomMaitreOeuvre',$this->maiteOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'mailMaitreOeuvre',$this->maiteOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telFixeMaitreOeuvre',$this->maiteOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telPortMaitreOeuvre',$this->maiteOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'numFaxMaitreOeuvre',$this->maiteOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'societeMaitreOeuvre',$this->maiteOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'nomMaitreOeuvre',$this->maitreOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomMaitreOeuvre',$this->maitreOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailMaitreOeuvre',$this->maitreOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixeMaitreOeuvre',$this->maitreOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortMaitreOeuvre',$this->maitreOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxMaitreOeuvre',$this->maitreOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societeMaitreOeuvre',$this->maitreOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations du prefet
 addChamp($odf, 'nomPrefet',$this->prefetInfos['NOM_UTILISATEURINFORMATIONS'] ?? '');
@@ -526,23 +526,14 @@ addChamp($odf, 'telPortMaitreOuvrage',$this->maitreOuvrage['TELPORTABLE_UTILISAT
 addChamp($odf, 'numFaxMaitreOuvrage',$this->maitreOuvrage['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
 addChamp($odf, 'societeMaitreOuvrage',$this->maitreOuvrage['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
-//Informations sur le maitre d'oeuvre
-addChamp($odf, 'nomMaitreOeuvre',$this->maitreOeuvre['NOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'prenomMaitreOeuvre',$this->maitreOeuvre['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'mailMaitreOeuvre',$this->maitreOeuvre['MAIL_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telFixeMaitreOeuvre',$this->maitreOeuvre['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telPortMaitreOeuvre',$this->maitreOeuvre['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'numFaxMaitreOeuvre',$this->maitreOeuvre['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'societeMaitreOeuvre',$this->maitreOeuvre['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
-
 //Informations sur le Pétitionnaire demandeur
-addChamp($odf, 'nomPetitionaireDemandeur',$this->petitionaireDemandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'prenomPetitionaireDemandeur',$this->petitionaireDemandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'mailPetitionaireDemandeur',$this->petitionaireDemandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telFixePetitionaireDemandeur',$this->petitionaireDemandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'telPortPetitionaireDemandeur',$this->petitionaireDemandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'numFaxPetitionaireDemandeur',$this->petitionaireDemandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
-addChamp($odf, 'societePetitionaireDemandeur',$this->petitionaireDemandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'nomPetitionnaireDemandeur',$this->petitionnaireDemandeur['NOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'prenomPetitionnaireDemandeur',$this->petitionnaireDemandeur['PRENOM_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'mailPetitionnaireDemandeur',$this->petitionnaireDemandeur['MAIL_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telFixePetitionnaireDemandeur',$this->petitionnaireDemandeur['TELFIXE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'telPortPetitionnaireDemandeur',$this->petitionnaireDemandeur['TELPORTABLE_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'numFaxPetitionnaireDemandeur',$this->petitionnaireDemandeur['TELFAX_UTILISATEURINFORMATIONS'] ?? '');
+addChamp($odf, 'societePetitionnaireDemandeur',$this->petitionnaireDemandeur['SOCIETE_UTILISATEURINFORMATIONS'] ?? '');
 
 //Informations sur le Controller Technique
 addChamp($odf, 'nomControllerTechnique',$this->controllerTechnique['NOM_UTILISATEURINFORMATIONS'] ?? '');

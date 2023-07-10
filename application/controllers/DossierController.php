@@ -2265,7 +2265,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurMail = $servInstructeurMail;
 
         $serviceDossier = new Service_Dossier();
-        $this->view->assign('maiteOeuvre', $serviceDossier->getContactInfo($idDossier, $idEtab, 4));
+        $this->view->assign('maitreOeuvre', $serviceDossier->getContactInfo($idDossier, $idEtab, 4));
 
         $this->view->assign('maitreOuvrage', $serviceDossier->getContactInfo($idDossier, $idEtab, 3));
 
@@ -2277,7 +2277,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->assign('proprioInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 17));
 
-        $this->view->assign('petitionaireDemandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 5));
+        $this->view->assign('petitionnaireDemandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 5));
 
         $this->view->assign('controllerTechnique', $serviceDossier->getContactInfo($idDossier, $idEtab, 6));
 
