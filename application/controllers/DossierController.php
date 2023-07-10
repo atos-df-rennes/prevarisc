@@ -395,7 +395,7 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->_getParam('id');
             $this->view->idDossier = $idDossier;
             //Récupération de tous les champs de la table dossier
-            $this->view->infosDossier = $DBdossier->find($idDossier)->current();
+            $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
 
             //On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             //document manquant - absence de quorum - hors delai - ne peut se prononcer - differe l'avis
@@ -2077,7 +2077,7 @@ class DossierController extends Zend_Controller_Action
 
         //RECUPERATIONS DES INFORMATIONS SUR L'ETABLISSEMENT
         $service_etablissement = new Service_Etablissement();
-        $this->view->etablissementInfos = $service_etablissement->get($idEtab);
+        $this->view->assign('etablissementInfos', $service_etablissement->get($idEtab));
 
         $model_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $model_etablissement->find($idEtab)->current();
@@ -2190,7 +2190,7 @@ class DossierController extends Zend_Controller_Action
             if ('' != $array_adresses[0]['LIBELLE_COMMUNE']) {
                 $adresse .= strtoupper($array_adresses[0]['LIBELLE_COMMUNE']).' ';
             }
-            $this->view->maire = $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']);
+            $this->view->assign('maire', $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']));
             $this->view->etablissementAdresse = $adresse;
         }
 
@@ -2264,62 +2264,20 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurNomContact = $servInstructeurNomContact;
         $this->view->servInstructeurMail = $servInstructeurMail;
 
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un maitre d'oeuvre existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 4);
-        if (1 === count($contactInfos)) {
-            $this->view->maiteOeuvre = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 4);
-            if (!empty($contactInfos)) {
-                $this->view->maiteOeuvre = $contactInfos[0];
-            }
-        }
-
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un directeur unique de sécurité existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 8);
-        if (1 === count($contactInfos)) {
-            $this->view->dusDossier = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 8);
-            if (!empty($contactInfos)) {
-                $this->view->dusDossier = $contactInfos[0];
-            }
-        }
-
-        //un exploitant existe
-        $exploitantInfos = $dbDossierContact->recupInfoContact($idDossier, 7);
-        if (1 === count($exploitantInfos)) {
-            $this->view->exploitantDossier = $exploitantInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 7);
-            if (!empty($contactInfos)) {
-                $this->view->exploitantDossier = $contactInfos[0];
-            }
-        }
-
-        //un responsable de sécurité existe
-        $respsecuInfos = $dbDossierContact->recupInfoContact($idDossier, 9);
-        if (1 === count($respsecuInfos)) {
-            $this->view->respsecuDossier = $respsecuInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 9);
-            if (!empty($contactInfos)) {
-                $this->view->respsecuDossier = $contactInfos[0];
-            }
-        }
-
-        //un proprietaire
-        $proprioInfos = $dbDossierContact->recupInfoContact($idDossier, 17);
-        if (1 === count($proprioInfos)) {
-            $this->view->proprioInfos = $proprioInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 17);
-            if (!empty($contactInfos)) {
-                $this->view->proprioInfos = $contactInfos[0];
-            }
-        }
+        $serviceDossier = new Service_Dossier();
+        $this->view->assign([
+            'maitreOeuvre' => $serviceDossier->getContactInfo($idDossier, $idEtab, 4),
+            'maitreOuvrage' => $serviceDossier->getContactInfo($idDossier, $idEtab, 3),
+            'dusDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 8),
+            'exploitantDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 7),
+            'respsecuDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 9),
+            'proprioInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 17),
+            'petitionnaireDemandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 5),
+            'controllerTechnique' => $serviceDossier->getContactInfo($idDossier, $idEtab, 6),
+            'participant' => $serviceDossier->getContactInfo($idDossier, $idEtab, 10),
+            'demandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 11),
+            'prefetInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 1),
+        ]);
 
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
@@ -2338,7 +2296,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->commissionInfos = 'Aucune commission';
         if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && null !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
-            $this->view->commissionInfos = $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current();
+            $this->view->assign('commissionInfos', $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current());
         }
 
         $this->view->etatDossier = 'Complet';
