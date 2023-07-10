@@ -2265,27 +2265,19 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurMail = $servInstructeurMail;
 
         $serviceDossier = new Service_Dossier();
-        $this->view->assign('maitreOeuvre', $serviceDossier->getContactInfo($idDossier, $idEtab, 4));
-
-        $this->view->assign('maitreOuvrage', $serviceDossier->getContactInfo($idDossier, $idEtab, 3));
-
-        $this->view->assign('dusDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 8));
-
-        $this->view->assign('exploitantDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 7));
-
-        $this->view->assign('respsecuDossier', $serviceDossier->getContactInfo($idDossier, $idEtab, 9));
-
-        $this->view->assign('proprioInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 17));
-
-        $this->view->assign('petitionnaireDemandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 5));
-
-        $this->view->assign('controllerTechnique', $serviceDossier->getContactInfo($idDossier, $idEtab, 6));
-
-        $this->view->assign('participant', $serviceDossier->getContactInfo($idDossier, $idEtab, 10));
-
-        $this->view->assign('demandeur', $serviceDossier->getContactInfo($idDossier, $idEtab, 11));
-
-        $this->view->assign('prefetInfos', $serviceDossier->getContactInfo($idDossier, $idEtab, 1));
+        $this->view->assign([
+            'maitreOeuvre' => $serviceDossier->getContactInfo($idDossier, $idEtab, 4),
+            'maitreOuvrage' => $serviceDossier->getContactInfo($idDossier, $idEtab, 3),
+            'dusDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 8),
+            'exploitantDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 7),
+            'respsecuDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 9),
+            'proprioInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 17),
+            'petitionnaireDemandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 5),
+            'controllerTechnique' => $serviceDossier->getContactInfo($idDossier, $idEtab, 6),
+            'participant' => $serviceDossier->getContactInfo($idDossier, $idEtab, 10),
+            'demandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 11),
+            'prefetInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 1),
+        ]);
 
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
