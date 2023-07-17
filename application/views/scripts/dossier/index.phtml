@@ -596,45 +596,53 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
             my_dialog("/calendrier-des-commissions/dialogcomm", "do=newComm&idComm=" + idComm +
                 "&dateD=" + start + "&dateF=" + end + "&libelleCom=" + nomCom + "&type=" + type,
                 function() {
-                    $("#dialogComm").dialog("option", "buttons", {
-                        'Enregistrer dans le calendrier': function() {
-                            // Lors de la validation de la boite de dialogue
-                            $.ajax({
-                                data: $("#formDateComm").serialize() +
-                                    "&idComm=" + idComm,
-                                url: "/calendrier-des-commissions/adddates",
-                                type: "POST",
-                                success: function(affichageResultat) {
-                                    //En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
-                                    //Récupération du Json et affichage de celui-ci
-                                    var rez = eval("(" + affichageResultat +
-                                        ")");
-                                    for (var i in rez) {
-                                        calendar.fullCalendar(
-                                        'renderEvent', {
-                                            id: rez[i]['id'],
-                                            title: rez[i]['title'],
-                                            className: rez[i][
-                                                'className'
-                                            ],
-                                            start: rez[i]['start'],
-                                            end: rez[i]['end'],
-                                            allDay: false,
-                                            url: "/commission/id/" +
-                                                rez[i]['id']
-                                        });
+                    $("#dialogComm").dialog("option", "buttons", [
+                        {
+                            text: 'Enregistrer dans le calendrier',
+                            class: 'btn btn-success',
+                            click: function() {
+                                // Lors de la validation de la boite de dialogue
+                                $.ajax({
+                                    data: $("#formDateComm").serialize() +
+                                        "&idComm=" + idComm,
+                                    url: "/calendrier-des-commissions/adddates",
+                                    type: "POST",
+                                    success: function(affichageResultat) {
+                                        //En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
+                                        //Récupération du Json et affichage de celui-ci
+                                        var rez = eval("(" + affichageResultat +
+                                            ")");
+                                        for (var i in rez) {
+                                            calendar.fullCalendar(
+                                            'renderEvent', {
+                                                id: rez[i]['id'],
+                                                title: rez[i]['title'],
+                                                className: rez[i][
+                                                    'className'
+                                                ],
+                                                start: rez[i]['start'],
+                                                end: rez[i]['end'],
+                                                allDay: false,
+                                                url: "/commission/id/" +
+                                                    rez[i]['id']
+                                            });
+                                        }
+                                        $("#" + divInfo).fullCalendar(
+                                            'refetchEvents');
+                                        $("#dialogComm").dialog('close').html(
+                                            '');
                                     }
-                                    $("#" + divInfo).fullCalendar(
-                                        'refetchEvents');
-                                    $("#dialogComm").dialog('close').html(
-                                        '');
-                                }
-                            });
+                                });
+                            }
                         },
-                        'Fermer la fenêtre d\'édition': function() {
-                            $("#dialogComm").dialog('close').html('');
+                        {
+                            text: "Fermer la fenêtre d'édition",
+                            class: 'btn',
+                            click: function() {
+                                $("#dialogComm").dialog('close').html('');
+                            }
                         }
-                    });
+                    ]);
                 });
         },
         eventClick: function(event, jsEvent, view) {

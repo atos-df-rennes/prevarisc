@@ -227,14 +227,16 @@ $(document).ready(function() {
 		autoOpen: false,
 		width: 800,
 		height: 600,
-		buttons: {
-			"Terminer": function() {
-				dialogDateCommission.dialog("close");
-				return false;
-			}
-		},
-		close: function(event, ui){
-		}
+		buttons: [
+            {
+                text: 'Terminer',
+                class: 'btn',
+                click: function() {
+                    dialogDateCommission.dialog("close");
+                    return false;
+                }
+            }
+        ],
 	});
 
 	$("#commissionPj").click(function(){

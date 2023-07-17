@@ -209,47 +209,55 @@
 					// On empêche la selection d'un samedi ou d'un dimanche
 					// Boite de dialogue en ajoutant en callback le traitement du formulaire
 					my_dialog("/calendrier-des-commissions/dialogcomm", "do=newComm&idComm="+idComm+"&dateD="+start+"&dateF="+end, function() {
-						$("#dialogComm").dialog("option", "buttons", {
-							'Enregistrer dans le calendrier': function() {
-								// Lors de la validation de la boite de dialogue
-								if($("#repeat").is(":checked") && $("#dateFin").val() == ''){
-									$("#erreurDateFin").html('Veuillez renseigner une date de fin');
-									return false;
-								}
+						$("#dialogComm").dialog("option", "buttons", [
+                            {
+                                text: 'Enregistrer dans le calendrier',
+                                class: 'btn btn-success',
+                                click: function() {
+                                    // Lors de la validation de la boite de dialogue
+                                    if($("#repeat").is(":checked") && $("#dateFin").val() == ''){
+                                        $("#erreurDateFin").html('Veuillez renseigner une date de fin');
+                                        return false;
+                                    }
 
-								if ($("#libelle_comm").val() == ''){
-									$("#libelle_comm").focus();
-									return false;
-								}
-								$.ajax({
-									data: $("#formDateComm").serialize() + "&idComm=" + idComm,
-									url: "/calendrier-des-commissions/adddates",
-									type:"POST",
-									success: function(affichageResultat) {
-										//En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
-										//Récupération du Json et affichage de celui-ci
-										var rez = eval("("+affichageResultat+")");
-										for( var i in rez ) {
-											calendar.fullCalendar('renderEvent',{
-												id: rez[i]['id'],
-												title: rez[i]['title'],
-												className: rez[i]['className'],
-												start: rez[i]['start'],
-												end: rez[i]['end'],
-												allDay: false,
-												//url: "/calendrier-des-commissions/view/id="+rez[i]['id']
-												url: "/commission/id/"+rez[i]['id']
-											});
-										}
-										$("#calendar").fullCalendar('refetchEvents');
-										$("#dialogComm").dialog('close').html('');
-									}
-								});
-							},
-							'Fermer la fenêtre d\'édition': function() {
-								$("#dialogComm").dialog('close').html('');
-							}
-						});
+                                    if ($("#libelle_comm").val() == ''){
+                                        $("#libelle_comm").focus();
+                                        return false;
+                                    }
+                                    $.ajax({
+                                        data: $("#formDateComm").serialize() + "&idComm=" + idComm,
+                                        url: "/calendrier-des-commissions/adddates",
+                                        type:"POST",
+                                        success: function(affichageResultat) {
+                                            //En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
+                                            //Récupération du Json et affichage de celui-ci
+                                            var rez = eval("("+affichageResultat+")");
+                                            for( var i in rez ) {
+                                                calendar.fullCalendar('renderEvent',{
+                                                    id: rez[i]['id'],
+                                                    title: rez[i]['title'],
+                                                    className: rez[i]['className'],
+                                                    start: rez[i]['start'],
+                                                    end: rez[i]['end'],
+                                                    allDay: false,
+                                                    //url: "/calendrier-des-commissions/view/id="+rez[i]['id']
+                                                    url: "/commission/id/"+rez[i]['id']
+                                                });
+                                            }
+                                            $("#calendar").fullCalendar('refetchEvents');
+                                            $("#dialogComm").dialog('close').html('');
+                                        }
+                                    });
+                                }
+                            },
+                            {
+                                text: "Fermer la fenêtre d'édition",
+                                class: 'btn',
+                                click: function() {
+                                    $("#dialogComm").dialog('close').html('');
+                                }
+                            }
+                        ]);
 					});
 				},
 				eventClick: function( event, jsEvent, view ) {
@@ -342,35 +350,46 @@
 					height: '500',
 					width: '800',
 					modal: true,
-					buttons: {
-						'Supprimer la date': function() {
-							$.ajax({
-								url: "/calendrier-des-commissions/alertsuppression",
-								data: "&dateCommission="+$("#dateCommission").val()+"&commissionId="+$("#commissionId").val(),
-								type:"POST",
-								beforeSend: function(){
-
-								},
-								success: function(affichageResultat){
-									$("#dialogComm").html(affichageResultat);
-									$(".ui-dialog-buttonset").children("button").remove();
-									return false;
-								},
-								error: function(){
-									return false;
-								}
-							});
-						},
-						'Afficher l\'ordre du jour': function() {
-							window.location.replace("./calendrier-des-commissions/gestionodj/dateCommId/"+$("#dateClick").val());
-						},
-						'Fermer la fenêtre d\'édition': function() {
-							$("#dialogComm").dialog('close').html('');
-						}
-					}
+					buttons: [
+                        {
+                            text: 'Supprimer la date',
+                            class: 'btn btn-warning',
+                            click: function() {
+                                $.ajax({
+                                    url: "/calendrier-des-commissions/alertsuppression",
+                                    data: "&dateCommission="+$("#dateCommission").val()+"&commissionId="+$("#commissionId").val(),
+                                    type:"POST",
+                                    beforeSend: function(){
+                                    },
+                                    success: function(affichageResultat){
+                                        $("#dialogComm").html(affichageResultat);
+                                        $(".ui-dialog-buttonset").children("button").remove();
+                                        return false;
+                                    },
+                                    error: function(){
+                                        return false;
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            text: "Afficher l'ordre du jour",
+                            class: 'btn btn-primary',
+                            click: function() {
+                                window.location.replace("./calendrier-des-commissions/gestionodj/dateCommId/"+$("#dateClick").val());
+                            }
+                        },
+                        {
+                            text: "Fermer la fenêtre d'édition",
+                            class: 'btn',
+                            click: function() {
+                                $("#dialogComm").dialog('close').html('');
+                            }
+                        }
+                    ]
 				});
 
-				if( callback ) {
+				if (callback) {
 					callback();
 				}
 			}

@@ -43,46 +43,50 @@
     $(document).ready(function() {
         $("body").append("<iframe name='hiddeniframe' id='hiddeniframe' src='about:blank' style='width:0px; height:0px' >");
 
-        // Bouton de la pièce jointe
-        $("#addPJ").button({
-            icons: {
-                primary: 'ui-icon-pin-s'
-            },
-            text: true
-        }).click(function() {
-            // Dialogue du formulaire
-            $.ajax({
-                url: "/piece-jointe/form",
-                data: "id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
-                type: "post",
-                success: function(result) {
-                    $("#formAddPJ").html(result).dialog({
-                        resizable: false,
-                        height: 500,
-                        width: 580,
-                        modal: true,
-                        buttons: {
-                            'Ajouter la pièce jointe': function() {
-                                // Envoi du formulaire dans form
-                                $("#formUpload").submit();
+		// Bouton de la pièce jointe
+		$("#addPJ").button({
+			icons: {
+				primary: 'ui-icon-pin-s'
+			},
+			text: true
+		}).click(function() {
+			// Dialogue du formulaire
+			$.ajax({
+				url: "/piece-jointe/form",
+				data: "id=" + $("#idLinkPJ").val() + "&type=" + $("#typePJ").val(),
+				type: "post",
+				success: function(result) {
+					$("#formAddPJ").html(result).dialog({
+						resizable: false,
+						height: 500,
+						width: 580,
+						modal: true,
+						buttons: [
+                            {
+                                text: 'Ajouter la pièce jointe',
+                                class: 'btn btn-success',
+                                click: function() {
+                                    // Envoi du formulaire dans form
+                                    $("#formUpload").submit();
 
-                                // On ferme la boite de dialogue
-                                $(this).dialog('close');
+                                    // On ferme la boite de dialogue
+                                    $(this).dialog('close');
 
-                                // On ouvre la barre de chargement
-                                $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
-                                    resizable: false,
-                                    height: 45,
-                                    width: 250,
-                                    modal: true,
-                                    dialogClass: 'noTitleStuff'
-                                });
+                                    // On ouvre la barre de chargement
+                                    $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
+                                        resizable: false,
+                                        height: 45,
+                                        width: 250,
+                                        modal: true,
+                                        dialogClass: 'noTitleStuff'
+                                    });
+                                }
                             }
-                        }
-                    });
-                }
-            });
-        });
+                        ]
+					});
+				}
+			});
+		});
 
         /* GESTION DU GLISSEZ DEPOSER */
         $("#addPJQuick").click(function() {
