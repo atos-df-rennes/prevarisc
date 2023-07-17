@@ -67,15 +67,17 @@
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
-        <button
-            id='preventionniste'
-            class='btn btn-info'
-            type='button'
-            style='margin-bottom: 10px;'
-            data-loading-text='Affectation...'
-        >
-            Affecter aux etablissements
-        </button>
+        <?php if (count($this->preventionnistes) > 0): ?>
+            <button
+                id='preventionniste'
+                class='btn btn-info'
+                type='button'
+                style='margin-bottom: 10px;'
+                data-loading-text='Affectation...'
+            >
+                Affecter aux etablissements
+            </button>
+        <?php endif ?>
 
 		<!-- Afficher la liste des prev. -->
 		<ul class='liste_informations' id='liste_prev'>
@@ -85,7 +87,7 @@
 					<span class='action' style='float: right' ><a style='text-decoration: none;' href='javascript:void(0)' onclick=" $(this).parent().parent().remove() ">&times;</a></span>
 					<input type='hidden' name='prev[]' value='<?php echo $preventionniste["ID_UTILISATEUR"]; ?>' />
 				</li>
-			<?php endforeach	?>
+			<?php endforeach ?>
 		</ul>
 	</div>
 
