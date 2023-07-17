@@ -163,6 +163,7 @@ class DossierController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('dossier');
         $this->view->inlineScript()->appendFile('/js/dossier/dossierGeneral.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/dossier/platau.js', 'text/javascript');
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         // Actions à effectuées en AJAX
@@ -194,6 +195,22 @@ class DossierController extends Zend_Controller_Action
             $dossier = $DBdossier->find($this->idDossier)->current();
 
             $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
+
+            if (null !== $dossier['ID_PLATAU']) {
+                $platauConsultationMapper = new Model_PlatauConsultationMapper();
+                $platauConsultationModel = new Model_PlatauConsultation();
+                $this->view->assign('enumStatutsPec', new Model_Enum_PlatauStatutPec());
+                $this->view->assign('enumStatutsAvis', new Model_Enum_PlatauStatutAvis());
+
+                $platauConsultation = $platauConsultationMapper->find($dossier['ID_PLATAU'], $platauConsultationModel);
+
+                if (null !== $platauConsultation) {
+                    $this->view->assign('statutPec', $platauConsultation->getStatutPec());
+                    $this->view->assign('datePec', $platauConsultation->getDatePec());
+                    $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
+                    $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
+                }
+            }
 
             $DBdossierType = new Model_DbTable_DossierType();
             $libelleType = $DBdossierType->find($dossier->TYPE_DOSSIER)->current();
@@ -378,7 +395,7 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->_getParam('id');
             $this->view->idDossier = $idDossier;
             //Récupération de tous les champs de la table dossier
-            $this->view->infosDossier = $DBdossier->find($idDossier)->current();
+            $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
 
             //On verifie les éléments masquant l'avis et la date de commission/visite pour les afficher ou non
             //document manquant - absence de quorum - hors delai - ne peut se prononcer - differe l'avis
@@ -831,6 +848,7 @@ class DossierController extends Zend_Controller_Action
                 'servInstGrp',
                 'repercuterAvis',
                 'INCOMPLET_DOSSIER',
+                'export-pj-platau',
             ];
 
             $includes = [
@@ -886,6 +904,12 @@ class DossierController extends Zend_Controller_Action
                 }
             }
 
+            if ($pjs = $this->_getParam('export-pj-platau')) {
+                $servicePj = new Service_PieceJointe();
+
+                $servicePj->exportPlatau($pjs);
+            }
+
             $nouveauDossier->HORSDELAI_DOSSIER = 0;
             if ($this->_getParam('HORSDELAI_DOSSIER')) {
                 $nouveauDossier->HORSDELAI_DOSSIER = 1;
@@ -908,7 +932,7 @@ class DossierController extends Zend_Controller_Action
 
             $nouveauDossier->CNE_DOSSIER = 0;
             if ($this->_getParam('CNE_DOSSIER')) {
-                $nouveauDossier->CNE_DOSSIER = 0;
+                $nouveauDossier->CNE_DOSSIER = 1;
             }
 
             if (!in_array('OBJET', $this->listeChamps[$this->_getParam('selectNature')])) {
@@ -2053,7 +2077,7 @@ class DossierController extends Zend_Controller_Action
 
         //RECUPERATIONS DES INFORMATIONS SUR L'ETABLISSEMENT
         $service_etablissement = new Service_Etablissement();
-        $this->view->etablissementInfos = $service_etablissement->get($idEtab);
+        $this->view->assign('etablissementInfos', $service_etablissement->get($idEtab));
 
         $model_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $model_etablissement->find($idEtab)->current();
@@ -2166,7 +2190,7 @@ class DossierController extends Zend_Controller_Action
             if ('' != $array_adresses[0]['LIBELLE_COMMUNE']) {
                 $adresse .= strtoupper($array_adresses[0]['LIBELLE_COMMUNE']).' ';
             }
-            $this->view->maire = $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']);
+            $this->view->assign('maire', $service_adresse->getMaire($array_adresses[0]['NUMINSEE_COMMUNE']));
             $this->view->etablissementAdresse = $adresse;
         }
 
@@ -2240,62 +2264,20 @@ class DossierController extends Zend_Controller_Action
         $this->view->servInstructeurNomContact = $servInstructeurNomContact;
         $this->view->servInstructeurMail = $servInstructeurMail;
 
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un maitre d'oeuvre existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 4);
-        if (1 === count($contactInfos)) {
-            $this->view->maiteOeuvre = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 4);
-            if (!empty($contactInfos)) {
-                $this->view->maiteOeuvre = $contactInfos[0];
-            }
-        }
-
-        $dbDossierContact = new Model_DbTable_DossierContact();
-        //On recherche si un directeur unique de sécurité existe
-        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, 8);
-        if (1 === count($contactInfos)) {
-            $this->view->dusDossier = $contactInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 8);
-            if (!empty($contactInfos)) {
-                $this->view->dusDossier = $contactInfos[0];
-            }
-        }
-
-        //un exploitant existe
-        $exploitantInfos = $dbDossierContact->recupInfoContact($idDossier, 7);
-        if (1 === count($exploitantInfos)) {
-            $this->view->exploitantDossier = $exploitantInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 7);
-            if (!empty($contactInfos)) {
-                $this->view->exploitantDossier = $contactInfos[0];
-            }
-        }
-
-        //un responsable de sécurité existe
-        $respsecuInfos = $dbDossierContact->recupInfoContact($idDossier, 9);
-        if (1 === count($respsecuInfos)) {
-            $this->view->respsecuDossier = $respsecuInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 9);
-            if (!empty($contactInfos)) {
-                $this->view->respsecuDossier = $contactInfos[0];
-            }
-        }
-
-        //un proprietaire
-        $proprioInfos = $dbDossierContact->recupInfoContact($idDossier, 17);
-        if (1 === count($proprioInfos)) {
-            $this->view->proprioInfos = $proprioInfos[0];
-        } else {
-            $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, 17);
-            if (!empty($contactInfos)) {
-                $this->view->proprioInfos = $contactInfos[0];
-            }
-        }
+        $serviceDossier = new Service_Dossier();
+        $this->view->assign([
+            'maitreOeuvre' => $serviceDossier->getContactInfo($idDossier, $idEtab, 4),
+            'maitreOuvrage' => $serviceDossier->getContactInfo($idDossier, $idEtab, 3),
+            'dusDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 8),
+            'exploitantDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 7),
+            'respsecuDossier' => $serviceDossier->getContactInfo($idDossier, $idEtab, 9),
+            'proprioInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 17),
+            'petitionnaireDemandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 5),
+            'controllerTechnique' => $serviceDossier->getContactInfo($idDossier, $idEtab, 6),
+            'participant' => $serviceDossier->getContactInfo($idDossier, $idEtab, 10),
+            'demandeur' => $serviceDossier->getContactInfo($idDossier, $idEtab, 11),
+            'prefetInfos' => $serviceDossier->getContactInfo($idDossier, $idEtab, 1),
+        ]);
 
         //Affichage dossier incomplet pour generation dossier incomplet
         //Recuperation des documents manquants dans le cas d'un dossier incomplet
@@ -2314,7 +2296,7 @@ class DossierController extends Zend_Controller_Action
 
         $this->view->commissionInfos = 'Aucune commission';
         if ('' !== $this->view->infosDossier['COMMISSION_DOSSIER'] && null !== $this->view->infosDossier['COMMISSION_DOSSIER']) {
-            $this->view->commissionInfos = $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current();
+            $this->view->assign('commissionInfos', $DBdossierCommission->find($this->view->infosDossier['COMMISSION_DOSSIER'])->current());
         }
 
         $this->view->etatDossier = 'Complet';
@@ -2568,7 +2550,7 @@ class DossierController extends Zend_Controller_Action
         //DATE DE LA DERNIERE VISITE PERIODIQUE
         $dateVisite = $this->view->infosDossier['DATEVISITE_DOSSIER'];
 
-        if ('' !== $dateVisite) {
+        if (null !== $dateVisite) {
             $dateLastVP = $DBdossier->findLastVpCreationDoc($idEtab, $idDossier, $dateVisite);
 
             $this->view->dateLastVP = null;
@@ -3001,6 +2983,9 @@ class DossierController extends Zend_Controller_Action
         //On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
 
         $service_dossier = new Service_Dossier();
+
+        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);
+        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, (int) $this->_getParam('idDossier'));
 
         $prescriptionExploitation = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 1);
         $service_dossier->copyPrescriptionDossier($prescriptionExploitation, (int) $this->_getParam('idDossier'));

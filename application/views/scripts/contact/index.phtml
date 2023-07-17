@@ -5,7 +5,7 @@
 
 <div style='clear: both'></div>
 <div id='contact-content-ajax'>
-	
+
 	<!-- Contacts parents pour les ets -->
 	<?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
 	<h3>Contacts des établissements parents</h3>
@@ -21,7 +21,7 @@
 	<?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
 	<h3>Contacts de l'établissement</h3>
 	<?php endif ?>
-	
+
 	<?php
 		if( count($this->contacts) != 0 ) {
 			echo $this->partialLoop("contact/partial_fiche.phtml", $this->contacts);
@@ -29,7 +29,7 @@
 			echo "<p><strong>Aucun contact.</strong></p>";
 		}
 	?>
-    
+
     <div style='clear: both'></div>
 </div>
 
@@ -54,7 +54,7 @@
 	<script type="text/javascript">
 		// Suppression d'un contact
 		$("a.contact-delete").live("click", function() {
-			var a = this; 
+			var a = this;
 			$("#dialog-delete-contact").dialog({
 				title: "Confirmation de suppression",
 				autoOpen: true,
@@ -63,25 +63,33 @@
 				position: 'center',
 				draggable: false,
 				resizable: false,
-				buttons: {
-					"Supprimer": function() {
-						$.ajax({
-							url: a.href + "&format=json",
-							type: "POST",
-							success: function () {
-								$(a).parents(".fiche_contact").remove();
-								$( "#dialog-delete-contact" ).dialog( "destroy" );
-							}
-						});
-					},
-					Cancel: function() {
-						$( "#dialog-delete-contact" ).dialog( "destroy" );
-					}
-				}
+				buttons: [
+                    {
+                        text: 'Supprimer',
+                        class: 'btn btn-danger',
+                        click: function() {
+                            $.ajax({
+                                url: a.href + "&format=json",
+                                type: "POST",
+                                success: function () {
+                                    $(a).parents(".fiche_contact").remove();
+                                    $( "#dialog-delete-contact" ).dialog( "destroy" );
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: 'Annuler',
+                        class: 'btn',
+                        click: function() {
+                            $( "#dialog-delete-contact" ).dialog( "destroy" );
+                        }
+                    }
+                ]
 			});
 			return false;
 		});
-		
+
 		// Ajout d'un contact
 		$("a#add-contact").live("click", function() {
 			var a = this;
@@ -94,30 +102,38 @@
 						width: 800,
 						draggable: false,
 						resizable: false,
-						buttons: {
-							"Ajouter": function() {
-								$.ajax({
-									url: "/contact/add?format=json",
-									data: $("#formulaire_contact").serialize(),
-									type: "POST",
-									success: function () {
-										$('#dialog-add-contact').dialog("destroy");
-										$('#dialog-add-contact').hide();
-										$("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
-									}
-								});
-							},
-							"Annuler": function() {
-								$("#dialog-add-contact").dialog( "destroy" );
-								$('#dialog-add-contact').html('');
-							}
-						}
+						buttons: [
+                            {
+                                text: 'Ajouter',
+                                class: 'btn btn-success',
+                                click: function() {
+                                    $.ajax({
+                                        url: "/contact/add?format=json",
+                                        data: $("#formulaire_contact").serialize(),
+                                        type: "POST",
+                                        success: function () {
+                                            $('#dialog-add-contact').dialog("destroy");
+                                            $('#dialog-add-contact').hide();
+                                            $("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
+                                        }
+                                    });
+                                }
+                            },
+                            {
+                                text: 'Annuler',
+                                class: 'btn',
+                                click: function() {
+                                    $("#dialog-add-contact").dialog( "destroy" );
+                                    $('#dialog-add-contact').html('');
+                                }
+                            }
+                        ]
 					});
 				}
 			});
 			return false;
 		});
-		
+
 		// Edition d'un contact
 		$(".fiche_edit a").live("click", function() {
 			var a = this;
@@ -130,31 +146,39 @@
 						width: 650,
 						draggable: false,
 						resizable: false,
-						buttons: {
-							"Modifier": function() {
-								$.ajax({
-									url: "/contact/edit",
-									data: $("#dialog-add-contact #formulaire_contact").serialize(),
-									type: "POST",
-									success: function () {
-										$('#dialog-add-contact').dialog("destroy");
-										$("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
-									}
-								});
-                                
-                                $("#dialog-add-contact").html('');
-							},
-							"Annuler": function() {
-                                $("#dialog-add-contact").dialog( "destroy" );
-                                $("#dialog-add-contact").html('');
-							}
-						}
+						buttons: [
+                            {
+                                text: 'Modifier',
+                                class: 'btn btn-success',
+                                click: function() {
+                                    $.ajax({
+                                        url: "/contact/edit",
+                                        data: $("#dialog-add-contact #formulaire_contact").serialize(),
+                                        type: "POST",
+                                        success: function () {
+                                            $('#dialog-add-contact').dialog("destroy");
+                                            $("#contact-content-ajax").load("/contact?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>&ajax=1");
+                                        }
+                                    });
+
+                                    $("#dialog-add-contact").html('');
+                                }
+                            },
+                            {
+                                text: 'Annuler',
+                                class: 'btn',
+                                click: function() {
+                                    $("#dialog-add-contact").dialog( "destroy" );
+                                    $("#dialog-add-contact").html('');
+                                }
+                            }
+                        ]
 					});
 				}
 			});
 			return false;
 		});
-		
+
 		// Ajout d'un contact existant
 		$("#dialog-add-contact-existant").dialog({
 			autoOpen: false,
@@ -162,19 +186,23 @@
 			height: 'auto',
 			width: 650,
 			resizable: false,
-			buttons: {
-				"Annuler": function() {
-					$('#dialog-add-contact-existant').dialog("close");
-				}
-			}
+			buttons: [
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        $('#dialog-add-contact-existant').dialog("close");
+                    }
+                }
+            ]
 		});
-		
+
 		$("a#add-contact-existant").click(function() {
 			$('#dialog-add-contact-existant').dialog("open");
 			$('#dialog-add-contact-existant input').val("");
 			return false;
 		});
-		
+
 		$("#nom_contact_existant").autocomplete("/contact/get?format=json", {
 			minChars: 3,
 			cacheLength: 0,

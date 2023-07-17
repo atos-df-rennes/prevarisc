@@ -10,18 +10,14 @@
     <h4 class='h4_subtitle'>Descriptif</h4>
 
     <div class='row-fluid'>
-        <div class='span10'>
-            <?php foreach ($this->rubriques as $key => $rubrique):
-                if (($key % 4) === 0): ?>
-                    <div class='row-fluid'>
-                <?php endif;
-
-                echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
-
-                if ((($key % 4) === 3) || ($rubrique === end($this->rubriques))): ?>
-                    </div>
-                <?php endif;
-            endforeach ?>
+        <div class='span12'>
+            <?php foreach (array_chunk($this->rubriques, 4) as $chunkedRubriques): ?>
+                <div class='row-fluid'>
+                    <?php foreach ($chunkedRubriques as $rubrique):
+                        echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+                    endforeach ?>
+                </div>
+            <?php endforeach ?>
         </div>
     </div>
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [

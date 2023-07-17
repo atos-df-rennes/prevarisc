@@ -83,12 +83,12 @@ class SearchController extends Zend_Controller_Action
                             ],
                         ],
                     ];
-                    $sheet->getStyle('A1:W1')->applyFromArray($styleArray);
+                    $sheet->getStyle('A1:X1')->applyFromArray($styleArray);
                     unset($styleArray);
-                    $sheet->getStyle('A1:W1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    $sheet->getStyle('A1:W1')->getFont()->setSize(11)->setBold(true);
+                    $sheet->getStyle('A1:X1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A1:X1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'W') as $columnID) {
+                    foreach (range('A', 'X') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
@@ -115,6 +115,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(20, 1, 'Libellé du père/site');
                     $sheet->setCellValueByColumnAndRow(21, 1, 'Genre');
                     $sheet->setCellValueByColumnAndRow(22, 1, 'Préventionniste');
+                    $sheet->setCellValueByColumnAndRow(23, 1, 'Présence de locaux à sommeil');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
@@ -199,6 +200,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(20, $ligne, $row['LIBELLE_ETABLISSEMENT_PERE']);
                         $sheet->setCellValueByColumnAndRow(21, $ligne, $row['LIBELLE_GENRE']);
                         $sheet->setCellValueByColumnAndRow(22, $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(23, $ligne, $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 'oui' : 'non');
 
                         ++$ligne;
                     }
@@ -575,7 +577,7 @@ class SearchController extends Zend_Controller_Action
 
         $service_search = new Service_Search();
 
-        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null);
+        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null, null);
 
         $data = $data['results'];
 

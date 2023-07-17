@@ -163,6 +163,22 @@ class Service_Dossier
         return $DB_contact->getContact('dossier', $id_dossier);
     }
 
+    public function getContactInfo(int $idDossier, int $idEtab, int $idFonction): array
+    {
+        $dbDossierContact = new Model_DbTable_DossierContact();
+        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, $idFonction);
+        if (1 === count($contactInfos)) {
+            return $contactInfos[0];
+        }
+
+        $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, $idFonction);
+        if (!empty($contactInfos)) {
+            return $contactInfos[0];
+        }
+
+        return [];
+    }
+
     /**
      * Récupération des textes applicables d'un dossier.
      *
