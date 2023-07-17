@@ -137,6 +137,10 @@
                             <controller>groupement</controller>
                             <action>delete-type</action>
                         </delete-type>
+                        <preventionniste>
+                            <controller>groupement</controller>
+                            <action>preventionniste</action>
+                        </preventionniste>
                     </pages>
                 </groupement>
                 <couches-cartographiques>

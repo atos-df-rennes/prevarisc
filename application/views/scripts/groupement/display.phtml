@@ -63,29 +63,32 @@
 
 	<!-- Partie des préventionnistes -->
 	<div id="tabs-2">
-
-		<br />
-
+        <br />
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
-		<hr class='clear' />
+        <?php if (count($this->preventionnistes) > 0): ?>
+            <button
+                id='preventionniste'
+                class='btn btn-info'
+                type='button'
+                style='margin-bottom: 10px;'
+                data-loading-text='Affectation...'
+            >
+                Affecter aux etablissements
+            </button>
+        <?php endif ?>
 
 		<!-- Afficher la liste des prev. -->
 		<ul class='liste_informations' id='liste_prev'>
-
 			<?php foreach($this->preventionnistes as $preventionniste) : ?>
-
 				<li id='prev_<?php echo $preventionniste["ID_UTILISATEUR"] ?>'>
 					<span ><a href='/user/profile/uid/<?php echo $preventionniste["ID_UTILISATEUR"]; ?>'><?php echo $preventionniste["GRADE_UTILISATEURINFORMATIONS"]." ".$preventionniste["NOM_UTILISATEURINFORMATIONS"]." ".$preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?></a></span>
 					<span class='action' style='float: right' ><a style='text-decoration: none;' href='javascript:void(0)' onclick=" $(this).parent().parent().remove() ">&times;</a></span>
 					<input type='hidden' name='prev[]' value='<?php echo $preventionniste["ID_UTILISATEUR"]; ?>' />
 				</li>
-
-			<?php endforeach	?>
-
+			<?php endforeach ?>
 		</ul>
-
 	</div>
 
 	<!-- Coordonnées -->
@@ -95,10 +98,23 @@
 
 	<!-- Partie contact -->
 	<div id="tabs-4"></div>
-
 </div>
 
 <script type="text/javascript">
+    //réaffecter un préventioiste
+    $("#preventionniste").click(function() {
+        $.ajax({
+            url: "/groupement/preventionniste",
+            data: "groupement="+$("#gpt option:selected").text(),
+            type: "POST",
+            beforeSend: function() {
+                $("#preventionniste").button('loading')
+            },
+            success: function() {
+                $("#preventionniste").button('reset')
+            },
+        })
+	});
 
 	// Onglets
 	$( "#tabs" ).tabs();
@@ -183,5 +199,4 @@
 	$("#villes_groupement option").each( function() {
 		$( "#liste_villes option[id='" + $(this).attr("id")  + "']" ).attr("disabled","disabled");
 	});
-
 </script>
