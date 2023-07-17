@@ -954,7 +954,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $this->view->informationsMembre = $listeMembres;
 
-            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
+            $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']);
 
             //On récupère le nom de la commission
             $this->view->commissionInfos = $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray();
@@ -1020,7 +1020,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 }
             }
 
-            foreach ($listeDossiers as &$dossier) {
+            foreach ($listeDossiers as $key => $dossier) {
                 // Gestion des formulaires personnalisés
                 $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
                 $rubriquesEtablissement = empty($dossier['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
@@ -1038,12 +1038,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
                 // Récupération des rubriques pour chaque objet global
-                // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-                foreach ($capsulesRubriques as &$capsuleRubrique) {
-                    $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+                    $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
                 }
 
-                $dossier['FORMULAIRES'] = $capsulesRubriques;
+                $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
             }
 
             $this->view->listeCommunes = $tabCommune;
@@ -1089,14 +1088,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers = $dbDateCommPj->getDossiersInfosByOrder($dateCommId);
         }
 
-        //Récupération des membres de la commission
-        $model_membres = new Model_DbTable_CommissionMembre();
-
-        $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$listeDossiers[0]['COMMISSION_DOSSIER']);
-
         //On récupère le nom de la commission
         $model_commission = new Model_DbTable_Commission();
-        $this->view->commissionInfos = $model_commission->find($listeDossiers[0]['COMMISSION_DOSSIER'])->toArray();
+        $this->view->commissionInfos = $model_commission->find($commSelect['COMMISSION_CONCERNE'])->toArray();
+
+        //Récupération des membres de la commission
+        $model_membres = new Model_DbTable_CommissionMembre();
+        $this->view->membresFiles = $model_membres->fetchAll('ID_COMMISSION = '.$commSelect['COMMISSION_CONCERNE']);
 
         //afin de récuperer les informations des communes (adresse des mairies etc)
         $model_adresseCommune = new Model_DbTable_AdresseCommune();
@@ -1167,15 +1165,15 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             }
         }
 
-        $listeMembres = $model_membres->get($listeDossiers[0]['COMMISSION_DOSSIER']);
+        $listeMembres = $model_membres->get($commSelect['COMMISSION_CONCERNE']);
         foreach ($listeMembres as $var => $membre) {
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
         }
 
         $dbDossier = new Model_DbTable_Dossier();
 
-        foreach ($listeDossiers as &$dossier) {
-            $dossier['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
+        foreach ($listeDossiers as $key => $dossier) {
+            $listeDossiers[$key]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
@@ -1194,12 +1192,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-            foreach ($capsulesRubriques as &$capsuleRubrique) {
-                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
-            $dossier['FORMULAIRES'] = $capsulesRubriques;
+            $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
         }
 
         $this->view->informationsMembre = $listeMembres;
@@ -1276,9 +1273,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-            foreach ($capsulesRubriques as &$capsuleRubrique) {
-                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
@@ -1347,9 +1343,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            // Le & devant $capsuleRubrique est nécessaire car on modifie une référence du tableau
-            foreach ($capsulesRubriques as &$capsuleRubrique) {
-                $capsuleRubrique['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
+                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;

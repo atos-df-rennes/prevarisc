@@ -219,16 +219,19 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     }
     addChamp($segment->infosDoss, 'numDocUrba', $listeDocUrba);
     addChamp($segment->infosDoss, 'typeDossierCourt', $typeDossierCourt);
-    $listePreventioniste = array();
-    $listeTelPreventioniste = array();
+    $listePreventioniste = [];
+    $listeTelPreventioniste = [];
+    $listeMailPreventionniste = [];
     if (isset($dossierInfos["preventionnistes"])) {
         foreach($dossierInfos["preventionnistes"] as $va => $preventioniste){
             $listePreventioniste[] = $preventioniste['GRADE_UTILISATEURINFORMATIONS']. " ".$preventioniste['NOM_UTILISATEURINFORMATIONS']. " ".$preventioniste['PRENOM_UTILISATEURINFORMATIONS'];
             $listeTelPreventioniste[] = $preventioniste['TELFIXE_UTILISATEURINFORMATIONS'];
+            $listeMailPreventionniste[] = $preventioniste['MAIL_UTILISATEURINFORMATIONS'];
         }
     }
     addChamp($segment->infosDoss, 'preventionnistes', implode(', ', $listePreventioniste));
     addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+    addChamp($segment->infosDoss, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
 
     try {
         $avisDerogations = $segment->infosDoss->avisDerogations;

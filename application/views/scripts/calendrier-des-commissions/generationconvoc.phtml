@@ -283,16 +283,19 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     }
     setVars($segment, 'numDocUrba', $listeDocUrba);
 
-    $listePreventioniste = array();
-    $listeTelPreventioniste = array();
+    $listePreventioniste = [];
+    $listeTelPreventioniste = [];
+    $listeMailPreventionniste = [];
     if (isset($dossierInfos["preventionnistes"])) {
         foreach($dossierInfos["preventionnistes"] as $va => $preventioniste){
             $listePreventioniste[] = $preventioniste['GRADE_UTILISATEURINFORMATIONS']. " " .$preventioniste['NOM_UTILISATEURINFORMATIONS']. " ".$preventioniste['PRENOM_UTILISATEURINFORMATIONS'];
             $listeTelPreventioniste[] = $preventioniste['TELFIXE_UTILISATEURINFORMATIONS'];
+            $listeMailPreventionniste[] = $preventioniste['MAIL_UTILISATEURINFORMATIONS'];
         }
     }
     setVars($segment, 'preventionnistes', implode(', ', $listePreventioniste));
     setVars($segment, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
+    setVars($segment, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
 
     // Gestion des avis & dérogations
     try {

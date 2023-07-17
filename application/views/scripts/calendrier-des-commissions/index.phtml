@@ -120,6 +120,10 @@
 				datas = { format: 'json', idComm: idComm };
 			}
 			var calendar = $('#calendar').fullCalendar( {
+                buttonIcons:{
+                    prevYear: 'seek-prev',
+                    nextYear: 'seek-next'
+                },
 				buttonText: {
 					month: 'Mois',
 					day: 'Jour',
@@ -127,7 +131,7 @@
 					today: 'Aujourd\'hui'
 				},
 				header: {
-					left: 'prev,next today',
+					left: 'prevYear prev,next nextYear today',
 					center: 'title',
 					right: 'month,agendaWeek,agendaDay'
 				},
