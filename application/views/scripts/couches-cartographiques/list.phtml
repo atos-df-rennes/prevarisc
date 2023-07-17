@@ -162,7 +162,7 @@
                 <td><?php echo $couche_cartographique['NOM_COUCHECARTO'].(($couche_cartographique['ISBASELAYER_COUCHECARTO']) ? " (couche de base)" : "") ?></td>
                 <td><?= $couche_cartographique['ORDRE_COUCHECARTO'] ?? 'Ordre non renseigné' ?></td>
                 <td>
-                    <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Éditer la couche</a><br/>
+                    <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Modifier la couche</a><br/>
                     <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Supprimer</a>
                 </td>
             </tr>
