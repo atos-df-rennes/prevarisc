@@ -53,7 +53,7 @@ $.fn.ajoutDocDialog = function(idNatureDoc) {
 
 			$("#libelleNewDoc").attr('value','');
 			$("#dossier_Pdroite").activeCheck('qsd');
-			
+
 			return false;
 		},
 		error: function() {
@@ -66,7 +66,7 @@ $.fn.ajoutDocDialog = function(idNatureDoc) {
 $('.divDocConsulte input:checkbox').live('click',function() {
 	var idcheckbox = $(this).attr("id");
 	var nomTab = $(this).attr('id').split('_');
-	
+
 	if (nomTab.length == 3) {
 		var nom = nomTab[1]+"_"+nomTab[2];
 	} else if (nomTab.length == 4) {
@@ -76,7 +76,7 @@ $('.divDocConsulte input:checkbox').live('click',function() {
 		$("#ref_"+nom).removeAttr('readonly');
 		$("#date_"+nom).removeAttr('readonly');
 		$("#modif_"+nom).hide();
-		$("#div_input_"+nom).fadeIn();				
+		$("#div_input_"+nom).fadeIn();
 		$("#tmp").attr('value','new');
 
 		$("#libelleView_"+nom).hide();
@@ -101,7 +101,7 @@ $(".validDoc").live('click',function() {
 
 	var data = $("#docConsulteForm").serialize();
 	var idTab = $(this).parent().attr('id').split('_');
-	
+
 	var valRef = $(this).parent().parent().prev().prev().children("input[type=text]").val();
 	var valDate = $(this).parent().parent().prev().children("input[type=text]").val();
 
@@ -114,19 +114,19 @@ $(".validDoc").live('click',function() {
 	$.ajax({
 		url: "/dossier/validdoc",
 		data: "do=validDoc&idValid="+idValid+"&"+data+"&id="+$("#idDossier").val(),
-		type:"POST",			
+		type:"POST",
 		beforeSend: function() {
 		},
 		success: function(affichageResultat) {
 			$("#dossier_Pdroite").showModif(idValid);
 			$("#dossier_Pdroite").activeCheck(idValid);
-			
+
 			$("#modif_"+idValid).show();
 			$("#valid_"+idValid).hide();
 			$("#ref_"+idValid).attr('readonly','true');
 			$("#date_"+idValid).attr('readonly','true').attr('disabled','disabled');
 			$("#check_"+idValid).attr('disabled','disabled');
-			
+
 			$("#tmpRef").attr('value','');
 			$("#tmpDate").attr('value','');
 
@@ -146,7 +146,7 @@ $(".validDoc").live('click',function() {
 
 $(document).ready(function() {
 	var idDiv = $(".nature").attr('id');
-	
+
 	$($(".divDoc").get().reverse()).each(function() {
 		var valeurDiv;
 		var idLi;
@@ -155,17 +155,17 @@ $(document).ready(function() {
 		{
 			idLi = "";
 			idLiTab = "";
-			
+
 			valeurDiv = $(this).html();
 			idLiTab = $(this).find("input:checkbox").attr('id').split("_");
 			if (idLiTab.length == 3) {
-				idLi = idLiTab[1]+"_"+idLiTab[2];			
+				idLi = idLiTab[1]+"_"+idLiTab[2];
 			} else if (idLiTab.length == 4) {
 				idLi = idLiTab[1]+"_"+idLiTab[2]+"_"+idLiTab[3];
 			} else {
 				return false;
 			}
-			
+
 			$(this).next().remove();
 			$(this).remove();
 			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row-fluid span12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
@@ -185,11 +185,13 @@ $(document).ready(function() {
 <?php
 foreach($this->listeNatures as $index => $nature) {
 	echo "
-		<div id='".$nature["ID_NATURE"]."' class='nature row-fluid'>	
+		<div id='".$nature["ID_NATURE"]."' class='nature row-fluid'>
 			<h4 class='hideDocConsulte' >Liste des documents consultés concernant la nature '".$nature["LIBELLE_DOSSIERNATURE"]."'</h4>
 			<p class='span5' style='padding-left:20px;'><strong>Libelle</strong></p>
-			<p class='span2'><strong>Reférence</strong></p>
-			<p class='span2'><strong>Date</strong></p>
+			<div class='span6'>
+                <p class='span5'><strong>Référence</strong></p>
+                <p class='span2'><strong>Date</strong></p>
+            </div>
 			<br class='clear' />
 			<ul id='listeDocs_".$nature["ID_NATURE"]."'>";
 
@@ -211,7 +213,7 @@ foreach($this->listeNatures as $index => $nature) {
 					$date = $docExistant['DATE_CONSULTE'];
 				}
 			}
-			
+
 			if ($exist) {
 				echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC'],$ref,$date);
 			} else {
