@@ -63,32 +63,22 @@
 
 	<!-- Partie des préventionnistes -->
 	<div id="tabs-2">
-
-		<br />
-
+        <br />
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
-        <a style='margin-bottom: 10px;' id='preventioniste' class='btn' >Affecter aux etablissements</a>
-
-
-		<hr class='clear' />
+        <button style='margin-bottom: 10px;' id='preventioniste' class='btn btn-info' >Affecter aux etablissements</button>
 
 		<!-- Afficher la liste des prev. -->
 		<ul class='liste_informations' id='liste_prev'>
-
 			<?php foreach($this->preventionnistes as $preventionniste) : ?>
-
 				<li id='prev_<?php echo $preventionniste["ID_UTILISATEUR"] ?>'>
 					<span ><a href='/user/profile/uid/<?php echo $preventionniste["ID_UTILISATEUR"]; ?>'><?php echo $preventionniste["GRADE_UTILISATEURINFORMATIONS"]." ".$preventionniste["NOM_UTILISATEURINFORMATIONS"]." ".$preventionniste["PRENOM_UTILISATEURINFORMATIONS"] ?></a></span>
 					<span class='action' style='float: right' ><a style='text-decoration: none;' href='javascript:void(0)' onclick=" $(this).parent().parent().remove() ">&times;</a></span>
 					<input type='hidden' name='prev[]' value='<?php echo $preventionniste["ID_UTILISATEUR"]; ?>' />
 				</li>
-
 			<?php endforeach	?>
-
 		</ul>
-
 	</div>
 
 	<!-- Coordonnées -->
@@ -98,11 +88,9 @@
 
 	<!-- Partie contact -->
 	<div id="tabs-4"></div>
-
 </div>
 
 <script type="text/javascript">
-
     //réaffecter un préventioiste
     $("#preventioniste").click( function() {
         $.ajax({url: "/groupement/preventioniste?groupement="+$("#gpt option:selected").text()/*+",idgroupement="+$("#gpt option:selected").val()*/
@@ -192,5 +180,4 @@
 	$("#villes_groupement option").each( function() {
 		$( "#liste_villes option[id='" + $(this).attr("id")  + "']" ).attr("disabled","disabled");
 	});
-
 </script>
