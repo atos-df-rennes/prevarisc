@@ -67,7 +67,15 @@
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
-        <button style='margin-bottom: 10px;' id='preventioniste' class='btn btn-info' >Affecter aux etablissements</button>
+        <button
+            id='preventionniste'
+            class='btn btn-info'
+            type='button'
+            style='margin-bottom: 10px;'
+            data-loading-text='Affectation...'
+        >
+            Affecter aux etablissements
+        </button>
 
 		<!-- Afficher la liste des prev. -->
 		<ul class='liste_informations' id='liste_prev'>
@@ -92,8 +100,17 @@
 
 <script type="text/javascript">
     //réaffecter un préventioiste
-    $("#preventioniste").click( function() {
-        $.ajax({url: "/groupement/preventioniste?groupement="+$("#gpt option:selected").text()/*+",idgroupement="+$("#gpt option:selected").val()*/
+    $("#preventionniste").click(function() {
+        $.ajax({
+            url: "/groupement/preventionniste",
+            data: "groupement="+$("#gpt option:selected").text(),
+            type: "POST",
+            beforeSend: function() {
+                $("#preventionniste").button('loading')
+            },
+            success: function() {
+                $("#preventionniste").button('reset')
+            },
         })
 	});
 

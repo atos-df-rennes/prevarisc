@@ -227,7 +227,7 @@ class GroupementController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    public function preventionisteAction(): void
+    public function preventionnisteAction(): void
     {
         $service_groupement = new Service_GroupementCommunes();
         $request = $this->getRequest();
