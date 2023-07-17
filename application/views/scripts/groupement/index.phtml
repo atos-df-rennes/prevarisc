@@ -18,7 +18,7 @@
     <!-- Icones -->
     <div class="btn-group" style='margin-bottom: 10px;'>
         <a id='save' href='#' class='btn btn-success' class='save' >Sauvegarder le groupement</a>
-        <a id='delete' href='#' class='btn' >Supprimer le groupement</a>
+        <a id='delete' href='#' class='btn btn-warning' >Supprimer le groupement</a>
     </div>
 
 </div>
@@ -58,38 +58,46 @@
 </div>
 
 <script type="text/javascript">
-
-
 	$("#confirm").dialog({
+        title: "Suppression d'un groupement",
 		resizable: false,
 		draggable: false,
-		height: 150,
+		height: 'auto',
+        width: 500,
 		autoOpen: false,
 		modal: true,
-		buttons: {
-			"Supprimer le groupement": function() {
-				$.ajax({
-					url: "/groupement/delete?id="+$("#gpt option:selected").val(),
-					beforeSend: function() {
-						$("#remove").button("disable");
-					},
-					success: function( result ) {
-						$("#remove").button("enable");
-						$("#notif").html("Le groupement a bien été supprimé.").show();
-						setTimeout( function() { $("#notif").fadeOut(); }, 2500);
+		buttons: [
+            {
+                text: 'Supprimer le groupement',
+                class: 'btn btn-danger',
+                click: function() {
+                    $.ajax({
+                        url: "/groupement/delete?id="+$("#gpt option:selected").val(),
+                        beforeSend: function() {
+                            $("#remove").button("disable");
+                        },
+                        success: function( result ) {
+                            $("#remove").button("enable");
+                            $("#notif").html("Le groupement a bien été supprimé.").show();
+                            setTimeout( function() { $("#notif").fadeOut(); }, 2500);
 
-						$("#gpt option:selected").remove();
-						$("#gpt option:first").attr("selected", "selected");
-						$("#gpt").change();
+                            $("#gpt option:selected").remove();
+                            $("#gpt option:first").attr("selected", "selected");
+                            $("#gpt").change();
 
-						$("#confirm").dialog( "close" );
-					}
-				});
-			},
-			"Annuler": function() {
-				$("#confirm").dialog( "close" );
-			}
-		}
+                            $("#confirm").dialog( "close" );
+                        }
+                    });
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    $("#confirm").dialog( "close" );
+                }
+            }
+        ]
 	});
 
 	$("#add").dialog({
@@ -100,26 +108,34 @@
 		width: 500,
 		modal: true,
 		autoOpen: false,
-		buttons: {
-			"Ajouter le groupement": function() {
-				$.ajax({
-					url: "/groupement/add?format=json",
-					type: "post",
-					data: $("#add-groupement").serialize(),
-					success: function( result ) {
+		buttons: [
+            {
+                text: 'Ajouter le groupement',
+                class: 'btn btn-success',
+                click: function() {
+                    $.ajax({
+                        url: "/groupement/add?format=json",
+                        type: "post",
+                        data: $("#add-groupement").serialize(),
+                        success: function( result ) {
 
-						$("#notif").html("Le groupement a bien été ajouté.").show();
-						$("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
-						$("select#gpt").change();
-						setTimeout( function() { $("#notif").fadeOut(); }, 2500);
-						$("#add").dialog( "close" );
-					}
-				});
-			},
-			"Annuler": function() {
-				$("#add").dialog( "close" );
-			}
-		}
+                            $("#notif").html("Le groupement a bien été ajouté.").show();
+                            $("select#gpt > optgroup#gpt_" + result["type"]).append( $("<option></option>").val( result["id"] ).html( result["libelle"] ).attr("selected", "selected") );
+                            $("select#gpt").change();
+                            setTimeout( function() { $("#notif").fadeOut(); }, 2500);
+                            $("#add").dialog( "close" );
+                        }
+                    });
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    $("#add").dialog( "close" );
+                }
+            }
+        ]
 	});
 
 	// Boutons de la toolbar

@@ -2,6 +2,7 @@
 
 class Service_Dossier
 {
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     /**
@@ -160,6 +161,22 @@ class Service_Dossier
         $DB_contact = new Model_DbTable_UtilisateurInformations();
 
         return $DB_contact->getContact('dossier', $id_dossier);
+    }
+
+    public function getContactInfo(int $idDossier, int $idEtab, int $idFonction): array
+    {
+        $dbDossierContact = new Model_DbTable_DossierContact();
+        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, $idFonction);
+        if (1 === count($contactInfos)) {
+            return $contactInfos[0];
+        }
+
+        $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, $idFonction);
+        if (!empty($contactInfos)) {
+            return $contactInfos[0];
+        }
+
+        return [];
     }
 
     /**

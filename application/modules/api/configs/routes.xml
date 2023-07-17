@@ -99,6 +99,10 @@
                         <route>get_voies</route>
                         <defaults method="getVoies" />
                     </get_voies>
+                    <get_numeros type="Zend_Controller_Router_Route">
+                        <route>get_numeros</route>
+                        <defaults method="getNumeros" />
+                    </get_numeros>
                 </chains>
             </adresse>
 
@@ -135,7 +139,7 @@
                     </contacts>
                 </chains>
             </dossier>
-            
+
             <!-- user -->
             <user type="Zend_Controller_Router_Route">
                 <route>user</route>
@@ -163,7 +167,7 @@
                     </get>
                 </chains>
             </calendar>
-            
+
         </chains>
     </api_1_0>
 

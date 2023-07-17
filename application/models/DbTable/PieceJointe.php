@@ -16,8 +16,9 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('piecejointe')
+            ->from(['piecejointe'])
             ->join($table, "piecejointe.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
+            ->joinLeft(['pjs' => 'piecejointestatut'], 'piecejointe.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT', ['NOM_STATUT'])
             ->where($champ.' = '.$identifiant)
             ->order('piecejointe.ID_PIECEJOINTE DESC')
         ;
@@ -32,5 +33,32 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
         ;';
 
         return $this->getAdapter()->fetchRow($select);
+    }
+
+    public function updatePlatauStatus(int $id, string $status): void
+    {
+        $modelPjStatus = new Model_DbTable_PieceJointeStatut();
+
+        $idStatus = $modelPjStatus->fetchRow(
+            $modelPjStatus->select()
+                ->from('piecejointestatut')
+                ->where('NOM_STATUT = ?', $status)
+        )['ID_PIECEJOINTESTATUT'];
+
+        $this->update(['ID_PIECEJOINTESTATUT' => $idStatus], "ID_PIECEJOINTE = {$id}");
+    }
+
+    public function getWithStatus(int $idDossier, string $status): Zend_Db_Table_Rowset_Abstract
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['pj' => 'piecejointe'])
+            ->join(['dpj' => 'dossierpj'], 'pj.ID_PIECEJOINTE = dpj.ID_PIECEJOINTE', [])
+            ->join(['pjs' => 'piecejointestatut'], 'pj.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT', [])
+            ->where('dpj.ID_DOSSIER = ?', $idDossier)
+            ->where('pjs.NOM_STATUT = ?', $status)
+        ;
+
+        return $this->fetchAll($select);
     }
 }
