@@ -1,9 +1,7 @@
 $(document).ready(function(){
-
 	$('.date').live('click', function() {
 		$(this).datepicker({showOn:'focus', dateFormat: 'dd/mm/yy', firstDay: 1}).focus();
 	});
-	
 
 	$(".cancelDoc").live('click',function(){
 		var nomTab = $(this).parent().attr('id').split('_');
@@ -39,7 +37,6 @@ $(document).ready(function(){
 		$("#tmpDate").attr('value','');
 		$("#tmp").attr('value','');
 		return false;
-		//return false;
 	});
 	
 	//déclaration de la boite de dialog pour l'ajout d'un document ne faisant pas parti de la liste de base
@@ -60,15 +57,12 @@ $(document).ready(function(){
 					$(this).dialog('close');
 				}
 				$(this).dialog('close');
-				//ici sauvegarder et afficher en ajax le doc qui a été ajouté
 			},
 			'Annuler': function() {
 				$(this).dialog('close');
-				//ici réinitialiser les champs à vide
 			}
 		},
-		close: function(event, ui){
-			
+		close: function(_event, _ui){
 			$("body").css('overflow','auto');
 			$("#libelleNewDoc").val('');
 			$("#natureDocAjout").val('');
@@ -93,33 +87,9 @@ $(document).ready(function(){
 					beforeSend: function(){
 						//VERIFICATION SUR L'integrité des données
 					},
-					success: function(affichageResultat){
-						var nomTab = $("#edit_"+$("#docInfos").val()).parent().attr('id').split('_');
-						//alert(nomTab.length);
-						var nature = nomTab[1];
-						if(nomTab.length == 3){
-							var nom = nomTab[2];
-						}else{
-							var nom = nomTab[2]+"_aj";
-						}
-						//alert(nom);
-						nom = nature+"_"+nom;
-						$("#tmpRef").attr('value',$("#ref_"+nom).val());
-						$("#tmpDate").attr('value',$("#date_"+nom).val());
-						$("#tmp").attr('value','edit');
+					success: function(){
+						displayActionButtons($("#edit_"+$("#docInfos").val()))
 
-						$("#ref_"+nom).removeAttr('readonly');
-						$("#date_"+nom).removeAttr('readonly').removeAttr('disabled');
-
-						$("#modif_"+nom).hide();
-						$("#valid_"+nom).fadeIn();
-
-						$("#libelleView_"+nom).hide();
-						$("#libelle_"+nom).show();
-
-						$("#dossier_Pdroite").hideModif(nom);
-						$("#dossier_Pdroite").blockCheck(nom);
-						//$("#"+$("#docInfos").val());
 						var tabInfos = $("#docInfos").val().split('_');
 						if(tabInfos.length == 2){
 							//doc de base
@@ -131,9 +101,6 @@ $(document).ready(function(){
 							$("#check_"+$("#docInfos").val()).removeAttr('disabled');
 							$("#dossier_Pdroite").activeCheck('');
 							$("#dossier_Pdroite").showModif('');
-							
-							
-							
 						}else{
 							//doc ajouté
 							$("#"+$("#docInfos").val()).remove();
@@ -148,14 +115,12 @@ $(document).ready(function(){
 				});
 				
 				$(this).dialog('close');
-		
 			},
 			'Annuler': function() {
 				$(this).dialog('close');
-				//ici réinitialiser les champs à vide
 			}
 		},
-		close: function(event, ui){
+		close: function(_event, _ui){
 			$("body").css('overflow','auto');
 		}
 	});
@@ -169,48 +134,8 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	//Fonction javascript lorsque l'on clique sur modifier
-	/*
-	$("button[name=annulation]").live('click',function(){
-		var nomTab = $(this).attr('id').split('_');
-		if(nomTab.length == 2){
-			var nom = nomTab[1];
-		}else{
-			var nom = nomTab[1]+"_aj";
-		}
-		switch($("#tmp").val()){
-			case "new":
-				$("#div_input_"+nom).fadeOut();
-				$("#div_edit_"+nom).fadeIn();
-				$("#check_"+nom).attr('checked','');
-				$("#ref_"+nom).attr('readonly','true').attr('value','');
-				$("#date_"+nom).attr('readonly','true').attr('value','');
-			break;
-			case "edit":
-				$("#modif_"+nom).fadeIn();
-				$("#valid_"+nom).hide();
-				$("#date_"+nom).attr('readonly','true').attr('disabled','disabled').attr('value',$("#tmpDate").val());
-				$("#ref_"+nom).attr('readonly','true').attr('value',$("#tmpRef").val());
-			break;
-			case "ajoutDoc":
-				$("#formNewDoc").fadeOut(function(){
-					$("#docAjout").fadeIn();						
-				});
-				$("#libelleNewDoc").attr('value','');
-			break;
-		}
-		$("#dossier_Pdroite").showModif(nom);
-		$("#dossier_Pdroite").activeCheck(nom);
-		$("#tmpRef").attr('value','');
-		$("#tmpDate").attr('value','');
-		$("#tmp").attr('value','');
-		return false;
-	});
-	*/
-	
 	//utilisé lorsque l'on ajoute un document à la liste des docs.
 	$("#AjoutDocValid").click(function(){
-		//alert('');
 		if($("#libelleNewDoc").val() == ''){
 			$("#libelleNewDoc").focus();
 			return false;
@@ -224,9 +149,7 @@ $(document).ready(function(){
 				//VERIFICATION SUR L'integrité des données
 			},
 			success: function(affichageResultat){
-				//alert($(".divDoc:last").attr('id'));
 				$("#listeDocs").append(affichageResultat);
-				//affichageResultat.insertAfter(".divDoc:last");
 				$("#libelleNewDoc").attr('value','');
 				$("#dossier_Pdroite").activeCheck('qsd');
 
@@ -241,16 +164,34 @@ $(document).ready(function(){
 
 	
 	$(".editDoc").live('click',function(){
-		var nomTab = $(this).parent().attr('id').split('_');
-		//alert(nomTab.length);
+		displayActionButtons($(this))
+
+		return false;
+	});
+
+	//gestion de la suppression des documents consultés
+	$(".deleteDoc").live('click',function(){
+		var idDoc = $(this).attr('name');
+		$('#docInfos').val(idDoc);
+		$("#dialogConfirmSuppDoc").dialog('open');
+		$("#affichageDocSupp").html($("#"+idDoc).children('.libelle').html());
+		$("#refDocSupp").html($("#ref_"+idDoc).val());
+		$("#dateDocSupp").html($("#date_"+idDoc).val());
+		return false;
+	});
+
+	function displayActionButtons(element) {
+		var nomTab = element.parent().attr('id').split('_');
 		var nature = nomTab[1];
-		if(nomTab.length == 3){
+
+		if (nomTab.length == 3) {
 			var nom = nomTab[2];
-		}else{
+		} else {
 			var nom = nomTab[2]+"_aj";
 		}
-		//alert(nom);
+
 		nom = nature+"_"+nom;
+
 		$("#tmpRef").attr('value',$("#ref_"+nom).val());
 		$("#tmpDate").attr('value',$("#date_"+nom).val());
 		$("#tmp").attr('value','edit');
@@ -265,34 +206,6 @@ $(document).ready(function(){
 		$("#libelle_"+nom).show();
 
 		$("#dossier_Pdroite").hideModif(nom);
-		$("#dossier_Pdroite").blockCheck(nom); 
-		return false;
-	});
-
-	//gestion de la suppression des documents consultés
-	$(".deleteDoc").live('click',function(){
-		var idDoc = $(this).attr('name');
-		$('#docInfos').val(idDoc);
-		$("#dialogConfirmSuppDoc").dialog('open');
-		$("#affichageDocSupp").html($("#"+idDoc).children('.libelle').html());
-		$("#refDocSupp").html($("#ref_"+idDoc).val());
-		$("#dateDocSupp").html($("#date_"+idDoc).val());
-		return false;
-	});
-/* à modifier le next car déplacé dans le div... plus utilisé pour le moment à voir si on le réintegre
-	$(".hideDocConsulte").click(function(){
-		var Div = $(this).next();
-
-		if(Div.is(":hidden")){
-			Div.show();
-		}else{
-			Div.hide();
-		}
-	});
-*/	
-
-
-
-
-
+		$("#dossier_Pdroite").blockCheck(nom);
+	}
 });
