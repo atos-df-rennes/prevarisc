@@ -46,17 +46,12 @@ class Api_Service_Adresse
     }
 
     /**
-     * Retourne le numero par rapport à une voie.
-     *
-     * @param int    $code_insee
-     * @param string $q
-     *
-     * @return array
+     * Retourne les numéros par rapport à une voie.
      */
-    public function getNumeros($code_insee, $q = '')
+    public function getNumeros(int $id_rue): array
     {
         $DB_adresse = new Service_Adresse();
 
-        return $DB_adresse->getNumeros($code_insee, $q);
+        return $DB_adresse->getNumeros($id_rue);
     }
 }

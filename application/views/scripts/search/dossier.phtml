@@ -271,11 +271,10 @@
                     url: "/api/1.0/adresse/get_numeros",
                     type: 'post',
                     data: {
-                        code_insee: selectedValue
+                        id_rue: selectedValue
                     },
                     success: function (result) {
-                        numeros = [];
-                        var selectNumero = $('select[name=numero]');
+                        const selectNumero = $('select[name=numero]');
                         selectNumero.empty();
                         selectNumero.append("<option value=''></option>");
                         $.each(result.response, function (i, numero) {

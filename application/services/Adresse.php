@@ -66,18 +66,13 @@ class Service_Adresse
     }
 
     /**
-     * Retourne les numeros par rapport à une voie.
-     *
-     * @param int    $code_insee
-     * @param string $q
-     *
-     * @return array
+     * Retourne les numéros par rapport à une voie.
      */
-    public function getNumeros($code_insee, $q = '')
+    public function getNumeros(int $id_rue): array
     {
         $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
-        return $DB_adresse->getNumeros($code_insee, $q);
+        return $DB_adresse->getNumeros($id_rue);
     }
 
     /**
