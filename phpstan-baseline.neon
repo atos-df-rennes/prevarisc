@@ -3436,6 +3436,11 @@ parameters:
 			path: application/controllers/SearchController.php
 
 		-
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_numeros\\.$#"
+			count: 1
+			path: application/controllers/SearchController.php
+
+		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_voies\\.$#"
 			count: 1
 			path: application/controllers/SearchController.php
@@ -3482,12 +3487,12 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getQuery\\(\\)\\.$#"
-			count: 12
+			count: 16
 			path: application/controllers/SearchController.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isGet\\(\\)\\.$#"
-			count: 4
+			count: 5
 			path: application/controllers/SearchController.php
 
 		-

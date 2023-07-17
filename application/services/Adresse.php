@@ -66,6 +66,16 @@ class Service_Adresse
     }
 
     /**
+     * Retourne les numéros par rapport à une voie.
+     */
+    public function getNumeros(int $id_rue): array
+    {
+        $DB_adresse = new Model_DbTable_EtablissementAdresse();
+
+        return $DB_adresse->getNumeros($id_rue);
+    }
+
+    /**
      * Retourne le maire de la commune concernée.
      *
      * @param int $numinsee le numéro insee de la commune
