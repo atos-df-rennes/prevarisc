@@ -47,21 +47,30 @@ $(document).ready(function(){
 		autoOpen: false,
 		modal: true,
 		title: 'Ajouter un document consulté',
-		buttons: {
-			'Enregistrer le document': function() {
-				if($("#libelleNewDoc").val() == ''){
-					$("#libelleNewDoc").focus();
-					return false;
-				}else{
-					$(this).ajoutDocDialog($("#natureDocAjout").val());
+		buttons: [
+			{
+				text: 'Enregistrer le document',
+				class: 'btn btn-success',
+				click: function() {
+					if ($("#libelleNewDoc").val() == '') {
+						$("#libelleNewDoc").focus();
+						return false;
+					} else {
+						$(this).ajoutDocDialog($("#natureDocAjout").val());
+						$(this).dialog('close');
+					}
+
 					$(this).dialog('close');
 				}
-				$(this).dialog('close');
 			},
-			'Annuler': function() {
-				$(this).dialog('close');
+			{
+				text: 'Annuler',
+				class: 'btn',
+				click: function() {
+					$(this).dialog('close');
+				}
 			}
-		},
+		],
 		close: function(_event, _ui){
 			$("body").css('overflow','auto');
 			$("#libelleNewDoc").val('');
@@ -77,49 +86,58 @@ $(document).ready(function(){
 		autoOpen: false,
 		modal: true,
 		title: 'Voulez vous vraiment supprimer ce document ?',
-		buttons: {
-			'Supprimer': function() {
-				//ici on supprime dans la base de données le document lié puis on reinitialise la ligne
-				$.ajax({
-					url: "/dossier/suppdoc",
-					data: "docInfos="+$("#docInfos").val()+"&idDossier="+$("#idDossier").val(),
-					type:"POST",
-					beforeSend: function(){
-						//VERIFICATION SUR L'integrité des données
-					},
-					success: function(){
-						displayActionButtons($("#edit_"+$("#docInfos").val()))
+		buttons: [
+			{
+				text: 'Supprimer',
+				class: 'btn btn-danger',
+				click: function() {
+					//ici on supprime dans la base de données le document lié puis on reinitialise la ligne
+					$.ajax({
+						url: "/dossier/suppdoc",
+						data: "docInfos="+$("#docInfos").val()+"&idDossier="+$("#idDossier").val(),
+						type:"POST",
+						beforeSend: function(){
+							//VERIFICATION SUR L'integrité des données
+						},
+						success: function(){
+							displayActionButtons($("#edit_"+$("#docInfos").val()))
 
-						var tabInfos = $("#docInfos").val().split('_');
-						if(tabInfos.length == 2){
-							//doc de base
-							$("#ref_"+$("#docInfos").val()).val('');
-							$("#date_"+$("#docInfos").val()).val('');
+							var tabInfos = $("#docInfos").val().split('_');
+							if (tabInfos.length == 2) {
+								//doc de base
+								$("#ref_"+$("#docInfos").val()).val('');
+								$("#date_"+$("#docInfos").val()).val('');
 
-							$("#div_input_"+$("#docInfos").val()).hide();
-							$("#check_"+$("#docInfos").val()).removeAttr('checked');
-							$("#check_"+$("#docInfos").val()).removeAttr('disabled');
-							$("#dossier_Pdroite").activeCheck('');
-							$("#dossier_Pdroite").showModif('');
-						}else{
-							//doc ajouté
-							$("#"+$("#docInfos").val()).remove();
-							$("#dossier_Pdroite").showModif('.');
-							$("#dossier_Pdroite").activeCheck('');
-						}	
-						return false;
-					},
-					error: function(){
-						return false;
-					}
-				});
-				
-				$(this).dialog('close');
+								$("#div_input_"+$("#docInfos").val()).hide();
+								$("#check_"+$("#docInfos").val()).removeAttr('checked');
+								$("#check_"+$("#docInfos").val()).removeAttr('disabled');
+								$("#dossier_Pdroite").activeCheck('');
+								$("#dossier_Pdroite").showModif('');
+							} else {
+								//doc ajouté
+								$("#"+$("#docInfos").val()).remove();
+								$("#dossier_Pdroite").showModif('.');
+								$("#dossier_Pdroite").activeCheck('');
+							}
+
+							return false;
+						},
+						error: function(){
+							return false;
+						}
+					});
+
+					$(this).dialog('close');
+				}
 			},
-			'Annuler': function() {
-				$(this).dialog('close');
+			{
+				text: 'Annuler',
+				class: 'btn',
+				click: function() {
+					$(this).dialog('close');
+				}
 			}
-		},
+		],
 		close: function(_event, _ui){
 			$("body").css('overflow','auto');
 		}
