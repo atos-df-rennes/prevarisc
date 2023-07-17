@@ -21,7 +21,10 @@ class Service_Prescriptions
 
         foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
-            $prescriptionArray[] = $assoc;
+
+            if ([] !== $assoc) {
+                $prescriptionArray[] = $assoc;
+            }
         }
 
         return $prescriptionArray;

@@ -25,35 +25,35 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputObjet">Objet</label>
+        <label class="control-label no-top-padding" for="inputObjet">Objet</label>
         <div class="controls">
             <textarea id="inputObjet" name="OBJET"></textarea>
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputJustification">Justification</label>
+        <label class="control-label no-top-padding" for="inputJustification">Justification</label>
         <div class="controls">
             <textarea id="inputJustification" name="JUSTIFICATION"></textarea>
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputArticlesConcernes">Article(s) concerné(s)</label>
+        <label class="control-label no-top-padding" for="inputArticlesConcernes">Article(s) concerné(s)</label>
         <div class="controls">
             <textarea id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
+        <label class="control-label no-top-padding" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
         <div class="controls">
             <textarea id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="inputAnalyseDeRisque">Analyse de risque</label>
+        <label class="control-label no-top-padding" for="inputAnalyseDeRisque">Analyse de risque</label>
         <div class="controls">
             <textarea id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
         </div>
@@ -71,12 +71,13 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label">Avis/Dérogation levé(e):</label>
+        <label class="control-label no-top-padding">Avis/Dérogation levé(e):</label>
         <?=
             $this->partial(
                 'dossier/results/avisderogation/liste-dossier.phtml',
                 [
-                    'listeDossierParType' => $this->listDossierEtab
+                    'listeDossierParType' => $this->listDossierEtab,
+                    'listeDossierParTypeN' => $this->listDossierEtabN
                 ]
             );
         ?>
@@ -85,7 +86,7 @@
     <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
 
     <div class="control-group">
-        <label class="control-label" for="DISPLAY_HISTORIQUE">Afficher dans l'historique de l'établissement</label>
+        <label class="control-label no-top-padding" for="DISPLAY_HISTORIQUE">Afficher dans l'onglet de l'établissement</label>
         <div class="controls">
             <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
             <input

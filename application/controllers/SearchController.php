@@ -83,12 +83,12 @@ class SearchController extends Zend_Controller_Action
                             ],
                         ],
                     ];
-                    $sheet->getStyle('A1:W1')->applyFromArray($styleArray);
+                    $sheet->getStyle('A1:X1')->applyFromArray($styleArray);
                     unset($styleArray);
-                    $sheet->getStyle('A1:W1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    $sheet->getStyle('A1:W1')->getFont()->setSize(11)->setBold(true);
+                    $sheet->getStyle('A1:X1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A1:X1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'W') as $columnID) {
+                    foreach (range('A', 'X') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
@@ -115,6 +115,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(20, 1, 'Libellé du père/site');
                     $sheet->setCellValueByColumnAndRow(21, 1, 'Genre');
                     $sheet->setCellValueByColumnAndRow(22, 1, 'Préventionniste');
+                    $sheet->setCellValueByColumnAndRow(23, 1, 'Présence de locaux à sommeil');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
@@ -199,6 +200,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(20, $ligne, $row['LIBELLE_ETABLISSEMENT_PERE']);
                         $sheet->setCellValueByColumnAndRow(21, $ligne, $row['LIBELLE_GENRE']);
                         $sheet->setCellValueByColumnAndRow(22, $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(23, $ligne, $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 'oui' : 'non');
 
                         ++$ligne;
                     }
@@ -293,6 +295,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : [];
+        $this->view->array_numeros = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : [];
         $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
@@ -325,6 +328,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
@@ -492,6 +496,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
@@ -572,7 +577,7 @@ class SearchController extends Zend_Controller_Action
 
         $service_search = new Service_Search();
 
-        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null);
+        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null, null);
 
         $data = $data['results'];
 

@@ -207,15 +207,16 @@ $(document).ready(function(){
 		autoOpen: false,
 		width: 1000,
 		height: 'auto',
-		buttons: {
-			"Fermer": function() {
-				dialogPrescType.html("");
-				dialogPrescType.dialog("close");
-			}
-		},
-		close: function(event, ui){
-
-		}
+		buttons: [
+            {
+                text: 'Fermer',
+                class: 'btn',
+                click: function() {
+                    dialogPrescType.html("");
+                    dialogPrescType.dialog("close");
+                }
+            }
+        ],
 	});
 
 	$("#addPrescriptionType").live('click',function(){
@@ -391,33 +392,39 @@ $(document).ready(function(){
 		autoOpen: false,
 		width: 1200,
 		height: 'auto',
-		buttons: {
-			"Reprendre les prescriptions": function() {
-				if($('input[type=radio][name=dossierSelect]:checked').length == 1){
-					$.ajax({
-						type: "POST",
-						url: "/dossier/recupprescription",
-						data: $("#selectionDossier").serialize(),
-						before: function(){
-							dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
-						},
-						success: function(msg){
-							window.location='/dossier/prescription/id/'+$("#idDossier").val();
-						}
-					});
-				}else{
-					return false;
-				}
-				return false;
-			},
-			"Annuler": function() {
-				$(this).html("");
-				$(this).dialog("close");
-			}
-		},
-		close: function(event, ui){
+		buttons: [
+            {
+                text: 'Reprendre les prescriptions',
+                class: 'btn btn-success',
+                click: function() {
+                    if ($('input[type=radio][name=dossierSelect]:checked').length == 1) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/dossier/recupprescription",
+                            data: $("#selectionDossier").serialize(),
+                            before: function(){
+                                dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
+                            },
+                            success: function(msg){
+                                window.location='/dossier/prescription/id/'+$("#idDossier").val();
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
 
-		}
+                    return false;
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    $(this).html("");
+                    $(this).dialog("close");
+                }
+            }
+        ],
 	});
 
 	$(".recupPrescDossier").live('click',function(){

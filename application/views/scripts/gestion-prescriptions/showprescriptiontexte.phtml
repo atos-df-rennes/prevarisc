@@ -1,12 +1,12 @@
 <?php
-	echo "<br/><br/>";	
+	echo "<br/><br/>";
 
 	echo "
 		<form id='FormPrescriptiontexte_".$this->idCategorie."' >
 			<input type='hidden' name='type' value='texte' />
 			<ul class='prescriptiontexte unstyled classement' id='prescriptiontexte_".$this->idCategorie."' >
 	";
-	
+
 	foreach($this->listePrescriptionTexte as $val => $ue){
 		echo "
 			<li id='texteid_".$ue['ID_PRESCRIPTIONTEXTE']."'>
@@ -25,7 +25,7 @@
 			</li>
 		";
 	}
-	
+
 	echo "
 		</ul>
 		</form>
@@ -55,7 +55,7 @@
 				echo "
 					<tr>
 						<td class='span3' style='vertical-align:top;'>".$texte."</td>
-						<td class='span3' style='vertical-align:top;'>".$article."</td>					
+						<td class='span3' style='vertical-align:top;'>".$article."</td>
 				";
 				if($cpt)
 				{
@@ -76,12 +76,12 @@
 				</li>
 			";
 		}
-	}	
+	}
 	echo "
 			</ul>
 		</form>
 	";
-	echo "<br/>";	
+	echo "<br/>";
 	echo "
 		<button class='addTexteCat btn' >Ajouter un type de disposition</button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

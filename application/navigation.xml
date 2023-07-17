@@ -137,6 +137,10 @@
                             <controller>groupement</controller>
                             <action>delete-type</action>
                         </delete-type>
+                        <preventionniste>
+                            <controller>groupement</controller>
+                            <action>preventionniste</action>
+                        </preventionniste>
                     </pages>
                 </groupement>
                 <couches-cartographiques>
@@ -678,7 +682,7 @@
                     <privilege>ecriture_commission</privilege>
                 </adddatedialogcomm>
                 <adddates>
-                    <controller>calendrier-des-commisions</controller>
+                    <controller>calendrier-des-commissions</controller>
                     <action>adddates</action>
                     <privilege>creation_commission</privilege>
                 </adddates>

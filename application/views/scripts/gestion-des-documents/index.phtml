@@ -85,7 +85,7 @@
 	        ";
 	        foreach($commission['listeFichier'] as $file){
 	        	echo "
-	        		
+
 	        			<tr style='height:20px;'>
 				        <td>
 				            <a href='".$this->path . DS . $commission['ID_COMMISSION']. DS . htmlspecialchars($file, ENT_QUOTES) ."'>".$file."</a>
@@ -131,29 +131,37 @@ $(document).ready(function() {
             create: function() {
                 dialog_aud.load( "/gestion-des-documents/form" );
             },
-            buttons: {
-                "Envoyer" : function() {
-                    if(!$("#fichier").val()){
-                        $("#fichier").click();
-                    }else{
-                        $("#formDocType").submit();
+            buttons: [
+                {
+                    text: 'Envoyer',
+                    class: 'btn btn-success',
+                    click: function() {
+                        if (!$("#fichier").val()) {
+                            $("#fichier").click();
+                        } else {
+                            $("#formDocType").submit();
 
-                        $(this).dialog('close'); 
+                            $(this).dialog('close');
 
-                        // On ouvre la barre de chargement
-                        $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
-                            resizable: false,
-                            height: 28,
-                            width: 250,
-                            modal: true,
-                            dialogClass: 'noTitleStuff'
-                        });
+                            // On ouvre la barre de chargement
+                            $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
+                                resizable: false,
+                                height: 28,
+                                width: 250,
+                                modal: true,
+                                dialogClass: 'noTitleStuff'
+                            });
+                        }
                     }
                 },
-                "Annuler": function() {
-                        $(this).dialog('close'); 
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        $(this).dialog('close');
+                    }
                 }
-            }
+            ]
         });
 
     }
@@ -183,46 +191,54 @@ $(document).ready(function() {
             draggable: false,
             resizable: false,
             modal: true,
-            buttons: {
-                "Supprimer" : function() {
-                    var infoComm = elementDoc.parent().parent().parent().parent().attr('id');
-                    var tabIdComm = infoComm.split("_");
-                    var idComm = tabIdComm[1];
+            buttons: [
+                {
+                    text: 'Supprimer',
+                    class: 'btn btn-danger',
+                    click: function() {
+                        var infoComm = elementDoc.parent().parent().parent().parent().attr('id');
+                        var tabIdComm = infoComm.split("_");
+                        var idComm = tabIdComm[1];
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/gestion-des-documents/suppdoc",
-                        data:{
-                            name:nomFichier,
-                            idCommission:idComm
-                        },
-                        success: function(msg){
-                            
-                            if (msg != "") window.location.reload();
-                            
-                            //suppression de la ligne
-                            elementDoc.parent().parent().remove();
-                            
-                            var num = $("#num_"+idComm).html();
-                            if(num == 1){
-                                $("#file_"+idComm).hide();
-                                $("#num_"+idComm).html('0');
-                            }else{
-                                num--;
-                                $("#num_"+idComm).html(num);
+                        $.ajax({
+                            type: "POST",
+                            url: "/gestion-des-documents/suppdoc",
+                            data:{
+                                name:nomFichier,
+                                idCommission:idComm
+                            },
+                            success: function(msg){
+
+                                if (msg != "") window.location.reload();
+
+                                //suppression de la ligne
+                                elementDoc.parent().parent().remove();
+
+                                var num = $("#num_"+idComm).html();
+                                if(num == 1){
+                                    $("#file_"+idComm).hide();
+                                    $("#num_"+idComm).html('0');
+                                }else{
+                                    num--;
+                                    $("#num_"+idComm).html(num);
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    dialog_supp.dialog("close");
-                    $("#dialog-supp").html('');
-                    return false;
+                        dialog_supp.dialog("close");
+                        $("#dialog-supp").html('');
+                        return false;
+                    }
                 },
-                "Annuler": function() {
-                    dialog_supp.dialog("close");
-                    $("#dialog-supp").html('');
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        dialog_supp.dialog("close");
+                        $("#dialog-supp").html('');
+                    }
                 }
-            }
+            ]
         });
 
     }

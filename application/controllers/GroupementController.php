@@ -226,4 +226,13 @@ class GroupementController extends Zend_Controller_Action
         // On desactive la vue
         $this->_helper->viewRenderer->setNoRender();
     }
+
+    public function preventionnisteAction(): void
+    {
+        $service_groupement = new Service_GroupementCommunes();
+        $request = $this->getRequest();
+
+        $service_groupement->reaffectationPreventioniste($request->getParam('groupement'));
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
+    }
 }

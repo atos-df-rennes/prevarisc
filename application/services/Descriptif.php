@@ -51,7 +51,7 @@ class Service_Descriptif
                     if (1 === $champ['tableau']) {
                         $listValeurs = [];
 
-                        foreach ($champ['FILS'] as &$champFils) {
+                        foreach ($champ['FILS'] as $champFils) {
                             $listValeurs[$champFils['ID_CHAMP']] = $this->serviceValeur->getAll($champFils['ID_CHAMP'], $idObject, $classObject);
                         }
 
@@ -69,13 +69,16 @@ class Service_Descriptif
                             $champFils['VALEUR'] = $valeur['VALEUR'];
                             $champFils['ID_VALEUR'] = $valeur['ID_VALEUR'];
                         }
+                        unset($champFils);
                     }
                 } else {
                     $champ['VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['VALEUR'];
                     $champ['ID_VALEUR'] = $this->serviceValeur->get($champ['ID_CHAMP'], $idObject, $classObject)['ID_VALEUR'];
                 }
             }
+            unset($champ);
         }
+        unset($rubrique);
 
         return $rubriques;
     }
