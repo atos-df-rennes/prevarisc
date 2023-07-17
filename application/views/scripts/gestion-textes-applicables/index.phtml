@@ -46,7 +46,7 @@ $(document).ready(function() {
 				var liId = $(this).attr('id');
 				listeOrder += liId+",";
 				listeTexteApplUpdate.push(liId);
-			});			
+			});
 			$.ajax({
 				url: "/gestion-textes-applicables/updateorder",
 				data: "tableUpdate="+listeTexteApplUpdate,
@@ -65,7 +65,7 @@ $(document).ready(function() {
 	});
 
 	var dialogEditTexteAppl = $('<div style="display:none"></div>').appendTo('body');
-	
+
 	$(".editTexteAppl").click(function(){
 		//On ouvre la boite de dialogue
 		var id = $(this).attr('id');
@@ -79,7 +79,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
+
 	$("#createTexteAppl").click(function(){
 		$.ajax({
 			type: "POST",
@@ -90,38 +90,47 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
+
 	dialogEditTexteAppl.dialog({
 		title: "Modification texte applicable",
 		modal: true,
 		autoOpen: false,
 		width: 'auto',
 		height: 'auto',
-		buttons: {
-			"Sauvegarder": function() {
-				$.ajax({
-					type: "POST",
-					url: "/gestion-textes-applicables/save",
-					data: $("#formTexteAppl").serialize(),
-					success: function(msg){
-						dialogEditTexteAppl.html("");
-						dialogEditTexteAppl.dialog("close");
-						if($("#gestionTextesAppl").length){
-							$("#gestionTextesAppl").click();
-						}else{
-							window.location='/gestion-textes-applicables';
-						}
-						
-					}
-				});
-				return false;
-			},
-			"Annuler": function() {
-				dialogEditTexteAppl.dialog("close");
-			}
-		},
+		buttons: [
+            {
+                text: 'Sauvegarder',
+                class: 'btn btn-success',
+                click: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/gestion-textes-applicables/save",
+                        data: $("#formTexteAppl").serialize(),
+                        success: function(msg){
+                            dialogEditTexteAppl.html("");
+                            dialogEditTexteAppl.dialog("close");
+                            if($("#gestionTextesAppl").length){
+                                $("#gestionTextesAppl").click();
+                            }else{
+                                window.location='/gestion-textes-applicables';
+                            }
+
+                        }
+                    });
+
+                    return false;
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    dialogEditTexteAppl.dialog("close");
+                }
+            }
+        ],
 		close: function(event, ui){
-			
+
 		}
 
 	});

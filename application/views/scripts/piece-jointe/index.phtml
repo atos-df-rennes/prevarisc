@@ -58,24 +58,28 @@
 						height: 500,
 						width: 580,
 						modal: true,
-						buttons: {
-							'Ajouter la pièce jointe': function() {
-								// Envoi du formulaire dans form
-								$("#formUpload").submit();
+						buttons: [
+                            {
+                                text: 'Ajouter la pièce jointe',
+                                class: 'btn btn-success',
+                                click: function() {
+                                    // Envoi du formulaire dans form
+                                    $("#formUpload").submit();
 
-								// On ferme la boite de dialogue
-								$(this).dialog('close');
+                                    // On ferme la boite de dialogue
+                                    $(this).dialog('close');
 
-								// On ouvre la barre de chargement
-								$("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
-									resizable: false,
-									height: 45,
-									width: 250,
-									modal: true,
-									dialogClass: 'noTitleStuff'
-								});
-							}
-						}
+                                    // On ouvre la barre de chargement
+                                    $("<div id='load' style='text-align: center'><img src='/images/bar.gif' alt='Upload en cours' /></div>").dialog({
+                                        resizable: false,
+                                        height: 45,
+                                        width: 250,
+                                        modal: true,
+                                        dialogClass: 'noTitleStuff'
+                                    });
+                                }
+                            }
+                        ]
 					});
 				}
 			});
