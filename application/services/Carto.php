@@ -3,6 +3,7 @@
 class Service_Carto
 {
     public $cache;
+
     /**
      * @var mixed|Model_DbTable_CoucheCarto
      */

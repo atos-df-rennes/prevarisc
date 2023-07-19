@@ -12,7 +12,7 @@ class Model_DbTable_PrescriptionArticle extends Zend_Db_Table_Abstract
      */
     public function recupPrescriptionArticle($idTexte)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pa' => 'prescriptionarticle'])
@@ -25,7 +25,7 @@ class Model_DbTable_PrescriptionArticle extends Zend_Db_Table_Abstract
 
     public function recupMaxNumArticle($idTexte)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pa' => 'prescriptionarticle'], 'max(pa.NUM_PRESCRIPTIONARTICLE) as maxnum')

@@ -172,7 +172,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         return $this->getAdapter()->query($select);
     }
 
-    //pour la gestion des ordres du jour récup des date liées
+    // pour la gestion des ordres du jour récup des date liées
 
     /**
      * @param int|string $idComm
@@ -193,7 +193,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 
     public function getInfosVisite($idDossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['da' => 'dossieraffectation'])
@@ -212,7 +212,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
      */
     public function getDateLieesv2($idDateComm)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['dc' => 'datecommission'])
@@ -241,10 +241,10 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         // des cohérences de données
         if ([] !== $dossiersAffecteIds) {
             if (1 == $datecommission->ID_COMMISSIONTYPEEVENEMENT) {
-                //COMMISSION EN SALLE
+                // COMMISSION EN SALLE
                 $dbDossier->update(['DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
             } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [2, 3])) {
-                //VISITE OU GROUPE DE VISITE
+                // VISITE OU GROUPE DE VISITE
                 $dbDossier->update(['DATEVISITE_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN ('.implode(',', $dossiersAffecteIds).')');
             }
         }

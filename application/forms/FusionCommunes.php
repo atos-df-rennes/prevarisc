@@ -2,9 +2,6 @@
 
 class Form_FusionCommunes extends Zend_Form
 {
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         $this->setMethod('post');

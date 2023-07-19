@@ -216,13 +216,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         // On créé une fonction spéciale pour convertir les ressources retravaillées
 
-        $develop_resources = /**
-            * @psalm-return array<int, mixed>
-            *
-            * @param mixed $list_resources_finale
-            *
-            * @return array
-            */
+        $develop_resources =
         function (&$list_resources_finale) use (&$develop_resources) {
             $list_resources_finaleCount = count($list_resources_finale);
             for ($i = 0; $i < $list_resources_finaleCount; ++$i) {

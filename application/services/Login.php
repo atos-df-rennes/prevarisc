@@ -2,7 +2,7 @@
 
 class Service_Login
 {
-    //login pour l'api
+    // login pour l'api
 
     /**
      * @param mixed $username
@@ -10,7 +10,7 @@ class Service_Login
      */
     public function login($username, $password): array
     {
-        //Reponse
+        // Reponse
         $reponse = [];
 
         try {

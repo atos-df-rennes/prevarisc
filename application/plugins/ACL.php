@@ -341,7 +341,6 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getPageResources.
      *
-     * @param            $page
      * @param null|mixed $request
      *
      * @return null|array
@@ -387,8 +386,6 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getPagePrivilege.
      *
-     * @param $page
-     *
      * @return null|string
      */
     private function getPagePrivilege($page)
@@ -403,7 +400,6 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getEtablissementPageResourses.
      *
-     * @param $id_etablissement
      * @param int $id_etablissement
      *
      * @return string[]

@@ -2,9 +2,6 @@
 
 class AboutController extends Zend_Controller_Action
 {
-    /**
-     * {@inheritdoc}
-     */
     public function postDispatch()
     {
         // on rend la vue générique

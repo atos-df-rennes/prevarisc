@@ -2,9 +2,6 @@
 
 class Form_FormChampFromParent extends Zend_Form
 {
-    /**
-     * {@inheritdoc}
-     */
     protected $champParentID;
     protected $rubriqueID;
 

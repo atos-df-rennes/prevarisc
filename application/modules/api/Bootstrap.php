@@ -2,9 +2,6 @@
 
 class Api_Bootstrap extends Zend_Application_Module_Bootstrap
 {
-    /**
-     * {@inheritdoc}
-     */
     public function run()
     {
         // Chargement et activation des plugins

@@ -7,7 +7,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
 
     public function recupMaxNumPrescDossier($idDossier, $type)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pd' => 'prescriptiondossier'], 'max(pd.NUM_PRESCRIPTION_DOSSIER) as maxnum')
@@ -26,7 +26,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
      */
     public function recupPrescDossier($idDossier, $type)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pd' => 'prescriptiondossier'])
@@ -40,7 +40,7 @@ class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
 
     public function recupPrescInfos($id_prescription)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pd' => 'prescriptiondossier'])

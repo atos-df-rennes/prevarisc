@@ -113,7 +113,7 @@ class Api_Service_Calendar
      *
      * @param mixed $commissionEvent
      *
-     * @return (mixed|string|false|DateTime)[]|null
+     * @return null|(DateTime|false|mixed|string)[]
      */
     private function createICSEvent($commissionEvent)
     {
@@ -153,7 +153,7 @@ class Api_Service_Calendar
                     trim($libelleSum)
                 );
                 $geo = sprintf('Commission en salle de %s', $commissionEvent['LIBELLE_COMMISSION']);
-            // Cas d'une visite d'une commission ou d'un groupe de visite
+                // Cas d'une visite d'une commission ou d'un groupe de visite
             } else {
                 $summary = sprintf(
                     '#%s %s : %s',

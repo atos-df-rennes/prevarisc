@@ -20,10 +20,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
      *
      * @param int $id_etablissement
      *
+     * @return array
+     *
      * @throws Exception si l'établissement n'existe pas
      * @throws Exception si la dernière fiche d'informations n'existe pas
-     *
-     * @return array
      */
     public function get($id_etablissement)
     {
@@ -117,7 +117,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
             $last_visite = $search
                 ->limit(1)
-                ->run(false, null, false)->toArray();
+                ->run(false, null, false)->toArray()
+            ;
 
             $next_visite = null;
 
@@ -182,8 +183,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 // Calcul de la durée totale de visite
                 foreach ($etablissement_lies as $etablissement) {
                     if (null != $etablissement['DUREEVISITE_ETABLISSEMENT']) {
-                        $date_zero = new Datetime('00:00:00');
-                        $duree_etablissement = new \Datetime($etablissement['DUREEVISITE_ETABLISSEMENT']);
+                        $date_zero = new DateTime('00:00:00');
+                        $duree_etablissement = new \DateTime($etablissement['DUREEVISITE_ETABLISSEMENT']);
                         $duree_etablissement_en_heure = $duree_etablissement->format('U') - $date_zero->format('U');
                         $duree_totale += (int) $etablissement['NBPREV_ETABLISSEMENT'] * $duree_etablissement_en_heure;
                     }
@@ -569,7 +570,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 break;
 
-           case 'autres':
+            case 'autres':
                 $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
 
                 break;
@@ -877,9 +878,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int $id_etablissement Optionnel
      * @param int $date             Optionnel format : Y-m-d
      *
-     * @throws Exception Si une erreur apparait lors de la sauvegarde
-     *
      * @return int $id_etablissement Optionnel
+     *
+     * @throws Exception Si une erreur apparait lors de la sauvegarde
      */
     public function save($id_genre, array $data, $id_etablissement = null, $date = '')
     {
@@ -956,7 +957,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // Cellule
+                    // Cellule
                 case 3:
                     $informations->ID_CATEGORIE = $data['ID_CATEGORIE'];
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
@@ -970,12 +971,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // Habitation
+                    // Habitation
                 case 4:
                     $informations->ID_FAMILLE = $data['ID_FAMILLE'];
 
                     break;
-                // IGH
+                    // IGH
                 case 5:
                     $informations->ID_CLASSE = $data['ID_CLASSE'];
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
@@ -986,13 +987,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // EIC
+                    // EIC
                 case 6:
                     $informations->ICPE_ETABLISSEMENTINFORMATIONS = (int) $data['ICPE_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Camping
+                    // Camping
                 case 7:
                     $informations->EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'];
@@ -1000,15 +1001,15 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Manifestation temporaire
+                    // Manifestation temporaire
                 case 8:
-                // IOP
+                    // IOP
                 case 9:
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Zone
+                    // Zone
                 case 10:
                     $informations->ID_CLASSEMENT = $data['ID_CLASSEMENT'];
 
@@ -1203,7 +1204,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Établissement
+                // Établissement
             case 2:
                 // Périodicité en fonction de la catégorie/type/local à sommeil
                 if (null !== $categorie && null !== $type && null !== $local_sommeil) {
@@ -1247,7 +1248,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Cellule
+                // Cellule
             case 3:
                 // Préventionnistes de l'établissement parent
                 if (null !== $id_etablissement_pere) {
@@ -1255,7 +1256,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // IGH
+                // IGH
             case 5:
                 // Périodicité en fonction de la classe
                 if (null !== $classe) {
@@ -1283,7 +1284,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Autres genres
+                // Autres genres
             default:
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
@@ -1584,7 +1585,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $search = new Model_DbTable_Search();
         $dossierDiff = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.DIFFEREAVIS_DOSSIER', 1)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, 1)->toArray();
 
-        //Si l'etablissement ne comporte pas d'avis différé on prend l'avis correspondant à ID_DOSSIERDONNANTAVIS
+        // Si l'etablissement ne comporte pas d'avis différé on prend l'avis correspondant à ID_DOSSIERDONNANTAVIS
         if (!empty($dossierDiff)) {
             $dateInsertDossierDiffere = $dossierDiff[0]['DATEINSERT_DOSSIER'];
             $dateInsertDossierDiffere = new Zend_Date($dateInsertDossierDiffere, Zend_Date::DATES);
@@ -1592,7 +1593,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             return 'avisDoss';
         }
 
-        //On compare la date de l'avis différé avec la date de l'avis d'exploitation le plus récent
+        // On compare la date de l'avis différé avec la date de l'avis d'exploitation le plus récent
         if (1 == $dateInsertDossierDonnantAvis->compare($dateInsertDossierDiffere)) {
             return 'avisDoss';
         }

@@ -12,7 +12,7 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
      */
     public function getAllArticles($visible = null)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['ptl' => 'prescriptionarticleliste'])
@@ -46,11 +46,11 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
         $where = [];
         $data = ['ID_ARTICLE' => $idNewArticle];
         $where[] = 'ID_ARTICLE = '.$idOldArticle;
-        //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
+        // MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossierassoc', $data, $where);
         $this->getAdapter()->update('prescriptiontypeassoc', $data, $where);
         $this->getAdapter()->update('prescriptionreglassoc', $data, $where);
-        //Suppression du texte
+        // Suppression du texte
         $this->delete('ID_ARTICLE = '.$idOldArticle);
     }
 }

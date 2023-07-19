@@ -6,30 +6,37 @@ class FormulaireController extends Zend_Controller_Action
      * @var mixed|\Model_DbTable_Champ
      */
     public $modelChamp;
+
     /**
      * @var mixed|\Model_DbTable_ChampValeurListe
      */
     public $modelChampValeurListe;
+
     /**
      * @var mixed|\Model_DbTable_ListeTypeChampRubrique
      */
     public $modelListeTypeChampRubrique;
+
     /**
      * @var mixed|\Model_DbTable_Rubrique
      */
     public $modelRubrique;
+
     /**
      * @var mixed|\Model_DbTable_CapsuleRubrique
      */
     public $modelCapsuleRubrique;
+
     /**
      * @var mixed|\Service_Formulaire
      */
     public $serviceFormulaire;
+
     /**
      * @var mixed|\Service_Utils
      */
     public $serviceUtils;
+
     /**
      * @var mixed|\Service_Champ
      */
@@ -172,7 +179,7 @@ class FormulaireController extends Zend_Controller_Action
             $idChamp = (int) $champ['ID_CHAMP'];
             $idTypeChamp = (int) $champ['ID_TYPECHAMP'];
 
-            $insertedRowAsArray = $this->modelChamp->getChampAndJoins($idChamp, ($idTypeChamp === $idListe));
+            $insertedRowAsArray = $this->modelChamp->getChampAndJoins($idChamp, $idTypeChamp === $idListe);
 
             echo json_encode($insertedRowAsArray);
         }

@@ -5,14 +5,14 @@ class View_Helper_AfficheDoc
     public function afficheDoc($verrou, $natureId, $id, $libelle, $ref = null, $date = null, $type = null): string
     {
         if (!$date) {
-            //document n'ayant PAS d'enregistrement dans la BD
+            // document n'ayant PAS d'enregistrement dans la BD
             $styleInput = 'display:none;';
             $etatCheck = '';
             $styleChecked = '';
             $styleValid = '';
             $styleDate = '';
         } else {
-            //document ayant un enregistrement dans la BD
+            // document ayant un enregistrement dans la BD
             $dateTab = explode('-', $date);
             $date = $dateTab[2].'/'.$dateTab[1].'/'.$dateTab[0];
 

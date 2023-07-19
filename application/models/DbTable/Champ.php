@@ -27,7 +27,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->where('r.ID_RUBRIQUE = ?', $idRubrique)
             ->where('c.ID_PARENT IS NULL')
             ->order('c.idx asc')
-            ;
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
