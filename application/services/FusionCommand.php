@@ -2,7 +2,7 @@
 
 class Service_FusionCommand
 {
-    public function mergeArrayCommune(array $objectJson): int
+    public function mergeArrayCommune(array $objectJson): bool
     {
         foreach ($objectJson as $nouvelleFusion) {
             if (0 !== $this->checkExists($nouvelleFusion)) {
@@ -18,10 +18,10 @@ class Service_FusionCommand
             $this->deleteArrayAdresseCommune($nouvelleFusion->listeCommune);
         }
 
-        return 0;
+        return false;
     }
 
-    public function checkExists(stdClass $nouvelleFusion): int
+    public function checkExists(stdClass $nouvelleFusion): bool
     {
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
 

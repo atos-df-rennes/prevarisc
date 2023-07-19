@@ -85,7 +85,7 @@ class Api_Service_Calendar
      * @param mixed $commission
      * @param mixed $isAllowedToViewAll
      *
-     * @return string La requête générée
+     * @return array La requête générée
      */
     private function createRequestForWebcalEvent($userid, $commission, $isAllowedToViewAll)
     {

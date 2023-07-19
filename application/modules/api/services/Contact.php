@@ -7,7 +7,7 @@ class Api_Service_Contact
      *
      * @param string $name
      *
-     * @return string
+     * @return null|array
      */
     public function get($name)
     {

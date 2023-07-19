@@ -5,17 +5,13 @@ class Service_Login
     //login pour l'api
 
     /**
-     * @psalm-return array{reponse:string, results?:array{ID_UTILISATEUR:mixed, LIBELLE_FONCTION:mixed, ID_UTILISATEURINFORMATIONS:mixed, NOM_UTILISATEURINFORMATIONS:mixed, PRENOM_UTILISATEURINFORMATIONS:mixed, LIBELLE_GROUPE:mixed, ID_GROUPE:mixed, TOKEN:string}}
-     *
      * @param mixed $username
      * @param mixed $password
-     *
-     * @return ((string|mixed)[]|string)[]
      */
     public function login($username, $password): array
     {
         //Reponse
-        $reponse = '';
+        $reponse = [];
 
         try {
             // Modèles de données
