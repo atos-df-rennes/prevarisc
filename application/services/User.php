@@ -51,7 +51,7 @@ class Service_User
         $model_user = new Model_DbTable_Utilisateur();
         $user = $model_user->fetchRow($model_user->select()->where('USERNAME_UTILISATEUR = ?', $username));
 
-        return null !== $user ? $this->find($user->ID_UTILISATEUR) : null;
+        return $user instanceof \Zend_Db_Table_Row_Abstract ? $this->find($user->ID_UTILISATEUR) : null;
     }
 
     /**

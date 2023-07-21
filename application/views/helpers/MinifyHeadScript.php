@@ -92,10 +92,8 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
 
     /**
      * Retrieve the minify url.
-     *
-     * @return string
      */
-    public function getMinUrl()
+    public function getMinUrl(): string
     {
         return $this->getBaseUrl().$this->_minifyLocation;
     }

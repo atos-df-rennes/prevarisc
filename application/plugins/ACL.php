@@ -342,6 +342,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
      * getPageResources.
      *
      * @param null|mixed $request
+     * @param mixed      $page
      *
      * @return null|array
      */
@@ -385,6 +386,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
     /**
      * getPagePrivilege.
+     *
+     * @param mixed $page
      *
      * @return null|string
      */
@@ -566,11 +569,7 @@ class ResourceContainer implements Iterator
 
     public function current()
     {
-        if (isset($this->developped_resources[$this->developped_resources_index])) {
-            return $this->developped_resources[$this->developped_resources_index];
-        }
-
-        return null;
+        return $this->developped_resources[$this->developped_resources_index] ?? null;
     }
 
     public function key()

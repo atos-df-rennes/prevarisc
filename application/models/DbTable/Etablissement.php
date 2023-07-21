@@ -408,8 +408,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
 
         $search->joinEtablissementDossier();
-        $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
-                .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
+        $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
                 .'LEFT JOIN etablissementdossier etabdoss ON etabdoss.ID_DOSSIER = dos.ID_DOSSIER '
                 .'LEFT JOIN dossiernature dn ON dn.ID_DOSSIER = dos.ID_DOSSIER '
                 .'WHERE etabdoss.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT '

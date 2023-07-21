@@ -44,7 +44,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                         $id_enfant = $parent['ID_ETABLISSEMENT'];
                     }
                 } while (null != $parent);
-                $etablissement_parents = empty($results) ? [] : array_reverse($results);
+                $etablissement_parents = [] === $results ? [] : array_reverse($results);
 
                 $pere = end($etablissement_parents);
 

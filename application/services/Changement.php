@@ -110,7 +110,7 @@ class Service_Changement
      *
      * @return string L'objet formaté
      */
-    public function getObjet($idChangement, $ets)
+    public function getObjet($idChangement, $ets): string
     {
         switch ($idChangement) {
             case '1':
@@ -173,7 +173,7 @@ class Service_Changement
      *
      * @return string Le message convertit
      */
-    public function convertMessage($message, $ets)
+    public function convertMessage($message, $ets): string
     {
         $params = [];
         foreach (self::BALISES as $balise => $content) {

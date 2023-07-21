@@ -132,7 +132,7 @@ class Service_Descriptif
         $expectedNumberOfArguments = 5;
 
         foreach ($initialList as $inputName => $value) {
-            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && (isset(explode('-', $inputName)[2]) && '' !== explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
                 $idxInput = explode('-', $inputName)[1];
                 $idParent = explode('-', $inputName)[2];
                 $idInput = explode('-', $inputName)[3];

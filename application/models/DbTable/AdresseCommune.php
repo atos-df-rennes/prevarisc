@@ -27,15 +27,13 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
      */
     public function getMairieInformation($numinsee)
     {
-        $select = 'SELECT * '
-                .'FROM adressecommune as commune '
-                .'INNER JOIN utilisateurinformations as user '
+        $select = 'SELECT * FROM adressecommune as commune INNER JOIN utilisateurinformations as user '
                 .'ON commune.ID_UTILISATEURINFORMATIONS = '
                 .'user.ID_UTILISATEURINFORMATIONS '
                 ."WHERE commune.NUMINSEE_COMMUNE = '".$numinsee."'";
 
         $result = $this->getAdapter()->fetchAll($select);
-        if (!empty($result)) {
+        if ([] !== $result) {
             return $result[0];
         }
 

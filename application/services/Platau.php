@@ -37,11 +37,7 @@ class Service_Platau
             return false;
         }
 
-        if (true !== $platauHealth->etatBdd) {
-            return false;
-        }
-
-        return true;
+        return true === $platauHealth->etatBdd;
     }
 
     private function getPisteCredentials(): array

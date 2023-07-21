@@ -2568,13 +2568,13 @@ class DossierController extends Zend_Controller_Action
         $rubriquesDossier = $serviceDescriptifDossier->getRubriques($idDossier, 'Dossier');
 
         $serviceDescriptifEtablissement = new Service_EtablissementDescriptif();
-        $rubriquesEtablissement = empty($idEtab) ? '' : $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
+        $rubriquesEtablissement = 0 === $idEtab ? '' : $serviceDescriptifEtablissement->getRubriques($idEtab, 'Etablissement');
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
         $rubriquesDossierEffectifsDegagements = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
 
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
-        $rubriquesEtablissementEffectifsDegagements = empty($idEtab) ? '' : $serviceEtablissementEffectifsDegagements->getRubriques($idEtab, 'Etablissement');
+        $rubriquesEtablissementEffectifsDegagements = 0 === $idEtab ? '' : $serviceEtablissementEffectifsDegagements->getRubriques($idEtab, 'Etablissement');
 
         $rubriquesByCapsuleRubrique = [
             'descriptifVerificationsTechniques' => $rubriquesDossier,

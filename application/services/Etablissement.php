@@ -53,7 +53,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
             // Si l'établissement n'existe pas, on génère une erreur
-            if (null === $general
+            if (!$general instanceof \Zend_Db_Table_Row_Abstract
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
             }
@@ -450,7 +450,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $date = new Zend_Date($value['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             }
 
-            if (null !== $date) {
+            if ($date instanceof \Zend_Date) {
                 $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
 
@@ -1657,7 +1657,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $remainderUnit = 'mois';
 
         if (0 !== $remainder) {
-            $periodicityString = "{$periodicityString} et {$remainder} {$remainderUnit}";
+            return "{$periodicityString} et {$remainder} {$remainderUnit}";
         }
 
         return $periodicityString;

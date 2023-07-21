@@ -93,10 +93,8 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      * @param type $piece_jointe
      * @param type $linkedObjectType
      * @param type $linkedObjectId
-     *
-     * @return null|string
      */
-    public function getURLPath($piece_jointe, $linkedObjectType, $linkedObjectId)
+    public function getURLPath($piece_jointe, $linkedObjectType, $linkedObjectId): ?string
     {
         if (!$piece_jointe) {
             return null;
@@ -118,10 +116,8 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
      * @param type $piece_jointe
      * @param type $linkedObjectType
      * @param type $linkedObjectId
-     *
-     * @return null|string
      */
-    public function getFormattedFilename($piece_jointe, $linkedObjectType, $linkedObjectId)
+    public function getFormattedFilename($piece_jointe, $linkedObjectType, $linkedObjectId): ?string
     {
         if (!$piece_jointe) {
             return null;

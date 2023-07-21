@@ -689,7 +689,7 @@ class Service_Search
             }
 
             // Si pas de dossier, pas de recherche
-            if (!empty($sIDsTable)) {
+            if ([] !== $sIDsTable) {
                 // Recherche des préventionnistes associés aux dossiers
                 $selectPrev = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
                 $selectPrev->from(['u' => 'utilisateur'], 'ID_UTILISATEUR')

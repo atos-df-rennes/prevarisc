@@ -92,14 +92,10 @@ class Service_Effectifdegagement
 
     public function save(int $idEffectifDegagement, array $data)
     {
-        if (is_array($data)) {
-            $newValue = $this->get($idEffectifDegagement);
-
-            foreach ($data as $key => $newAttrValue) {
-                $newValue->{$key} = $newAttrValue;
-            }
-
-            $newValue->save();
+        $newValue = $this->get($idEffectifDegagement);
+        foreach ($data as $key => $newAttrValue) {
+            $newValue->{$key} = $newAttrValue;
         }
+        $newValue->save();
     }
 }

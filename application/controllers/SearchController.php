@@ -41,7 +41,7 @@ class SearchController extends Zend_Controller_Action
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {
@@ -311,7 +311,7 @@ class SearchController extends Zend_Controller_Action
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {

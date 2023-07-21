@@ -174,7 +174,7 @@ class Service_Dossier
         }
 
         $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, $idFonction);
-        if (!empty($contactInfos)) {
+        if ([] !== $contactInfos) {
             return $contactInfos[0];
         }
 

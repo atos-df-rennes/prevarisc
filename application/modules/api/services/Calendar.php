@@ -26,7 +26,7 @@ class Api_Service_Calendar
         if ($commission) {
             $dbCommission = new Model_DbTable_Commission();
             $resultLibelle = $dbCommission->getLibelleCommissions($commission);
-            if (!empty($resultLibelle)) {
+            if ([] !== $resultLibelle) {
                 $calendrierNom .= ' '.$resultLibelle[0]['LIBELLE_COMMISSION'];
             }
         }
@@ -321,13 +321,12 @@ class Api_Service_Calendar
         $preventionniste = $this->formatPrevisionniste($preventionnistes);
 
         $corpus .= 'Préventionniste(s) du dossier : '.self::LF;
-        $corpus .= sprintf(
+
+        return $corpus.sprintf(
             '%s%s',
             $preventionniste,
             self::LF.self::LF
         );
-
-        return $corpus;
     }
 
     private function formatPrevisionniste($preventionnistes): string

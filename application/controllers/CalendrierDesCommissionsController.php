@@ -164,7 +164,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
             // on recupere la liste des infos des établissement
 
-            if (!empty($listeEtab)) {
+            if ([] !== $listeEtab) {
                 $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                 $listeDossiersNonAffect[$val]['infosEtab'] = $etablissementInfos;
                 $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
@@ -301,7 +301,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             // On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
             // on recupere la liste des infos des établissement
-            if (!empty($listeEtab)) {
+            if ([] !== $listeEtab) {
                 $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                 $listeDossiersAffect[$val]['infosEtab'] = $etablissementInfos;
                 $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
@@ -366,7 +366,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 'url' => '/dossier/index/id/'.$dossierAffect['ID_DOSSIER'],
                 'title' => '   '.$affichage,
                 'start' => date($dateDebut.' '.$dossierAffect['HEURE_DEB_AFFECT']),
-                'end' => date($dateDebut.' '.$dossierAffect['HEURE_FIN_AFFECT']),
+                'end' => date($dateFin.' '.$dossierAffect['HEURE_FIN_AFFECT']),
                 'backgroundColor' => $color,
                 'allDay' => false,
             ];
@@ -978,7 +978,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 // On recupere la liste des établissements qui concernent le dossier
                 $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
                 // on recupere la liste des infos des établissement
-                if (!empty($listeEtab)) {
+                if ([] !== $listeEtab) {
                     $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                     $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
@@ -1121,7 +1121,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             // On recupere la liste des établissements qui concernent le dossier
             $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
             // on recupere la liste des infos des établissement
-            if (!empty($listeEtab)) {
+            if ([] !== $listeEtab) {
                 $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                 $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
 
@@ -1479,7 +1479,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $libellecommission = $commissionArray[0];
 
-            if (!empty($commissions)) {
+            if ([] !== $commissions) {
                 header('Content-Type: text/Calendar');
                 header('Content-Disposition: inline; filename=calendar_'.$mois.'_'.$annee.'_'.$libellecommission['LIBELLE_COMMISSION'].'.ics');
 
@@ -1498,7 +1498,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                     $dossieraffecte = $dossiersaff->getListDossierAffect($commissiondujour['ID_DATECOMMISSION']);
 
-                    if (!empty($dossieraffecte)) {
+                    if ([] !== $dossieraffecte) {
                         $descriptifAdd .= ' / Ordre du jour : ';
                         foreach ($dossieraffecte as $dossier) {
                             $descriptifAdd .= $dossier['OBJET_DOSSIER'].';';

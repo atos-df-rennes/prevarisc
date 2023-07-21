@@ -149,10 +149,8 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
 
     /**
      * Retrieve the minify url.
-     *
-     * @return string
      */
-    public function getMinUrl()
+    public function getMinUrl(): string
     {
         return $this->getBaseUrl().$this->_minifyLocation;
     }
