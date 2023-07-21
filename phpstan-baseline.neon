@@ -1607,7 +1607,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDossier\\.$#"
-			count: 111
+			count: 108
 			path: application/controllers/DossierController.php
 
 		-
@@ -4291,94 +4291,9 @@ parameters:
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$id_etablissement\\)\\: Unexpected token \"\\$id_etablissement\", expected type at offset 63$#"
-			count: 1
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$page\\)\\: Unexpected token \"\\$page\", expected type at offset 50$#"
-			count: 1
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$page\\)\\: Unexpected token \"\\$page\", expected type at offset 61$#"
-			count: 1
-			path: application/plugins/ACL.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoRouteAndExit\\(\\)\\.$#"
 			count: 1
 			path: application/plugins/Security.php
-
-		-
-			message: "#^Default value of the parameter \\#4 \\$createDirIfNotExists \\(false\\) of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) is incompatible with type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$createDirIfNotExists of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Property Plugin_SimpleFileDataStore\\:\\:\\$types has unknown class type as its type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:setView\\(\\)\\.$#"
@@ -4858,31 +4773,6 @@ parameters:
 		-
 			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
 			count: 3
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$categorie$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$classe$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$famille$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$genre$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$types$#"
-			count: 1
 			path: application/services/Search.php
 
 		-

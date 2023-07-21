@@ -372,7 +372,7 @@ class Service_User
      *
      * @param array $user array définissant l'utilisateur
      *
-     * @return null|array
+     * @return null|array|void
      */
     public function logFailedLogin($user)
     {

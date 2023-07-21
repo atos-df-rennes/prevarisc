@@ -15,7 +15,7 @@ class StatistiquesController extends Zend_Controller_Action
         ob_end_clean();
         $this->_helper->layout->setLayout('dashboard');
         // On prépare me XML pour l'extraction et la génération
-        while ([$key, $val] = each($this->liste)) {
+        foreach (array_keys($this->liste) as $key) {
             $this->_helper->contextSwitch()->addActionContext($key, ['json', 'xml']);
         }
 
