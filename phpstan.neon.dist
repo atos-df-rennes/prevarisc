@@ -3,7 +3,7 @@ includes:
 
 parameters:
     phpVersion: 70100
-    level: 3
+    level: 4
     paths:
         - application
     scanFiles:
