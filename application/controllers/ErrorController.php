@@ -37,6 +37,8 @@ class ErrorController extends Zend_Controller_Action
                     $this->getResponse()->setHttpResponseCode($unautorizedStatusCode);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
+                } else {
+                    $this->view->message = $errors->exception->getMessage();
                 }
 
                 break;

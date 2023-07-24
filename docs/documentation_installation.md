@@ -119,6 +119,7 @@ PREVARISC_UNITE_PERIODICITE_ANNEES | [FACULTATIF] Permet d'afficher la périodic
 PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE | [FACULTATIF] Permet d'utiliser la date de commission au lieu de la date de visite pour relancer la périodicité lorsque le dernier dossier donnant avis est un Groupe de visite | 0 ou 1 pour l'activer
 PREVARISC_PLATAU_PATH | [FACULTATIF] Chemin vers l'installation de la passerelle Plat'AU | Chaine de caractères
 PREVARISC_COMMAND_PATH | [FACULTATIF] Chemin vers le dossier destiné à stocker le(s) fichier(s) d'entrée à fournir aux commandes (e.g. La fusion des communes) | Chaine de caractères
+PREVARISC_DEACTIVATE_PLATAU | [FACULTATIF] Permet de désactiver tous les affichages liés à Plat'AU | 0 ou 1 pour désactiver (affichages activés par défaut)
 
 * Taper :```/etc/init.d/apache2 restart```
 

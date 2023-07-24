@@ -173,17 +173,6 @@ class Service_Dashboard
             'height' => 'small',
             'width' => 'small',
         ],
-
-        // bloc plat'au
-        'dossierPlatau' => [
-            'service' => 'Service_Dashboard',
-            'method' => 'getDossiersPlatAUSansEtablissement',
-            'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
-            'title' => 'Dossiers Plat\'AU à traiter',
-            'type' => 'dossiers_platau',
-            'height' => 'small',
-            'width' => 'small',
-        ],
     ];
 
     /**
@@ -209,6 +198,18 @@ class Service_Dashboard
 
         if (getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS')) {
             $this->options['courrier_sans_reponse_days'] = (int) getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS');
+        }
+
+        if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->blocsConfig['dossierPlatau'] = [
+                'service' => 'Service_Dashboard',
+                'method' => 'getDossiersPlatAUSansEtablissement',
+                'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
+                'title' => 'Dossiers Plat\'AU à traiter',
+                'type' => 'dossiers_platau',
+                'height' => 'small',
+                'width' => 'small',
+            ];
         }
     }
 
