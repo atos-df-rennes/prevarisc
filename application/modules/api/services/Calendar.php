@@ -286,7 +286,7 @@ class Api_Service_Calendar
                 $serviceInstruct = $dbGroupement->getByLibelle(
                     $commissionEvent['SERVICEINSTRUC_DOSSIER']
                 );
-                $serviceInstruct = empty($serviceInstruct) ?
+                $serviceInstruct = [] === $serviceInstruct ?
                                     null : $serviceInstruct[0];
             }
             if ($maire && [] !== $maire) {

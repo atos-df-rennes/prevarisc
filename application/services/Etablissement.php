@@ -1562,10 +1562,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
-                if (null !== $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+                if ($etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
                     $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()->delete();
                 }
-            } elseif (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+            } elseif (!$etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
                 $row = $etsTexteApplicable->createRow();
                 $row->ID_TEXTESAPPL = $id_texte_applicable;
                 $row->ID_ETABLISSEMENT = $id_etablissement;

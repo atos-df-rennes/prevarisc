@@ -16,7 +16,7 @@ class Service_Valeur
         $idValeur = null;
         $idxValeur = null;
 
-        if (null !== $valeur) {
+        if ($valeur instanceof \Zend_Db_Table_Row_Abstract) {
             $typeValeur = $this->getTypeValeur($idChamp);
             $idValeur = $valeur['ID_VALEUR'];
             $idxValeur = $valeur['idx'];

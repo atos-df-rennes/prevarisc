@@ -54,6 +54,6 @@ class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
 
         $results = $this->fetchAll($select);
 
-        return null !== $results ? $results->toArray() : [];
+        return $results instanceof \Zend_Db_Table_Rowset_Abstract ? $results->toArray() : [];
     }
 }

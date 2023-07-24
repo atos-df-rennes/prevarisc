@@ -371,7 +371,7 @@ class PieceJointeController extends Zend_Controller_Action
             $listePj = [];
         }
 
-        $pj = empty($listePj) ? null : $listePj[0];
+        $pj = null === $listePj || [] === $listePj ? null : $listePj[0];
 
         if (!$pj) {
             return;
