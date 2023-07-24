@@ -56,13 +56,15 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
-        $checkPlatau = $this->servicePlatau->executeHealthcheck();
-        if (false === $checkPlatau) {
-            $this->_helper->flashMessenger([
-                'context' => 'error',
-                'title' => 'La connexion Plat\'AU a échouée.',
-                'message' => 'Veuillez suivre les instructions du Manuel Utilisateur §6.17.2',
-            ]);
+        if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+            $checkPlatau = $this->servicePlatau->executeHealthcheck();
+            if (false === $checkPlatau) {
+                $this->_helper->flashMessenger([
+                    'context' => 'error',
+                    'title' => "La connexion Plat'AU a échouée.",
+                    'message' => 'Veuillez suivre les instructions du Manuel Utilisateur §6.17.2',
+                ]);
+            }
         }
 
         $this->view->user = $user;

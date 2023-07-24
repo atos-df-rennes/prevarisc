@@ -197,6 +197,10 @@ class DossierController extends Zend_Controller_Action
             $this->view->id_platau = $dossier['ID_PLATAU'] ?? null;
 
             if (null !== $dossier['ID_PLATAU']) {
+                if (filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+                    throw new Exception("Plat'AU est désactivé", 500);
+                }
+
                 $platauConsultationMapper = new Model_PlatauConsultationMapper();
                 $platauConsultationModel = new Model_PlatauConsultation();
                 $this->view->assign('enumStatutsPec', new Model_Enum_PlatauStatutPec());

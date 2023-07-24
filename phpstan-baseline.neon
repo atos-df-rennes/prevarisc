@@ -2087,7 +2087,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property ArrayObject\\:\\:\\$exception\\.$#"
-			count: 3
+			count: 4
 			path: application/controllers/ErrorController.php
 
 		-
@@ -2112,7 +2112,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$message\\.$#"
-			count: 4
+			count: 5
 			path: application/controllers/ErrorController.php
 
 		-
