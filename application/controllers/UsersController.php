@@ -332,12 +332,13 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_famille = new Service_Famille();
                                         $tmp_familles = $service_famille->getAll();
-                                        $familles = [];
-                                        $types = null;
+                                        $types = [];
+
                                         foreach ($tmp_familles as $t) {
                                             $types[$t['ID_FAMILLE']] = $t['LIBELLE_FAMILLE'];
                                         }
-                                        $array[$key] = $familles[$val];
+
+                                        $array[$key] = $types[$val];
                                     });
                                 }
 
