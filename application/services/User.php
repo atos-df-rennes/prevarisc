@@ -387,7 +387,7 @@ class Service_User
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
-        if (!$dbUser) {
+        if (!$dbUser instanceof \Zend_Db_Table_Rowset_Abstract) {
             return;
         }
         $dbUser = $dbUser->current();
@@ -413,7 +413,7 @@ class Service_User
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
-        if (!$dbUser) {
+        if (!$dbUser instanceof \Zend_Db_Table_Rowset_Abstract) {
             return;
         }
         $dbUser = $dbUser->current();

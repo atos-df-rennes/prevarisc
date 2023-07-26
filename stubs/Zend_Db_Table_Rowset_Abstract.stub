@@ -1,0 +1,15 @@
+<?php
+
+/**
+* @template TKey of array-key
+* @template TValue
+* @implements SeekableIterator<TKey, TValue>
+* @implements ArrayAccess<TKey, TValue>
+*/
+abstract class Zend_Db_Table_Rowset_Abstract implements SeekableIterator, Countable, ArrayAccess
+{
+    /**
+    * @return null|TValue
+    */
+    public function current();
+}

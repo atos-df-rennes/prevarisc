@@ -18,8 +18,6 @@ class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
             ->where('ID_ETABLISSEMENT = ?', $id_etablissement)
         ;
 
-        $results = $this->fetchAll($select);
-
-        return $results instanceof \Zend_Db_Table_Rowset_Abstract ? $results->toArray() : [];
+        return $this->fetchAll($select)->toArray();
     }
 }

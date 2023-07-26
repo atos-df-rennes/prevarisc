@@ -395,7 +395,6 @@ class Api_Service_Calendar
             );
             if ($user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
                 && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
-                && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
                 && $user['CPADRESSE_UTILISATEURINFORMATIONS']
                 && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
             ) {

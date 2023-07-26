@@ -7,6 +7,7 @@ class Service_RubriqueEtablissement
         $modelRubrique = new Model_DbTable_Rubrique();
         $modelDisplayRubriqueEtablissement = new Model_DbTable_DisplayRubriqueEtablissement();
 
+        /** @var int $rubriqueDefaultDisplay */
         $rubriqueDefaultDisplay = $modelRubrique->find($idRubrique)->current()['DEFAULT_DISPLAY'];
         $userModified = $modelDisplayRubriqueEtablissement->find($idEtablissement, $idRubrique)->current();
 

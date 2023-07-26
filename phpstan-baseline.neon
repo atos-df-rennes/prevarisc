@@ -4401,42 +4401,7 @@ parameters:
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COURRIEL_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATESUPPRESSION_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DELETED_BY\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_DEROGATIONS_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_HISTORIQUE_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DROITPUBLIC_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DUREEVISITE_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
@@ -4481,11 +4446,6 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$FAX_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ICPE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
@@ -4512,7 +4472,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
-			count: 11
+			count: 2
 			path: application/services/Etablissement.php
 
 		-
@@ -4551,11 +4511,6 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
@@ -4566,27 +4521,12 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NBPREV_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMEROID_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$R14320_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELEPHONE_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
@@ -4616,11 +4556,6 @@ parameters:
 			path: application/services/Feed.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
-			count: 2
-			path: application/services/FusionCommand.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(int numinsee Optionnel\\)\\: Unexpected token \"numinsee\", expected variable at offset 76$#"
 			count: 1
 			path: application/services/GroupementCommunes.php
@@ -4631,13 +4566,8 @@ parameters:
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_FONCTION\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Login.php
 
 		-
@@ -4651,27 +4581,7 @@ parameters:
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_FONCTION\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPE\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRENOM_UTILISATEURINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Login.php
 
@@ -4682,12 +4592,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONREGL\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONTYPE\\.$#"
-			count: 3
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
@@ -4697,16 +4607,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ARTICLE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_TEXTE\\.$#"
-			count: 2
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONARTICLE\\.$#"
 			count: 1
 			path: application/services/Prescriptions.php
 
@@ -4716,63 +4621,13 @@ parameters:
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONTEXTE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_CAT\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_LIBELLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_TYPE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_VISIBLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_ARTICLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_CATEGORIE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_LIBELLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_NUM\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_TEXTE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_ARTICLE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_TEXTE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
@@ -4781,27 +4636,7 @@ parameters:
 			path: application/services/Search.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ACTIF_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DASHBOARD_BLOCS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESC_GROUPE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$FAILED_LOGIN_ATTEMPTS_UTILISATEUR\\.$#"
-			count: 4
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$GRADE_UTILISATEURINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/User.php
 
@@ -4811,97 +4646,11 @@ parameters:
 			path: application/services/User.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_FONCTION\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
-			count: 3
-			path: application/services/User.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
 			count: 1
 			path: application/services/User.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
-			count: 17
+			count: 4
 			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 3
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$IP_UTILISATEUR\\.$#"
-			count: 2
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LASTACTION_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$MAIL_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$OBS_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRENOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELFAX_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELFIXE_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELPORTABLE_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$USERNAME_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$WEB_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-

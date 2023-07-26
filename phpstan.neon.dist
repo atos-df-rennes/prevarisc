@@ -8,6 +8,8 @@ parameters:
         - application
     scanFiles:
         - public/index.php
+    stubFiles:
+        - stubs/Zend_Db_Table_Rowset_Abstract.stub
     excludePaths:
         analyseAndScan:
             - application/cache

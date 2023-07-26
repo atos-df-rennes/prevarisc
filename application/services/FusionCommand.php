@@ -5,7 +5,7 @@ class Service_FusionCommand
     public function mergeArrayCommune(array $objectJson): bool
     {
         foreach ($objectJson as $nouvelleFusion) {
-            if (0 !== $this->checkExists($nouvelleFusion)) {
+            if ($this->checkExists($nouvelleFusion)) {
                 return true;
             }
 
