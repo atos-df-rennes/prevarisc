@@ -686,6 +686,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->joinLeft(['u' => 'utilisateur'], 'u.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
             ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL')
+            ->group('d.ID_DOSSIER')
         ;
 
         return $this->fetchAll($select)->toArray();

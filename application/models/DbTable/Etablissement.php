@@ -507,6 +507,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
             ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
+            ->group('e.ID_ETABLISSEMENT')
         ;
 
         return $this->fetchAll($select)->toArray();
