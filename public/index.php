@@ -20,8 +20,48 @@ defined('REAL_DATA_PATH') || define('REAL_DATA_PATH', getenv('PREVARISC_REAL_DAT
 // Define path to plat'au directory
 defined('PLATAU_PATH') || define('PLATAU_PATH', getenv('PREVARISC_PLATAU_PATH') ?: dirname(__FILE__).DS.'..'.DS.'..'.DS.'prevarisc-passerelle-platau');
 
+// Define path to config directory
+defined('CONFIG_PATH') || define('CONFIG_PATH', getenv('PREVARISC_CONFIG_PATH') ?: dirname(__FILE__, 3).DS.'httpd'.DS.'conf'.DS.'prevarisc');
+
 // Chargements des librairies
 require APPLICATION_PATH.DS.'..'.DS.'vendor'.DS.'autoload.php';
+
+// Chargements des évolutions activées
+$featuresFilepath = CONFIG_PATH.DS.'liste-evols.json';
+$legacyFeaturesContent = file(CONFIG_PATH.DS.'httpd-prevarisc-config.conf');
+$supportedLegacyFeatures = [
+    'PREVARISC_DEBUG_ENABLED' => 'Activation du mode debug',
+    'PREVARISC_ENFORCE_SECURITY' => 'Renforcement de la sécurité',
+    'PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE' => 'Utilisation de la date de commission pour relancer la périodicité',
+    'PREVARISC_DESCRIPTIF_PERSONNALISE' => 'Utilisation des descriptifs personnalisés',
+    'PREVARISC_UNITE_PERIODICITE_ANNEES' => 'Affichage des périodicités en années',
+];
+$newFeaturesContent = [];
+
+foreach ($legacyFeaturesContent as $legacyFeaturesLine) {
+    preg_match("$^SetEnv\s(?P<key>PREVARISC_[\w_]+)\s\"?(?P<value>[01])\"?$", $legacyFeaturesLine, $matches);
+
+    if (
+        [] !== $matches
+        && array_key_exists($matches['key'], $supportedLegacyFeatures)
+    ) {
+        $newFeaturesContent[$matches['key']] = [
+            'value' => (int) $matches['value'],
+            'label' => $supportedLegacyFeatures[$matches['key']],
+        ];
+    }
+}
+
+if (!file_exists($featuresFilepath)) {
+    file_put_contents($featuresFilepath, json_encode($newFeaturesContent));
+}
+
+$json = file_get_contents($featuresFilepath);
+$parsedJson = json_decode($json, true);
+
+foreach ($parsedJson as $key => $data) {
+    putenv("{$key}={$data['value']}");
+}
 
 // Création de l'application avec les fichiers config
 $application = new Zend_Application('production', [
