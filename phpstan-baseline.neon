@@ -1887,7 +1887,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property ArrayObject\\:\\:\\$exception\\.$#"
-			count: 3
+			count: 4
 			path: application/controllers/ErrorController.php
 
 		-
@@ -1912,7 +1912,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$message\\.$#"
-			count: 4
+			count: 5
 			path: application/controllers/ErrorController.php
 
 		-
@@ -2872,7 +2872,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 2
+			count: 3
+			path: application/controllers/IndexController.php
+
+		-
+			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
+			count: 1
 			path: application/controllers/IndexController.php
 
 		-
@@ -2902,7 +2907,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
-			count: 5
+			count: 4
 			path: application/controllers/IndexController.php
 
 		-

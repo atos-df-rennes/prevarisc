@@ -1,3 +1,5 @@
+<div id="bloc__connexion-platau" class="mb-4"></div>
+
 <div id="home" class="dashboard">
     <?php foreach($this->blocs as $id => $bloc): ?>
         <?php echo $this->partial('index/partials/'.$bloc['type'].'_bloc.phtml', array_merge($bloc, array('id' => $id))) ?>
@@ -12,7 +14,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
         // Gestion des boites modales
         $("a[data-toggle='modal']").click(function() {
             var target = $(this).attr("data-target");
@@ -97,7 +98,6 @@
         }
 
         $container.packery( 'on', 'layoutComplete', orderItems );
-        //$container.packery( 'on', 'dragItemPositioned', orderItems );
 
         $('#reinitBlocOrder').click(function() {
             $.post("/api/1.0/user/preferences", {
@@ -130,5 +130,37 @@
             }
         });
 
+        // Vérification de la connexion à Plat'AU
+        <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)): ?>
+            $.ajax({
+                type: 'GET',
+                url: '/index/platau-healthcheck',
+                beforeSend: function() {
+                    $("#bloc__connexion-platau").html("Vérification de la connexion à Plat'AU <img src='/images/load.gif' />");
+                },
+                success: function(result) {
+                    const res = JSON.parse(result)
+
+                    if (res) {
+                        $("#bloc__connexion-platau").html(`<div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>La connexion à Plat'AU a fonctionnée.</strong>
+                        </div>`)
+                    } else {
+                        $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <h4>La connexion à Plat'AU a échouée.</h4>
+                            Veuillez suivre les instructions du Manuel Utilisateur §6.17.2
+                        </div>`)
+                    }
+                },
+                error: function() {
+                    $("#bloc__connexion-platau").html(`<div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Une erreur s'est produite lors de la vérification de la connexion à Plat'AU.</strong>
+                    </div>`);
+                },
+            })
+        <?php endif ?>
     });
 </script>

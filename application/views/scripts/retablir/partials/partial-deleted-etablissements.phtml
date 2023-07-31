@@ -6,15 +6,15 @@
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th>Supprimé par</th>
+                <th class="whitespace-nowrap">Supprimé par</th>
                 <th>Nom de l'établissement</th>
-                <th></th>
+                <th class="whitespace-nowrap"></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($this->data as $deletedElement) : ?>
                 <tr>
-                    <td>
+                    <td class="whitespace-nowrap">
                         <p><?= $deletedElement['USERNAME_UTILISATEUR'] ?></p>
                     </td>
 
@@ -25,7 +25,7 @@
                         <?php endif ?>
                     </td>
 
-                    <td>
+                    <td class="whitespace-nowrap">
                         <a
                             class='btn-small'
                             href=<?= '/etablissement/retablir-etablissement/idEtablissement/'.$deletedElement['ID_ETABLISSEMENT'] ?>

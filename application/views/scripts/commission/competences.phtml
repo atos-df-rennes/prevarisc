@@ -26,22 +26,22 @@
 					<th>Classe</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				<?php echo $this->partialLoop("commission/partials/partial-ligne-regle-commission.phtml", $this->array_regles); ?>
 			</tbody>
 		</table>
-	
+
 	</form>
-	
+
 	<div id="save_div" style="text-align: center" >
-			<button class='save-competences save btn btn-success' >Sauvegarder les règles</button>
-			<button class='apply-competences save btn btn-success' >Appliquer les règles</button>
-			
+			<button class='save-competences save btn btn-success' data-loading-text="Sauvegarde des règles <img src='/images/load.gif' />">Sauvegarder les règles</button>
+			<button class='apply-competences save btn btn-success' data-loading-text="Application des règles <img src='/images/load.gif' />">Appliquer les règles</button>
+
 			<span id='<?php echo $_GET["id_commission"] ?>_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
 				Les compétences de la commission ont bien été sauvegardées.
 			</span>
-			
+
 			<span id='<?php echo $_GET["id_commission"] ?>_application' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
 				Les compétences de la commission ont bien été appliquées sur les établissements de Prevarisc.
 			</span>
@@ -65,24 +65,28 @@
         }).click(function() {
             $(this).val("").css("background-color", "white");
         });
-	
+
 	$(".commune").click(function() {
 		$(this).val("").css("background-color", "white");
 	});
-	
+
 	// Bouton de sauvegarde
 	$("#<?php echo $_GET["id_commission"] ?>_tabs .save-competences").click(function() {
 		$.ajax({
 			url: "/commission/save-regles",
 			data: $(this).parent().prev().serialize(),
 			type: "post",
+            beforeSend: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-competences").button('loading')
+            },
 			success: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-competences").button('reset')
 				$("#<?php echo $_GET["id_commission"] ?>_notification").show();
 				setTimeout( function() { $("#<?php echo $_GET["id_commission"] ?>_notification").fadeOut(); }, 2500);
 			}
 		});
 	});
-	
+
 	// Bouton d'application
 	$("#<?php echo $_GET["id_commission"] ?>_tabs .apply-competences").button({
 		icons: { primary: "ui-icon-check" }
@@ -91,13 +95,17 @@
 			url: "/commission/apply-regles",
 			data: $(this).parent().prev().serialize(),
 			type: "post",
+            beforeSend: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .apply-competences").button('loading')
+            },
 			success: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .apply-competences").button('reset')
 				$("#<?php echo $_GET["id_commission"] ?>_application").show();
 				setTimeout( function() { $("#<?php echo $_GET["id_commission"] ?>_notification").fadeOut(); }, 2500);
 			}
 		});
 	});
-	
+
 	// Lien pour ajouter une règle
 	$("#<?php echo $_GET["id_commission"] ?>_tabs .add-regle").click(function() {
 		var a = this;
@@ -110,7 +118,7 @@
 		});
 		return false;
 	});
-	
+
 	// Lien pour supprimer une règle
 	$("#<?php echo $_GET["id_commission"] ?>_tabs .delete-regle").click(function() {
 		var a = this;
