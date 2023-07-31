@@ -73,10 +73,13 @@
                 class='btn btn-info'
                 type='button'
                 style='margin-bottom: 10px;'
-                data-loading-text='Affectation...'
+                data-loading-text="Affectation <img src='/images/load.gif' />"
             >
-                Affecter aux etablissements
+                Affecter aux établissements
             </button>
+            <span id='preventionniste-notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
+				Les préventionnistes ont été affectés.
+			</span>
         <?php endif ?>
 
 		<!-- Afficher la liste des prev. -->
@@ -112,6 +115,10 @@
             },
             success: function() {
                 $("#preventionniste").button('reset')
+                $('#preventionniste-notification').show()
+                setTimeout(function() {
+                    $("#preventionniste-notification").fadeOut();
+                }, 2500)
             },
         })
 	});
