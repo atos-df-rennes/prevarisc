@@ -67,10 +67,8 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      * @see Zend_View_Helper_HeadScript->toString()
      *
      * @param int|string $indent
-     *
-     * @return string
      */
-    public function toString($indent = null)
+    public function toString($indent = null): string
     {
         $indent = (null !== $indent) ? $this->getWhitespace($indent) : $this->getIndent();
         $trimmedBaseUrl = trim($this->getBaseUrl(), '/');

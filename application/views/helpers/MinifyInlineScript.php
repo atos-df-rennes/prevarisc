@@ -60,10 +60,8 @@ class View_Helper_MinifyInlineScript extends Zend_View_Helper_InlineScript
      * @see Zend_View_Helper_HeadScript->toString()
      *
      * @param int|string $indent
-     *
-     * @return string
      */
-    public function toString($indent = null)
+    public function toString($indent = null): string
     {
         // An array of Script Items to be rendered
         $items = [];

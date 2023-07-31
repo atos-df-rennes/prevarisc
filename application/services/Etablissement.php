@@ -61,7 +61,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // On récupère la dernière fiche d'informations de l'établissement
             $informations = $model_etablissement->getInformations($id_etablissement);
             // Si l'établissement n'existe pas, on généère une erreur
-            if (null === $informations) {
+            if (!$informations instanceof \Zend_Db_Table_Row_Abstract) {
                 throw new Exception("La fiche d'informations de l'établissement n'existe pas.");
             }
 
@@ -79,7 +79,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     }
                 }
             } while (null != $parent);
-            $etablissement_parents = empty($results) ? [] : array_reverse($results);
+            $etablissement_parents = $results === [] ? [] : array_reverse($results);
 
             // Récupération de l'avis de l'établissement + dates de VP +  Récupération du facteur de dangerosité
             $avis = $facteur_dangerosite = null;
@@ -275,7 +275,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'etablissement_lies' => $etablissement_lies,
                 'preventionnistes' => $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_etablissement)->run()->getAdapter()->getItems(0, 50)->toArray(),
                 'adresses' => $DB_adresse->get($id_etablissement),
-                'presence_dus' => !empty($contacts_dus),
+                'presence_dus' => $contacts_dus !== [],
             ];
 
             // On stocke en cache
