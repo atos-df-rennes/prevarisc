@@ -3,7 +3,7 @@ name: Prevarisc Lint
 on:
   pull_request:
   push:
-    branches: [ 2.5, bugfix/phpstan ]
+    branches: [ 2.5 ]
 
 jobs:
   validate-composer:
