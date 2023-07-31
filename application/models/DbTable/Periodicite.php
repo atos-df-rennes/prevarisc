@@ -18,9 +18,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         ;
 
         // Retourne le résultat
-        $result = $this->getAdapter()->fetchOne($select);
-
-        return false === $result ? '0' : $result;
+        return $this->getAdapter()->fetchOne($select);
     }
 
     public function gn4ForEtablissement($etablissement)
