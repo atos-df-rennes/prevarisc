@@ -13,7 +13,7 @@ class Model_DbTable_PrescriptionRegl extends Zend_Db_Table_Abstract
      */
     public function recupPrescRegl($type, $mode = null)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $typePresc = null;
         if ('etude' == $type) {
             $typePresc = 1;

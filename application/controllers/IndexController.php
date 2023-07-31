@@ -35,7 +35,7 @@ class IndexController extends Zend_Controller_Action
         foreach ($blocsConfig as $blocId => $blocConfig) {
             if (
                 !$blocConfig['acl']
-                || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))
+                || $acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1])
             ) {
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],

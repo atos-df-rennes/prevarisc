@@ -103,7 +103,7 @@ class UsersController extends Zend_Controller_Action
             try {
                 foreach ($this->_request->getParam('groupe') as $id_groupe => $privileges) {
                     foreach ($privileges as $id_privilege => $value_privilege) {
-                        $groupe_privilege_exists = null !== $model_groupes_privilege->find($id_groupe, $id_privilege)->current();
+                        $groupe_privilege_exists = $model_groupes_privilege->find($id_groupe, $id_privilege)->current() instanceof \Zend_Db_Table_Row_Abstract;
 
                         if (
                             1 == $value_privilege
@@ -332,12 +332,13 @@ class UsersController extends Zend_Controller_Action
                                     array_walk($array, function (&$val, $key) use (&$array) {
                                         $service_famille = new Service_Famille();
                                         $tmp_familles = $service_famille->getAll();
-                                        $familles = [];
-                                        $types = null;
+                                        $types = [];
+
                                         foreach ($tmp_familles as $t) {
                                             $types[$t['ID_FAMILLE']] = $t['LIBELLE_FAMILLE'];
                                         }
-                                        $array[$key] = $familles[$val];
+
+                                        $array[$key] = $types[$val];
                                     });
                                 }
 

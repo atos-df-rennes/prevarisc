@@ -57,10 +57,10 @@ class Service_Descriptif
 
                         $inputs = $this->serviceFormulaire->getInputs($champ);
 
-                        //Affectation des valeurs
+                        // Affectation des valeurs
                         $champ['FILS']['VALEURS'] = $this->serviceFormulaire->getArrayValuesWithPattern($listValeurs, $inputs);
 
-                        //Affectation des modeles type des inputs sans valeurs
+                        // Affectation des modeles type des inputs sans valeurs
                         $champ['FILS']['INPUTS'] = $inputs;
                     } else {
                         foreach ($champ['FILS'] as &$champFils) {
@@ -132,7 +132,7 @@ class Service_Descriptif
         $expectedNumberOfArguments = 5;
 
         foreach ($initialList as $inputName => $value) {
-            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && !empty(explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && (isset(explode('-', $inputName)[2]) && '' !== explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
                 $idxInput = explode('-', $inputName)[1];
                 $idParent = explode('-', $inputName)[2];
                 $idInput = explode('-', $inputName)[3];
@@ -166,7 +166,7 @@ class Service_Descriptif
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
         $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
 
-        if (null === $valueInDB) {
+        if (!$valueInDB instanceof \Zend_Db_Table_Row_Abstract) {
             $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value, $idx);
         } else {
             $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);

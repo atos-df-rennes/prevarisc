@@ -32,7 +32,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-            // Adresse d'une cellule
+                // Adresse d'une cellule
             case 3:
                 // Récupération des parents de l'établissement
                 $results = [];
@@ -44,7 +44,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                         $id_enfant = $parent['ID_ETABLISSEMENT'];
                     }
                 } while (null != $parent);
-                $etablissement_parents = empty($results) ? [] : array_reverse($results);
+                $etablissement_parents = [] === $results ? [] : array_reverse($results);
 
                 $pere = end($etablissement_parents);
 
@@ -53,7 +53,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-            // Adresse par défaut
+                // Adresse par défaut
             default:
                 $select = $this->select()
                     ->setIntegrityCheck(false)

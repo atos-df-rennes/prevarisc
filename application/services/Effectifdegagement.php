@@ -6,18 +6,22 @@ class Service_Effectifdegagement
      * @var mixed|\Model_DbTable_EffectifDegagement
      */
     public $modelEffectifDegagement;
+
     /**
      * @var mixed|\Model_DbTable_DossierEffectifDegagement
      */
     public $modelEffectifDegagementDossier;
+
     /**
      * @var mixed|\Model_DbTable_EtablissementEffectifDegagement
      */
     public $modelEffectifDegagementEtablissement;
+
     /**
      * @var mixed|\Model_DbTable_Dossier
      */
     public $modelDossier;
+
     /**
      * @var mixed|\Model_DbTable_Etablissement
      */
@@ -88,14 +92,10 @@ class Service_Effectifdegagement
 
     public function save(int $idEffectifDegagement, array $data)
     {
-        if (is_array($data)) {
-            $newValue = $this->get($idEffectifDegagement);
-
-            foreach ($data as $key => $newAttrValue) {
-                $newValue->{$key} = $newAttrValue;
-            }
-
-            $newValue->save();
+        $newValue = $this->get($idEffectifDegagement);
+        foreach ($data as $key => $newAttrValue) {
+            $newValue->{$key} = $newAttrValue;
         }
+        $newValue->save();
     }
 }

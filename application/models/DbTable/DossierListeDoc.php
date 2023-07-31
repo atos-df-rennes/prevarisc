@@ -5,7 +5,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
     protected $_name = 'listedocconsulte'; // Nom de la base
     protected $_primary = 'ID_DOC'; // Clé primaire
 
-    //Fonction qui récupère tous les doc de viste
+    // Fonction qui récupère tous les doc de viste
 
     /**
      * @return array
@@ -22,7 +22,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //Fonction qui récupère tous les doc d'etude
+    // Fonction qui récupère tous les doc d'etude
 
     /**
      * @return array
@@ -69,7 +69,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //récupere les dossier qui ont été selection pour le dossier
+    // récupere les dossier qui ont été selection pour le dossier
 
     /**
      * @param mixed $id_dossier
@@ -87,7 +87,7 @@ class Model_DbTable_DossierListeDoc extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //récupération des docconsulte après un changement de nature
+    // récupération des docconsulte après un changement de nature
 
     /**
      * @param int|string $id_nature

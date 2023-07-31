@@ -73,7 +73,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
      */
     public function commissionListe($crit)
     {
-        //Autocomplétion sur la liste des commission
+        // Autocomplétion sur la liste des commission
         $select = "SELECT ID_COMMISSION, LIBELLE_COMMISSION
             FROM commission
             WHERE LIBELLE_COMMISSION LIKE '%".$crit."%';
@@ -87,7 +87,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
      */
     public function getAllCommissions()
     {
-        //Récupération de l'ensemble des commissions
+        // Récupération de l'ensemble des commissions
         $select = 'SELECT ID_COMMISSION, LIBELLE_COMMISSION
             FROM commission
             ORDER BY LIBELLE_COMMISSION
@@ -103,7 +103,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
      */
     public function getLibelleCommissions($id)
     {
-        //Récupération de l'ensemble des commissions
+        // Récupération de l'ensemble des commissions
         $select = "SELECT LIBELLE_COMMISSION
             FROM commission
             WHERE ID_COMMISSION = '".$id."'";

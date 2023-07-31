@@ -33,7 +33,7 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
      */
     public function getDossiersInfosByHour($dateCommId)
     {
-        //Retourne les dossiers avec toutes les informations le concernant class�s par heure
+        // Retourne les dossiers avec toutes les informations le concernant class�s par heure
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['doss' => 'dossier'])
@@ -56,7 +56,7 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
      */
     public function getDossiersInfosByOrder($dateCommId)
     {
-        //Retourne les dossiers avec toutes les informations le concernant class�s par ordre
+        // Retourne les dossiers avec toutes les informations le concernant class�s par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['doss' => 'dossier'])

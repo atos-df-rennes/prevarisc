@@ -26,7 +26,7 @@ class Api_Service_Calendar
         if ($commission) {
             $dbCommission = new Model_DbTable_Commission();
             $resultLibelle = $dbCommission->getLibelleCommissions($commission);
-            if (!empty($resultLibelle)) {
+            if ([] !== $resultLibelle) {
                 $calendrierNom .= ' '.$resultLibelle[0]['LIBELLE_COMMISSION'];
             }
         }
@@ -85,7 +85,7 @@ class Api_Service_Calendar
      * @param mixed $commission
      * @param mixed $isAllowedToViewAll
      *
-     * @return string La requête générée
+     * @return array La requête générée
      */
     private function createRequestForWebcalEvent($userid, $commission, $isAllowedToViewAll)
     {
@@ -113,7 +113,7 @@ class Api_Service_Calendar
      *
      * @param mixed $commissionEvent
      *
-     * @return (mixed|string|false|DateTime)[]|null
+     * @return null|(DateTime|false|mixed|string)[]
      */
     private function createICSEvent($commissionEvent)
     {
@@ -153,7 +153,7 @@ class Api_Service_Calendar
                     trim($libelleSum)
                 );
                 $geo = sprintf('Commission en salle de %s', $commissionEvent['LIBELLE_COMMISSION']);
-            // Cas d'une visite d'une commission ou d'un groupe de visite
+                // Cas d'une visite d'une commission ou d'un groupe de visite
             } else {
                 $summary = sprintf(
                     '#%s %s : %s',
@@ -286,7 +286,7 @@ class Api_Service_Calendar
                 $serviceInstruct = $dbGroupement->getByLibelle(
                     $commissionEvent['SERVICEINSTRUC_DOSSIER']
                 );
-                $serviceInstruct = empty($serviceInstruct) ?
+                $serviceInstruct = [] === $serviceInstruct ?
                                     null : $serviceInstruct[0];
             }
             if ($maire && [] !== $maire) {
@@ -321,13 +321,12 @@ class Api_Service_Calendar
         $preventionniste = $this->formatPrevisionniste($preventionnistes);
 
         $corpus .= 'Préventionniste(s) du dossier : '.self::LF;
-        $corpus .= sprintf(
+
+        return $corpus.sprintf(
             '%s%s',
             $preventionniste,
             self::LF.self::LF
         );
-
-        return $corpus;
     }
 
     private function formatPrevisionniste($preventionnistes): string
@@ -396,7 +395,6 @@ class Api_Service_Calendar
             );
             if ($user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
                 && $user['RUEADRESSE_UTILISATEURINFORMATIONS']
-                && $user['NUMEROADRESSE_UTILISATEURINFORMATIONS']
                 && $user['CPADRESSE_UTILISATEURINFORMATIONS']
                 && $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
             ) {

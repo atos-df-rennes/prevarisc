@@ -5,7 +5,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     protected $_name = 'dossier'; // Nom de la base
     protected $_primary = 'ID_DOSSIER'; // Clé primaire
 
-    //Fonction qui récupére toutes les infos générales d'un dossier
+    // Fonction qui récupére toutes les infos générales d'un dossier
 
     /**
      * @param float|int|string $id
@@ -25,8 +25,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
-    //Fonction qui récupére tous les établissements concernés par le dossier
-    //PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
+    // Fonction qui récupére tous les établissements concernés par le dossier
+    // PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
 
     /**
      * @param int|string $id_etablissement
@@ -48,7 +48,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+    // Fonction qui récup tous les établissements liés au dossier LAST VERSION
 
     /**
      * @param int|string $id_dossier
@@ -57,7 +57,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getEtablissementDossier($id_dossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = "SELECT etablissementdossier.ID_ETABLISSEMENTDOSSIER ,t1.ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
             FROM etablissementdossier, etablissement e, etablissementinformations t1, genre
             WHERE etablissementdossier.ID_ETABLISSEMENT = t1.ID_ETABLISSEMENT
@@ -96,7 +96,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    //autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
+    // autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
 
     /**
      * @param int|string $etablissementLibelle
@@ -119,7 +119,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //Fonction qui récupère toutes les cellules concernées par le dossier
+    // Fonction qui récupère toutes les cellules concernées par le dossier
 
     /**
      * @param int|string $id_dossier
@@ -138,7 +138,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //retourne 1 si dossier Etude - 0 si Visite
+    // retourne 1 si dossier Etude - 0 si Visite
     public function getTypeDossier($id_dossier)
     {
         $select = $this->select()
@@ -430,7 +430,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+    // Fonction qui récup tous les établissements liés au dossier LAST VERSION
 
     /**
      * @param int|string $id_dossier
@@ -439,7 +439,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getPreventionnistesDossier($id_dossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = "SELECT usrinfos.*
             FROM dossierpreventionniste, utilisateur usr, utilisateurinformations usrinfos
             WHERE dossierpreventionniste.ID_PREVENTIONNISTE = usr.ID_UTILISATEUR

@@ -23,7 +23,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
         $liste_commission = $service_commission->getAll();
 
-        //Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
+        // Récupération des documents présents dans le dossier 0. Documents visibles après vérrouillage
         $pathVer = $this->path.'/0';
         ($dirVer = opendir($pathVer)) || exit('Erreur de listage : le répertoire n\'existe pas');
         $fichierVer = [];
@@ -46,7 +46,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
         $this->view->fichierVer = $fichierVer;
 
-        //Récupération de l'ensemble des documents des différentes commissions
+        // Récupération de l'ensemble des documents des différentes commissions
         foreach ($liste_commission as $var => $commission) {
             $path = $this->path.DS.$commission['ID_COMMISSION'];
             ($dir = opendir($path)) || exit('Erreur de listage : le répertoire n\'existe pas'); // on ouvre le contenu du dossier courant
@@ -96,7 +96,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                 throw new Exception('Seuls les fichiers .odt sont autorisés en upload.');
             }
 
-            //Si besoin verificaiton de l'extension du fichier (uniquement odt)
+            // Si besoin verificaiton de l'extension du fichier (uniquement odt)
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->_getParam('commission').DS.$filename)) {
                 throw new Exception('Impossible de déplacer le fichier uploadé');
             }
@@ -129,7 +129,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
             $filename = str_replace(DS, '', $this->_getParam('name'));
 
-            //On verifie si le fichier existe
+            // On verifie si le fichier existe
             $exist = file_exists($path.DS.$filename);
             unlink($path.DS.$filename);
             $exist2 = file_exists($path.DS.$filename);

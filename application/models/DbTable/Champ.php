@@ -27,7 +27,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
             ->where('r.ID_RUBRIQUE = ?', $idRubrique)
             ->where('c.ID_PARENT IS NULL')
             ->order('c.idx asc')
-            ;
+        ;
 
         return $this->fetchAll($select)->toArray();
     }
@@ -71,9 +71,7 @@ class Model_DbTable_Champ extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param array $postParam
-     *                         `Format : ['ID', 'idx']`
-     *
+     * `Format : ['ID', 'idx']`
      * `ID` correspond à l'identifiant de la rubrique ou du champ.
      * `idx` correspond au nouvel index de la rubrique ou du champ.
      */

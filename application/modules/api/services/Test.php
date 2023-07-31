@@ -2,6 +2,7 @@
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class Api_Service_Test

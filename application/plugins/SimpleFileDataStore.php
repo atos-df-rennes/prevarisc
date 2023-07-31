@@ -15,8 +15,6 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     /**
      * Mapping entre les types de pièces jointes et les
      * répertoires dans lesquels ils sont stockés.
-     *
-     * @var type
      */
     protected $types = [];
 
@@ -46,9 +44,9 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     /**
      * Retourne le répertoire où se trouve le fichier.
      *
-     * @param type  $linkedObjectType
-     * @param type  $linkedObjectId
-     * @param mixed $piece_jointe
+     * @param string $linkedObjectType
+     * @param int    $linkedObjectId
+     * @param array  $piece_jointe
      */
     public function getBasePath($piece_jointe, $linkedObjectType, $linkedObjectId): string
     {
@@ -64,10 +62,10 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     /**
      * Génère le chemin complet d'accès au fichier sur le file system.
      *
-     * @param type $piece_jointe
-     * @param type $linkedObjectType
-     * @param type $linkedObjectId
-     * @param type $createDirIfNotExists
+     * @param array  $piece_jointe
+     * @param string $linkedObjectType
+     * @param int    $linkedObjectId
+     * @param bool   $createDirIfNotExists
      *
      * @throws Exception
      */
@@ -83,22 +81,20 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
 
         return implode(DS, [
             $directory,
-            $piece_jointe ? $piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'] : '',
+            [] !== $piece_jointe ? $piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'] : '',
         ]);
     }
 
     /**
      * Génère l'URL d'accès réelle au fichier (nécessaire pour les images).
      *
-     * @param type $piece_jointe
-     * @param type $linkedObjectType
-     * @param type $linkedObjectId
-     *
-     * @return null|string
+     * @param array  $piece_jointe
+     * @param string $linkedObjectType
+     * @param int    $linkedObjectId
      */
-    public function getURLPath($piece_jointe, $linkedObjectType, $linkedObjectId)
+    public function getURLPath($piece_jointe, $linkedObjectType, $linkedObjectId): ?string
     {
-        if (!$piece_jointe) {
+        if ([] === $piece_jointe) {
             return null;
         }
 
@@ -115,15 +111,13 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
     /**
      * Génère un nom lisible et formaté pour le téléchargement d'une pièce jointe.
      *
-     * @param type $piece_jointe
-     * @param type $linkedObjectType
-     * @param type $linkedObjectId
-     *
-     * @return null|string
+     * @param array  $piece_jointe
+     * @param string $linkedObjectType
+     * @param int    $linkedObjectId
      */
-    public function getFormattedFilename($piece_jointe, $linkedObjectType, $linkedObjectId)
+    public function getFormattedFilename($piece_jointe, $linkedObjectType, $linkedObjectId): ?string
     {
-        if (!$piece_jointe) {
+        if ([] === $piece_jointe) {
             return null;
         }
 

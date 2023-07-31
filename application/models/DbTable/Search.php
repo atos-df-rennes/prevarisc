@@ -89,7 +89,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                 ;
 
                 break;
-            // Pour les dossiers
+                // Pour les dossiers
             case 'dossier':
                 $this->select
                     ->from(['d' => 'dossier'])
@@ -145,7 +145,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                 ;
 
                 break;
-            // Pour les utilisateurs
+                // Pour les utilisateurs
             case 'utilisateur':
                 $this->select
                     ->from(['u' => 'utilisateur'], ['uid' => 'ID_UTILISATEUR'])

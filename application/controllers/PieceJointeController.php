@@ -120,7 +120,7 @@ class PieceJointeController extends Zend_Controller_Action
 
         readfile($filepath);
 
-        exit();
+        exit;
     }
 
     public function formAction()
@@ -222,9 +222,9 @@ class PieceJointeController extends Zend_Controller_Action
 
                 // Mise en avant d'une pièce jointe (null = nul part, 0 = plan, 1 = diapo)
                 if (
-                        'null' != $this->_request->PLACEMENT_ETABLISSEMENTPJ
-                        && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])
-                    ) {
+                    'null' != $this->_request->PLACEMENT_ETABLISSEMENTPJ
+                    && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])
+                ) {
                     $miniature = $nouvellePJ;
                     $miniature['EXTENSION_PIECEJOINTE'] = '.jpg';
                     $miniature_path = $this->store->getFilePath($miniature, 'etablissement_miniature', $this->_getParam('id'), true);
@@ -350,7 +350,7 @@ class PieceJointeController extends Zend_Controller_Action
             ]);
         }
 
-        //redirection
+        // redirection
         $this->_helper->redirector('index');
     }
 
@@ -371,7 +371,7 @@ class PieceJointeController extends Zend_Controller_Action
             $listePj = [];
         }
 
-        $pj = empty($listePj) ? null : $listePj[0];
+        $pj = null === $listePj || [] === $listePj ? null : $listePj[0];
 
         if (!$pj) {
             return;

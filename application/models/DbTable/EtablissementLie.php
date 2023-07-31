@@ -12,7 +12,7 @@ class Model_DbTable_EtablissementLie extends Zend_Db_Table_Abstract
      */
     public function recupEtabCellule($idCellule)
     {
-        //retourne le/les établissements qui sont père de la cellule
+        // retourne le/les établissements qui sont père de la cellule
         $select = $this->select()
             ->from(['etabLie' => 'etablissementlie'])
             ->where('ID_FILS_ETABLISSEMENT = ?', $idCellule)

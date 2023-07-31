@@ -8,7 +8,7 @@ class Service_PlatauClient
     {
         $this->options[CURLOPT_RETURNTRANSFER] = 1;
 
-        if (filter_var(getenv('PREVARISC_PROXY_ENABLED'), FILTER_VALIDATE_BOOL)) {
+        if (filter_var(getenv('PREVARISC_PROXY_ENABLED'), FILTER_VALIDATE_BOOLEAN)) {
             $this->options[CURLOPT_PROXYTYPE] = getenv('PREVARISC_PROXY_PROTOCOL');
             $this->options[CURLOPT_PROXYPORT] = getenv('PREVARISC_PROXY_PORT');
             $this->options[CURLOPT_PROXY] = getenv('PREVARISC_PROXY_HOST');

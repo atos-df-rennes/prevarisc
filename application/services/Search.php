@@ -10,10 +10,6 @@ class Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param array|string $genre
-     * @param array|string $categorie
-     * @param array|string $classe
-     * @param array|string $famille
      * @param array|string $types_activites
      * @param bool         $avis_favorable
      * @param array|string $statuts
@@ -86,7 +82,7 @@ class Service_Search
                 // Cyprien DEMAEGDT le 03/08/2015 : rétablissement de la clause pour résoudre le
                 // problème de duplicité d'établissements dans les résultats de recherche (#1300)
                 ->group('e.ID_ETABLISSEMENT')
-                ;
+            ;
 
             // Critères : nom de l'établissement
             if (null !== $label) {
@@ -96,11 +92,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -208,7 +204,7 @@ class Service_Search
                 $select->where(0 == $parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = ?', $parent);
             }
 
-            //Critère : preventionniste
+            // Critère : preventionniste
             if (null !== $preventionniste) {
                 $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
             }
@@ -244,10 +240,6 @@ class Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param array|string $genre
-     * @param array|string $categorie
-     * @param array|string $classe
-     * @param array|string $famille
      * @param array|string $types_activites
      * @param bool         $avis_favorable
      * @param array|string $statuts
@@ -351,11 +343,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -463,7 +455,7 @@ class Service_Search
                 $select->where(0 == $parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = ?', $parent);
             }
 
-            //Critère : preventionniste
+            // Critère : preventionniste
             if (null !== $preventionniste) {
                 $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
             }
@@ -558,7 +550,7 @@ class Service_Search
                 ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
-                ;
+            ;
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
@@ -572,10 +564,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -697,7 +689,7 @@ class Service_Search
             }
 
             // Si pas de dossier, pas de recherche
-            if (!empty($sIDsTable)) {
+            if ([] !== $sIDsTable) {
                 // Recherche des préventionnistes associés aux dossiers
                 $selectPrev = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
                 $selectPrev->from(['u' => 'utilisateur'], 'ID_UTILISATEUR')
@@ -816,7 +808,7 @@ class Service_Search
                 ->joinLeft('dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', 'ID_PIECEJOINTE')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
-                        ;
+            ;
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
@@ -830,10 +822,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -914,11 +906,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -994,7 +986,6 @@ class Service_Search
     /**
      * Recherche des courriers.
      *
-     * @param array  $types
      * @param string $objet
      * @param string $num_doc_urba
      * @param int    $parent       Id d'un dossier parent

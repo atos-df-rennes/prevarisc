@@ -38,7 +38,7 @@ class Service_Utils_Descriptif
         foreach ($newArrayValue as $champParent) {
             foreach ($champParent as $newIdxValeur => $valeurs) {
                 foreach ($valeurs as $idChamp => $valeur) {
-                    //Si la valeur vient d'être ajoutée alors on insert en DB, sinon on met à jour
+                    // Si la valeur vient d'être ajoutée alors on insert en DB, sinon on met à jour
                     if ('NULL' === $valeur['ID_VALEUR']) {
                         $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
                     } elseif (

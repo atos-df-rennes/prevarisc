@@ -2,11 +2,14 @@ includes:
 	- phpstan-baseline.neon
 
 parameters:
-    level: 2
+    phpVersion: 70100
+    level: 4
     paths:
         - application
     scanFiles:
         - public/index.php
+    stubFiles:
+        - stubs/Zend_Db_Table_Rowset_Abstract.stub
     excludePaths:
         analyseAndScan:
             - application/cache

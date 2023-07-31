@@ -42,82 +42,27 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATECOMMISSION_LIEES\\.$#"
-			count: 7
+			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_COMMISSION\\.$#"
-			count: 3
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$GESTION_HEURES\\.$#"
 			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEUREDEB_COMMISSION\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEUREFIN_COMMISSION\\.$#"
-			count: 3
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEURE_DEB_AFFECT\\.$#"
-			count: 5
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEURE_FIN_AFFECT\\.$#"
-			count: 6
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
-			count: 2
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPEEVENEMENT\\.$#"
-			count: 3
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DATECOMMISSION\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSION\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONTYPE\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONTYPEEVENEMENT\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DATECOMMISSION\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_DOSSIER\\.$#"
-			count: 3
+			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
@@ -476,53 +421,18 @@ parameters:
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COURRIER_CONVOCATIONSALLE\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COURRIER_CONVOCATIONVISITE\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COURRIER_ODJ\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DOCUMENT_CR\\.$#"
-			count: 4
-			path: application/controllers/CommissionController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
-			count: 3
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
-			count: 2
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
 			count: 2
 			path: application/controllers/CommissionController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONMEMBRE\\.$#"
-			count: 2
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
 			count: 1
 			path: application/controllers/CommissionController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESENCE_COMMISSIONMEMBRE\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/CommissionController.php
 
 		-
@@ -776,48 +686,23 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ABSQUORUM_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$CNE_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$CREATEUR_DOSSIER\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATECOMM_DOSSIER\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATEVISITE_DOSSIER\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_COMMISSION\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_CONSULTE\\.$#"
-			count: 3
+			count: 2
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_DOCAJOUT\\.$#"
-			count: 4
+			count: 3
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_DOCSMANQUANT\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/DossierController.php
 
 		-
@@ -827,11 +712,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_RECEPTION_DOC\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_DOSSIER\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
@@ -841,13 +721,8 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DIFFEREAVIS_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DOCMANQUANT\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/DossierController.php
 
 		-
@@ -861,28 +736,8 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEURE_DEB_AFFECT\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HEURE_FIN_AFFECT\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$HORSDELAI_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DATECOMMISSION_AFFECT\\.$#"
-			count: 4
+			count: 2
 			path: application/controllers/DossierController.php
 
 		-
@@ -897,7 +752,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER\\.$#"
-			count: 22
+			count: 17
 			path: application/controllers/DossierController.php
 
 		-
@@ -916,11 +771,6 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_DONNANT_AVIS\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
 			count: 3
 			path: application/controllers/DossierController.php
@@ -932,7 +782,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_NATURE\\.$#"
-			count: 8
+			count: 7
 			path: application/controllers/DossierController.php
 
 		-
@@ -967,31 +817,16 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$INCOMPLET_DOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONTYPE\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DOCAJOUT\\.$#"
-			count: 5
+			count: 4
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_PIECEJOINTE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NPSP_DOSSIER\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
@@ -1006,58 +841,23 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_DOSSIER\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_DOSSIER\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$OBJET_DOSSIER\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$REF_CONSULTE\\.$#"
-			count: 3
+			count: 2
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$REF_DOCAJOUT\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$SERVICEINSTRUC_DOSSIER\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPESERVINSTRUC_DOSSIER\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPE_DOSSIER\\.$#"
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPE_PRESCRIPTION_DOSSIER\\.$#"
 			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VERROU_DOSSIER\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VERROU_USER_DOSSIER\\.$#"
-			count: 2
 			path: application/controllers/DossierController.php
 
 		-
@@ -1607,7 +1407,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDossier\\.$#"
-			count: 111
+			count: 108
 			path: application/controllers/DossierController.php
 
 		-
@@ -2526,18 +2326,13 @@ parameters:
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
+			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
-			count: 2
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSION\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
@@ -2592,16 +2387,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$numinsee\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 4
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMUNE\\.$#"
 			count: 1
 			path: application/controllers/GestionDesCommunesController.php
 
@@ -2682,26 +2467,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONCAT\\.$#"
-			count: 3
+			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONTEXTE\\.$#"
-			count: 2
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_PRESCRIPTIONARTICLE\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_PRESCRIPTIONTEXTE\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_PRESCRIPTION_CAT\\.$#"
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
@@ -2931,11 +2701,6 @@ parameters:
 			path: application/controllers/GestionTextesApplicablesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_TEXTESAPPL\\.$#"
-			count: 1
-			path: application/controllers/GestionTextesApplicablesController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTexteAppl\\.$#"
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
@@ -2992,12 +2757,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
-			count: 7
+			count: 2
 			path: application/controllers/GroupementController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENTTYPE\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/GroupementController.php
 
 		-
@@ -3007,11 +2772,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 4
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPEMENT\\.$#"
 			count: 1
 			path: application/controllers/GroupementController.php
 
@@ -3107,11 +2867,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Call to an undefined method Zend_Db_Table_Row_Abstract\\:\\:findModel_DbTable_AdresseCommuneViaModel_DbTable_GroupementCommune\\(\\)\\.$#"
 			count: 1
 			path: application/controllers/GroupementController.php
 
@@ -3227,7 +2982,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$EXTENSION_PIECEJOINTE\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
@@ -3247,7 +3002,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PIECEJOINTE\\.$#"
-			count: 7
+			count: 6
 			path: application/controllers/PieceJointeController.php
 
 		-
@@ -3334,6 +3089,11 @@ parameters:
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:partial\\(\\)\\.$#"
 			count: 2
 			path: application/controllers/PieceJointeController.php
+
+		-
+			message: "#^Property PlatauController\\:\\:\\$viewRenderer \\(Zend_Controller_Action_Helper_ViewRenderer\\) does not accept Zend_Controller_Action_Helper_Abstract\\.$#"
+			count: 1
+			path: application/controllers/PlatauController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
@@ -3597,26 +3357,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CATEGORIE\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TYPE\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LOCALSOMMEIL_PERIODICITE\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_PERIODICITE\\.$#"
 			count: 1
 			path: application/controllers/TableauDesPeriodicitesController.php
 
@@ -3916,46 +3656,6 @@ parameters:
 			path: application/forms/FormChampFromParent.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$idx\\.$#"
-			count: 1
-			path: application/models/DbTable/Champ.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CATEGORIE\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CLASSE\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSION\\.$#"
-			count: 4
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
-			count: 3
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_TYPE\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LOCALSOMMEIL\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
-			count: 3
-			path: application/models/DbTable/Commission.php
-
-		-
 			message: "#^Method Model_DbTable_Commission\\:\\:getCommission\\(\\) should return array\\|null but return statement is missing\\.$#"
 			count: 1
 			path: application/models/DbTable/Commission.php
@@ -4017,12 +3717,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATE_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 2
+			count: 1
 			path: application/models/DbTable/Etablissement.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_CATEGORIE\\.$#"
-			count: 4
+			count: 2
 			path: application/models/DbTable/Etablissement.php
 
 		-
@@ -4042,7 +3742,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 4
+			count: 2
 			path: application/models/DbTable/Etablissement.php
 
 		-
@@ -4081,11 +3781,6 @@ parameters:
 			path: application/models/DbTable/PrescriptionDossierAssoc.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$idx\\.$#"
-			count: 1
-			path: application/models/DbTable/Rubrique.php
-
-		-
 			message: "#^Method Model_DbTable_Statistiques\\:\\:enExploitation\\(\\) should return Model_DbTable_Statistiques\\|null but return statement is missing\\.$#"
 			count: 1
 			path: application/models/DbTable/Statistiques.php
@@ -4111,22 +3806,7 @@ parameters:
 			path: application/models/DbTable/Statistiques.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
-			count: 1
-			path: application/models/DbTable/Utilisateur.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
-			count: 1
-			path: application/models/DbTable/Utilisateur.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
-			count: 1
-			path: application/models/DbTable/Utilisateur.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
 			count: 1
 			path: application/models/DbTable/Utilisateur.php
 
@@ -4281,109 +3961,14 @@ parameters:
 			path: application/plugins/ACL.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPE\\.$#"
-			count: 4
-			path: application/plugins/ACL.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoSimple\\(\\)\\.$#"
 			count: 2
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^Call to an undefined method Zend_Db_Table_Row_Abstract\\:\\:findModel_DbTable_PrivilegeViaModel_DbTable_GroupePrivilege\\(\\)\\.$#"
-			count: 2
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$id_etablissement\\)\\: Unexpected token \"\\$id_etablissement\", expected type at offset 63$#"
-			count: 1
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$page\\)\\: Unexpected token \"\\$page\", expected type at offset 50$#"
-			count: 1
-			path: application/plugins/ACL.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$page\\)\\: Unexpected token \"\\$page\", expected type at offset 61$#"
-			count: 1
 			path: application/plugins/ACL.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:gotoRouteAndExit\\(\\)\\.$#"
 			count: 1
 			path: application/plugins/Security.php
-
-		-
-			message: "#^Default value of the parameter \\#4 \\$createDirIfNotExists \\(false\\) of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) is incompatible with type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$createDirIfNotExists of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectId of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getBasePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$linkedObjectType of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getFilePath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getFormattedFilename\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Parameter \\$piece_jointe of method Plugin_SimpleFileDataStore\\:\\:getURLPath\\(\\) has invalid type type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
-
-		-
-			message: "#^Property Plugin_SimpleFileDataStore\\:\\:\\$types has unknown class type as its type\\.$#"
-			count: 1
-			path: application/plugins/SimpleFileDataStore.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:setView\\(\\)\\.$#"
@@ -4406,26 +3991,6 @@ parameters:
 			path: application/services/Changement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_COMMISSIONTYPE\\.$#"
-			count: 2
-			path: application/services/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_COMMISSIONTYPE\\.$#"
-			count: 1
-			path: application/services/Commission.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATESUPPRESSION_DOSSIER\\.$#"
-			count: 2
-			path: application/services/Dossier.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DELETED_BY\\.$#"
-			count: 2
-			path: application/services/Dossier.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"
 			count: 7
 			path: application/services/Dossier.php
@@ -4436,23 +4001,18 @@ parameters:
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_DONNANT_AVIS\\.$#"
-			count: 3
-			path: application/services/Dossier.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Dossier.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_DOSSIER\\.$#"
-			count: 10
+			count: 8
 			path: application/services/Dossier.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTION_TYPE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Dossier.php
 
 		-
@@ -4467,12 +4027,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_PRESCRIPTION_DOSSIER\\.$#"
-			count: 5
+			count: 3
 			path: application/services/Dossier.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_DOSSIER\\.$#"
-			count: 18
+			count: 3
 			path: application/services/Dossier.php
 
 		-
@@ -4482,46 +4042,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TYPE_PRESCRIPTION_DOSSIER\\.$#"
-			count: 7
+			count: 3
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COURRIEL_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DATESUPPRESSION_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DELETED_BY\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_DEROGATIONS_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESCRIPTIF_HISTORIQUE_ETABLISSEMENT\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DROITPUBLIC_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DUREEVISITE_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
@@ -4566,11 +4091,6 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$FAX_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ICPE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
@@ -4597,7 +4117,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
-			count: 11
+			count: 2
 			path: application/services/Etablissement.php
 
 		-
@@ -4636,11 +4156,6 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
@@ -4651,27 +4166,12 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NBPREV_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMEROID_ETABLISSEMENT\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PERIODICITE_ETABLISSEMENTINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$R14320_ETABLISSEMENTINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Etablissement.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELEPHONE_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Etablissement.php
 
@@ -4696,14 +4196,19 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
+			message: "#^Result of \\|\\| is always true\\.$#"
+			count: 1
+			path: application/services/Etablissement.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: application/services/Etablissement.php
+
+		-
 			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
 			count: 2
 			path: application/services/Feed.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
-			count: 2
-			path: application/services/FusionCommand.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(int numinsee Optionnel\\)\\: Unexpected token \"numinsee\", expected variable at offset 76$#"
@@ -4716,13 +4221,8 @@ parameters:
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_FONCTION\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Login.php
 
 		-
@@ -4736,27 +4236,7 @@ parameters:
 			path: application/services/Login.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_FONCTION\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPE\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/Login.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRENOM_UTILISATEURINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/Login.php
 
@@ -4767,12 +4247,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONREGL\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PRESCRIPTIONTYPE\\.$#"
-			count: 3
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
@@ -4782,16 +4262,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_ARTICLE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_TEXTE\\.$#"
-			count: 2
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONARTICLE\\.$#"
 			count: 1
 			path: application/services/Prescriptions.php
 
@@ -4801,63 +4276,13 @@ parameters:
 			path: application/services/Prescriptions.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTIONTEXTE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUM_PRESCRIPTION_CAT\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_LIBELLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_TYPE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONREGL_VISIBLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_ARTICLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_CATEGORIE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_LIBELLE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_NUM\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRESCRIPTIONTYPE_TEXTE\\.$#"
-			count: 1
-			path: application/services/Prescriptions.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_ARTICLE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$VISIBLE_TEXTE\\.$#"
-			count: 2
+			count: 1
 			path: application/services/Prescriptions.php
 
 		-
@@ -4866,52 +4291,7 @@ parameters:
 			path: application/services/Search.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$categorie$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$classe$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$famille$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$genre$#"
-			count: 2
-			path: application/services/Search.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$types$#"
-			count: 1
-			path: application/services/Search.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ACTIF_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DASHBOARD_BLOCS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$DESC_GROUPE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$FAILED_LOGIN_ATTEMPTS_UTILISATEUR\\.$#"
-			count: 4
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$GRADE_UTILISATEURINFORMATIONS\\.$#"
 			count: 1
 			path: application/services/User.php
 
@@ -4921,97 +4301,11 @@ parameters:
 			path: application/services/User.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_FONCTION\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPE\\.$#"
-			count: 3
-			path: application/services/User.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_GROUPEMENT\\.$#"
 			count: 1
 			path: application/services/User.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
-			count: 17
+			count: 4
 			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEURINFORMATIONS\\.$#"
-			count: 3
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$IP_UTILISATEUR\\.$#"
-			count: 2
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LASTACTION_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_GROUPE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$MAIL_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$NUMINSEE_COMMUNE\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$OBS_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PASSWD_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$PRENOM_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELFAX_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELFIXE_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$TELPORTABLE_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$USERNAME_UTILISATEUR\\.$#"
-			count: 1
-			path: application/services/User.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$WEB_UTILISATEURINFORMATIONS\\.$#"
-			count: 1
-			path: application/services/User.php
-

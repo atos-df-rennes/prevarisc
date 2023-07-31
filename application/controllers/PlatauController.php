@@ -28,7 +28,7 @@ class PlatauController extends Zend_Controller_Action
         ;
 
         $this->platauConsultationMapper = new Model_PlatauConsultationMapper();
-        $this->layout = $this->getHelper('layout');
+        $this->layout = Zend_Layout::getMvcInstance();
         $this->viewRenderer = $this->getHelper('viewRenderer');
     }
 

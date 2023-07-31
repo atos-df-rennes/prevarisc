@@ -41,7 +41,7 @@ class SearchController extends Zend_Controller_Action
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {
@@ -214,7 +214,7 @@ class SearchController extends Zend_Controller_Action
                     header('Content-Disposition: attachment; filename="Export_Etablissements_'.date('Y-m-d_H-i-s').'.ods"');
                     $this->view->writer->save('php://output');
 
-                    exit();
+                    exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
                         'context' => 'error',
@@ -311,7 +311,7 @@ class SearchController extends Zend_Controller_Action
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {
@@ -465,7 +465,7 @@ class SearchController extends Zend_Controller_Action
                     header('Content-Disposition: attachment; filename='.$filename.'');
                     $this->view->writer->save('php://output');
 
-                    exit();
+                    exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
                         'context' => 'error',

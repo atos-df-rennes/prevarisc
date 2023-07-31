@@ -2,9 +2,6 @@
 
 class Form_CustomFormField extends Zend_Form
 {
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         $this->setMethod('post');

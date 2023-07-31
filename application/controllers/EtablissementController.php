@@ -3,14 +3,17 @@
 class EtablissementController extends Zend_Controller_Action
 {
     public $cache;
+
     /**
      * @var mixed|\Service_Etablissement
      */
     public $serviceEtablissement;
+
     /**
      * @var array<string, mixed>|mixed|mixed[]
      */
     public $etablissement;
+
     /**
      * @var array<string, mixed>|mixed
      */
@@ -312,7 +315,7 @@ class EtablissementController extends Zend_Controller_Action
                 }
 
                 $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post);
-                //Sauvegarde les changements dans les tableaux
+                // Sauvegarde les changements dans les tableaux
                 $serviceEtablissementDescriptif->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les descriptifs ont bien été mis à jour.']);
@@ -602,7 +605,7 @@ class EtablissementController extends Zend_Controller_Action
                 }
 
                 $groupInputsPost = $serviceEtablissementEffectifsDegagements->groupInputByOrder($post);
-                //Sauvegarde les changements dans les tableaux
+                // Sauvegarde les changements dans les tableaux
                 $serviceEtablissementEffectifsDegagements->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
