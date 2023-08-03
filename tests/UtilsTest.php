@@ -1,6 +1,5 @@
 <?php
 
-use App\services\Utils;
 use PHPUnit\Framework\TestCase;
 
 final class UtilsTest extends TestCase
@@ -9,7 +8,7 @@ final class UtilsTest extends TestCase
 
     public function setUp()
     {
-        $this->utils = new Utils();
+        $this->utils = new Service_Utils();
     }
 
     /**
@@ -28,6 +27,11 @@ final class UtilsTest extends TestCase
         $this->assertSame($expected, $this->utils->getFusionNameMagicalCase($initialName));
     }
 
+    // public function testGetPjPlatauPath(int $idPj, string $extensionPj, int $idDossier, string $idPlatau): void
+    // {
+
+    // }
+
     public function fusionNameProvider(): array
     {
         return [
@@ -41,6 +45,13 @@ final class UtilsTest extends TestCase
         return [
             'simple field' => ['descriptif Rubrique Un champ', 'DescriptifRubriqueUnChamp'],
             'formatted field' => ['descriptif rUbrique un Champ d\'enfer "Personnalisé"', 'DescriptifRubriqueUnChampDEnferPersonnalisé'],
+        ];
+    }
+
+    public function pjPlatauProvider(): array
+    {
+        return [
+            [10, '.odt', 5, '7WO-QPQ-680']
         ];
     }
 }

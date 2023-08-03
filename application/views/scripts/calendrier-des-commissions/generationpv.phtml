@@ -1,7 +1,5 @@
 <?php
 
-use App\services\Utils;
-
 function addChamp($odf,$nomOdf, $variable){
     try{
         $odf->setVars($nomOdf,$variable, true,'UTF8');
@@ -172,7 +170,7 @@ foreach($this->membresFiles as $val => $membre){
                         }
 
                         // Gestion des formulaires personnalisés
-                        $serviceUtils = new Utils();
+                        $serviceUtils = new Service_Utils();
 
 						//Ajout du model permettant de recuperer les champ fils d un parent
 						$modelChamp = new Model_DbTable_Champ();

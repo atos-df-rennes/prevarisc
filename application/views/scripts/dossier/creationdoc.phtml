@@ -1,7 +1,5 @@
 <?php
 
-use App\services\Utils;
-
 if (!function_exists('addChamp')) {
     function addChamp($odf,$nomOdf, $variable) {
         try{
@@ -815,7 +813,7 @@ try {
 } catch (OdfException $e) {}
 
 // Gestion des formulaires personnalisés
-$serviceUtils = new Utils();
+$serviceUtils = new Service_Utils();
 
 foreach ($this->formulaires as $formulaire) {
     // Permet d'avoir les informations unitairement

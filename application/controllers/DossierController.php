@@ -1,7 +1,5 @@
 <?php
 
-use App\services\Utils;
-
 class DossierController extends Zend_Controller_Action
 {
     public const ID_DOSSIERTYPE_VISITE = 2;
@@ -3310,7 +3308,7 @@ class DossierController extends Zend_Controller_Action
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         foreach ($pjs as $pj) {
-            $pjPath = Utils::getPjPath($pj);
+            $pjPath = Service_Utils::getPjPath($pj);
 
             if (!$zip->addFile($pjPath, $pj['NOM_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'])) {
                 error_log("Erreur lors de l'ajout de la pièce jointe \"{$pj['NOM_PIECEJOINTE']}{$pj['EXTENSION_PIECEJOINTE']}\" au fichier ZIP");

@@ -1,8 +1,6 @@
 <?php
 
-namespace App\services;
-
-class Utils
+class Service_Utils
 {
     public function getFullFusionName(string $capsuleRubrique, array $options): string
     {
@@ -30,7 +28,6 @@ class Utils
         return $fusionName;
     }
 
-    // TODO Vérifier si c'est pété ou pas
     public static function getPjPath($pjData)
     {
         if (null !== $pjData['ID_PLATAU']) {

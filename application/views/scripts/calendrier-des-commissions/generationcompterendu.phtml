@@ -1,7 +1,5 @@
 <?php
 
-use App\services\Utils;
-
 function addChamp($odf,$nomOdf, $variable){
   try{
     $odf->setVars($nomOdf,$variable, true,'UTF8');
@@ -201,7 +199,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                 }
 
                 // Gestion des formulaires personnalisés
-                $serviceUtils = new Utils();
+                $serviceUtils = new Service_Utils();
 
                 foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
                     if (is_array($formulaire['RUBRIQUES'])) {
