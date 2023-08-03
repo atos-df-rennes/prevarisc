@@ -26,20 +26,6 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
         return parent::run();
     }
 
-    /**
-     * Initialisation du data store à utiliser.
-     *
-     * @return object
-     */
-    public function _initDataStore()
-    {
-        $options = $this->getOption('resources');
-        $options = $options['dataStore'];
-        $className = $options['adapter'];
-
-        return new $className($options);
-    }
-
     public function _initTranslator()
     {
         $translator = new Zend_Translate(
@@ -74,7 +60,7 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
     /**
      * Initialisation de l'auto-loader.
      */
-    protected function _initAutoLoader(): Zend_Loader_Autoloader
+    public function _initAutoLoader(): Zend_Loader_Autoloader
     {
         $autoloader = Zend_Loader_Autoloader::getInstance();
 
@@ -85,6 +71,20 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
         $autoloader->pushAutoloader($autoloader_application);
 
         return $autoloader;
+    }
+
+    /**
+     * Initialisation du data store à utiliser.
+     *
+     * @return object
+     */
+    public function _initDataStore()
+    {
+        $options = $this->getOption('resources');
+        $options = $options['dataStore'];
+        $className = $options['adapter'];
+
+        return new $className($options);
     }
 
     /**
