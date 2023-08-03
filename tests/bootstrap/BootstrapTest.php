@@ -2,13 +2,11 @@
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
 {
-    /**
-     * {@inheritdoc}
-     */
     public function run()
     {
         // Chargement des plugins de base
