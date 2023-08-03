@@ -1,6 +1,8 @@
 <?php
 
-class Service_Utils
+namespace App\services;
+
+class Utils
 {
     public function getFullFusionName(string $capsuleRubrique, array $options): string
     {

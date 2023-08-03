@@ -1,5 +1,7 @@
 <?php
 
+use App\services\Utils;
+
 class FormulaireController extends Zend_Controller_Action
 {
     /**
@@ -33,7 +35,7 @@ class FormulaireController extends Zend_Controller_Action
     public $serviceFormulaire;
 
     /**
-     * @var mixed|\Service_Utils
+     * @var Utils
      */
     public $serviceUtils;
 
@@ -51,7 +53,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
 
         $this->serviceFormulaire = new Service_Formulaire();
-        $this->serviceUtils = new Service_Utils();
+        $this->serviceUtils = new Utils();
         $this->serviceChamp = new Service_Champ();
     }
 

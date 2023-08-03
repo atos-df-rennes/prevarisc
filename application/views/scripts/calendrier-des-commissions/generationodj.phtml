@@ -1,5 +1,7 @@
 <?php
 
+use App\services\Utils;
+
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
@@ -277,7 +279,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     }
 
     // Gestion des formulaires personnalisés
-    $serviceUtils = new Service_Utils();
+    $serviceUtils = new Utils();
 
     foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
         if (is_array($formulaire['RUBRIQUES'])) {
