@@ -48,7 +48,7 @@ $application = new Zend_Application('production', [
             ],
         ],
         'dataStore' => [
-            'adapter' => getenv('PREVARISC_DATASTORE_ADAPTER') ? getenv('PREVARISC_DATASTORE_ADAPTER') : 'Plugin_SimpleFileDataStore',
+            'adapter' => 'Plugin_HashedFileDataStore',
         ],
         'modules' => '',
     ],
