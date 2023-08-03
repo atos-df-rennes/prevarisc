@@ -33,7 +33,8 @@
     "scripts": {
         "cs-fix": "/usr/bin/php81 tools/vendor/bin/rector && /usr/bin/php81 tools/vendor/bin/php-cs-fixer fix",
         "analyse": "/usr/bin/php81 tools/vendor/bin/phpstan analyse --memory-limit=-1",
-        "test": "php vendor/bin/phpunit --bootstrap tests/bootstrap/indexTest.php --testdox --coverage-html tests/coverage/ --whitelist application/ tests/"
+        "test": "php vendor/bin/phpunit --bootstrap tests/bootstrap/indexTest.php --testdox tests/",
+        "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/"
     },
 
     "autoload": {
