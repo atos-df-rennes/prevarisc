@@ -28,7 +28,7 @@ class Service_Utils
         return $fusionName;
     }
 
-    public static function getPjPath($pjData)
+    public static function getPjPath(array $pjData): string
     {
         if (null !== $pjData['ID_PLATAU']) {
             return

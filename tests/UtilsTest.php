@@ -27,10 +27,13 @@ final class UtilsTest extends TestCase
         $this->assertSame($expected, $this->utils->getFusionNameMagicalCase($initialName));
     }
 
-    // public function testGetPjPlatauPath(int $idPj, string $extensionPj, int $idDossier, string $idPlatau): void
-    // {
-
-    // }
+    /**
+     * @dataProvider pjProvider
+     */
+    public function testGetPjPath(array $pjData, string $expected): void
+    {
+        $this->assertSame($expected, $this->utils::getPjPath($pjData));
+    }
 
     public function fusionNameProvider(): array
     {
@@ -48,10 +51,18 @@ final class UtilsTest extends TestCase
         ];
     }
 
-    public function pjPlatauProvider(): array
+    public function pjProvider(): array
     {
         return [
-            [10, '.odt', 5, '7WO-QPQ-680']
+            'pj platau' => [
+                [
+                    'ID_PIECEJOINTE' => 10,
+                    'EXTENSION_PIECEJOINTE' => '.odt',
+                    'ID_DOSSIER' => 5,
+                    'ID_PLATAU' => '7WO-QPQ-680'
+                ],
+                REAL_DATA_PATH.DS.'uploads/pieces-jointes/10.odt'
+            ],
         ];
     }
 }
