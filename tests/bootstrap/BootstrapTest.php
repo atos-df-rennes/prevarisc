@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
 {
     /**
@@ -20,6 +24,51 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
         }
 
         return parent::run();
+    }
+
+    /**
+     * Initialisation du data store à utiliser.
+     *
+     * @return object
+     */
+    public function _initDataStore()
+    {
+        $options = $this->getOption('resources');
+        $options = $options['dataStore'];
+        $className = $options['adapter'];
+
+        return new $className($options);
+    }
+
+    public function _initTranslator()
+    {
+        $translator = new Zend_Translate(
+            [
+                'adapter' => 'array',
+                'content' => implode(DS, [
+                    APPLICATION_PATH,
+                    '..',
+                    'vendor',
+                    'zendframework',
+                    'zendframework1',
+                    'resources',
+                    'languages',
+                ]),
+                'locale' => 'fr',
+                'scan' => Zend_Translate::LOCALE_DIRECTORY,
+            ]
+        );
+        Zend_Validate_Abstract::setDefaultTranslator($translator);
+    }
+
+    public function _initAuth(): Zend_Session_Namespace
+    {
+        $options = $this->getOption('cache');
+        $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
+        $namespace = new Zend_Session_Namespace(\Zend_Auth::class);
+        $namespace->setExpirationSeconds($max_lifetime);
+
+        return $namespace;
     }
 
     /**
@@ -112,7 +161,8 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
             ->appendName('viewport', 'width=device-width,initial-scale=1')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge,chrome=1')
             ->appendName('description', 'Logiciel de gestion du service Prévention')
-            ->appendName('author', 'SDIS62 - Service Recherche et Développement');
+            ->appendName('author', 'SDIS62 - Service Recherche et Développement')
+        ;
 
         $view->addHelperPath(APPLICATION_PATH.'/views/helpers');
 
@@ -125,50 +175,5 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLayout(): Zend_Layout
     {
         return Zend_Layout::startMvc(['layoutPath' => APPLICATION_PATH.DS.'layouts']);
-    }
-
-    /**
-     * Initialisation du data store à utiliser.
-     *
-     * @return object
-     */
-    public function _initDataStore()
-    {
-        $options = $this->getOption('resources');
-        $options = $options['dataStore'];
-        $className = $options['adapter'];
-
-        return new $className($options);
-    }
-
-    public function _initTranslator()
-    {
-        $translator = new Zend_Translate(
-            [
-                'adapter' => 'array',
-                'content' => implode(DS, [
-                    APPLICATION_PATH,
-                    '..',
-                    'vendor',
-                    'zendframework',
-                    'zendframework1',
-                    'resources',
-                    'languages',
-                ]),
-                'locale' => 'fr',
-                'scan' => Zend_Translate::LOCALE_DIRECTORY,
-            ]
-        );
-        Zend_Validate_Abstract::setDefaultTranslator($translator);
-    }
-
-    public function _initAuth(): Zend_Session_Namespace
-    {
-        $options = $this->getOption('cache');
-        $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
-        $namespace = new Zend_Session_Namespace(\Zend_Auth::class);
-        $namespace->setExpirationSeconds($max_lifetime);
-
-        return $namespace;
     }
 }

@@ -59,9 +59,9 @@ final class UtilsTest extends TestCase
                     'ID_PIECEJOINTE' => 10,
                     'EXTENSION_PIECEJOINTE' => '.odt',
                     'ID_DOSSIER' => 5,
-                    'ID_PLATAU' => '7WO-QPQ-680'
+                    'ID_PLATAU' => '7WO-QPQ-680',
                 ],
-                REAL_DATA_PATH.DS.'uploads/pieces-jointes/10.odt'
+                REAL_DATA_PATH.DS.'uploads/pieces-jointes/10.odt',
             ],
         ];
     }
