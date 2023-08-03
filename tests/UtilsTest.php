@@ -6,7 +6,7 @@ final class UtilsTest extends TestCase
 {
     private $utils;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->utils = new Service_Utils();
     }
