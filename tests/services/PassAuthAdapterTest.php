@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-final class PassAuthAdapterTest extends TestCase
+final class Service_PassAuthAdapterTest extends TestCase
 {
     public function testAuthenticationSuccess()
     {

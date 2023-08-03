@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-final class UtilsTest extends TestCase
+final class Service_UtilsTest extends TestCase
 {
     private $utils;
 
