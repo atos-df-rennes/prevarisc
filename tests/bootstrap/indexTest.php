@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/Paris');
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 // Définition du chemin vers le dossier application/
-defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__).DS.'..'.DS.'application');
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__, 3).DS.'application');
 
 // Définition du chemin vers le dossier command/
 defined('COMMAND_PATH') || define('COMMAND_PATH', getenv('PREVARISC_COMMAND_PATH') ? getenv('PREVARISC_COMMAND_PATH') : APPLICATION_PATH.DS.'command');
@@ -26,7 +26,7 @@ require APPLICATION_PATH.DS.'..'.DS.'vendor'.DS.'autoload.php';
 // Création de l'application avec les fichiers config
 $application = new Zend_Application('production', [
     'bootstrap' => [
-        'path' => dirname(APPLICATION_PATH).DS.'tests'.DS.'BootstrapTest.php',
+        'path' => dirname(APPLICATION_PATH).DS.'tests'.DS.'bootstrap'.DS.'BootstrapTest.php',
         'class' => 'BootstrapTest',
     ],
     'resources' => [
