@@ -30,6 +30,7 @@ class Utils
         return $fusionName;
     }
 
+    // TODO Vérifier si c'est pété ou pas
     public static function getPjPath($pjData)
     {
         if (null !== $pjData['ID_PLATAU']) {
