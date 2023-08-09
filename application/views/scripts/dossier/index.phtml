@@ -257,10 +257,12 @@ $(document).ready(function() {
                 $("#AVIS_DOSSIER").parent().prev().prev().html("Avis du groupe de visite");
             }
 
-            if (idType == 1) {
-                gestionAffichageInfosPlatau()
-            } else {
-                gestionMasquageInfosPlatau()
+            if (isDossierPlatau()) {
+                if (idType == 1) {
+                    gestionAffichageInfosPlatau()
+                } else {
+                    gestionMasquageInfosPlatau()
+                }
             }
 
             $.ajax({
@@ -1041,12 +1043,16 @@ $("#modificationDossier").live('click', function() {
     //Gestion des cas calendrier comm visite en fonction du type de dossier
     $(".hideCalendar").hide();
 
-    if ($('#TYPE_DOSSIER').val() === '1') {
+    if (isDossierPlatau() && $('#TYPE_DOSSIER').val() === '1') {
         gestionAffichageInfosPlatau()
     }
 
     return false;
 });
+
+function isDossierPlatau() {
+    return $('.dossier__identifiant-platau').length === 1
+}
 
 function gestionAffichageInfosPlatau() {
     $('.incomplet').live('click.platau', function() {
