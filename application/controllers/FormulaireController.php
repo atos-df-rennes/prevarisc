@@ -173,7 +173,7 @@ class FormulaireController extends Zend_Controller_Action
 
             $idListe = $this->modelListeTypeChampRubrique->getIdTypeChampByName('Liste')['ID_TYPECHAMP'];
 
-            $isParent = filter_var($request->getParam('isParent', false), FILTER_VALIDATE_BOOL);
+            $isParent = filter_var($request->getParam('isParent', false), FILTER_VALIDATE_BOOLEAN);
             $champ = $this->serviceFormulaire->insertChamp($post, $rubrique, $isParent);
 
             $idChamp = (int) $champ['ID_CHAMP'];
@@ -350,7 +350,7 @@ class FormulaireController extends Zend_Controller_Action
             }
 
             $champ->NOM = $post['nom_champ'];
-            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+            $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $champ->save();
             $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
         }

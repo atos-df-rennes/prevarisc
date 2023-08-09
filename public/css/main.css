@@ -1262,13 +1262,6 @@ dl.champ_effectif_camping dd input {
     width: fit-content;
 }
 
-.linkDisabled {
-    pointer-events: none;
-}
-.linkDisabled li {
-    list-style: none;
-}
-
 .radio-controls {
     margin-left: 3rem;
 }

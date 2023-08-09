@@ -100,7 +100,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 ->setCriteria('ID_NATURE', [21, 26, 47, 48])
             ;
 
-            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOL);
+            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
             if ($use_date_commission_for_periodicity) {
                 $search->columns([
                     'DATE_RELANCE_PERIODICITE' => new Zend_Db_Expr(
@@ -1639,7 +1639,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $periodicityString = "{$periodicity} {$periodicityUnit}";
 
         if (
-            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOL)
+            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOLEAN)
         ) {
             return $periodicityString;
         }

@@ -388,7 +388,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
 
-        $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOL);
+        $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
         if ($use_date_commission_for_periodicity) {
             $search->columns([
                 'nextvisiteyearmonth' => new Zend_Db_Expr(
