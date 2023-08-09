@@ -438,11 +438,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $avisDerogations = $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement);
 
         foreach ($avisDerogations as $elem => $value) {
-            $valueDisplay = implode(' - ', [
-                $value['TYPE'],
-                $value['TITRE'],
-            ]);
-
             $date = null;
             if (null !== $value['DATECOMM_DOSSIER']) {
                 $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
@@ -455,11 +450,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
 
             $historique[$key][$elem] = [
-                'valeur' => $valueDisplay,
+                'titre' => $value['TITRE'],
+                'type' => $value['TYPE'],
                 'url' => sprintf('/dossier/avis-et-derogations-edit/id/%d/avis-derogation/%d', $value['ID_DOSSIER'], $value['ID_AVIS_DEROGATION']),
                 'debut' => $date,
                 'author' => null,
-                'type' => $value['TYPE_DOSSIER'],
+                'type_dossier' => $value['TYPE_DOSSIER'],
+                'leve' => $value['ID_DOSSIER_LIE'] !== null,
             ];
         }
 
