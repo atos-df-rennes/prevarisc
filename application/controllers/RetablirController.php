@@ -5,7 +5,9 @@ class RetablirController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
-        $this->view->headLink()->appendStylesheet('/css/elements-supprimes.css', 'all');
+        /** @var Zend_View $view */
+        $view = $this->view;
+        $view->headLink()->appendStylesheet('/css/elements-supprimes.css', 'all');
 
         $DBDossier = new Model_DbTable_Dossier();
         $DBEtablissement = new Model_DbTable_Etablissement();
