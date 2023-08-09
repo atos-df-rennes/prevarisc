@@ -5,6 +5,7 @@ class RetablirController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->_helper->layout->setLayout('menu_admin');
+
         /** @var Zend_View $view */
         $view = $this->view;
         $view->headLink()->appendStylesheet('/css/elements-supprimes.css', 'all');
