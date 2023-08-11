@@ -1,3 +1,11 @@
+<button
+    id="deselect"
+    type="button"
+    class="btn btn-info <?php if (null === $this->ID_DOSSIER_LIE) echo 'hide' ?>"
+>
+    Désélectionner
+</button>
+
 <?php foreach ($this->listeDossierParType as $type => $dossiers): ?>
     <div class="controls">
         <p>

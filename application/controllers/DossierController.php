@@ -3250,6 +3250,8 @@ class DossierController extends Zend_Controller_Action
      */
     public function avisEtDerogationsEditAction()
     {
+        $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/cardAvisDerogations.css', 'all');
+        $this->view->inlineScript()->appendFile('/js/dossier/avisDerogation.js');
         $this->view->inlineScript()->appendFile('/js/dossier/drop-list-button.js');
 
         $dbAvisDerogations = new Model_DbTable_AvisDerogations();
@@ -3265,7 +3267,7 @@ class DossierController extends Zend_Controller_Action
         $idDossier = $this->getParam('id');
         $idAvisDerogation = $this->getParam('avis-derogation');
 
-        $this->view->avisDerogations = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
+        $avisDerogation = $dbAvisDerogations->getByIdAvisDerogation($idAvisDerogation);
         $this->view->listDossierEtab = $dbDossier->getListeDossierFromDossier($idDossier);
         $this->view->assign('listDossierEtabN', $dbDossier->getListeDossierFromDossierN($idDossier));
 
@@ -3281,8 +3283,15 @@ class DossierController extends Zend_Controller_Action
 
             $dbAvisDerogations->update($data, $where);
 
+            if (!array_key_exists('ID_DOSSIER_LIE', $data)) {
+                $avisDerogation->ID_DOSSIER_LIE = null;
+                $avisDerogation->save();
+            }
+
             $this->_helper->redirector('avis-et-derogations', null, null, ['id' => $idDossier]);
         }
+
+        $this->view->avisDerogations = $avisDerogation;
     }
 
     public function avisEtDerogationsDeleteAction()

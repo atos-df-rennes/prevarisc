@@ -29,3 +29,7 @@
 .whitespace-nowrap {
     white-space: nowrap;
 }
+
+.no-padding-top {
+    padding-top: 0 !important;
+}
