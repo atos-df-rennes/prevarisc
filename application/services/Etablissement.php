@@ -456,7 +456,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'debut' => $date,
                 'author' => null,
                 'type_dossier' => $value['TYPE_DOSSIER'],
-                'leve' => $value['ID_DOSSIER_LIE'] !== null,
+                'leve' => null !== $value['ID_DOSSIER_LIE'],
             ];
         }
 
