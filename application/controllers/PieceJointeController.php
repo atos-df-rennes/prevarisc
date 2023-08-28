@@ -30,7 +30,7 @@ class PieceJointeController extends Zend_Controller_Action
         $DBused = new Model_DbTable_PieceJointe();
         $modelDossier = new Model_DbTable_Dossier();
 
-        $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOL);
+        $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOLEAN);
 
         // Cas dossier
         if ('dossier' == $this->_request->type) {

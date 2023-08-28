@@ -1862,7 +1862,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
-			count: 10
+			count: 11
 			path: application/controllers/DossierController.php
 
 		-
@@ -1872,7 +1872,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
-			count: 14
+			count: 15
 			path: application/controllers/DossierController.php
 
 		-

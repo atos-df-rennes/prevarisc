@@ -11,4 +11,21 @@ $(document).ready(function() {
             submit.val("Ajouter la dérogation")
         }
     })
+
+    // Gestion du bouton de désélection
+    const deselectButton = document.getElementById('deselect')
+
+    if (deselectButton) {
+        deselectButton.addEventListener('click', function() {
+            const idDossier = $('.avis-derogation__leve input:checked')[0].id
+
+            document.getElementById(idDossier).checked = false
+            
+            $('#deselect').hide()
+        })
+    }
+
+    $('.avis-derogation__leve input').on('change', function() {
+        $('#deselect').show()
+    })
 })

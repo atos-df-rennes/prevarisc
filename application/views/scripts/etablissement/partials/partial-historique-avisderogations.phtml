@@ -15,15 +15,25 @@
                     <?php if (null !== $item["debut"]): ?>
                         Du <?= $item["debut"] ?>
                     <?php else: ?>
-                        <?php if ($item['type'] === 1): ?>
+                        <?php if ($item['type_dossier'] === 1): ?>
                             Date de commission non renseignée
-                        <?php elseif (in_array($item['type'], [2, 3])): ?>
+                        <?php elseif (in_array($item['type_dossier'], [2, 3])): ?>
                             Date de visite non renseignée
                         <?php endif ?>
                     <?php endif ?>
                 </td>
                 <td>
-                    <a href="<?= $item['url'] ?>" target="_blank" title="Ouvrir <?= $item['valeur'] ?> (nouvel onglet)"><?= $item["valeur"] ?></a>
+                    <a href="<?= $item['url'] ?>" target="_blank" title="Ouvrir <?= $item['titre'] ?> (nouvel onglet)"><?= $item["titre"] ?></a>
+
+                    <div>
+                        <small class="muted"><?= $item['type'] ?></small>
+
+                        <?php if ($item['leve']): ?>
+                            <span class="label label-info">
+                                Levé<?php if ($item['type'] === 'Dérogation') echo 'e'; ?>
+                            </span>
+                        <?php endif ?>
+                    </div>
                 </td>
             </tr>
             <?php endforeach ?>

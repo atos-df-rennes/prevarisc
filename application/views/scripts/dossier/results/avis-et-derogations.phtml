@@ -13,7 +13,7 @@
             <p>Avis/Dérogation levé(e):
                 <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
                     <?php if ($this->ID_DOSSIER_LIE):
-                        echo $this->ID_DOSSIER_LIE.'-'.$this->OBJET_DOSSIER;
+                        echo $this->OBJET_DOSSIER ?? $this->ID_DOSSIER_LIE;
                     endif ?>
                 </a>
             </p>
