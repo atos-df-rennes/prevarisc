@@ -23,3 +23,14 @@
 .controls label {
     width: fit-content;
 }
+
+.avis-derogation__leve {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#deselect {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
