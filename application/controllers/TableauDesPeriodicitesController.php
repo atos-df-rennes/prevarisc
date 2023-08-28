@@ -25,13 +25,8 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
 
         $result = [];
 
-        foreach ($tableau as $i => $singleTableau) {
-            // Sans local sommeil
-            $result[$tableau[$i]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
-            // Avec local (on exclu igh == categ à 0)
-            if (0 != $singleTableau['ID_CATEGORIE']) {
-                $result[$tableau[$i++]['ID_CATEGORIE']][$tableau[$i]['ID_TYPE']][$tableau[$i]['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
-            }
+        foreach ($tableau as $singleTableau) {
+            $result[$singleTableau['ID_CATEGORIE']][$singleTableau['ID_TYPE']][$singleTableau['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
         }
 
         $this->view->tableau = $result;
