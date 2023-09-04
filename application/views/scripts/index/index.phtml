@@ -141,17 +141,25 @@
                 success: function(result) {
                     const res = JSON.parse(result)
 
-                    if (res) {
+                    if (res.healthcheckOk) {
                         $("#bloc__connexion-platau").html(`<div class="alert alert-info">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <strong>La connexion à Plat'AU a fonctionnée.</strong>
                         </div>`)
                     } else {
-                        $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <h4>La connexion à Plat'AU a échouée.</h4>
-                            Veuillez suivre les instructions du Manuel Utilisateur §6.17.2
-                        </div>`)
+                        if (res.errorOrigin === 'prevarisc') {
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <h4>La connexion à Plat'AU depuis Prevarisc a échouée.</h4>
+                                Veuillez suivre les instructions du Manuel Utilisateur §6.17.2
+                            </div>`)
+                        } else if (res.errorOrigin === 'PlatAU') {
+                            $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-error">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <h4>Plat'AU est en erreur.</h4>
+                                Veuillez réessayer ultérieurement.
+                            </div>`)
+                        }
                     }
                 },
                 error: function() {
