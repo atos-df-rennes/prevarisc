@@ -438,7 +438,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
-        if ($idsCommission) {
+        if ([] !== $idsCommission) {
             $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
 
