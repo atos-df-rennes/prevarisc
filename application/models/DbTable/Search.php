@@ -104,6 +104,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                 }
 
                 break;
+
                 // Pour les dossiers
             case 'dossier':
                 if ($getCount) {
@@ -174,6 +175,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                 }
 
                 break;
+
                 // Pour les utilisateurs
             case 'utilisateur':
                 $this->select

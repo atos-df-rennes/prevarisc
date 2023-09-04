@@ -488,6 +488,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $this->view->dateAjouteeInput = $dateAjoutee->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
 
                     break;
+
                     // LIBELLE
                 case 'libelleCom':
                 case 'annule_libelleCom':
@@ -512,6 +513,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $this->view->libelleDateComm = $this->_getParam('data');
 
                     break;
+
                     // TYPE
                 case 'typeCom':
                     // EDITION Permet de charger le type de commission
@@ -549,6 +551,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $this->view->libelleType = $infoType['LIBELLE_COMMISSIONTYPEEVENEMENT'];
 
                     break;
+
                     // DATE
                 case 'dateComm':
                 case 'annule_dateCom':
