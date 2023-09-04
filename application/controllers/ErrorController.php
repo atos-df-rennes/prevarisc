@@ -37,6 +37,8 @@ class ErrorController extends Zend_Controller_Action
                     $this->getResponse()->setHttpResponseCode($unautorizedStatusCode);
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
+                } else {
+                    $this->view->message = $errors->exception->getMessage();
                 }
 
                 break;
@@ -67,11 +69,12 @@ class ErrorController extends Zend_Controller_Action
     /**
      * Récupération des logs.
      *
-     * @return Zend_Log
+     * @return false|Zend_Log
      */
     public function getLog()
     {
         $bootstrap = $this->getInvokeArg('bootstrap');
+
         if (!$bootstrap->hasResource('Log')) {
             return false;
         }

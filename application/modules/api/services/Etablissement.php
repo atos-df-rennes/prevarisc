@@ -77,7 +77,7 @@ class Api_Service_Etablissement
      *
      * @param int $id
      *
-     * @return (string|mixed)[][]
+     * @return (mixed|string)[][]
      *
      * @psalm-return array<int, array{ID_PIECE_JOINTE:mixed, IMAGE:string}>
      */

@@ -36,11 +36,12 @@ class SearchController extends Zend_Controller_Action
         $this->view->DB_commission = $service_commission->getAll();
         $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
+        $this->view->liste_prev = $service_search->listePrevActifs();
 
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {
@@ -62,8 +63,9 @@ class SearchController extends Zend_Controller_Action
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
                     $groupements_territoriaux = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
+                    $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
 
-                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux);
+                    $search = $service_search->extractionEtablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste);
 
                     $objPHPExcel = new PHPExcel();
                     $objPHPExcel->setActiveSheetIndex(0);
@@ -81,12 +83,12 @@ class SearchController extends Zend_Controller_Action
                             ],
                         ],
                     ];
-                    $sheet->getStyle('A1:W1')->applyFromArray($styleArray);
+                    $sheet->getStyle('A1:X1')->applyFromArray($styleArray);
                     unset($styleArray);
-                    $sheet->getStyle('A1:W1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    $sheet->getStyle('A1:W1')->getFont()->setSize(11)->setBold(true);
+                    $sheet->getStyle('A1:X1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A1:X1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'W') as $columnID) {
+                    foreach (range('A', 'X') as $columnID) {
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
@@ -113,6 +115,7 @@ class SearchController extends Zend_Controller_Action
                     $sheet->setCellValueByColumnAndRow(20, 1, 'Libellé du père/site');
                     $sheet->setCellValueByColumnAndRow(21, 1, 'Genre');
                     $sheet->setCellValueByColumnAndRow(22, 1, 'Préventionniste');
+                    $sheet->setCellValueByColumnAndRow(23, 1, 'Présence de locaux à sommeil');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
@@ -197,6 +200,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(20, $ligne, $row['LIBELLE_ETABLISSEMENT_PERE']);
                         $sheet->setCellValueByColumnAndRow(21, $ligne, $row['LIBELLE_GENRE']);
                         $sheet->setCellValueByColumnAndRow(22, $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(23, $ligne, $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 'oui' : 'non');
 
                         ++$ligne;
                     }
@@ -210,7 +214,7 @@ class SearchController extends Zend_Controller_Action
                     header('Content-Disposition: attachment; filename="Export_Etablissements_'.date('Y-m-d_H-i-s').'.ods"');
                     $this->view->writer->save('php://output');
 
-                    exit();
+                    exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
                         'context' => 'error',
@@ -244,6 +248,8 @@ class SearchController extends Zend_Controller_Action
                     $street = array_key_exists('street', $parameters) && '' != $parameters['street'] ? $parameters['street'] : null;
                     $number = array_key_exists('number', $parameters) && '' != $parameters['number'] ? $parameters['number'] : null;
                     $commissions = array_key_exists('commissions', $parameters) && '' != $parameters['commissions'] ? $parameters['commissions'] : null;
+                    $preventionniste = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
+
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
                         $groupements_territoriaux = $parameters['groupements_territoriaux'];
                     } elseif (null != $this->view->user && array_key_exists('groupements', $this->view->user) && count($this->view->user['groupements']) > 0) {
@@ -257,7 +263,7 @@ class SearchController extends Zend_Controller_Action
                         $groupements_territoriaux = null;
                     }
 
-                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, 50, $page);
+                    $search = $service_search->etablissements($label, $identifiant, $genres, $categories, $classes, $familles, $types_activites, $avis_favorable, $statuts, $local_sommeil, null, null, null, $city, $street, $number, $commissions, $groupements_territoriaux, $preventionniste, 50, $page);
 
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
@@ -289,6 +295,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->array_communes = $service_adresse->getAllCommunes();
         $this->view->liste_prev = $service_search->listePrevActifs();
         $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : [];
+        $this->view->array_numeros = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : [];
         $typeGroupementTerritorial = [5];
         $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
 
@@ -304,7 +311,7 @@ class SearchController extends Zend_Controller_Action
         if (
             $this->_request->isGet()
             && count($this->_request->getQuery()) > 0
-            && !empty($_GET)
+            && [] !== $_GET
         ) {
             // Export Calc
             if (isset($_GET['Exporter'])) {
@@ -321,6 +328,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
@@ -457,7 +465,7 @@ class SearchController extends Zend_Controller_Action
                     header('Content-Disposition: attachment; filename='.$filename.'');
                     $this->view->writer->save('php://output');
 
-                    exit();
+                    exit;
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger([
                         'context' => 'error',
@@ -488,6 +496,7 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['avisDiffere'] = array_key_exists('avisDiffere', $parameters) && 1 == count($parameters['avisDiffere']) ? 'true' == $parameters['avisDiffere'][0] : null;
                     $criteresRecherche['commune'] = array_key_exists('commune', $parameters) && '' != $parameters['commune'] ? $parameters['commune'] : null;
                     $criteresRecherche['voie'] = array_key_exists('voie', $parameters) && '' != $parameters['voie'] ? $parameters['voie'] : null;
+                    $criteresRecherche['numero'] = array_key_exists('numero', $parameters) && '' != $parameters['numero'] ? $parameters['numero'] : null;
                     $criteresRecherche['courrier'] = array_key_exists('courrier', $parameters) && '' != $parameters['courrier'] ? $parameters['courrier'] : null;
                     $criteresRecherche['preventionniste'] = array_key_exists('preventionniste', $parameters) && '' != $parameters['preventionniste'] ? $parameters['preventionniste'] : null;
                     $criteresRecherche['dateCreationStart'] = array_key_exists('date-creation-start', $parameters) && $checkDateFormat($parameters['date-creation-start']) ? $parameters['date-creation-start'] : null;
@@ -568,7 +577,7 @@ class SearchController extends Zend_Controller_Action
 
         $service_search = new Service_Search();
 
-        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null);
+        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null, null);
 
         $data = $data['results'];
 

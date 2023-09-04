@@ -21,7 +21,10 @@ class Service_Prescriptions
 
         foreach ($listePrescType as $ue) {
             $assoc = $dbPrescAssoc->getPrescriptionAssoc($ue['ID_PRESCRIPTIONTYPE']);
-            $prescriptionArray[] = $assoc;
+
+            if ([] !== $assoc) {
+                $prescriptionArray[] = $assoc;
+            }
         }
 
         return $prescriptionArray;
@@ -91,7 +94,7 @@ class Service_Prescriptions
         return $dbPrescTextes->getAllTextes();
     }
 
-    //FIN getTextesListe
+    // FIN getTextesListe
 
     public function getTexte($id_texte)
     {
@@ -100,7 +103,7 @@ class Service_Prescriptions
         return $dbPrescTextes->getTexte($id_texte);
     }
 
-    //FIN getTexte
+    // FIN getTexte
 
     public function saveTexte($post, $idTexte = null)
     {
@@ -118,7 +121,7 @@ class Service_Prescriptions
         }
     }
 
-    //FIN saveTexte
+    // FIN saveTexte
 
     public function replaceTexte($newId, $oldId)
     {
@@ -140,7 +143,7 @@ class Service_Prescriptions
         return $dbPrescArticles->getAllArticles();
     }
 
-    //FIN getArticlesListe
+    // FIN getArticlesListe
 
     public function getArticle($id_article)
     {
@@ -149,7 +152,7 @@ class Service_Prescriptions
         return $dbPrescArticles->getArticle($id_article);
     }
 
-    //FIN getArticle
+    // FIN getArticle
 
     public function saveArticle($post, $idArticle = null)
     {
@@ -167,7 +170,7 @@ class Service_Prescriptions
         }
     }
 
-    //FIN saveArticle
+    // FIN saveArticle
 
     public function replaceArticle($newId, $oldId)
     {
@@ -212,7 +215,7 @@ class Service_Prescriptions
         }
     }
 
-    //FIN savePrescription
+    // FIN savePrescription
 
     /**
      * @psalm-return array<int, mixed>
@@ -236,7 +239,7 @@ class Service_Prescriptions
         return $prescriptionArray;
     }
 
-    //FIN getPrescriptions
+    // FIN getPrescriptions
 
     /**
      * @param string $type
@@ -251,7 +254,7 @@ class Service_Prescriptions
         }
     }
 
-    //FIN getPrescriptionInfo
+    // FIN getPrescriptionInfo
 
     public function setOrder($data, $type)
     {
@@ -286,5 +289,5 @@ class Service_Prescriptions
         }
     }
 
-    //FIN setOrder
-} //FIN SERVICE
+    // FIN setOrder
+} // FIN SERVICE

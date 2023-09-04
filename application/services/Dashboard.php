@@ -173,17 +173,6 @@ class Service_Dashboard
             'height' => 'small',
             'width' => 'small',
         ],
-
-        // bloc plat'au
-        'dossierPlatau' => [
-            'service' => 'Service_Dashboard',
-            'method' => 'getDossiersPlatAUSansEtablissement',
-            'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
-            'title' => 'Dossiers Plat\'AU à traiter',
-            'type' => 'dossiers_platau',
-            'height' => 'small',
-            'width' => 'small',
-        ],
     ];
 
     /**
@@ -209,6 +198,18 @@ class Service_Dashboard
 
         if (getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS')) {
             $this->options['courrier_sans_reponse_days'] = (int) getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS');
+        }
+
+        if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->blocsConfig['dossierPlatau'] = [
+                'service' => 'Service_Dashboard',
+                'method' => 'getDossiersPlatAUSansEtablissement',
+                'acl' => ['dashboard', 'view_doss_platau_sans_etab'],
+                'title' => 'Dossiers Plat\'AU à traiter',
+                'type' => 'dossiers_platau',
+                'height' => 'small',
+                'width' => 'small',
+            ];
         }
     }
 
@@ -462,17 +463,16 @@ class Service_Dashboard
         $valCpt = 0;
 
         foreach ($dossiers as $dossier) {
-            if ((null !== $dossier['ID_DOSSIER'])) {
-                $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
-                foreach ($listeDossiersLies as $lien) {
-                    $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
-                    $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
-                    if (
-                        self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
-                        || self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature
-                        || self::ID_NATURE_ECHEANCIER_TRAVAUX == $idNature) {
-                        unset($dossiers[$valCpt]);
-                    }
+            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+            foreach ($listeDossiersLies as $lien) {
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
+                $idNature = $DBdossierNautre->getDossierNaturesId($idLien)['ID_NATURE'];
+
+                if (
+                    self::ID_NATURE_LEVEE_AVIS_DEF == $idNature
+                    || self::ID_NATURE_LEVEE_PRESCRIPTIONS == $idNature
+                    || self::ID_NATURE_ECHEANCIER_TRAVAUX == $idNature) {
+                    unset($dossiers[$valCpt]);
                 }
             }
 
@@ -495,14 +495,13 @@ class Service_Dashboard
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {
-            if (isset($dossier['ID_DOSSIER'])) {
-                $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
-                foreach ($listeDossiersLies as $lien) {
-                    $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
-                    $tabType = $DBdossier->getTypeDossier($idLien);
-                    if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
-                        unset($dossiers[$valCpt]);
-                    }
+            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+            foreach ($listeDossiersLies as $lien) {
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
+                $tabType = $DBdossier->getTypeDossier($idLien);
+
+                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
+                    unset($dossiers[$valCpt]);
                 }
             }
             ++$valCpt;
@@ -531,6 +530,7 @@ class Service_Dashboard
             foreach ($listeDossiersLies as $lien) {
                 $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
+
                 if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
                     unset($dossiers[$valCpt]);
                 }

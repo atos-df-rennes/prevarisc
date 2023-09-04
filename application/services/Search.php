@@ -10,10 +10,6 @@ class Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param array|string $genre
-     * @param array|string $categorie
-     * @param array|string $classe
-     * @param array|string $famille
      * @param array|string $types_activites
      * @param bool         $avis_favorable
      * @param array|string $statuts
@@ -32,10 +28,11 @@ class Service_Search
      * @param null|mixed   $familles
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
+     * @param null|mixed   $preventionniste
      *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -78,13 +75,14 @@ class Service_Search
                 ->joinLeft(['adressecommunesite' => 'adressecommune'], 'etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE')
                 ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
                 ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
+                ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 // Vincent MICHEL le 12/11/2014 : retrait de cette clause qui tue les performances
                 // sur la recherche. Je n'ai pas vu d'impact sur le retrait du group by.
                 // Cyprien DEMAEGDT le 03/08/2015 : rétablissement de la clause pour résoudre le
                 // problème de duplicité d'établissements dans les résultats de recherche (#1300)
                 ->group('e.ID_ETABLISSEMENT')
-                ;
+            ;
 
             // Critères : nom de l'établissement
             if (null !== $label) {
@@ -94,11 +92,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -206,6 +204,11 @@ class Service_Search
                 $select->where(0 == $parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = ?', $parent);
             }
 
+            // Critère : preventionniste
+            if (null !== $preventionniste) {
+                $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
+            }
+
             // Performance optimisation : avoid sorting on big queries, and sort only if
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 1) {
@@ -237,10 +240,6 @@ class Service_Search
      *
      * @param string       $label
      * @param string       $identifiant
-     * @param array|string $genre
-     * @param array|string $categorie
-     * @param array|string $classe
-     * @param array|string $famille
      * @param array|string $types_activites
      * @param bool         $avis_favorable
      * @param array|string $statuts
@@ -257,10 +256,11 @@ class Service_Search
      * @param null|mixed   $number
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
+     * @param null|mixed   $preventionniste
      *
      * @return array
      */
-    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null)
+    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -343,11 +343,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -455,6 +455,11 @@ class Service_Search
                 $select->where(0 == $parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = ?', $parent);
             }
 
+            // Critère : preventionniste
+            if (null !== $preventionniste) {
+                $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
+            }
+
             // Performance optimisation : avoid sorting on big queries, and sort only if
             // there is at least one where part
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 0) {
@@ -545,7 +550,7 @@ class Service_Search
                 ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
-                ;
+            ;
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
@@ -559,10 +564,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -614,6 +619,10 @@ class Service_Search
 
             if (isset($criterias['voie']) && null !== $criterias['voie']) {
                 $this->setCriteria($select, 'ea.ID_RUE', $criterias['voie']);
+            }
+
+            if (isset($criterias['numero']) && null !== $criterias['numero']) {
+                $this->setCriteria($select, 'ea.NUMERO_ADRESSE', $criterias['numero']);
             }
 
             // Critère : groupement territorial
@@ -680,7 +689,7 @@ class Service_Search
             }
 
             // Si pas de dossier, pas de recherche
-            if (!empty($sIDsTable)) {
+            if ([] !== $sIDsTable) {
                 // Recherche des préventionnistes associés aux dossiers
                 $selectPrev = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
                 $selectPrev->from(['u' => 'utilisateur'], 'ID_UTILISATEUR')
@@ -799,7 +808,7 @@ class Service_Search
                 ->joinLeft('dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', 'ID_PIECEJOINTE')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
-                        ;
+            ;
 
             // Critères : numéro de doc urba
             if (null !== $num_doc_urba) {
@@ -813,10 +822,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -880,6 +889,10 @@ class Service_Search
                 $this->setCriteria($select, 'ea.ID_RUE', $criterias['voie']);
             }
 
+            if (isset($criterias['numero']) && null !== $criterias['numero']) {
+                $this->setCriteria($select, 'ea.NUMERO_ADRESSE', $criterias['numero']);
+            }
+
             // Critère : groupement territorial
             if (isset($criterias['groupements_territoriaux']) && null !== $criterias['groupements_territoriaux']) {
                 $this->setCriteria($select, 'groupement.ID_GROUPEMENT', $criterias['groupements_territoriaux']);
@@ -893,11 +906,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                // cas par défaut
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -973,7 +986,6 @@ class Service_Search
     /**
      * Recherche des courriers.
      *
-     * @param array  $types
      * @param string $objet
      * @param string $num_doc_urba
      * @param int    $parent       Id d'un dossier parent

@@ -1,4 +1,3 @@
-
 <form action="/changement" method="post">
     <div class='pull-right' >
         <input type='button' class="btn see-balises" value="Voir les balises disponibles">
@@ -8,9 +7,8 @@
         <h3>
             Message de <?php echo strtolower($changement["LIBELLE_CHANGEMENT"]); ?>
         </h3>
-        <textarea class="tinyarea" 
-            name='<?php echo $changement["ID_CHANGEMENT"]; ?>_MESSAGE'
-        ><?php if ($changement["MESSAGE_CHANGEMENT"]) { echo $changement["MESSAGE_CHANGEMENT"]; } ?></textarea>
+        <textarea class="tinyarea" name='<?php echo $changement["ID_CHANGEMENT"]; ?>_MESSAGE'>
+        <?php if ($changement["MESSAGE_CHANGEMENT"]) { echo $changement["MESSAGE_CHANGEMENT"]; } ?></textarea>
     <?php endforeach ?>
 </form>
 
@@ -18,6 +16,7 @@
 <script type='text/javascript'>
     tinymce.init({
         selector: '.tinyarea',
+        language: 'fr_FR',
         height: 150,
         menubar: false,
         statusbar: false,
@@ -38,19 +37,23 @@
             var idEts = "<?php echo $this->etablissement['general']['ID_ETABLISSEMENT'] ?>";
             var changement = $(this).attr("data-value");
             var dialogAlerte = $('<div style="display:none;"></div>').appendTo('body');
-    
+
             dialogAlerte.dialog({
                 title: "Liste des balises disponibles",
                 modal: true,
                 autoOpen: false,
                 width: 600,
                 height: 'auto',
-                buttons: {
-                    "Fermer": function() {
-                        dialogAlerte.html("");
-                        dialogAlerte.dialog("close");
+                buttons: [
+                    {
+                        text: 'Fermer',
+                        class: 'btn',
+                        click: function() {
+                            dialogAlerte.html("");
+                            dialogAlerte.dialog("close");
+                        }
                     }
-                },
+                ],
                 close: function(event, ui){
                     dialogAlerte.html("");
                     dialogAlerte.dialog("close");
@@ -66,7 +69,7 @@
                 },
             });
             return false;
-            
+
         });
     });
 </script>

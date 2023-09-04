@@ -44,4 +44,14 @@ class Api_Service_Adresse
 
         return $service_adresse->getVoies($code_insee, $q);
     }
+
+    /**
+     * Retourne les numéros par rapport à une voie.
+     */
+    public function getNumeros(int $id_rue): array
+    {
+        $DB_adresse = new Service_Adresse();
+
+        return $DB_adresse->getNumeros($id_rue);
+    }
 }

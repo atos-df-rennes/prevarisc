@@ -12,7 +12,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
      */
     public function getDossierNonAffect($idDateCom)
     {
-        //retourne l'ensemble des dossiers programés à la date de comm passée en param et dont les horaires N'ONT PAS été précisés
+        // retourne l'ensemble des dossiers programés à la date de comm passée en param et dont les horaires N'ONT PAS été précisés
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['doss' => 'dossier'])
@@ -40,7 +40,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
      */
     public function getDossierAffect($idDateCom)
     {
-        //retourne l'ensemble des dossiers programés à la date de comm passée en param et dont les horaires ONT été précisés
+        // retourne l'ensemble des dossiers programés à la date de comm passée en param et dont les horaires ONT été précisés
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['doss' => 'dossier'])
@@ -110,10 +110,8 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
 
     /**
      * @param int|string $idDossier
-     *
-     * @return int
      */
-    public function deleteDateDossierAffect($idDossier)
+    public function deleteDateDossierAffect($idDossier): void
     {
         $this->delete("ID_DOSSIER_AFFECT = '".$idDossier."'");
     }
@@ -133,7 +131,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
      */
     public function getDossierAffectAndType($idDossier)
     {
-        //récupèration des affectations du dossier ainsi que le type d'affectation (salle / visite / visite de comm)
+        // récupèration des affectations du dossier ainsi que le type d'affectation (salle / visite / visite de comm)
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['doss' => 'dossier'])

@@ -24,7 +24,7 @@ class Model_DbTable_DossierDocConsulte extends Zend_Db_Table_Abstract
      */
     public function getDocRenseigne($idDossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['ddc' => 'dossierdocconsulte'])

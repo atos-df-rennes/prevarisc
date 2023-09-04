@@ -30,7 +30,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 
 		if($nbAdresse != 0){
 			foreach($dossierInfos['infosEtab']['adresses'] as $commune){
-
 				addChamp($dossInfos,'commissionNom', $this->commissionInfos[0]['LIBELLE_COMMISSION']);
 
 				if(isset($commune["LIBELLE_COMMUNE"])){
@@ -135,7 +134,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 					break;
 				}
 				addChamp($dossInfos,'avisDossier', $avis);
-				
+
 				switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
 					case 1:
 						$avis_commission = "Favorable";
@@ -155,17 +154,171 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				addChamp($dossInfos,'numDocUrba', $listeDocUrba);
 
+                //Generation du segment avis derogations
+                try {
+                    $avisDerogations = $dossInfos->avisDerogations;
+                } catch (Exception $e) {}
 
-				$dossInfos->merge();
+                if (isset($avisDerogations)) {
+                    if (!empty($dossierInfos["AVIS_DEROGATIONS"])) {
+                        foreach($dossierInfos["AVIS_DEROGATIONS"] as $avisDerogation) {
+                            addChamp($avisDerogations, 'type', $avisDerogation['TYPE']);
+                            addChamp($avisDerogations, 'titre', $avisDerogation['TITRE']);
+                            addChamp($avisDerogations, 'objet', $avisDerogation['OBJET']);
+                            addChamp($avisDerogations, 'justification', $avisDerogation['JUSTIFICATION']);
+                            addChamp($avisDerogations, 'articles_concernes', $avisDerogation['ARTICLES_CONCERNES']);
+                            addChamp($avisDerogations, 'mesures_compensatoires_proposees', $avisDerogation['MESURES_COMPENSATOIRES_PROPOSEES']);
+                            addChamp($avisDerogations, 'analyse_de_risque', $avisDerogation['ANALYSE_DE_RISQUE']);
+                            addChamp($avisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
+                            addChamp($avisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
+
+                            if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
+                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
+                            } else {
+                                $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+                            }
+
+                            addChamp($avisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+
+                            $avisDerogations->merge();
+                        }
+                    } else {
+                        addChamp($avisDerogations, 'type', '');
+                        addChamp($avisDerogations, 'titre', '');
+                        addChamp($avisDerogations, 'objet', '');
+                        addChamp($avisDerogations, 'justification', '');
+                        addChamp($avisDerogations, 'articles_concernes', '');
+                        addChamp($avisDerogations, 'mesures_compensatoires_proposees', '');
+                        addChamp($avisDerogations, 'analyse_de_risque', '');
+                        addChamp($avisDerogations, 'avis', '');
+                        addChamp($avisDerogations, 'identifiantdossierleve', '');
+                        addChamp($avisDerogations, 'affichagehistorique', '');
+
+                        $avisDerogations->merge();
+                    }
+                }
+
+                // Gestion des formulaires personnalisés
+                $serviceUtils = new Service_Utils();
+
+                foreach ($dossierInfos['FORMULAIRES'] as $formulaire) {
+                    if (is_array($formulaire['RUBRIQUES'])) {
+                        // Permet d'avoir les informations unitairement
+                        foreach ($formulaire['RUBRIQUES'] as $rubrique) {
+                            foreach ($rubrique['CHAMPS'] as $champ) {
+                                if ('Parent' === $champ['TYPE']) {
+                                    if (1 === $champ['tableau']) {
+                                        foreach ($champ['FILS'] as $idx => $champFils) {
+                                            if(is_int($idx)){
+                                                addChamp(
+                                                    $dossInfos,
+                                                    $serviceUtils->getFullFusionName(
+                                                        $formulaire['NOM_INTERNE'],
+                                                        [
+                                                            $rubrique['NOM'],
+                                                            $champ['NOM'],
+                                                            $champFils['idx']
+                                                        ]
+                                                    ),
+                                                    $champFils['NOM']
+                                                );
+                                            }
+                                        }
+
+                                        $nomFusion = $serviceUtils->getFusionNameMagicalCase(
+                                            $formulaire['NOM_INTERNE'].' '.
+                                            $rubrique['NOM'].' '.
+                                            $champ['NOM'].' '.
+                                            'valeurs'
+                                        );
+
+                                        try {
+                                            $segmentTableau = $dossInfos->$nomFusion;
+                                        } catch (Exception $e) {}
+
+                                        if (isset($segmentTableau)) {
+                                            foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                                $idxCol = 0;
+
+                                                foreach ($ligne as $col) {
+                                                    if ('Case à cocher' === $col['TYPE']) {
+                                                        if (true === boolval($col['VALEUR'])) {
+                                                            $col['VALEUR'] = 'Oui';
+                                                        } else {
+                                                            $col['VALEUR'] = 'Non';
+                                                        }
+                                                    }
+
+                                                    addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                                    $idxCol++;
+                                                }
+
+                                                $segmentTableau->merge();
+                                            }
+                                        }
+
+                                        $segmentTableau = null;
+                                    } else {
+                                        foreach ($champ['FILS'] as $champFils) {
+                                            if ('Case à cocher' === $champFils['TYPE']) {
+                                                if (true === boolval($champFils['VALEUR'])) {
+                                                    $champFils['VALEUR'] = 'Oui';
+                                                } else {
+                                                    $champFils['VALEUR'] = 'Non';
+                                                }
+                                            }
+                                            addChamp(
+                                                $dossInfos,
+                                                $serviceUtils->getFullFusionName(
+                                                    $formulaire['NOM_INTERNE'],
+                                                    [
+                                                        $rubrique['NOM'],
+                                                        $champ['NOM'],
+                                                        $champFils['NOM']
+                                                    ]
+                                                ),
+                                                $champFils['VALEUR']
+                                            );
+                                        }
+                                    }
+                                }else{
+                                    // Définition du libellé pour les cases à cocher
+                                    if ('Case à cocher' === $champ['TYPE']) {
+                                        if (true === boolval($champ['VALEUR'])) {
+                                            $champ['VALEUR'] = 'Oui';
+                                        } else {
+                                            $champ['VALEUR'] = 'Non';
+                                        }
+                                    }
+                                    addChamp(
+                                        $dossInfos,
+                                        $serviceUtils->getFullFusionName(
+                                            $formulaire['NOM_INTERNE'],
+                                            [
+                                                $rubrique['NOM'],
+                                                $champ['NOM']
+                                            ]
+                                        ),
+                                        $champ['VALEUR']
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $dossInfos->merge();
 			}
 		}
 	}
+
 	$odf->mergeSegment($dossInfos);
 	$nouvellePJ = savePj($this->idComm,"Compte rendu du ");
 
-        $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
-        $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
+	$store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+	$path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
 	$odf->saveToDisk($path);
+
 	echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le compte rendu a été généré avec succes</span><br/><br/><br/>";
 }else{
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier de compte rendu pour la commission n'existe pas</span><br/><br/><br/>";

@@ -32,7 +32,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-            // Adresse d'une cellule
+                // Adresse d'une cellule
             case 3:
                 // Récupération des parents de l'établissement
                 $results = [];
@@ -44,7 +44,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                         $id_enfant = $parent['ID_ETABLISSEMENT'];
                     }
                 } while (null != $parent);
-                $etablissement_parents = empty($results) ? [] : array_reverse($results);
+                $etablissement_parents = [] === $results ? [] : array_reverse($results);
 
                 $pere = end($etablissement_parents);
 
@@ -53,7 +53,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                 }
 
                 return [];
-            // Adresse par défaut
+                // Adresse par défaut
             default:
                 $select = $this->select()
                     ->setIntegrityCheck(false)
@@ -129,7 +129,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    // Retourne les voies par rapport é une ville et un type de voie
+    // Retourne les voies par rapport à une ville et un type de voie
 
     /**
      * @param float|int|string $code_insee
@@ -148,6 +148,20 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         if (null != $q) {
             $select->where('LIBELLE_RUE LIKE ?', '%'.$q.'%');
         }
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    /**
+     * Retourne les numéros par rapport à une voie.
+     */
+    public function getNumeros(int $id_rue): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('etablissementadresse')
+            ->where("ID_RUE = '{$id_rue}'")
+        ;
 
         return $this->fetchAll($select)->toArray();
     }

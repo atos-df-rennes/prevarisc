@@ -3,55 +3,68 @@ name: Prevarisc Lint
 on:
   pull_request:
   push:
-    branches: [ 2.5, evol-sdis** ]
+    branches: [ 2.5 ]
 
 jobs:
   validate-composer:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.1'
+        php-version: '8.1'
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
   php-cs-fixer:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.1'
-    - run: composer install --prefer-dist --no-progress
+        php-version: '8.1'
+    - run: composer install --prefer-dist --no-progress --working-dir=tools/
 
     - name: PHP-CS-Fixer
-      run: ./vendor/bin/php-cs-fixer fix --diff --dry-run
+      run: tools/vendor/bin/php-cs-fixer fix --diff --dry-run
 
   rector:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.1'
-    - run: composer install --prefer-dist --no-progress
+        php-version: '8.1'
+    - run: composer install --prefer-dist --no-progress --working-dir=tools/
 
     - name: Rector
-      run: ./vendor/bin/rector process --dry-run
+      run: tools/vendor/bin/rector process --dry-run
+  
+  phpstan:
+    needs: validate-composer
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+    - run: composer install --prefer-dist --no-progress
+    - run: composer install --prefer-dist --no-progress --working-dir=tools/
+
+    - name: PHPStan
+      run: tools/vendor/bin/phpstan analyse
 
   var-dump-check:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '7.1'
-    - run: composer install --prefer-dist --no-progress
 
     - name: Normal VarDump Check
       uses: umutphp/php-var-dump-check-action@v2
@@ -69,13 +82,13 @@ jobs:
 
   magical-number-check:
     needs: validate-composer
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.1'
-    - run: composer install --prefer-dist --no-progress
+        php-version: '8.1'
+    - run: composer install --prefer-dist --no-progress --working-dir=tools/
 
     - name: Magical Number Check
-      run: ./vendor/bin/phpmnd $GITHUB_WORKSPACE/application --non-zero-exit-on-violation --extensions=-switch_case
+      run: tools/vendor/bin/phpmnd $GITHUB_WORKSPACE/application --extensions=-switch_case --ignore-numbers=-1

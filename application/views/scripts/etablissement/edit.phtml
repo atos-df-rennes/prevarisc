@@ -278,33 +278,33 @@
                 <dd class='effectif_habitation'>
                     <input type='text' name='EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"] ?>' />
                 </dd>
-                
+
                 <!-- Aire de stationnement pour autocaravanes -->
                 <dt class='effectif_caravane'>Autocaravanes</dt>
                 <dd class='effectif_caravane'>
                     <input type='text' name='EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"] ?>' />
-                </dd> 
-                
+                </dd>
+
                 <!-- Emplacements nus -->
                 <dt class='effectif_emplacement_nu'>Emplacements nus</dt>
                 <dd class='effectif_emplacement_nu'>
                     <input type='text' name='EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"] ?>' />
-                </dd>      
-                               
+                </dd>
+
                 <!-- Emplacements autres -->
                 <dt class='effectif_autre_camping'>Autres emplacements</dt>
                 <dd class='effectif_autre_camping'>
                     <input type='text' name='EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS' value='<?php echo $this->etablissement['informations']["EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"] ?>' />
-                </dd>      
+                </dd>
 
                 <!-- Total Camping emplacements / Règle => valeur pouvant être modifié par l'utilisateur -->
                 <dt class='effectif_total_camping'>Total</dt>
                 <dd class='effectif_total_camping'>
                     <input type='text' name='EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS' value='' disabled />
-                </dd>                
+                </dd>
 
             </dl>
-            
+
             <!-- Plan -->
             <h4 class="champ_plans champs h4_subtitle">Plans d'intervention <a href='#' style='font-size: 0.85em; float: right; font-weight: normal;' onclick="time = Date.now(); $('#prototype_plan').clone().appendTo( $(this).parent().next() ).removeClass('hide prototypes').attr('id', '').find('input, select').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); }); return false;">Ajouter un plan</a></h4>
             <table class='table table-condensed champ_plans champs'>
@@ -556,12 +556,12 @@
 
             <dt>Longitude</dt>
             <dd>
-                 <input id="addressLongitude" type='text' name='lon' />
+                <input id="addressLongitude" type='text' name='lon' maxlength="11" />
             </dd>
 
             <dt>Latitude</dt>
             <dd>
-                 <input id="addressLatitude" type='text' name='lat' />
+                <input id="addressLatitude" type='text' name='lat' maxlength="10" />
             </dd>
         </dl>
         <?php if ($this->key_ign != null): ?>
@@ -572,7 +572,7 @@
                 .ol-full-screen {right:9px; top:49px}
             </style>
         <?php endif ?>
-        
+
         <?php if ($this->geoconcept_url != null) : ?>
             <div id='geoconcept-container' style="height: 400px; width: 100%"></div>
             <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
@@ -1024,11 +1024,11 @@
 
             $('#adresse-modal input').val('');
             $("#adresse-modal input[name='voie_ac'], #adresse-modal input[name='numero'], #adresse-modal input[name='complement']").val("").attr("disabled", true).blur();
-            $("span.result").text("Inconnu");            
+            $("span.result").text("Inconnu");
             $('#geoportail-container').css('visibility', 'hidden');
 
             // Si une carto est déjà présente, on n'en charge pas une autre
-            if($('#geoportail-container .ol-viewport').length == 0) { 
+            if($('#geoportail-container .ol-viewport').length == 0) {
                 // On empêche le clic sur la géolocalisation jusqu'à ce que la carto soit chargée
                 $('#adresse-modal #geolocme').attr('disabled', true);
                 $('#adresse-modal #geolocme_nominatim').attr('disabled', true);
@@ -1057,7 +1057,6 @@
 
                         // Ajout des couches utilisateur
                         viewer = addUserLayers(viewer,
-                                               '<?php echo $this->key_ign ?>',
                                                <?php echo json_encode($this->couches_cartographiques) ?>);
                         nbCouches = viewer.getLibMap().getLayers().getLength();
 
@@ -1130,19 +1129,19 @@
                 <?php endif ?>
             }
         });
-        
+
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
                 initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
             <?php endif ?>
-                                
-            var map = initGeoConceptViewer('geoconcept-container', 
+
+            var map = initGeoConceptViewer('geoconcept-container',
                 "<?php echo $this->geoconcept_url ?>",
                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                 [{lat: <?php echo $this->default_lat ?>,lon: <?php echo $this->default_lon ?>, description: ""}],
                 <?php echo json_encode($this->couches_cartographiques) ?>,
                 function() {
-                    
+
                     // removes the marker
                     var vectorLayers = map.getLayersByClass('OpenLayers.Layer.Vector');
                     if (vectorLayers !== null && vectorLayers.length > 0) {
@@ -1187,14 +1186,14 @@
                             geoConceptPutMarkerAt(map, map.getLonLatFromViewPortPx(e.xy));
                         }
                     });
-                    
+
                     // création et insertion du nouveau contrôleur
                     map.addControl(new OpenLayers.Control.Click({
                         autoActivate:true
                     }));
                 }
             );
-    
+
             $('#adresse-modal #geolocme-geoconcept').click(function(e) {
                 e.preventDefault();
                 var geocoderUrl = "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER') ?>";
@@ -1259,7 +1258,7 @@
                         $("input[name='lon']").val(geolocations[0].lon);
                         $("input[name='lat']").val(geolocations[0].lat);
                         <?php if ($this->key_ign != null) : ?>
-                            var map = viewer.getViewer().getMap(); 
+                            var map = viewer.getViewer().getMap();
                             var lonlat = new OpenLayers.LonLat(geolocations[0].lon, geolocations[0].lat);
                             lonlat = lonlat.transform('EPSG:4326', map.getProjection());
                             putMarkerAt(map, lonlat, map.getProjection());
@@ -1286,16 +1285,16 @@
 
             return false;
         });
-        
+
         $('input[name=EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS], input[name=EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS], input[name=EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS], input[name=EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS]').on('keydown keyup', function() {
             setTotalEmplacementCamping();
-        });        
+        });
         $('input[name=EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS]').val(setTotalEmplacementCamping());
-        
+
     });
-            
+
     function setTotalEmplacementCamping() {
-    
+
         var nbHabitation = parseInt($('input[name=EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS]').val());
         var nbCaravane = parseInt($('input[name=EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS]').val());
         var nbEmplacementNu = parseInt($('input[name=EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS]').val());
@@ -1305,11 +1304,11 @@
         var nbCaravane = (isNaN(nbCaravane)) ? 0 : nbCaravane;
         var nbEmplacementNu = (isNaN(nbEmplacementNu)) ? 0 : nbEmplacementNu;
         var nbAutre = (isNaN(nbAutre)) ? 0 : nbAutre;
-        
+
         var totalEmplacement = nbHabitation + nbCaravane + nbEmplacementNu + nbAutre;
-                    
-        $('input[name=EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS]').val(totalEmplacement);      
-        
+
+        $('input[name=EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS]').val(totalEmplacement);
+
         return totalEmplacement;
     }
 </script>

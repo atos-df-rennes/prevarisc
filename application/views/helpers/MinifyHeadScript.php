@@ -43,10 +43,8 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
      * @see Zend_View_Helper_HeadScript->toString()
      *
      * @param int|string $indent
-     *
-     * @return string
      */
-    public function toString($indent = null)
+    public function toString($indent = null): string
     {
         // An array of Script Items to be rendered
         $items = [];
@@ -92,10 +90,8 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
 
     /**
      * Retrieve the minify url.
-     *
-     * @return string
      */
-    public function getMinUrl()
+    public function getMinUrl(): string
     {
         return $this->getBaseUrl().$this->_minifyLocation;
     }

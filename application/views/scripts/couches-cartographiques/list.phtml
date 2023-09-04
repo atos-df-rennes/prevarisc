@@ -34,7 +34,6 @@
 
             viewer = addUserLayers(
                 viewer,
-                '<?php echo $this->key_ign ?>',
                 <?php echo json_encode($this->couches_cartographiques) ?>
             );
             $('.ol-rotate').css('display', 'none');
@@ -73,9 +72,9 @@
                 lon: <?php echo $this->default_lon ?>,
                 description: "Centre par défaut"
             });
-            
+
             map = initGeoConceptViewer(
-                'geoconcept-container', 
+                'geoconcept-container',
                 "<?php echo $this->geoconcept_url ?>",
                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                 points,
@@ -97,7 +96,7 @@
                 center: point,
                 zoom: 12
             });
-            
+
             var marker = new google.maps.Marker({
                 position: point,
                 map: map,
@@ -163,7 +162,7 @@
                 <td><?php echo $couche_cartographique['NOM_COUCHECARTO'].(($couche_cartographique['ISBASELAYER_COUCHECARTO']) ? " (couche de base)" : "") ?></td>
                 <td><?= $couche_cartographique['ORDRE_COUCHECARTO'] ?? 'Ordre non renseigné' ?></td>
                 <td>
-                    <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Éditer la couche</a><br/>
+                    <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Modifier la couche</a><br/>
                     <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $couche_cartographique['ID_COUCHECARTO'])) ?>">Supprimer</a>
                 </td>
             </tr>

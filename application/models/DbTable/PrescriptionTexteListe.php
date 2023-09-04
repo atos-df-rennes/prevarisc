@@ -45,11 +45,11 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
         $where = [];
         $data = ['ID_TEXTE' => $idNewTexte];
         $where[] = 'ID_TEXTE = '.$idOldTexte;
-        //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
+        // MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossierassoc', $data, $where);
         $this->getAdapter()->update('prescriptiontypeassoc', $data, $where);
         $this->getAdapter()->update('prescriptionreglassoc', $data, $where);
-        //Suppression du texte
+        // Suppression du texte
         $this->delete('ID_TEXTE = '.$idOldTexte);
     }
 }

@@ -3,55 +3,63 @@
     <li class="nav-header">Général</li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'admin') echo "class='active'" ?> >
-        <a href='/admin' ><em class="icon-exclamation-sign icon-black"></em> Informations</a>
+        <a href='/admin' ><i class="icon-exclamation-sign icon-black"></i> Informations</a>
     </li>
-        
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'retablir') echo "class='active'" ?> >
+        <a href='/retablir' ><i class="icon-ok icon-black"></i> Gestion des éléments supprimés</a>
+    </li>
+
     <li class="nav-header">Gestion des entités</li>
-        
+
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'users') echo "class='active'" ?> >
-        <a href='/users/index' ><em class="icon-cog icon-black"></em> Gestion des utilisateurs</a>
+        <a href='/users/index' ><i class="icon-cog icon-black"></i> Gestion des utilisateurs</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-communes') echo "class='active'" ?> >
-        <a href='/gestion-des-communes' ><em class="icon-th-list icon-black"></em> Gestion des communes</a>
+        <a href='/gestion-des-communes' ><i class="icon-th-list icon-black"></i> Gestion des communes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
-        <a href='/fusion-des-communes' ><em class="icon-th-list icon-black"></em> Fusion des communes</a>
+        <a href='/fusion-des-communes' ><i class="icon-th-list icon-black"></i> Fusion des communes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'couches-cartographiques') echo "class='active'" ?> >
-        <a href='/couches-cartographiques/list' ><em class="icon-cog icon-black"></em> Gestion des couches cartographiques</a>
+        <a href='/couches-cartographiques/list' ><i class="icon-cog icon-black"></i> Gestion des couches cartographiques</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-commission') echo "class='active'" ?> >
-        <a href='/gestion-des-commissions' ><em class="icon-th-list icon-black"></em> Gestion des commissions</a>
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-commissions') echo "class='active'" ?> >
+        <a href='/gestion-des-commissions' ><i class="icon-th-list icon-black"></i> Gestion des commissions</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-documents') echo "class='active'" ?> >
-        <a href='/gestion-des-documents' ><em class="icon-th-list icon-black"></em> Gestion des documents</a>
+        <a href='/gestion-des-documents' ><i class="icon-th-list icon-black"></i> Gestion des documents</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-prescriptions') echo "class='active'" ?> >
-        <a href='/gestion-prescriptions' ><em class="icon-th-list icon-black"></em> Gestion des prescriptions</a>
+        <a href='/gestion-prescriptions' ><i class="icon-th-list icon-black"></i> Gestion des prescriptions</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-textes-applicables') echo "class='active'" ?> >
-        <a href='/gestion-textes-applicables' ><em class="icon-th-list icon-black"></em> Gestion des textes applicables</a>
+        <a href='/gestion-textes-applicables' ><i class="icon-th-list icon-black"></i> Gestion des textes applicables</a>
     </li>
-        
+
     <li class="nav-header">Paramétrage du logiciel</li>
-        
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'periodicite') echo "class='active'" ?> >
-        <a href='/tableau-des-periodicites' ><em class="icon-th-list icon-black"></em> Tableau des périodicités</a>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'tableau-des-periodicites') echo "class='active'" ?> >
+        <a href='/tableau-des-periodicites' ><i class="icon-th-list icon-black"></i> Tableau des périodicités</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'groupement') echo "class='active'" ?> >
-        <a href='/groupement' ><em class="icon-th-list icon-black"></em> Groupements de communes</a>
+        <a href='/groupement' ><i class="icon-th-list icon-black"></i> Groupements de communes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'changement') echo "class='active'" ?> >
-        <a href='/changement' ><em class="icon-th-list icon-black"></em> Messages des alertes</a>
+        <a href='/changement' ><i class="icon-th-list icon-black"></i> Messages des alertes</a>
+    </li>
+
+    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
+        <a href='/formulaire' ><i class="icon-th-list icon-black"></i> Formulaires</a>
     </li>
 </ul>
 

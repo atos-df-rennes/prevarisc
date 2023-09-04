@@ -7,8 +7,8 @@ class Model_DbTable_Groupe extends Zend_Db_Table_Abstract
 
     protected $_dependentTables = ['Model_DbTable_GroupePrivilege'];
 
-    public function delete($id_groupe)
+    public function delete($id_groupe): int
     {
-        parent::delete('ID_GROUPE = '.$id_groupe);
+        return parent::delete('ID_GROUPE = '.$id_groupe);
     }
 }

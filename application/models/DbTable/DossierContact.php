@@ -13,7 +13,7 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
      */
     public function recupInfoContact($idDossier, $idFct)
     {
-        //Permet de récuperer les informations concernant le directeur unique de sécurité
+        // Permet de récuperer les informations concernant le directeur unique de sécurité
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['dc' => 'dossiercontact'])
@@ -34,7 +34,7 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
      */
     public function recupContactEtablissement($idEtablissement, $idFct = null)
     {
-        //Permet de récuperer les informations concernant le directeur unique de sécurité
+        // Permet de récuperer les informations concernant le directeur unique de sécurité
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['ec' => 'etablissementcontact'])
