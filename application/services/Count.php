@@ -1,96 +1,142 @@
 <?php
 
-    class Service_Count extends Service_Dashboard
+class Service_Count extends Service_Dashboard
+{
+    /**
+     * Retourne le nombre de prochaines commissions.
+     */
+    public function getNextCommissionCount(array $user): int
     {
-        public function getNextCommissionCount($user)
-        {
-            return $this->getNextCommission($user, true)[0]['count'];
-        }
-
-        public function getERPSuivisCount($user)
-        {
-            return $this->getERPSuivis($user, true);
-        }
-
-        public function getERPOuvertsSousAvisDefavorableCount($user)
-        {
-            return $this->getERPOuvertsSousAvisDefavorable($user, true);
-        }
-
-        public function getERPOuvertsSousAvisDefavorableSuivisCount($user)
-        {
-            return $this->getERPOuvertsSousAvisDefavorableSuivis($user, true);
-        }
-
-        public function getERPOuvertsSousAvisDefavorableSurCommuneCount($user)
-        {
-            return $this->getERPOuvertsSousAvisDefavorableSurCommune($user, true);
-        }
-
-        public function getERPSansPreventionnisteCount($user)
-        {
-            return $this->getERPSansPreventionniste($user, true);
-        }
-
-        public function getERPOuvertsSansProchainesVisitePeriodiquesCount($user)
-        {
-            return $this->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
-        }
-
-        public function getDossiersSuivisSansAvisCount($user)
-        {
-            return $this->getDossiersSuivisSansAvis($user, true);
-        }
-
-        public function getDossiersSuivisNonVerrouillesCount($user)
-        {
-            return $this->getDossiersSuivisNonVerrouilles($user, true);
-        }
-
-        public function getDossierDateCommissionEchuCount($user)
-        {
-            return $this->getDossierDateCommissionEchu($user, true);
-        }
-
-        public function getDossierAvecAvisDiffererCount($user)
-        {
-            return $this->getDossierAvecAvisDiffere($user, true);
-        }
-
-        public function getCourrierSansReponseCount($user)
-        {
-            return $this->getCourrierSansReponse($user, true);
-        }
-
-        public function getFeedsCount($user)
-        {
-            $serviceFeed = new Service_Feed();
-
-            return $serviceFeed->getFeeds($user, null, true);
-        }
-
-        public function getLeveePrescCount($user)
-        {
-            return $this->getLeveePresc($user, true);
-        }
-
-        public function getAbsenceQuorumCount($user)
-        {
-            return $this->getAbsenceQuorum($user, true);
-        }
-
-        public function getNpspCount($user)
-        {
-            return $this->getNpsp($user, true);
-        }
-
-        public function getDossiersPlatAUSansEtablissementCount($user)
-        {
-            return $this->getDossiersPlatAUSansEtablissement($user, true);
-        }
-
-        public function getDossierAvecAvisDiffereCount($user)
-        {
-            return $this->getDossierAvecAvisDiffere($user, true);
-        }
+        return $this->getNextCommission($user, true);
     }
+
+    /**
+     * Retourne le nombre d'ERP suivis.
+     */
+    public function getERPSuivisCount(array $user): int
+    {
+        return $this->getERPSuivis($user, true);
+    }
+
+    /**
+     * Retourne le nombre d'ERP ouverts sous avis défavorable.
+     */
+    public function getERPOuvertsSousAvisDefavorableCount(array $user): int
+    {
+        return $this->getERPOuvertsSousAvisDefavorable($user, true);
+    }
+
+    /**
+     * Retourne le nombre d'ERP suivis ouverts sous avis défavorable.
+     */
+    public function getERPOuvertsSousAvisDefavorableSuivisCount(array $user): int
+    {
+        return $this->getERPOuvertsSousAvisDefavorableSuivis($user, true);
+    }
+
+    /**
+     * Retourne le nombre d'ERP ouverts sous avis défavorable sur la commune affectée à l'utilisateur.
+     */
+    public function getERPOuvertsSousAvisDefavorableSurCommuneCount(array $user): int
+    {
+        return $this->getERPOuvertsSousAvisDefavorableSurCommune($user, true);
+    }
+
+    /**
+     * Retourne le nombre d'ERP sans préventionniste.
+     */
+    public function getERPSansPreventionnisteCount(array $user): int
+    {
+        return $this->getERPSansPreventionniste($user, true);
+    }
+
+    /**
+     * Retourne le nombre d'ERP ouverts sans prochaines visites périodiques.
+     */
+    public function getERPOuvertsSansProchainesVisitePeriodiquesCount(array $user): int
+    {
+        return $this->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers suivis sans avis.
+     */
+    public function getDossiersSuivisSansAvisCount(array $user): int
+    {
+        return $this->getDossiersSuivisSansAvis($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers suivis non vérouillés.
+     */
+    public function getDossiersSuivisNonVerrouillesCount(array $user): int
+    {
+        return $this->getDossiersSuivisNonVerrouilles($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers pour lesquels la date de commission est échue.
+     */
+    public function getDossierDateCommissionEchuCount(array $user): int
+    {
+        return $this->getDossierDateCommissionEchu($user, true);
+    }
+
+    /**
+     * Retourne le nombre de courriers sans réponse.
+     */
+    public function getCourrierSansReponseCount(array $user): int
+    {
+        return $this->getCourrierSansReponse($user, true);
+    }
+
+    /**
+     * Retourne le nombre de messages.
+     */
+    public function getFeedsCount(array $user): int
+    {
+        $serviceFeed = new Service_Feed();
+
+        return $serviceFeed->getFeeds($user, null, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers avec une levée de prescription.
+     */
+    public function getLeveePrescCount(array $user): int
+    {
+        return $this->getLeveePresc($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers avec une absence de quorum.
+     */
+    public function getAbsenceQuorumCount(array $user): int
+    {
+        return $this->getAbsenceQuorum($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers avec une mention "Ne peut se prononcer".
+     */
+    public function getNpspCount(array $user): int
+    {
+        return $this->getNpsp($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers Plat'AU non rattachés à un établissement.
+     */
+    public function getDossiersPlatAUSansEtablissementCount(array $user): int
+    {
+        return $this->getDossiersPlatAUSansEtablissement($user, true);
+    }
+
+    /**
+     * Retourne le nombre de dossiers avec avis différé.
+     */
+    public function getDossierAvecAvisDiffereCount(array $user): int
+    {
+        return $this->getDossierAvecAvisDiffere($user, true);
+    }
+}

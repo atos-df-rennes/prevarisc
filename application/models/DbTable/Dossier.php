@@ -364,23 +364,18 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param mixed $idsCommission
-     * @param mixed $sinceDays
-     * @param mixed $untilDays
-     * @param mixed $getCount
-     *
-     * @return array
+     * @return array|int
      */
-    public function listeDesDossierDateCommissionEchu($idsCommission, $sinceDays = 10, $untilDays = 100, $getCount = false)
+    public function listeDesDossierDateCommissionEchu(array $idsCommission, int $sinceDays = 10, int $untilDays = 100, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
-
         $select = $this->select()->setIntegrityCheck(false);
+
         if ($getCount) {
             $select->from(['d' => 'dossier'], ['COUNT(*) as count']);
         } else {
             $select->from(['d' => 'dossier']);
         }
+
         $select
             ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
             ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
@@ -394,36 +389,40 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
             ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER')
             ->joinLeft('datecommission', 'dossieraffectation.ID_DATECOMMISSION_AFFECT = datecommission.ID_DATECOMMISSION ')
-            ->group('d.ID_DOSSIER')
-            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.((int) $sinceDays))
-            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.((int) $untilDays))
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.$sinceDays)
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.$untilDays)
             ->where('d.AVIS_DOSSIER_COMMISSION IS NULL or d.AVIS_DOSSIER_COMMISSION = 0')
-            ->order('datecommission.DATE_COMMISSION desc')
         ;
 
-        if ([] !== $ids) {
-            $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
+        if ([] !== $idsCommission) {
+            $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')');
         }
 
         if ($getCount) {
-            $res = $this->getAdapter()->fetchRow($select);
-
-            return $res['count'];
+            return $this->getAdapter()->fetchRow($select)['count'];
         }
+
+        $select
+            ->group('d.ID_DOSSIER')
+            ->order('datecommission.DATE_COMMISSION desc')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function listeDossierAvecAvisDiffere($idsCommission, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function listeDossierAvecAvisDiffere(array $idsCommission, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
-
         // Dossiers avec avis différé
         $search = new Model_DbTable_Search();
         $search->setItem('dossier', $getCount);
-        if ([] !== $ids) {
-            $search->setCriteria('d.COMMISSION_DOSSIER', $ids);
+
+        if ([] !== $idsCommission) {
+            $search->setCriteria('d.COMMISSION_DOSSIER', $idsCommission);
         }
+
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);
 
         if ($getCount) {
@@ -433,14 +432,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeDesCourrierSansReponse($duree_en_jour = 5, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function listeDesCourrierSansReponse(int $duree_en_jour = 5, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('dossier', $getCount);
         $search->setCriteria('d.TYPE_DOSSIER', 5);
         $search->setCriteria('d.DATEREP_DOSSIER IS NULL');
         $search->setCriteria('d.OBJET_DOSSIER IS NOT NULL');
-        $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', (int) $duree_en_jour);
+        $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', $duree_en_jour);
         $search->order('d.DATEINSERT_DOSSIER desc');
 
         if ($getCount) {

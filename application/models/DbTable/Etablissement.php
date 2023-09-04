@@ -352,19 +352,25 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
     }
 
-    public function listeDesERPOuvertsSousAvisDefavorable($idsCommission = null, $numInseeCommune = null, $idUtilisateur = null, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function listeDesERPOuvertsSousAvisDefavorable(?array $idsCommission = null, ?string $numInseeCommune = null, ?int $idUtilisateur = null, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement', $getCount);
         $search->setCriteria('avis.ID_AVIS', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
+
         if ($numInseeCommune) {
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE', $numInseeCommune);
         }
+
         if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
+
         if ($idUtilisateur) {
             $search->setCriteria('utilisateur.ID_UTILISATEUR', $idUtilisateur);
         }
@@ -376,7 +382,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeERPSansPreventionniste($getCount = null)
+    /**
+     * @return array|int
+     */
+    public function listeERPSansPreventionniste(bool $getCount = null)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement', $getCount);
@@ -391,7 +400,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function listeErpOuvertsSansProchainesVisitePeriodiques(array $idsCommission, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement', $getCount);
@@ -427,7 +439,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
         if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
 
         $search->having("nextvisiteyearmonth < DATE_FORMAT(CURDATE(), '%Y-%m')");

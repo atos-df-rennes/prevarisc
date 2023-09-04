@@ -30,13 +30,9 @@ class Service_Feed
     }
 
     /**
-     * @param null|int $count
-     * @param mixed    $user
-     * @param mixed    $getCount
-     *
-     * @return array
+     * @return array|int
      */
-    public function getFeeds($user, $count = 5, $getCount = false)
+    public function getFeeds(array $user, ?int $count = 5, bool $getCount = false)
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
@@ -50,6 +46,7 @@ class Service_Feed
         } else {
             $select->from('news');
         }
+
         $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')

@@ -38,7 +38,6 @@ class IndexController extends Zend_Controller_Action
                 !$blocConfig['acl']
                 || $acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1])
             ) {
-                $user = $service_user->find($identity['ID_UTILISATEUR']);
                 $method = $blocConfig['method'];
                 $methodCount = $method.'Count';
                 $serviceCount = new Service_Count();

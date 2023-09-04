@@ -219,31 +219,22 @@ class Service_Dashboard
     }
 
     /**
-     * @psalm-return array<int, array{id:mixed, LIBELLE_COMMISSION:mixed, LIBELLE_DATECOMMISSION:mixed, ID_COMMISSIONTYPEEVENEMENT:mixed, DATE_COMMISSION:mixed, HEUREDEB_COMMISSION:mixed, HEUREFIN_COMMISSION:mixed, heure:string, odj:mixed}>
-     *
-     * @param mixed $user
-     * @param mixed $getCount
-     *
-     * @return array[]
+     * @return array|int
      */
-    public function getNextCommission($user, $getCount = false): array
+    public function getNextCommission(array $user, bool $getCount = false)
     {
         $dbDateCommission = new Model_DbTable_DateCommission();
-
-        if ($getCount) {
-            return $dbDateCommission->getNextCommission(
-                $this->getCommissionUser($user),
-                time(),
-                time() + 3600 * 24 * $this->options['next_commissions_days'],
-                $getCount
-            );
-        }
 
         $prochainesCommission = $dbDateCommission->getNextCommission(
             $this->getCommissionUser($user),
             time(),
-            time() + 3600 * 24 * $this->options['next_commissions_days']
+            time() + 3600 * 24 * $this->options['next_commissions_days'],
+            $getCount
         );
+
+        if ($getCount) {
+            return $prochainesCommission;
+        }
 
         // on récupère pour chaque prochaine commission le nombre de dossiers affectés
         $commissions = [];
@@ -264,29 +255,41 @@ class Service_Dashboard
         return $commissions;
     }
 
-    public function getDossierDateCommissionEchu($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getDossierDateCommissionEchu(array $user, bool $getCount = false)
     {
         $dbDossier = new Model_DbTable_Dossier();
         $commissionsUser = $this->getCommissionUser($user);
 
-        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], null, $getCount);
+        return $dbDossier->listeDesDossierDateCommissionEchu($commissionsUser, $this->options['dossiers_sans_avis_days'], 0, $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorable($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getERPOuvertsSousAvisDefavorable(array $user, bool $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, null, null, $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorableSuivis($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getERPOuvertsSousAvisDefavorableSuivis(array $user, bool $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, null, $user['ID_UTILISATEUR'], $getCount);
     }
 
-    public function getERPOuvertsSousAvisDefavorableSurCommune($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getERPOuvertsSousAvisDefavorableSurCommune(array $user, bool $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
@@ -297,7 +300,10 @@ class Service_Dashboard
         return $dbEtablissement->listeDesERPOuvertsSousAvisDefavorable(null, $user['NUMINSEE_COMMUNE'], null, $getCount);
     }
 
-    public function getERPOuvertsSansProchainesVisitePeriodiques($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getERPOuvertsSansProchainesVisitePeriodiques(array $user, bool $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
         $commissionsUser = $this->getCommissionUser($user);
@@ -305,7 +311,10 @@ class Service_Dashboard
         return $dbEtablissement->listeErpOuvertsSansProchainesVisitePeriodiques($commissionsUser, $getCount);
     }
 
-    public function getERPSansPreventionniste($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getERPSansPreventionniste(array $user, bool $getCount = false)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
 
@@ -313,14 +322,12 @@ class Service_Dashboard
     }
 
     /**
-     * @param mixed $user
-     * @param mixed $getCount
-     *
-     * @return array
+     * @return array|int
      */
-    public function getERPSuivis($user, $getCount = false)
+    public function getERPSuivis(array $user, bool $getCount = false)
     {
         $etablissements = [];
+        $nbEtablissements = 0;
         $id_user = $user['ID_UTILISATEUR'];
 
         // Ets 1 - 4ème catégorie
@@ -331,10 +338,12 @@ class Service_Dashboard
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', ['1', '2', '3', '4']);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
+
         if ($getCount) {
-            return $search->run(false, null, false)->toArray()[0]['count'];
+            $nbEtablissements += $search->run(false, null, false, true);
+        } else {
+            $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
         }
-        $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
         // 5ème catégorie defavorable
         $search = new Model_DbTable_Search();
@@ -345,7 +354,12 @@ class Service_Dashboard
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', '5');
         $search->setCriteria('avis.ID_AVIS', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
-        $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
+
+        if ($getCount) {
+            $nbEtablissements += $search->run(false, null, false, true);
+        } else {
+            $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
+        }
 
         // 5ème catégorie avec local à sommeil
         $search = new Model_DbTable_Search();
@@ -356,7 +370,12 @@ class Service_Dashboard
         $search->setCriteria('etablissementinformations.ID_CATEGORIE', '5');
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $search->setCriteria('etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', '1');
-        $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
+
+        if ($getCount) {
+            $nbEtablissements += $search->run(false, null, false, true);
+        } else {
+            $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
+        }
 
         // EIC - IGH - HAB - Autres
         $search = new Model_DbTable_Search();
@@ -365,12 +384,20 @@ class Service_Dashboard
         $search->setCriteria('etablissementinformations.ID_STATUT', ['2', '4']);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
         $search->setCriteria('etablissementinformations.ID_GENRE', ['6', '5', '4', '7', '8', '9', '10']);
-        $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
 
-        return array_unique($etablissements, SORT_REGULAR);
+        if ($getCount) {
+            $nbEtablissements += $search->run(false, null, false, true);
+        } else {
+            $etablissements = array_merge($search->run(false, null, false)->toArray(), $etablissements);
+        }
+
+        return $getCount ? $nbEtablissements : array_unique($etablissements, SORT_REGULAR);
     }
 
-    public function getDossierAvecAvisDiffere($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getDossierAvecAvisDiffere(array $user, bool $getCount = false)
     {
         $dbDossier = new Model_DbTable_Dossier();
         $commissionsUser = $this->getCommissionUser($user);
@@ -378,14 +405,20 @@ class Service_Dashboard
         return $dbDossier->listeDossierAvecAvisDiffere($commissionsUser, $getCount);
     }
 
-    public function getCourrierSansReponse($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getCourrierSansReponse(array $user, bool $getCount = false)
     {
         $dbDossier = new Model_DbTable_Dossier();
 
         return $dbDossier->listeDesCourrierSansReponse($this->options['courrier_sans_reponse_days'], $getCount);
     }
 
-    public function getDossiersSuivisNonVerrouilles($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getDossiersSuivisNonVerrouilles(array $user, bool $getCount = false)
     {
         $id_user = $user['ID_UTILISATEUR'];
 
@@ -403,7 +436,10 @@ class Service_Dashboard
         return $search->run(false, null, false)->toArray();
     }
 
-    public function getDossiersSuivisSansAvis($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getDossiersSuivisSansAvis(array $user, bool $getCount = false)
     {
         $id_user = $user['ID_UTILISATEUR'];
 
@@ -429,10 +465,9 @@ class Service_Dashboard
     /**
      * Retourne la liste des dossiers Plat'AU non associé à un etablissement.
      *
-     * @param mixed $user
-     * @param mixed $getCount
+     * @return array|int
      */
-    public function getDossiersPlatAUSansEtablissement($user, $getCount = false)
+    public function getDossiersPlatAUSansEtablissement(array $user, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('dossier', $getCount);
@@ -446,7 +481,10 @@ class Service_Dashboard
         return $search->run(false, null, false)->toArray();
     }
 
-    public function getLeveePresc($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getLeveePresc(array $user, bool $getCount = false)
     {
         $DBdossierLie = new Model_DbTable_DossierLie();
         $DBdossierNautre = new Model_DbTable_DossierNature();
@@ -454,14 +492,14 @@ class Service_Dashboard
         $search = new Model_DbTable_Search();
         $search->setItem('dossier', $getCount);
         $search->setCriteria('DELAIPRESC_DOSSIER IS NOT NULL');
-        $dossiers = $search->run(false, null, false)->toArray();
 
         if ($getCount) {
-            return $dossiers[0]['count'];
+            return $search->run(false, null, false, true);
         }
 
-        $valCpt = 0;
+        $dossiers = $search->run(false, null, false)->toArray();
 
+        $valCpt = 0;
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
             foreach ($listeDossiersLies as $lien) {
@@ -482,7 +520,10 @@ class Service_Dashboard
         return $dossiers;
     }
 
-    public function getAbsenceQuorum($user, $getCount = false)
+    /**
+     * @return array|int
+     */
+    public function getAbsenceQuorum(array $user, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $DBdossier = new Model_DbTable_Dossier();
@@ -490,43 +531,17 @@ class Service_Dashboard
 
         $search->setItem('dossier', $getCount);
         $search->setCriteria('ABSQUORUM_DOSSIER = 1');
-        $resRun = $search->run(false, null, false);
-        $dossiers = $resRun->toArray();
 
-        $valCpt = 0;
-        foreach ($dossiers as $dossier) {
-            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
-            foreach ($listeDossiersLies as $lien) {
-                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
-                $tabType = $DBdossier->getTypeDossier($idLien);
-
-                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
-                    unset($dossiers[$valCpt]);
-                }
-            }
-            ++$valCpt;
-        }
-
-        return $getCount ? $dossiers[0]['count'] : $dossiers;
-    }
-
-    public function getNpsp($user, $getCount = false)
-    {
-        $search = new Model_DbTable_Search();
-        $DBdossier = new Model_DbTable_Dossier();
-        $DBdossierLie = new Model_DbTable_DossierLie();
-
-        $search->setItem('dossier', $getCount);
-        $search->setCriteria('NPSP_DOSSIER = 1');
-        $resRun = $search->run(false, null, false);
-        $dossiers = $resRun->toArray();
         if ($getCount) {
-            return $resRun[0]['count'];
+            return $search->run(false, null, false, true);
         }
+
+        $dossiers = $search->run(false, null, false)->toArray();
 
         $valCpt = 0;
         foreach ($dossiers as $dossier) {
             $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+
             foreach ($listeDossiersLies as $lien) {
                 $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
                 $tabType = $DBdossier->getTypeDossier($idLien);
@@ -535,6 +550,7 @@ class Service_Dashboard
                     unset($dossiers[$valCpt]);
                 }
             }
+
             ++$valCpt;
         }
 
@@ -542,11 +558,43 @@ class Service_Dashboard
     }
 
     /**
-     * @psalm-return array<int, mixed>
-     *
-     * @param mixed $user
+     * @return array|int
      */
-    protected function getCommissionUser($user): array
+    public function getNpsp(array $user, bool $getCount = false)
+    {
+        $search = new Model_DbTable_Search();
+        $DBdossier = new Model_DbTable_Dossier();
+        $DBdossierLie = new Model_DbTable_DossierLie();
+
+        $search->setItem('dossier', $getCount);
+        $search->setCriteria('NPSP_DOSSIER = 1');
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
+        $dossiers = $search->run(false, null, false)->toArray();
+
+        $valCpt = 0;
+        foreach ($dossiers as $dossier) {
+            $listeDossiersLies = $DBdossierLie->getDossierLie($dossier['ID_DOSSIER']);
+
+            foreach ($listeDossiersLies as $lien) {
+                $idLien = $lien['ID_DOSSIER1'] == $dossier['ID_DOSSIER'] ? $lien['ID_DOSSIER2'] : $lien['ID_DOSSIER1'];
+                $tabType = $DBdossier->getTypeDossier($idLien);
+
+                if (0 == $tabType['TYPE_DOSSIER'] || self::ID_DOSSIERTYPE_COURRIER == $tabType['TYPE_DOSSIER']) {
+                    unset($dossiers[$valCpt]);
+                }
+            }
+
+            ++$valCpt;
+        }
+
+        return $dossiers;
+    }
+
+    protected function getCommissionUser(array $user): array
     {
         $commissionsUser = [];
 
@@ -559,12 +607,7 @@ class Service_Dashboard
         return $commissionsUser;
     }
 
-    /**
-     * @param mixed $commission
-     *
-     * @return array
-     */
-    protected function getCommissionODJ($commission)
+    protected function getCommissionODJ(array $commission): array
     {
         $dbDossierAffectation = new Model_DbTable_DossierAffectation();
         $odj = array_merge(

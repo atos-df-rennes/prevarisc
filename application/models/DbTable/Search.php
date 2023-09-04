@@ -11,21 +11,18 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
     // On demare la recherche
 
     /**
-     * @param mixed      $id_etablissement_parent
-     * @param null|mixed $numero_de_page
-     * @param mixed      $paginator
-     * @param mixed      $getCount
+     * @param bool|int $id_etablissement_parent
      *
-     * @return Zend_Db_Table_Rowset_Abstract|Zend_Paginator
+     * @return int|Zend_Db_Table_Rowset_Abstract|Zend_Paginator
      */
-    public function run($id_etablissement_parent = false, $numero_de_page = null, $paginator = true, $getCount = false)
+    public function run($id_etablissement_parent = false, ?int $numero_de_page = null, bool $paginator = true, bool $getCount = false)
     {
         // Recherche par niveaux
         if (false !== $id_etablissement_parent) {
             if ('etablissement' == $this->item) {
-                $this->select->where(true === $id_etablissement_parent || 0 == $id_etablissement_parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = '.$id_etablissement_parent);
+                $this->select->where(true === $id_etablissement_parent || 0 === $id_etablissement_parent ? 'etablissementlie.ID_ETABLISSEMENT IS NULL' : 'etablissementlie.ID_ETABLISSEMENT = '.$id_etablissement_parent);
             } elseif ('dossier' == $this->item) {
-                $this->select->where(true === $id_etablissement_parent || 0 == $id_etablissement_parent ? 'dossierlie.ID_DOSSIER1 IS NULL' : 'dossierlie.ID_DOSSIER1 = '.$id_etablissement_parent);
+                $this->select->where(true === $id_etablissement_parent || 0 === $id_etablissement_parent ? 'dossierlie.ID_DOSSIER1 IS NULL' : 'dossierlie.ID_DOSSIER1 = '.$id_etablissement_parent);
             }
         }
 
