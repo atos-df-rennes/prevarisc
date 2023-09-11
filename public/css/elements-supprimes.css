@@ -1,0 +1,33 @@
+.tab-content {
+    height: 700px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: lightgrey;
+}
+
+.deleted-element__name {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.deleted-element__deleted-by {
+    display: flex;
+    flex-direction: column;
+}
+
+.deleted-element__deleted-by_informations {
+    display: flex;
+    gap: 10px;
+}
+
+.deleted-element__restore-button {
+    white-space: nowrap;
+}

@@ -48,6 +48,7 @@ $(document).ready(function() {
                 dialogAlerte.html(msg);
                 tinymce.init({
                     selector: '.tinyarea',
+                    language: 'fr_FR',
                     height: 220,
                     menubar: false,
                     statusbar: false,
@@ -243,16 +244,25 @@ $(document).ready(function() {
         $("#InfosDossier > li").hide();
         $("#creationDossier").hide();
         $(".docurba").remove();
+
         if (idType == 0) {
             $("#nature").hide();
         } else {
             //Modif de la dénomination de l'avis
             if (idType == 1 || idType == 2) {
-                //dans le cas d'une étude
+                //dans le cas d'une étude ou d'une visite
                 $("#AVIS_DOSSIER").parent().prev().prev().html("Avis du rapporteur");
             } else if (idType == 3) {
-                //cas d'une visite ou d'un groupe de visite
+                //cas d'un groupe de visite
                 $("#AVIS_DOSSIER").parent().prev().prev().html("Avis du groupe de visite");
+            }
+
+            if (isDossierPlatau()) {
+                if (idType == 1) {
+                    gestionAffichageInfosPlatau()
+                } else {
+                    gestionMasquageInfosPlatau()
+                }
             }
 
             $.ajax({
@@ -446,8 +456,18 @@ function majAvisSelect() {
 
 $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar, mois, annee) {
     var calendar = $("#" + divInfo).fullCalendar({
+        buttonIcons:{
+            prevYear: 'seek-prev',
+            nextYear: 'seek-next'
+        },
+        buttonText: {
+            month: 'Mois',
+            day: 'Jour',
+            week: 'Semaine',
+            today: 'Aujourd\'hui'
+        },
         header: {
-            left: 'prev,next today',
+            left: 'prevYear prev,next nextYear today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
@@ -547,9 +567,9 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
             // Boite de dialogue en ajoutant en callback le traitement du formulaire
             var nomEtab = "";
             if ($("#infosEtabs > .etab").length > 0) {
-                nomEtab = $("#infosEtabs > .etab").text().trim();
+                nomEtab = document.querySelector('#infosEtabs > .etab').innerText.trim();
             } else if ($("#infosEtablissement > .etab").length > 0) {
-                nomEtab = $("#infosEtablissement > .etab").text().trim();
+                nomEtab = document.querySelector('#infosEtablissement > .etab').innerText.trim();
             }
             nomEtab = nomEtab.replace('&nbsp;', ' ');
             nomEtab = nomEtab.replace("'", " ");
@@ -578,45 +598,53 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
             my_dialog("/calendrier-des-commissions/dialogcomm", "do=newComm&idComm=" + idComm +
                 "&dateD=" + start + "&dateF=" + end + "&libelleCom=" + nomCom + "&type=" + type,
                 function() {
-                    $("#dialogComm").dialog("option", "buttons", {
-                        'Enregistrer dans le calendrier': function() {
-                            // Lors de la validation de la boite de dialogue
-                            $.ajax({
-                                data: $("#formDateComm").serialize() +
-                                    "&idComm=" + idComm,
-                                url: "/calendrier-des-commissions/adddates",
-                                type: "POST",
-                                success: function(affichageResultat) {
-                                    //En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
-                                    //Récupération du Json et affichage de celui-ci
-                                    var rez = eval("(" + affichageResultat +
-                                        ")");
-                                    for (var i in rez) {
-                                        calendar.fullCalendar(
-                                        'renderEvent', {
-                                            id: rez[i]['id'],
-                                            title: rez[i]['title'],
-                                            className: rez[i][
-                                                'className'
-                                            ],
-                                            start: rez[i]['start'],
-                                            end: rez[i]['end'],
-                                            allDay: false,
-                                            url: "/commission/id/" +
-                                                rez[i]['id']
-                                        });
+                    $("#dialogComm").dialog("option", "buttons", [
+                        {
+                            text: 'Enregistrer dans le calendrier',
+                            class: 'btn btn-success',
+                            click: function() {
+                                // Lors de la validation de la boite de dialogue
+                                $.ajax({
+                                    data: $("#formDateComm").serialize() +
+                                        "&idComm=" + idComm,
+                                    url: "/calendrier-des-commissions/adddates",
+                                    type: "POST",
+                                    success: function(affichageResultat) {
+                                        //En cas de succes il faut inserer tous les évenements dans le calendrier et la BD
+                                        //Récupération du Json et affichage de celui-ci
+                                        var rez = eval("(" + affichageResultat +
+                                            ")");
+                                        for (var i in rez) {
+                                            calendar.fullCalendar(
+                                            'renderEvent', {
+                                                id: rez[i]['id'],
+                                                title: rez[i]['title'],
+                                                className: rez[i][
+                                                    'className'
+                                                ],
+                                                start: rez[i]['start'],
+                                                end: rez[i]['end'],
+                                                allDay: false,
+                                                url: "/commission/id/" +
+                                                    rez[i]['id']
+                                            });
+                                        }
+                                        $("#" + divInfo).fullCalendar(
+                                            'refetchEvents');
+                                        $("#dialogComm").dialog('close').html(
+                                            '');
                                     }
-                                    $("#" + divInfo).fullCalendar(
-                                        'refetchEvents');
-                                    $("#dialogComm").dialog('close').html(
-                                        '');
-                                }
-                            });
+                                });
+                            }
                         },
-                        'Fermer la fenêtre d\'édition': function() {
-                            $("#dialogComm").dialog('close').html('');
+                        {
+                            text: "Fermer la fenêtre d'édition",
+                            class: 'btn',
+                            click: function() {
+                                $("#dialogComm").dialog('close').html('');
+                            }
                         }
-                    });
+                    ]);
                 });
         },
         eventClick: function(event, jsEvent, view) {
@@ -1014,8 +1042,78 @@ $("#modificationDossier").live('click', function() {
 
     //Gestion des cas calendrier comm visite en fonction du type de dossier
     $(".hideCalendar").hide();
+
+    if (isDossierPlatau() && $('#TYPE_DOSSIER').val() === '1') {
+        gestionAffichageInfosPlatau()
+    }
+
     return false;
 });
+
+function isDossierPlatau() {
+    return $('.dossier__identifiant-platau').length === 1
+}
+
+function gestionAffichageInfosPlatau() {
+    $('.incomplet').live('click.platau', function() {
+        afficheInfosPlatau($('#INCOMPLET'))
+    })
+    $('.cancelIncomplet').live('click.platau', function() {
+        masqueInfosPlatau()
+    })
+
+    $('#AVIS_DOSSIER_COMMISSION').live('change.platau', function() {
+        const avis = $('#AVIS_DOSSIER_COMMISSION').val()
+        const infosPlatauExists = !!document.getElementById('PIECESJOINTES')
+
+        if (avis !== '0') {
+            if (!infosPlatauExists) {
+                afficheInfosPlatau($('#AVIS_COMMISSION'))
+            }
+        } else {
+            masqueInfosPlatau()
+        }
+    })
+
+    $('#select-platau').live('click.platau', function(e) {
+        e.preventDefault()
+        document.getElementById('PIECESJOINTES').scrollIntoView()
+        $('#PIECESJOINTES').focus()
+    })
+
+    if ($('#statut-pec').hasClass('text-warning')) {
+        afficheInfosPlatau($('#INCOMPLET'))
+    }
+
+    if ($('#statut-avis').hasClass('text-warning')) {
+        afficheInfosPlatau($('#AVIS_COMMISSION'))
+    }
+}
+
+function gestionMasquageInfosPlatau() {
+    $('.incomplet').die('click.platau')
+    $('.cancelIncomplet').die('click.platau')
+    $('#AVIS_DOSSIER_COMMISSION').die('change.platau')
+    $('#select-platau').die('click.platau')
+}
+
+function afficheInfosPlatau(parentRow) {
+    $.post(
+        '/piece-jointe/display-pj-platau',
+        { idDossier: $('#idDossier').val() },
+        function(data) {
+            if ('' !== data) {
+                parentRow.after(data)
+                $('.label.label-warning').removeClass('ui-helper-hidden')
+            }
+        }
+    )
+}
+
+function masqueInfosPlatau() {
+    $('#PIECESJOINTES').remove()
+    $('.label.label-warning').addClass('ui-helper-hidden')
+}
 
 //Selection d'une nature et affichage des champs en fonction de la ou des natures
 $("#selectNature").live('change', function() {
@@ -1213,6 +1311,10 @@ $(".delaipresc").live('click', function() {
 });
 </script>
 
+<span class="label label-warning ui-helper-hidden">
+    N'oubliez pas de <a href="#" id="select-platau">sélectionner les documents</a> à envoyer vers Plat'AU
+</span>
+
 <?php
 	$action = $this->do;
 	if ($this->verrouDossier != 1 && 'edit' == $action): ?>
@@ -1248,6 +1350,76 @@ $(".delaipresc").live('click', function() {
             <div id='chargement'></div>
         </div>
         <h3>Informations générales</h3>
+        <?php if (null !== $this->id_platau): ?>
+            <h4 class="title">Informations sur Plat'AU</h4>
+            <ul class="list unstyled">
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <div class="left span3">Identifiant de la consultation</div>
+                    <div class="right span9"><?= $this->id_platau ?></div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classPec = 'muted';
+                    if ($this->enumStatutsPec::EN_ATTENTE === $this->statutPec):
+                        $classPec = 'text-info';
+                    elseif ($this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec):
+                        $classPec = 'text-success';
+                    elseif ($this->enumStatutsPec::A_RENVOYER === $this->statutPec):
+                        $classPec = 'text-warning';
+                    elseif ($this->enumStatutsPec::EN_ERREUR === $this->statutPec):
+                        $classPec = 'text-error';
+                    endif ?>
+                    <div class="left span3">Prise en compte métier</div>
+                    <div class="right span9">
+                        <?php if ($this->enumStatutsPec::EN_ERREUR === $this->statutPec): ?>
+                            <i class="icon-warning-sign"></i>
+                        <?php endif ?>
+                        <span id="statut-pec" class="<?= $classPec ?>"><?= $this->enumStatutsPec->getLabel($this->statutPec) ?></span>
+                        <?php if ($this->datePec): ?>
+                            le <?= $this->datePec ?>
+                        <?php endif ?>
+
+                        <?php if (
+                                $this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec &&
+                                null === $this->dateAvis
+                            ): ?>
+                            <a id="retry-export-pec" href="#" title="Renvoyer la prise en compte métier" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <?php
+                        $classAvis = 'muted';
+                    if ($this->enumStatutsAvis::EN_COURS === $this->statutAvis):
+                        $classAvis = 'text-info';
+                    elseif ($this->enumStatutsAvis::TRAITE === $this->statutAvis):
+                        $classAvis = 'text-success';
+                    elseif ($this->enumStatutsAvis::A_RENVOYER === $this->statutAvis):
+                        $classAvis = 'text-warning';
+                    elseif ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis):
+                        $classAvis = 'text-error';
+                    endif ?>
+                    <div class="left span3">Avis</div>
+                    <div class="right span9">
+                        <?php if ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis): ?>
+                            <i class="icon-warning-sign"></i>
+                        <?php endif ?>
+                        <span id="statut-avis" class="<?= $classAvis ?>"><?= $this->enumStatutsAvis->getLabel($this->statutAvis) ?></span>
+                        <?php if ($this->dateAvis): ?>
+                            le <?= $this->dateAvis ?>
+                        <?php endif ?>
+
+                        <?php if ($this->enumStatutsAvis::TRAITE === $this->statutAvis): ?>
+                            <a id="retry-export-avis" href="#" title="Renvoyer l'avis" data-id="<?= $this->id_platau ?>">
+                                <i class='icon-repeat icon-black'></i>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </li>
+            </ul>
+        <?php endif ?>
         <!-- BEGIN UL Type/Nature -->
         <h4>Type et nature du dossier</h4>
         <ul class='list unstyled'>
@@ -1928,7 +2100,7 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='AVIS_DOSSIER_COMMISSION' id='AVIS_DOSSIER_COMMISSION'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?>>
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?>>
                         <option value='0'></option>
                         <?php foreach ($this->listeAvis as $avis) : ?>
                         <option value='<?php echo $avis["ID_AVIS"] ?>'
@@ -1939,36 +2111,62 @@ $(".delaipresc").live('click', function() {
                     </select>
                     &nbsp;&nbsp;&nbsp;
                     <input type='checkbox' name='repercuterAvis' id='repercuterAvis'
-                        <?php echo ($this->is_allowed_change_avis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
+                        <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
                     établissements enfants
                 </div>
             </li>
+            <?php
+                $thirdPartyPlugins = explode(';', getenv('PREVARISC_THIRDPARTY_PLUGINS'));
+                $isSignalement = in_array('Plugin_FacteurCriticite', $thirdPartyPlugins, true);
+            ?>
             <li class='row-fluid' id='FACTDANGE'
-                style='margin-bottom:20px;<?php echo ($action != 'new' && $this->infosDossier['FACTDANGE_DOSSIER'] != null && $this->infosDossier['FACTDANGE_DOSSIER'] != 0) ? "" : "display:none;" ?>'>
+                style='margin-bottom:20px;
+                <?php echo (
+                    $action != 'new'
+                    && $this->infosDossier['FACTDANGE_DOSSIER'] !== null
+                    && (
+                        ($isSignalement && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2)
+                        || $this->infosDossier['FACTDANGE_DOSSIER'] > 0
+                    )
+                ) ? "" : "display:none;" ?>'
+            >
                 <div class='left libelle span3' style='float:left;'>Facteur de criticité</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
-                    <span class='factDange <?php echo $this->infosDossier['FACTDANGE_DOSSIER'] ?>'>
-                        <?php echo $this->infosDossier['FACTDANGE_DOSSIER'] ?>
+                    <span class='factDange'>
+                        <?php if ($isSignalement) {
+                            if ($this->infosDossier['FACTDANGE_DOSSIER'] === 0) {
+                                echo 'Non';
+                            } else {
+                                echo 'Oui';
+                            }
+                        } else {
+                            echo $this->infosDossier['FACTDANGE_DOSSIER'];
+                        } ?>
                     </span>
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='FACTDANGE_DOSSIER' id='FACTDANGE_DOSSIER'>
-                        <option value='0'>-</option>
-                        <option value='1'
-                            <?php echo (1 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>1
-                        </option>
-                        <option value='2'
-                            <?php echo (2 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>2
-                        </option>
-                        <option value='3'
-                            <?php echo (3 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>3
-                        </option>
-                        <option value='4'
-                            <?php echo (4 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>4
-                        </option>
-                        <option value='5'
-                            <?php echo (5 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>5
-                        </option>
+                        <?php if ($isSignalement): ?>
+                            <option value='0' <?php if ($this->infosDossier['FACTDANGE_DOSSIER'] === 0) echo "selected='selected'" ?>>Non</option>
+                            <option value='1' <?php if ($this->infosDossier['FACTDANGE_DOSSIER'] > 0) echo "selected='selected'" ?>>Oui</option>
+                        <?php else: ?>
+                            <option value='0'>-</option>
+                            <option value='1'
+                                <?php echo (1 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>1
+                            </option>
+                            <option value='2'
+                                <?php echo (2 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>2
+                            </option>
+                            <option value='3'
+                                <?php echo (3 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>3
+                            </option>
+                            <option value='4'
+                                <?php echo (4 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>4
+                            </option>
+                            <option value='5'
+                                <?php echo (5 == $this->infosDossier['FACTDANGE_DOSSIER']) ? "selected='selected'" : "" ?>>5
+                            </option>
+                        <?php endif ?>
                     </select>
                 </div>
             </li>
@@ -2238,7 +2436,7 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <ul class='unstyled'>
-                        <li style='liste-style-type:none' id='liste_prev'>
+                        <li style='list-style-type:none' id='liste_prev'>
                             <?php if (count($this->preventionnistes) > 0) :
 								foreach ($this->preventionnistes as $prev) : ?>
 								<span class='ui-state-highlight'

@@ -85,14 +85,14 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
 
         // Etape 2 : Code commune
-        if ('S' != $genre || 'C' != $genre || !empty($adresses)) {
+        if ('S' != $genre || 'C' != $genre) {
             $codecommune = str_pad($adresses[0]['NUMINSEE_COMMUNE'], 6, '0', STR_PAD_LEFT);
         } else {
             $codecommune = '000000';
         }
 
         // Etape 3 : Ordre sur la commune
-        if ('S' != $genre || 'C' != $genre || !empty($adresses)) {
+        if ('S' != $genre || 'C' != $genre) {
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->distinct()
@@ -352,47 +352,83 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
     }
 
-    public function listeDesERPOuvertsSousAvisDefavorable($idsCommission = null, $numInseeCommune = null, $idUtilisateur = null)
+    /**
+     * @return array|int
+     */
+    public function listeDesERPOuvertsSousAvisDefavorable(?array $idsCommission = null, ?string $numInseeCommune = null, ?int $idUtilisateur = null, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('avis.ID_AVIS', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
+
         if ($numInseeCommune) {
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE', $numInseeCommune);
         }
+
         if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
+
         if ($idUtilisateur) {
             $search->setCriteria('utilisateur.ID_UTILISATEUR', $idUtilisateur);
         }
 
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeERPSansPreventionniste()
+    /**
+     * @return array|int
+     */
+    public function listeERPSansPreventionniste(bool $getCount = null)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         $search->setCriteria('utilisateur.ID_UTILISATEUR IS NULL');
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission)
+    /**
+     * @return array|int
+     */
+    public function listeErpOuvertsSansProchainesVisitePeriodiques(array $idsCommission, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
-        $search->columns([
-            'nextvisiteyear' => new Zend_Db_Expr('YEAR(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH))'),
-        ]);
+        $search->setItem('etablissement', $getCount);
+
+        $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
+        if ($use_date_commission_for_periodicity) {
+            $search->columns([
+                'nextvisiteyearmonth' => new Zend_Db_Expr(
+                    "CASE WHEN
+                            dossiers.DATECOMM_DOSSIER >= dossiers.DATEVISITE_DOSSIER
+                        THEN
+                            DATE_FORMAT(DATE_ADD(dossiers.DATECOMM_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')
+                        ELSE
+                            DATE_FORMAT(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')
+                    END"
+                ),
+            ]);
+        } else {
+            $search->columns([
+                'nextvisiteyearmonth' => "DATE_FORMAT(DATE_ADD(dossiers.DATEVISITE_DOSSIER, INTERVAL etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH), '%Y-%m')",
+            ]);
+        }
+
         $search->joinEtablissementDossier();
-        $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( '
-                .'SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
+        $search->setCriteria('dossiers.DATEVISITE_DOSSIER = ( SELECT MAX(dos.DATEVISITE_DOSSIER) FROM dossier as dos '
                 .'LEFT JOIN etablissementdossier etabdoss ON etabdoss.ID_DOSSIER = dos.ID_DOSSIER '
                 .'LEFT JOIN dossiernature dn ON dn.ID_DOSSIER = dos.ID_DOSSIER '
                 .'WHERE etabdoss.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT '
@@ -401,10 +437,16 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
-        if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+
+        if ([] !== $idsCommission) {
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
-        $search->having('nextvisiteyear <= YEAR(NOW())');
+
+        $search->having("nextvisiteyearmonth < DATE_FORMAT(CURDATE(), '%Y-%m')");
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
 
         return $search->run(false, null, false)->toArray();
     }
@@ -429,5 +471,68 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         ;
 
         return $this->fetchRow($select);
+    }
+
+    public function getEffectifEtDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], [])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'e.ID_ETABLISSEMENT = eed.ID_ETABLISSEMENT', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idEtab)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['eed' => 'etablissementeffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = eed.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['e' => 'etablissement'], 'eed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtab)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des avis et derogations d un etablissement.
+     *
+     * @param mixed $idEtablissement
+     */
+    public function getListAvisDerogationsEtablissement($idEtablissement)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->join(['ad' => 'avisderogations'], 'd.ID_DOSSIER = ad.ID_DOSSIER')
+            ->joinLeft(['d2' => 'dossier'], 'd2.ID_DOSSIER = ad.ID_DOSSIER_LIE', ['TYPE_DOSSIER'])
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+            ->where('ad.DISPLAY_HISTORIQUE = ?', 1)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getDeleteEtablissement(): array
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT')
+            ->join(['ea' => 'etablissementadresse'], 'e.ID_ETABLISSEMENT = ea.ID_ETABLISSEMENT', [])
+            ->join(['ac' => 'adressecommune'], 'ea.NUMINSEE_COMMUNE = ac.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE')
+            ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = e.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
+            ->group('e.ID_ETABLISSEMENT')
+        ;
+
+        return $this->fetchAll($select)->toArray();
     }
 }

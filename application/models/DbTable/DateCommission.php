@@ -53,21 +53,20 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param int   $date
-     * @param int   $next_date
-     * @param mixed $idsCommission
-     *
-     * @return array
+     * @return array|int
      */
-    public function getNextCommission($idsCommission, $date, $next_date)
+    public function getNextCommission(array $idsCommission, int $date, int $next_date, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
-        $select = "SELECT *
-            FROM datecommission d
+        $select = $getCount ? 'SELECT COUNT(*) as count ' : 'SELECT * ';
+        $select .= "FROM datecommission d
             LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
             WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-            ".([] !== $ids ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
+            ".([] !== $idsCommission ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')' : '').'
             ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
+
+        if ($getCount) {
+            return $this->getAdapter()->fetchRow($select)['count'];
+        }
 
         return $this->getAdapter()->fetchAll($select);
     }
@@ -172,7 +171,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         return $this->getAdapter()->query($select);
     }
 
-    //pour la gestion des ordres du jour récup des date liées
+    // pour la gestion des ordres du jour récup des date liées
 
     /**
      * @param int|string $idComm
@@ -193,7 +192,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
 
     public function getInfosVisite($idDossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['da' => 'dossieraffectation'])
@@ -212,7 +211,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
      */
     public function getDateLieesv2($idDateComm)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['dc' => 'datecommission'])
@@ -241,10 +240,10 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         // des cohérences de données
         if ([] !== $dossiersAffecteIds) {
             if (1 == $datecommission->ID_COMMISSIONTYPEEVENEMENT) {
-                //COMMISSION EN SALLE
+                // COMMISSION EN SALLE
                 $dbDossier->update(['DATECOMM_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN('.implode(',', $dossiersAffecteIds).')');
             } elseif (in_array($datecommission->ID_COMMISSIONTYPEEVENEMENT, [2, 3])) {
-                //VISITE OU GROUPE DE VISITE
+                // VISITE OU GROUPE DE VISITE
                 $dbDossier->update(['DATEVISITE_DOSSIER' => $datecommission->DATE_COMMISSION], 'ID_DOSSIER IN ('.implode(',', $dossiersAffecteIds).')');
             }
         }

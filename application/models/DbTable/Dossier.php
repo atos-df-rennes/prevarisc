@@ -5,7 +5,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     protected $_name = 'dossier'; // Nom de la base
     protected $_primary = 'ID_DOSSIER'; // Clé primaire
 
-    //Fonction qui récupére toutes les infos générales d'un dossier
+    // Fonction qui récupére toutes les infos générales d'un dossier
 
     /**
      * @param float|int|string $id
@@ -25,8 +25,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchRow($select);
     }
 
-    //Fonction qui récupére tous les établissements concernés par le dossier
-    //PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
+    // Fonction qui récupére tous les établissements concernés par le dossier
+    // PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE
 
     /**
      * @param int|string $id_etablissement
@@ -48,7 +48,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+    // Fonction qui récup tous les établissements liés au dossier LAST VERSION
 
     /**
      * @param int|string $id_dossier
@@ -57,7 +57,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getEtablissementDossier($id_dossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = "SELECT etablissementdossier.ID_ETABLISSEMENTDOSSIER ,t1.ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
             FROM etablissementdossier, etablissement e, etablissementinformations t1, genre
             WHERE etablissementdossier.ID_ETABLISSEMENT = t1.ID_ETABLISSEMENT
@@ -96,7 +96,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    //autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
+    // autocompletion utilisé dans la partie dossier - Recherche etablissement LAST VERSION
 
     /**
      * @param int|string $etablissementLibelle
@@ -119,7 +119,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //Fonction qui récupère toutes les cellules concernées par le dossier
+    // Fonction qui récupère toutes les cellules concernées par le dossier
 
     /**
      * @param int|string $id_dossier
@@ -138,7 +138,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    //retourne 1 si dossier Etude - 0 si Visite
+    // retourne 1 si dossier Etude - 0 si Visite
     public function getTypeDossier($id_dossier)
     {
         $select = $this->select()
@@ -364,18 +364,19 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param mixed $idsCommission
-     * @param mixed $sinceDays
-     * @param mixed $untilDays
-     *
-     * @return array
+     * @return array|int
      */
-    public function listeDesDossierDateCommissionEchu($idsCommission, $sinceDays = 10, $untilDays = 100)
+    public function listeDesDossierDateCommissionEchu(array $idsCommission, int $sinceDays = 10, int $untilDays = 100, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
+        $select = $this->select()->setIntegrityCheck(false);
 
-        $select = $this->select()->setIntegrityCheck(false)
-            ->from(['d' => 'dossier'])
+        if ($getCount) {
+            $select->from(['d' => 'dossier'], ['COUNT(*) as count']);
+        } else {
+            $select->from(['d' => 'dossier']);
+        }
+
+        $select
             ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
             ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
             ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
@@ -388,49 +389,70 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
             ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER')
             ->joinLeft('datecommission', 'dossieraffectation.ID_DATECOMMISSION_AFFECT = datecommission.ID_DATECOMMISSION ')
-            ->group('d.ID_DOSSIER')
-            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.((int) $sinceDays))
-            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.((int) $untilDays))
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) >= '.$sinceDays)
+            ->where('DATEDIFF(CURDATE(), datecommission.DATE_COMMISSION) <= '.$untilDays)
             ->where('d.AVIS_DOSSIER_COMMISSION IS NULL or d.AVIS_DOSSIER_COMMISSION = 0')
-            ->order('datecommission.DATE_COMMISSION desc')
         ;
 
-        if ([] !== $ids) {
-            $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $ids).')');
+        if ([] !== $idsCommission) {
+            $select->where('datecommission.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')');
         }
+
+        if ($getCount) {
+            return $this->getAdapter()->fetchRow($select)['count'];
+        }
+
+        $select
+            ->group('d.ID_DOSSIER')
+            ->order('datecommission.DATE_COMMISSION desc')
+        ;
 
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function listeDossierAvecAvisDiffere($idsCommission)
+    /**
+     * @return array|int
+     */
+    public function listeDossierAvecAvisDiffere(array $idsCommission, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
-
         // Dossiers avec avis différé
         $search = new Model_DbTable_Search();
-        $search->setItem('dossier');
-        if ([] !== $ids) {
-            $search->setCriteria('d.COMMISSION_DOSSIER', $ids);
+        $search->setItem('dossier', $getCount);
+
+        if ([] !== $idsCommission) {
+            $search->setCriteria('d.COMMISSION_DOSSIER', $idsCommission);
         }
+
         $search->setCriteria('d.DIFFEREAVIS_DOSSIER', 1);
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
 
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeDesCourrierSansReponse($duree_en_jour = 5)
+    /**
+     * @return array|int
+     */
+    public function listeDesCourrierSansReponse(int $duree_en_jour = 5, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('dossier');
+        $search->setItem('dossier', $getCount);
         $search->setCriteria('d.TYPE_DOSSIER', 5);
         $search->setCriteria('d.DATEREP_DOSSIER IS NULL');
         $search->setCriteria('d.OBJET_DOSSIER IS NOT NULL');
-        $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', (int) $duree_en_jour);
+        $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', $duree_en_jour);
         $search->order('d.DATEINSERT_DOSSIER desc');
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
 
         return $search->run(false, null, false)->toArray();
     }
 
-    //Fonction qui récup tous les établissements liés au dossier LAST VERSION
+    // Fonction qui récup tous les établissements liés au dossier LAST VERSION
 
     /**
      * @param int|string $id_dossier
@@ -439,7 +461,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      */
     public function getPreventionnistesDossier($id_dossier)
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = "SELECT usrinfos.*
             FROM dossierpreventionniste, utilisateur usr, utilisateurinformations usrinfos
             WHERE dossierpreventionniste.ID_PREVENTIONNISTE = usr.ID_UTILISATEUR
@@ -479,8 +501,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = "SELECT ID_DOSSIER from (
                 (SELECT d.ID_DOSSIER, d.DATECOMM_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -491,8 +513,8 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 limit 1)
             UNION
                 (SELECT d.ID_DOSSIER, d.DATEVISITE_DOSSIER
-                from etablissement e 
-                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT 
+                from etablissement e
+                join etablissementdossier ed ON e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT
                 join dossier d ON ed.ID_DOSSIER = d.ID_DOSSIER
                 join dossiernature dn ON d.ID_DOSSIER = dn.ID_DOSSIER
                 where e.ID_ETABLISSEMENT = '{$idEtab}'
@@ -506,5 +528,189 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ";
 
         return $this->getAdapter()->fetchRow($select);
+    }
+
+    public function isPlatau(int $idDossier): bool
+    {
+        $select = $this->select(self::SELECT_WITH_FROM_PART)
+            ->where('ID_DOSSIER = ?', $idDossier)
+        ;
+
+        $result = $this->fetchRow($select);
+
+        return null !== $result['ID_PLATAU'];
+    }
+
+    // Récupère les dossiers d'un établissement par type
+    public function getDossiersEtablissementByType(int $idEtablissement, string $type): array
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')
+            ->join(['dt' => 'dossiertype'], 'd.TYPE_DOSSIER = dt.ID_DOSSIERTYPE')
+            ->where('e.ID_ETABLISSEMENT = ?', $idEtablissement)
+        ;
+
+        switch ($type) {
+            case 'etudes':
+                $select->where('dt.ID_DOSSIERTYPE = 1');
+
+                break;
+
+            case 'visites':
+                $select->where('dt.ID_DOSSIERTYPE IN (2, 3)');
+
+                break;
+
+            case 'autres':
+                $select->where('dt.ID_DOSSIERTYPE NOT IN (1, 2, 3)');
+
+                break;
+
+            default:
+                throw new Exception(sprintf('Type %s non supporté', $type));
+        }
+
+        return $this->getAdapter()->fetchAll($select);
+    }
+
+    // FIXME Supprimer une des deux fonctions
+    public function getEffectifEtDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], [])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['ed' => 'effectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    public function getIdEffectifDegagement(int $idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ed' => 'effectifdegagement'], ['ID_EFFECTIF_DEGAGEMENT'])
+            ->join(['ded' => 'dossiereffectifdegagement'], 'ed.ID_EFFECTIF_DEGAGEMENT = ded.ID_EFFECTIF_DEGAGEMENT', [])
+            ->join(['d' => 'dossier'], 'ded.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchRow($select);
+    }
+
+    /**
+     * Retourne la liste des dossiers d un etablissement en se basant sur un dossier.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListeDossierFromDossier($idDossier)
+    {
+        $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
+
+        $dossiers = $this->getAdapter()->fetchAll($select);
+
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), 0, $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), 0, $nbdossiermax);
+
+        return $dossEtab;
+    }
+
+    public function getListeDossierFromDossierN($idDossier)
+    {
+        $dossEtab = [];
+        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER')
+            ->join(['e' => 'etablissement'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT')
+            ->where("e.ID_ETABLISSEMENT = (Select etablissement.ID_ETABLISSEMENT from etablissement
+                            inner join etablissementdossier on etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
+                            inner join dossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                            where dossier.ID_DOSSIER = {$idDossier})")
+            ->where('d.ID_DOSSIER != ?', $idDossier)
+            ->order('d.ID_DOSSIER DESC')
+        ;
+
+        $dossiers = $this->getAdapter()->fetchAll($select);
+
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
+        }), $nbdossiermax);
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+            return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
+        }), $nbdossiermax);
+
+        return $dossEtab;
+    }
+
+    /**
+     * Retourne la liste des avis derogations d un dossier en passant l id dossier en param.
+     *
+     * @param mixed $idDossier
+     */
+    public function getListAvisDerogationsFromDossier($idDossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['ad' => 'avisderogations'])
+            ->join(['d' => 'dossier'], 'ad.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['a' => 'avis'], 'ad.AVIS = a.ID_AVIS', 'LIBELLE_AVIS')
+            ->joinLeft(['dl' => 'dossier'], 'ad.ID_DOSSIER_LIE = dl.ID_DOSSIER', 'OBJET_DOSSIER')
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
+    public function getDeleteDossier(): array
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'])
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
+            ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
+            ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(
+                ['ei' => 'etablissementinformations'],
+                'ed.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT',
+                'LIBELLE_ETABLISSEMENTINFORMATIONS'
+            )
+            ->joinLeft(['u' => 'utilisateur'], 'u.ID_UTILISATEUR = d.DELETED_BY', 'USERNAME_UTILISATEUR')
+            ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
+            ->where('d.DATESUPPRESSION_DOSSIER IS NOT NULL')
+            ->group('d.ID_DOSSIER')
+        ;
+
+        return $this->fetchAll($select)->toArray();
     }
 }

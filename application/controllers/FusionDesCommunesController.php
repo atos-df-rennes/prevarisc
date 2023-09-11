@@ -17,7 +17,7 @@ class FusionDesCommunesController extends Zend_Controller_Action
 
         if ($request->isPost()) {
             if (!$form->isValid($request->getPost())) {
-                return $this->render('index');
+                $this->render('index');
             }
 
             if (!$form->fusioncommunes->receive()) {

@@ -4,11 +4,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
     public const CLASSEMENT_CHANGE = 3;
+    public const NB_DOSSIERS_A_AFFICHER = 5;
     public const ID_FONCTION_DUS = 8;
     public const ID_GENRE_CELLULE = 3;
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_EIC = 6;
     public const ID_STATUS_OUVERT = 2;
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
     public const ID_5EME_CAT = 5;
@@ -18,10 +20,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
      *
      * @param int $id_etablissement
      *
+     * @return array
+     *
      * @throws Exception si l'établissement n'existe pas
      * @throws Exception si la dernière fiche d'informations n'existe pas
-     *
-     * @return array
      */
     public function get($id_etablissement)
     {
@@ -50,8 +52,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Récupération de l'établissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
-            // Si l'établissement n'existe pas, on généère une erreur
-            if (null === $general
+            // Si l'établissement n'existe pas, on génère une erreur
+            if (!$general instanceof \Zend_Db_Table_Row_Abstract
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
             }
@@ -59,7 +61,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // On récupère la dernière fiche d'informations de l'établissement
             $informations = $model_etablissement->getInformations($id_etablissement);
             // Si l'établissement n'existe pas, on généère une erreur
-            if (null === $informations) {
+            if (!$informations instanceof \Zend_Db_Table_Row_Abstract) {
                 throw new Exception("La fiche d'informations de l'établissement n'existe pas.");
             }
 
@@ -77,7 +79,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     }
                 }
             } while (null != $parent);
-            $etablissement_parents = empty($results) ? [] : array_reverse($results);
+            $etablissement_parents = [] === $results ? [] : array_reverse($results);
 
             // Récupération de l'avis de l'établissement + dates de VP +  Récupération du facteur de dangerosité
             $avis = $facteur_dangerosite = null;
@@ -87,24 +89,49 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $facteur_dangerosite = $dossier_donnant_avis->FACTDANGE_DOSSIER;
             }
 
-            $last_visite = $search->setItem('dossier')
-                    // Dossier correspondant à l'établissement dont l'ID est donné
+            $search->setItem('dossier')
+                // Dossier correspondant à l'établissement dont l'ID est donné
                 ->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)
-                    // Dossier type "Visite de commission" et "Groupe de visite"
+                // Dossier type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('d.TYPE_DOSSIER', [2, 3])
-                        // Dossier ayant un avis de commission rendu
+                // Dossier ayant un avis de commission rendu
                 ->setCriteria('d.AVIS_DOSSIER_COMMISSION > 0')
-                    // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
+                // Dossier nature "périodique" et autres types donnant avis de type "Visite de commission" et "Groupe de visite"
                 ->setCriteria('ID_NATURE', [21, 26, 47, 48])
-                ->order('DATEVISITE_DOSSIER DESC')
+            ;
+
+            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
+            if ($use_date_commission_for_periodicity) {
+                $search->columns([
+                    'DATE_RELANCE_PERIODICITE' => new Zend_Db_Expr(
+                        'CASE WHEN
+                            DATECOMM_DOSSIER >= DATEVISITE_DOSSIER THEN DATECOMM_DOSSIER
+                            ELSE DATEVISITE_DOSSIER
+                        END'
+                    ),
+                ]);
+                $search->order('DATE_RELANCE_PERIODICITE DESC');
+            } else {
+                $search->order('DATEVISITE_DOSSIER DESC');
+            }
+
+            $last_visite = $search
                 ->limit(1)
-                ->run(false, null, false)->toArray();
+                ->run(false, null, false)->toArray()
+            ;
 
             $next_visite = null;
 
             if (null !== $last_visite && !empty($last_visite)) {
-                if (null !== $last_visite[0]['DATEVISITE_DOSSIER']) {
+                if (
+                    (!$use_date_commission_for_periodicity && null !== $last_visite[0]['DATEVISITE_DOSSIER'])
+                    || ($use_date_commission_for_periodicity && null !== $last_visite[0]['DATE_RELANCE_PERIODICITE'])
+                ) {
                     $tmp_date = new Zend_Date($last_visite[0]['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                    if ($use_date_commission_for_periodicity) {
+                        $tmp_date = new Zend_Date($last_visite[0]['DATE_RELANCE_PERIODICITE'], Zend_Date::DATES);
+                    }
+
                     $last_visite = $tmp_date->get(Zend_date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
 
                     if (0 != $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS) {
@@ -156,8 +183,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 // Calcul de la durée totale de visite
                 foreach ($etablissement_lies as $etablissement) {
                     if (null != $etablissement['DUREEVISITE_ETABLISSEMENT']) {
-                        $date_zero = new Datetime('00:00:00');
-                        $duree_etablissement = new \Datetime($etablissement['DUREEVISITE_ETABLISSEMENT']);
+                        $date_zero = new DateTime('00:00:00');
+                        $duree_etablissement = new \DateTime($etablissement['DUREEVISITE_ETABLISSEMENT']);
                         $duree_etablissement_en_heure = $duree_etablissement->format('U') - $date_zero->format('U');
                         $duree_totale += (int) $etablissement['NBPREV_ETABLISSEMENT'] * $duree_etablissement_en_heure;
                     }
@@ -248,7 +275,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 'etablissement_lies' => $etablissement_lies,
                 'preventionnistes' => $search->setItem('utilisateur')->setCriteria('etablissementinformations.ID_ETABLISSEMENT', $id_etablissement)->run()->getAdapter()->getItems(0, 50)->toArray(),
                 'adresses' => $DB_adresse->get($id_etablissement),
-                'presence_dus' => !empty($contacts_dus),
+                'presence_dus' => [] !== $contacts_dus,
             ];
 
             // On stocke en cache
@@ -402,6 +429,37 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
+        /**
+         * Ajout de la partie avis derogations.
+         */
+        $key = 'AVIS_DEROGATIONS';
+        $dbEtablissement = new Model_DbTable_Etablissement();
+
+        $avisDerogations = $dbEtablissement->getListAvisDerogationsEtablissement($id_etablissement);
+
+        foreach ($avisDerogations as $elem => $value) {
+            $date = null;
+            if (null !== $value['DATECOMM_DOSSIER']) {
+                $date = new Zend_Date($value['DATECOMM_DOSSIER'], Zend_Date::DATES);
+            } elseif (null !== $value['DATEVISITE_DOSSIER']) {
+                $date = new Zend_Date($value['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+            }
+
+            if ($date instanceof \Zend_Date) {
+                $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            }
+
+            $historique[$key][$elem] = [
+                'titre' => $value['TITRE'],
+                'type' => $value['TYPE'],
+                'url' => sprintf('/dossier/avis-et-derogations-edit/id/%d/avis-derogation/%d', $value['ID_DOSSIER'], $value['ID_AVIS_DEROGATION']),
+                'debut' => $date,
+                'author' => null,
+                'type_dossier' => $value['TYPE_DOSSIER'],
+                'leve' => null !== $value['ID_DOSSIER_LIE'],
+            ];
+        }
+
         return $historique;
     }
 
@@ -436,6 +494,91 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
         $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
         $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, 999999)->toArray();
+
+        return $results;
+    }
+
+    public function getNbDossierTypeEtablissement(int $idEtablissement, string $type): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+        $result = $modelDossier->getDossiersEtablissementByType($idEtablissement, $type);
+
+        return count($result);
+    }
+
+    public function getNLastDossiers(int $idEtablissement, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = [];
+
+        foreach ($dossier_types as $type) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = [];
+        $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+
+        return $results;
+    }
+
+    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    {
+        // Création de l'objet recherche
+        $search = new Model_DbTable_Search();
+
+        // récupération des types de dossier autre
+        $dossier_types = new Model_DbTable_DossierType();
+        $dossier_types = $dossier_types->fetchAll()->toArray();
+
+        $i = 0;
+        $types_autre = [];
+
+        foreach ($dossier_types as $type) {
+            if (self::ID_DOSSIERTYPE_ETUDE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_VISITE !== $type['ID_DOSSIERTYPE'] && self::ID_DOSSIERTYPE_GRPVISITE !== $type['ID_DOSSIERTYPE']) {
+                $types_autre[$i] = $type['ID_DOSSIERTYPE'];
+                ++$i;
+            }
+        }
+
+        // On balance le résultat sur la vue
+        $results = [];
+
+        switch ($typeDossier) {
+            case 'etudes':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+            case 'visites':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+            case 'autres':
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+
+            default:
+                $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+
+                break;
+        }
 
         return $results;
     }
@@ -732,9 +875,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int $id_etablissement Optionnel
      * @param int $date             Optionnel format : Y-m-d
      *
-     * @throws Exception Si une erreur apparait lors de la sauvegarde
-     *
      * @return int $id_etablissement Optionnel
+     *
+     * @throws Exception Si une erreur apparait lors de la sauvegarde
      */
     public function save($id_genre, array $data, $id_etablissement = null, $date = '')
     {
@@ -811,7 +954,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // Cellule
+
+                    // Cellule
                 case 3:
                     $informations->ID_CATEGORIE = $data['ID_CATEGORIE'];
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
@@ -825,12 +969,14 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // Habitation
+
+                    // Habitation
                 case 4:
                     $informations->ID_FAMILLE = $data['ID_FAMILLE'];
 
                     break;
-                // IGH
+
+                    // IGH
                 case 5:
                     $informations->ID_CLASSE = $data['ID_CLASSE'];
                     $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
@@ -841,13 +987,15 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
-                // EIC
+
+                    // EIC
                 case 6:
                     $informations->ICPE_ETABLISSEMENTINFORMATIONS = (int) $data['ICPE_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Camping
+
+                    // Camping
                 case 7:
                     $informations->EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS'];
@@ -855,15 +1003,17 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Manifestation temporaire
+
+                    // Manifestation temporaire
                 case 8:
-                // IOP
+                    // IOP
                 case 9:
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
-                // Zone
+
+                    // Zone
                 case 10:
                     $informations->ID_CLASSEMENT = $data['ID_CLASSEMENT'];
 
@@ -876,7 +1026,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $etablissement->save();
 
             $etablissement->NUMEROID_ETABLISSEMENT = null != $data['NUMEROID_ETABLISSEMENT'] ? $data['NUMEROID_ETABLISSEMENT'] : $etablissement->ID_ETABLISSEMENT;
-
             $etablissement->save();
 
             $informations->LIBELLE_ETABLISSEMENTINFORMATIONS = $data['LIBELLE_ETABLISSEMENTINFORMATIONS'];
@@ -1059,7 +1208,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Établissement
+
+                // Établissement
             case 2:
                 // Périodicité en fonction de la catégorie/type/local à sommeil
                 if (null !== $categorie && null !== $type && null !== $local_sommeil) {
@@ -1103,7 +1253,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Cellule
+
+                // Cellule
             case 3:
                 // Préventionnistes de l'établissement parent
                 if (null !== $id_etablissement_pere) {
@@ -1111,7 +1262,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // IGH
+
+                // IGH
             case 5:
                 // Périodicité en fonction de la classe
                 if (null !== $classe) {
@@ -1139,7 +1291,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
-            // Autres genres
+
+                // Autres genres
             default:
                 // Préventionnistes du site ou des groupements de communes
                 if (null !== $numinsee || null !== $id_etablissement_pere) {
@@ -1417,10 +1570,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
-                if (null !== $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+                if ($etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
                     $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()->delete();
                 }
-            } elseif (null === $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()) {
+            } elseif (!$etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
                 $row = $etsTexteApplicable->createRow();
                 $row->ID_TEXTESAPPL = $id_texte_applicable;
                 $row->ID_ETABLISSEMENT = $id_etablissement;
@@ -1440,7 +1593,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $search = new Model_DbTable_Search();
         $dossierDiff = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.DIFFEREAVIS_DOSSIER', 1)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, 1)->toArray();
 
-        //Si l'etablissement ne comporte pas d'avis différé on prend l'avis correspondant à ID_DOSSIERDONNANTAVIS
+        // Si l'etablissement ne comporte pas d'avis différé on prend l'avis correspondant à ID_DOSSIERDONNANTAVIS
         if (!empty($dossierDiff)) {
             $dateInsertDossierDiffere = $dossierDiff[0]['DATEINSERT_DOSSIER'];
             $dateInsertDossierDiffere = new Zend_Date($dateInsertDossierDiffere, Zend_Date::DATES);
@@ -1448,7 +1601,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             return 'avisDoss';
         }
 
-        //On compare la date de l'avis différé avec la date de l'avis d'exploitation le plus récent
+        // On compare la date de l'avis différé avec la date de l'avis d'exploitation le plus récent
         if (1 == $dateInsertDossierDonnantAvis->compare($dateInsertDossierDiffere)) {
             return 'avisDoss';
         }
@@ -1468,9 +1621,54 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $date = new DateTime();
         $DB_Etab = new Model_DbTable_Etablissement();
 
+        $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+
         $etablissement = $DB_Etab->find($idEtablissement)->current();
         $etablissement->DATESUPPRESSION_ETABLISSEMENT = $date->format('Y-m-d');
+        $etablissement->DELETED_BY = $idDeleteBy;
         $etablissement->save();
+    }
+
+    public function retablirEtablissement($idEtablissement): void
+    {
+        $DB_etablissement = new Model_DbTable_Etablissement();
+        $etablissement = $DB_etablissement->find($idEtablissement)->current();
+        $etablissement->DATESUPPRESSION_ETABLISSEMENT = null;
+        $etablissement->DELETED_BY = null;
+        $etablissement->save();
+    }
+
+    public function getDisplayedPeriodicity(array $etablissement): string
+    {
+        $numberOfMonthsInAYear = 12;
+
+        $periodicity = $etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
+        $periodicityUnit = 'mois';
+        $periodicityString = "{$periodicity} {$periodicityUnit}";
+
+        if (
+            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOLEAN)
+        ) {
+            return $periodicityString;
+        }
+
+        if ($periodicity < $numberOfMonthsInAYear) {
+            return $periodicityString;
+        }
+
+        $periodicityYear = intdiv($periodicity, $numberOfMonthsInAYear);
+        $periodicityUnit = 1 === $periodicityYear ? 'an' : 'ans';
+
+        $periodicityString = "{$periodicityYear} {$periodicityUnit}";
+
+        $remainder = $periodicity % $numberOfMonthsInAYear;
+        $remainderUnit = 'mois';
+
+        if (0 !== $remainder) {
+            return "{$periodicityString} et {$remainder} {$remainderUnit}";
+        }
+
+        return $periodicityString;
     }
 
     private function compareActivitesSecondaires($ets, $postData): bool

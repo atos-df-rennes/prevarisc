@@ -8,7 +8,7 @@ class Api_Service_Login
      * @param null|mixed $username
      * @param null|mixed $password
      *
-     * @return string
+     * @return array
      */
     public function login($username = null, $password = null)
     {

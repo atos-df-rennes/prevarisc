@@ -29,7 +29,7 @@
 	</form>
 
 	<div id="save_div" style="text-align: center" >
-		<button class='save-membres save btn btn-success' >Sauvegarder les membres</button>
+		<button class='save-membres save btn btn-success' data-loading-text="Sauvegarde des membres <img src='/images/load.gif' />">Sauvegarder les membres</button>
 
 		<span id='<?php echo $_GET["id_commission"] ?>_membres_notification' class='ui-state-highlight ui-helper-hidden' style='padding: .5em;'>
 			Les membres de la commission ont bien été sauvegardés.
@@ -48,7 +48,11 @@
 			url: "/commission/save-membres",
 			data: $(this).parent().prev().serialize(),
 			type: "post",
+            beforeSend: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button('loading')
+            },
 			success: function() {
+                $("#<?php echo $_GET["id_commission"] ?>_tabs .save-membres").button('reset')
 				$("#<?php echo $_GET["id_commission"] ?>_membres_notification").show();
 				setTimeout( function() { $("#<?php echo $_GET["id_commission"] ?>_membres_notification").fadeOut(); }, 2500);
 			}

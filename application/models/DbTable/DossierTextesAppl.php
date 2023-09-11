@@ -52,8 +52,6 @@ class Model_DbTable_DossierTextesAppl extends Zend_Db_Table_Abstract
             ->where('dta.ID_DOSSIER = ?', $idDossier)
         ;
 
-        $results = $this->fetchAll($select);
-
-        return null !== $results ? $results->toArray() : [];
+        return $this->fetchAll($select)->toArray();
     }
 }

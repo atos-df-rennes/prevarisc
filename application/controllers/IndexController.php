@@ -3,12 +3,19 @@
 class IndexController extends Zend_Controller_Action
 {
     /**
-     * @var mixed|\Service_Platau
+     * @var \Service_Platau
      */
     public $servicePlatau;
 
     public function init()
     {
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext
+            ->addActionContext('platauHealthcheck', 'json')
+            ->initContext()
+        ;
+
         $this->servicePlatau = new Service_Platau();
     }
 
@@ -20,6 +27,7 @@ class IndexController extends Zend_Controller_Action
 
         $identity = Zend_Auth::getInstance()->getIdentity();
         $user = $service_user->find($identity['ID_UTILISATEUR']);
+
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $acl = unserialize($cache->load('acl'));
         $profil = $user['group']['LIBELLE_GROUPE'];
@@ -28,11 +36,15 @@ class IndexController extends Zend_Controller_Action
         foreach ($blocsConfig as $blocId => $blocConfig) {
             if (
                 !$blocConfig['acl']
-                || ($acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1]))
+                || $acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1])
             ) {
+                $method = $blocConfig['method'];
+                $methodCount = $method.'Count';
+                $serviceCount = new Service_Count();
                 $blocs[$blocId] = [
                     'type' => $blocConfig['type'],
                     'title' => $blocConfig['title'],
+                    'count' => $serviceCount->{$methodCount}($user),
                     'height' => $blocConfig['height'],
                     'width' => $blocConfig['width'],
                 ];
@@ -54,15 +66,6 @@ class IndexController extends Zend_Controller_Action
             }
         } else {
             $blocsOrder = array_keys($blocsConfig);
-        }
-
-        $checkPlatau = $this->servicePlatau->executeHealthcheck();
-        if (false === $checkPlatau) {
-            $this->_helper->flashMessenger([
-                'context' => 'error',
-                'title' => 'La connexion Plat\'AU a échouée.',
-                'message' => 'Veuillez suivre les instructions du Manuel Utilisateur §6.17.2',
-            ]);
         }
 
         $this->view->user = $user;
@@ -131,5 +134,13 @@ class IndexController extends Zend_Controller_Action
             $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$e->getMessage()]);
         }
         $this->_helper->redirector('index', 'index');
+    }
+
+    public function platauHealthcheckAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        echo json_encode($this->servicePlatau->executeHealthcheck());
     }
 }

@@ -30,26 +30,38 @@ class Service_Feed
     }
 
     /**
-     * @param null|int $count
-     * @param mixed    $user
-     *
-     * @return array
+     * @return array|int
      */
-    public function getFeeds($user, $count = 5)
+    public function getFeeds(array $user, ?int $count = 5, bool $getCount = false)
     {
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
-        $select->from('news')
-            ->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
+        if ($getCount) {
+            $modelNews = new Model_DbTable_News();
+            $select = $modelNews->select()->setIntegrityCheck(false);
+        }
+
+        if ($getCount) {
+            $select->from('news', ['COUNT(*) as count']);
+        } else {
+            $select->from('news');
+        }
+
+        $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
-            ->group('ID_NEWS')
-            ->order('ID_NEWS DESC')
+            ->order('news.ID_NEWS DESC')
             ->limit($count)
         ;
 
-        return $select->query()->fetchAll();
+        if (!$getCount) {
+            $select
+                ->group('news.ID_NEWS')
+            ;
+        }
+
+        return $getCount ? $modelNews->fetchRow($select)['count'] : $select->query()->fetchAll();
     }
 
     /**

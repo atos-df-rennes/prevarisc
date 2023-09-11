@@ -10,7 +10,7 @@ class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
      */
     public function recupPrescriptionCat()
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pc' => 'prescriptioncat'])
@@ -22,7 +22,7 @@ class Model_DbTable_PrescriptionCat extends Zend_Db_Table_Abstract
 
     public function recupMaxNumCat()
     {
-        //retourne la liste des catégories de prescriptions par ordre
+        // retourne la liste des catégories de prescriptions par ordre
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from(['pc' => 'prescriptioncat'], 'max(pc.NUM_PRESCRIPTION_CAT) as maxnum')

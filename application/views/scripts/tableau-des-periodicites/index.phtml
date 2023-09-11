@@ -1,8 +1,7 @@
 <!-- Titre -->
-<h3 class='page-header'>Tableau des périodicités</h3>
+<h3 class='page-header'>Tableau des périodicités <small>(Les valeurs sont affichées et à saisir en mois)</small></h3>
 
 <form id='form_periodicite' action='/tableau-des-periodicites/save' method='post' >
-
 	<h3>ERP</h3>
         <!-- Types pour lesquels on ne définit pas la périodicité sans hebergement -->
         <?php
@@ -40,14 +39,14 @@
 
 					<td style='text-align: center' >
 						<?php if(!in_array($type["ID_TYPE"], $localsommeil_types)) : ?>
-							<input type='text' size='3' maxlength='3' value='<?php echo ( isset($periodicite[0]) ) ? $periodicite[0] : 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_0" ?>' />
+							<input type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_0" ?>' />
 						<?php else : ?>
 							<input type='text' size='3' style='visibility: hidden' />
 						<?php endif ?>
 					</td>
 
 					<td style='text-align: center' >
-							<input type='text' size='3' maxlength='3' value='<?php echo ( isset($periodicite[1]) ) ? $periodicite[1] : 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_1" ?>' />
+                        <input type='text' size='3' maxlength='3' value='<?= $periodicite[1] ?: 0 ?>' name='<?php echo $categorie["ID_CATEGORIE"]."_".$type["ID_TYPE"]."_1" ?>' />
 					</td>
 
 				<?php endforeach ?>
@@ -73,7 +72,7 @@
 					<?php $periodicite = $this->tableau[0][$classe["ID_CLASSE"]]; ?>
 
 					<td style='text-align: center' >
-						<input type='text' size='3' maxlength='3' value='<?php echo ( isset($periodicite[0]) ) ? $periodicite[0] : 0 ?>' name='<?php echo "0_".$classe["ID_CLASSE"]."_0" ?>' />
+						<input type='text' size='3' maxlength='3' value='<?= $periodicite[0] ?: 0 ?>' name='<?php echo "0_".$classe["ID_CLASSE"]."_0" ?>' />
 					</td>
 
 				<?php endforeach ?>
@@ -84,7 +83,7 @@
 
     <p class='text-center'>
 		<input type='submit' id='submit' value='Sauvegarder' class='btn btn-success' />
-        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-success'>Appliquer sur TOUS les établissements</a>	
+        <a href="/tableau-des-periodicites/apply" onClick="return confirm('Etes-vous sûr de vouloir appliquer ces paramètres à l\'ensemble des établissements ?');"class='btn btn-success'>Appliquer sur TOUS les établissements</a>
     </p>
 
 </form>

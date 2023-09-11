@@ -5,14 +5,14 @@ class View_Helper_AfficheDoc
     public function afficheDoc($verrou, $natureId, $id, $libelle, $ref = null, $date = null, $type = null): string
     {
         if (!$date) {
-            //document n'ayant PAS d'enregistrement dans la BD
+            // document n'ayant PAS d'enregistrement dans la BD
             $styleInput = 'display:none;';
             $etatCheck = '';
             $styleChecked = '';
             $styleValid = '';
             $styleDate = '';
         } else {
-            //document ayant un enregistrement dans la BD
+            // document ayant un enregistrement dans la BD
             $dateTab = explode('-', $date);
             $date = $dateTab[2].'/'.$dateTab[1].'/'.$dateTab[0];
 
@@ -50,12 +50,12 @@ class View_Helper_AfficheDoc
                     </div>
                     <div class='span3'>
                         <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".((1 == $verrou) ? 'display:none;' : '')."' >
-                                <button class='editDoc btn'><i class='icon-pencil'></i>&nbsp;</button>
+                                <button class='editDoc btn' id='".'edit_'.$natureId.'_'.$id.$type."'><i class='icon-pencil'></i>&nbsp;</button>
+                                <button class='deleteDoc btn' name='".$natureId.'_'.$id.$type."'><i class='icon-trash'></i>&nbsp;</button>
                         </span>
                         <span id='valid_".$natureId.'_'.$id.$type."' style='".$styleValid."'>
                                 <button class='validDoc btn'><i class='icon-ok'></i>&nbsp;</button>
                                 <button class='cancelDoc btn'><i class='icon-remove'></i>&nbsp;</button>
-                                <button class='deleteDoc btn' name='".$natureId.'_'.$id.$type."'><i class='icon-trash'></i>&nbsp;</button>
                             </a>
                         </span>
                     </div>

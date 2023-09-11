@@ -1,0 +1,3 @@
+SET NAMES 'utf8';
+
+ALTER TABLE `avisderogations` MODIFY `TITRE` VARCHAR(100);

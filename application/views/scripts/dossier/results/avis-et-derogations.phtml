@@ -1,0 +1,47 @@
+<div class="span5 cardAvisDerogations">
+    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?= $this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>'>&times;</a>
+
+    <h1 class='text-center'><?= $this->TITRE ?></h1>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <p>Type : <?= $this->TYPE ?></p>
+            <p>Objet : <?= $this->OBJET ?>
+            <p>Avis : <?= $this->LIBELLE_AVIS ?></p>
+        </div>
+        <div class="span6">
+            <p>Avis/Dérogation levé(e):
+                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
+                    <?php if ($this->ID_DOSSIER_LIE):
+                        echo $this->OBJET_DOSSIER ?? $this->ID_DOSSIER_LIE;
+                    endif ?>
+                </a>
+            </p>
+            <div class="flex">
+                <label for="affHistorique">Afficher dans l'onglet de l'établissement</label>
+                <input
+                    type="checkbox"
+                    name="affHistorique"
+                    disabled
+                    <?= boolval($this->DISPLAY_HISTORIQUE) === true ? 'checked' : '' ?>
+                >
+            </div>
+        </div>
+    </div>
+
+    <div class="pull-right">
+        <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations-edit', 'id' => $this->ID_DOSSIER, 'avis-derogation' => $this->ID_AVIS_DEROGATION], false, true) ?>">
+            <i class="icon-pencil icon-black"></i>
+        </a>
+    </div>
+</div>
+
+<script>
+    $(".close").click(function (event) {
+        event.preventDefault()
+        $.ajax({
+            type: "delete",
+            url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id')
+        });
+    });
+</script>

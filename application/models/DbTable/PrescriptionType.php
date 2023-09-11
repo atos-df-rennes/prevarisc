@@ -59,7 +59,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
         $where = [];
         $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];
         $where[] = 'ID_PRESCRIPTION_TYPE = '.$idOldType;
-        //MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
+        // MAJ des id des textes dans les tables : prescriptiondossierassoc, prescriptiontypeassoc
         $this->getAdapter()->update('prescriptiondossier', $data, $where);
     }
 }

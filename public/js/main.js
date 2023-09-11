@@ -63,9 +63,7 @@ function bindEtsPopup($elem) {
             $.getJSON("/api/1.0/etablissement?id=" + id, function(data) {
                 var ets_id = data.response.general.ID_ETABLISSEMENT;
                 var ets_libelle = data.response.informations.LIBELLE_ETABLISSEMENTINFORMATIONS;
-                var ets_genre = data.response.informations.LIBELLE_GENRE;
                 var ets_type = data.response.informations.LIBELLE_TYPE_PRINCIPAL;
-                var ets_statut = data.response.informations.LIBELLE_STATUT;
                 var ets_cat = data.response.informations.ID_GENRE == 3 ? data.response.parents[0].LIBELLE_CATEGORIE : data.response.informations.LIBELLE_CATEGORIE;
                 var ets_adresse = data.response.adresses[0];
                 data.response.parents.forEach(function(element, index, array) {
@@ -78,7 +76,7 @@ function bindEtsPopup($elem) {
 
                 if(data.response.informations.ID_GENRE == 1) {
                     var ets_adresses = "";
-                    data.response.etablissement_lies.forEach(function(element, index, array) {
+                    data.response.etablissement_lies.forEach(function(element, _index, _array) {
                         if (element.LIBELLE_COMMUNE_ADRESSE_DEFAULT != null && ets_adresses == "") {
                             ets_adresses = element.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
                         }
@@ -112,6 +110,20 @@ function bindEtsPopup($elem) {
                 if(ets_cat != null && ets_type != null) html += "<br><span>" + ets_cat + " - " + ets_type + "</span>";
 
                 if(ets_adresse != null) html += "<br><span>" + (ets_adresse.NUMERO_ADRESSE == null ? '' : ets_adresse.NUMERO_ADRESSE) + " " + ets_adresse.LIBELLE_RUE + " " + ets_adresse.CODEPOSTAL_COMMUNE + " " + ets_adresse.LIBELLE_COMMUNE + "</span>";
+
+                if (data.response.preventionnistes.length > 0) {
+                    html += "<br><br>";
+                    data.response.preventionnistes.forEach((preventionniste, index) => 
+                        {
+                            const nomPrenom = preventionniste.NOM_UTILISATEURINFORMATIONS + ' ' + preventionniste.PRENOM_UTILISATEURINFORMATIONS
+                            html += nomPrenom
+
+                            if (index < data.response.preventionnistes.length - 1) {
+                                html += ', '
+                            }
+                        }
+                    )
+                }
 
                 html += "<br><br>";
                 html += "<a href='/etablissement/index/id/" + ets_id + "' class='btn btn-small btn-primary btn-block'>Voir la fiche</a>";

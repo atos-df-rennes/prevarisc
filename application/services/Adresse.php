@@ -52,17 +52,22 @@ class Service_Adresse
 
     /**
      * Retourne les voies par rapport à une ville.
-     *
-     * @param int    $code_insee
-     * @param string $q
-     *
-     * @return array
      */
-    public function getVoies($code_insee, $q = '')
+    public function getVoies(int $code_insee, string $q = ''): array
     {
         $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
         return $DB_adresse->getVoies($code_insee, $q);
+    }
+
+    /**
+     * Retourne les numéros par rapport à une voie.
+     */
+    public function getNumeros(int $id_rue): array
+    {
+        $DB_adresse = new Model_DbTable_EtablissementAdresse();
+
+        return $DB_adresse->getNumeros($id_rue);
     }
 
     /**

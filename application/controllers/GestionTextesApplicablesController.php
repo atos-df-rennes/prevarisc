@@ -6,14 +6,14 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('menu_admin');
 
-        //on commence par afficher tous les texte applicables regroupés par leurs type
+        // on commence par afficher tous les texte applicables regroupés par leurs type
         $dbTextesAppl = new Model_DbTable_TextesAppl();
         $this->view->listeTextesAppl = $dbTextesAppl->recupTextesAppl();
     }
 
     public function formtexteapplAction()
     {
-        //Cas d'une création d'un texte
+        // Cas d'une création d'un texte
         $dbTypeTextesAppl = new Model_DbTable_TypeTextesAppl();
         $this->view->listeType = $dbTypeTextesAppl->getType();
         if ($this->_getParam('id')) {
@@ -26,10 +26,10 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
     public function saveAction()
     {
         try {
-            //sauvegarde d'un nouveau texte ou mise à jour d'un texte existant
+            // sauvegarde d'un nouveau texte ou mise à jour d'un texte existant
             $dbTextesAppl = new Model_DbTable_TextesAppl();
             if ($this->_getParam('idTexteAppl')) {
-                //cas d'une édition
+                // cas d'une édition
                 $rowEdit = $dbTextesAppl->find($this->_getParam('idTexteAppl'))->current();
                 $rowEdit['LIBELLE_TEXTESAPPL'] = $this->_getParam('libelle');
                 $rowEdit['VISIBLE_TEXTESAPPL'] = $this->_getParam('visible');
@@ -37,7 +37,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 $rowEdit['NUM_TEXTESAPPL'] = '99999';
                 $rowEdit->save();
             } else {
-                //cas d'une création
+                // cas d'une création
                 $newRow = $dbTextesAppl->createRow();
                 $newRow['LIBELLE_TEXTESAPPL'] = $this->_getParam('libelle');
                 $newRow['VISIBLE_TEXTESAPPL'] = $this->_getParam('visible');
@@ -47,7 +47,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
             }
 
             if ('yes' == $this->_getParam('defPrescription')) {
-                //on enregistre le texte dans la table prescriptiontexteliste
+                // on enregistre le texte dans la table prescriptiontexteliste
                 $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
                 $newTexte = $dbPrescTextes->createRow();
                 $newTexte->LIBELLE_TEXTE = $this->_getParam('libelle');

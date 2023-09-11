@@ -2,12 +2,15 @@
 
 class Service_Dossier
 {
+    public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
+
     /**
      * @var array<string, int>|array<string, mixed>|array<string, mixed[]>|mixed
      */
     public $etablissement;
+
     /**
      * @var mixed|mixed[]
      */
@@ -49,6 +52,25 @@ class Service_Dossier
         $DBused = new Model_DbTable_PieceJointe();
 
         return $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $id_dossier);
+    }
+
+    /**
+     * Similaire à la fonction getAllPJ() mais permet d'avoir l'ID_PLATAU pour connaître le chemin où sont sauvegardées les PJs.
+     */
+    public function getAllPiecesJointes(int $idDossier): array
+    {
+        $DBused = new Model_DbTable_PieceJointe();
+
+        $select = $DBused->select()
+            ->setIntegrityCheck(false)
+            ->from('piecejointe')
+            ->join('dossierpj', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', [])
+            ->join('dossier', 'dossierpj.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'ID_PLATAU'])
+            ->where('dossier.ID_DOSSIER = ?', $idDossier)
+            ->order('piecejointe.ID_PIECEJOINTE DESC')
+        ;
+
+        return $DBused->fetchAll($select)->toArray();
     }
 
     /**
@@ -143,6 +165,22 @@ class Service_Dossier
         return $DB_contact->getContact('dossier', $id_dossier);
     }
 
+    public function getContactInfo(int $idDossier, int $idEtab, int $idFonction): array
+    {
+        $dbDossierContact = new Model_DbTable_DossierContact();
+        $contactInfos = $dbDossierContact->recupInfoContact($idDossier, $idFonction);
+        if (1 === count($contactInfos)) {
+            return $contactInfos[0];
+        }
+
+        $contactInfos = $dbDossierContact->recupContactEtablissement($idEtab, $idFonction);
+        if ([] !== $contactInfos) {
+            return $contactInfos[0];
+        }
+
+        return [];
+    }
+
     /**
      * Récupération des textes applicables d'un dossier.
      *
@@ -193,7 +231,7 @@ class Service_Dossier
         $typeDossier = $dbDossier->getTypeDossier($id_dossier);
         $type = $typeDossier['TYPE_DOSSIER'];
 
-        //On récupère le premier établissements afin de mettre à jour ses textes applicables lorsque l'on est dans une visite
+        // On récupère le premier établissements afin de mettre à jour ses textes applicables lorsque l'on est dans une visite
         $id_etablissement = null;
         if (in_array($type, [2, 3])) {
             $tabEtablissement = $dbDossier->getEtablissementDossier($id_dossier);
@@ -203,16 +241,16 @@ class Service_Dossier
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
                 $texte_applicable = $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current();
-                if (null !== $texte_applicable) {
+                if ($texte_applicable instanceof \Zend_Db_Table_Row_Abstract) {
                     $texte_applicable->delete();
                     if (in_array($type, [2, 3]) && $id_etablissement) {
                         $texte_applicable = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
-                        if (null !== $texte_applicable) {
+                        if ($texte_applicable instanceof \Zend_Db_Table_Row_Abstract) {
                             $texte_applicable->delete();
                         }
                     }
                 }
-            } elseif (null === $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current()) {
+            } elseif (!$dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current() instanceof \Zend_Db_Table_Row_Abstract) {
                 $row = $dossierTexteApplicable->createRow();
                 $row->ID_TEXTESAPPL = $id_texte_applicable;
                 $row->ID_DOSSIER = $id_dossier;
@@ -338,13 +376,13 @@ class Service_Dossier
         $prescriptionArray = [];
         foreach ($listePrescDossier as $ue) {
             if ($ue['ID_PRESCRIPTION_TYPE']) {
-                //cas d'une prescription type
+                // cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
                 if ([] !== $assoc) {
                     $prescriptionArray[] = $assoc;
                 }
             } else {
-                //cas d'une prescription particulière
+                // cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue['ID_PRESCRIPTION_DOSSIER']);
                 if ([] !== $assoc) {
                     $prescriptionArray[] = $assoc;
@@ -364,11 +402,11 @@ class Service_Dossier
      */
     public function getDetailPrescription($id_prescription)
     {
-        //On recherche la ligne correspondante à la prescription
+        // On recherche la ligne correspondante à la prescription
         $db_prescription_dossier = new Model_DbTable_PrescriptionDossier();
         $infos_prescription = $db_prescription_dossier->recupPrescInfos($id_prescription);
 
-        //On va chercher les textes et articles associés à cette prescription
+        // On va chercher les textes et articles associés à cette prescription
         if (null == $infos_prescription['ID_PRESCRIPTION_TYPE']) {
             $db_prescription_assoc = new Model_DbTable_PrescriptionDossierAssoc();
             $liste_assoc = $db_prescription_assoc->getPrescriptionDossierAssoc($id_prescription);
@@ -414,7 +452,7 @@ class Service_Dossier
             $prescEdit->save();
 
             if ($newCount) {
-                //il faut effectuer une nouvelle numérotation des prescriptions du type que l'on abandonne
+                // il faut effectuer une nouvelle numérotation des prescriptions du type que l'on abandonne
                 $nbPresc = 1;
                 $listeExploit = $dbPrescDossier->recupPrescDossier($post['id_dossier'], 0);
                 foreach ($listeExploit as $prescDossier) {
@@ -562,10 +600,10 @@ class Service_Dossier
 
         foreach ($listePrescription as $val => $ue) {
             if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
-                //cas d'une prescription type
+                // cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
             } else {
-                //cas d'une prescription particulière
+                // cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue[0]['ID_PRESCRIPTION_DOSSIER']);
             }
 
@@ -728,17 +766,18 @@ class Service_Dossier
     public function isDossierDonnantAvis($dossier, $idNature): bool
     {
         return
-            //Cas d'une étude uniquement dans le cas d'une levée de reserve
+            // Cas d'une étude uniquement dans le cas d'une levée de reserve
             in_array($idNature, [19, 7, 17, 16]) && $dossier->DATECOMM_DOSSIER
-            //Cas d'une viste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
+            // Cas d'une viste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
             || in_array($idNature, [21, 23, 24, 47]) && $dossier->DATEVISITE_DOSSIER
-            //Cas d'un groupe deviste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
+            // Cas d'un groupe deviste uniquement dans le cas d'une VP, inopinée, avant ouverture ou controle
             || in_array($idNature, [26, 28, 29, 48]) && $dossier->DATECOMM_DOSSIER;
     }
 
     public function getDateDossier($dossier): Zend_Date
     {
         $date = $dossier->DATEINSERT_DOSSIER;
+
         if (1 == $dossier->TYPE_DOSSIER || self::ID_DOSSIERTYPE_GRPVISITE == $dossier->TYPE_DOSSIER) {
             if (null != $dossier->DATECOMM_DOSSIER && '' != $dossier->DATECOMM_DOSSIER) {
                 $date = $dossier->DATECOMM_DOSSIER;
@@ -792,7 +831,7 @@ class Service_Dossier
 
         foreach ($listeEtab as $ue) {
             $etabToEdit = $dbEtab->find($ue['ID_ETABLISSEMENT'])->current();
-            //Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
+            // Avant la mise à jour du champ ID_DOSSIER_DONNANT_AVIS on s'assure que la date de l'avis est plus récente
             if (property_exists($etabToEdit, 'ID_DOSSIER_DONNANT_AVIS') && null !== $etabToEdit->ID_DOSSIER_DONNANT_AVIS) {
                 $dossierAncienAvis = $DBdossier->find($etabToEdit->ID_DOSSIER_DONNANT_AVIS)->current();
 
@@ -855,8 +894,9 @@ class Service_Dossier
         }
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
-
-            //suppression de la date de passage en commission
+            $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
+            $dossier->DELETED_BY = $idDeleteBy;
+            // suppression de la date de passage en commission
             $dbAffectDossier = new Model_DbTable_DossierAffectation();
             $dbAffectDossier->deleteDateDossierAffect($idDossier);
 
@@ -881,5 +921,23 @@ class Service_Dossier
         $DB_prev = new Model_DbTable_DossierPreventionniste();
 
         return $DB_prev->getPrevDossier($idDossier);
+    }
+
+    public function hasAvisDerogation(int $idDossier): bool
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $result = $modelDossier->getListAvisDerogationsFromDossier($idDossier);
+
+        return !empty($result);
+    }
+
+    public function retablirDossier($idDossier)
+    {
+        $DB_dossier = new Model_DbTable_Dossier();
+        $dossier = $DB_dossier->find($idDossier)->current();
+        $dossier->DATESUPPRESSION_DOSSIER = null;
+        $dossier->DELETED_BY = null;
+        $dossier->save();
     }
 }

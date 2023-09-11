@@ -2,9 +2,6 @@
 
 class ContactController extends Zend_Controller_Action
 {
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         // Actions à effectuées en AJAX

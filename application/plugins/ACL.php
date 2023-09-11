@@ -341,8 +341,8 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getPageResources.
      *
-     * @param            $page
      * @param null|mixed $request
+     * @param mixed      $page
      *
      * @return null|array
      */
@@ -387,7 +387,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getPagePrivilege.
      *
-     * @param $page
+     * @param mixed $page
      *
      * @return null|string
      */
@@ -403,7 +403,6 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
     /**
      * getEtablissementPageResourses.
      *
-     * @param $id_etablissement
      * @param int $id_etablissement
      *
      * @return string[]
@@ -426,6 +425,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 foreach ($etablissement['etablissement_lies'] as $etablissements_enfant) {
                     $etablissements[$etablissements_enfant['ID_ETABLISSEMENT']]['informations'] = $etablissements_enfant;
                 }
+
                 // no break
             default:
                 break;
@@ -570,11 +570,7 @@ class ResourceContainer implements Iterator
 
     public function current()
     {
-        if (isset($this->developped_resources[$this->developped_resources_index])) {
-            return $this->developped_resources[$this->developped_resources_index];
-        }
-
-        return null;
+        return $this->developped_resources[$this->developped_resources_index] ?? null;
     }
 
     public function key()
