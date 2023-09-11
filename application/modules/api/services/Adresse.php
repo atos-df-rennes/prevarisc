@@ -21,7 +21,7 @@ class Api_Service_Adresse
      *
      * @param int $code_insee
      *
-     * @return string
+     * @return array
      */
     public function getTypesVoieParVille($code_insee)
     {

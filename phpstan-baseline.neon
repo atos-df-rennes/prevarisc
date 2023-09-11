@@ -1927,12 +1927,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 20
+			count: 21
 			path: application/controllers/EtablissementController.php
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
-			count: 4
+			count: 5
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -2202,7 +2202,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
-			count: 8
+			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -2217,12 +2217,12 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
-			count: 13
+			count: 14
 			path: application/controllers/EtablissementController.php
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
-			count: 7
+			count: 10
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -3924,11 +3924,6 @@ parameters:
 			message: "#^Access to an undefined property Zend_Controller_Plugin_ErrorHandler\\:\\:\\$type\\.$#"
 			count: 1
 			path: application/modules/api/plugins/RefererCheck.php
-
-		-
-			message: "#^Call to an undefined method Service_Adresse\\:\\:getTypesVoieByVille\\(\\)\\.$#"
-			count: 1
-			path: application/modules/api/services/Adresse.php
 
 		-
 			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VTimeZone\\:\\:\\$TZID\\.$#"
