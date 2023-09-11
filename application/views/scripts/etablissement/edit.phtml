@@ -375,7 +375,7 @@
 
         <!-- Carte de l'emplacement de l'établissement / informations  -->
         <div class='span6'>
-            <h4 class="champ_adresse champs h4_subtitle">Adresse <a style='font-size: 0.85em; float: right; font-weight: normal;' data-toggle="modal" data-backdrop="false" href="#adresse-modal-ajout">Ajouter une adresse</a></h4>
+            <h4 class="champ_adresse champs h4_subtitle">Adresse <a style='font-size: 0.85em; float: right; font-weight: normal;' data-toggle="modal" data-backdrop="static" href="#adresse-modal-ajout">Ajouter une adresse</a></h4>
             <table id='adresses' class='table table-condensed champ_adresse champs'>
                 <thead>
                     <tr>
@@ -701,11 +701,8 @@
             node.find('input[name="ADRESSES[-1][COMPLEMENT_ADRESSE]"]').val($('form.adresse').find('input[name="complement"]').val());
             node.find('span').text($('form.adresse').find('input[name="numero"]').val() + " " + $('form.adresse').find('input[name="voie_ac"]').val() + " " + $('form.adresse').find('input[name="code_postal"]').val() + " " + $('form.adresse').find('input[name="commune_ac"]').val());
             node.find('input').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); });
-
-
-            node.find('#adresseNA').attr('id','adresse'+time)
+            node.find('#adresse').attr('id','adresse'+time)
             node.find('.modifierAdresse').attr('data-id',time)
-
 
             $('form.adresse').find('button.close').click();
             setTriggerEventModalAdresseEdit()
@@ -1115,35 +1112,34 @@
                     }
                 })
                 $.ajax({
-                        type: "get",
-                        url: "/api/1.0/adresse/get_libelle_rue",
-                        data: {idRue: data.ID_RUE},
-                        async: false,
-                        success: function (recieveRue) {
-                            data.LIBELLE_RUE = recieveRue?.response?.LIBELLE_RUE
-                        }
-                    })
+                    type: "get",
+                    url: "/api/1.0/adresse/get_libelle_rue",
+                    data: {idRue: data.ID_RUE},
+                    async: false,
+                    success: function (recieveRue) {
+                        data.LIBELLE_RUE = recieveRue?.response?.LIBELLE_RUE
+                    }
+                })
             return data
-
         }
 
-         function setTriggerEventModalAdresseEdit(){
+         function setTriggerEventModalAdresseEdit() {
             $('.modifierAdresse').click(function (e) {
                 e.preventDefault();
                 const dataId = $(this).attr('data-id')
-                let data = null
+
                 $.ajax({
                     url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
                     type: "get",
-                    success: async function (reception) {
-                        //TODO trouver une autre maniere pour faire plus propre
-                        setModalEditAdresseInputValue(reception?.response, dataId)
+                    success: function (result) {
+                        if (result === null) {
+                            setModalEditAdresseInputValue(getValueOfNewAdresse(dataId), dataId)
+                        } else {
+                            setModalEditAdresseInputValue(result.response, dataId)
+                        }
                     }
-            }).fail(
-                setModalEditAdresseInputValue(getValueOfNewAdresse(dataId), dataId)
-            );
-         });
-
+                })
+            })
          }
 
          setTriggerEventModalAdresseEdit()
@@ -1212,7 +1208,7 @@
                 }
             );
 
-            $('#adresse-modal-ajout #geolocme-geoconcept').click(function(e) {
+            $('#geolocme-geoconcept').click(function(e) {
                 e.preventDefault();
                 var geocoderUrl = "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER') ?>";
                 var adresse = "";
@@ -1252,7 +1248,7 @@
         <?php endif ?>
 
         // Géolocalisation de l'adresse
-        $('#adresse-modal-ajout #geolocme_nominatim').click(function() {
+        $('#geolocme_nominatim').click(function() {
             element = $(this);
             $.ajax({
                 url: "//nominatim.openstreetmap.org/search",
