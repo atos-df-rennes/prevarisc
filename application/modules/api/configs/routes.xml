@@ -47,6 +47,10 @@
                         <route>defaults_values</route>
                         <defaults method="getDefaultValues" />
                     </defaults_values>
+                    <get_adresse type="Zend_Controller_Router_Route">
+                        <route>get_adresse</route>
+                        <defaults method="getAdresse" />
+                    </get_adresse>
                 </chains>
             </etablissement>
 
@@ -99,6 +103,14 @@
                         <route>get_voies</route>
                         <defaults method="getVoies" />
                     </get_voies>
+                    <get_libelle_commune type="Zend_Controller_Router_Route">
+                        <route>get_libelle_commune</route>
+                        <defaults method="getLibelleCommune" />
+                    </get_libelle_commune>
+                    <get_libelle_rue type="Zend_Controller_Router_Route">
+                        <route>get_libelle_rue</route>
+                        <defaults method="getLibelleRue" />
+                    </get_libelle_rue>
                     <get_numeros type="Zend_Controller_Router_Route">
                         <route>get_numeros</route>
                         <defaults method="getNumeros" />

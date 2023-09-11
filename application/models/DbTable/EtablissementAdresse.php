@@ -70,6 +70,20 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         }
     }
 
+    public function getAdresse($idAdresse)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('etablissementadresse')
+            ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
+            ->joinLeft('adresserue', 'etablissementadresse.ID_RUE = adresserue.ID_RUE AND etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE', 'LIBELLE_RUE')
+            ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'])
+            ->where('etablissementadresse.ID_ADRESSE = ?', $idAdresse)
+        ;
+
+        return $this->fetchRow($select)->toArray();
+    }
+
     // Donne la liste des rues
 
     /**

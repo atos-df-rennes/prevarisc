@@ -52,13 +52,8 @@ class Service_Adresse
 
     /**
      * Retourne les voies par rapport à une ville.
-     *
-     * @param int    $code_insee
-     * @param string $q
-     *
-     * @return array
      */
-    public function getVoies($code_insee, $q = '')
+    public function getVoies(int $code_insee, string $q = ''): array
     {
         $DB_adresse = new Model_DbTable_EtablissementAdresse();
 
@@ -94,5 +89,26 @@ class Service_Adresse
         ;
 
         return $select->query()->fetch();
+    }
+
+    public function getAdresseById($idAdresse)
+    {
+        $dbEtablissementAdresse = new Model_DbTable_EtablissementAdresse();
+
+        return $dbEtablissementAdresse->getAdresse($idAdresse);
+    }
+
+    public function getLibelleCommune($code_insee)
+    {
+        $dbAdresseCommune = new Model_DbTable_AdresseCommune();
+
+        return $dbAdresseCommune->getLibelleCommune($code_insee);
+    }
+
+    public function getLibelleRue($idRue)
+    {
+        $dbAdresseRue = new Model_DbTable_AdresseRue();
+
+        return $dbAdresseRue->getLibelleRue($idRue);
     }
 }

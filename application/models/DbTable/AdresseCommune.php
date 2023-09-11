@@ -39,4 +39,15 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
 
         return null;
     }
+
+    public function getLibelleCommune($code_insee)
+    {
+        $select = $this->select();
+
+        $select->from('adressecommune')
+            ->where('NUMINSEE_COMMUNE = ?', $code_insee)
+        ;
+
+        return $this->getAdapter()->fetchRow($select);
+    }
 }

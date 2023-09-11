@@ -304,7 +304,7 @@ function updateCoordinates(center, sourceProj, destProj) {
     return lonlat;
 }
 
-function geocodeWithJsAutoconf(adresse, filterOptionsType, projection, viewer, nbCouches) {
+function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, projection, viewer, nbCouches) {
     Gp.Services.geocode({
         apiKey: 'essentiels',
         location: adresse,
@@ -320,7 +320,7 @@ function geocodeWithJsAutoconf(adresse, filterOptionsType, projection, viewer, n
             };
             viewer.setCenter(newCenter);
             $("span.result").text("Géolocalisée IGN");
-            $('#geoportail-container').css('visibility', 'visible');
+            $(`#${geoContainerId}`).css('visibility', 'visible');
             // Changement des coordonnées et du marker 
             lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');
             putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);

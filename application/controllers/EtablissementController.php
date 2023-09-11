@@ -72,6 +72,10 @@ class EtablissementController extends Zend_Controller_Action
     public function editAction()
     {
         $this->_helper->layout->setLayout('etablissement');
+        $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
+        $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
+        $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        $this->view->headScript()->appendFile('/js/etablissement/edit/geolocaliseIGN.js', 'text/javascript');
 
         $viewHeadScript = $this->view;
         $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
@@ -548,6 +552,15 @@ class EtablissementController extends Zend_Controller_Action
         } catch (Exception $e) {
             $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
+    }
+
+    public function updateAdresseAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $postData = $this->getRequest()->getPost();
+        echo json_encode($postData);
     }
 
     public function effectifsDegagementsEtablissementAction()

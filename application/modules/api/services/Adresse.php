@@ -21,28 +21,37 @@ class Api_Service_Adresse
      *
      * @param int $code_insee
      *
-     * @return string
+     * @return array
      */
     public function getTypesVoieParVille($code_insee)
     {
         $service_adresse = new Service_Adresse();
 
-        return $service_adresse->getTypesVoieByVille($code_insee);
+        return $service_adresse->getTypesVoieParVille($code_insee);
     }
 
     /**
      * Retourne les voies par rapport à une ville.
-     *
-     * @param int    $code_insee
-     * @param string $q
-     *
-     * @return array
      */
-    public function getVoies($code_insee, $q = '')
+    public function getVoies(int $code_insee, string $q = ''): array
     {
         $service_adresse = new Service_Adresse();
 
         return $service_adresse->getVoies($code_insee, $q);
+    }
+
+    public function getLibelleCommune($code_insee)
+    {
+        $service_adresse = new Service_Adresse();
+
+        return $service_adresse->getLibelleCommune($code_insee);
+    }
+
+    public function getLibelleRue($idRue)
+    {
+        $service_adresse = new Service_Adresse();
+
+        return $service_adresse->getLibelleRue($idRue);
     }
 
     /**
