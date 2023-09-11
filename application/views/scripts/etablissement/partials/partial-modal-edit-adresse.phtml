@@ -41,8 +41,7 @@
 
             <dt>Géolocalisation</dt>
             <dd>
-                <!-- FIXME On doit avoir la géolocalisation IGN -->
-                <?php if ($this->key_ign != null) : ?><button id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <?php if ($this->key_ign !== null) : ?><button id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
                 <br/>
                 <small>Résultat : <span class='result'>Inconnu</span></small>
             </dd>
@@ -57,7 +56,7 @@
                  <input id="addressLatitude" type='text' name='lat' />
             </dd>
         </dl>
-        <?php if ($this->key_ign != null): ?>
+        <?php if ($this->key_ign !== null): ?>
             <div id="edit-geoportail-container" style="height: 400px;"></div>
 
             <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches) -->
@@ -69,7 +68,7 @@
 
     <div class="modal-footer">
         <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-        <button id='submit-adresse-edit' class="btn btn-success"> Modifier </a>
+        <button id='submit-adresse-edit' class="btn btn-success">Modifier</a>
     </div>
 </form>
 
@@ -82,28 +81,22 @@
             dataToPush[$('#adresse-modal-edit :input')[idx].name] = $('#adresse-modal-edit :input')[idx].value
         })
 
-        $.post("/etablissement/update-adresse", dataToPush,
-            function (data, textStatus, jqXHR) {
-                dataParse = JSON.parse(data)
+        const nouveauLibelle =
+            dataToPush.numero + ' ' +
+            dataToPush.voie_ac + ' ' +
+            dataToPush.complement + ' ' +
+            dataToPush.code_postal + ' ' +
+            dataToPush.commune_ac
 
-                const nouveauLibelle =
-                    dataParse.numero + ' ' +
-                    dataParse.voie_ac + ' ' +
-                    dataParse.complement + ' ' +
-                    dataParse.code_postal + ' ' +
-                    dataParse.commune_ac
+        $('#adresse' + dataToPush.idAdresse + '>span').text(nouveauLibelle)
 
-                $('#adresse'+JSON.parse(data).idAdresse+'>span').text(nouveauLibelle)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMINSEE_COMMUNE]"]').val(dataToPush.code_insee)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LON_ETABLISSEMENTADRESSE]"]').val(dataToPush.lon)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][LAT_ETABLISSEMENTADRESSE]"]').val(dataToPush.lat)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][NUMERO_ADRESSE]"]').val(dataToPush.numero)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][ID_RUE]"]').val(dataToPush.voie)
+        $('input[name="ADRESSES[' + dataToPush.idAdresse + '][COMPLEMENT_ADRESSE]"]').val(dataToPush.complement)
 
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMINSEE_COMMUNE]"]').val(dataParse.code_insee)
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][LON_ETABLISSEMENTADRESSE]"]').val(dataParse.lon)
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][LAT_ETABLISSEMENTADRESSE]"]').val(dataParse.lat)
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][NUMERO_ADRESSE]"]').val(dataParse.numero)
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][ID_RUE]"]').val(dataParse.voie)
-                $('input[name="ADRESSES['+dataParse.idAdresse+'][COMPLEMENT_ADRESSE]"]').val(dataParse.complement)
-
-                $('#adresse-modal-edit .close').click()
-            }
-        );
+        $('#adresse-modal-edit .close').click()
     });
 </script>

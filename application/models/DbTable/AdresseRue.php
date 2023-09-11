@@ -7,7 +7,7 @@ class Model_DbTable_AdresseRue extends Zend_Db_Table_Abstract
 
     public function getLibelleRue($idRue)
     {
-        $select = $this->select()->setIntegrityCheck(false);
+        $select = $this->select();
 
         $select->from('adresserue')
             ->where('ID_RUE = ?', $idRue)
