@@ -184,37 +184,15 @@ class Service_Dossier
     /**
      * Récupération des textes applicables d'un dossier.
      *
-     * @param int $id_dossier
-     *
      * @return array[][]
-     *
-     * @psalm-return array<mixed, array<mixed, array{ID_TEXTESAPPL:mixed, LIBELLE_TEXTESAPPL:mixed}>>
      */
-    public function getAllTextesApplicables($id_dossier): array
+    public function getAllTextesApplicables(int $id_dossier): array
     {
         $dossierTextesAppl = new Model_DbTable_DossierTextesAppl();
 
-        $textes_applicables = [];
         $textes_applicables_non_organises = $dossierTextesAppl->recupTextes($id_dossier);
 
-        $old_titre = null;
-
-        foreach ($textes_applicables_non_organises as $texte_applicable) {
-            $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
-
-            if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
-                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = [];
-            }
-
-            $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']][$texte_applicable['ID_TEXTESAPPL']] = [
-                'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
-                'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
-            ];
-
-            $old_titre = $new_titre;
-        }
-
-        return $textes_applicables;
+        return (new Service_TextesApplicables)->organize($textes_applicables_non_organises);
     }
 
     /**
