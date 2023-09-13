@@ -15,3 +15,4 @@ HashedFileDataStore.php
 .php-cs-fixer.cache
 .vscode
 phpstan.neon
+tests/coverage/*

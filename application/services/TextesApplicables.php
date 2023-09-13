@@ -4,33 +4,39 @@ class Service_TextesApplicables
 {
     /**
      * @return array[][]
-     *
-     * @psalm-return array<mixed, array<int, array{ID_TEXTESAPPL:mixed, LIBELLE_TEXTESAPPL:mixed}>>
      */
     public function getAll(): array
     {
         $dbTextesAppl = new Model_DbTable_TextesAppl();
 
-        $textes_applicables = [];
         $textes_applicables_non_organises = $dbTextesAppl->recupTextesApplVisible();
 
-        $old_titre = null;
+        return $this->organize($textes_applicables_non_organises);
+    }
 
-        foreach ($textes_applicables_non_organises as $texte_applicable) {
-            $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
+    /**
+     * @return array[][]
+     */
+    public function organize(array $unorganizedTexts): array
+    {
+        $organizedApplicableTexts = [];
+        $oldTitle = null;
 
-            if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
-                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = [];
+        foreach ($unorganizedTexts as $applicableText) {
+            $newTitle = $applicableText['ID_TYPETEXTEAPPL'];
+
+            if ($oldTitle != $newTitle && !array_key_exists($applicableText['LIBELLE_TYPETEXTEAPPL'], $organizedApplicableTexts)) {
+                $organizedApplicableTexts[$applicableText['LIBELLE_TYPETEXTEAPPL']] = [];
             }
 
-            $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']][] = [
-                'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
-                'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
+            $organizedApplicableTexts[$applicableText['LIBELLE_TYPETEXTEAPPL']][$applicableText['ID_TEXTESAPPL']] = [
+                'ID_TEXTESAPPL' => $applicableText['ID_TEXTESAPPL'],
+                'LIBELLE_TEXTESAPPL' => $applicableText['LIBELLE_TEXTESAPPL'],
             ];
 
-            $old_titre = $new_titre;
+            $oldTitle = $newTitle;
         }
 
-        return $textes_applicables;
+        return $organizedApplicableTexts;
     }
 }

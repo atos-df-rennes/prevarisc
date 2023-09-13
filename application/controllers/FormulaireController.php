@@ -33,7 +33,7 @@ class FormulaireController extends Zend_Controller_Action
     public $serviceFormulaire;
 
     /**
-     * @var mixed|\Service_Utils
+     * @var Service_Utils
      */
     public $serviceUtils;
 

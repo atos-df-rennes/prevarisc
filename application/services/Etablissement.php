@@ -1526,37 +1526,15 @@ class Service_Etablissement implements Service_Interface_Etablissement
     /**
      * Récupération des textes applicables sur l'établissement.
      *
-     * @param int $id_etablissement
-     *
      * @return array[][]
-     *
-     * @psalm-return array<mixed, array<mixed, array{ID_TEXTESAPPL:mixed, LIBELLE_TEXTESAPPL:mixed}>>
      */
-    public function getAllTextesApplicables($id_etablissement)
+    public function getAllTextesApplicables(int $id_etablissement): array
     {
         $etsTexteApplicable = new Model_DbTable_EtsTextesAppl();
 
-        $textes_applicables = [];
         $textes_applicables_non_organises = $etsTexteApplicable->recupTextes($id_etablissement);
 
-        $old_titre = null;
-
-        foreach ($textes_applicables_non_organises as $texte_applicable) {
-            $new_titre = $texte_applicable['ID_TYPETEXTEAPPL'];
-
-            if ($old_titre != $new_titre && !array_key_exists($texte_applicable['LIBELLE_TYPETEXTEAPPL'], $textes_applicables)) {
-                $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']] = [];
-            }
-
-            $textes_applicables[$texte_applicable['LIBELLE_TYPETEXTEAPPL']][$texte_applicable['ID_TEXTESAPPL']] = [
-                'ID_TEXTESAPPL' => $texte_applicable['ID_TEXTESAPPL'],
-                'LIBELLE_TEXTESAPPL' => $texte_applicable['LIBELLE_TEXTESAPPL'],
-            ];
-
-            $old_titre = $new_titre;
-        }
-
-        return $textes_applicables;
+        return (new Service_TextesApplicables())->organize($textes_applicables_non_organises);
     }
 
     /**
