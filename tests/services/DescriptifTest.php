@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Service_Descriptif
+ *
+ * @internal
+ */
 final class Service_DescriptifTest extends TestCase
 {
     /** @var Service_Descriptif */

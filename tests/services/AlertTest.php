@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Service_Alerte
+ *
+ * @internal
+ */
 final class Service_AlerteTest extends TestCase
 {
     /** @var Service_Alerte */

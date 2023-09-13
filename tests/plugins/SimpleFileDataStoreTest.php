@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Plugin_SimpleFileDataStore
+ *
+ * @internal
+ */
 final class Plugin_SimpleFileDataStoreTest extends TestCase
 {
     /** @var Plugin_SimpleFileDataStore */

@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Service_TextesApplicables
+ *
+ * @internal
+ */
 final class Service_TextesApplicablesTest extends TestCase
 {
     /** @var Service_TextesApplicables */
