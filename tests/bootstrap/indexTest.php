@@ -48,7 +48,7 @@ $application = new Zend_Application('production', [
             ],
         ],
         'dataStore' => [
-            'adapter' => 'Plugin_HashedFileDataStore',
+            'adapter' => 'Plugin_SimpleFileDataStore',
         ],
         'modules' => '',
     ],
