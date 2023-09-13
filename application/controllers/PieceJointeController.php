@@ -89,7 +89,7 @@ class PieceJointeController extends Zend_Controller_Action
 
         $piece_jointe = $piece_jointe[0];
 
-        if ($this->getRequest()->getParam('type') === 'dossier') {
+        if ('dossier' === $this->getRequest()->getParam('type')) {
             // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
             // Nécessite de modifier la configuration Plat'AU
             // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
@@ -176,7 +176,7 @@ class PieceJointeController extends Zend_Controller_Action
             // Sauvegarde de la BDD
             $nouvellePJ->save();
 
-            if ($this->getRequest()->getParam('type') === 'dossier') {
+            if ('dossier' === $this->getRequest()->getParam('type')) {
                 // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
                 $modelDossier = new Model_DbTable_Dossier();
                 $dossier = $modelDossier->find($this->_getParam('id'))->current();
@@ -316,7 +316,7 @@ class PieceJointeController extends Zend_Controller_Action
                 null != $pj
                 && null != $DBitem
             ) {
-                if ($this->getRequest()->getParam('type') === 'dossier') {
+                if ('dossier' === $this->getRequest()->getParam('type')) {
                     // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
                     $modelDossier = new Model_DbTable_Dossier();
                     $dossier = $modelDossier->find($this->_request->id)->current();
@@ -390,7 +390,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
 
         $modelDossier = new Model_DbTable_Dossier();
-        if ($this->getRequest()->getParam('type') === 'dossier') {
+        if ('dossier' === $this->getRequest()->getParam('type')) {
             // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
             $dossier = $modelDossier->find($this->_request->id)->current();
 
@@ -418,7 +418,7 @@ class PieceJointeController extends Zend_Controller_Action
                 'droit_ecriture' => true,
                 'type' => $this->_request->type,
                 'id' => $this->_request->id,
-                'isPlatau' => $this->getRequest()->getParam('type') === 'dossier' ? $modelDossier->isPlatau($dossier['ID_DOSSIER']) : false,
+                'isPlatau' => 'dossier' === $this->getRequest()->getParam('type') && $modelDossier->isPlatau($dossier['ID_DOSSIER']),
             ]);
         }
     }
