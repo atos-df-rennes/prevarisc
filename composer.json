@@ -22,7 +22,7 @@
         "sdis62/toolbox": "dev-master",
         "sebastian/git": "^2.0",
         "sabre/vobject": "~4",
-        "jasig/phpcas": "1.4.0",
+        "jasig/phpcas": "~1.4.0",
         "phpoffice/phpexcel": "^1.8"
     },
 
