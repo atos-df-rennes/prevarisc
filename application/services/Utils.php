@@ -19,7 +19,7 @@ class Service_Utils
     public function getFusionNameMagicalCase(string $name): string
     {
         $fusionName = '';
-        $strings = preg_split("/[\\s'\"\/]+/", $name);
+        $strings = preg_split("/[\\s'\"\\/]+/", $name);
 
         foreach ($strings as $string) {
             $fusionName .= ucfirst(strtolower($string));
