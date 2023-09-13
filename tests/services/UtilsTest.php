@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Service_UtilsTest extends TestCase
 {
-    /** @var Service_Utils */
+    /** @var Service_Utils $utils */
     private $utils;
 
     public function setUp(): void

@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Service_AlerteTest extends TestCase
 {
-    /** @var Service_Alerte */
+    /** @var Service_Alerte $alerte */
     private $alerte;
 
     public function setUp(): void

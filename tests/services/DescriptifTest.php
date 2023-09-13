@@ -4,12 +4,16 @@ use PHPUnit\Framework\TestCase;
 
 final class Service_DescriptifTest extends TestCase
 {
-    /** @var Service_Descriptif */
+    /** @var Service_Descriptif $descriptif */
     private $descriptif;
 
     public function setUp(): void
     {
-        $this->descriptif = new Service_Descriptif('descriptifEtablissement', new Model_DbTable_DisplayRubriqueDossier(), new Service_RubriqueDossier());
+        $this->descriptif = new Service_Descriptif(
+            'descriptifEtablissement',
+            new Model_DbTable_DisplayRubriqueEtablissement(),
+            new Service_RubriqueEtablissement()
+        );
     }
 
     /**
