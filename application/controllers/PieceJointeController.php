@@ -89,15 +89,20 @@ class PieceJointeController extends Zend_Controller_Action
 
         $piece_jointe = $piece_jointe[0];
 
-        // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
-        // Nécessite de modifier la configuration Plat'AU
-        // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
-        $modelDossier = new Model_DbTable_Dossier();
-        $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
+        if ('dossier' === $this->getRequest()->getParam('type')) {
+            // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+            // Nécessite de modifier la configuration Plat'AU
+            // Option "PREVARISC_PIECES_JOINTES_PATH": "/mnt/prevarisc-data/uploads/pieces-jointes"
+            $modelDossier = new Model_DbTable_Dossier();
+            $dossier = $modelDossier->find($piece_jointe['ID_DOSSIER'])->current();
 
-        if (null !== $dossier['ID_PLATAU']) {
-            $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
-            $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+            if (null !== $dossier['ID_PLATAU']) {
+                $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+                $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
+            } else {
+                $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
+                $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
+            }
         } else {
             $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
             $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
@@ -171,17 +176,21 @@ class PieceJointeController extends Zend_Controller_Action
             // Sauvegarde de la BDD
             $nouvellePJ->save();
 
-            // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
-            $modelDossier = new Model_DbTable_Dossier();
-            $dossier = $modelDossier->find($this->_getParam('id'))->current();
+            if ('dossier' === $this->getRequest()->getParam('type')) {
+                // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+                $modelDossier = new Model_DbTable_Dossier();
+                $dossier = $modelDossier->find($this->_getParam('id'))->current();
 
-            if (null !== $dossier['ID_PLATAU']) {
-                $file_path = implode(DS, [
-                    REAL_DATA_PATH,
-                    'uploads',
-                    'pieces-jointes',
-                    $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE,
-                ]);
+                if (null !== $dossier['ID_PLATAU']) {
+                    $file_path = implode(DS, [
+                        REAL_DATA_PATH,
+                        'uploads',
+                        'pieces-jointes',
+                        $nouvellePJ->ID_PIECEJOINTE.$nouvellePJ->EXTENSION_PIECEJOINTE,
+                    ]);
+                } else {
+                    $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
+                }
             } else {
                 $file_path = $this->store->getFilePath($nouvellePJ, $this->_getParam('type'), $this->_getParam('id'), true);
             }
@@ -307,18 +316,21 @@ class PieceJointeController extends Zend_Controller_Action
                 null != $pj
                 && null != $DBitem
             ) {
-                // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
-                $modelDossier = new Model_DbTable_Dossier();
+                if ('dossier' === $this->getRequest()->getParam('type')) {
+                    // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+                    $modelDossier = new Model_DbTable_Dossier();
+                    $dossier = $modelDossier->find($this->_request->id)->current();
 
-                $dossier = $modelDossier->find($this->_request->id)->current();
-
-                if (null !== $dossier['ID_PLATAU']) {
-                    $file_path = implode(DS, [
-                        REAL_DATA_PATH,
-                        'uploads',
-                        'pieces-jointes',
-                        $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE,
-                    ]);
+                    if (null !== $dossier['ID_PLATAU']) {
+                        $file_path = implode(DS, [
+                            REAL_DATA_PATH,
+                            'uploads',
+                            'pieces-jointes',
+                            $pj->ID_PIECEJOINTE.$pj->EXTENSION_PIECEJOINTE,
+                        ]);
+                    } else {
+                        $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+                    }
                 } else {
                     $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
                 }
@@ -377,18 +389,21 @@ class PieceJointeController extends Zend_Controller_Action
             return;
         }
 
-        // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
         $modelDossier = new Model_DbTable_Dossier();
+        if ('dossier' === $this->getRequest()->getParam('type')) {
+            // FIXME Solution temporaire pour ouvrir les PJs provenant de Plat'AU
+            $dossier = $modelDossier->find($this->_request->id)->current();
 
-        $dossier = $modelDossier->find($this->_request->id)->current();
-
-        if (null !== $dossier['ID_PLATAU']) {
-            $file_path = implode(DS, [
-                REAL_DATA_PATH,
-                'uploads',
-                'pieces-jointes',
-                $pj['ID_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'],
-            ]);
+            if (null !== $dossier['ID_PLATAU']) {
+                $file_path = implode(DS, [
+                    REAL_DATA_PATH,
+                    'uploads',
+                    'pieces-jointes',
+                    $pj['ID_PIECEJOINTE'].$pj['EXTENSION_PIECEJOINTE'],
+                ]);
+            } else {
+                $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
+            }
         } else {
             $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
         }
@@ -403,7 +418,7 @@ class PieceJointeController extends Zend_Controller_Action
                 'droit_ecriture' => true,
                 'type' => $this->_request->type,
                 'id' => $this->_request->id,
-                'isPlatau' => $modelDossier->isPlatau($dossier['ID_DOSSIER']),
+                'isPlatau' => 'dossier' === $this->getRequest()->getParam('type') && $modelDossier->isPlatau($dossier['ID_DOSSIER']),
             ]);
         }
     }
