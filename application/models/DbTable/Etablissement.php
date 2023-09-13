@@ -352,41 +352,61 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
     }
 
-    public function listeDesERPOuvertsSousAvisDefavorable($idsCommission = null, $numInseeCommune = null, $idUtilisateur = null)
+    /**
+     * @return array|int
+     */
+    public function listeDesERPOuvertsSousAvisDefavorable(?array $idsCommission = null, ?string $numInseeCommune = null, ?int $idUtilisateur = null, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('avis.ID_AVIS', 2);
         $search->setCriteria('etablissementinformations.ID_GENRE', [2]);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
+
         if ($numInseeCommune) {
             $search->setCriteria('etablissementadresse.NUMINSEE_COMMUNE', $numInseeCommune);
         }
+
         if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
+
         if ($idUtilisateur) {
             $search->setCriteria('utilisateur.ID_UTILISATEUR', $idUtilisateur);
         }
 
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeERPSansPreventionniste()
+    /**
+     * @return array|int
+     */
+    public function listeERPSansPreventionniste(bool $getCount = null)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
         $search->setCriteria('etablissementinformations.ID_STATUT', 2);
         $search->setCriteria('utilisateur.ID_UTILISATEUR IS NULL');
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
         return $search->run(false, null, false)->toArray();
     }
 
-    public function listeErpOuvertsSansProchainesVisitePeriodiques($idsCommission)
+    /**
+     * @return array|int
+     */
+    public function listeErpOuvertsSansProchainesVisitePeriodiques(array $idsCommission, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement');
+        $search->setItem('etablissement', $getCount);
 
         $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
         if ($use_date_commission_for_periodicity) {
@@ -418,11 +438,15 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search->setCriteria('etablissementinformations.ID_GENRE', 2);
         $search->sup('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS', 0);
 
-        if ($idsCommission) {
-            $search->setCriteria('etablissementinformations.ID_COMMISSION', (array) $idsCommission);
+        if ([] !== $idsCommission) {
+            $search->setCriteria('etablissementinformations.ID_COMMISSION', $idsCommission);
         }
 
         $search->having("nextvisiteyearmonth < DATE_FORMAT(CURDATE(), '%Y-%m')");
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
 
         return $search->run(false, null, false)->toArray();
     }

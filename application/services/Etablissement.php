@@ -954,6 +954,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
+
                     // Cellule
                 case 3:
                     $informations->ID_CATEGORIE = $data['ID_CATEGORIE'];
@@ -968,11 +969,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
+
                     // Habitation
                 case 4:
                     $informations->ID_FAMILLE = $data['ID_FAMILLE'];
 
                     break;
+
                     // IGH
                 case 5:
                     $informations->ID_CLASSE = $data['ID_CLASSE'];
@@ -984,12 +987,14 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
                     break;
+
                     // EIC
                 case 6:
                     $informations->ICPE_ETABLISSEMENTINFORMATIONS = (int) $data['ICPE_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
+
                     // Camping
                 case 7:
                     $informations->EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS'];
@@ -998,6 +1003,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS'];
 
                     break;
+
                     // Manifestation temporaire
                 case 8:
                     // IOP
@@ -1006,6 +1012,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
 
                     break;
+
                     // Zone
                 case 10:
                     $informations->ID_CLASSEMENT = $data['ID_CLASSEMENT'];
@@ -1201,6 +1208,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
+
                 // Établissement
             case 2:
                 // Périodicité en fonction de la catégorie/type/local à sommeil
@@ -1245,6 +1253,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
+
                 // Cellule
             case 3:
                 // Préventionnistes de l'établissement parent
@@ -1253,6 +1262,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
+
                 // IGH
             case 5:
                 // Périodicité en fonction de la classe
@@ -1281,6 +1291,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 }
 
                 break;
+
                 // Autres genres
             default:
                 // Préventionnistes du site ou des groupements de communes

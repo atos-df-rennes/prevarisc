@@ -1,5 +1,5 @@
 <?php if(count($this->data) > 0 ) : ?>
-    <?php 
+    <?php
     $actual = new Zend_Date();
     $in = array(
             '`((?:https?|ftp)://\S+[[:alnum:]]/?)`si',
@@ -34,8 +34,3 @@
 <?php else: ?>
   <small class='muted'>Aucun message disponible.</small>
 <?php endif ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#<?php echo $this->id ?> .panel-heading").append(' (<?php echo count($this->data) ?>)');
-    });
-</script>
