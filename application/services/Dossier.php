@@ -192,7 +192,7 @@ class Service_Dossier
 
         $textes_applicables_non_organises = $dossierTextesAppl->recupTextes($id_dossier);
 
-        return (new Service_TextesApplicables)->organize($textes_applicables_non_organises);
+        return (new Service_TextesApplicables())->organize($textes_applicables_non_organises);
     }
 
     /**

@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Service_AlerteTest extends TestCase
 {
-    /** @var Service_Alerte $alerte */
+    /** @var Service_Alerte */
     private $alerte;
 
     public function setUp(): void
@@ -26,12 +26,12 @@ final class Service_AlerteTest extends TestCase
             'with establishment id' => [
                 5,
                 18450,
-                '<a data-value="5" data-ets="18450" class="pull-right alerte-link"><i class="icon-bell icon-black"></i>Alerter</a>'
+                '<a data-value="5" data-ets="18450" class="pull-right alerte-link"><i class="icon-bell icon-black"></i>Alerter</a>',
             ],
             'without establishment id' => [
                 5,
                 null,
-                '<a data-value="5" class="pull-right alerte-link"><i class="icon-bell icon-black"></i>Alerter</a>'
+                '<a data-value="5" class="pull-right alerte-link"><i class="icon-bell icon-black"></i>Alerter</a>',
             ],
         ];
     }

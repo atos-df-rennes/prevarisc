@@ -1534,7 +1534,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         $textes_applicables_non_organises = $etsTexteApplicable->recupTextes($id_etablissement);
 
-        return (new Service_TextesApplicables)->organize($textes_applicables_non_organises);
+        return (new Service_TextesApplicables())->organize($textes_applicables_non_organises);
     }
 
     /**

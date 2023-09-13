@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Service_DescriptifTest extends TestCase
 {
-    /** @var Service_Descriptif $descriptif */
+    /** @var Service_Descriptif */
     private $descriptif;
 
     public function setUp(): void
