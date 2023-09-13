@@ -425,6 +425,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 foreach ($etablissement['etablissement_lies'] as $etablissements_enfant) {
                     $etablissements[$etablissements_enfant['ID_ETABLISSEMENT']]['informations'] = $etablissements_enfant;
                 }
+
                 // no break
             default:
                 break;

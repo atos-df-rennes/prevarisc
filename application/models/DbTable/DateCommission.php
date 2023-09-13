@@ -53,21 +53,20 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param int   $date
-     * @param int   $next_date
-     * @param mixed $idsCommission
-     *
-     * @return array
+     * @return array|int
      */
-    public function getNextCommission($idsCommission, $date, $next_date)
+    public function getNextCommission(array $idsCommission, int $date, int $next_date, bool $getCount = false)
     {
-        $ids = (array) $idsCommission;
-        $select = "SELECT *
-            FROM datecommission d
+        $select = $getCount ? 'SELECT COUNT(*) as count ' : 'SELECT * ';
+        $select .= "FROM datecommission d
             LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
             WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-            ".([] !== $ids ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $ids).')' : '').'
+            ".([] !== $idsCommission ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')' : '').'
             ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
+
+        if ($getCount) {
+            return $this->getAdapter()->fetchRow($select)['count'];
+        }
 
         return $this->getAdapter()->fetchAll($select);
     }

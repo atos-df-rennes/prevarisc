@@ -375,7 +375,7 @@
 
         <!-- Carte de l'emplacement de l'établissement / informations  -->
         <div class='span6'>
-            <h4 class="champ_adresse champs h4_subtitle">Adresse <a style='font-size: 0.85em; float: right; font-weight: normal;' data-toggle="modal" data-backdrop="false" href="#adresse-modal">Ajouter une adresse</a></h4>
+            <h4 class="champ_adresse champs h4_subtitle">Adresse <a style='font-size: 0.85em; float: right; font-weight: normal;' data-toggle="modal" data-backdrop="static" href="#adresse-modal-ajout">Ajouter une adresse</a></h4>
             <table id='adresses' class='table table-condensed champ_adresse champs'>
                 <thead>
                     <tr>
@@ -505,7 +505,7 @@
 </div>
 
 <!-- Boite de construction d'adresse-->
-<form id="adresse-modal" class="modal hide adresse fase" action='#' method='post'>
+<form id="adresse-modal-ajout" class="modal hide adresse fade" action='#' method='post'>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -591,6 +591,8 @@
         <a href="#" data-dismiss="modal" class="btn btn-success" id='submit-adresse'>Sauvegarder</a>
     </div>
 </form>
+
+<?= $this->partial('etablissement/partials/partial-modal-edit-adresse.phtml', ['key_ign' => $this->key_ign]) ?>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -690,6 +692,7 @@
         $("form.adresse a#submit-adresse").live('click', function() {
             time = Date.now();
             node = $('#prototype_adresse').clone().prependTo( $('table.champ_adresse') ).removeClass('hide prototypes').addClass('adresse').attr('id', '');
+
             node.find('input[name="ADRESSES[-1][LON_ETABLISSEMENTADRESSE]"]').val($('form.adresse').find('input[name="lon"]').val());
             node.find('input[name="ADRESSES[-1][LAT_ETABLISSEMENTADRESSE]"]').val($('form.adresse').find('input[name="lat"]').val());
             node.find('input[name="ADRESSES[-1][NUMERO_ADRESSE]"]').val($('form.adresse').find('input[name="numero"]').val());
@@ -698,7 +701,11 @@
             node.find('input[name="ADRESSES[-1][COMPLEMENT_ADRESSE]"]').val($('form.adresse').find('input[name="complement"]').val());
             node.find('span').text($('form.adresse').find('input[name="numero"]').val() + " " + $('form.adresse').find('input[name="voie_ac"]').val() + " " + $('form.adresse').find('input[name="code_postal"]').val() + " " + $('form.adresse').find('input[name="commune_ac"]').val());
             node.find('input').each(function() {$(this).attr('name', $(this).attr('name').replace(/-1/gi, time)); });
+            node.find('#adresse').attr('id','adresse'+time)
+            node.find('.modifierAdresse').attr('data-id',time)
+
             $('form.adresse').find('button.close').click();
+            setTriggerEventModalAdresseEdit()
             return false;
         });
 
@@ -988,20 +995,27 @@
                 return item.LIBELLE_COMMUNE + " (" + item.NUMINSEE_COMMUNE + ")";
             }
         }).result(function(e, item) {
-            $("#adresse-modal input[name='code_insee']").val( item.NUMINSEE_COMMUNE );
-            $("#adresse-modal input[name='code_postal']").val( item.CODEPOSTAL_COMMUNE );
-            $("#adresse-modal input[name='voie_ac']").removeAttr('disabled');
+            const modalId = $(this).closest('form')[0].id
+
+            $(`#${modalId} input[name='code_insee']`).val( item.NUMINSEE_COMMUNE );
+            $(`#${modalId} input[name='code_postal']`).val( item.CODEPOSTAL_COMMUNE );
+            $(`#${modalId} input[name='voie_ac']`).removeAttr('disabled');
         }).click(function() {
+            const modalId = $(this).closest('form')[0].id
+
             $(this).val("");
-            $("#adresse-modal input[name='voie_ac'], #adresse-modal input[name='numero'], #adresse-modal input[name='complement']").val("").attr("disabled", true).blur();
-            $("#adresse-modal input[name='voie']").val("").blur();
+            $(`#${modalId} input[name='voie_ac'], #${modalId} input[name='numero'], #${modalId} input[name='complement']`).val("").attr("disabled", true).blur();
+            $(`#${modalId} input[name='voie']`).val("").blur();
         });
 
         // Auto complétion de la rue
         $("input[name='voie_ac']").autocomplete('/api/1.0/adresse/get_voies', {
             minChars: 2,
             cacheLength: 0,
-            extraParams: { code_insee: function(){ return $("#adresse-modal input[name='code_insee']").val() } },
+            extraParams: { code_insee: function(){
+                const modalId = $("input[name='voie_ac']").closest('form.in')[0].id
+                return $(`#${modalId} input[name='code_insee']`).val()
+            } },
             parse: function(data) {
                 return $.map(data["response"], function(row) { return {data: row,value: row.LIBELLE_RUE,result: row.LIBELLE_RUE} });
             },
@@ -1009,126 +1023,126 @@
                 return item.LIBELLE_RUE + ' (code insee : ' + item.NUMINSEE_COMMUNE + ')';
             }
         }).result(function(e, item) {
-            $("#adresse-modal input[name='voie']").val( item.ID_RUE );
-            $("#adresse-modal input[name='type_voie']").val( item.ID_RUETYPE );
-            $("#adresse-modal input[name='numero'], #adresse-modal input[name='complement']").removeAttr("disabled");
+            const modalId = $(this).closest('form')[0].id
+
+            $(`#${modalId} input[name='voie']`).val( item.ID_RUE );
+            $(`#${modalId} input[name='type_voie']`).val( item.ID_RUETYPE );
+            $(`#${modalId} input[name='numero'], #${modalId} input[name='complement']`).removeAttr("disabled");
         }).click(function() {
+            const modalId = $(this).closest('form')[0].id
+
             $(this).val("");
-            $("#adresse-modal input[name='numero'], #adresse-modal input[name='complement']").val("").attr("disabled", true).blur();
+            $(`#${modalId} input[name='numero'], #${modalId} input[name='complement']`).val("").attr("disabled", true).blur();
         });
 
-        $('#adresse-modal').on('shown.bs.modal', function () {
-            if($('#adresse-modal .modal-body').scrollTop() !== 0) {
-                $('#adresse-modal .modal-body').scrollTop(0);
+        <?php if ($this->key_ign != null):
+            $public_dir = $_SERVER['DOCUMENT_ROOT'];
+            $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
+            $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
+        ?>
+
+            const optionsGeo = {
+                geo_container_id: '',
+                key_ign: '<?= $this->key_ign ?>',
+                default_lat: <?= $this->default_lat ?>,
+                default_lon: <?= $this->default_lon ?>,
+                autoconf_path: '<?= $autoconf_path ?>',
+                couches_cartographiques: <?= json_encode($this->couches_cartographiques) ?>
             }
+        <?php endif ?>
 
-            $('#adresse-modal input').val('');
-            $("#adresse-modal input[name='voie_ac'], #adresse-modal input[name='numero'], #adresse-modal input[name='complement']").val("").attr("disabled", true).blur();
-            $("span.result").text("Inconnu");
-            $('#geoportail-container').css('visibility', 'hidden');
+        $('#adresse-modal-ajout').on('shown.bs.modal', function () {
+            optionsGeo.geo_container_id = 'geoportail-container'
+            geolocaliseIGN("#adresse-modal-ajout", optionsGeo)
+        })
 
-            // Si une carto est déjà présente, on n'en charge pas une autre
-            if($('#geoportail-container .ol-viewport').length == 0) {
-                // On empêche le clic sur la géolocalisation jusqu'à ce que la carto soit chargée
-                $('#adresse-modal #geolocme').attr('disabled', true);
-                $('#adresse-modal #geolocme_nominatim').attr('disabled', true);
+        $('#adresse-modal-edit').on('shown.bs.modal', function () {
+            optionsGeo.geo_container_id = 'edit-geoportail-container'
+            geolocaliseIGN("#adresse-modal-edit", optionsGeo)
+        })
 
-                /***** Carte IGN *****/
-                <?php if ($this->key_ign != null): ?>
-                    <?php
-                        $public_dir = $_SERVER['DOCUMENT_ROOT'];
-                        $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
-                        $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
-                    ?>
+        function setModalEditAdresseInputValue(data, dataId){
+            //On set les valeurs reçu
+            // Ville
+            $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
+            // Voie
+            $("input[name='voie_ac']").removeAttr('disabled')
+            $("input[name='voie_ac']").val(data.LIBELLE_RUE)
 
-                    viewer = initViewer('geoportail-container',
-                                        '<?php echo $this->key_ign ?>',
-                                        [<?php echo $this->default_lon ?>, <?php echo $this->default_lat ?>],
-                                        '<b>Centre par défaut</b>',
-                                        '<?php echo $autoconf_path ?>');
+            // Numéro
+            $("input[name='numero']").removeAttr('disabled')
+            $("input[name='numero']").val(data.NUMERO_ADRESSE)
 
-                    viewer.listen('mapLoaded', afterInitMap);
-                    viewer.listen('azimuthChanged', onRotation);
+            // Complément d'adresse
+            $("input[name='complement']")
+            $("input[name='complement']").val(data.COMPLEMENT_ADRESSE)
 
-                    function afterInitMap () {
-                        // Ajout du bouton FullScreen sur la carte
-                        var fsControl = new ol.control.FullScreen({});
-                        viewer.getLibMap().addControl(fsControl);
+            // Coordonnées
+            $("input[name='lon']").val(data.LON_ETABLISSEMENTADRESSE)
+            $("input[name='lat']").val(data.LAT_ETABLISSEMENTADRESSE)
 
-                        // Ajout des couches utilisateur
-                        viewer = addUserLayers(viewer,
-                                               <?php echo json_encode($this->couches_cartographiques) ?>);
-                        nbCouches = viewer.getLibMap().getLayers().getLength();
+            // Code INSEE
+            $("input[name='code_insee']").val(data.NUMINSEE_COMMUNE)
 
-                        // On enlève le marker par défaut, les outils de mesures, et le reset d'orientation
-                        $('.ol-overlay-container').css('display', 'none');
-                        $('div[id^=GPtoolbox-measure-main-]').css('display', 'none');
-                        $('.ol-rotate').css('display', 'none');
+            // Code Postal
+            $("input[name='code_postal']").val(data.CODEPOSTAL_COMMUNE)
 
-                        $('#adresse-modal #geolocme').removeAttr('disabled');
-                        $('#adresse-modal #geolocme_nominatim').removeAttr('disabled');
-                    };
+            //Id de l'adrese
+            $("input[name='idAdresse']").val(dataId)
+        }
 
-                    function onRotation () {
-                        viewer.getAzimuth() === 0 ? $('.ol-rotate').css('display', 'none') : $('.ol-rotate').css('display', 'block');
-                    };
+        function getValueOfNewAdresse(dataId){
+            let data = {}
+                $(`#adresse${dataId} input`).each(idx => {
+                    data[
+                        $(`#adresse${dataId} :input`)[idx].name.split(`ADRESSES[${dataId}]`)[1]
+                        .replaceAll('[','')
+                        .replaceAll(']','')
+                        ]
+                    = $(`#adresse${dataId} :input`)[idx].value
+                })
+                //On recupere le libelle de la commune
+                $.ajax({
+                    type: "get",
+                    url: "/api/1.0/adresse/get_libelle_commune",
+                    data: {code_insee: data.NUMINSEE_COMMUNE},
+                    async: false,
+                    success: function (recieveLibelleCommune) {
+                        data.LIBELLE_COMMUNE = recieveLibelleCommune?.response?.LIBELLE_COMMUNE
+                    }
+                })
+                $.ajax({
+                    type: "get",
+                    url: "/api/1.0/adresse/get_libelle_rue",
+                    data: {idRue: data.ID_RUE},
+                    async: false,
+                    success: function (recieveRue) {
+                        data.LIBELLE_RUE = recieveRue?.response?.LIBELLE_RUE
+                    }
+                })
+            return data
+        }
 
-                    viewer.getLibMap().on('singleclick', function(evt) {
-                        lonlat = updateCoordinates(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-                        putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
-                    });
+         function setTriggerEventModalAdresseEdit() {
+            $('.modifierAdresse').click(function (e) {
+                e.preventDefault();
+                const dataId = $(this).attr('data-id')
 
-                    $('#adresse-modal #geolocme').click(function(e) {
-                        e.preventDefault();
-
-                        var adresse = "";
-                        var numero = $("input[name='numero']").val().trim();
-                        var voie = $("input[name='voie_ac']").val().trim();
-                        var codepostal = $("input[name='code_postal']").val();
-                        var commune = $("input[name='commune_ac']").val().replace(/\(.*\)/g, '');
-
-                        if (!commune) {
-                            $("span.result").text("Pas de commune renseignée");
-                            return false;
+                $.ajax({
+                    url: "/api/1.0/etablissement/get_adresse?id="+$(this).attr('data-id'),
+                    type: "get",
+                    success: function (result) {
+                        if (result === null) {
+                            setModalEditAdresseInputValue(getValueOfNewAdresse(dataId), dataId)
+                        } else {
+                            setModalEditAdresseInputValue(result.response, dataId)
                         }
+                    }
+                })
+            })
+         }
 
-                        if (!voie) {
-                            $("span.result").text("Pas de voie renseignée");
-                            return false;
-                        }
-
-                        if (numero) {
-                            adresse += numero + ", ";
-                        }
-
-                        // On regarde si la voie contient une commune entre parenthèses
-                        var regExp = /\(([^)]+)\)/;
-                        var matches = regExp.exec(voie);
-
-                        if (matches) {
-                            // matches[1] contient la valeur entre parenthèses
-                            commune = matches[1];
-
-                            // On retire la commune de la voie
-                            voie = voie.split(regExp)[0].trim();
-                        }
-
-                        adresse += voie + ", " + codepostal +  ", " + commune;
-
-                        $("span.result").text("Géolocalisation en cours...");
-                        geocodeWithJsAutoconf(
-                            adresse,
-                            'StreetAddress',
-                            'EPSG:4326',
-                            viewer,
-                            nbCouches
-                        );
-
-                        return false;
-                    });
-                <?php endif ?>
-            }
-        });
+         setTriggerEventModalAdresseEdit()
 
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
@@ -1194,7 +1208,7 @@
                 }
             );
 
-            $('#adresse-modal #geolocme-geoconcept').click(function(e) {
+            $('#geolocme-geoconcept').click(function(e) {
                 e.preventDefault();
                 var geocoderUrl = "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER') ?>";
                 var adresse = "";
@@ -1234,7 +1248,7 @@
         <?php endif ?>
 
         // Géolocalisation de l'adresse
-        $('#adresse-modal #geolocme_nominatim').click(function() {
+        $('#geolocme_nominatim').click(function() {
             element = $(this);
             $.ajax({
                 url: "//nominatim.openstreetmap.org/search",
