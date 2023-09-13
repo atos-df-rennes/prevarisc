@@ -16,8 +16,10 @@
     font-size: 28px;
 }
 
-.flex {
-    display:flex;
+.avis-derogation__affichage-historique {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .controls label {
