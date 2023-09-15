@@ -371,6 +371,7 @@ class EtablissementController extends Zend_Controller_Action
             $allPiecesJointes,
             function ($pieceJointe) use ($store) {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
+
                 return is_readable($pieceJointePath);
             }
         );
@@ -395,6 +396,7 @@ class EtablissementController extends Zend_Controller_Action
             $allPiecesJointes,
             function ($pieceJointe) use ($store) {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
+
                 return is_readable($pieceJointePath);
             }
         );

@@ -55,7 +55,8 @@ class PieceJointeController extends Zend_Controller_Action
         $filteredListePj = array_filter(
             $listePj,
             function ($pieceJointe) {
-                $pieceJointePath = $this->store->getFilePath($pieceJointe, $this->_request->type, $this->_request->id);
+                $pieceJointePath = $this->store->getFilePath($pieceJointe, $this->getRequest()->getParam('type'), $this->getRequest()->getParam('id'));
+
                 return is_readable($pieceJointePath);
             }
         );
