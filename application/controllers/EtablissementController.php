@@ -364,8 +364,20 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->pieces_jointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
-        $this->view->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+        $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
+
+        $piecesJointes = array_filter(
+            $allPiecesJointes,
+            function ($pieceJointe) use ($store) {
+                $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
+
+                return is_readable($pieceJointePath);
+            }
+        );
+
+        $this->view->pieces_jointes = $piecesJointes;
+        $this->view->store = $store;
     }
 
     public function getPieceJointeAction()
@@ -377,8 +389,20 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->pieces_jointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
-        $this->view->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+        $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+        $allPiecesJointes = $this->serviceEtablissement->getAllPJ($this->_request->id);
+
+        $piecesJointes = array_filter(
+            $allPiecesJointes,
+            function ($pieceJointe) use ($store) {
+                $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
+
+                return is_readable($pieceJointePath);
+            }
+        );
+
+        $this->view->pieces_jointes = $piecesJointes;
+        $this->view->store = $store;
     }
 
     public function addPieceJointeAction()
