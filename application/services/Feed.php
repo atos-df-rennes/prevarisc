@@ -34,16 +34,12 @@ class Service_Feed
      */
     public function getFeeds(array $user, ?int $count = 5, bool $getCount = false)
     {
-        $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
-
         if ($getCount) {
             $modelNews = new Model_DbTable_News();
             $select = $modelNews->select()->setIntegrityCheck(false);
-        }
-
-        if ($getCount) {
             $select->from('news', ['COUNT(*) as count']);
         } else {
+            $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
             $select->from('news');
         }
 
@@ -59,9 +55,17 @@ class Service_Feed
             $select
                 ->group('news.ID_NEWS')
             ;
+
+            return $select->query()->fetchAll();
         }
 
-        return $getCount ? $modelNews->fetchRow($select)['count'] : $select->query()->fetchAll();
+        if (null === $modelNews->fetchRow($select)) {
+            error_log('La requête de comptage des messages a échouée.');
+
+            return 0;
+        }
+
+        return filter_var($modelNews->fetchRow($select)['count'], FILTER_VALIDATE_INT);
     }
 
     /**

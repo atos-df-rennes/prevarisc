@@ -27,7 +27,13 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         }
 
         if ($getCount) {
-            return $this->fetchRow($this->select)['count'];
+            if (!$this->fetchRow($this->select) instanceof \Zend_Db_Table_Row_Abstract) {
+                error_log('La requête de comptage des éléments a échouée.');
+
+                return 0;
+            }
+
+            return filter_var($this->fetchRow($this->select)['count'], FILTER_VALIDATE_INT);
         }
 
         if (!$paginator) {
