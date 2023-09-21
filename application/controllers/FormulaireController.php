@@ -247,6 +247,7 @@ class FormulaireController extends Zend_Controller_Action
                     )
                 );
 
+                $idx = 0;
                 foreach ($listChamps as $listChamp) {
                     $fieldNames[] = $this->serviceUtils->getFullFusionName(
                         $capsuleRubrique['NOM_INTERNE'],
@@ -257,7 +258,8 @@ class FormulaireController extends Zend_Controller_Action
                         ]
                     );
 
-                    $fieldValues[] = sprintf('valeur%d', $listChamp['idx']);
+                    $fieldValues[] = sprintf('valeur%d', $idx);
+                    $idx++;
                 }
 
                 $champFusionValue = [
