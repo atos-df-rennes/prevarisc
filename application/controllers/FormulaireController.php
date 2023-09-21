@@ -259,7 +259,7 @@ class FormulaireController extends Zend_Controller_Action
                     );
 
                     $fieldValues[] = sprintf('valeur%d', $idx);
-                    $idx++;
+                    ++$idx;
                 }
 
                 $champFusionValue = [
