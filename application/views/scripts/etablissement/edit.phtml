@@ -547,8 +547,8 @@
 
             <dt>Géolocalisation</dt>
             <dd>
-                <?php if ($this->key_ign != null) : ?><button id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                <?php if ($this->geoconcept_url != null) : ?><button id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
+                <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
                 <button id="geolocme_nominatim" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)</button>
                 <br/>
                 <small>Résultat : <span class='result'>Inconnu</span></small>
