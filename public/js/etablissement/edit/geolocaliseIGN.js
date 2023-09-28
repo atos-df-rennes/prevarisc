@@ -56,8 +56,6 @@ function geolocaliseIGN (idModal, options) {
         });
 
         $(idModal+' #geolocme').click(function(e) {
-            e.preventDefault();
-
             var adresse = "";
             var numero = $(idModal+" input[name='numero']").val().trim();
             var voie = $(idModal+" input[name='voie_ac']").val().trim();

@@ -2217,12 +2217,12 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
-			count: 14
+			count: 13
 			path: application/controllers/EtablissementController.php
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headScript\\(\\)\\.$#"
-			count: 10
+			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-

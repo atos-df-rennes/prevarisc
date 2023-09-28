@@ -72,14 +72,11 @@ class EtablissementController extends Zend_Controller_Action
     public function editAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
-        $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
-        $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
-        $this->view->headScript()->appendFile('/js/etablissement/edit/geolocaliseIGN.js', 'text/javascript');
 
         $viewHeadScript = $this->view;
         $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $viewHeadScript->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        $viewHeadScript->headScript()->appendFile('/js/etablissement/edit/geolocaliseIGN.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
@@ -158,6 +155,7 @@ class EtablissementController extends Zend_Controller_Action
         $viewHeadScript = $this->view;
         $viewHeadScript->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $viewHeadScript->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
+        $viewHeadScript->headScript()->appendFile('/js/etablissement/edit/geolocaliseIGN.js', 'text/javascript');
 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/js/geoportail/sdk-ol/GpSDK2D.css', 'all');
