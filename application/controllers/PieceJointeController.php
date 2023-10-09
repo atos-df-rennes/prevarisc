@@ -31,6 +31,7 @@ class PieceJointeController extends Zend_Controller_Action
         $modelDossier = new Model_DbTable_Dossier();
 
         $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOLEAN);
+        $objectType = $this->getRequest()->getParam('type');
 
         // Cas dossier
         if ('dossier' == $this->_request->type) {
@@ -54,8 +55,12 @@ class PieceJointeController extends Zend_Controller_Action
 
         $filteredListePj = array_filter(
             $listePj,
-            function ($pieceJointe) {
-                $pieceJointePath = $this->store->getFilePath($pieceJointe, $this->getRequest()->getParam('type'), $this->getRequest()->getParam('id'));
+            function ($pieceJointe) use ($objectType, $modelDossier) {
+                if ('dossier' === $objectType && $modelDossier->isPlatau($this->getRequest()->getParam('id'))) {
+                    $pieceJointePath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$pieceJointe['ID_PIECEJOINTE'].$pieceJointe['EXTENSION_PIECEJOINTE'];
+                } else {
+                    $pieceJointePath = $this->store->getFilePath($pieceJointe, $this->getRequest()->getParam('type'), $this->getRequest()->getParam('id'));
+                }
 
                 return is_readable($pieceJointePath);
             }
