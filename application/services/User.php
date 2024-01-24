@@ -327,7 +327,7 @@ class Service_User
                     }
                 }
 
-                $DB_groupe->delete($id_group);
+                $DB_groupe->delete((string) $id_group);
 
                 $db->commit();
             } catch (Exception $e) {

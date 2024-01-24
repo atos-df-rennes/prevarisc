@@ -17,7 +17,7 @@ class Service_Feed
         $select = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
 
         $select->from('news')
-            ->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
+            ->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', [])
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $id_group)
@@ -43,7 +43,7 @@ class Service_Feed
             $select->from('news');
         }
 
-        $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', null)
+        $select->join('newsgroupe', 'news.ID_NEWS = newsgroupe.ID_NEWS', [])
             ->join('utilisateur', 'news.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
             ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS')
             ->where('newsgroupe.ID_GROUPE = ?', $user['group']['ID_GROUPE'])
@@ -59,7 +59,7 @@ class Service_Feed
             return $select->query()->fetchAll();
         }
 
-        if (null === $modelNews->fetchRow($select)) {
+        if (!$modelNews->fetchRow($select) instanceof \Zend_Db_Table_Row_Abstract) {
             error_log('La requête de comptage des messages a échouée.');
 
             return 0;

@@ -129,7 +129,7 @@ class SessionController extends Zend_Controller_Action
         if ($auth->hasIdentity()) {
             $service_user = new Service_User();
 
-            $service_user->updateLastActionDate($auth->getIdentity()['ID_UTILISATEUR'], null);
+            $service_user->updateLastActionDate($auth->getIdentity()['ID_UTILISATEUR']);
 
             $auth->clearIdentity();
         }
