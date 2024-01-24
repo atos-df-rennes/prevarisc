@@ -3266,6 +3266,36 @@ parameters:
 			path: application/controllers/SearchController.php
 
 		-
+			message: "#^Parameter \\#1 \\$month of function checkdate expects int, string given\\.$#"
+			count: 1
+			path: application/controllers/SearchController.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			count: 9
+			path: application/controllers/SearchController.php
+
+		-
+			message: "#^Parameter \\#2 \\$day of function checkdate expects int, string given\\.$#"
+			count: 1
+			path: application/controllers/SearchController.php
+
+		-
+			message: "#^Parameter \\#2 \\$month of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			count: 9
+			path: application/controllers/SearchController.php
+
+		-
+			message: "#^Parameter \\#3 \\$day of static method PHPExcel_Shared_Date\\:\\:FormattedPHPToExcel\\(\\) expects int, \\(string\\|false\\) given\\.$#"
+			count: 9
+			path: application/controllers/SearchController.php
+
+		-
+			message: "#^Parameter \\#3 \\$year of function checkdate expects int, string given\\.$#"
+			count: 1
+			path: application/controllers/SearchController.php
+
+		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
 			count: 2
 			path: application/controllers/SessionController.php

@@ -82,7 +82,7 @@ class Service_Changement
     {
         if (is_array($data)) {
             foreach ($data as $key => $message) {
-                $idChangement = explode('_', $key)[0];
+                $idChangement = filter_var(explode('_', $key)[0], FILTER_VALIDATE_INT);
                 $changement = $this->get($idChangement);
                 $changement->MESSAGE_CHANGEMENT = $message;
                 $changement->save();

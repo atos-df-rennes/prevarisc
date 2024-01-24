@@ -136,7 +136,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('adresserue', null)
+            ->from('adresserue', [])
             ->join('adresseruetype', 'adresserue.ID_RUETYPE = adresseruetype.ID_RUETYPE')
             ->where("NUMINSEE_COMMUNE = '{$code_insee}'")
             ->group('ID_RUETYPE')

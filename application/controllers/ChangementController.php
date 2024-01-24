@@ -44,7 +44,7 @@ class ChangementController extends Zend_Controller_Action
         $changement = $serviceChangement->get($this->_getParam('changement'));
 
         $users = $serviceUser->getUtilisateursForAlterte(
-            $changement['ID_CHANGEMENT'],
+            (int) $changement['ID_CHANGEMENT'],
             $etablissement
         );
 
@@ -65,7 +65,7 @@ class ChangementController extends Zend_Controller_Action
         $this->view->mails = implode(';', $mails);
 
         $this->view->objet = $serviceChangement->getObjet(
-            $changement['ID_CHANGEMENT'],
+            (int) $changement['ID_CHANGEMENT'],
             $etablissement
         );
 

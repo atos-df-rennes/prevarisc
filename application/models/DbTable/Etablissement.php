@@ -96,13 +96,13 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->distinct()
-                ->from('adressecommune', null)
+                ->from('adressecommune', [])
                 ->join('etablissementadresse', 'etablissementadresse.NUMINSEE_COMMUNE =adressecommune.NUMINSEE_COMMUNE', 'etablissementadresse.ID_ETABLISSEMENT')
-                ->join('etablissement', 'etablissementadresse.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT', null)
+                ->join('etablissement', 'etablissementadresse.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT', [])
                 ->where('adressecommune.NUMINSEE_COMMUNE = ?', $adresses[0]['NUMINSEE_COMMUNE'])
                 ->where("etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = '".('B' == $genre ? $parent['ID_ETABLISSEMENT'] : $id)."')")
             ;
-            $nbetscommune = str_pad(count($this->fetchAll($select)), 5, '0', STR_PAD_LEFT);
+            $nbetscommune = str_pad((string) count($this->fetchAll($select)), 5, '0', STR_PAD_LEFT);
         } else {
             $nbetscommune = '00000';
         }
@@ -112,12 +112,12 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->from('etablissementlie')
-                ->join('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', null)
+                ->join('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', [])
                 ->where('etablissementlie.ID_ETABLISSEMENT = ?', $parent['ID_ETABLISSEMENT'])
                 ->where('etablissement.DATEENREGISTREMENT_ETABLISSEMENT  <= ( SELECT etablissement.DATEENREGISTREMENT_ETABLISSEMENT FROM etablissement WHERE etablissement.ID_ETABLISSEMENT = ?)', $id)
             ;
             $result = $this->fetchAll($select);
-            $rangcell = str_pad(null == $result ? 0 : count($result), 3, '0', STR_PAD_LEFT);
+            $rangcell = str_pad(null == $result ? '0' : (string) count($result), 3, '0', STR_PAD_LEFT);
         } else {
             $rangcell = '000';
         }
@@ -139,7 +139,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from(['e' => 'etablissement'], 'ID_ETABLISSEMENT')
             ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENTINFORMATIONS', 'PERIODICITE_ETABLISSEMENTINFORMATIONS'])
-            ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', null)
+            ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', [])
             ->where('DATE_ETABLISSEMENTINFORMATIONS = (select max(DATE_ETABLISSEMENTINFORMATIONS) from etablissementinformations where ID_ETABLISSEMENT = e.ID_ETABLISSEMENT ) ')
             ->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$id_user)
             ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT ) OR etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
@@ -179,7 +179,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(['e' => 'etablissement'], null)
+        $select->from(['e' => 'etablissement'], [])
             ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
             ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
@@ -194,7 +194,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(['e' => 'etablissement'], null)
+        $select->from(['e' => 'etablissement'], [])
             ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'PERIODICITE_ETABLISSEMENTINFORMATIONS')
             ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
@@ -218,7 +218,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->setIntegrityCheck(false);
 
-        $select->from(['e' => 'etablissement'], null)
+        $select->from(['e' => 'etablissement'], [])
             ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT', 'ID_GENRE')
             ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
             ->where('etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
@@ -238,7 +238,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementlie', null)
+            ->from('etablissementlie', [])
             ->joinLeft('etablissementinformations', 'etablissementinformations.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT')
             ->joinLeft('categorie', 'categorie.ID_CATEGORIE = etablissementinformations.ID_CATEGORIE')
             ->joinLeft('etablissement', 'etablissement.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT')
@@ -270,7 +270,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementpj', null)
+            ->from('etablissementpj', [])
             ->joinLeft('piecejointe', 'piecejointe.ID_PIECEJOINTE = etablissementpj.ID_PIECEJOINTE')
             ->where("EXTENSION_PIECEJOINTE = '.jpg' OR EXTENSION_PIECEJOINTE = '.JPG' OR EXTENSION_PIECEJOINTE = '.jpeg' OR EXTENSION_PIECEJOINTE = '.png'")
             ->where('PLACEMENT_ETABLISSEMENTPJ = 1')
@@ -289,7 +289,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementpj', null)
+            ->from('etablissementpj', [])
             ->joinLeft('piecejointe', 'piecejointe.ID_PIECEJOINTE = etablissementpj.ID_PIECEJOINTE')
             ->where("EXTENSION_PIECEJOINTE = '.jpg' OR EXTENSION_PIECEJOINTE = '.JPG' OR EXTENSION_PIECEJOINTE = '.png'")
             ->where('PLACEMENT_ETABLISSEMENTPJ = 2')
@@ -462,7 +462,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('dossier', ['ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER', 'AVIS_DOSSIER_COMMISSION'])
             ->join('etablissementdossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER')
-            ->join('dossiernature', 'dossiernature.ID_DOSSIER = etablissementdossier.ID_DOSSIER', null)
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = etablissementdossier.ID_DOSSIER', [])
             ->where('etablissementdossier.ID_ETABLISSEMENT = ?', $id_etablissement)
             ->where('dossiernature.ID_NATURE in (?)', [19, 7, 17, 16, 21, 23, 24, 47, 26, 28, 29, 48])
             ->where('dossier.AVIS_DOSSIER_COMMISSION IS NOT NULL')

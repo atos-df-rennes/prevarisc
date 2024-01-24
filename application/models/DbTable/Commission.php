@@ -59,7 +59,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('commission')
-            ->join('commissiontype', 'commissiontype.ID_COMMISSIONTYPE = commission.ID_COMMISSIONTYPE', null)
+            ->join('commissiontype', 'commissiontype.ID_COMMISSIONTYPE = commission.ID_COMMISSIONTYPE', [])
             ->where("commission.ID_COMMISSIONTYPE = {$type}")
         ;
 
@@ -144,11 +144,11 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'])
-                ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
-                ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', null)
-                ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', null)
-                ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', null)
-                ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', null)
+                ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', [])
+                ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', [])
+                ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', [])
+                ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', [])
+                ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', [])
                 ->where('commissionreglecategorie.ID_CATEGORIE = ?', $categorie)
                 ->where('commissionregletype.ID_TYPE = ?', $type)
                 ->where('commissionreglelocalsommeil.LOCALSOMMEIL = ?', $localsommeil)
@@ -167,7 +167,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                         $model_groupementCommune = new Model_DbTable_GroupementCommune();
                         $row_groupement = $model_groupementCommune->fetchRow("ID_GROUPEMENT = '".$result->ID_GROUPEMENT."' AND NUMINSEE_COMMUNE = '".$commune."'");
 
-                        if (1 === count($row_groupement)) {
+                        if ($row_groupement instanceof \Zend_Db_Table_Row_Abstract) {
                             return $this->find($result->ID_COMMISSION)->toArray();
                         }
                     }
@@ -194,10 +194,10 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
             $select = $this->select()
                 ->setIntegrityCheck(false)
                 ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE', 'ID_COMMISSION'])
-                ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
-                ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', null)
-                ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', null)
-                ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', null)
+                ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', [])
+                ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', [])
+                ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', [])
+                ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', [])
                 ->where('commissionregleclasse.ID_CLASSE = ?', $classe)
                 ->where('commissionreglelocalsommeil.LOCALSOMMEIL = ?', $localsommeil)
                 ->where('commission.ID_COMMISSIONTYPE = ?', $row_typeCommission['ID_COMMISSIONTYPE'])
@@ -215,7 +215,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                         $model_groupementCommune = new Model_DbTable_GroupementCommune();
                         $row_groupement = $model_groupementCommune->fetchRow("ID_GROUPEMENT = '".$result->ID_GROUPEMENT."' AND NUMINSEE_COMMUNE = '".$commune."'");
 
-                        if (1 === count($row_groupement)) {
+                        if ($row_groupement instanceof \Zend_Db_Table_Row_Abstract) {
                             return $this->find($result->ID_COMMISSION)->toArray();
                         }
                     }
@@ -240,12 +240,12 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('commissionregle', ['ID_GROUPEMENT', 'NUMINSEE_COMMUNE'])
-            ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', null)
+            ->joinLeft('commission', 'commission.ID_COMMISSION = commissionregle.ID_COMMISSION', [])
             ->joinLeft('commissionregletype', 'commissionregle.ID_REGLE = commissionregletype.ID_REGLE', ['ID_TYPE'])
             ->joinLeft('commissionreglecategorie', 'commissionregle.ID_REGLE = commissionreglecategorie.ID_REGLE', ['ID_CATEGORIE'])
             ->joinLeft('commissionregleclasse', 'commissionregle.ID_REGLE = commissionregleclasse.ID_REGLE', ['ID_CLASSE'])
             ->joinLeft('commissionreglelocalsommeil', 'commissionregle.ID_REGLE = commissionreglelocalsommeil.ID_REGLE', ['LOCALSOMMEIL'])
-            ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', null)
+            ->joinLeft('adressecommune', 'adressecommune.NUMINSEE_COMMUNE = commissionregle.NUMINSEE_COMMUNE', [])
             ->where('commission.ID_COMMISSION = ?', $id_commission)
         ;
 

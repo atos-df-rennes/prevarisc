@@ -106,7 +106,7 @@ class Service_Descriptif
     public function saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
     {
         $explodedChamp = explode('-', $key);
-        $idChamp = end($explodedChamp);
+        $idChamp = filter_var(end($explodedChamp), FILTER_VALIDATE_INT);
         $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
     }
 

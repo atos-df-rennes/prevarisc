@@ -98,7 +98,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('utilisateurcommission', null)
+            ->from('utilisateurcommission', [])
             ->join('commission', 'commission.ID_COMMISSION = utilisateurcommission.ID_COMMISSION')
             ->join('commissiontype', 'commission.ID_COMMISSIONTYPE = commissiontype.ID_COMMISSIONTYPE')
             ->where('ID_UTILISATEUR = ?', $id)
@@ -144,7 +144,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('utilisateurgroupement', null)
+            ->from('utilisateurgroupement', [])
             ->join('groupement', 'groupement.ID_GROUPEMENT = utilisateurgroupement.ID_GROUPEMENT')
             ->where('ID_UTILISATEUR = ?', $id)
         ;
@@ -206,7 +206,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         // Récupération depuis la base des ressources / privileges du groupe de l'utilisateur
 
         $this->select = $this->select()->setIntegrityCheck(false);
-        $select = $this->select->from('groupe-privileges', null)
+        $select = $this->select->from('groupe-privileges', [])
             ->join('privileges', '`groupe-privileges`.id_privilege = privileges.id_privilege', ['name_privilege' => 'name'])
             ->join('resources', 'privileges.id_resource = resources.id_resource', ['name_resource' => 'name'])
             ->where('`groupe-privileges`.ID_GROUPE = ?', $group)
@@ -366,8 +366,8 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                 ['ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
                     'ui.MAIL_UTILISATEURINFORMATIONS', ]
             )
-            ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', null)
-            ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', null)
+            ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', [])
+            ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', [])
             ->where('ui.MAIL_UTILISATEURINFORMATIONS IS NOT NULL')
             ->where('ui.MAIL_UTILISATEURINFORMATIONS <> ?', '')
             ->where('gp.id_privilege = ('.$selectPrivilegeQuery.')')
@@ -383,10 +383,10 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                 ['ui.NOM_UTILISATEURINFORMATIONS', 'ui.PRENOM_UTILISATEURINFORMATIONS',
                     'ui.MAIL_UTILISATEURINFORMATIONS', ]
             )
-            ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', null)
-            ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', null)
-            ->join(['ug' => 'utilisateurgroupement'], 'ug.ID_UTILISATEUR = u.ID_UTILISATEUR', null)
-            ->join(['gc' => 'groupementcommune'], 'gc.ID_GROUPEMENT = ug.ID_GROUPEMENT', null)
+            ->join(['g' => 'groupe'], 'g.ID_GROUPE = u.ID_GROUPE', [])
+            ->join(['gp' => 'groupe-privileges'], 'gp.ID_GROUPE = g.ID_GROUPE', [])
+            ->join(['ug' => 'utilisateurgroupement'], 'ug.ID_UTILISATEUR = u.ID_UTILISATEUR', [])
+            ->join(['gc' => 'groupementcommune'], 'gc.ID_GROUPEMENT = ug.ID_GROUPEMENT', [])
             ->where('ui.MAIL_UTILISATEURINFORMATIONS IS NOT NULL')
             ->where('ui.MAIL_UTILISATEURINFORMATIONS <> ?', '')
             ->where('gp.id_privilege = ('.$selectPrivilegeQuery.')')

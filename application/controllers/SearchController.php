@@ -92,42 +92,42 @@ class SearchController extends Zend_Controller_Action
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
-                    $sheet->setCellValueByColumnAndRow(0, 1, 'Commune');
-                    $sheet->setCellValueByColumnAndRow(1, 1, 'Catégorie');
-                    $sheet->setCellValueByColumnAndRow(2, 1, 'Type');
-                    $sheet->setCellValueByColumnAndRow(3, 1, 'Activité');
-                    $sheet->setCellValueByColumnAndRow(4, 1, 'Commission compétente');
-                    $sheet->setCellValueByColumnAndRow(5, 1, 'Code/identifiant établissement');
-                    $sheet->setCellValueByColumnAndRow(6, 1, 'Libellé établissement');
-                    $sheet->setCellValueByColumnAndRow(7, 1, 'Statut');
-                    $sheet->setCellValueByColumnAndRow(8, 1, 'Avis');
-                    $sheet->setCellValueByColumnAndRow(9, 1, 'Date du dernier avis');
-                    $sheet->setCellValueByColumnAndRow(10, 1, 'Date du premier avis favorable');
-                    $sheet->setCellValueByColumnAndRow(11, 1, 'Date du premier avis défavorable consécutif');
-                    $sheet->setCellValueByColumnAndRow(12, 1, 'Effectif total');
-                    $sheet->setCellValueByColumnAndRow(13, 1, 'Effectif public');
-                    $sheet->setCellValueByColumnAndRow(14, 1, 'Effectif personnel');
-                    $sheet->setCellValueByColumnAndRow(15, 1, 'Date de dernière visite');
-                    $sheet->setCellValueByColumnAndRow(16, 1, 'Date de prochaine visite périodique');
-                    $sheet->setCellValueByColumnAndRow(17, 1, 'Date de visite prévue');
-                    $sheet->setCellValueByColumnAndRow(18, 1, 'Adresse');
-                    $sheet->setCellValueByColumnAndRow(19, 1, 'Groupement territorial compétent');
-                    $sheet->setCellValueByColumnAndRow(20, 1, 'Libellé du père/site');
-                    $sheet->setCellValueByColumnAndRow(21, 1, 'Genre');
-                    $sheet->setCellValueByColumnAndRow(22, 1, 'Préventionniste');
-                    $sheet->setCellValueByColumnAndRow(23, 1, 'Présence de locaux à sommeil');
+                    $sheet->setCellValueByColumnAndRow(0, '1', 'Commune');
+                    $sheet->setCellValueByColumnAndRow(1, '1', 'Catégorie');
+                    $sheet->setCellValueByColumnAndRow(2, '1', 'Type');
+                    $sheet->setCellValueByColumnAndRow(3, '1', 'Activité');
+                    $sheet->setCellValueByColumnAndRow(4, '1', 'Commission compétente');
+                    $sheet->setCellValueByColumnAndRow(5, '1', 'Code/identifiant établissement');
+                    $sheet->setCellValueByColumnAndRow(6, '1', 'Libellé établissement');
+                    $sheet->setCellValueByColumnAndRow(7, '1', 'Statut');
+                    $sheet->setCellValueByColumnAndRow(8, '1', 'Avis');
+                    $sheet->setCellValueByColumnAndRow(9, '1', 'Date du dernier avis');
+                    $sheet->setCellValueByColumnAndRow(10, '1', 'Date du premier avis favorable');
+                    $sheet->setCellValueByColumnAndRow(11, '1', 'Date du premier avis défavorable consécutif');
+                    $sheet->setCellValueByColumnAndRow(12, '1', 'Effectif total');
+                    $sheet->setCellValueByColumnAndRow(13, '1', 'Effectif public');
+                    $sheet->setCellValueByColumnAndRow(14, '1', 'Effectif personnel');
+                    $sheet->setCellValueByColumnAndRow(15, '1', 'Date de dernière visite');
+                    $sheet->setCellValueByColumnAndRow(16, '1', 'Date de prochaine visite périodique');
+                    $sheet->setCellValueByColumnAndRow(17, '1', 'Date de visite prévue');
+                    $sheet->setCellValueByColumnAndRow(18, '1', 'Adresse');
+                    $sheet->setCellValueByColumnAndRow(19, '1', 'Groupement territorial compétent');
+                    $sheet->setCellValueByColumnAndRow(20, '1', 'Libellé du père/site');
+                    $sheet->setCellValueByColumnAndRow(21, '1', 'Genre');
+                    $sheet->setCellValueByColumnAndRow(22, '1', 'Préventionniste');
+                    $sheet->setCellValueByColumnAndRow(23, '1', 'Présence de locaux à sommeil');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
-                        $sheet->setCellValueByColumnAndRow(0, $ligne, $row['LIBELLE_COMMUNE']);
-                        $sheet->setCellValueByColumnAndRow(1, $ligne, $row['LIBELLE_CATEGORIE']);
-                        $sheet->setCellValueByColumnAndRow(2, $ligne, $row['LIBELLE_TYPE']);
-                        $sheet->setCellValueByColumnAndRow(3, $ligne, $row['LIBELLE_ACTIVITE']);
-                        $sheet->setCellValueByColumnAndRow(4, $ligne, $row['LIBELLE_COMMISSION']);
-                        $sheet->setCellValueByColumnAndRow(5, $ligne, $row['NUMEROID_ETABLISSEMENT']);
-                        $sheet->setCellValueByColumnAndRow(6, $ligne, $row['LIBELLE_ETABLISSEMENTINFORMATIONS']);
-                        $sheet->setCellValueByColumnAndRow(7, $ligne, $row['LIBELLE_STATUT']);
-                        $sheet->setCellValueByColumnAndRow(8, $ligne, $row['LIBELLE_AVIS']);
+                        $sheet->setCellValueByColumnAndRow(0, (string) $ligne, $row['LIBELLE_COMMUNE']);
+                        $sheet->setCellValueByColumnAndRow(1, (string) $ligne, $row['LIBELLE_CATEGORIE']);
+                        $sheet->setCellValueByColumnAndRow(2, (string) $ligne, $row['LIBELLE_TYPE']);
+                        $sheet->setCellValueByColumnAndRow(3, (string) $ligne, $row['LIBELLE_ACTIVITE']);
+                        $sheet->setCellValueByColumnAndRow(4, (string) $ligne, $row['LIBELLE_COMMISSION']);
+                        $sheet->setCellValueByColumnAndRow(5, (string) $ligne, $row['NUMEROID_ETABLISSEMENT']);
+                        $sheet->setCellValueByColumnAndRow(6, (string) $ligne, $row['LIBELLE_ETABLISSEMENTINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(7, (string) $ligne, $row['LIBELLE_STATUT']);
+                        $sheet->setCellValueByColumnAndRow(8, (string) $ligne, $row['LIBELLE_AVIS']);
 
                         if ('' != $row['DATE_DERNIER_AVIS']) {
                             $dateDernierAvis = preg_split('/-|\\//', $row['DATE_DERNIER_AVIS']);
@@ -136,7 +136,7 @@ class SearchController extends Zend_Controller_Action
                                 $dateDernierAvis[2] = substr($dateDernierAvis[2], 0, 2);
                             }
                             $datetimeDernierAvis = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDernierAvis[0], $dateDernierAvis[1], $dateDernierAvis[2]);
-                            $sheet->setCellValueByColumnAndRow(9, $ligne, $datetimeDernierAvis);
+                            $sheet->setCellValueByColumnAndRow(9, (string) $ligne, $datetimeDernierAvis);
                             $sheet->getStyleByColumnAndRow(9, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
 
@@ -146,7 +146,7 @@ class SearchController extends Zend_Controller_Action
                                 $datePremierAvisFavorable[2] = substr($datePremierAvisFavorable[2], 0, 2);
                             }
                             $datePremierAvisFavorable = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisFavorable[0], $datePremierAvisFavorable[1], $datePremierAvisFavorable[2]);
-                            $sheet->setCellValueByColumnAndRow(10, $ligne, $datePremierAvisFavorable);
+                            $sheet->setCellValueByColumnAndRow(10, (string) $ligne, $datePremierAvisFavorable);
                             $sheet->getStyleByColumnAndRow(10, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
 
@@ -156,13 +156,13 @@ class SearchController extends Zend_Controller_Action
                                 $datePremierAvisDefavorableConsecutif[2] = substr($datePremierAvisDefavorableConsecutif[2], 0, 2);
                             }
                             $datetimePremierAvisDefavorableConsecutif = PHPExcel_Shared_Date::FormattedPHPToExcel($datePremierAvisDefavorableConsecutif[0], $datePremierAvisDefavorableConsecutif[1], $datePremierAvisDefavorableConsecutif[2]);
-                            $sheet->setCellValueByColumnAndRow(11, $ligne, $datetimePremierAvisDefavorableConsecutif);
+                            $sheet->setCellValueByColumnAndRow(11, (string) $ligne, $datetimePremierAvisDefavorableConsecutif);
                             $sheet->getStyleByColumnAndRow(11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
 
-                        $sheet->setCellValueByColumnAndRow(12, $ligne, $row['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $row['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
-                        $sheet->setCellValueByColumnAndRow(13, $ligne, $row['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS']);
-                        $sheet->setCellValueByColumnAndRow(14, $ligne, $row['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(12, (string) $ligne, $row['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $row['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(13, (string) $ligne, $row['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(14, (string) $ligne, $row['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
 
                         if ('' != $row['DATE_DERNIERE_VISITE']) {
                             $dateDerniereVisite = preg_split('/-|\\//', $row['DATE_DERNIERE_VISITE']);
@@ -170,7 +170,7 @@ class SearchController extends Zend_Controller_Action
                                 $dateDerniereVisite[2] = substr($dateDerniereVisite[2], 0, 2);
                             }
                             $datetimeDerniereVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateDerniereVisite[0], $dateDerniereVisite[1], $dateDerniereVisite[2]);
-                            $sheet->setCellValueByColumnAndRow(15, $ligne, $datetimeDerniereVisite);
+                            $sheet->setCellValueByColumnAndRow(15, (string) $ligne, $datetimeDerniereVisite);
                             $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
 
                             if (0 != $row['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
@@ -180,7 +180,7 @@ class SearchController extends Zend_Controller_Action
                                     $dateProchaineVisite[2] = substr($dateProchaineVisite[2], 0, 2);
                                 }
                                 $datetimeProchaineVisite = PHPExcel_Shared_Date::FormattedPHPToExcel($dateProchaineVisite[0], $dateProchaineVisite[1], $dateProchaineVisite[2]);
-                                $sheet->setCellValueByColumnAndRow(16, $ligne, $datetimeProchaineVisite);
+                                $sheet->setCellValueByColumnAndRow(16, (string) $ligne, $datetimeProchaineVisite);
                                 $sheet->getStyleByColumnAndRow(16, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                             }
                         }
@@ -191,16 +191,16 @@ class SearchController extends Zend_Controller_Action
                                 $dateVisitePrevue[2] = substr($dateVisitePrevue[2], 0, 2);
                             }
                             $datetimeVisitePrevue = PHPExcel_Shared_Date::FormattedPHPToExcel($dateVisitePrevue[0], $dateVisitePrevue[1], $dateVisitePrevue[2]);
-                            $sheet->setCellValueByColumnAndRow(17, $ligne, $datetimeVisitePrevue);
+                            $sheet->setCellValueByColumnAndRow(17, (string) $ligne, $datetimeVisitePrevue);
                             $sheet->getStyleByColumnAndRow(17, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
 
-                        $sheet->setCellValueByColumnAndRow(18, $ligne, $row['NUMERO_ADRESSE'].' '.$row['LIBELLE_RUE'].' '.$row['COMPLEMENT_ADRESSE'].' '.$row['CODEPOSTAL_COMMUNE']);
-                        $sheet->setCellValueByColumnAndRow(19, $ligne, $row['LIBELLE_GROUPEMENT']);
-                        $sheet->setCellValueByColumnAndRow(20, $ligne, $row['LIBELLE_ETABLISSEMENT_PERE']);
-                        $sheet->setCellValueByColumnAndRow(21, $ligne, $row['LIBELLE_GENRE']);
-                        $sheet->setCellValueByColumnAndRow(22, $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
-                        $sheet->setCellValueByColumnAndRow(23, $ligne, $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 'oui' : 'non');
+                        $sheet->setCellValueByColumnAndRow(18, (string) $ligne, $row['NUMERO_ADRESSE'].' '.$row['LIBELLE_RUE'].' '.$row['COMPLEMENT_ADRESSE'].' '.$row['CODEPOSTAL_COMMUNE']);
+                        $sheet->setCellValueByColumnAndRow(19, (string) $ligne, $row['LIBELLE_GROUPEMENT']);
+                        $sheet->setCellValueByColumnAndRow(20, (string) $ligne, $row['LIBELLE_ETABLISSEMENT_PERE']);
+                        $sheet->setCellValueByColumnAndRow(21, (string) $ligne, $row['LIBELLE_GENRE']);
+                        $sheet->setCellValueByColumnAndRow(22, (string) $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(23, (string) $ligne, $row['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 'oui' : 'non');
 
                         ++$ligne;
                     }
@@ -373,60 +373,60 @@ class SearchController extends Zend_Controller_Action
                         $sheet->getColumnDimension($columnID)->setAutoSize(true);
                     }
 
-                    $sheet->setCellValueByColumnAndRow(0, 1, 'Groupement');
-                    $sheet->setCellValueByColumnAndRow(1, 1, 'Commune');
-                    $sheet->setCellValueByColumnAndRow(2, 1, 'Catégorie');
-                    $sheet->setCellValueByColumnAndRow(3, 1, 'Type');
-                    $sheet->setCellValueByColumnAndRow(4, 1, 'Activité');
-                    $sheet->setCellValueByColumnAndRow(5, 1, 'Code/identifiant établissement');
-                    $sheet->setCellValueByColumnAndRow(6, 1, 'Libellé établissement');
-                    $sheet->setCellValueByColumnAndRow(7, 1, 'Statut');
-                    $sheet->setCellValueByColumnAndRow(8, 1, 'Genre');
-                    $sheet->setCellValueByColumnAndRow(9, 1, 'Type du dossier');
-                    $sheet->setCellValueByColumnAndRow(10, 1, 'Nature du dossier');
-                    $sheet->setCellValueByColumnAndRow(11, 1, 'Date de création du dossier');
-                    $sheet->setCellValueByColumnAndRow(12, 1, 'Objet du dossier');
-                    $sheet->setCellValueByColumnAndRow(13, 1, 'Numéro document urbanisme');
-                    $sheet->setCellValueByColumnAndRow(14, 1, 'Date de visite');
-                    $sheet->setCellValueByColumnAndRow(15, 1, 'Date de la commission en salle');
-                    $sheet->setCellValueByColumnAndRow(16, 1, 'Commission du dossier');
-                    $sheet->setCellValueByColumnAndRow(17, 1, 'Avis rapporteur');
-                    $sheet->setCellValueByColumnAndRow(18, 1, 'Avis commission');
-                    $sheet->setCellValueByColumnAndRow(19, 1, 'Préventionniste en charge du dossier');
-                    $sheet->setCellValueByColumnAndRow(20, 1, 'Pièces jointes ?');
-                    $sheet->setCellValueByColumnAndRow(21, 1, 'Identifiant PLATAU');
+                    $sheet->setCellValueByColumnAndRow(0, '1', 'Groupement');
+                    $sheet->setCellValueByColumnAndRow(1, '1', 'Commune');
+                    $sheet->setCellValueByColumnAndRow(2, '1', 'Catégorie');
+                    $sheet->setCellValueByColumnAndRow(3, '1', 'Type');
+                    $sheet->setCellValueByColumnAndRow(4, '1', 'Activité');
+                    $sheet->setCellValueByColumnAndRow(5, '1', 'Code/identifiant établissement');
+                    $sheet->setCellValueByColumnAndRow(6, '1', 'Libellé établissement');
+                    $sheet->setCellValueByColumnAndRow(7, '1', 'Statut');
+                    $sheet->setCellValueByColumnAndRow(8, '1', 'Genre');
+                    $sheet->setCellValueByColumnAndRow(9, '1', 'Type du dossier');
+                    $sheet->setCellValueByColumnAndRow(10, '1', 'Nature du dossier');
+                    $sheet->setCellValueByColumnAndRow(11, '1', 'Date de création du dossier');
+                    $sheet->setCellValueByColumnAndRow(12, '1', 'Objet du dossier');
+                    $sheet->setCellValueByColumnAndRow(13, '1', 'Numéro document urbanisme');
+                    $sheet->setCellValueByColumnAndRow(14, '1', 'Date de visite');
+                    $sheet->setCellValueByColumnAndRow(15, '1', 'Date de la commission en salle');
+                    $sheet->setCellValueByColumnAndRow(16, '1', 'Commission du dossier');
+                    $sheet->setCellValueByColumnAndRow(17, '1', 'Avis rapporteur');
+                    $sheet->setCellValueByColumnAndRow(18, '1', 'Avis commission');
+                    $sheet->setCellValueByColumnAndRow(19, '1', 'Préventionniste en charge du dossier');
+                    $sheet->setCellValueByColumnAndRow(20, '1', 'Pièces jointes ?');
+                    $sheet->setCellValueByColumnAndRow(21, '1', 'Identifiant PLATAU');
 
                     $ligne = 2;
                     foreach ($search['results'] as $row) {
-                        $sheet->setCellValueByColumnAndRow(0, $ligne, $row['LIBELLE_GROUPEMENT']);
-                        $sheet->setCellValueByColumnAndRow(1, $ligne, $row['LIBELLE_COMMUNE']);
-                        $sheet->setCellValueByColumnAndRow(2, $ligne, $row['LIBELLE_CATEGORIE']);
-                        $sheet->setCellValueByColumnAndRow(3, $ligne, $row['LIBELLE_TYPE_ETABLISSEMENT']);
-                        $sheet->setCellValueByColumnAndRow(4, $ligne, $row['LIBELLE_ACTIVITE']);
-                        $sheet->setCellValueByColumnAndRow(5, $ligne, $row['NUMEROID_ETABLISSEMENT']);
-                        $sheet->setCellValueByColumnAndRow(6, $ligne, $row['LIBELLE_ETABLISSEMENTINFORMATIONS']);
-                        $sheet->setCellValueByColumnAndRow(7, $ligne, $row['LIBELLE_STATUT']);
-                        $sheet->setCellValueByColumnAndRow(8, $ligne, $row['LIBELLE_GENRE']);
-                        $sheet->setCellValueByColumnAndRow(9, $ligne, $row['LIBELLE_DOSSIERTYPE']);
-                        $sheet->setCellValueByColumnAndRow(10, $ligne, $row['LIBELLE_DOSSIERNATURE']);
+                        $sheet->setCellValueByColumnAndRow(0, (string) $ligne, $row['LIBELLE_GROUPEMENT']);
+                        $sheet->setCellValueByColumnAndRow(1, (string) $ligne, $row['LIBELLE_COMMUNE']);
+                        $sheet->setCellValueByColumnAndRow(2, (string) $ligne, $row['LIBELLE_CATEGORIE']);
+                        $sheet->setCellValueByColumnAndRow(3, (string) $ligne, $row['LIBELLE_TYPE_ETABLISSEMENT']);
+                        $sheet->setCellValueByColumnAndRow(4, (string) $ligne, $row['LIBELLE_ACTIVITE']);
+                        $sheet->setCellValueByColumnAndRow(5, (string) $ligne, $row['NUMEROID_ETABLISSEMENT']);
+                        $sheet->setCellValueByColumnAndRow(6, (string) $ligne, $row['LIBELLE_ETABLISSEMENTINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(7, (string) $ligne, $row['LIBELLE_STATUT']);
+                        $sheet->setCellValueByColumnAndRow(8, (string) $ligne, $row['LIBELLE_GENRE']);
+                        $sheet->setCellValueByColumnAndRow(9, (string) $ligne, $row['LIBELLE_DOSSIERTYPE']);
+                        $sheet->setCellValueByColumnAndRow(10, (string) $ligne, $row['LIBELLE_DOSSIERNATURE']);
                         if ('' != $row['DATEINSERT_DOSSIER']) {
                             $dateCreationDossier = preg_split('/-|\\//', $row['DATEINSERT_DOSSIER']);
                             if (!is_numeric($dateCreationDossier[2])) {
                                 $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
                             }
                             $datetimeCreationDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateCreationDossier[0], $dateCreationDossier[1], $dateCreationDossier[2]);
-                            $sheet->setCellValueByColumnAndRow(11, $ligne, $datetimeCreationDossier);
+                            $sheet->setCellValueByColumnAndRow(11, (string) $ligne, $datetimeCreationDossier);
                             $sheet->getStyleByColumnAndRow(11, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
-                        $sheet->setCellValueByColumnAndRow(12, $ligne, $row['OBJET_DOSSIER']);
-                        $sheet->setCellValueByColumnAndRow(13, $ligne, $row['NUM_DOCURBA']);
+                        $sheet->setCellValueByColumnAndRow(12, (string) $ligne, $row['OBJET_DOSSIER']);
+                        $sheet->setCellValueByColumnAndRow(13, (string) $ligne, $row['NUM_DOCURBA']);
                         if ('' != $row['DATEVISITE_DOSSIER']) {
                             $dateVisiteDossier = preg_split('/-|\\//', $row['DATEVISITE_DOSSIER']);
                             if (!is_numeric($dateVisiteDossier[2])) {
                                 $dateVisiteDossier[2] = substr($dateVisiteDossier[2], 0, 2);
                             }
                             $datetimeVisiteDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateVisiteDossier[0], $dateVisiteDossier[1], $dateVisiteDossier[2]);
-                            $sheet->setCellValueByColumnAndRow(14, $ligne, $datetimeVisiteDossier);
+                            $sheet->setCellValueByColumnAndRow(14, (string) $ligne, $datetimeVisiteDossier);
                             $sheet->getStyleByColumnAndRow(14, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
                         if ('' != $row['DATECOMM_DOSSIER']) {
@@ -435,21 +435,21 @@ class SearchController extends Zend_Controller_Action
                                 $dateCommissionDossier[2] = substr($dateCommissionDossier[2], 0, 2);
                             }
                             $datetimeCommissionDossier = PHPExcel_Shared_Date::FormattedPHPToExcel($dateCommissionDossier[0], $dateCommissionDossier[1], $dateCommissionDossier[2]);
-                            $sheet->setCellValueByColumnAndRow(15, $ligne, $datetimeCommissionDossier);
+                            $sheet->setCellValueByColumnAndRow(15, (string) $ligne, $datetimeCommissionDossier);
                             $sheet->getStyleByColumnAndRow(15, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
-                        $sheet->setCellValueByColumnAndRow(16, $ligne, $row['LIBELLE_COMMISSION']);
-                        $sheet->setCellValueByColumnAndRow(17, $ligne, $row['LIBELLE_AVIS_RAPPORTEUR']);
-                        $sheet->setCellValueByColumnAndRow(18, $ligne, $row['LIBELLE_AVIS_COMMISSION']);
-                        $sheet->setCellValueByColumnAndRow(19, $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
+                        $sheet->setCellValueByColumnAndRow(16, (string) $ligne, $row['LIBELLE_COMMISSION']);
+                        $sheet->setCellValueByColumnAndRow(17, (string) $ligne, $row['LIBELLE_AVIS_RAPPORTEUR']);
+                        $sheet->setCellValueByColumnAndRow(18, (string) $ligne, $row['LIBELLE_AVIS_COMMISSION']);
+                        $sheet->setCellValueByColumnAndRow(19, (string) $ligne, $row['PRENOM_UTILISATEURINFORMATIONS'].' '.$row['NOM_UTILISATEURINFORMATIONS']);
                         if ('' != $row['ID_PIECEJOINTE']) {
-                            $sheet->setCellValueByColumnAndRow(20, $ligne, 'Oui');
+                            $sheet->setCellValueByColumnAndRow(20, (string) $ligne, 'Oui');
                         } else {
-                            $sheet->setCellValueByColumnAndRow(20, $ligne, 'Non');
+                            $sheet->setCellValueByColumnAndRow(20, (string) $ligne, 'Non');
                         }
 
                         if ('1' === $criteresRecherche['provenance']) {
-                            $sheet->setCellValueByColumnAndRow(21, $ligne, $row['ID_PLATAU']);
+                            $sheet->setCellValueByColumnAndRow(21, (string) $ligne, $row['ID_PLATAU']);
                         }
 
                         ++$ligne;

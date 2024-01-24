@@ -3153,15 +3153,15 @@ class DossierController extends Zend_Controller_Action
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
-        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
         $service_dossier = new Service_Dossier();
 
         if ($this->idDossier) {
             $this->view->enteteEtab = $service_dossier->getEtabInfos($this->idDossier);
         }
 
-        $this->view->assign('rubriques', $serviceDossierDescriptif->getRubriques($this->idDossier, 'Dossier'));
-        $this->view->assign('champsvaleurliste', $serviceDossierDescriptif->getValeursListe());
+        $this->view->assign('rubriques', $serviceDossierVerificationsTechniques->getRubriques($this->idDossier, 'Dossier'));
+        $this->view->assign('champsvaleurliste', $serviceDossierVerificationsTechniques->getValeursListe());
     }
 
     public function editVerificationsTechniquesAction(): void
@@ -3174,7 +3174,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
 
-        $serviceDossierDescriptif = new Service_DossierVerificationsTechniques();
+        $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
 
         $this->verificationsTechniquesAction();
 
@@ -3187,17 +3187,17 @@ class DossierController extends Zend_Controller_Action
                     // Informations concernant l'affichage des rubriques
 
                     if (0 === strpos($key, 'afficher_rubrique-')) {
-                        $serviceDossierDescriptif->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
+                        $serviceDossierVerificationsTechniques->saveRubriqueDisplay($key, $this->idDossier, (int) $value);
                     }
 
                     // Informations concernant les valeurs des champs
                     if (0 === strpos($key, 'champ-')) {
-                        $serviceDossierDescriptif->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
+                        $serviceDossierVerificationsTechniques->saveValeurChamp($key, $this->idDossier, 'Dossier', $value);
                     }
                 }
 
                 // Sauvegarde les changements dans les tableaux
-                $serviceDossierDescriptif->saveChangeTable($this->view->rubriques, $serviceDossierDescriptif->groupInputByOrder($post), 'Dossier', $this->idDossier);
+                $serviceDossierVerificationsTechniques->saveChangeTable($this->view->rubriques, $serviceDossierVerificationsTechniques->groupInputByOrder($post), 'Dossier', $this->idDossier);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {

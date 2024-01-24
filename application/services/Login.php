@@ -57,7 +57,7 @@ class Service_Login
                 $informations = $user->ID_UTILISATEUR;
 
                 // On encode le jeton
-                $token = hash('sha256', $time + $informations);
+                $token = hash('sha256', 'login'.($time + $informations));
 
                 $results = [
                     'reponse' => $reponse,

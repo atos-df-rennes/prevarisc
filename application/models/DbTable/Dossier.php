@@ -218,7 +218,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementdossier', null)
+            ->from('etablissementdossier', [])
             ->join('dossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'LIBELLE_DOSSIER', 'OBJET_DOSSIER', 'DESCRIPTIFGEN_DOSSIER', 'DATESECRETARIAT_DOSSIER'])
             ->join('dossiertype', 'dossier.TYPE_DOSSIER = dossiertype.ID_DOSSIERTYPE', 'VISITEBOOL_DOSSIERTYPE')
             ->where("etablissementdossier.ID_ETABLISSEMENT = {$etablissement}")
@@ -378,13 +378,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $select
             ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
-            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
             ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
             ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
             ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
-            ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+            ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', [])
             ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
-            ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
+            ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', [])
             ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = dossierpreventionniste.ID_PREVENTIONNISTE', 'ID_UTILISATEUR')
             ->joinLeft('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', 'LIBELLE_ETABLISSEMENTINFORMATIONS')
             ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER')

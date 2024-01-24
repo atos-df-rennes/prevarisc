@@ -90,7 +90,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                     ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
                     ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
                     ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', ['pere' => 'ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT'])
-                    ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', null)
+                    ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS', [])
                     ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = etablissementinformationspreventionniste.ID_UTILISATEUR', 'ID_UTILISATEUR')
                     ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'ID_RUE'])
                     ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT')
@@ -149,13 +149,13 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                             WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)'),
                     ])
                     ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
-                    ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+                    ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
                     ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                     ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
                     ->joinLeft('dossierdocurba', 'd.ID_DOSSIER = dossierdocurba.ID_DOSSIER', 'NUM_DOCURBA')
-                    ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+                    ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', [])
                     ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
-                    ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
+                    ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', [])
                     ->joinLeft('utilisateur', 'utilisateur.ID_UTILISATEUR = dossierpreventionniste.ID_PREVENTIONNISTE', 'ID_UTILISATEUR')
                     ->joinLeft(
                         'etablissementinformations',

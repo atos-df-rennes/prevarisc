@@ -12,7 +12,7 @@ class Model_DbTable_EtsTextesAppl extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from('etablissementtextapp', null)
+            ->from('etablissementtextapp', [])
             ->join('textesappl', 'etablissementtextapp.ID_TEXTESAPPL = textesappl.ID_TEXTESAPPL', ['ID_TEXTESAPPL', 'LIBELLE_TEXTESAPPL'])
             ->join('typetextesappl', 'textesappl.ID_TYPETEXTEAPPL = typetextesappl.ID_TYPETEXTEAPPL')
             ->where('ID_ETABLISSEMENT = ?', $id_etablissement)

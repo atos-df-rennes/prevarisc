@@ -532,21 +532,21 @@ class Service_Search
                         WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)'), ])
                 ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
                 ->joinLeft('commission', 'd.COMMISSION_DOSSIER = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
-                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                 ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
-                ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+                ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', [])
                 ->joinLeft(['ei' => new Zend_Db_Expr('(SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS), etablissementinformations.* FROM etablissementinformations group by ID_ETABLISSEMENT)')], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENTINFORMATIONS', 'ID_ETABLISSEMENT'])
                 ->joinLeft('type', 'type.ID_TYPE = ei.ID_TYPE', ['ID_TYPE', 'LIBELLE_TYPE'])
                 ->joinLeft('genre', 'genre.ID_GENRE = ei.ID_GENRE', 'LIBELLE_GENRE')
                 ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
-                ->joinLeft('dossierdocurba', 'dossierdocurba.ID_DOSSIER = d.ID_DOSSIER', null)
-                ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', null)
-                ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', null)
-                ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
-                ->joinLeft(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', null)
+                ->joinLeft('dossierdocurba', 'dossierdocurba.ID_DOSSIER = d.ID_DOSSIER', [])
+                ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', [])
+                ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', [])
+                ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', [])
+                ->joinLeft(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
                 ->joinLeft('adressecommune', 'ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
-                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', null)
+                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', [])
                 ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
@@ -782,10 +782,10 @@ class Service_Search
                         WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)'), ])
                 ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
                 ->joinLeft('commission', 'd.COMMISSION_DOSSIER = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
-                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                 ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
-                ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', null)
+                ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
                 ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', 'NUMEROID_ETABLISSEMENT')
                 ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )', ['LIBELLE_ETABLISSEMENTINFORMATIONS', 'ID_ETABLISSEMENT', 'ID_CATEGORIE'])
                 ->joinLeft('categorie', 'categorie.ID_CATEGORIE = ei.ID_CATEGORIE', 'LIBELLE_CATEGORIE')
@@ -796,14 +796,14 @@ class Service_Search
                 ->joinLeft(['ar' => 'avis'], 'd.AVIS_DOSSIER = ar.ID_AVIS', 'LIBELLE_AVIS AS LIBELLE_AVIS_RAPPORTEUR')
                 ->joinLeft(['ac' => 'avis'], 'd.AVIS_DOSSIER_COMMISSION = ac.ID_AVIS', 'LIBELLE_AVIS AS LIBELLE_AVIS_COMMISSION')
                 ->joinLeft('dossierdocurba', 'dossierdocurba.ID_DOSSIER = d.ID_DOSSIER', 'NUM_DOCURBA')
-                ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', null)
-                ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', null)
-                ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', null)
+                ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', [])
+                ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', [])
+                ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->joinLeft('utilisateur', 'dossierpreventionniste.ID_PREVENTIONNISTE = utilisateur.ID_UTILISATEUR')
                 ->joinLeft('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
-                ->joinLeft(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT', null)
+                ->joinLeft(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT', [])
                 ->joinLeft('adressecommune', 'ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
-                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', null)
+                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', [])
                 ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
                 ->joinLeft('dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', 'ID_PIECEJOINTE')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
@@ -1029,10 +1029,10 @@ class Service_Search
                         INNER JOIN dossiernature ON dossierlie.ID_DOSSIER1 = dossiernature.ID_DOSSIER
                         WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)'), ])
                 ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
-                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', null)
+                ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                 ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
-                ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', null)
+                ->joinLeft(['e' => 'etablissementdossier'], 'd.ID_DOSSIER = e.ID_DOSSIER', [])
                 ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
                 ->group('d.ID_DOSSIER')
             ;
@@ -1157,7 +1157,7 @@ class Service_Search
         // Liste des préventionnistes pour les critères de recherche
         $selectListePrev = new Zend_Db_Select(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db'));
         $selectListePrev->from(['ui' => 'utilisateurinformations'], ['NOM_UTILISATEURINFORMATIONS', 'PRENOM_UTILISATEURINFORMATIONS'])
-            ->join('utilisateur', 'ui.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', null)
+            ->join('utilisateur', 'ui.ID_UTILISATEURINFORMATIONS = utilisateur.ID_UTILISATEURINFORMATIONS', [])
             ->join('dossierpreventionniste', 'dossierpreventionniste.ID_PREVENTIONNISTE = utilisateur.ID_UTILISATEUR', 'ID_PREVENTIONNISTE')
             ->order('NOM_UTILISATEURINFORMATIONS')
             ->distinct()
@@ -1169,10 +1169,10 @@ class Service_Search
     /**
      * Méthode pour aider à placer des conditions sur la requête.
      *
-     * @param string       $key
-     * @param array|string $value
-     * @param bool         $exact
-     * @param string       $clause Par défaut where
+     * @param string                      $key
+     * @param array|bool|float|int|string $value
+     * @param bool                        $exact
+     * @param string                      $clause Par défaut where
      *
      * @return Service_Search Interface fluide
      */
