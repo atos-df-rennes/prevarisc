@@ -112,15 +112,14 @@ class PieceJointeController extends Zend_Controller_Action
 
             if (null !== $dossier['ID_PLATAU']) {
                 $filepath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$piece_jointe['ID_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
-                $filename = $piece_jointe['NOM_PIECEJOINTE'].$piece_jointe['EXTENSION_PIECEJOINTE'];
             } else {
                 $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
-                $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
             }
         } else {
             $filepath = $this->store->getFilePath($piece_jointe, $type, $identifiant);
-            $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
         }
+
+        $filename = $this->store->getFormattedFilename($piece_jointe, $type, $identifiant);
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
