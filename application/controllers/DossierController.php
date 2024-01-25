@@ -3351,6 +3351,15 @@ class DossierController extends Zend_Controller_Action
 
         $serviceDossier->retablirDossier($this->_getParam('idDossier'));
 
+        $cacheSearch = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+        $cacheSearch->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Le dossier a bien été rétabli',
+            'message' => '',
+        ]);
+
         $this->redirect($previousUrl);
     }
 }
