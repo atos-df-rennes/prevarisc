@@ -10,7 +10,7 @@ class View_Helper_Dates
      */
     public function formatDateDiff(DateTimeInterface $start, ?DateTimeInterface $end = null): string
     {
-        if (!$end instanceof \DateTimeInterface) {
+        if (!$end instanceof DateTimeInterface) {
             $end = new DateTime();
         }
 

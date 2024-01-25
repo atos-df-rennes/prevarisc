@@ -59,7 +59,7 @@ class Service_Feed
             return $select->query()->fetchAll();
         }
 
-        if (!$modelNews->fetchRow($select) instanceof \Zend_Db_Table_Row_Abstract) {
+        if (!$modelNews->fetchRow($select) instanceof Zend_Db_Table_Row_Abstract) {
             error_log('La requête de comptage des messages a échouée.');
 
             return 0;

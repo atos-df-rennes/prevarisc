@@ -166,7 +166,7 @@ class Service_Descriptif
         $valueInDB = $this->modelValeur->getByChampAndObject($idChamp, $idObject, $classObject, $idx);
         $valueInDB = $this->modelValeur->find($valueInDB['ID_VALEUR'])->current();
 
-        if (!$valueInDB instanceof \Zend_Db_Table_Row_Abstract) {
+        if (!$valueInDB instanceof Zend_Db_Table_Row_Abstract) {
             $this->serviceValeur->insert($idChamp, $idObject, $classObject, $value, $idx);
         } else {
             $this->serviceValeur->update($idChamp, $valueInDB, $value, $idx);

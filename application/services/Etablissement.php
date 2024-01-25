@@ -53,7 +53,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $general = $model_etablissement->find($id_etablissement)->current();
 
             // Si l'établissement n'existe pas, on génère une erreur
-            if (!$general instanceof \Zend_Db_Table_Row_Abstract
+            if (!$general instanceof Zend_Db_Table_Row_Abstract
                 || null !== $general['DATESUPPRESSION_ETABLISSEMENT']) {
                 throw new Exception("L'établissement n'existe pas.");
             }
@@ -61,7 +61,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // On récupère la dernière fiche d'informations de l'établissement
             $informations = $model_etablissement->getInformations($id_etablissement);
             // Si l'établissement n'existe pas, on généère une erreur
-            if (!$informations instanceof \Zend_Db_Table_Row_Abstract) {
+            if (!$informations instanceof Zend_Db_Table_Row_Abstract) {
                 throw new Exception("La fiche d'informations de l'établissement n'existe pas.");
             }
 
@@ -184,7 +184,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 foreach ($etablissement_lies as $etablissement) {
                     if (null != $etablissement['DUREEVISITE_ETABLISSEMENT']) {
                         $date_zero = new DateTime('00:00:00');
-                        $duree_etablissement = new \DateTime($etablissement['DUREEVISITE_ETABLISSEMENT']);
+                        $duree_etablissement = new DateTime($etablissement['DUREEVISITE_ETABLISSEMENT']);
                         $duree_etablissement_en_heure = $duree_etablissement->format('U') - $date_zero->format('U');
                         $duree_totale += (int) $etablissement['NBPREV_ETABLISSEMENT'] * $duree_etablissement_en_heure;
                     }
@@ -445,7 +445,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $date = new Zend_Date($value['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             }
 
-            if ($date instanceof \Zend_Date) {
+            if ($date instanceof Zend_Date) {
                 $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
             }
 
@@ -1548,10 +1548,10 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
-                if ($etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
+                if ($etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof Zend_Db_Table_Row_Abstract) {
                     $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current()->delete();
                 }
-            } elseif (!$etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof \Zend_Db_Table_Row_Abstract) {
+            } elseif (!$etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current() instanceof Zend_Db_Table_Row_Abstract) {
                 $row = $etsTexteApplicable->createRow();
                 $row->ID_TEXTESAPPL = $id_texte_applicable;
                 $row->ID_ETABLISSEMENT = $id_etablissement;

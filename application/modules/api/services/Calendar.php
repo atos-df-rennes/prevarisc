@@ -1,6 +1,8 @@
 <?php
 
-use Sabre\VObject;
+use Sabre\VObject\Component;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Component\VTimeZone;
 
 class Api_Service_Calendar
 {
@@ -36,7 +38,7 @@ class Api_Service_Calendar
                         && '' !== getenv('PREVARISC_CALENDAR_REFRESH_TIME')) ?
                         getenv('PREVARISC_CALENDAR_REFRESH_TIME') : 'PT5M';
 
-        $calendar = new VObject\Component\VCalendar([
+        $calendar = new VCalendar([
             'NAME' => $calendrierNom,
             'X-WR-CALNAME' => $calendrierNom,
             'REFRESH-INTERVAL;VALUE=DURATION' => $refreshTime,
@@ -56,16 +58,16 @@ class Api_Service_Calendar
         echo $calendar->serialize();
     }
 
-    private function getVTimezoneComponent($calendar): Sabre\VObject\Component\VTimeZone
+    private function getVTimezoneComponent($calendar): VTimeZone
     {
-        $vtimezone = new VObject\Component\VTimeZone($calendar, 'VTIMEZONE');
-        $daylight = new VObject\Component($calendar, 'DAYLIGHT', [
+        $vtimezone = new VTimeZone($calendar, 'VTIMEZONE');
+        $daylight = new Component($calendar, 'DAYLIGHT', [
             'DTSTART' => new DateTime('16010325T020000'),
             'RRULE' => 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3',
             'TZOFFSETFROM' => '+0100',
             'TZOFFSETTO' => '+0200',
         ]);
-        $standard = new VObject\Component($calendar, 'STANDARD', [
+        $standard = new Component($calendar, 'STANDARD', [
             'DTSTART' => new DateTime('16011028T030000'),
             'RRULE' => 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10',
             'TZOFFSETFROM' => '+0200',
@@ -89,7 +91,7 @@ class Api_Service_Calendar
      */
     private function createRequestForWebcalEvent($userid, $commission, $isAllowedToViewAll)
     {
-        $today = new \DateTime();
+        $today = new DateTime();
         $yearBefore = $today->modify('-1 year')->format('Y');
 
         $dbDateCommission = new Model_DbTable_DateCommission();
@@ -153,7 +155,7 @@ class Api_Service_Calendar
                     trim($libelleSum)
                 );
                 $geo = sprintf('Commission en salle de %s', $commissionEvent['LIBELLE_COMMISSION']);
-                // Cas d'une visite d'une commission ou d'un groupe de visite
+            // Cas d'une visite d'une commission ou d'un groupe de visite
             } else {
                 $summary = sprintf(
                     '#%s %s : %s',
@@ -179,7 +181,7 @@ class Api_Service_Calendar
                                 'HEURE_DEB_AFFECT' : 'HEUREDEB_COMMISSION';
             $dateEndHour = $commissionEvent['HEURE_FIN_AFFECT'] ?
                                 'HEURE_FIN_AFFECT' : 'HEUREFIN_COMMISSION';
-            $dtStart = new \DateTime(
+            $dtStart = new DateTime(
                 sprintf(
                     '%s %s',
                     $commissionEvent['DATE_COMMISSION'],
@@ -188,7 +190,7 @@ class Api_Service_Calendar
                 new DateTimeZone(date_default_timezone_get())
             );
 
-            $dtEnd = new \DateTime(
+            $dtEnd = new DateTime(
                 sprintf(
                     '%s %s',
                     $commissionEvent['DATE_COMMISSION'],

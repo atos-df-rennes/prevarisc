@@ -29,7 +29,7 @@ class Service_Login
 
             // Si l'utilisateur n'est pas actif, on renvoie false
             if (
-                !$user instanceof \Zend_Db_Table_Row_Abstract
+                !$user instanceof Zend_Db_Table_Row_Abstract
                 || !$user->ACTIF_UTILISATEUR
                 || md5($username.getenv('PREVARISC_SECURITY_SALT').$password) != $user->PASSWD_UTILISATEUR
             ) {

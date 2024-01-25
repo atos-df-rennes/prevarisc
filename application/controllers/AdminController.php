@@ -1,5 +1,7 @@
 <?php
 
+use SebastianBergmann\Git\Git;
+
 class AdminController extends Zend_Controller_Action
 {
     public function indexAction()
@@ -10,7 +12,7 @@ class AdminController extends Zend_Controller_Action
 
         if (!getenv('PREVARISC_BRANCH')) {
             try {
-                $git = new SebastianBergmann\Git\Git(APPLICATION_PATH.DS.'..');
+                $git = new Git(APPLICATION_PATH.DS.'..');
                 $revisions = $git->getRevisions();
                 $last_revision = end($revisions);
                 $revision_prevarisc_local = $last_revision['sha1'];

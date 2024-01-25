@@ -219,16 +219,16 @@ class Service_Dossier
         foreach ($textes_applicables as $id_texte_applicable => $is_active) {
             if (!$is_active) {
                 $texte_applicable = $dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current();
-                if ($texte_applicable instanceof \Zend_Db_Table_Row_Abstract) {
+                if ($texte_applicable instanceof Zend_Db_Table_Row_Abstract) {
                     $texte_applicable->delete();
                     if (in_array($type, [2, 3]) && $id_etablissement) {
                         $texte_applicable = $etsTexteApplicable->find($id_texte_applicable, $id_etablissement)->current();
-                        if ($texte_applicable instanceof \Zend_Db_Table_Row_Abstract) {
+                        if ($texte_applicable instanceof Zend_Db_Table_Row_Abstract) {
                             $texte_applicable->delete();
                         }
                     }
                 }
-            } elseif (!$dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current() instanceof \Zend_Db_Table_Row_Abstract) {
+            } elseif (!$dossierTexteApplicable->find($id_texte_applicable, $id_dossier)->current() instanceof Zend_Db_Table_Row_Abstract) {
                 $row = $dossierTexteApplicable->createRow();
                 $row->ID_TEXTESAPPL = $id_texte_applicable;
                 $row->ID_DOSSIER = $id_dossier;
