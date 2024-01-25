@@ -531,6 +531,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
             ->where('ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT) OR ei.DATE_ETABLISSEMENTINFORMATIONS IS NULL')
             ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NOT NULL')
             ->group('e.ID_ETABLISSEMENT')
+            ->order('e.DATESUPPRESSION_ETABLISSEMENT DESC')
         ;
 
         return $this->fetchAll($select)->toArray();

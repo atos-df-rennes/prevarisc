@@ -667,6 +667,15 @@ class EtablissementController extends Zend_Controller_Action
 
         $serviceEtablissement->retablirEtablissement($this->_getParam('idEtablissement'));
 
+        $cacheSearch = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
+        $cacheSearch->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => "L'établissement a bien été rétabli",
+            'message' => '',
+        ]);
+
         $this->redirect($previousUrl);
     }
 }
