@@ -14,7 +14,7 @@ class Service_RubriqueDossier
         // Si l'utilisateur a déjà modifié, et qu'il remodifie, on supprime la ligne pour revenir à l'état d'origine
         if (
             ($rubriqueDefaultDisplay !== $userDisplay)
-            && (!$userModified instanceof \Zend_Db_Table_Row_Abstract)
+            && (!$userModified instanceof Zend_Db_Table_Row_Abstract)
         ) {
             $modelDisplayRubriqueDossier->insert(
                 [
@@ -25,7 +25,7 @@ class Service_RubriqueDossier
             );
         } elseif (
             ($rubriqueDefaultDisplay === $userDisplay)
-            && ($userModified instanceof \Zend_Db_Table_Row_Abstract)
+            && ($userModified instanceof Zend_Db_Table_Row_Abstract)
         ) {
             $userModified->delete();
         }

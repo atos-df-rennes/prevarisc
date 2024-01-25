@@ -27,7 +27,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         }
 
         if ($getCount) {
-            if (!$this->fetchRow($this->select) instanceof \Zend_Db_Table_Row_Abstract) {
+            if (!$this->fetchRow($this->select) instanceof Zend_Db_Table_Row_Abstract) {
                 error_log('La requête de comptage des éléments a échouée.');
 
                 return 0;

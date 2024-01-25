@@ -210,7 +210,7 @@ class DossierController extends Zend_Controller_Action
 
                 $platauConsultation = $platauConsultationMapper->find($dossier['ID_PLATAU'], $platauConsultationModel);
 
-                if ($platauConsultation instanceof \Model_PlatauConsultation) {
+                if ($platauConsultation instanceof Model_PlatauConsultation) {
                     $this->view->assign('statutPec', $platauConsultation->getStatutPec());
                     $this->view->assign('datePec', $platauConsultation->getDatePec());
                     $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());

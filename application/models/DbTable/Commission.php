@@ -167,7 +167,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                         $model_groupementCommune = new Model_DbTable_GroupementCommune();
                         $row_groupement = $model_groupementCommune->fetchRow("ID_GROUPEMENT = '".$result->ID_GROUPEMENT."' AND NUMINSEE_COMMUNE = '".$commune."'");
 
-                        if ($row_groupement instanceof \Zend_Db_Table_Row_Abstract) {
+                        if ($row_groupement instanceof Zend_Db_Table_Row_Abstract) {
                             return $this->find($result->ID_COMMISSION)->toArray();
                         }
                     }
@@ -215,7 +215,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                         $model_groupementCommune = new Model_DbTable_GroupementCommune();
                         $row_groupement = $model_groupementCommune->fetchRow("ID_GROUPEMENT = '".$result->ID_GROUPEMENT."' AND NUMINSEE_COMMUNE = '".$commune."'");
 
-                        if ($row_groupement instanceof \Zend_Db_Table_Row_Abstract) {
+                        if ($row_groupement instanceof Zend_Db_Table_Row_Abstract) {
                             return $this->find($result->ID_COMMISSION)->toArray();
                         }
                     }

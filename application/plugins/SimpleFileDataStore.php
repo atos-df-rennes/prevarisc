@@ -37,9 +37,7 @@ class Plugin_SimpleFileDataStore extends Zend_Application_Resource_ResourceAbstr
         }
     }
 
-    public function init()
-    {
-    }
+    public function init() {}
 
     /**
      * Retourne le répertoire où se trouve le fichier.

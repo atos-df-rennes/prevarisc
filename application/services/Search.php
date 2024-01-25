@@ -92,11 +92,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -343,11 +343,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }
@@ -564,10 +564,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -822,10 +822,10 @@ class Service_Search
                 // recherche par id
                 if ('#' == substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
-                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -906,11 +906,11 @@ class Service_Search
                 if ('#' == substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
-                    // on test si la chaine contient uniquement des caractères de type identifiant sans espace
+                // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[E0-9\/\-\.]+([0-9A-Z]{1,2})?$/', $cleanLabel)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', $cleanLabel, false);
 
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'LIBELLE_ETABLISSEMENTINFORMATIONS', $cleanLabel, false);
                 }

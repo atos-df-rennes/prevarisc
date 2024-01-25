@@ -3,7 +3,7 @@
 class IndexController extends Zend_Controller_Action
 {
     /**
-     * @var \Service_Platau
+     * @var Service_Platau
      */
     public $servicePlatau;
 

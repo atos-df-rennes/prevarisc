@@ -483,9 +483,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Contacts de la commission
-    public function contactsAction()
-    {
-    }
+    public function contactsAction() {}
 
     // Courriers types des membres de la commission
     public function courriersAction()
