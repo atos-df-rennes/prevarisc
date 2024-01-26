@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
+use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -33,5 +34,8 @@ return static function (RectorConfig $rectorConfig): void {
         RemoveUnusedPromotedPropertyRector::class,
         ChangeAndIfToEarlyReturnRector::class,
         CompleteDynamicPropertiesRector::class,
+        RemoveAlwaysTrueIfConditionRector::class => [
+            __DIR__.'/application/services/Descriptif.php',
+        ],
     ]);
 };

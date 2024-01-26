@@ -103,11 +103,15 @@ class Service_Descriptif
         $this->serviceRubrique->updateRubriqueDisplay($idRubrique, $idElement, $value);
     }
 
-    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value, int $idx = null): void
+    public function saveValeurChamp(string $key, int $idObject, string $classObject, $value): void
     {
-        $explodedChamp = explode('-', $key);
-        $idChamp = filter_var(end($explodedChamp), FILTER_VALIDATE_INT);
-        $this->saveValeur($idChamp, $idObject, $classObject, $value, $idx);
+        [, $idChamp, $idx] = explode('-', $key);
+
+        if (null !== $idx) {
+            $idx = (int) $idx;
+        }
+
+        $this->saveValeur((int) $idChamp, $idObject, $classObject, $value, $idx);
     }
 
     /**
@@ -126,27 +130,41 @@ class Service_Descriptif
         $serviceUtilsDescriptif->deleteTableValues($tableauDeComparaison);
     }
 
-    public function groupInputByOrder(array $initialList)
+    public function groupInputByOrder(array $initialList, int $idObject, string $classObject)
     {
         $newList = [];
-        $expectedNumberOfArguments = 5;
+        $expectedValeurNumberOfArguments = 5;
+        $expectedChampNumberOfArguments = 4;
 
         foreach ($initialList as $inputName => $value) {
-            if ($expectedNumberOfArguments === count(explode('-', $inputName)) && (isset(explode('-', $inputName)[2]) && '' !== explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
+            $explodedInput = explode('-', $inputName);
+            $numberOfArguments = count($explodedInput);
+
+            if (
+                $expectedValeurNumberOfArguments !== $numberOfArguments
+                && $expectedChampNumberOfArguments !== $numberOfArguments
+            ) {
+                continue;
+            }
+
+            if ($expectedValeurNumberOfArguments === $numberOfArguments && (isset(explode('-', $inputName)[2]) && '' !== explode('-', $inputName)[2]) && '0' !== explode('-', $inputName)[1]) {
                 $idxInput = explode('-', $inputName)[1];
                 $idParent = explode('-', $inputName)[2];
                 $idInput = explode('-', $inputName)[3];
                 $idValeur = explode('-', $inputName)[4];
-
-                if (!array_key_exists($idParent, $newList)) {
-                    $newList[$idParent] = [];
-                }
-                if (!array_key_exists($idxInput, $newList[$idParent])) {
-                    $newList[$idParent][$idxInput] = [];
-                }
-                $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
-                $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
+            } else {
+                [, $idInput, $idxInput, $idParent] = $explodedInput;
+                $idValeur = $this->modelValeur->getByChampAndObject((int) $idInput, $idObject, $classObject, (int) $idxInput)['ID_VALEUR'];
             }
+
+            if (!array_key_exists($idParent, $newList)) {
+                $newList[$idParent] = [];
+            }
+            if (!array_key_exists($idxInput, $newList[$idParent])) {
+                $newList[$idParent][$idxInput] = [];
+            }
+            $newList[$idParent][$idxInput][$idInput]['VALEUR'] = $value;
+            $newList[$idParent][$idxInput][$idInput]['ID_VALEUR'] = $idValeur;
         }
 
         $tmpList = [];

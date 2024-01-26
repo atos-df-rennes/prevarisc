@@ -42,10 +42,16 @@ class Service_Utils_Descriptif
                     if ('NULL' === $valeur['ID_VALEUR']) {
                         $this->serviceValeur->insert($idChamp, $idObject, $classObject, $valeur['VALEUR'], $newIdxValeur);
                     } elseif (
-                        $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
+                        !isset($tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR'])
+                        || $newIdxValeur !== $tableauDeComparaison[$valeur['ID_VALEUR']]['IDX_VALEUR']
                         || $valeur['VALEUR'] !== $tableauDeComparaison[$valeur['ID_VALEUR']]['VALEUR']
                     ) {
                         $valueInDB = $this->modelValeur->find($valeur['ID_VALEUR'])->current();
+
+                        if (null === $valueInDB) {
+                            continue;
+                        }
+
                         $this->serviceValeur->update($idChamp, $valueInDB, $valeur['VALEUR'], $newIdxValeur);
                     }
 

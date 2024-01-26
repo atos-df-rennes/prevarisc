@@ -316,7 +316,7 @@ class EtablissementController extends Zend_Controller_Action
                     }
                 }
 
-                $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post);
+                $groupInputsPost = $serviceEtablissementDescriptif->groupInputByOrder($post, $idEtablissement, 'Etablissement');
                 // Sauvegarde les changements dans les tableaux
                 $serviceEtablissementDescriptif->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 
@@ -639,7 +639,7 @@ class EtablissementController extends Zend_Controller_Action
                     }
                 }
 
-                $groupInputsPost = $serviceEtablissementEffectifsDegagements->groupInputByOrder($post);
+                $groupInputsPost = $serviceEtablissementEffectifsDegagements->groupInputByOrder($post, $idEtablissement, 'Etablissement');
                 // Sauvegarde les changements dans les tableaux
                 $serviceEtablissementEffectifsDegagements->saveChangeTable($this->view->rubriques, $groupInputsPost, 'Etablissement', $idEtablissement);
 

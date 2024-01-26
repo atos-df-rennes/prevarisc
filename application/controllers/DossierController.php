@@ -3136,7 +3136,7 @@ class DossierController extends Zend_Controller_Action
                 }
 
                 // Sauvegarde les changements dans les tableaux
-                $serviceDossierEffectifsDegagements->saveChangeTable($this->view->rubriques, $serviceDossierEffectifsDegagements->groupInputByOrder($post), 'Dossier', $this->idDossier);
+                $serviceDossierEffectifsDegagements->saveChangeTable($this->view->rubriques, $serviceDossierEffectifsDegagements->groupInputByOrder($post, $this->idDossier, 'Dossier'), 'Dossier', $this->idDossier);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les effectifs et dégagements ont bien été mis à jour.']);
             } catch (Exception $e) {
@@ -3197,7 +3197,7 @@ class DossierController extends Zend_Controller_Action
                 }
 
                 // Sauvegarde les changements dans les tableaux
-                $serviceDossierVerificationsTechniques->saveChangeTable($this->view->rubriques, $serviceDossierVerificationsTechniques->groupInputByOrder($post), 'Dossier', $this->idDossier);
+                $serviceDossierVerificationsTechniques->saveChangeTable($this->view->rubriques, $serviceDossierVerificationsTechniques->groupInputByOrder($post, $this->idDossier, 'Dossier'), 'Dossier', $this->idDossier);
 
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'Les vérifications techniques ont bien été mises à jour.']);
             } catch (Exception $e) {
