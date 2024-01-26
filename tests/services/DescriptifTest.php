@@ -26,7 +26,7 @@ final class Service_DescriptifTest extends TestCase
      */
     public function testGroupInputByOrder(array $initialList, array $expected): void
     {
-        $this->assertSame($expected, $this->descriptif->groupInputByOrder($initialList));
+        $this->assertSame($expected, $this->descriptif->groupInputByOrder($initialList, 10, 'Etablissement'));
     }
 
     /** TODO Cas à faire :
