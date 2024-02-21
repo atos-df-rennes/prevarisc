@@ -159,6 +159,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 break;
 
                             case 'hab':
+                            case 'zone':
                                 if ('1' == $resource_exploded[3]) {
                                     $resource_exploded[3] = $groupements;
                                 }
@@ -190,16 +191,6 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 }
                                 if ('1' == $resource_exploded[3]) {
                                     $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
-                                }
-
-                                break;
-
-                            case 'zone':
-                                if ('1' == $resource_exploded[3]) {
-                                    $resource_exploded[3] = $groupements;
-                                }
-                                if ('1' == $resource_exploded[4]) {
-                                    $resource_exploded[4] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
 
                                 break;

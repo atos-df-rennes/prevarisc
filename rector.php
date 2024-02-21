@@ -4,38 +4,28 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
-use Rector\Php71\Rector\FuncCall\CountOnNullRector;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
+use Rector\ValueObject\PhpVersion;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withPaths([
         __DIR__.'/application',
-    ]);
-
-    // Defined PHP version
-    $rectorConfig->phpVersion(PhpVersion::PHP_71);
-
-    // Rules Sets
-    $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_71,
-        SetList::DEAD_CODE,
-        SetList::EARLY_RETURN,
-        SetList::CODE_QUALITY,
-    ]);
-
-    // Rules Skipped
-    $rectorConfig->skip([
-        CountOnNullRector::class,
+    ])
+    ->withPhpVersion(PhpVersion::PHP_71)
+    ->withPhpSets(php71: true)
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        earlyReturn: true,
+    )
+    ->withSkip([
         RemoveUnusedPromotedPropertyRector::class,
         ChangeAndIfToEarlyReturnRector::class,
         CompleteDynamicPropertiesRector::class,
         RemoveAlwaysTrueIfConditionRector::class => [
             __DIR__.'/application/services/Descriptif.php',
         ],
-    ]);
-};
+    ])
+;
