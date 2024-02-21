@@ -2528,6 +2528,18 @@ class DossierController extends Zend_Controller_Action
             $this->view->DATESDIS = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
         }
 
+        // Conversion de la date de dossier incomplet (documents manquants)
+        if (null !== $this->view->listeDocManquant['DATE_DOCSMANQUANT']) {
+            $date = new Zend_Date($this->view->listeDocManquant['DATE_DOCSMANQUANT'], Zend_Date::DATES);
+            $this->view->DATE_DOCSMANQUANT = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
+        }
+
+        // Conversion de la date de dossier complet (réception des documents manquants)
+        if (null !== $this->view->listeDocManquant['DATE_RECEPTION_DOC']) {
+            $date = new Zend_Date($this->view->listeDocManquant['DATE_RECEPTION_DOC'], Zend_Date::DATES);
+            $this->view->DATE_RECEPTION_DOC = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
+        }
+
         // date rvrat et attestation solidité et MO
         $this->view->dateRvrat = 'Indisponible';
         if (

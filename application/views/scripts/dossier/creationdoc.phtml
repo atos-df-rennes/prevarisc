@@ -43,6 +43,8 @@ if ($this->infosDossier['HORSDELAI_DOSSIER'] == 0) {
 }
 addChamp($odf, 'horsDelai',$horsdelai);
 addChamp($odf, 'docManquant', $this->listeDocManquant['DOCMANQUANT']);
+addChamp($odf, 'dateDocManquant', $this->DATE_DOCSMANQUANT);
+addChamp($odf, 'dateReceptionDocManquant', $this->DATE_RECEPTION_DOC);
 
 if ($this->infosDossier['DATEVISITE_DOSSIER']) {
     addChamp($odf, 'dateVisite', $this->dateVisite);
