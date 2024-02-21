@@ -961,6 +961,16 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATE_DOCSMANQUANT\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATE_RECEPTION_DOC\\.$#"
+			count: 1
+			path: application/controllers/DossierController.php
+
+		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DELAIPRESC_INPUT\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
@@ -1502,7 +1512,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocManquant\\.$#"
-			count: 3
+			count: 7
 			path: application/controllers/DossierController.php
 
 		-
