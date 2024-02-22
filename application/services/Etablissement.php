@@ -957,14 +957,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                     // Cellule
                 case 3:
-                    $informations->ID_CATEGORIE = $data['ID_CATEGORIE'];
-                    $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
                     $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
-                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
@@ -1117,7 +1114,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
             if (array_key_exists('ID_FILS_ETABLISSEMENT', $data) && count($data['ID_FILS_ETABLISSEMENT']) > 0) {
                 foreach ($data['ID_FILS_ETABLISSEMENT'] as $id_etablissement_enfant) {
                     if ($id_etablissement_enfant > 0) {
-                        $genre_enfant = $DB_etablissement->getInformations($id_etablissement_enfant)->ID_GENRE;
+                        $enfant = $DB_etablissement->getInformations($id_etablissement_enfant);
+                        $genre_enfant = $enfant->ID_GENRE;
                         if (1 == $id_genre && !in_array($genre_enfant, [2, 4, 5, 6, 7, 8, 9])) {
                             throw new Exception('L\'établissement enfant n\'est pas compatible (Un site ne ne peut contenir que des établissements, habitations, EIC, camping, manifestation, IOP)', 500);
                         }
@@ -1135,13 +1133,20 @@ class Service_Etablissement implements Service_Interface_Etablissement
                             'ID_FILS_ETABLISSEMENT' => $id_etablissement_enfant,
                         ])->save();
                         $cache->remove('etablissement_id_'.$id_etablissement_enfant);
+
+                        // Affectation de la catégorie de l'établissement parent lors de la modification de l'établissement parent
+                        if (self::ID_GENRE_CELLULE === $genre_enfant) {
+                            $enfant->ID_CATEGORIE = $informations->ID_CATEGORIE;
+                            $enfant->save();
+                        }
                     }
                 }
             }
 
             // Sauvegarde du père de l'établissement
             if (array_key_exists('ID_PERE', $data) && !empty($data['ID_PERE'])) {
-                $genre_pere = $DB_etablissement->getInformations($data['ID_PERE'])->ID_GENRE;
+                $pere = $DB_etablissement->getInformations($data['ID_PERE']);
+                $genre_pere = $pere->ID_GENRE;
 
                 if (in_array($id_genre, [2, 4, 5, 6, 7, 8, 9]) && 1 != $genre_pere) {
                     throw new Exception('Le père n\'est pas compatible (Un établissement a comme père un site)', 500);
@@ -1161,6 +1166,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
                     'ID_FILS_ETABLISSEMENT' => $etablissement->ID_ETABLISSEMENT,
                 ])->save();
                 $cache->remove('etablissement_id_'.(int) $data['ID_PERE']);
+
+                // Affectation de la catégorie de l'établissement parent à la cellule lors de l'ajout de la cellule
+                if (self::ID_GENRE_CELLULE === filter_var($id_genre, FILTER_VALIDATE_INT)) {
+                    $informations->ID_CATEGORIE = $pere->ID_CATEGORIE;
+                    $informations->save();
+                }
             }
 
             Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
