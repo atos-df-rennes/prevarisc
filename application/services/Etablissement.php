@@ -957,14 +957,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                     // Cellule
                 case 3:
-                    $informations->ID_CATEGORIE = $data['ID_CATEGORIE'];
-                    $informations->PERIODICITE_ETABLISSEMENTINFORMATIONS = (int) $data['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
                     $informations->ID_TYPE = $data['ID_TYPE'];
                     $informations->ID_TYPEACTIVITE = $data['ID_TYPEACTIVITE'];
                     $informations->R14320_ETABLISSEMENTINFORMATIONS = (int) $data['R14320_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'];
                     $informations->EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS = (int) $data['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'];
-                    $informations->EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS = self::ID_5EME_CAT == $data['ID_CATEGORIE'] ? (int) $data['EFFECTIFJUSTIFIANTCLASSEMENT_ETABLISSEMENTINFORMATIONS'] : null;
                     $etablissement->NBPREV_ETABLISSEMENT = (int) $data['NBPREV_ETABLISSEMENT'];
                     $etablissement->DUREEVISITE_ETABLISSEMENT = empty($data['DUREEVISITE_ETABLISSEMENT']) ? null : $data['DUREEVISITE_ETABLISSEMENT'];
 
