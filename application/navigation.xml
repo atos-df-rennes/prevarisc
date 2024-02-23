@@ -150,45 +150,45 @@
                     <privilege>admin</privilege>
                     <pages>
                         <index>
-                            <label>Couches Cartographiques</label>
+                            <label>Informations</label>
                             <controller>couches-cartographiques</controller>
                             <action>list</action>
                         </index>
                         <add-couche-cartographique>
-                            <label>Ajouter Couche Cartographique</label>
+                            <label>Ajouter une couche cartographique</label>
                             <controller>couches-cartographiques</controller>
                             <action>add</action>
                         </add-couche-cartographique>
                         <add-couche-ign>
-                            <label>Ajouter Couche IGN</label>
+                            <label>Ajouter une couche IGN</label>
                             <controller>couches-cartographiques</controller>
                             <action>add-couche-ign</action>
                         </add-couche-ign>
                         <edit-couche-cartographique>
-                            <label>Editer Couche Cartographique</label>
+                            <label>Éditer une couche cartographique</label>
                             <controller>couches-cartographiques</controller>
                             <action>edit</action>
                         </edit-couche-cartographique>
                         <delete-couche-cartographique>
-                            <label>Suppimer Couche Cartographique</label>
+                            <label>Suppimer une couche cartographique</label>
                             <controller>couches-cartographiques</controller>
                             <action>delete</action>
                         </delete-couche-cartographique>
                         <change-order-couches>
-                            <label>Changer ordre Couches Cartographiques</label>
+                            <label>Changer l'ordre des couches cartographiques</label>
                             <controller>couches-cartographiques</controller>
                             <action>change-order</action>
                         </change-order-couches>
                     </pages>
                 </couches-cartographiques>
                 <tableau-des-periodicites>
-                    <label>Tableau des Periodicités</label>
+                    <label>Tableau des périodicités</label>
                     <controller>tableau-des-periodicites</controller>
                     <resource>gestion_parametrages</resource>
                     <privilege>periodicites</privilege>
                     <pages>
                         <index>
-                            <label>Affichage</label>
+                            <label>Informations</label>
                             <controller>tableau-des-periodicites</controller>
                             <action>index</action>
                         </index>
@@ -200,19 +200,19 @@
                     </pages>
                 </tableau-des-periodicites>
                 <gestion-des-commissions>
-                    <label>Gestion des Commissions</label>
+                    <label>Gestion des commissions</label>
                     <controller>gestion-des-commssions</controller>
                     <resource>gestion_parametrages</resource>
                     <privilege>gestion_commissions</privilege>
                     <pages>
                         <index>
-                            <label>Index</label>
-                            <controller>gestiondescommissions</controller>
+                            <label>Informations</label>
+                            <controller>gestion-des-commissions</controller>
                             <action>index</action>
                         </index>
                         <form>
                             <label>Formulaire d'une commission</label>
-                            <controller>gestiondescommissions</controller>
+                            <controller>gestion-des-commissions</controller>
                             <action>form</action>
                         </form>
                         <save>
@@ -385,16 +385,11 @@
                     </pages>
                 </gestion-des-commissions>
                 <gestion-des-communes>
-                    <label>Gestions des Communes</label>
+                    <label>Gestion des Communes</label>
                     <controller>gestion-des-communes</controller>
                     <resource>gestion_parametrages</resource>
                     <privilege>communes</privilege>
                     <pages>
-                        <index>
-                            <label>index</label>
-                            <controller>gestion-des-communes</controller>
-                            <action>index</action>
-                        </index>
                         <display>
                             <label>Affichage</label>
                             <controller>gestion-des-communes</controller>
@@ -413,13 +408,13 @@
                     <action>index</action>
                 </fusion-des-communes>
                 <gestion-des-documents>
-                    <label>Gestion des Documents</label>
+                    <label>Gestion des documents</label>
                     <controller>gestion-des-documents</controller>
                     <resource>gestion_parametrages</resource>
                     <privilege>docs</privilege>
                     <pages>
                         <index>
-                            <label>Gestion des documents</label>
+                            <label>Informations</label>
                             <controller>gestion-des-documents</controller>
                             <action>index</action>
                         </index>
@@ -445,13 +440,13 @@
                     </pages>
                 </gestion-des-documents>
                 <gestion-prescriptions>
-                    <label>Gestion des Prescriptions</label>
+                    <label>Gestion des prescriptions</label>
                     <controller>gestion-prescriptions</controller>
                     <resource>gestion_parametrages</resource>
                     <privilege>gestion_prescriptions</privilege>
                     <pages>
                         <index>
-                            <label>Gestion des Prescriptions</label>
+                            <label>Informations</label>
                             <controller>gestion-prescriptions</controller>
                             <action>index</action>
                         </index>
@@ -515,6 +510,51 @@
                             <controller>gestion-prescriptions</controller>
                             <action>saveprescriptiontype</action>
                         </saveprescriptiontype>
+                        <rappelsreg>
+                            <label>Gestion des rappels réglementaires</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-rappel-reg</action>
+                        </rappelsreg>
+                        <addrappelsreg>
+                            <label>Ajout des rappels réglementaires</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-rappel-reg-add</action>
+                        </addrappelsreg>
+                        <editrappelsreg>
+                            <label>Édition des rappels réglementaires</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-rappel-reg-edit</action>
+                        </editrappelsreg>
+                        <textes>
+                            <label>Gestion des textes</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-textes</action>
+                        </textes>
+                        <addtextes>
+                            <label>Ajout des textes</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-textes-add</action>
+                        </addtextes>
+                        <edittextes>
+                            <label>Édition des textes</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-textes-edit</action>
+                        </edittextes>
+                        <articles>
+                            <label>Gestion des articles</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-articles</action>
+                        </articles>
+                        <addarticles>
+                            <label>Ajout des articles</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-articles-add</action>
+                        </addarticles>
+                        <editarticles>
+                            <label>Édition des articles</label>
+                            <controller>gestion-prescriptions</controller>
+                            <action>gestion-articles-edit</action>
+                        </editarticles>
                     </pages>
                 </gestion-prescriptions>
                 <gestion-textes-applicables>
@@ -524,7 +564,7 @@
                     <privilege>gestion_textes_applicables</privilege>
                     <pages>
                         <index>
-                            <label>Index</label>
+                            <label>Informations</label>
                             <controller>gestion-textes-applicables</controller>
                             <action>index</action>
                         </index>
@@ -556,7 +596,7 @@
                     <privilege>gestion_formulaires</privilege>
                     <pages>
                         <index>
-                            <label>Index</label>
+                            <label>Informations</label>
                             <controller>formulaire</controller>
                             <action>index</action>
                         </index>
@@ -607,7 +647,7 @@
             <resource>commission</resource>
             <pages>
                 <index>
-                    <label>Affichage</label>
+                    <label>Informations</label>
                     <controller>calendrier-des-commissions</controller>
                     <action>index</action>
                     <privilege>lecture_commission</privilege>
@@ -772,10 +812,11 @@
 
         <!-- Dossier -->
         <dossier>
-            <label>Dossiers</label>
+            <label>Dossier</label>
             <controller>dossier</controller>
             <pages>
                 <index>
+                    <label>Informations générales</label>
                     <controller>dossier</controller>
                     <action>index</action>
                     <privilege>view_doss</privilege>
@@ -794,6 +835,12 @@
                     <action>deverrou</action>
                     <privilege>verrouillage_dossier</privilege>
                 </deverrou>
+                <piece>
+                    <label>Pièces Jointes</label>
+                    <controller>dossier</controller>
+                    <action>piece-jointe</action>
+                    <privilege>view_doss</privilege>
+                </piece>
                 <piece-jointe>
                     <label>Pièces Jointes</label>
                     <controller>piece-jointe</controller>
@@ -867,11 +914,17 @@
                     <action>selectionetab</action>
                 </selectionetab>
                 <liees>
-                    <label>Etablissements et dossiers liés</label>
+                    <label>Établissements et dossiers liés</label>
                     <controller>dossier</controller>
                     <action>liees</action>
                     <privilege>view_doss</privilege>
                 </liees>
+                <liees-doss>
+                    <label>Édition des établissements et dossiers liés</label>
+                    <controller>dossier</controller>
+                    <action>liees-doss</action>
+                    <privilege>edit_doss</privilege>
+                </liees-doss>
                 <contact>
                     <label>Contacts</label>
                     <controller>dossier</controller>
@@ -879,7 +932,7 @@
                     <privilege>view_doss</privilege>
                 </contact>
                 <docconsulte>
-                    <label>Consulter Doc</label>
+                    <label>Documents consultés</label>
                     <controller>dossier</controller>
                     <action>docconsulte</action>
                     <privilege>view_doss</privilege>
@@ -928,11 +981,12 @@
                     <action>descriptifs</action>
                     <privilege>view_doss</privilege>
                 </descriptifs>
-                <dialoggenrapport>
+                <rapport>
+                    <label>Rapport</label>
                     <controller>dossier</controller>
-                    <action>dialoggenrapport</action>
-                    <privilege>edit_doss</privilege>
-                </dialoggenrapport>
+                    <action>rapport</action>
+                    <privilege>view_doss</privilege>
+                </rapport>
                 <generationrapport>
                     <controller>dossier</controller>
                     <action>generationrapport</action>
@@ -949,8 +1003,9 @@
                     <privilege>view_doss</privilege>
                 </descriptif>
                 <textesapplicables>
+                    <label>Textes applicables</label>
                     <controller>dossier</controller>
-                    <action>textesapplicables</action>
+                    <action>textes-applicables</action>
                     <privilege>view_doss</privilege>
                 </textesapplicables>
                 <edit-textesapplicables>
@@ -1002,30 +1057,18 @@
                     <action>prescriptionaddtype</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionaddtype>
-                <prescriptioneditsave>
-                    <label>Voir prescription</label>
-                    <controller>dossier</controller>
-                    <action>prescriptioneditsave</action>
-                    <privilege>edit_doss</privilege>
-                </prescriptioneditsave>
                 <prescriptionadd>
-                    <label>Voir prescription</label>
+                    <label>Ajout d'une prescription</label>
                     <controller>dossier</controller>
-                    <action>prescriptionadd</action>
+                    <action>prescription-add</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionadd>
                 <prescriptionedit>
-                    <label>Voir prescription</label>
+                    <label>Édition d'une prescription</label>
                     <controller>dossier</controller>
-                    <action>prescriptionedit</action>
+                    <action>prescription-edit</action>
                     <privilege>edit_doss</privilege>
                 </prescriptionedit>
-                <prescriptiondelete>
-                    <label>Voir prescription</label>
-                    <controller>dossier</controller>
-                    <action>prescriptiondelete</action>
-                    <privilege>edit_doss</privilege>
-                </prescriptiondelete>
                 <prescriptionchangepos>
                     <label>Voir prescription</label>
                     <controller>dossier</controller>
@@ -1214,14 +1257,14 @@
                     <privilege>view_ets</privilege>
                 </alerteform>
                 <effectifs-degagements-etablissement>
-                    <label>Effectifs et Dégagements</label>
+                    <label>Effectifs et dégagements</label>
                     <controller>etablissement</controller>
                     <action>effectifs-degagements-etablissement</action>
                     <resource>effectifs_degagements</resource>
                     <privilege>effectifs_degagements_ets</privilege>
                 </effectifs-degagements-etablissement>
                 <effectifs-degagements-etablissement-edit>
-                    <label>Modification Effectifs et Dégagements</label>
+                    <label>Édition des effectifs et dégagements</label>
                     <controller>etablissement</controller>
                     <action>effectifs-degagements-etablissement-edit</action>
                     <resource>effectifs_degagements</resource>

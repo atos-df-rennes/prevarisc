@@ -2,8 +2,8 @@
 
 <?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
 
-<ul class='nav nav-tabs nav-stacked menu_dashboard' >
-    <li class="<?= $action_name == 'index' ? 'active' : '' ?>">
+<ul class='nav nav-tabs nav-stacked menu_dashboard'>
+    <li class="<?= in_array($action_name, ['index', 'edit']) ? 'active' : '' ?>">
         <a href='<?= $this->url(array("action"=>"index")) ?>'>
             <i class="icon-info-sign icon-black"></i>
             Général
@@ -47,7 +47,7 @@
         </li>
     <?php endif ?>
 
-    <li class="<?= $action_name == 'pieces-jointes' ? 'active' : '' ?>">
+    <li class="<?= strpos($action_name, 'pieces-jointes') !== false ? 'active' : '' ?>">
         <a href='<?= $this->url(array("action"=>"pieces-jointes")) ?>'>
             <i class="icon-share icon-black"></i>
             Pièces jointes

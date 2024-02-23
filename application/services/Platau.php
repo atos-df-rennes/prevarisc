@@ -25,7 +25,7 @@ class Service_Platau
         $pisteTokenData = $this->getPisteTokenData();
         $pisteToken = $pisteTokenData['access_token'] ?? null;
 
-        if (null === $pisteToken || $this->isTokenValid($pisteTokenData)) {
+        if (null === $pisteToken || !$this->isTokenValid($pisteTokenData)) {
             $pisteData = $this->requestPisteToken();
 
             if (null === $pisteData) {
