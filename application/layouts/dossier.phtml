@@ -70,7 +70,7 @@
         <?php endif ?>
 
         <?php if (!in_array($this->natureDossier, [3, 5, 31, 32, 40, 41, 42, 44])): ?>
-            <li class="<?= strpos($this->action, 'prescription') !== false ? 'active' : '' ?>">
+            <li class="<?= strpos($this->action, 'presc') !== false || in_array($this->action, ['edit', 'edit-type']) ? 'active' : '' ?>">
                 <a href='<?= $this->url(array("controller" => "dossier", "action" => "prescription", "id" => $this->idDossier), false, true) ?>'>
                     <i class="icon-flag icon-black"></i>
                     Prescriptions
@@ -78,7 +78,7 @@
             </li>
         <?php endif ?>
 
-        <li class='<?= ($this->action == "liees") ? "active" : "" ?>'>
+        <li class='<?= strpos($this->action, "liees") !== false ? "active" : "" ?>'>
             <a href='<?= $this->url(array("controller" => "dossier", "action" => "liees", "id" => $this->idDossier), false, true) ?>'>
                 <i class="icon-folder-open icon-black"></i>
                 Établissements et dossiers liés
