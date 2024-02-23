@@ -41,7 +41,7 @@
         <?php if (($this->idTypeDossier === 2 || $this->idTypeDossier === 3) && $this->isAllowedVerificationsTechniques): ?>
             <li class="<?= strpos($this->action, 'verifications-techniques') !== false ? 'active' : '' ?>">
                 <a href= <?= $this->url(array("controller" => "dossier", "action" => "verifications-techniques", "id" => $this->idDossier), false, true) ?>>
-                    <i class="icon-file icon-black"></i>
+                    <i class="icon-th-list icon-black"></i>
                     Vérifications techniques
                 </a>
             </li>
@@ -59,7 +59,7 @@
         <?php if ($this->idTypeDossier === 1 && $this->isAllowedAvisDerogation): ?>
             <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
                 <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
-                    <i class="icon-file icon-black"></i>
+                    <i class="icon-pencil icon-black"></i>
                     Avis et dérogations
 
                     <?php if($this->hasAvisDerogation): ?>
@@ -121,7 +121,7 @@
 
         <li class='<?= ($this->action == "rapport") ? "active" : "read" ?>'>
             <a href='<?= $this->url(array("controller" => "dossier", "action" => "rapport", "id" => $this->idDossier), false, true) ?>'>
-                <i class="icon-refresh icon-black"></i>
+                <i class="icon-book icon-black"></i>
                 Rapport
             </a>
         </li>
