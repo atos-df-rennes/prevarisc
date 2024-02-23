@@ -9,10 +9,11 @@ jobs:
   validate-composer:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
+        coverage: none
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -21,11 +22,15 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - run: composer install --prefer-dist --no-progress --working-dir=tools/
+        coverage: none
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
+        working-directory: "tools"
 
     - name: PHP-CS-Fixer
       run: tools/vendor/bin/php-cs-fixer fix --diff --dry-run
@@ -34,11 +39,15 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - run: composer install --prefer-dist --no-progress --working-dir=tools/
+        coverage: none
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
+        working-directory: "tools"
 
     - name: Rector
       run: tools/vendor/bin/rector process --dry-run
@@ -47,12 +56,18 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - run: composer install --prefer-dist --no-progress
-    - run: composer install --prefer-dist --no-progress --working-dir=tools/
+        coverage: none
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
+        working-directory: "tools"
 
     - name: PHPStan
       run: tools/vendor/bin/phpstan analyse
@@ -61,11 +76,14 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '7.1'
-    - run: composer install --prefer-dist --no-progress
+        coverage: none
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
 
     - name: PHPUnit
       run: composer test
@@ -74,10 +92,11 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '7.1'
+        coverage: none
 
     - name: Normal VarDump Check
       uses: umutphp/php-var-dump-check-action@v2
@@ -97,11 +116,15 @@ jobs:
     needs: validate-composer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - run: composer install --prefer-dist --no-progress --working-dir=tools/
+        coverage: none
+    - uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--prefer-dist"
+        working-directory: "tools"
 
     - name: Magical Number Check
       run: tools/vendor/bin/phpmnd $GITHUB_WORKSPACE/application --extensions=-switch_case --ignore-numbers=-1
