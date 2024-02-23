@@ -165,7 +165,9 @@ class PieceJointeController extends Zend_Controller_Action
 
             // Un fichier est-il envoyé ?
             if (!isset($_FILES['fichier'])) {
-                throw new Exception('Aucun fichier reçu');
+                error_log('La taille de la requete depasse la limite autorisee par le parametre post_max_size.');
+
+                throw new Exception('Aucun fichier reçu. Veuillez contacter votre service informatique.');
             }
 
             // Extension du fichier
@@ -213,7 +215,9 @@ class PieceJointeController extends Zend_Controller_Action
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $file_path)) {
                 $nouvellePJ->delete();
 
-                throw new Exception('Impossible de charger la pièce jointe');
+                error_log('La taille de la piece jointe depasse la limite autorisee par le parametre upload_max_filesize');
+
+                throw new Exception('Impossible de charger la pièce jointe. Veuillez contacter votre service informatique.');
             }
             // Dans le cas d'un dossier
             if ('dossier' == $this->_getParam('type')) {
