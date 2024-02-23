@@ -3,6 +3,7 @@
 class Service_Platau
 {
     private const HEALTHCHECK_ENDPOINT = 'healthcheck';
+    private $datastore;
     private $platauServiceFilePath;
     private $platauConfigFilePath;
     private $pisteClientId;
@@ -10,6 +11,7 @@ class Service_Platau
 
     public function __construct()
     {
+        $this->datastore = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.implode(DS, ['src', 'Service', 'PlatauAbstract.php']));
         $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.'config.json');
         [$this->pisteClientId, $this->pisteClientSecret] = $this->getPisteCredentials();
@@ -20,15 +22,21 @@ class Service_Platau
      */
     public function executeHealthcheck(): array
     {
-        $pisteToken = $this->requestPisteToken();
+        $pisteTokenData = $this->getPisteTokenData();
+        $pisteToken = $pisteTokenData['access_token'] ?? null;
 
-        if (null === $pisteToken) {
-            error_log("Le token d'accès à PISTE n'est pas valide.");
+        if (null === $pisteToken || $this->isTokenValid($pisteTokenData)) {
+            $pisteData = $this->requestPisteToken();
 
-            return [
-                'healthcheckOk' => false,
-                'errorOrigin' => 'prevarisc',
-            ];
+            if (null === $pisteData) {
+                return [
+                    'healthcheckOk' => false,
+                    'errorOrigin' => 'prevarisc',
+                ];
+            }
+
+            $this->storePisteToken($pisteData);
+            $pisteToken = $pisteData['access_token'];
         }
 
         $platauHealth = $this->requestPlatauHealthcheck($pisteToken);
@@ -79,7 +87,7 @@ class Service_Platau
     /**
      * Récupère le token PISTE.
      */
-    private function requestPisteToken(): ?string
+    private function requestPisteToken(): ?array
     {
         $url = $this->getConstInFile($this->platauServiceFilePath, 'PISTE_ACCESS_TOKEN_URL');
 
@@ -122,7 +130,7 @@ class Service_Platau
             return null;
         }
 
-        return $decodedData['access_token'];
+        return $decodedData;
     }
 
     /**
@@ -173,7 +181,7 @@ class Service_Platau
 
     /**
      * Récupère la valeur d'une constante dans un fichier.
-     * e.g. private const PATH = '/home/user/' renvoie /home/user/.
+     * e.g. `private const PATH = '/home/user/' renvoie /home/user/`.
      */
     private function getConstInFile(string $filepath, string $const): ?string
     {
@@ -186,5 +194,40 @@ class Service_Platau
         }
 
         return null;
+    }
+
+    /**
+     * Récupère le token PISTE stocké s'il existe.
+     */
+    private function getPisteTokenData(): array
+    {
+        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste', 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
+
+        if (!file_exists($filepath)) {
+            return [];
+        }
+
+        $pisteData = file_get_contents($filepath);
+
+        return json_decode($pisteData, true);
+    }
+
+    /**
+     * Stocke le token PISTE pour le réutiliser tant qu'il n'est pas expiré.
+     */
+    private function storePisteToken(array $pisteData): void
+    {
+        $storedData = json_encode(array_merge_recursive($pisteData, ['request_time' => time()]), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste', 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
+        file_put_contents($filepath, $storedData);
+    }
+
+    /**
+     * Détermine si le token est valide avec une marge de 5min.
+     */
+    private function isTokenValid(array $tokenData): bool
+    {
+        return time() < $tokenData['request_time'] + ($tokenData['expires_in'] - 300);
     }
 }
