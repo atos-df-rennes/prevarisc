@@ -1,13 +1,6 @@
 <?php if ($this->key_ign != null) : ?>
-    <div id='geoportail-container'  style="height: 350px; max-height: 350px;"></div>
+    <div id='geoportail-container' style="height: 350px; max-height: 350px;"></div>
     <div id="info"></div>
-
-    <!-- Déplacement du bouton FullScreen (sinon supperposé avec le gestionnaire de couches)
-    et du panel Profil Altimétrique (sinon coupé en 2) -->
-    <style>
-        .ol-full-screen {right:9px; top:49px;}
-        div[id^=GPelevationPathPanel-] {top:-75px;}
-    </style>
 
     <script type="text/javascript">
         <?php
@@ -25,7 +18,6 @@
         );
 
         viewer.listen('mapLoaded', afterInitMap);
-        viewer.listen('azimuthChanged', onRotation);
 
         function afterInitMap () {
             // Ajout du bouton FullScreen
@@ -36,11 +28,6 @@
                 viewer,
                 <?php echo json_encode($this->couches_cartographiques) ?>
             );
-            $('.ol-rotate').css('display', 'none');
-        };
-
-        function onRotation () {
-            viewer.getAzimuth() === 0 ? $('.ol-rotate').css('display', 'none') : $('.ol-rotate').css('display', 'block');
         };
 
         // Affichage de la version du SDK et de sa date de création

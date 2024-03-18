@@ -14,11 +14,6 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
 
-        $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('getCapabilities', 'json')
-            ->initContext()
-        ;
-
         $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
         $this->serviceCarto = new Service_Carto();
     }
@@ -51,6 +46,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
     public function addCoucheIgnAction(): void
     {
         $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('formats', ['wmts', 'wms raster', 'wms vecteur']);
 
         $this->addAction();
     }
@@ -82,7 +78,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
         try {
             $this->serviceCarto->delete($this->getRequest()->getParam('id'));
-            $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Ajout réussi !', 'message' => 'La couche cartographique a été supprimée.']);
+            $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La couche cartographique a été supprimée.']);
         } catch (Exception $e) {
             $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
         }
