@@ -1997,9 +1997,9 @@ class DossierController extends Zend_Controller_Action
             $dossierVer = [];
             while ($elementVer = readdir($dirVer)) {
                 if (
-                    '.' != $elementVer
-                    && '..' != $elementVer
-                    && '.gitignore' != $elementVer
+                    '.' !== $elementVer
+                    && '..' !== $elementVer
+                    && '.gitignore' !== $elementVer
                 ) {
                     if (!is_dir($pathVer.DS.$elementVer)) {
                         $fichierVer[] = $elementVer;
@@ -2025,9 +2025,9 @@ class DossierController extends Zend_Controller_Action
 
                 while ($element = readdir($dir)) {
                     if (
-                        '.' != $element
-                        && '..' != $element
-                        && '.gitignore' != $element
+                        '.' !== $element
+                        && '..' !== $element
+                        && '.gitignore' !== $element
                     ) {
                         if (!is_dir($path.DS.$element)) {
                             $fichier[] = $element;
@@ -2436,7 +2436,7 @@ class DossierController extends Zend_Controller_Action
 
             if (
                 isset($affectDossier['ID_DATECOMMISSION_AFFECT'])
-                && '' != $affectDossier['ID_DATECOMMISSION_AFFECT']
+                && '' !== $affectDossier['ID_DATECOMMISSION_AFFECT']
             ) {
                 $cptIdArray = 0;
                 foreach ($listeDossierConcerne as $dossier) {

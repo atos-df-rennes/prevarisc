@@ -89,7 +89,7 @@ class Service_Search
                 $cleanLabel = trim($label);
 
                 // recherche par id
-                if ('#' == substr($cleanLabel, 0, 1)) {
+                if ('#' === substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
@@ -340,7 +340,7 @@ class Service_Search
                 $cleanLabel = trim($label);
 
                 // recherche par id
-                if ('#' == substr($cleanLabel, 0, 1)) {
+                if ('#' === substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'e.NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
@@ -562,7 +562,7 @@ class Service_Search
                 $cleanObjet = trim($objet);
 
                 // recherche par id
-                if ('#' == substr($cleanObjet, 0, 1)) {
+                if ('#' === substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
@@ -820,7 +820,7 @@ class Service_Search
                 $cleanObjet = trim($objet);
 
                 // recherche par id
-                if ('#' == substr($cleanObjet, 0, 1)) {
+                if ('#' === substr($cleanObjet, 0, 1)) {
                     $select->having('NB_URBA like ?', '%'.substr($cleanObjet, 1).'%');
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
@@ -903,7 +903,7 @@ class Service_Search
                 $cleanLabel = trim($criterias['label']);
 
                 // recherche par id
-                if ('#' == substr($cleanLabel, 0, 1)) {
+                if ('#' === substr($cleanLabel, 0, 1)) {
                     $this->setCriteria($select, 'NUMEROID_ETABLISSEMENT', substr($cleanLabel, 1), false);
 
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace

@@ -3,7 +3,7 @@
 class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 {
     /**
-     * @var mixed|\Zend_Db_Select
+     * @var mixed|Zend_Db_Select
      */
     public $select;
     protected $_name = 'utilisateur';
@@ -244,18 +244,18 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         // Spécialisation des ressources pour l'utilisateur
 
         foreach ($privileges as $key => $resource) {
-            if ('etablissement' == explode('_', $resource['name_resource'])[0]) {
+            if ('etablissement' === explode('_', $resource['name_resource'])[0]) {
                 $resource_exploded = explode('_', $resource['name_resource']);
 
                 switch ($resource_exploded[1]) {
                     case 'erp':
-                        if ('1' == $resource_exploded[4]) {
+                        if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $commissions;
                         }
-                        if ('1' == $resource_exploded[5]) {
+                        if ('1' === $resource_exploded[5]) {
                             $resource_exploded[5] = $groupements;
                         }
-                        if ('1' == $resource_exploded[6]) {
+                        if ('1' === $resource_exploded[6]) {
                             $resource_exploded[6] = $commune;
                         }
 
@@ -263,23 +263,23 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
                     case 'hab':
                     case 'zone':
-                        if ('1' == $resource_exploded[3]) {
+                        if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $groupements;
                         }
-                        if ('1' == $resource_exploded[4]) {
+                        if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $commune;
                         }
 
                         break;
 
                     case 'igh':
-                        if ('1' == $resource_exploded[3]) {
+                        if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $commissions;
                         }
-                        if ('1' == $resource_exploded[4]) {
+                        if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $groupements;
                         }
-                        if ('1' == $resource_exploded[5]) {
+                        if ('1' === $resource_exploded[5]) {
                             $resource_exploded[5] = $commune;
                         }
 
@@ -289,10 +289,10 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                     case 'camp':
                     case 'temp':
                     case 'iop':
-                        if ('1' == $resource_exploded[2]) {
+                        if ('1' === $resource_exploded[2]) {
                             $resource_exploded[2] = $groupements;
                         }
-                        if ('1' == $resource_exploded[3]) {
+                        if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $commune;
                         }
 

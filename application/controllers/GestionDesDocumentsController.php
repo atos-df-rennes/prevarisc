@@ -30,9 +30,9 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         $dossierVer = [];
         while ($elementVer = readdir($dirVer)) {
             if (
-                '.' != $elementVer
-                && '..' != $elementVer
-                && '.gitignore' != $elementVer
+                '.' !== $elementVer
+                && '..' !== $elementVer
+                && '.gitignore' !== $elementVer
             ) {
                 if (!is_dir($pathVer.DS.$elementVer)) {
                     $fichierVer[] = $elementVer;
@@ -55,9 +55,9 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 
             while ($element = readdir($dir)) {
                 if (
-                    '.' != $element
-                    && '..' != $element
-                    && '.gitignore' != $element
+                    '.' !== $element
+                    && '..' !== $element
+                    && '.gitignore' !== $element
                 ) {
                     if (!is_dir($path.DS.$element)) {
                         $fichier[] = $element;
@@ -92,7 +92,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             // Extension du fichier
             $filename = str_replace(DS, '', $_FILES['fichier']['name']);
             $extension = strtolower(strrchr($filename, '.'));
-            if ('.odt' != $extension) {
+            if ('.odt' !== $extension) {
                 throw new Exception('Seuls les fichiers .odt sont autorisés en upload.');
             }
 

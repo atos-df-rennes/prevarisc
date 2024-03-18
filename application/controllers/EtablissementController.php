@@ -5,7 +5,7 @@ class EtablissementController extends Zend_Controller_Action
     public $cache;
 
     /**
-     * @var mixed|\Service_Etablissement
+     * @var mixed|Service_Etablissement
      */
     public $serviceEtablissement;
 

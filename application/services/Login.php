@@ -45,7 +45,7 @@ class Service_Login
             }
 
             // Stockage de l'utilisateur dans la session
-            if ('autorise' == $reponse) {
+            if ('autorise' === $reponse) {
                 $row_utilisateurInformations = $model_utilisateurInformations->find($user->ID_UTILISATEURINFORMATIONS)->current();
                 $row_groupe = $model_groupe->find($user->ID_GROUPE)->current();
                 $row_fonction = $model_fonction->find($row_utilisateurInformations->ID_FONCTION)->current();

@@ -120,7 +120,7 @@ class View_Helper_MinifyHeadScript extends Zend_View_Helper_HeadScript
     protected function _generateMinifyItem(array $scripts)
     {
         $baseUrl = $this->getBaseUrl();
-        if ('/' == substr($baseUrl, 0, 1)) {
+        if ('/' === substr($baseUrl, 0, 1)) {
             $baseUrl = substr($baseUrl, 1);
         }
         $minScript = new stdClass();

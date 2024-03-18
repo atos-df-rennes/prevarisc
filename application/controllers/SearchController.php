@@ -48,8 +48,8 @@ class SearchController extends Zend_Controller_Action
                 try {
                     $parameters = $this->_request->getQuery();
                     $page = $parameters['page'] ?? null;
-                    $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
-                    $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' !== (string) $parameters['label'][0] ? $parameters['label'] : null;
+                    $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' === (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
                     $genres = $parameters['genres'] ?? null;
                     $categories = $parameters['categories'] ?? null;
                     $classes = $parameters['classes'] ?? null;
@@ -234,8 +234,8 @@ class SearchController extends Zend_Controller_Action
                 try {
                     $parameters = $this->_request->getQuery();
                     $page = $parameters['page'] ?? null;
-                    $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
-                    $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $label = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' !== (string) $parameters['label'][0] ? $parameters['label'] : null;
+                    $identifiant = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' === (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
                     $genres = $parameters['genres'] ?? null;
                     $categories = $parameters['categories'] ?? null;
                     $classes = $parameters['classes'] ?? null;
@@ -319,7 +319,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && '' != $parameters['permis'] ? $parameters['permis'] : null;
-                    $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' != (string) $parameters['objet'][0] ? $parameters['objet'] : null;
+                    $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' !== (string) $parameters['objet'][0] ? $parameters['objet'] : null;
                     $types = $parameters['types'] ?? null;
                     $criteresRecherche = [];
                     $criteresRecherche['commissions'] = $parameters['commissions'] ?? null;
@@ -342,8 +342,8 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
                     $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
                     $criteresRecherche['groupements_territoriaux'] = array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux'] ? $parameters['groupements_territoriaux'] : null;
-                    $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
-                    $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' !== (string) $parameters['label'][0] ? $parameters['label'] : null;
+                    $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' === (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
                     $criteresRecherche['provenance'] = $this->_request->getParam('provenance');
 
                     $search = $service_search->extractionDossiers($types, $objet, $num_doc_urba, null, null, $criteresRecherche);
@@ -487,7 +487,7 @@ class SearchController extends Zend_Controller_Action
                     $parameters = $this->_request->getQuery();
                     $page = array_key_exists('page', $parameters) ? $parameters['page'] : 1;
                     $num_doc_urba = array_key_exists('permis', $parameters) && '' != $parameters['permis'] ? $parameters['permis'] : null;
-                    $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' != (string) $parameters['objet'][0] ? $parameters['objet'] : null;
+                    $objet = array_key_exists('objet', $parameters) && '' != $parameters['objet'] && '#' !== (string) $parameters['objet'][0] ? $parameters['objet'] : null;
                     $types = $parameters['types'] ?? null;
                     $criteresRecherche = [];
                     $criteresRecherche['commissions'] = $parameters['commissions'] ?? null;
@@ -509,8 +509,8 @@ class SearchController extends Zend_Controller_Action
                     $criteresRecherche['dateCommissionEnd'] = array_key_exists('date-commission-end', $parameters) && $checkDateFormat($parameters['date-commission-end']) ? $parameters['date-commission-end'] : null;
                     $criteresRecherche['dateVisiteStart'] = array_key_exists('date-visite-start', $parameters) && $checkDateFormat($parameters['date-visite-start']) ? $parameters['date-visite-start'] : null;
                     $criteresRecherche['dateVisiteEnd'] = array_key_exists('date-visite-end', $parameters) && $checkDateFormat($parameters['date-visite-end']) ? $parameters['date-visite-end'] : null;
-                    $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' != (string) $parameters['label'][0] ? $parameters['label'] : null;
-                    $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' == (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
+                    $criteresRecherche['label'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' !== (string) $parameters['label'][0] ? $parameters['label'] : null;
+                    $criteresRecherche['identifiant'] = array_key_exists('label', $parameters) && '' != $parameters['label'] && '#' === (string) $parameters['label'][0] ? substr($parameters['label'], 1) : null;
                     $criteresRecherche['provenance'] = $this->_request->getParam('provenance');
 
                     if (array_key_exists('groupements_territoriaux', $parameters) && '' != $parameters['groupements_territoriaux']) {
