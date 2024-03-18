@@ -32,7 +32,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                     });
 
                     foreach ($resources_dbtable->fetchAll()->toArray() as $resource) {
-                        if ('etablissement' == explode('_', $resource['name'])[0]) {
+                        if ('etablissement' === explode('_', $resource['name'])[0]) {
                             continue;
                         }
 
@@ -141,18 +141,18 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                 // On ajoute les ressources spécialisées
                 foreach ($resources_dbtable->fetchAll()->toArray() as $resource) {
-                    if ('etablissement' == explode('_', $resource['name'])[0]) {
+                    if ('etablissement' === explode('_', $resource['name'])[0]) {
                         $resource_exploded = explode('_', $resource['name']);
 
                         switch ($resource_exploded[1]) {
                             case 'erp':
-                                if ('1' == $resource_exploded[4]) {
+                                if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $commissions;
                                 }
-                                if ('1' == $resource_exploded[5]) {
+                                if ('1' === $resource_exploded[5]) {
                                     $resource_exploded[5] = $groupements;
                                 }
-                                if ('1' == $resource_exploded[6]) {
+                                if ('1' === $resource_exploded[6]) {
                                     $resource_exploded[6] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
 
@@ -160,23 +160,23 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                             case 'hab':
                             case 'zone':
-                                if ('1' == $resource_exploded[3]) {
+                                if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $groupements;
                                 }
-                                if ('1' == $resource_exploded[4]) {
+                                if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
 
                                 break;
 
                             case 'igh':
-                                if ('1' == $resource_exploded[3]) {
+                                if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $commissions;
                                 }
-                                if ('1' == $resource_exploded[4]) {
+                                if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $groupements;
                                 }
-                                if ('1' == $resource_exploded[5]) {
+                                if ('1' === $resource_exploded[5]) {
                                     $resource_exploded[5] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
 
@@ -186,10 +186,10 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                             case 'camp':
                             case 'temp':
                             case 'iop':
-                                if ('1' == $resource_exploded[2]) {
+                                if ('1' === $resource_exploded[2]) {
                                     $resource_exploded[2] = $groupements;
                                 }
-                                if ('1' == $resource_exploded[3]) {
+                                if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
 
@@ -271,7 +271,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                     $access_granted_ets = false;
                                     $i = 0;
                                     foreach ($resources as $resource) {
-                                        if ('etablissement' == explode('_', $resource)[0]) {
+                                        if ('etablissement' === explode('_', $resource)[0]) {
                                             if ($acl->has($resource) && $acl->isAllowed($role, $resource, 'view_ets')) {
                                                 $access_granted_ets = true;
 
@@ -282,7 +282,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                     }
                                     if ($access_granted_ets || 0 == $i) {
                                         foreach ($resources as $resource) {
-                                            if (('dossier' == explode('_', $resource)[0] || 'creations' == explode('_', $resource)[0]) && $acl->has($resource) && $acl->isAllowed($role, $resource, $privilege)) {
+                                            if (('dossier' === explode('_', $resource)[0] || 'creations' === explode('_', $resource)[0]) && $acl->has($resource) && $acl->isAllowed($role, $resource, $privilege)) {
                                                 $access_granted = true;
 
                                                 break;

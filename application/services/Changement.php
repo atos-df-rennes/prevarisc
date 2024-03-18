@@ -206,12 +206,12 @@ class Service_Changement
             $ets['general']['ID_DOSSIER_DONNANT_AVIS']
         );
 
-        if (true == $ets['presence_avis_differe'] && 'avisDiff' == $avisType) {
+        if (true == $ets['presence_avis_differe'] && 'avisDiff' === $avisType) {
             $avis = "Présence d'un dossier avec avis differé";
         } elseif (null != $ets['avis']) {
-            if (1 == $ets['avis'] && 'avisDoss' == $avisType) {
+            if (1 == $ets['avis'] && 'avisDoss' === $avisType) {
                 $avis = 'Favorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
-            } elseif (self::ID_AVIS_DEFAVORABLE == $ets['avis'] && 'avisDoss' == $avisType) {
+            } elseif (self::ID_AVIS_DEFAVORABLE == $ets['avis'] && 'avisDoss' === $avisType) {
                 $avis = 'Défavorable'.(self::ID_GENRE_CELLULE == $ets['informations']['ID_GENRE'] ? '' : " à l'exploitation");
             }
         } else {

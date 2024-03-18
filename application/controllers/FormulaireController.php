@@ -3,32 +3,32 @@
 class FormulaireController extends Zend_Controller_Action
 {
     /**
-     * @var mixed|\Model_DbTable_Champ
+     * @var mixed|Model_DbTable_Champ
      */
     public $modelChamp;
 
     /**
-     * @var mixed|\Model_DbTable_ChampValeurListe
+     * @var mixed|Model_DbTable_ChampValeurListe
      */
     public $modelChampValeurListe;
 
     /**
-     * @var mixed|\Model_DbTable_ListeTypeChampRubrique
+     * @var mixed|Model_DbTable_ListeTypeChampRubrique
      */
     public $modelListeTypeChampRubrique;
 
     /**
-     * @var mixed|\Model_DbTable_Rubrique
+     * @var mixed|Model_DbTable_Rubrique
      */
     public $modelRubrique;
 
     /**
-     * @var mixed|\Model_DbTable_CapsuleRubrique
+     * @var mixed|Model_DbTable_CapsuleRubrique
      */
     public $modelCapsuleRubrique;
 
     /**
-     * @var mixed|\Service_Formulaire
+     * @var mixed|Service_Formulaire
      */
     public $serviceFormulaire;
 
@@ -38,7 +38,7 @@ class FormulaireController extends Zend_Controller_Action
     public $serviceUtils;
 
     /**
-     * @var mixed|\Service_Champ
+     * @var mixed|Service_Champ
      */
     public $serviceChamp;
 

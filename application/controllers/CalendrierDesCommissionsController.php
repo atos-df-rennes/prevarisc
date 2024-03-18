@@ -3,27 +3,27 @@
 class CalendrierDesCommissionsController extends Zend_Controller_Action
 {
     /**
-     * @var mixed|\Service_DossierVerificationsTechniques
+     * @var mixed|Service_DossierVerificationsTechniques
      */
     public $serviceDescriptifDossier;
 
     /**
-     * @var mixed|\Service_EtablissementDescriptif
+     * @var mixed|Service_EtablissementDescriptif
      */
     public $serviceDescriptifEtablissement;
 
     /**
-     * @var mixed|\Service_DossierEffectifsDegagements
+     * @var mixed|Service_DossierEffectifsDegagements
      */
     public $serviceDossierEffectifsDegagements;
 
     /**
-     * @var mixed|\Service_EtablissementEffectifsDegagements
+     * @var mixed|Service_EtablissementEffectifsDegagements
      */
     public $serviceEtablissementEffectifsDegagements;
 
     /**
-     * @var mixed|\Service_Formulaire
+     * @var mixed|Service_Formulaire
      */
     public $serviceFormulaire;
 
@@ -681,7 +681,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                         if (
                             $expectedNumberOfDateParameters == count($varExplode2)
-                            && 'D' == $varExplode1[0]
+                            && 'D' === $varExplode1[0]
                         ) {
                             // on s'assure que c'est bien une date jj/mm/aaaa
                             // Ici insertion la premiere dates dans la base de données
@@ -728,7 +728,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                         if ($expectedNumberOfDateParameters == count($varExplode2)) {
                             // Ici insertion des dates dans la base de données
-                            if ('D' == $varExplode1[0]) {
+                            if ('D' === $varExplode1[0]) {
                                 if ($premiereDate) {
                                     $idOrigine = $dbDateCommission->addDateComm($varExplode1[1], $this->_getParam('D_'.$varExplode1[1]), $this->_getParam('F_'.$varExplode1[1]), $this->_getParam('idComm'), $this->_getParam('typeCom'), $this->_getParam('libelle_comm'));
                                     $idCalendrierTab = $idOrigine;
