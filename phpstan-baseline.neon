@@ -631,11 +631,6 @@ parameters:
 			path: application/controllers/CouchesCartographiquesController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
 			count: 3
 			path: application/controllers/CouchesCartographiquesController.php
