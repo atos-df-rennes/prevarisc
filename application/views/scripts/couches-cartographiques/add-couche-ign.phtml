@@ -5,15 +5,27 @@
 <h3>Ajout d'une couche cartographique IGN</h3>
 
 <div class="accordion" id="ign-accordion">
-    <?php foreach ($this->key_ign as $index => $ignKey): ?>
+    <?php foreach ($this->formats as $index => $format): ?>
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="ign-accordion" href="#<?= $ignKey ?>">
-                    <?= ucfirst($ignKey) ?>
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
+                    <?= strtoupper($format) ?>
                 </a>
             </div>
-            <div id="<?= $ignKey ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
+            <div id="<?= str_replace(' ', '-', $format) ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
                 <div class="accordion-inner">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nom de la couche</th>
+                                <th scope="col">Nom de la couche dans le flux</th>
+                                <th scope="col">Format de l'image dans le flux</th>
+                                <th scope="col">Couche transparente ?</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -25,71 +37,85 @@
     let contentDiv = null
     const formats = ['wmts', 'wms raster', 'wms vecteur']
 
-    <?php foreach ($this->key_ign as $key): ?>
-        formats.forEach(format => {
-            const baseFormat = format.split(' ')[0]
+    formats.forEach(format => {
+        const baseFormat = format.split(' ')[0]
 
-            result = getCapabilities('<?= $key ?>', format)
+        const [parser, urlToCall] = getCapabilities(format, baseFormat)
 
-            if (result.length > 0) {
-                contentDiv = $('#<?= $key ?> .accordion-inner')
+        $.ajax({
+            url: urlToCall,
+            type: 'get',
+            success: function (result) {
+                const layers = getCapabilitiesLayers(parser, format, baseFormat, result)
 
-                contentDiv.append('<div class="row-fluid"><div class="span12"><strong>' + format.toUpperCase() + '</strong></div></div>')
-                for (let i = 0; i < result.length; i++) {
-                    contentDiv.append('<div id="<?= $key ?>-' + result[i].internalName + '-' + format.replace(' ', '-') + '" class="row-fluid">')
-                    let row = $('#<?= $key ?>-' + result[i].internalName.replace(/\./g, '\\.') + '-' + format.replace(' ', '-'))
-                    row.append('<form action="/couches-cartographiques/add-couche-ign" method="post">')
+                if (layers.length > 0) {
+                    contentDiv = $(`#${format.replace(' ', '-')} .accordion-inner table tbody`)
 
-                    let form = $(row.selector + ' > form')
+                    for (let i = 0; i < layers.length; i++) {
+                        contentDiv.append(`<tr id="${layers[i].internalName}-${format.replace(' ', '-')}">`)
+                        let row = $('#' + layers[i].internalName.replace(/\./g, '\\.') + '-' + format.replace(' ', '-'))
+                        row.append(`
+                            <td title="${layers[i].name}">
+                                <form action="/couches-cartographiques/add-couche-ign" method="post" id="form-${layers[i].internalName}-${format.replace(' ', '-')}">
+                                    <input type="hidden" name="TYPE_COUCHECARTO" value="${layers[i].type}">
+                                    <input type="hidden" name="NOM_COUCHECARTO" value="${layers[i].name}" />
+                                    <input type="hidden" name="LAYERS_COUCHECARTO" value="${layers[i].internalName}" />
+                                    <input type="hidden" name="URL_COUCHECARTO" value="${layers[i].url}" />
+                                </form>
+                                ${layers[i].name}
+                            </td>
+                        `)
 
-                    form.append('<input type="hidden" name="TYPE_COUCHECARTO" value="' + result[i].type + '">')
+                        row.append(`<td title="${layers[i].internalName}">${layers[i].internalName}</td>`)
 
-                    form.append('<div class="span2" title="' + result[i].name + '">' + result[i].name + '</div>')
-                    form.append('<input type="hidden" name="NOM_COUCHECARTO" value="' + result[i].name + '" />')
+                        if (baseFormat === 'wms') {
+                            const pngChecked = layers[i].format === 'image/png'
+                            const jpegChecked = layers[i].format === 'image/jpeg'
 
-                    form.append('<div class="span3" title="' + result[i].internalName + '">' + result[i].internalName + '</div>')
-                    form.append('<input type="hidden" name="LAYERS_COUCHECARTO" value="' + result[i].internalName + '" />')
+                            row.append(`
+                                <td>
+                                    <select form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="FORMAT_COUCHECARTO">
+                                    </select>
+                                </td>
+                            `)
 
-                    form.append('<div class="span2 " title="' + result[i].url + '">' + result[i].url + '</div>')
-                    form.append('<input type="hidden" name="URL_COUCHECARTO" value="' + result[i].url + '" />')
+                            const select = $(row.selector + ' select[name="FORMAT_COUCHECARTO"]')
 
-                    if (baseFormat === 'wms') {
-                        const pngChecked = result[i].format === 'image/png'
-                        const jpegChecked = result[i].format === 'image/jpeg'
-
-                        form.append(
-                            `<div class="span2 text-center">
-                                <select name="FORMAT_COUCHECARTO">
-                                </select>
-                            </div>`
-                        )
-
-                        const select = $(row.selector + ' select[name="FORMAT_COUCHECARTO"')
-
-                        if (pngChecked === true) {
-                            select.append(
-                                `<option value="image/png" selected>image/png</option>
-                                <option value="image/jpeg">image/jpeg</option>`
-                            )
-                        } else if (jpegChecked === true) {
-                            select.append(
-                                `<option value="image/png">image/png</option>
+                            if (pngChecked === true) {
+                                select.append(
+                                    `<option value="image/png" selected>image/png</option>
+                                    <option value="image/jpeg">image/jpeg</option>`
+                                )
+                            } else if (jpegChecked === true) {
+                                select.append(
+                                    `<option value="image/png">image/png</option>
                                     <option value="image/jpeg" selected>image/jpeg</option>`
-                            )
+                                )
+                            }
+                        } else {
+                            row.append(`
+                                <td>
+                                    ${layers[i].format}
+                                    <input form="form-${layers[i].internalName}-${format.replace(' ', '-')}" type="hidden" name="FORMAT_COUCHECARTO" value="${layers[i].format}" />
+                                </td>
+                            `)
                         }
-                    } else {
-                        form.append('<div class="span2 text-center">' + result[i].format + '</div>')
-                        form.append('<input type="hidden" name="FORMAT_COUCHECARTO" value="' + result[i].format + '" />')
+
+                        row.append(`
+                            <td>
+                                <input id="couche-visible" form="form-${layers[i].internalName}-${format.replace(' ', '-')}" name="TRANSPARENT_COUCHECARTO" type="checkbox" value="0" />
+                            </td>
+                        `)
+                        row.append(`
+                            <td>
+                                <input form="form-${layers[i].internalName}-${format.replace(' ', '-')}" type="submit" class="btn btn-success" value="Ajouter">
+                            </td>
+                        `)
+
+                        contentDiv.append('</tr>')
                     }
-
-                    form.append('<div class="span1 visibilite-couche"><span><i class="icon-eye-open" title="Couche visible"></i></span></div>')
-                    form.append('<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />')
-
-                    form.append('<div class="span1"><input type="submit" class="btn btn-success" value="Ajouter"></div>')
-
-                    contentDiv.append('</div>')
                 }
             }
         })
-    <?php endforeach ?>
+    })
 </script>

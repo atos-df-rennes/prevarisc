@@ -66,7 +66,7 @@ PREVARISC_MAIL_TRANSPORT | [FACULTATIF] Système de transport des mails | "smtp"
 PREVARISC_MAIL_HOST | [FACULTATIF] IP du serveur mails | Chaîne de charactères
 PREVARISC_MAIL_USERNAME | [FACULTATIF] Nom d'utilisateur ayant les droits de connexion au serveur Mail (peut-être vide si aucune authentification nécessaire) | Chaîne de caractères
 PREVARISC_MAIL_PASSWORD | [FACULTATIF] Mot de passe de l'utilisateur ayant les droits de connexion au serveur Mail | Chaîne de caractères
-SetEnv PREVARISC_MAIL_PORT | [FACULTATIF] Le port du serveur mail | Nombres (exmple : "25")
+PREVARISC_MAIL_PORT | [FACULTATIF] Le port du serveur mail | Nombres (exmple : "25")
 PREVARISC_MAIL_SENDER | [FACULTATIF] Adresse email apparaissant sur les mails envoyés par l'application | Chaîne de caractères (format email, par exemple : "no-reply@sdis.fr")
 PREVARISC_MAIL_SENDER_NAME | [FACULTATIF] Nom associé à l'email définit précédemment et apparaissant sur les mails envoyés par l'application | Chaîne de caractères (exemple : "Prévarisc")
 PREVARISC_CACHE_LIFETIME | Durée de vie du cache, actif si valeur > 0 | Valeur numérique (secondes)
@@ -84,7 +84,8 @@ PREVARISC_LDAP_PASSWORD | [FACULTATIF] Mot de passe de connexion au LDAP | Chain
 PREVARISC_LDAP_BASEDN | [FACULTATIF] Chaine de selection afin de trouver les utilisateurs dans le LDAP | Chaine de caractères (exemple : DC=sdisxx,DC=fr)
 PREVARISC_LDAP_ACCOUNT_FORM | [FACULTATIF] Format des comptes LDAP à utiliser, par défaut domaine\login   | Entier voir class Zend_Ldap
 PREVARISC_DEBUG_ENABLED | [FACULTATIF] Activation du mode debug | 1 ou 0
-PREVARISC_PLUGIN_IGNKEY | [FACULTATIF] Clé IGN pour afficher la carte | Valeur alphanumérique
+PREVARISC_PLUGIN_IGNKEY | [FACULTATIF] Clés IGN pour afficher la carte séparées par des ",' | Valeur alphanumérique (exemple : essentiels,adresse,administratif,cartes,cartovecto)
+PREVARISC_IGN_AUTOCONF | [FACULTATIF] Fichier d'autoconfiguration pour obtenir les métadonnées de la carte | Chemin relatif au dossier public/ vers le fichier (exemple : /ign/prevarisc/customConfig.json)
 PREVARISC_PLUGIN_GOOGLEMAPKEY | [FACULTATIF] Clé Google Map pour afficher la carte (non recommandé) | Valeur alphanumérique
 PREVARISC_THIRDPARTY_PLUGINS | [FACULTATIF] Liste des classes de Plugins tiers séparée par un ";" à charger au démarrage | Chaine de caractères (exemple : Plugin_MyPlugin;Plugin_YourPluginInc)
 PREVARISC_PROXY_ENABLED | [FACULTATIF] Active le passage par un proxy lors de l'appel aux URL /proxy | 0 ou 1 pour l'activer

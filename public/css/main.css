@@ -1152,6 +1152,19 @@ a.list-group-item-danger.active:focus {
 #geoportail-container img, #geoconcept-container img {
     max-width: none;
 }
+#geoportail-container .ol-full-screen {
+    right:9px; top:49px;
+}
+#geoportail-container div[id^=GPelevationPathPanel-] {
+    top:-75px;
+}
+#ign-accordion select[name='FORMAT_COUCHECARTO'] {
+    width: fit-content;
+}
+#ign-accordion form {
+    margin: 0;
+}
+
 #geoconcept-container label {
     display: inline;
 }
@@ -1246,20 +1259,6 @@ dl.champ_effectif_camping dd input {
 
 #dossierInfos li:focus {
     outline: solid 2px blue;
-}
-
-#ign-accordion span > i {
-    cursor: pointer;
-}
-
-#ign-accordion div[class^='span'] {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-#ign-accordion select[name='FORMAT_COUCHECARTO'] {
-    width: fit-content;
 }
 
 .radio-controls {
