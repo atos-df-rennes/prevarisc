@@ -258,7 +258,8 @@ function getCapabilitiesLayers(parser, format, baseFormat, result) {
 
 function putMarkerAt(viewer, center, nbCouches) {
     // Si on a déjà un marker, on le retire
-    if (viewer.getLayers().getLength() != nbCouches) {
+    // On vérifie sur nbCouches + 1 car une couche (photographies aériennes) est ajoutée par défaut
+    if (viewer.getLayers().getLength() !== (nbCouches + 1)) {
         var toRemove = viewer.getLayers().item(viewer.getLayers().getLength()-1);
         viewer.removeLayer(toRemove);
     }
@@ -296,7 +297,6 @@ function updateCoordinates(center, sourceProj, destProj) {
 
 function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, projection, viewer, nbCouches) {
     Gp.Services.geocode({
-        apiKey: 'essentiels',
         location: adresse,
         filterOptions: [{
             type: filterOptionsType
@@ -304,8 +304,8 @@ function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, proje
         srs: projection,
         onSuccess: function(t) {
             var newCenter = {
-                x: t.locations[0].position.y,
-                y: t.locations[0].position.x,
+                x: t.locations[0].position.lon,
+                y: t.locations[0].position.lat,
                 projection: projection
             };
             viewer.setCenter(newCenter);

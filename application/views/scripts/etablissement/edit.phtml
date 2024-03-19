@@ -1035,7 +1035,6 @@
             $autoconf_path = getenv('PREVARISC_IGN_AUTOCONF');
             $autoconf_path = file_exists($public_dir.$autoconf_path) ? $autoconf_path : "";
         ?>
-
             const optionsGeo = {
                 geo_container_id: '',
                 key_ign: '<?= $this->key_ign ?>',
@@ -1119,7 +1118,7 @@
             return data
         }
 
-         function setTriggerEventModalAdresseEdit() {
+        function setTriggerEventModalAdresseEdit() {
             $('.modifierAdresse').click(function (e) {
                 e.preventDefault();
                 const dataId = $(this).attr('data-id')
@@ -1136,9 +1135,9 @@
                     }
                 })
             })
-         }
+        }
 
-         setTriggerEventModalAdresseEdit()
+        setTriggerEventModalAdresseEdit()
 
         <?php if ($this->geoconcept_url != null): ?>
             <?php if ($token = getenv('PREVARISC_PLUGIN_GEOCONCEPT_TOKEN') && $app_id = getenv('PREVARISC_PLUGIN_GEOCONCEPT_APP_ID')): ?>
