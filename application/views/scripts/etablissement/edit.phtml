@@ -1,13 +1,13 @@
 <form id='etablissement' class="<?php echo $this->add ? 'add' : 'edit' ?>" action='<?php echo $this->url(array('action' => $this->add ? 'add' : 'edit')) ?>' method='post' >
 
     <?php if ($this->add) : ?>
-    <div class='pull-right' >
+    <div class='pull-right'>
         <input type='submit' class="btn btn-success" value="Ajouter l'établissement">
         <input type="hidden" name="date" value='<?php echo date("Y-m-d H:i:s") ?>'>
     </div>
     <h3>Ajout d'un établissement</h3>
     <?php else : ?>
-    <div class='pull-right' >
+    <div class='pull-right'>
         <div class="btn-group">
             <a class='btn' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
             <input type='submit' class="btn btn-success" value='Sauvegarder'>
