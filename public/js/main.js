@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
     bindContainerSize();
     bindEtsMarquee($(document));
     bindEtsPopup($(document));
+    loadStickyButtons()
+    window.onresize = loadStickyButtons
 }, false);
 
 function bindTitlePopup() {
@@ -53,7 +55,6 @@ function bindEtsMarquee($elem) {
 }
 
 function bindEtsPopup($elem) {
-
     // Bulle ETS
     $elem.find('a[href^="/etablissement/index/id/"]').hoverIntent({
         over: function () {
@@ -164,3 +165,15 @@ function loadBloc($bloc) {
         }
     });
 };
+
+function loadStickyButtons() {
+    const headerHeight = document.querySelector('.navbar.navbar-fixed-top').clientHeight
+
+    document.querySelectorAll('.action-buttons').forEach((actionButtons) => {
+        actionButtons.style.position = 'sticky'
+        // /!\ Il faut mettre des ";" après les template literals
+        actionButtons.style.top = `${headerHeight}px`;
+        actionButtons.style.padding = '10px 0 10px 16px'
+        actionButtons.style.backgroundColor = 'white'
+    })
+}

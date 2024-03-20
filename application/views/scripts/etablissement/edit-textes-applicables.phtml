@@ -1,6 +1,5 @@
 <form action='<?php echo $this->url(array('action' => 'edit-textes-applicables')) ?>' method='post'>
-
-    <div class='pull-right' >
+    <div class='action-buttons pull-right'>
         <div class="btn-group">
             <a class='btn' href="<?php echo $this->url(array('action' => 'textes-applicables')) ?>">Annuler la modification</a>
             <input type='submit' class="btn btn-success" value='Sauvegarder'>
@@ -21,5 +20,4 @@
             </p>
         <?php endforeach ?>
     <?php endforeach ?>
-
 </form>
