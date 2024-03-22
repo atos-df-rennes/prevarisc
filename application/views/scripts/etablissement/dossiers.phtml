@@ -1,5 +1,5 @@
 <input name = "idEtablissement" type="hidden" value=<?php echo($this->etablissement['general']['ID_ETABLISSEMENT'])?> />
-<div class='pull-right' >
+<div class='pull-right'>
     <a class='btn' href="<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>">Ajouter un dossier</a>
 </div>
 
@@ -15,7 +15,7 @@
         <?php if (count($this->visites) > 0) : ?>
             <h4>Visites</h4>
             <ul class='recherche_liste'>
-                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->visites); ?>
+                <?= $this->partialLoop('search/results/dossier.phtml', $this->visites) ?>
                 <div class="voir-plus" id="divcompleteListeVisite"></div>
             </ul>
 
@@ -33,7 +33,7 @@
 
             <h4>Études</h4>
             <ul class='recherche_liste'>
-                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->etudes);  ?>
+                <?= $this->partialLoop('search/results/dossier.phtml', $this->etudes)  ?>
                 <div class="voir-plus" id='divcompleteListeEtude'></div>
             </ul>
 
@@ -51,7 +51,7 @@
 
             <h4>Autres</h4>
             <ul class='recherche_liste'>
-                <?php echo $this->partialLoop('search/results/dossier.phtml', $this->autres);  ?>
+                <?= $this->partialLoop('search/results/dossier.phtml', $this->autres) ?>
                 <div class='voir-plus' id='divcompleteListeAutres'></div>
             </ul>
 
@@ -60,7 +60,7 @@
             <?php endif;
         endif ?>
     </div>
-<?php endif; ?>
+<?php endif ?>
 
 <script>
     $(document).ready(function() {
@@ -88,10 +88,10 @@
                 });
             }
         }
-     
+
         Array.from(document.getElementsByClassName('buttonOpenClose')).forEach(function(element) {
-            tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()   
-            
+            tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
+
             element.addEventListener(
                 'click',
                 () => {
@@ -100,7 +100,7 @@
                     newObjValue.isDeployed = !newObjValue.isDeployed
                     tableDisplay.set("div"+element.id, newObjValue)
                     tableDisplay.get("div"+element.id).isDeployed ? $("#div"+element.id).show() : $("#div"+element.id).hide()
-                    tableDisplay.get("div"+element.id).isDeployed ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus" 
+                    tableDisplay.get("div"+element.id).isDeployed ? $("#"+element.id)[0].innerText = "Voir moins" : $("#"+element.id)[0].innerText = "Voir plus"
                 }
             );
         });
