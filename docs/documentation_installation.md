@@ -121,6 +121,7 @@ PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE | [FACULTATIF] Permet d'utiliser l
 PREVARISC_PLATAU_PATH | [FACULTATIF] Chemin vers l'installation de la passerelle Plat'AU | Chaine de caractères
 PREVARISC_COMMAND_PATH | [FACULTATIF] Chemin vers le dossier destiné à stocker le(s) fichier(s) d'entrée à fournir aux commandes (e.g. La fusion des communes) | Chaine de caractères
 PREVARISC_DEACTIVATE_PLATAU | [FACULTATIF] Permet de désactiver tous les affichages liés à Plat'AU | 0 ou 1 pour désactiver (affichages activés par défaut)
+PREVARISC_DOSSIERS_MAX_A_AFFICHER | [FACULTATIF] Permet de configurer le nombre de dossiers du même type à afficher dans la liste des dossiers, par défaut 5 | Entier
 
 * Taper :```/etc/init.d/apache2 restart```
 
