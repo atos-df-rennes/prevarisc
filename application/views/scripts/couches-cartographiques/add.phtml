@@ -5,7 +5,7 @@
 	</div>
 
 	<h3><?php echo $this->row ? "Modification d'une couche cartographique" : "Ajout d'une couche cartographique" ?></h3>
-        
+
 	<dl class='dl-horizontal'>
 		<dt>Type de la couche</dt>
 		<dd>
@@ -14,7 +14,7 @@
 				<option value="WMTS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMTS') echo "selected" ?> >WMTS</option>
 			</select>
 		</dd>
-                
+
 		<dt>Nom de la couche</dt>
 		<dd>
 			<input type="text" name="NOM_COUCHECARTO" value="<?php echo $this->row ? $this->row['NOM_COUCHECARTO'] : "" ?>" />
@@ -47,7 +47,7 @@
 			</select>
 		</dd>
 
-		<dt>Couche transparente ?</dt>
+		<dt>Couche masquée ?</dt>
 		<dd>
 			<p>
             	<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />
