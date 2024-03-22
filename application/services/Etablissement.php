@@ -4,7 +4,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
     public const CLASSEMENT_CHANGE = 3;
-    public const NB_DOSSIERS_A_AFFICHER = 5;
     public const ID_FONCTION_DUS = 8;
     public const ID_GENRE_CELLULE = 3;
     public const ID_GENRE_ETABLISSEMENT = 2;
@@ -506,7 +505,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return count($result);
     }
 
-    public function getNLastDossiers(int $idEtablissement, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    public function getNLastDossiers(int $idEtablissement): array
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
@@ -527,14 +526,14 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         // On balance le résultat sur la vue
         $results = [];
-        $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
-        $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
-        $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, $nbDossierAAfficher)->toArray();
+        $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, Service_Utils_DossiersMaxNumber::value())->toArray();
+        $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(0, Service_Utils_DossiersMaxNumber::value())->toArray();
+        $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(0, Service_Utils_DossiersMaxNumber::value())->toArray();
 
         return $results;
     }
 
-    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null, int $nbDossierAAfficher = self::NB_DOSSIERS_A_AFFICHER): array
+    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null): array
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
@@ -558,24 +557,24 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
         switch ($typeDossier) {
             case 'etudes':
-                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
 
                 break;
 
             case 'visites':
-                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
 
                 break;
 
             case 'autres':
-                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
 
                 break;
 
             default:
-                $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
-                $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
-                $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems($nbDossierAAfficher, 999999)->toArray();
+                $results['etudes'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', 1)->order('COALESCE(DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
+                $results['visites'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', [2, 3])->order('COALESCE(DATEVISITE_DOSSIER, DATECOMM_DOSSIER,DATEINSERT_DOSSIER) DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
+                $results['autres'] = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $idEtablissement)->setCriteria('d.TYPE_DOSSIER', $types_autre)->order('DATEINSERT_DOSSIER DESC')->run()->getAdapter()->getItems(Service_Utils_DossiersMaxNumber::value(), 999999)->toArray();
 
                 break;
         }

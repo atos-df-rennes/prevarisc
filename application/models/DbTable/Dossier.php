@@ -611,7 +611,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListeDossierFromDossier($idDossier)
     {
         $dossEtab = [];
-        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+        $nbdossiermax = Service_Utils_DossiersMaxNumber::value();
 
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])
@@ -643,7 +643,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getListeDossierFromDossierN($idDossier)
     {
         $dossEtab = [];
-        $nbdossiermax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+        $nbdossiermax = Service_Utils_DossiersMaxNumber::value();
 
         $select = $this->select()->setIntegrityCheck(false)
             ->from(['d' => 'dossier'])

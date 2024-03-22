@@ -526,7 +526,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->visites = $dossiers['visites'];
         $this->view->autres = $dossiers['autres'];
 
-        $this->view->nbElemMax = Service_Etablissement::NB_DOSSIERS_A_AFFICHER;
+        $this->view->nbElemMax = Service_Utils_DossiersMaxNumber::value();
         $this->view->nbEtudes = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes');
         $this->view->nbVisites = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'visites');
         $this->view->nbAutres = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres');
