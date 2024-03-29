@@ -31,16 +31,6 @@ parameters:
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$end\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$start\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
@@ -62,11 +52,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_DATECOMMISSION\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$TabNouvelleDate\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
@@ -257,11 +242,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nomComm\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nouvelleDate\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 

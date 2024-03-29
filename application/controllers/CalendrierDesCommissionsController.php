@@ -3,27 +3,27 @@
 class CalendrierDesCommissionsController extends Zend_Controller_Action
 {
     /**
-     * @var mixed|Service_DossierVerificationsTechniques
+     * @var Service_DossierVerificationsTechniques
      */
     public $serviceDescriptifDossier;
 
     /**
-     * @var mixed|Service_EtablissementDescriptif
+     * @var Service_EtablissementDescriptif
      */
     public $serviceDescriptifEtablissement;
 
     /**
-     * @var mixed|Service_DossierEffectifsDegagements
+     * @var Service_DossierEffectifsDegagements
      */
     public $serviceDossierEffectifsDegagements;
 
     /**
-     * @var mixed|Service_EtablissementEffectifsDegagements
+     * @var Service_EtablissementEffectifsDegagements
      */
     public $serviceEtablissementEffectifsDegagements;
 
     /**
-     * @var mixed|Service_Formulaire
+     * @var Service_Formulaire
      */
     public $serviceFormulaire;
 
@@ -247,10 +247,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     {
         $this->_helper->viewRenderer->setNoRender();
         // Permet la récupération des différents éléments du calendrier pour la commission concernée
-        $dateDebut = new Zend_Date(substr($this->_request->start, 0, -3), Zend_Date::TIMESTAMP);
+        $dateDebut = new Zend_Date(substr($this->getRequest()->getParam('start'), 0, -3), Zend_Date::TIMESTAMP);
         $dateDebut = $dateDebut->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
 
-        $dateFin = new Zend_Date(substr($this->_request->end, 0, -3), Zend_Date::TIMESTAMP);
+        $dateFin = new Zend_Date(substr($this->getRequest()->getParam('end'), 0, -3), Zend_Date::TIMESTAMP);
         $dateFin = $dateFin->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
 
         $dbDateCommission = new Model_DbTable_DateCommission();
@@ -282,10 +282,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
 
         // Permet la récupération des différents éléments du calendrier pour la commission concernée
-        $dateDebut = new Zend_Date(substr($this->_request->start, 0, -3), Zend_Date::TIMESTAMP);
+        $dateDebut = new Zend_Date(substr($this->getRequest()->getParam('start'), 0, -3), Zend_Date::TIMESTAMP);
         $dateDebut = $dateDebut->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
 
-        $dateFin = new Zend_Date(substr($this->_request->end, 0, -3), Zend_Date::TIMESTAMP);
+        $dateFin = new Zend_Date(substr($this->getRequest()->getParam('end'), 0, -3), Zend_Date::TIMESTAMP);
         $dateFin = $dateFin->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
 
         $dbDossierAffect = new Model_DbTable_DossierAffectation();
@@ -609,8 +609,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $newDate->COMMISSION_CONCERNE = $LigneComm->COMMISSION_CONCERNE;
                     $newDate->LIBELLE_DATECOMMISSION = $LigneComm->LIBELLE_DATECOMMISSION;
                     $newDate->save();
-                    $this->view->TabNouvelleDate = $newDate;
-                    $this->view->nouvelleDate = $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr');
+                    $this->view->assign('TabNouvelleDate', $newDate);
+                    $this->view->assign('nouvelleDate', $date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr'));
 
                     break;
 
