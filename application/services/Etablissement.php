@@ -533,7 +533,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $results;
     }
 
-    public function getDossiersAfterN(int $idEtablissement, string $typeDossier = null): array
+    public function getDossiersAfterN(int $idEtablissement, ?string $typeDossier = null): array
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
