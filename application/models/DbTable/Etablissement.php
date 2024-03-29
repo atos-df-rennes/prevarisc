@@ -385,7 +385,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     /**
      * @return array|int
      */
-    public function listeERPSansPreventionniste(bool $getCount = null)
+    public function listeERPSansPreventionniste(?bool $getCount = null)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement', $getCount);

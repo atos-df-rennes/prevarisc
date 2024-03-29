@@ -51,7 +51,7 @@ class View_Helper_MinifyHeadLink extends Zend_View_Helper_HeadLink
      *
      * @return Zend_View_Helper_HeadLink
      */
-    public function minifyHeadLink(array $attributes = null, $placement = Zend_View_Helper_Placeholder_Container_Abstract::APPEND)
+    public function minifyHeadLink(?array $attributes = null, $placement = Zend_View_Helper_Placeholder_Container_Abstract::APPEND)
     {
         return parent::headLink($attributes, $placement);
     }

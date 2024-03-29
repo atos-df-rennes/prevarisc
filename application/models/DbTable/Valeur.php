@@ -10,7 +10,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
      *  OU
      * Retourne la valeur à l'index spécifié d'un champ étant un enfant d'un champ `tableau`.
      */
-    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, int $idx = null): ?Zend_Db_Table_Row_Abstract
+    public function getByChampAndObject(int $idChamp, int $idObject, string $classObject, ?int $idx = null): ?Zend_Db_Table_Row_Abstract
     {
         $select = $this->getSelect($idChamp, $idObject, $classObject);
         null === $idx ? $select->where('v.idx IS NULL') : $select->where('v.idx = ?', $idx);

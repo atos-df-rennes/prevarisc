@@ -63,7 +63,7 @@ class Service_Valeur
         return $retourValeurs;
     }
 
-    public function insert(int $idChamp, int $idObject, string $classObject, $value, int $idx = null): void
+    public function insert(int $idChamp, int $idObject, string $classObject, $value, ?int $idx = null): void
     {
         if ('' !== $value) {
             $typeValeur = $this->getTypeValeur($idChamp);
@@ -96,7 +96,7 @@ class Service_Valeur
         }
     }
 
-    public function update(int $idChamp, $valueInDB, $newValue, int $idx = null): void
+    public function update(int $idChamp, $valueInDB, $newValue, ?int $idx = null): void
     {
         if ('' === $newValue) {
             $valueInDB->delete();
