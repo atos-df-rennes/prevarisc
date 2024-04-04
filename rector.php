@@ -8,6 +8,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\ValueObject\PhpVersion;
+use Utils\Rector\Rector\DynamicViewPropertyToAssignRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -27,5 +28,8 @@ return RectorConfig::configure()
         RemoveAlwaysTrueIfConditionRector::class => [
             __DIR__.'/application/services/Descriptif.php',
         ],
+    ])
+    ->withRules([
+        DynamicViewPropertyToAssignRector::class,
     ])
 ;
