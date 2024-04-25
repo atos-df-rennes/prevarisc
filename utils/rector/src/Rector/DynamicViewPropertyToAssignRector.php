@@ -9,12 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-/**
- * @see \Utils\Rector\Tests\Rector\DynamicViewPropertyToAssignRector\DynamicViewPropertyToAssignRectorTest
- */
 final class DynamicViewPropertyToAssignRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition

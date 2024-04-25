@@ -35,19 +35,19 @@ class PieceJointeController extends Zend_Controller_Action
 
         // Cas dossier
         if ('dossier' == $this->_request->type) {
-            $this->view->type = 'dossier';
-            $this->view->identifiant = $this->_request->id;
-            $this->view->pjcomm = $this->_request->pjcomm;
+            $this->view->assign('type', 'dossier');
+            $this->view->assign('identifiant', $this->_request->id);
+            $this->view->assign('pjcomm', $this->_request->pjcomm);
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
-            $this->view->verrou = $this->_request->verrou;
+            $this->view->assign('verrou', $this->_request->verrou);
             $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement
-            $this->view->type = 'etablissement';
-            $this->view->identifiant = $this->_request->id;
+            $this->view->assign('type', 'etablissement');
+            $this->view->assign('identifiant', $this->_request->id);
             $listePj = $DBused->affichagePieceJointe('etablissementpj', 'etablissementpj.ID_ETABLISSEMENT', $this->_request->id);
         } elseif ('dateCommission' == $this->_request->type) { // Cas d'une date de commission
-            $this->view->type = 'dateCommission';
-            $this->view->identifiant = $this->_request->id;
+            $this->view->assign('type', 'dateCommission');
+            $this->view->assign('identifiant', $this->_request->id);
             $listePj = $DBused->affichagePieceJointe('datecommissionpj', 'datecommissionpj.ID_DATECOMMISSION', $this->_request->id);
         } else { // Cas par défaut
             $listePj = [];
@@ -67,8 +67,8 @@ class PieceJointeController extends Zend_Controller_Action
         );
 
         // On envoi la liste des PJ dans la vue
-        $this->view->listePj = $filteredListePj;
-        $this->view->displayDownloadButton = $displayDownloadButton;
+        $this->view->assign('listePj', $filteredListePj);
+        $this->view->assign('displayDownloadButton', $displayDownloadButton);
     }
 
     public function getAction()
@@ -144,13 +144,13 @@ class PieceJointeController extends Zend_Controller_Action
     public function formAction()
     {
         // Placement
-        $this->view->type = $this->_getParam('type');
-        $this->view->identifiant = $this->_getParam('id');
+        $this->view->assign('type', $this->_getParam('type'));
+        $this->view->assign('identifiant', $this->_getParam('id'));
 
         // Ici suivant le type on change toutes les infos nécessaires pour lier aux différents établissements, dossiers
         if ('dossier' == $this->view->type) {
             $DBdossier = new Model_DbTable_Dossier();
-            $this->view->listeEtablissement = $DBdossier->getEtablissementDossier((int) $this->_getParam('id'));
+            $this->view->assign('listeEtablissement', $DBdossier->getEtablissementDossier((int) $this->_getParam('id')));
         }
     }
 
@@ -425,18 +425,18 @@ class PieceJointeController extends Zend_Controller_Action
             $file_path = $this->store->getFilePath($pj, $this->_request->type, $this->_request->id);
         }
 
-        $this->view->exists = file_exists($file_path);
+        $this->view->assign('exists', file_exists($file_path));
 
         if ($this->view->exists) {
             // Données de la pj
-            $this->view->html = $this->view->partial('piece-jointe/display.phtml', [
+            $this->view->assign('html', $this->view->partial('piece-jointe/display.phtml', [
                 'path' => $this->getHelper('url')->url(['controller' => 'piece-jointe', 'id' => $this->_request->id, 'action' => 'get', 'idpj' => $this->_request->idpj, 'type' => $this->_request->type]),
                 'listePj' => $listePj,
                 'droit_ecriture' => true,
                 'type' => $this->_request->type,
                 'id' => $this->_request->id,
                 'isPlatau' => 'dossier' === $this->getRequest()->getParam('type') && $modelDossier->isPlatau($dossier['ID_DOSSIER']),
-            ]);
+            ]));
         }
     }
 

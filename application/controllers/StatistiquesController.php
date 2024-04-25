@@ -25,22 +25,22 @@ class StatistiquesController extends Zend_Controller_Action
     // Accueil
     public function indexAction()
     {
-        $this->view->title = 'Statistiques';
-        $this->view->liste = $this->liste;
+        $this->view->assign('title', 'Statistiques');
+        $this->view->assign('liste', $this->liste);
     }
 
     public function extractionProcess($champs_supplementaires, $noms_des_colonnes_a_afficher, Model_DbTable_Statistiques $requete)
     {
         // Si on interroge l'action en json, on demande les champs supplémentaires
         if ('json' == $this->_getParam('format')) {
-            $this->view->result = $champs_supplementaires;
+            $this->view->assign('result', $champs_supplementaires);
         } else {
-            $this->view->columns = $noms_des_colonnes_a_afficher;
-            $this->view->results = $requete->go();
-            $this->view->titre = [
+            $this->view->assign('columns', $noms_des_colonnes_a_afficher);
+            $this->view->assign('results', $requete->go());
+            $this->view->assign('titre', [
                 'normalize' => $this->_request->getActionName(),
                 'full' => $this->liste[$this->_request->getActionName()],
-            ];
+            ]);
         }
     }
 
@@ -51,7 +51,7 @@ class StatistiquesController extends Zend_Controller_Action
 
         if ('json' != $this->_getParam('format')) {
             $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->resume = 'Liste ERP en exploitation connus soumis à contrôle à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            $this->view->assign('resume', 'Liste ERP en exploitation connus soumis à contrôle à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -84,7 +84,7 @@ class StatistiquesController extends Zend_Controller_Action
 
         if ('json' != $this->_getParam('format')) {
             $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->resume = 'Liste ERP en exploitation sous avis défavorable à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            $this->view->assign('resume', 'Liste ERP en exploitation sous avis défavorable à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -140,7 +140,7 @@ class StatistiquesController extends Zend_Controller_Action
 
         if ('json' != $this->_getParam('format')) {
             $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->resume = 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            $this->view->assign('resume', 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -191,7 +191,7 @@ class StatistiquesController extends Zend_Controller_Action
 
         if ('json' != $this->_getParam('format')) {
             $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->resume = 'Liste ERP avec des visites periodiques à partir du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+            $this->view->assign('resume', 'Liste ERP avec des visites periodiques à partir du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -255,7 +255,7 @@ class StatistiquesController extends Zend_Controller_Action
                     $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Modifier la periodicité</a>";
                 }
             }
-            $this->view->results = $results;
+            $this->view->assign('results', $results);
             $this->render('extraction');
         }
     }

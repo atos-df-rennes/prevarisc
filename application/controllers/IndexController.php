@@ -68,9 +68,9 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
-        $this->view->user = $user;
-        $this->view->blocs = $blocs;
-        $this->view->blocsOrder = $blocsOrder;
+        $this->view->assign('user', $user);
+        $this->view->assign('blocs', $blocs);
+        $this->view->assign('blocsOrder', $blocsOrder);
         $this->view->inlineScript()->appendFile('/js/jquery.packery.pkgd.min.js');
         $this->_helper->layout->setLayout('index');
         $this->render('index');
@@ -103,7 +103,7 @@ class IndexController extends Zend_Controller_Action
             ];
         }
 
-        $this->view->bloc = $bloc;
+        $this->view->assign('bloc', $bloc);
     }
 
     public function addMessageAction()
@@ -111,7 +111,7 @@ class IndexController extends Zend_Controller_Action
         $service_feed = new Service_Feed();
         $service_user = new Service_User();
 
-        $this->view->groupes = $service_user->getAllGroupes();
+        $this->view->assign('groupes', $service_user->getAllGroupes());
         if ($this->_request->isPost()) {
             try {
                 $service_feed->addMessage($this->_request->getParam('type'), $this->_request->getParam('text'), Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], $this->_request->getParam('conf'));

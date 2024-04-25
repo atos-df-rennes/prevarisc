@@ -10,7 +10,7 @@ class FusionDesCommunesController extends Zend_Controller_Action
     public function indexAction()
     {
         $form = new Form_FusionCommunes();
-        $this->view->form = $form;
+        $this->view->assign('form', $form);
 
         /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
@@ -25,15 +25,15 @@ class FusionDesCommunesController extends Zend_Controller_Action
             }
 
             $service = new Service_FusionCommand();
-            $this->view->hasErrors = $service->mergeArrayCommune(
+            $this->view->assign('hasErrors', $service->mergeArrayCommune(
                 json_decode(
                     file_get_contents($form->fusioncommunes->getFileName())
                 )
-            );
+            ));
 
             unlink($form->fusioncommunes->getFileName());
 
-            $this->view->processComplete = true;
+            $this->view->assign('processComplete', true);
         }
     }
 }
