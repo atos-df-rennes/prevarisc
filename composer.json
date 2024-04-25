@@ -27,7 +27,7 @@
         "cs-check": "/usr/bin/php81 tools/vendor/bin/rector --dry-run && /usr/bin/php81 tools/vendor/bin/php-cs-fixer fix --dry-run",
         "cs-fix": "/usr/bin/php81 tools/vendor/bin/rector && /usr/bin/php81 tools/vendor/bin/php-cs-fixer fix",
         "analyse": "/usr/bin/php81 tools/vendor/bin/phpstan analyse --memory-limit=-1",
-        "generate-baseline": "/usr/bin/php81 tools/vendor/bin/phpstan --generate-baseline",
+        "generate-baseline": "/usr/bin/php81 tools/vendor/bin/phpstan --memory-limit=-1 --generate-baseline",
         "test": "php vendor/bin/phpunit --bootstrap tests/bootstrap/indexTest.php --testdox tests/",
         "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/"
     },
