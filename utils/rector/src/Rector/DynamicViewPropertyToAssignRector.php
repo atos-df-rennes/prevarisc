@@ -61,7 +61,13 @@ final class DynamicViewPropertyToAssignRector extends AbstractRector
                 return null;
             }
 
-            $shouldBeModified = true;
+            $this->traverseNodesWithCallable($leftOperand, function (Node $singleLeftOperand) use (&$shouldBeModified) {
+                if (!$singleLeftOperand instanceof PropertyFetch) {
+                    return null;
+                }
+
+                $shouldBeModified = true;
+            });
         });
 
         if ($shouldBeModified) {
