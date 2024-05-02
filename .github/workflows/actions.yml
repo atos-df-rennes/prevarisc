@@ -49,9 +49,6 @@ jobs:
         composer-options: "--prefer-dist"
         working-directory: "tools"
 
-    - name: Load custom rules
-      run: composer dump-autoload
-
     - name: Rector
       run: tools/vendor/bin/rector process --dry-run
   
