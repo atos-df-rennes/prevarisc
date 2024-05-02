@@ -1177,7 +1177,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
         }
 
-        $dbDossier = new Model_DbTable_Dossier();
         $model_etablissement = new Model_DbTable_Etablissement();
 
         foreach ($listeDossiers as $key => $dossier) {
