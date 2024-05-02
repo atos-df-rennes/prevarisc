@@ -49,6 +49,9 @@ jobs:
         composer-options: "--prefer-dist"
         working-directory: "tools"
 
+    - name: Autoload
+      run: composer dump-autoload -o
+
     - name: Rector
       run: tools/vendor/bin/rector process --dry-run
   
