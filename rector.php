@@ -11,6 +11,9 @@ use Rector\ValueObject\PhpVersion;
 use Utils\Rector\Rector\DynamicViewPropertyToAssignRector;
 
 return RectorConfig::configure()
+    ->withAutoloadPaths([
+        __DIR__.'/utils/rector/src/Rector/DynamicViewPropertyToAssignRector.php',
+    ])
     ->withPaths([
         __DIR__.'/application',
     ])

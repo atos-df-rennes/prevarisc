@@ -37,9 +37,8 @@
         }
     },
     "autoload-dev": {
-        "psr-4": {
-            "Utils\\Rector\\": "utils/rector/src",
-            "Utils\\Rector\\Tests\\": "utils/rector/tests"
-        }
+        "files": [
+            "utils/rector/src/Rector/DynamicViewPropertyToAssignRector.php"
+        ]
     }
 }

@@ -11,11 +11,5 @@
         "allow-plugins": {
             "phpstan/extension-installer": true
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Utils\\Rector\\": "utils/rector/src",
-            "Utils\\Rector\\Tests\\": "utils/rector/tests"
-        }
     }
 }
