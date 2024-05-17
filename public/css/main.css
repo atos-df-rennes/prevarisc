@@ -1268,3 +1268,9 @@ dl.champ_effectif_camping dd input {
 .control-label.no-top-padding {
     padding-top: 0;
 }
+
+.action-buttons {
+    padding: 10px 0 10px 16px;
+    background-color: white;
+    height: fit-content;
+}
