@@ -169,11 +169,9 @@ function loadBloc($bloc) {
 function loadStickyButtons() {
     const headerHeight = document.querySelector('.navbar.navbar-fixed-top').clientHeight
 
-    document.querySelectorAll('.action-buttons').forEach((actionButtons) => {
-        actionButtons.style.position = 'sticky'
+    document.querySelectorAll('.action-buttons').forEach((actionButton) => {
+        actionButton.style.position = 'sticky'
         // /!\ Il faut mettre des ";" après les template literals
-        actionButtons.style.top = `${headerHeight}px`;
-        actionButtons.style.padding = '10px 0 10px 16px'
-        actionButtons.style.backgroundColor = 'white'
+        actionButton.style.top = `${headerHeight}px`;
     })
 }
