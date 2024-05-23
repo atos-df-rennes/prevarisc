@@ -799,13 +799,18 @@ try {
         addChamp($segmentAvisDerogations, 'avis', $avisDerogation['LIBELLE_AVIS']);
         addChamp($segmentAvisDerogations, 'identifiantdossierleve', $avisDerogation['ID_DOSSIER_LIE']);
 
-        if (true === boolval($avisDerogation['DISPLAY_HISTORIQUE'])) {
-            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Oui';
-        } else {
-            $avisDerogation['DISPLAY_HISTORIQUE'] = 'Non';
+        $date = null;
+        if (null !== $avisDerogation['DATECOMM_DOSSIER']) {
+            $date = new Zend_Date($avisDerogation['DATECOMM_DOSSIER'], Zend_Date::DATES);
+        } elseif (null !== $avisDerogation['DATEVISITE_DOSSIER']) {
+            $date = new Zend_Date($avisDerogation['DATEVISITE_DOSSIER'], Zend_Date::DATES);
         }
 
-        addChamp($segmentAvisDerogations, 'affichagehistorique', $avisDerogation['DISPLAY_HISTORIQUE']);
+        if ($date instanceof Zend_Date) {
+            $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+        }
+
+        addChamp($segmentAvisDerogations, 'date', $date);
 
         $segmentAvisDerogations->merge();
     }

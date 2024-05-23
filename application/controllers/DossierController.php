@@ -2216,7 +2216,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('infosDossier', $DBdossier->find($idDossier)->current());
 
         // Avis & Dérogations
-        $this->view->assign('avisDerogations', $DBdossier->getListAvisDerogationsFromDossier($idDossier));
+        $this->view->assign('avisDerogations', $model_etablissement->getListAvisDerogationsEtablissement($idEtab));
 
         // Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
