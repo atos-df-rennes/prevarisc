@@ -256,13 +256,13 @@ function getCapabilitiesLayers(parser, format, baseFormat, result) {
     return layersToReturn
 }
 
-function putMarkerAt(viewer, center, nbCouches) {
-    // Si on a déjà un marker, on le retire
-    // On vérifie sur nbCouches + 1 car une couche (photographies aériennes) est ajoutée par défaut
-    if (viewer.getLayers().getLength() !== (nbCouches + 1)) {
-        var toRemove = viewer.getLayers().item(viewer.getLayers().getLength()-1);
-        viewer.removeLayer(toRemove);
-    }
+function putMarkerAt(viewer, center) {
+    // Retrait du marqueur si déjà présent
+    viewer.getLayers().forEach((layer) => {
+        if (layer.get('source').layer_ === undefined) {
+            viewer.removeLayer(layer)
+        }
+    })
 
     var coordinates = ol.proj.fromLonLat([center[0],center[1]]);
     var point = new ol.geom.Point(coordinates);
@@ -295,7 +295,7 @@ function updateCoordinates(center, sourceProj, destProj) {
     return lonlat;
 }
 
-function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, projection, viewer, nbCouches) {
+function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, projection, viewer) {
     Gp.Services.geocode({
         location: adresse,
         filterOptions: [{
@@ -313,7 +313,7 @@ function geocodeWithJsAutoconf(geoContainerId, adresse, filterOptionsType, proje
             $(`#${geoContainerId}`).css('visibility', 'visible');
             // Changement des coordonnées et du marker 
             lonlat = updateCoordinates([viewer.getCenter().x, viewer.getCenter().y], 'EPSG:3857', 'EPSG:4326');
-            putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
+            putMarkerAt(viewer.getLibMap(), lonlat);
         },
         onFailure: function() {
             console.error('Erreur du service de géocodage ! Veuillez réessayer');
