@@ -28,7 +28,7 @@ class ChangementController extends Zend_Controller_Action
             }
         }
 
-        $this->view->changements = $serviceChangement->getAll();
+        $this->view->assign('changements', $serviceChangement->getAll());
     }
 
     public function alerteformAction()
@@ -61,24 +61,24 @@ class ChangementController extends Zend_Controller_Action
                 $user['MAIL_UTILISATEURINFORMATIONS']
             );
         }
-        $this->view->tos = implode(', ', $tos);
-        $this->view->mails = implode(';', $mails);
+        $this->view->assign('tos', implode(', ', $tos));
+        $this->view->assign('mails', implode(';', $mails));
 
-        $this->view->objet = $serviceChangement->getObjet(
+        $this->view->assign('objet', $serviceChangement->getObjet(
             (int) $changement['ID_CHANGEMENT'],
             $etablissement
-        );
+        ));
 
-        $this->view->message = $serviceChangement->convertMessage(
+        $this->view->assign('message', $serviceChangement->convertMessage(
             $changement['MESSAGE_CHANGEMENT'],
             $etablissement
-        );
+        ));
     }
 
     public function balisesAction()
     {
         $serviceChangement = new Service_Changement();
-        $this->view->balises = $serviceChangement->getBalises();
+        $this->view->assign('balises', $serviceChangement->getBalises());
     }
 
     public function sendmailalerteAction()

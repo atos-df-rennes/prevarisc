@@ -9,10 +9,10 @@ class UsersController extends Zend_Controller_Action
         $service_user = new Service_User();
         $service_search = new Service_Search();
 
-        $this->view->users = $service_search->users(null, null, $this->hasParam('gid') ? $this->_request->getParam('gid') : null, true, 1000)['results'];
-        $this->view->inactives_users = $service_search->users(null, null, $this->hasParam('gid') ? $this->_request->getParam('gid') : null, false, 1000)['results'];
+        $this->view->assign('users', $service_search->users(null, null, $this->hasParam('gid') ? $this->_request->getParam('gid') : null, true, 1000)['results']);
+        $this->view->assign('inactives_users', $service_search->users(null, null, $this->hasParam('gid') ? $this->_request->getParam('gid') : null, false, 1000)['results']);
 
-        $this->view->groupes = $service_user->getAllGroupes();
+        $this->view->assign('groupes', $service_user->getAllGroupes());
     }
 
     public function editAction()
@@ -24,18 +24,18 @@ class UsersController extends Zend_Controller_Action
         $service_commission = new Service_Commission();
         $service_adresse = new Service_Adresse();
 
-        $this->view->user = $service_user->find($this->_request->getParam('uid'));
-        $this->view->commissions = $service_commission->getAll();
-        $this->view->groupements = $service_groupement->findGroupementAndGroupementType();
-        $this->view->fonctions = $service_user->getAllFonctions();
-        $this->view->communes = $service_adresse->getAllCommunes();
-        $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = ['LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
+        $this->view->assign('user', $service_user->find($this->_request->getParam('uid')));
+        $this->view->assign('commissions', $service_commission->getAll());
+        $this->view->assign('groupements', $service_groupement->findGroupementAndGroupementType());
+        $this->view->assign('fonctions', $service_user->getAllFonctions());
+        $this->view->assign('communes', $service_adresse->getAllCommunes());
+        $this->view->assign('groupes', $service_user->getAllGroupes());
+        $this->view->assign('params', ['LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
             || getenv('PREVARISC_NTLM_ENABLED')
             || getenv('PREVARISC_CAS_ENABLED'),
-        ];
+        ]);
 
-        $this->view->add = false;
+        $this->view->assign('add', false);
 
         if ($this->_request->isPost()) {
             try {
@@ -58,17 +58,17 @@ class UsersController extends Zend_Controller_Action
         $service_commission = new Service_Commission();
         $service_adresse = new Service_Adresse();
 
-        $this->view->commissions = $service_commission->getAll();
-        $this->view->groupements = $service_groupement->findGroupementAndGroupementType();
-        $this->view->fonctions = $service_user->getAllFonctions();
-        $this->view->communes = $service_adresse->getAllCommunes();
-        $this->view->groupes = $service_user->getAllGroupes();
-        $this->view->params = ['LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
+        $this->view->assign('commissions', $service_commission->getAll());
+        $this->view->assign('groupements', $service_groupement->findGroupementAndGroupementType());
+        $this->view->assign('fonctions', $service_user->getAllFonctions());
+        $this->view->assign('communes', $service_adresse->getAllCommunes());
+        $this->view->assign('groupes', $service_user->getAllGroupes());
+        $this->view->assign('params', ['LDAP_ACTIF' => getenv('PREVARISC_LDAP_ENABLED')
             || getenv('PREVARISC_NTLM_ENABLED')
             || getenv('PREVARISC_CAS_ENABLED'),
-        ];
+        ]);
 
-        $this->view->add = true;
+        $this->view->assign('add', true);
 
         if ($this->_request->isPost()) {
             try {
@@ -94,9 +94,9 @@ class UsersController extends Zend_Controller_Action
         $model_groupes_privilege = new Model_DbTable_GroupePrivilege();
 
         // On envoit les données sur la vue
-        $this->view->rowset_groupes = $model_groupes->fetchAll();
-        $this->view->rowset_resources = $model_resource->fetchAll();
-        $this->view->rowset_groupes_privilege = $model_groupes_privilege->fetchAll()->toArray();
+        $this->view->assign('rowset_groupes', $model_groupes->fetchAll());
+        $this->view->assign('rowset_resources', $model_resource->fetchAll());
+        $this->view->assign('rowset_groupes_privilege', $model_groupes_privilege->fetchAll()->toArray());
 
         // Si des données sont envoyées, on procède à leur traitement
         if ($this->_request->isPost()) {
@@ -150,9 +150,9 @@ class UsersController extends Zend_Controller_Action
 
         $service_user = new Service_User();
 
-        $this->view->group = $service_user->getGroup($this->_request->gid);
+        $this->view->assign('group', $service_user->getGroup($this->_request->gid));
 
-        $this->view->add = false;
+        $this->view->assign('add', false);
 
         if ($this->_request->isPost()) {
             try {
@@ -172,7 +172,7 @@ class UsersController extends Zend_Controller_Action
 
         $service_user = new Service_User();
 
-        $this->view->add = true;
+        $this->view->assign('add', true);
 
         if ($this->_request->isPost()) {
             try {
@@ -194,7 +194,7 @@ class UsersController extends Zend_Controller_Action
 
         $service_user = new Service_User();
 
-        $this->view->add = true;
+        $this->view->assign('add', true);
 
         try {
             $service_user->deleteGroup($this->_request->gid);
@@ -237,16 +237,16 @@ class UsersController extends Zend_Controller_Action
             $type_sort[$types_sort[$type['ID_TYPE']]['LIBELLE_TYPE']][] = $type;
         }
 
-        $this->view->categories = $service_categorie->getAll();
-        $this->view->types = $type_sort;
-        $this->view->types_dossier = $service_dossier->getAllTypes();
-        $this->view->natures_dossier = $service_dossier->getAllNatures();
-        $this->view->genres = $service_genre->getAll();
+        $this->view->assign('categories', $service_categorie->getAll());
+        $this->view->assign('types', $type_sort);
+        $this->view->assign('types_dossier', $service_dossier->getAllTypes());
+        $this->view->assign('natures_dossier', $service_dossier->getAllNatures());
+        $this->view->assign('genres', $service_genre->getAll());
         unset($this->view->genres[0]);
-        $this->view->resources = $model_resource->fetchAll();
-        $this->view->familles = $service_famille->getAll();
-        $this->view->classements = $service_genre->getClassements();
-        $this->view->classes = $service_classe->getAll();
+        $this->view->assign('resources', $model_resource->fetchAll());
+        $this->view->assign('familles', $service_famille->getAll());
+        $this->view->assign('classements', $service_genre->getClassements());
+        $this->view->assign('classes', $service_classe->getAll());
     }
 
     public function addRessourceSpecialiseeAction()

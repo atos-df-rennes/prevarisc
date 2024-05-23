@@ -8,18 +8,18 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
 
         // on commence par afficher tous les texte applicables regroupés par leurs type
         $dbTextesAppl = new Model_DbTable_TextesAppl();
-        $this->view->listeTextesAppl = $dbTextesAppl->recupTextesAppl();
+        $this->view->assign('listeTextesAppl', $dbTextesAppl->recupTextesAppl());
     }
 
     public function formtexteapplAction()
     {
         // Cas d'une création d'un texte
         $dbTypeTextesAppl = new Model_DbTable_TypeTextesAppl();
-        $this->view->listeType = $dbTypeTextesAppl->getType();
+        $this->view->assign('listeType', $dbTypeTextesAppl->getType());
         if ($this->_getParam('id')) {
-            $this->view->idTexteAppl = $this->_getParam('id');
+            $this->view->assign('idTexteAppl', $this->_getParam('id'));
             $dbTextesAppl = new Model_DbTable_TextesAppl();
-            $this->view->texteEdit = $dbTextesAppl->find($this->_getParam('id'));
+            $this->view->assign('texteEdit', $dbTextesAppl->find($this->_getParam('id')));
         }
     }
 

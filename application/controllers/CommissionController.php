@@ -55,7 +55,7 @@ class CommissionController extends Zend_Controller_Action
         // Les modèles
         $model_regles = new Model_DbTable_CommissionRegle();
         // On récupère les règles de la commission
-        $this->view->array_regles = $model_regles->get($this->_request->id_commission);
+        $this->view->assign('array_regles', $model_regles->get($this->_request->id_commission));
     }
 
     public function addRegleAction()
@@ -289,7 +289,7 @@ class CommissionController extends Zend_Controller_Action
         $model_membres = new Model_DbTable_CommissionMembre();
 
         // On récupère les règles de la commission
-        $this->view->array_membres = $model_membres->get($this->_request->id_commission);
+        $this->view->assign('array_membres', $model_membres->get($this->_request->id_commission));
 
         // On met le libellé du type dans le tableau des activités
         $types = $model_types->fetchAll()->toArray();
@@ -492,7 +492,7 @@ class CommissionController extends Zend_Controller_Action
         $model_membres = new Model_DbTable_CommissionMembre();
 
         // On récupère la liste des membres de la commission
-        $this->view->rowset_membres = $model_membres->fetchAll('ID_COMMISSION = '.$this->_request->id_commission);
+        $this->view->assign('rowset_membres', $model_membres->fetchAll('ID_COMMISSION = '.$this->_request->id_commission));
     }
 
     // Courriers types des membres de la commission
@@ -504,7 +504,7 @@ class CommissionController extends Zend_Controller_Action
         $commission = $model_commission->find($this->_request->id_commission)->current();
 
         // On récupère la liste des membres de la commission
-        $this->view->name_document_cr = $commission->DOCUMENT_CR;
+        $this->view->assign('name_document_cr', $commission->DOCUMENT_CR);
     }
 
     // Courriers types des membres de la commission

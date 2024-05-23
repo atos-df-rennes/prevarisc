@@ -44,7 +44,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         closedir($dirVer);
         sort($fichierVer);
 
-        $this->view->fichierVer = $fichierVer;
+        $this->view->assign('fichierVer', $fichierVer);
 
         // Récupération de l'ensemble des documents des différentes commissions
         foreach ($liste_commission as $var => $commission) {
@@ -72,15 +72,15 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             $liste_commission[$var]['listeFichier'] = $fichier;
         }
 
-        $this->view->path = DATA_PATH.'/uploads/documents';
-        $this->view->liste_commission = $liste_commission;
+        $this->view->assign('path', DATA_PATH.'/uploads/documents');
+        $this->view->assign('liste_commission', $liste_commission);
     }
 
     public function formAction()
     {
         $service_commission = new Service_Commission();
 
-        $this->view->liste_commission = $service_commission->getAll();
+        $this->view->assign('liste_commission', $service_commission->getAll());
     }
 
     public function addAction()

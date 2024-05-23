@@ -13,7 +13,7 @@ class SessionController extends Zend_Controller_Action
         $username = null;
         $password = '';
         $user = null;
-        $this->view->form = $form;
+        $this->view->assign('form', $form);
 
         try {
             // Adaptateur CAS

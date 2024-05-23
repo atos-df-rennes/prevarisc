@@ -11,7 +11,7 @@ class GestionDesCommunesController extends Zend_Controller_Action
         $commune = new Model_DbTable_AdresseCommune();
 
         // Liste des villes pour le select
-        $this->view->rowset_communes = $commune->fetchAll(null, 'LIBELLE_COMMUNE');
+        $this->view->assign('rowset_communes', $commune->fetchAll(null, 'LIBELLE_COMMUNE'));
     }
 
     public function displayAction()
@@ -22,12 +22,12 @@ class GestionDesCommunesController extends Zend_Controller_Action
 
         // On récupère la commune
         $commune = $DB_communes->find($this->_request->numinsee)->current();
-        $this->view->commune = $commune;
+        $this->view->assign('commune', $commune);
 
         // On envoie le tout sur la vue
-        $this->view->user_info = $DB_informations->find($commune->ID_UTILISATEURINFORMATIONS)->current();
+        $this->view->assign('user_info', $DB_informations->find($commune->ID_UTILISATEURINFORMATIONS)->current());
 
-        $this->view->ext = $this->_request->ext;
+        $this->view->assign('ext', $this->_request->ext);
     }
 
     public function saveAction()

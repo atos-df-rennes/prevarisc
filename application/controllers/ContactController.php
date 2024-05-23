@@ -19,13 +19,13 @@ class ContactController extends Zend_Controller_Action
     public function indexAction()
     {
         $DB_contact = new Model_DbTable_UtilisateurInformations();
-        $this->view->contacts = $DB_contact->getContact($this->_request->item, $this->_request->id);
+        $this->view->assign('contacts', $DB_contact->getContact($this->_request->item, $this->_request->id));
 
         // Placement
-        $this->view->item = $this->_request->item;
-        $this->view->id = $this->_request->id;
-        $this->view->verrou = $this->_request->verrou;
-        $this->view->ajax = $this->_request->ajax;
+        $this->view->assign('item', $this->_request->item);
+        $this->view->assign('id', $this->_request->id);
+        $this->view->assign('verrou', $this->_request->verrou);
+        $this->view->assign('ajax', $this->_request->ajax);
 
         // Si on est dans un établissement, on cherche les contacts des ets parents
         if ('etablissement' == $this->_request->item) {
@@ -43,30 +43,30 @@ class ContactController extends Zend_Controller_Action
                     }
                 }
             }
-            $this->view->contacts_parent = $array;
+            $this->view->assign('contacts_parent', $array);
         }
 
         // Taille des cases
-        $this->view->size = ('dossier' == $this->_request->item) ? 3 : 4;
+        $this->view->assign('size', ('dossier' == $this->_request->item) ? 3 : 4);
     }
 
     public function formAction()
     {
         // On récupère la liste des fonctions des contacts
         $DB_contactfonction = new Model_DbTable_Fonction();
-        $this->view->contact_fonction_list = $DB_contactfonction->fetchAll()->toArray();
+        $this->view->assign('contact_fonction_list', $DB_contactfonction->fetchAll()->toArray());
 
         // On récupère la liste des civilités
         $DB_civilite = new Model_DbTable_UtilisateurCivilite();
-        $this->view->civilite_list = $DB_civilite->fetchAll()->toArray();
+        $this->view->assign('civilite_list', $DB_civilite->fetchAll()->toArray());
 
         // Groupes
         $DB_groupe = new Model_DbTable_Groupe();
-        $this->view->groupes = $DB_groupe->fetchAll()->toArray();
+        $this->view->assign('groupes', $DB_groupe->fetchAll()->toArray());
 
         // Placement
-        $this->view->item = $this->_request->item;
-        $this->view->id = $this->_request->id;
+        $this->view->assign('item', $this->_request->item);
+        $this->view->assign('id', $this->_request->id);
     }
 
     public function addAction()
@@ -154,7 +154,7 @@ class ContactController extends Zend_Controller_Action
             $DB_informations = new Model_DbTable_UtilisateurInformations();
             $DB_contact = new Model_DbTable_EtablissementContact();
             $row = $DB_informations->find($this->_request->id)->current();
-            $this->view->user_info = $row;
+            $this->view->assign('user_info', $row);
 
             if ([] !== $_POST) {
                 $this->_helper->viewRenderer->setNoRender(); // On desactive la vue
@@ -265,6 +265,6 @@ class ContactController extends Zend_Controller_Action
     public function getAction()
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
-        $this->view->resultats = $DB_informations->getAllContacts($this->_request->q);
+        $this->view->assign('resultats', $DB_informations->getAllContacts($this->_request->q));
     }
 }

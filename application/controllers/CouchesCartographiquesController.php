@@ -14,18 +14,18 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
 
-        $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->serviceCarto = new Service_Carto();
     }
 
     public function listAction()
     {
-        $this->view->couches_cartographiques = $this->serviceCarto->getAll();
+        $this->view->assign('couches_cartographiques', $this->serviceCarto->getAll());
 
-        $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
-        $this->view->key_googlemap = getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY');
-        $this->view->default_lon = getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517';
-        $this->view->default_lat = getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818';
+        $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
+        $this->view->assign('key_googlemap', getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY'));
+        $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
+        $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
     }
 
     public function addAction()
@@ -45,7 +45,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function addCoucheIgnAction(): void
     {
-        $this->view->key_ign = explode(',', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_ign', explode(',', getenv('PREVARISC_PLUGIN_IGNKEY')));
         $this->view->assign('formats', ['wmts', 'wms raster', 'wms vecteur']);
 
         $this->addAction();
@@ -54,7 +54,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
     public function editAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $this->view->row = $this->serviceCarto->findById($id);
+        $this->view->assign('row', $this->serviceCarto->findById($id));
 
         if ($this->_request->isPost()) {
             try {
@@ -88,7 +88,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function changeOrderAction(): void
     {
-        $this->view->couches_cartographiques = $this->serviceCarto->getAll();
+        $this->view->assign('couches_cartographiques', $this->serviceCarto->getAll());
 
         $request = $this->getRequest();
         if ($request->isPost()) {

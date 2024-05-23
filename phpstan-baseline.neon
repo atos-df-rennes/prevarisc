@@ -31,16 +31,6 @@ parameters:
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$end\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$start\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
 			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
@@ -66,243 +56,8 @@ parameters:
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$TabNouvelleDate\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_commissions\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionId\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionInfos\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionsListe\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateAjoutee\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateAjouteeInput\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateClick\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateComm\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommD\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommDetail\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommF\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommission\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateFr\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateSelectD\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateSelectF\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$do\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierComm\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$first\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$heureDeb\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idComm\\.$#"
-			count: 5
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idParam\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTypeSelect\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$informationsMembre\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosCommission\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosCommissionType\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDateComm\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_admin\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_view_all\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$items\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleCom\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleDateComm\\.$#"
 			count: 3
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleType\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeCommType\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeCommunes\\.$#"
-			count: 2
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDates\\.$#"
-			count: 3
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDossierNonAffect\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$membresFiles\\.$#"
-			count: 4
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nomComm\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nouvelleDate\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$recupCommLiees\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$title\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeComLibelle\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeComSelect\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeCommission\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeDoss\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$updateDateComm\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$url_webcal\\.$#"
-			count: 1
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
@@ -332,36 +87,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Request_Abstract\\:\\:\\$id\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$balises\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$changements\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$mails\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$message\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$objet\\.$#"
-			count: 1
-			path: application/controllers/ChangementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$tos\\.$#"
 			count: 1
 			path: application/controllers/ChangementController.php
 
@@ -441,21 +166,6 @@ parameters:
 			path: application/controllers/CommissionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_regles\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$name_document_cr\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_membres\\.$#"
-			count: 1
-			path: application/controllers/CommissionController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:actionStack\\(\\)\\.$#"
 			count: 3
 			path: application/controllers/CommissionController.php
@@ -506,66 +216,6 @@ parameters:
 			path: application/controllers/ContactController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$ajax\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$civilite_list\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$contact_fonction_list\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$contacts\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$contacts_parent\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupes\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id\\.$#"
-			count: 2
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$item\\.$#"
-			count: 2
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$resultats\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$size\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user_info\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$verrou\\.$#"
-			count: 1
-			path: application/controllers/ContactController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 6
 			path: application/controllers/ContactController.php
@@ -582,41 +232,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$couches_cartographiques\\.$#"
-			count: 2
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$default_lat\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$default_lon\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$geoconcept_url\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$key_googlemap\\.$#"
-			count: 1
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$key_ign\\.$#"
-			count: 2
-			path: application/controllers/CouchesCartographiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$row\\.$#"
 			count: 1
 			path: application/controllers/CouchesCartographiquesController.php
 
@@ -782,7 +397,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_PIECEJOINTE\\.$#"
-			count: 2
+			count: 3
 			path: application/controllers/DossierController.php
 
 		-
@@ -856,402 +471,27 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$AVIS_COMMISSION_VALUE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$AVIS_VALUE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEENVTRANSIT_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEINCOMPLET\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEINSERTDOSSIER\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEINSERT_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEINTERV_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEMAIRIE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEMAIRIE_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEPREF_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATERECEPTIONCOMM\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEREP_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATEREUN_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATERVRAT_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATESDIS\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATESDIS_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATESECRETARIAT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATESECRETARIAT_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATESIGN_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATETRANSFERTCOMM\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATE_DOCSMANQUANT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DATE_RECEPTION_DOC\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DELAIPRESC_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DESCGEN_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DESCRIPTIF_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$ECHEANCIERTRAV\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$GN\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$HEUREINTERV_INPUT\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$ID_AFFECTATION_DOSSIER_VISITE\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$action\\.$#"
-			count: 4
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$activiteSecondaire\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$affectDossier\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$afficheAvis\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$afficherChamps\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$arrayAvisDerogations\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_commissions\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$article\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$articleLibelle\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$articles\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$autres\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avisDerogations\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avisDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avisDossierCommission\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avisExploitationEtab\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avisLastVP\\.$#"
-			count: 1
+			count: 7
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorie\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieEtabPere\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieLibelle\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieListe\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$celluleDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$celluleDossierLevee\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionEtab\\.$#"
-			count: 1
+			count: 8
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionInfos\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissionInfosCommissionType\\.$#"
 			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$communeEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommEntete\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommInput\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateCommValue\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateDay\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateDelaipresc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateDuJour\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateLastVP\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateRvrat\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateSelect\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateToday\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateVisite\\.$#"
-			count: 2
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateVisiteInput\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dateVisiteValue\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dejaLies\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$do\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierDocConsutle\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierDocUrba\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierNatureListe\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierSupprime\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$dossierType\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$enteteEtab\\.$#"
-			count: 17
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$entite\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etabDesc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etablissementAdresse\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
@@ -1261,73 +501,8 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etablissementLibelle\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etatDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etudes\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fichierSelect\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fichierVer\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$genre\\.$#"
 			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$genreEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$genrePere\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$hasAvisDerogation\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$heureVisite\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idCommission\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idDateCommissionAffect\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idDateVisiteAffect\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idDossier\\.$#"
-			count: 10
 			path: application/controllers/DossierController.php
 
 		-
@@ -1336,78 +511,23 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idNatureNewDoc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idNewDoc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPieceJointe\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPrescriptionDossier\\.$#"
 			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idRapportPj\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTypeActivitePrinc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTypeDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idUser\\.$#"
-			count: 2
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_dossier\\.$#"
-			count: 4
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_platau\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_prescription\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id_typeactivite\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infoPere\\.$#"
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosCommission\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosDateComm\\.$#"
-			count: 1
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infoPere\\.$#"
+			count: 5
 			path: application/controllers/DossierController.php
 
 		-
@@ -1416,133 +536,18 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosPrescription\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$isAllowedAvisDerogation\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$isAllowedEffectifsDegagements\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$isAllowedVerificationsTechniques\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_allowed_change_avis\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_allowed_delete_dossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$lastAvisEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelle\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleActiviteP\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleActivitePPere\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleNewDoc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelleType\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listDossierEtab\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeArticles\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeAvis\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDoc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocManquant\\.$#"
-			count: 7
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocUrba\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocs\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDocsAjout\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDossierEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeDossierLies\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeEtab\\.$#"
-			count: 1
+			count: 4
 			path: application/controllers/DossierController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeEtablissement\\.$#"
-			count: 3
+			count: 1
 			path: application/controllers/DossierController.php
 
 		-
@@ -1551,43 +556,8 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeTextes\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeTextesAppl\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste_commission\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$locked\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$mailEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$mois\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$natureConcerne\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$natureDossier\\.$#"
-			count: 2
+			count: 1
 			path: application/controllers/DossierController.php
 
 		-
@@ -1596,142 +566,12 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nouvellePJ\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numDocManquant\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numFaxEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numHeberge\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numPersonnel\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numPresc\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numPublic\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numTelEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numTotal\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$numWinPrev\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$objetDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$path\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$pathBase\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionAmelioration\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionExploitation\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionReglDossier\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionType\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$preventionnistes\\.$#"
-			count: 3
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rubriques\\.$#"
 			count: 2
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$selectAbreviation\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$selectEtab\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$servInstructeur\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$servInstructeurMail\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$servInstructeurNomContact\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$servInstructeurPrenomContact\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$serviceInstructeurId\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$serviceInstructeurLibelle\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$store\\.$#"
 			count: 1
 			path: application/controllers/DossierController.php
 
@@ -1742,92 +582,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texte\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteArticle\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteLibelle\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteListe\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$textes\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$textes_applicables\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$textes_applicables_dossier\\.$#"
-			count: 2
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeLettreP\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeLettrePPere\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typePrescDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeSecondaire\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$userInfos\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user_info\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user_infoVerrou\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$verrou\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$verrouDossier\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$visites\\.$#"
-			count: 1
+			count: 8
 			path: application/controllers/DossierController.php
 
 		-
@@ -1911,22 +666,7 @@ parameters:
 			path: application/controllers/ErrorController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$exception\\.$#"
-			count: 1
-			path: application/controllers/ErrorController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$message\\.$#"
-			count: 5
-			path: application/controllers/ErrorController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$request\\.$#"
-			count: 1
-			path: application/controllers/ErrorController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$showException\\.$#"
 			count: 1
 			path: application/controllers/ErrorController.php
 
@@ -1961,238 +701,13 @@ parameters:
 			path: application/controllers/EtablissementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_activite\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_avis\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_categorie\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_classe\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_classement\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_commission\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_famille\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_genre\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_statut\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_type\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_typesplan\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$add\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$autres\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$avis\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$champs_descriptif_technique\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$contacts\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$contacts_etablissements_parents\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$couches_cartographiques\\.$#"
-			count: 3
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$default_lat\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$default_lon\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$default_periodicite\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$derogations\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$descriptif\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etablissement\\.$#"
-			count: 5
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$etudes\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fonctions\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$geoconcept_url\\.$#"
-			count: 3
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupements_de_communes\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$hasAvisDerogations\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$historique\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$historiqueAvisDerogations\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$isAllowedAvisDerogations\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$isAllowedEffectifsDegagements\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_allowed_change_statut\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_allowed_delete_etablissement\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$key_googlemap\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$key_ign\\.$#"
-			count: 3
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbAutres\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbElemMax\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbEtudes\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$nbVisites\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$pieces_jointes\\.$#"
-			count: 2
+			count: 4
 			path: application/controllers/EtablissementController.php
 
 		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rubriques\\.$#"
 			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$store\\.$#"
-			count: 3
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$textes_applicables\\.$#"
-			count: 1
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$textes_applicables_de_etablissement\\.$#"
-			count: 2
-			path: application/controllers/EtablissementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$visites\\.$#"
-			count: 1
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -2296,21 +811,6 @@ parameters:
 			path: application/controllers/FusionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$form\\.$#"
-			count: 1
-			path: application/controllers/FusionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$hasErrors\\.$#"
-			count: 1
-			path: application/controllers/FusionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$processComplete\\.$#"
-			count: 1
-			path: application/controllers/FusionDesCommunesController.php
-
-		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
 			count: 1
 			path: application/controllers/GestionDesCommissionsController.php
@@ -2346,31 +846,6 @@ parameters:
 			path: application/controllers/GestionDesCommissionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$row_typeDesCommissions\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_commissions\\.$#"
-			count: 2
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_typesDesCommissions\\.$#"
-			count: 2
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$tid\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$title\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommissionsController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 4
 			path: application/controllers/GestionDesCommissionsController.php
@@ -2396,26 +871,6 @@ parameters:
 			path: application/controllers/GestionDesCommunesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commune\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$ext\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_communes\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user_info\\.$#"
-			count: 1
-			path: application/controllers/GestionDesCommunesController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 2
 			path: application/controllers/GestionDesCommunesController.php
@@ -2433,21 +888,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
 			count: 2
-			path: application/controllers/GestionDesDocumentsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fichierVer\\.$#"
-			count: 1
-			path: application/controllers/GestionDesDocumentsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste_commission\\.$#"
-			count: 2
-			path: application/controllers/GestionDesDocumentsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$path\\.$#"
-			count: 1
 			path: application/controllers/GestionDesDocumentsController.php
 
 		-
@@ -2496,178 +936,23 @@ parameters:
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$action\\.$#"
-			count: 8
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$article\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$articleInfo\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$articleLibelle\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$assoc\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$catInfo\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorie\\.$#"
-			count: 5
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieLibelle\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorieListe\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$do\\.$#"
-			count: 8
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idArticle\\.$#"
-			count: 2
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idCategorie\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPrescType\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPrescription\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idPrescriptionType\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTexte\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$infosPrescription\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelle\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeArticles\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeCategorie\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePrescEtude\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePrescVisite\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePrescriptionArticle\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePrescriptionCat\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePrescriptionTexte\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeTextes\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste_articles\\.$#"
-			count: 2
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste_textes\\.$#"
-			count: 2
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionType\\.$#"
-			count: 5
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texte\\.$#"
 			count: 4
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteArticle\\.$#"
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categorie\\.$#"
+			count: 4
+			path: application/controllers/GestionPrescriptionsController.php
+
+		-
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prescriptionType\\.$#"
 			count: 1
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteInfo\\.$#"
-			count: 3
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteLibelle\\.$#"
-			count: 2
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteListe\\.$#"
-			count: 1
-			path: application/controllers/GestionPrescriptionsController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$typeAction\\.$#"
-			count: 2
+			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texte\\.$#"
+			count: 5
 			path: application/controllers/GestionPrescriptionsController.php
 
 		-
@@ -2702,26 +987,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$LIBELLE_TEXTE\\.$#"
-			count: 1
-			path: application/controllers/GestionTextesApplicablesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$idTexteAppl\\.$#"
-			count: 1
-			path: application/controllers/GestionTextesApplicablesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeTextesAppl\\.$#"
-			count: 1
-			path: application/controllers/GestionTextesApplicablesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeType\\.$#"
-			count: 1
-			path: application/controllers/GestionTextesApplicablesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$texteEdit\\.$#"
 			count: 1
 			path: application/controllers/GestionTextesApplicablesController.php
 
@@ -2791,76 +1056,6 @@ parameters:
 			path: application/controllers/GroupementController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_groupementstypes\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupement\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$id\\.$#"
-			count: 2
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$libelle\\.$#"
-			count: 2
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$prev\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$preventionnistes\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$row\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$title\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$type\\.$#"
-			count: 2
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$types\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user_info\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$ville_du_groupement\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$villes\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$villes_tests\\.$#"
-			count: 1
-			path: application/controllers/GroupementController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 6
 			path: application/controllers/GroupementController.php
@@ -2882,31 +1077,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$viewRenderer\\.$#"
-			count: 1
-			path: application/controllers/IndexController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$bloc\\.$#"
-			count: 1
-			path: application/controllers/IndexController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$blocs\\.$#"
-			count: 1
-			path: application/controllers/IndexController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$blocsOrder\\.$#"
-			count: 1
-			path: application/controllers/IndexController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupes\\.$#"
-			count: 1
-			path: application/controllers/IndexController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user\\.$#"
 			count: 1
 			path: application/controllers/IndexController.php
 
@@ -3021,47 +1191,12 @@ parameters:
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$displayDownloadButton\\.$#"
-			count: 1
-			path: application/controllers/PieceJointeController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$exists\\.$#"
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$html\\.$#"
-			count: 1
-			path: application/controllers/PieceJointeController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$identifiant\\.$#"
-			count: 4
-			path: application/controllers/PieceJointeController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listeEtablissement\\.$#"
-			count: 1
-			path: application/controllers/PieceJointeController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$listePj\\.$#"
-			count: 1
-			path: application/controllers/PieceJointeController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$pjcomm\\.$#"
-			count: 1
-			path: application/controllers/PieceJointeController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$type\\.$#"
-			count: 4
-			path: application/controllers/PieceJointeController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$verrou\\.$#"
 			count: 1
 			path: application/controllers/PieceJointeController.php
 
@@ -3141,98 +1276,8 @@ parameters:
 			path: application/controllers/SearchController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_avis\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_categorie\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_classe\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_commission\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_famille\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_fonction\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_genre\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_groupementterritorial\\.$#"
-			count: 2
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_statut\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_type\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$DB_typeactivite\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_commissions\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_communes\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_numeros\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_voies\\.$#"
-			count: 1
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$is_allowed_export_calc\\.$#"
-			count: 2
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste_prev\\.$#"
-			count: 2
-			path: application/controllers/SearchController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$results\\.$#"
-			count: 3
-			path: application/controllers/SearchController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user\\.$#"
-			count: 4
+			count: 2
 			path: application/controllers/SearchController.php
 
 		-
@@ -3321,11 +1366,6 @@ parameters:
 			path: application/controllers/SessionController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$form\\.$#"
-			count: 1
-			path: application/controllers/SessionController.php
-
-		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:flashMessenger\\(\\)\\.$#"
 			count: 1
 			path: application/controllers/SessionController.php
@@ -3351,37 +1391,7 @@ parameters:
 			path: application/controllers/StatistiquesController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$columns\\.$#"
-			count: 1
-			path: application/controllers/StatistiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$liste\\.$#"
-			count: 1
-			path: application/controllers/StatistiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$result\\.$#"
-			count: 1
-			path: application/controllers/StatistiquesController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$results\\.$#"
-			count: 3
-			path: application/controllers/StatistiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$resume\\.$#"
-			count: 4
-			path: application/controllers/StatistiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$title\\.$#"
-			count: 1
-			path: application/controllers/StatistiquesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$titre\\.$#"
 			count: 1
 			path: application/controllers/StatistiquesController.php
 
@@ -3392,26 +1402,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_categories\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_classes\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$array_types\\.$#"
-			count: 1
-			path: application/controllers/TableauDesPeriodicitesController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$tableau\\.$#"
 			count: 1
 			path: application/controllers/TableauDesPeriodicitesController.php
 
@@ -3526,117 +1516,7 @@ parameters:
 			path: application/controllers/UsersController.php
 
 		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$add\\.$#"
-			count: 5
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$categories\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$classements\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$classes\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$commissions\\.$#"
-			count: 2
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$communes\\.$#"
-			count: 2
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$familles\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$fonctions\\.$#"
-			count: 2
-			path: application/controllers/UsersController.php
-
-		-
 			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$genres\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$group\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupements\\.$#"
-			count: 2
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$groupes\\.$#"
-			count: 3
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$inactives_users\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$natures_dossier\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$params\\.$#"
-			count: 2
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$resources\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_groupes\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_groupes_privilege\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$rowset_resources\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$types\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$types_dossier\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$user\\.$#"
-			count: 1
-			path: application/controllers/UsersController.php
-
-		-
-			message: "#^Access to an undefined property Zend_View_Interface\\:\\:\\$users\\.$#"
 			count: 1
 			path: application/controllers/UsersController.php
 

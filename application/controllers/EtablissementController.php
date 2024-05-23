@@ -24,16 +24,16 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->headLink()->appendStylesheet('/css/etiquetteAvisDerogations/greenCircle.css', 'all');
 
         $this->cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-        $this->view->isAllowedEffectifsDegagements = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets');
-        $this->view->isAllowedAvisDerogations = unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations');
+        $this->view->assign('isAllowedEffectifsDegagements', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'effectifs_degagements', 'effectifs_degagements_ets'));
+        $this->view->assign('isAllowedAvisDerogations', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
 
         $this->serviceEtablissement = new Service_Etablissement();
 
         if ($this->getParam('id')) {
             $this->etablissement = $this->serviceEtablissement->get($this->getParam('id'));
-            $this->view->etablissement = $this->etablissement;
-            $this->view->avis = $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']);
-            $this->view->hasAvisDerogations = array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id));
+            $this->view->assign('etablissement', $this->etablissement);
+            $this->view->assign('avis', $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
+            $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($this->_request->id)));
         }
     }
 
@@ -53,20 +53,20 @@ class EtablissementController extends Zend_Controller_Action
         $service_carto = new Service_Carto();
         $DB_periodicite = new Model_DbTable_Periodicite();
 
-        $this->view->couches_cartographiques = $service_carto->getAll();
-        $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
-        $this->view->key_googlemap = getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY');
-        $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
+        $this->view->assign('couches_cartographiques', $service_carto->getAll());
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_googlemap', getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY'));
+        $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
 
-        $this->view->default_periodicite = $DB_periodicite->gn4ForEtablissement($this->etablissement);
+        $this->view->assign('default_periodicite', $DB_periodicite->gn4ForEtablissement($this->etablissement));
         $this->view->assign('periodicity', $this->serviceEtablissement->getDisplayedPeriodicity($this->etablissement));
-        $this->view->groupements_de_communes = 0 == count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']);
+        $this->view->assign('groupements_de_communes', 0 == count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']));
 
-        $this->view->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
+        $this->view->assign('store', Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore'));
 
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         // Autorisation de suppression de l'établissement
-        $this->view->is_allowed_delete_etablissement = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_etablissement');
+        $this->view->assign('is_allowed_delete_etablissement', unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'suppression', 'delete_etablissement'));
     }
 
     public function editAction()
@@ -83,10 +83,10 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_carto = new Service_Carto();
 
-        $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
-        $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
-        $this->view->default_lon = getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517';
-        $this->view->default_lat = getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818';
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
+        $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
+        $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
 
         $service_genre = new Service_Genre();
         $service_statut = new Service_Statut();
@@ -100,25 +100,25 @@ class EtablissementController extends Zend_Controller_Action
         $service_classe = new Service_Classe();
         $service_classement = new Service_Classement();
 
-        $this->view->DB_genre = $service_genre->getAll();
-        $this->view->DB_statut = $service_statut->getAll();
-        $this->view->DB_avis = $service_avis->getAll();
-        $this->view->DB_categorie = $service_categorie->getAll();
-        $this->view->DB_type = $service_type->getAll();
-        $this->view->DB_activite = $service_typeactivite->getAll();
-        $this->view->DB_commission = $service_commission->getCommissionsAndTypes();
-        $this->view->DB_typesplan = $service_typesplan->getAll();
-        $this->view->DB_famille = $service_famille->getAll();
-        $this->view->DB_classe = $service_classe->getAll();
-        $this->view->DB_classement = $service_classement->getAll();
+        $this->view->assign('DB_genre', $service_genre->getAll());
+        $this->view->assign('DB_statut', $service_statut->getAll());
+        $this->view->assign('DB_avis', $service_avis->getAll());
+        $this->view->assign('DB_categorie', $service_categorie->getAll());
+        $this->view->assign('DB_type', $service_type->getAll());
+        $this->view->assign('DB_activite', $service_typeactivite->getAll());
+        $this->view->assign('DB_commission', $service_commission->getCommissionsAndTypes());
+        $this->view->assign('DB_typesplan', $service_typesplan->getAll());
+        $this->view->assign('DB_famille', $service_famille->getAll());
+        $this->view->assign('DB_classe', $service_classe->getAll());
+        $this->view->assign('DB_classement', $service_classement->getAll());
 
-        $this->view->couches_cartographiques = $service_carto->getAll();
+        $this->view->assign('couches_cartographiques', $service_carto->getAll());
 
-        $this->view->add = false;
+        $this->view->assign('add', false);
 
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $mygroupe = Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'];
-        $this->view->is_allowed_change_statut = unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut');
+        $this->view->assign('is_allowed_change_statut', unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut'));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -173,29 +173,29 @@ class EtablissementController extends Zend_Controller_Action
         $service_classement = new Service_Classement();
         $service_carto = new Service_Carto();
 
-        $this->view->DB_genre = $service_genre->getAll();
-        $this->view->DB_statut = $service_statut->getAll();
-        $this->view->DB_avis = $service_avis->getAll();
-        $this->view->DB_categorie = $service_categorie->getAll();
-        $this->view->DB_type = $service_type->getAll();
-        $this->view->DB_activite = $service_typeactivite->getAll();
-        $this->view->DB_commission = $service_commission->getCommissionsAndTypes();
-        $this->view->DB_typesplan = $service_typesplan->getAll();
-        $this->view->DB_famille = $service_famille->getAll();
-        $this->view->DB_classe = $service_classe->getAll();
-        $this->view->DB_classement = $service_classement->getAll();
+        $this->view->assign('DB_genre', $service_genre->getAll());
+        $this->view->assign('DB_statut', $service_statut->getAll());
+        $this->view->assign('DB_avis', $service_avis->getAll());
+        $this->view->assign('DB_categorie', $service_categorie->getAll());
+        $this->view->assign('DB_type', $service_type->getAll());
+        $this->view->assign('DB_activite', $service_typeactivite->getAll());
+        $this->view->assign('DB_commission', $service_commission->getCommissionsAndTypes());
+        $this->view->assign('DB_typesplan', $service_typesplan->getAll());
+        $this->view->assign('DB_famille', $service_famille->getAll());
+        $this->view->assign('DB_classe', $service_classe->getAll());
+        $this->view->assign('DB_classement', $service_classement->getAll());
 
-        $this->view->add = true;
+        $this->view->assign('add', true);
 
-        $this->view->key_ign = getenv('PREVARISC_PLUGIN_IGNKEY');
-        $this->view->geoconcept_url = getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL');
-        $this->view->default_lon = getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517';
-        $this->view->default_lat = getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818';
-        $this->view->couches_cartographiques = $service_carto->getAll();
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
+        $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
+        $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
+        $this->view->assign('couches_cartographiques', $service_carto->getAll());
 
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $mygroupe = Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'];
-        $this->view->is_allowed_change_statut = unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut');
+        $this->view->assign('is_allowed_change_statut', unserialize($cache->load('acl'))->isAllowed($mygroupe, 'statut_etablissement', 'edit_statut'));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -233,10 +233,10 @@ class EtablissementController extends Zend_Controller_Action
 
             $descriptifs = $this->serviceEtablissement->getDescriptifs($this->_request->id);
 
-            $this->view->descriptif = $descriptifs['descriptif'];
-            $this->view->historique = $descriptifs['historique'];
-            $this->view->derogations = $descriptifs['derogations'];
-            $this->view->champs_descriptif_technique = $descriptifs['descriptifs_techniques'];
+            $this->view->assign('descriptif', $descriptifs['descriptif']);
+            $this->view->assign('historique', $descriptifs['historique']);
+            $this->view->assign('derogations', $descriptifs['derogations']);
+            $this->view->assign('champs_descriptif_technique', $descriptifs['descriptifs_techniques']);
         }
     }
 
@@ -333,7 +333,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->textes_applicables_de_etablissement = $this->serviceEtablissement->getAllTextesApplicables($this->_request->id);
+        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->_request->id));
     }
 
     public function editTextesApplicablesAction()
@@ -342,8 +342,8 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_textes_applicables = new Service_TextesApplicables();
 
-        $this->view->textes_applicables_de_etablissement = $this->serviceEtablissement->getAllTextesApplicables($this->_request->id);
-        $this->view->textes_applicables = $service_textes_applicables->getAll();
+        $this->view->assign('textes_applicables_de_etablissement', $this->serviceEtablissement->getAllTextesApplicables($this->_request->id));
+        $this->view->assign('textes_applicables', $service_textes_applicables->getAll());
 
         if ($this->_request->isPost()) {
             try {
@@ -374,8 +374,8 @@ class EtablissementController extends Zend_Controller_Action
             }
         );
 
-        $this->view->pieces_jointes = $piecesJointes;
-        $this->view->store = $store;
+        $this->view->assign('pieces_jointes', $piecesJointes);
+        $this->view->assign('store', $store);
     }
 
     public function getPieceJointeAction()
@@ -399,8 +399,8 @@ class EtablissementController extends Zend_Controller_Action
             }
         );
 
-        $this->view->pieces_jointes = $piecesJointes;
-        $this->view->store = $store;
+        $this->view->assign('pieces_jointes', $piecesJointes);
+        $this->view->assign('store', $store);
     }
 
     public function addPieceJointeAction()
@@ -451,15 +451,15 @@ class EtablissementController extends Zend_Controller_Action
             $contacts_etablissements_parents = array_merge($contacts_etablissements_parents, $this->serviceEtablissement->getAllContacts($this->etablissement_parent['ID_ETABLISSEMENT']));
         }
 
-        $this->view->contacts = $this->serviceEtablissement->getAllContacts($this->_request->id);
-        $this->view->contacts_etablissements_parents = $contacts_etablissements_parents;
+        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->_request->id));
+        $this->view->assign('contacts_etablissements_parents', $contacts_etablissements_parents);
     }
 
     public function editContactsAction()
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->contacts = $this->serviceEtablissement->getAllContacts($this->_request->id);
+        $this->view->assign('contacts', $this->serviceEtablissement->getAllContacts($this->_request->id));
     }
 
     public function addContactAction()
@@ -468,7 +468,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_contact = new Service_Contact();
 
-        $this->view->fonctions = $service_contact->getFonctions();
+        $this->view->assign('fonctions', $service_contact->getFonctions());
 
         if ($this->_request->isPost()) {
             try {
@@ -522,14 +522,14 @@ class EtablissementController extends Zend_Controller_Action
 
         $dossiers = $this->serviceEtablissement->getNLastDossiers($this->_request->id);
 
-        $this->view->etudes = $dossiers['etudes'];
-        $this->view->visites = $dossiers['visites'];
-        $this->view->autres = $dossiers['autres'];
+        $this->view->assign('etudes', $dossiers['etudes']);
+        $this->view->assign('visites', $dossiers['visites']);
+        $this->view->assign('autres', $dossiers['autres']);
 
-        $this->view->nbElemMax = Service_Utils_DossiersMaxNumber::value();
-        $this->view->nbEtudes = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes');
-        $this->view->nbVisites = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'visites');
-        $this->view->nbAutres = $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres');
+        $this->view->assign('nbElemMax', Service_Utils_DossiersMaxNumber::value());
+        $this->view->assign('nbEtudes', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'etudes'));
+        $this->view->assign('nbVisites', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'visites'));
+        $this->view->assign('nbAutres', $this->serviceEtablissement->getNbDossierTypeEtablissement($this->_request->id, 'autres'));
     }
 
     public function getDossiersAfterNAction()
@@ -550,7 +550,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        $this->view->historique = $this->serviceEtablissement->getHistorique($this->_request->id);
+        $this->view->assign('historique', $this->serviceEtablissement->getHistorique($this->_request->id));
     }
 
     public function deleteAction()
@@ -655,7 +655,7 @@ class EtablissementController extends Zend_Controller_Action
     public function avisDerogationsEtablissementAction()
     {
         $this->_helper->layout->setLayout('etablissement');
-        $this->view->historiqueAvisDerogations = $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? [];
+        $this->view->assign('historiqueAvisDerogations', $this->serviceEtablissement->getHistorique($this->_request->id)['AVIS_DEROGATIONS'] ?? []);
     }
 
     public function retablirEtablissementAction(): void
