@@ -633,13 +633,17 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                             'refetchEvents');
                                         $("#dialogComm").dialog('close').html(
                                             '');
+
+                                        // Permet d'affecter la date de commission au champ du dossier en un seul clic
                                         var eventId = rez[0]['id'];
 
                                         var calendarId = 'calendar'; 
+
                                         if ($("#calendarVisite").is(":visible")) { 
                                             //pour verifier si l'element n'est pas masqué (donc visible)
                                             calendarId = 'calendarVisite';
                                         }
+
                                         var parentElement = $("li:has(#" + calendarId + ")");
                                         var prevElement = parentElement.prev('li.row-fluid');
                                         var dateSelect = prevElement.attr('id');
@@ -647,6 +651,7 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         var dateEnd = new Date(end);
                                         var dateStart = new Date(start);
                                         var date = dateEnd;
+
                                         if( date < dateStart){
                                             date = dateStart;
                                         }
@@ -661,35 +666,28 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         if (mm < 10) {
                                             mm = '0' + mm;
                                         }
-                                        if (emplacement == 'calendrierComm') {
-                                            my_dialog("/calendrier-des-commissions/dialogcomm", "idComm=" + idComm +
-                                            "&idDateComm=" + event.id + "&do=edit");
-                                        } else if (emplacement == 'dossier') {
-                                            if (typeDossier == 1) {
-                                                if (dateSelect == "DATEVISITE") {
-                                                    $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                    $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
-                                                    $("#hideCommission").click();
-                                                 }
-                       
-                                                else if (dateSelect == "DATECOMM") {
-                                                    $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                    $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
-                                                    $("#hideCommission").click();
-                                                }
-                                            }else if (typeDossier == 2 || typeDossier == 3 ) {
-                                                if (dateSelect == "DATEVISITE") {
-                                                    $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                    $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
-                                                    $("#hideVisite").click();
-                                                }
-                                                else if(dateSelect == "DATECOMM"){
-                                                    $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                    $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
-                                                    $("#hideCommission").click();
-                                                }
-                                            } 
-                                        }  
+                                    
+                                        if (typeDossier == 1) {
+                                            if (dateSelect == "DATEVISITE") {
+                                                $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
+                                                $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
+                                                $("#hideCommission").click();
+                                                } else if (dateSelect == "DATECOMM") {
+                                                $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
+                                                $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
+                                                $("#hideCommission").click();
+                                            }
+                                        } else if (typeDossier == 2 || typeDossier == 3 ) {
+                                            if (dateSelect == "DATEVISITE") {
+                                                $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
+                                                $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
+                                                $("#hideVisite").click();
+                                            } else if(dateSelect == "DATECOMM") {
+                                                $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
+                                                $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
+                                                $("#hideCommission").click();
+                                            }
+                                        }
                                     }
                                 });
                             }
