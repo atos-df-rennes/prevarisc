@@ -603,7 +603,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                             text: 'Enregistrer dans le calendrier',
                             class: 'btn btn-success',
                             click: function() {
-     
                                 // Lors de la validation de la boite de dialogue
                                 $.ajax({
                                     data: $("#formDateComm").serialize() +
@@ -644,12 +643,7 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         var parentElement = $("li:has(#" + calendarId + ")");
                                         var prevElement = parentElement.prev('li.row-fluid');
                                         var dateSelect = prevElement.attr('id');
-                                        console.log('ID de l\'élément précédent : ' + dateSelect);
-
-
-
                                         var typeDossier = type;// on prend le type choisi (1 pour commision et 2 pour visite)  
-                                        console.log("typeDateSelect "+ type);
                                         var dateEnd = new Date(end);
                                         var dateStart = new Date(start);
                                         var date = dateEnd;
@@ -673,14 +667,12 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         } else if (emplacement == 'dossier') {
                                             if (typeDossier == 1) {
                                                 if (dateSelect == "DATEVISITE") {
-                                                    //console.log("voila la date de visite de type de dossier commision" + dateSelect)
                                                     $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                                                     $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
                                                     $("#hideCommission").click();
                                                  }
                        
                                                 else if (dateSelect == "DATECOMM") {
-                                                    //console.log("voila la date de commission de type de dossier commision" + dateSelect)
                                                     $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
                                                     $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
                                                     $("#hideCommission").click();
@@ -689,24 +681,15 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                                 if (dateSelect == "DATEVISITE") {
                                                     $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                                                     $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
-                                                    //console.log("voila la date de visite de type de dossier visite" + dateSelect)
                                                     $("#hideVisite").click();
                                                 }
                                                 else if(dateSelect == "DATECOMM"){
                                                     $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
                                                     $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
-                                                    //console.log("voila la date de commisiion de type de dossier visite" + dateSelect)
                                                     $("#hideCommission").click();
-
                                                 }
-
-
-
                                             } 
                                         }  
-                                        
-
-
                                     }
                                 });
                             }
@@ -733,8 +716,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                     //Si une seule date on la renseinge aussi dans l'input date de passage en commission
                     var dateSelect = $(this).parent().parent().parent().parent().parent().prev().attr(
                         'id');
-                       
-                
                     var dateEnd = new Date(event.end);
                     var dateStart = new Date(event.start);
                     var date = dateEnd;
@@ -755,17 +736,12 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                     }
 
                     if (dateSelect == "DATEVISITE") {
-                        //console.log("voila la date de visite de type de dossier commision" + dateSelect)
                         $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                         $("#ID_AFFECTATION_DOSSIER_VISITE").val(event.id);
                        
                     } else if (dateSelect == "DATECOMM") {
-                        //console.log("voila la date de commission de type de dossier commision" + dateSelect)
                         $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
                         $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(event.id);
-                       
-                       
-
                     }
                     $("#" + dateSelect).find(".hideCalendar").click();
                 } else if ($("#TYPE_DOSSIER").val() == 3 || $("#TYPE_DOSSIER").val() == 2) {
@@ -802,7 +778,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
 
                                     $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                                     $("#ID_AFFECTATION_DOSSIER_VISITE").val(event.id);
-                                    //console.log("voila la date de visite de type de dossier visite" + dateSelect)
                                     $("#hideVisite").click();
                                 } else if (rez.length > 1) {
                                     var nbResultats = rez.length;
@@ -853,7 +828,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
 
                         $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
                         $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(event.id);
-                        //console.log("voila la date de commisiion de type de dossier visite" + dateSelect)
                         $("#hideCommission").click();
                     }
                 }
