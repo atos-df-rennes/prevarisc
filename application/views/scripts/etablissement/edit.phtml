@@ -1056,7 +1056,7 @@
         })
 
         function setModalEditAdresseInputValue(data, dataId){
-            //On set les valeurs reçu
+            // On set les valeurs reçues
             // Ville
             $("input[name='commune_ac']").val(data.LIBELLE_COMMUNE)
             // Voie
@@ -1270,7 +1270,7 @@
                             var map = viewer.getViewer().getMap();
                             var lonlat = new OpenLayers.LonLat(geolocations[0].lon, geolocations[0].lat);
                             lonlat = lonlat.transform('EPSG:4326', map.getProjection());
-                            putMarkerAt(map, lonlat, map.getProjection());
+                            putMarkerAt(map, lonlat);
                             viewer.setCenter(parseFloat(geolocations[0].lon), parseFloat(geolocations[0].lat));
                             viewer.setZoom(17);
                         <?php elseif ($this->geoconcept_url != null): ?>

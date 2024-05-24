@@ -5,14 +5,14 @@ class GestionDesCommissionsController extends Zend_Controller_Action
     public function indexAction()
     {
         // Titre
-        $this->view->title = 'Gestion des commissions';
+        $this->view->assign('title', 'Gestion des commissions');
 
         $this->_helper->layout->setLayout('menu_admin');
 
         // Modèles de données
         $model_typesDesCommissions = new Model_DbTable_CommissionType();
 
-        $this->view->rowset_typesDesCommissions = $model_typesDesCommissions->fetchAll();
+        $this->view->assign('rowset_typesDesCommissions', $model_typesDesCommissions->fetchAll());
     }
 
     public function formAction()
@@ -21,8 +21,8 @@ class GestionDesCommissionsController extends Zend_Controller_Action
         $model_typesDesCommissions = new Model_DbTable_CommissionType();
         $model_commissions = new Model_DbTable_Commission();
 
-        $this->view->rowset_typesDesCommissions = $model_typesDesCommissions->fetchAll();
-        $this->view->rowset_commissions = $model_commissions->fetchAll();
+        $this->view->assign('rowset_typesDesCommissions', $model_typesDesCommissions->fetchAll());
+        $this->view->assign('rowset_commissions', $model_commissions->fetchAll());
     }
 
     public function saveAction()
@@ -73,10 +73,10 @@ class GestionDesCommissionsController extends Zend_Controller_Action
         $model_typesDesCommissions = new Model_DbTable_CommissionType();
 
         // On récupère les commissions du type demandé
-        $this->view->rowset_commissions = $model_commission->fetchAll('ID_COMMISSIONTYPE = '.$this->_request->id_type_des_commissions);
+        $this->view->assign('rowset_commissions', $model_commission->fetchAll('ID_COMMISSIONTYPE = '.$this->_request->id_type_des_commissions));
 
         // On récupère le type
-        $this->view->row_typeDesCommissions = $model_typesDesCommissions->fetchRow('ID_COMMISSIONTYPE = '.$this->_request->id_type_des_commissions);
+        $this->view->assign('row_typeDesCommissions', $model_typesDesCommissions->fetchRow('ID_COMMISSIONTYPE = '.$this->_request->id_type_des_commissions));
     }
 
     public function addCommissionAction()
@@ -94,7 +94,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
             }
 
             if (!empty($this->_request->cid)) {
-                $this->view->commission = $DB_commission->find($this->_request->cid)->current();
+                $this->view->assign('commission', $DB_commission->find($this->_request->cid)->current());
 
                 if (
                     isset($_GET['action'])
@@ -109,7 +109,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 $DB_commission->insert(array_intersect_key($_POST, $DB_commission->info('metadata')));
             }
 
-            $this->view->tid = $_GET['tid'];
+            $this->view->assign('tid', $_GET['tid']);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',

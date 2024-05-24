@@ -12,7 +12,7 @@ class ErrorController extends Zend_Controller_Action
             !$errors
             || !$errors instanceof ArrayObject
         ) {
-            $this->view->message = 'Vous avez atteint la page d\'erreur';
+            $this->view->assign('message', 'Vous avez atteint la page d\'erreur');
 
             return;
         }
@@ -25,7 +25,7 @@ class ErrorController extends Zend_Controller_Action
                 // Type de l'erreur :  404 error
                 $this->getResponse()->setHttpResponseCode(404);
                 $priority = Zend_Log::NOTICE;
-                $this->view->message = 'Page introuvable';
+                $this->view->assign('message', 'Page introuvable');
 
                 break;
 
@@ -38,7 +38,7 @@ class ErrorController extends Zend_Controller_Action
                     $priority = Zend_Log::NOTICE;
                     $this->render('not-allowed');
                 } else {
-                    $this->view->message = $errors->exception->getMessage();
+                    $this->view->assign('message', $errors->exception->getMessage());
                 }
 
                 break;
@@ -47,7 +47,7 @@ class ErrorController extends Zend_Controller_Action
                 // Type de l'erreur : application error
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
-                $this->view->message = 'L\'application a levée une erreur';
+                $this->view->assign('message', 'L\'application a levée une erreur');
 
                 break;
         }
@@ -59,11 +59,11 @@ class ErrorController extends Zend_Controller_Action
         }
 
         // Si l'affichage des exceptions est activé, on envoie un message
-        $this->view->showException = $this->getInvokeArg('displayExceptions');
-        $this->view->exception = $errors->exception;
+        $this->view->assign('showException', $this->getInvokeArg('displayExceptions'));
+        $this->view->assign('exception', $errors->exception);
 
         // On envoie la requête de l'erreur sur la vue
-        $this->view->request = $errors->request;
+        $this->view->assign('request', $errors->request);
     }
 
     /**

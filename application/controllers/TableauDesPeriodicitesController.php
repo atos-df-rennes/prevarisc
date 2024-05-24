@@ -9,15 +9,15 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
 
         // Liste des types d'activité
         $activite_model = new Model_DbTable_Type();
-        $this->view->array_types = $activite_model->fetchAll()->toArray();
+        $this->view->assign('array_types', $activite_model->fetchAll()->toArray());
 
         // Liste des catégorie
         $cat_model = new Model_DbTable_Categorie();
-        $this->view->array_categories = $cat_model->fetchAll()->toArray();
+        $this->view->assign('array_categories', $cat_model->fetchAll()->toArray());
 
         // Liste des classes
         $classe_model = new Model_DbTable_Classe();
-        $this->view->array_classes = $classe_model->fetchAll()->toArray();
+        $this->view->assign('array_classes', $classe_model->fetchAll()->toArray());
 
         // Les périodicités
         $perio_model = new Model_DbTable_Periodicite();
@@ -29,7 +29,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
             $result[$singleTableau['ID_CATEGORIE']][$singleTableau['ID_TYPE']][$singleTableau['LOCALSOMMEIL_PERIODICITE']] = $singleTableau['PERIODICITE_PERIODICITE'];
         }
 
-        $this->view->tableau = $result;
+        $this->view->assign('tableau', $result);
     }
 
     public function saveAction()

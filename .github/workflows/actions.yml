@@ -27,7 +27,7 @@ jobs:
       with:
         php-version: '8.1'
         coverage: none
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
         working-directory: "tools"
@@ -44,7 +44,7 @@ jobs:
       with:
         php-version: '8.1'
         coverage: none
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
         working-directory: "tools"
@@ -61,10 +61,10 @@ jobs:
       with:
         php-version: '8.1'
         coverage: none
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
         working-directory: "tools"
@@ -81,7 +81,7 @@ jobs:
       with:
         php-version: '7.1'
         coverage: none
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
 
@@ -121,7 +121,7 @@ jobs:
       with:
         php-version: '8.1'
         coverage: none
-    - uses: ramsey/composer-install@v2
+    - uses: ramsey/composer-install@v3
       with:
         composer-options: "--prefer-dist"
         working-directory: "tools"

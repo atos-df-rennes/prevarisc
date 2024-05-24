@@ -15,7 +15,7 @@ class GroupementController extends Zend_Controller_Action
     public function indexAction()
     {
         // Titre
-        $this->view->title = 'Groupements de communes';
+        $this->view->assign('title', 'Groupements de communes');
 
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -26,17 +26,17 @@ class GroupementController extends Zend_Controller_Action
         $array_groupementstypes = $model_groupementstypes->fetchAll()->toArray();
 
         // Envoi dans la vue les groupements et leur types
-        $this->view->array_groupementstypes = $array_groupementstypes;
+        $this->view->assign('array_groupementstypes', $array_groupementstypes);
 
         $commune = new Model_DbTable_AdresseCommune();
-        $this->view->villes_tests = $commune->fetchAll()->toArray();
+        $this->view->assign('villes_tests', $commune->fetchAll()->toArray());
     }
 
     public function displayAction()
     {
         // Liste des villes pour le select
         $commune = new Model_DbTable_AdresseCommune();
-        $this->view->villes = $commune->fetchAll()->toArray();
+        $this->view->assign('villes', $commune->fetchAll()->toArray());
 
         // On check les prev du groupement
         $groupements = new Model_DbTable_Groupement();
@@ -45,31 +45,31 @@ class GroupementController extends Zend_Controller_Action
         $groupement_type = new Model_DbTable_GroupementType();
         $types = $groupement_type->fetchAll();
 
-        $this->view->types = $types;
+        $this->view->assign('types', $types);
 
         // Coordonnées du groupement
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
-        $this->view->preventionnistes = [];
+        $this->view->assign('preventionnistes', []);
         if (
             isset($_GET['id'])
             && 0 != $_GET['id']
         ) {
             $groupement = $groupements->find($_GET['id'])->current();
-            $this->view->groupement = $groupement->toArray();
-            $this->view->libelle = $groupement['LIBELLE_GROUPEMENT'];
-            $this->view->type = $groupement['ID_GROUPEMENTTYPE'];
-            $this->view->preventionnistes = $groupements->getPreventionnistes($_GET['id']);
-            $this->view->ville_du_groupement = $groupement->findModel_DbTable_AdresseCommuneViaModel_DbTable_GroupementCommune()->toArray();
-            $this->view->user_info = $DB_informations->find($groupement->ID_UTILISATEURINFORMATIONS)->current();
+            $this->view->assign('groupement', $groupement->toArray());
+            $this->view->assign('libelle', $groupement['LIBELLE_GROUPEMENT']);
+            $this->view->assign('type', $groupement['ID_GROUPEMENTTYPE']);
+            $this->view->assign('preventionnistes', $groupements->getPreventionnistes($_GET['id']));
+            $this->view->assign('ville_du_groupement', $groupement->findModel_DbTable_AdresseCommuneViaModel_DbTable_GroupementCommune()->toArray());
+            $this->view->assign('user_info', $DB_informations->find($groupement->ID_UTILISATEURINFORMATIONS)->current());
         }
     }
 
     public function viewAction()
     {
         $model_groupement = new Model_DbTable_Groupement();
-        $this->view->row = $model_groupement->get($this->_request->id);
-        $this->view->prev = $model_groupement->getPreventionnistes($this->_request->id);
+        $this->view->assign('row', $model_groupement->get($this->_request->id));
+        $this->view->assign('prev', $model_groupement->getPreventionnistes($this->_request->id));
     }
 
     public function addAction()
@@ -141,9 +141,9 @@ class GroupementController extends Zend_Controller_Action
                 }
             }
 
-            $this->view->id = $new_groupement->ID_GROUPEMENT;
-            $this->view->libelle = $new_groupement->LIBELLE_GROUPEMENT;
-            $this->view->type = $new_groupement->ID_GROUPEMENTTYPE;
+            $this->view->assign('id', $new_groupement->ID_GROUPEMENT);
+            $this->view->assign('libelle', $new_groupement->LIBELLE_GROUPEMENT);
+            $this->view->assign('type', $new_groupement->ID_GROUPEMENTTYPE);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',
@@ -203,7 +203,7 @@ class GroupementController extends Zend_Controller_Action
             $new->LIBELLE_GROUPEMENTTYPE = $this->_request->LIBELLE_GROUPEMENTTYPE;
             $new->save();
 
-            $this->view->id = $new->ID_GROUPEMENTTYPE;
+            $this->view->assign('id', $new->ID_GROUPEMENTTYPE);
 
             $this->_helper->flashMessenger([
                 'context' => 'success',

@@ -13,7 +13,7 @@ class SearchController extends Zend_Controller_Action
 
         // Gestion droit export Calc
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-        $this->view->is_allowed_export_calc = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'export', 'export_ets');
+        $this->view->assign('is_allowed_export_calc', unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'export', 'export_ets'));
 
         $service_search = new Service_Search();
         $service_genre = new Service_Genre();
@@ -26,17 +26,17 @@ class SearchController extends Zend_Controller_Action
         $service_commission = new Service_Commission();
         $service_groupementcommunes = new Service_GroupementCommunes();
 
-        $this->view->DB_genre = $service_genre->getAll();
-        $this->view->DB_statut = $service_statut->getAll();
-        $this->view->DB_avis = $service_avis->getAll();
-        $this->view->DB_classe = $service_classe->getAll();
-        $this->view->DB_categorie = $service_categorie->getAll();
-        $this->view->DB_typeactivite = $service_typeactivite->getAllWithTypes();
-        $this->view->DB_famille = $service_famille->getAll();
-        $this->view->DB_commission = $service_commission->getAll();
+        $this->view->assign('DB_genre', $service_genre->getAll());
+        $this->view->assign('DB_statut', $service_statut->getAll());
+        $this->view->assign('DB_avis', $service_avis->getAll());
+        $this->view->assign('DB_classe', $service_classe->getAll());
+        $this->view->assign('DB_categorie', $service_categorie->getAll());
+        $this->view->assign('DB_typeactivite', $service_typeactivite->getAllWithTypes());
+        $this->view->assign('DB_famille', $service_famille->getAll());
+        $this->view->assign('DB_commission', $service_commission->getAll());
         $typeGroupementTerritorial = [5];
-        $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
-        $this->view->liste_prev = $service_search->listePrevActifs();
+        $this->view->assign('DB_groupementterritorial', $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial));
+        $this->view->assign('liste_prev', $service_search->listePrevActifs());
 
         if (
             $this->_request->isGet()
@@ -205,7 +205,7 @@ class SearchController extends Zend_Controller_Action
                         ++$ligne;
                     }
 
-                    $this->view->writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                    $this->view->assign('writer', PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5'));
 
                     // Ensuite j'ai choisi de désactiver mon layout
                     $this->_helper->layout()->disableLayout();
@@ -228,7 +228,7 @@ class SearchController extends Zend_Controller_Action
                 if (!isset($_GET['Rechercher'])) {
                     // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
                     $service_user = new Service_User();
-                    $this->view->user = $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
+                    $this->view->assign('user', $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']));
                 }
 
                 try {
@@ -268,7 +268,7 @@ class SearchController extends Zend_Controller_Action
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
-                    $this->view->results = $paginator;
+                    $this->view->assign('results', $paginator);
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectuée correctement. Veuillez réessayer. ('.$e->getMessage().')']);
                 }
@@ -282,7 +282,7 @@ class SearchController extends Zend_Controller_Action
 
         // Gestion droit export Calc
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
-        $this->view->is_allowed_export_calc = unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'export', 'export_doss');
+        $this->view->assign('is_allowed_export_calc', unserialize($cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'export', 'export_doss'));
 
         $service_search = new Service_Search();
         $service_commissions = new Service_Commission();
@@ -290,14 +290,14 @@ class SearchController extends Zend_Controller_Action
         $service_dossier = new Service_Dossier();
         $service_groupementcommunes = new Service_GroupementCommunes();
 
-        $this->view->DB_type = $service_dossier->getAllTypes();
-        $this->view->array_commissions = $service_commissions->getCommissionsAndTypes();
-        $this->view->array_communes = $service_adresse->getAllCommunes();
-        $this->view->liste_prev = $service_search->listePrevActifs();
-        $this->view->array_voies = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : [];
-        $this->view->array_numeros = $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : [];
+        $this->view->assign('DB_type', $service_dossier->getAllTypes());
+        $this->view->assign('array_commissions', $service_commissions->getCommissionsAndTypes());
+        $this->view->assign('array_communes', $service_adresse->getAllCommunes());
+        $this->view->assign('liste_prev', $service_search->listePrevActifs());
+        $this->view->assign('array_voies', $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('commune', $this->_request->getQuery()) && '' != $this->_request->getQuery()['commune'] ? $service_adresse->getVoies($this->_request->getQuery()['commune']) : []);
+        $this->view->assign('array_numeros', $this->_request->isGet() && count($this->_request->getQuery()) > 0 && array_key_exists('voie', $this->_request->getQuery()) && '' != $this->_request->getQuery()['voie'] ? $service_adresse->getNumeros($this->_request->getQuery()['voie']) : []);
         $typeGroupementTerritorial = [5];
-        $this->view->DB_groupementterritorial = $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial);
+        $this->view->assign('DB_groupementterritorial', $service_groupementcommunes->findGroupementForGroupementType($typeGroupementTerritorial));
 
         $checkDateFormat = function ($date): bool {
             if (!$date) {
@@ -455,7 +455,7 @@ class SearchController extends Zend_Controller_Action
                         ++$ligne;
                     }
 
-                    $this->view->writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                    $this->view->assign('writer', PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5'));
 
                     // Ensuite j'ai choisi de désactiver mon layout
                     $this->_helper->layout()->disableLayout();
@@ -480,7 +480,7 @@ class SearchController extends Zend_Controller_Action
                 if (!isset($_GET['Rechercher'])) {
                     // Si l'utilisateur est rattaché à un groupement territorial, présélection de celui-ci dans le filtre
                     $service_user = new Service_User();
-                    $this->view->user = $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']);
+                    $this->view->assign('user', $service_user->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR']));
                 }
 
                 try {
@@ -531,7 +531,7 @@ class SearchController extends Zend_Controller_Action
                     $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                     $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
-                    $this->view->results = $paginator;
+                    $this->view->assign('results', $paginator);
                 } catch (Exception $e) {
                     $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
                 }
@@ -546,7 +546,7 @@ class SearchController extends Zend_Controller_Action
         $service_search = new Service_Search();
         $service_user = new Service_User();
 
-        $this->view->DB_fonction = $service_user->getAllFonctions();
+        $this->view->assign('DB_fonction', $service_user->getAllFonctions());
 
         if (
             $this->_request->isGet()
@@ -563,7 +563,7 @@ class SearchController extends Zend_Controller_Action
                 $paginator = new Zend_Paginator(new SDIS62_Paginator_Adapter_Array($search['results'], $search['search_metadata']['count']));
                 $paginator->setItemCountPerPage(50)->setCurrentPageNumber($page)->setDefaultScrollingStyle('Elastic');
 
-                $this->view->results = $paginator;
+                $this->view->assign('results', $paginator);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Problème de recherche', 'message' => 'La recherche n\'a pas été effectué correctement. Veuillez rééssayez. ('.$e->getMessage().')']);
             }

@@ -39,7 +39,6 @@ function geolocaliseIGN (idModal, options) {
 
             // Ajout des couches utilisateur
             viewer = addUserLayers(viewer,options.couches_cartographiques);
-            nbCouches = viewer.getLibMap().getLayers().getLength();
 
             // On enlève le marker par défaut, les outils de mesures, et le reset d'orientation
             $('.ol-overlay-container').css('display', 'none');
@@ -60,7 +59,7 @@ function geolocaliseIGN (idModal, options) {
 
         viewer.getLibMap().on('singleclick', function(evt) {
             lonlat = updateCoordinates(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-            putMarkerAt(viewer.getLibMap(), lonlat, nbCouches);
+            putMarkerAt(viewer.getLibMap(), lonlat);
         });
     }
 
@@ -105,8 +104,7 @@ function geolocaliseIGN (idModal, options) {
             adresse,
             'StreetAddress',
             'EPSG:4326',
-            viewer,
-            nbCouches
+            viewer
         );
 
         return false;
