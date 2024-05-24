@@ -502,25 +502,15 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
         theme: true,
         aspectRatio: 2,
         events: function(start, end, callback) {
-            var type;
+            var type = $("#TYPE_DOSSIER").val();
 
-            if ($("#TYPE_DOSSIER").val() == 1) {
-                //cas type dossier étude. On affiche alors que les commissions de type En Salle
-                type = 1;
-            } else if ($("#TYPE_DOSSIER").val() == 2) {
-                //cas type de dossier visite ou groupe de visite suivant le champ infoCalendar on choisi ce que l'on affiche
-                if (infoCalendar == 'showVisite') {
-                    type = $("#TYPE_DOSSIER").val();
-                } else if (infoCalendar == 'showCommission') {
-                    type = 1;
-                }
-            } else if ($("#TYPE_DOSSIER").val() == 3) {
-                if (infoCalendar == 'showVisite') {
-                    type = $("#TYPE_DOSSIER").val();
-                } else if (infoCalendar == 'showCommission') {
+            if (type == 3) {
+                //cas type de dossier groupe de visite suivant le champ infoCalendar on choisi ce que l'on affiche
+                if (infoCalendar == 'showCommission') {
                     type = 1;
                 }
             }
+            
             $.ajax({
                 url: '/calendrier-des-commissions/recupevenement?start=' + start.getTime() +
                     "&end=" + end.getTime() + "&type=" + type,
@@ -633,6 +623,45 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                             'refetchEvents');
                                         $("#dialogComm").dialog('close').html(
                                             '');
+
+                                        // Permet d'affecter la date de commission au champ du dossier en un seul clic
+                                        var eventId = rez[0]['id'];
+
+                                        // Calcul de la date
+                                        var dateEnd = new Date(end);
+                                        var dateStart = new Date(start);
+                                        var date = dateEnd;
+
+                                        if( date < dateStart){
+                                            date = dateStart;
+                                        }
+                                        
+                                        dd = date.getDate();
+                                        mm = date.getUTCMonth() + 1;
+                                        aa = date.getUTCFullYear();
+
+                                        if (dd < 10) {
+                                            dd = '0' + dd;
+                                        }
+                                        if (mm < 10) {
+                                            mm = '0' + mm;
+                                        }
+                                    
+                                        /*
+                                        Remplissage du champ concerné
+                                        Pour groupe de visite : 
+                                            - type = 1 pour le champ "Date de commission en salle"
+                                            - type = 3 pour le champ "Date de visite"
+                                        */
+                                        if (type == 1) {
+                                            $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
+                                            $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
+                                            $("#hideCommission").click();
+                                        } else if (type == 2 || type == 3 ) {
+                                            $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
+                                            $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
+                                            $("#hideVisite").click();
+                                        }
                                     }
                                 });
                             }
@@ -720,7 +749,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
 
                                     $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                                     $("#ID_AFFECTATION_DOSSIER_VISITE").val(event.id);
-
                                     $("#hideVisite").click();
                                 } else if (rez.length > 1) {
                                     var nbResultats = rez.length;
