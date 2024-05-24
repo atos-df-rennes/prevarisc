@@ -502,25 +502,15 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
         theme: true,
         aspectRatio: 2,
         events: function(start, end, callback) {
-            var type;
+            var type = $("#TYPE_DOSSIER").val();
 
-            if ($("#TYPE_DOSSIER").val() == 1) {
-                //cas type dossier étude. On affiche alors que les commissions de type En Salle
-                type = 1;
-            } else if ($("#TYPE_DOSSIER").val() == 2) {
-                //cas type de dossier visite ou groupe de visite suivant le champ infoCalendar on choisi ce que l'on affiche
-                if (infoCalendar == 'showVisite') {
-                    type = $("#TYPE_DOSSIER").val();
-                } else if (infoCalendar == 'showCommission') {
-                    type = 1;
-                }
-            } else if ($("#TYPE_DOSSIER").val() == 3) {
-                if (infoCalendar == 'showVisite') {
-                    type = $("#TYPE_DOSSIER").val();
-                } else if (infoCalendar == 'showCommission') {
+            if (type == 3) {
+                //cas type de dossier groupe de visite suivant le champ infoCalendar on choisi ce que l'on affiche
+                if (infoCalendar == 'showCommission') {
                     type = 1;
                 }
             }
+            
             $.ajax({
                 url: '/calendrier-des-commissions/recupevenement?start=' + start.getTime() +
                     "&end=" + end.getTime() + "&type=" + type,
@@ -637,17 +627,7 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         // Permet d'affecter la date de commission au champ du dossier en un seul clic
                                         var eventId = rez[0]['id'];
 
-                                        var calendarId = 'calendar'; 
-
-                                        if ($("#calendarVisite").is(":visible")) { 
-                                            //pour verifier si l'element n'est pas masqué (donc visible)
-                                            calendarId = 'calendarVisite';
-                                        }
-
-                                        var parentElement = $("li:has(#" + calendarId + ")");
-                                        var prevElement = parentElement.prev('li.row-fluid');
-                                        var dateSelect = prevElement.attr('id');
-                                        var typeDossier = type;// on prend le type choisi (1 pour commision et 2 pour visite)  
+                                        // Calcul de la date
                                         var dateEnd = new Date(end);
                                         var dateStart = new Date(start);
                                         var date = dateEnd;
@@ -667,26 +647,20 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                             mm = '0' + mm;
                                         }
                                     
-                                        if (typeDossier == 1) {
-                                            if (dateSelect == "DATEVISITE") {
-                                                $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
-                                                $("#hideCommission").click();
-                                                } else if (dateSelect == "DATECOMM") {
-                                                $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
-                                                $("#hideCommission").click();
-                                            }
-                                        } else if (typeDossier == 2 || typeDossier == 3 ) {
-                                            if (dateSelect == "DATEVISITE") {
-                                                $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
-                                                $("#hideVisite").click();
-                                            } else if(dateSelect == "DATECOMM") {
-                                                $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
-                                                $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
-                                                $("#hideCommission").click();
-                                            }
+                                        /*
+                                        Remplissage du champ concerné
+                                        Pour groupe de visite : 
+                                            - type = 1 pour le champ "Date de commission en salle"
+                                            - type = 3 pour le champ "Date de visite"
+                                        */
+                                        if (type == 1) {
+                                            $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
+                                            $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(eventId);
+                                            $("#hideCommission").click();
+                                        } else if (type == 2 || type == 3 ) {
+                                            $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
+                                            $("#ID_AFFECTATION_DOSSIER_VISITE").val(eventId);
+                                            $("#hideVisite").click();
                                         }
                                     }
                                 });
@@ -736,7 +710,6 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                     if (dateSelect == "DATEVISITE") {
                         $("#DATEVISITE_INPUT").val(dd + "/" + mm + "/" + aa);
                         $("#ID_AFFECTATION_DOSSIER_VISITE").val(event.id);
-                       
                     } else if (dateSelect == "DATECOMM") {
                         $("#DATECOMM_INPUT").val(dd + "/" + mm + "/" + aa);
                         $("#ID_AFFECTATION_DOSSIER_COMMISSION").val(event.id);
