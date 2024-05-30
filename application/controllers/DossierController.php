@@ -3124,6 +3124,8 @@ class DossierController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/Calendrier/Calendar.js', 'text/javascript');
+
 
         $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
 
@@ -3185,6 +3187,8 @@ class DossierController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/Calendrier/Calendar.js', 'text/javascript');
+
 
         $serviceDossierVerificationsTechniques = new Service_DossierVerificationsTechniques();
 

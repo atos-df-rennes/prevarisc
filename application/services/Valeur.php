@@ -21,6 +21,10 @@ class Service_Valeur
             $idValeur = $valeur['ID_VALEUR'];
             $idxValeur = $valeur['idx'];
             $valeur = $valeur[$typeValeur];
+            if($typeValeur ===  'VALEUR_DATE' ){
+                $valeur = Service_Utils_Date::convertFromMySQL($valeur);
+            }
+            
         }
 
         return ['ID_VALEUR' => $idValeur, 'VALEUR' => $valeur, 'IDX_VALEUR' => $idxValeur];
@@ -67,6 +71,9 @@ class Service_Valeur
     {
         if ('' !== $value) {
             $typeValeur = $this->getTypeValeur($idChamp);
+            if($typeValeur === 'VALEUR_DATE' ){
+                $value = Service_Utils_Date::convertToMySQL($value);
+            }
             $idValeurInsert = $this->modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
@@ -102,6 +109,9 @@ class Service_Valeur
             $valueInDB->delete();
         } else {
             $typeValeur = $this->getTypeValeur($idChamp);
+            if($typeValeur ===  'VALEUR_DATE' ){
+                $newValue = Service_Utils_Date::convertToMySQL($newValue);
+            }
             $valueInDB->{$typeValeur} = $newValue;
             $valueInDB->idx = $idx;
             $valueInDB->save();
@@ -136,6 +146,10 @@ class Service_Valeur
                 $typeValeur = 'VALEUR_CHECKBOX';
 
                 break;
+            case 7:
+                $typeValeur = 'VALEUR_DATE';
+                break;
+
 
             default:
                 throw new Exception('Type de champ non supporté.');
