@@ -1045,8 +1045,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
                 // Récupération des rubriques pour chaque objet global
-                foreach ($capsulesRubriques as $key => $capsuleRubrique) {
-                    $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                    $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
                 }
 
                 $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
@@ -1199,8 +1199,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
-                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
             $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
@@ -1281,8 +1281,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
-                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
@@ -1352,8 +1352,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
 
             // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $key => $capsuleRubrique) {
-                $capsulesRubriques[$key]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
             }
 
             $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
