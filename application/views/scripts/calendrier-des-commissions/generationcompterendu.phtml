@@ -262,21 +262,22 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                                 $col['VALEUR'] = 'Non';
                                                             }
                                                         }
+                                                        else{
+                                                            // Définition du libellé pour les dates 
+                                                            if ('Date' === $champ['TYPE']) {
+                                                                if (!empty($champ['VALEUR'])) {
+                                                                    $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                                                    $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                                }else{
+                                                                    $champ['VALEUR']= "";
+                                                                }
+                                                            }
+                                                        }
 
                                                         addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
                                                         $idxCol++;
                                                     }
-                                                    else{
-                                                        // Définition du libellé pour les dates 
-                                                        if ('Date' === $champ['TYPE']) {
-                                                            if (!empty($champ['VALEUR'])) {
-                                                                $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
-                                                                $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                                                            }else{
-                                                                $champ['VALEUR']= "";
-                                                            }
-                                                        }
-                                                    }
+                                                   
 
                                                     $segmentTableau->merge();
                                                 }
