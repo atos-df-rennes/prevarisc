@@ -1,6 +1,6 @@
 SET NAMES 'utf8';
 
-INSERT INTO `listetypechamprubrique` VALUES (NULL, 'Parent');
+INSERT INTO `listetypechamprubrique` VALUES (6, 'Parent');
 
 ALTER TABLE `champ` ADD column `ID_PARENT` bigint(20);
 

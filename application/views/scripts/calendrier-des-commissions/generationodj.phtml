@@ -331,6 +331,17 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                                 $col['VALEUR'] = 'Non';
                                             }
                                         }
+                                        else{
+                                            // Définition du libellé pour les dates 
+                                            if ('Date' === $champ['TYPE']) {
+                                                if (!empty($champ['VALEUR'])) {
+                                                    $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                                    $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                }else{
+                                                    $champ['VALEUR']= "";
+                                                }
+                                            }
+                                        }
 
                                         addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
                                         $idxCol++;
@@ -348,6 +359,17 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                         $champFils['VALEUR'] = 'Oui';
                                     } else {
                                         $champFils['VALEUR'] = 'Non';
+                                    }
+                                }
+                                else{
+                                    // Définition du libellé pour les dates 
+                                    if ('Date' === $champ['TYPE']) {
+                                        if (!empty($champ['VALEUR'])) {
+                                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                        }else{
+                                            $champ['VALEUR']= "";
+                                        }
                                     }
                                 }
                                 addChamp(
@@ -373,6 +395,17 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                 $champ['VALEUR'] = 'Non';
                             }
                         }
+                        else{
+                            // Définition du libellé pour les dates 
+                            if ('Date' === $champ['TYPE']) {
+                                if (!empty($champ['VALEUR'])) {
+                                    $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                    $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                }else{
+                                    $champ['VALEUR']= "";
+                                }
+                            }
+                        }
                         addChamp(
                             $segment->infosDoss,
                             $serviceUtils->getFullFusionName(
@@ -385,6 +418,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             $champ['VALEUR']
                         );
                     }
+                    
                 }
             }
         }

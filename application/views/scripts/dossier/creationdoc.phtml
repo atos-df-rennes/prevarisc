@@ -867,6 +867,17 @@ foreach ($this->formulaires as $formulaire) {
                                         $col['VALEUR'] = 'Non';
                                     }
                                 }
+                                else{
+                                    // Définition du libellé pour les dates 
+                                    if ('Date' === $champ['TYPE']) {
+                                        if (!empty($champ['VALEUR'])) {
+                                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                        }else{
+                                            $champ['VALEUR']= "";
+                                        }
+                                    }
+                                }
 
                                 addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
                                 $idxCol++;
@@ -884,6 +895,17 @@ foreach ($this->formulaires as $formulaire) {
                                 $champFils['VALEUR'] = 'Oui';
                             } else {
                                 $champFils['VALEUR'] = 'Non';
+                            }
+                        }
+                        else{
+                            // Définition du libellé pour les dates 
+                            if ('Date' === $champ['TYPE']) {
+                                if (!empty($champ['VALEUR'])) {
+                                    $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                    $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                }else{
+                                    $champ['VALEUR']= "";
+                                }
                             }
                         }
                         addChamp(
@@ -909,6 +931,17 @@ foreach ($this->formulaires as $formulaire) {
                         $champ['VALEUR'] = 'Non';
                     }
                 }
+                else{
+                    // Définition du libellé pour les dates 
+                    if ('Date' === $champ['TYPE']) {
+                        if (!empty($champ['VALEUR'])) {
+                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                        }else{
+                            $champ['VALEUR']= "";
+                        }
+                    }
+                }
                 addChamp(
                     $odf,
                     $serviceUtils->getFullFusionName(
@@ -921,6 +954,7 @@ foreach ($this->formulaires as $formulaire) {
                     $champ['VALEUR']
                 );
             }
+            
         }
     }
 }

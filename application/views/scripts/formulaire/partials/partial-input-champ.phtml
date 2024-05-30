@@ -15,7 +15,7 @@
         <input
             type='text'
             name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA']  : $champStr ?>'
-            value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'
+            value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES)  ?>'
             <?= $this->canWrite ? '' : 'disabled' ?>
         >
     <?php break;
@@ -117,6 +117,28 @@
             </div>
         <?php endif?>
     <?php break;
+    // Date
+    case 7: if ($this->canWrite) { ?>
+        <div class='right form span9' style>
+            <input type='text' class ='date' id='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' <?= $this->canWrite ? '' : 'disabled' ?> value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
+            <button type="button" class='today btn'>
+                <i class='icon-calendar' aria-hidden='true'></i>
+                Aujourd'hui
+            </button>
+        </div>
+    <?php
+    } else { 
+        $formattedDate = ''; 
+        if (!empty($this->champ['VALEUR'])) {
+            $formattedDate = Service_Utils_Date::formatDateWithDayName($this->champ['VALEUR']);
+        }
+        ?>
+        <div class='right form span9' style="margin-top: 5px;">
+            <span><?= htmlspecialchars($formattedDate, ENT_QUOTES) ?></span>
+        </div>
+        <?php
+    }
+    break;
     default:
         break;
-} ?>
+}?>
