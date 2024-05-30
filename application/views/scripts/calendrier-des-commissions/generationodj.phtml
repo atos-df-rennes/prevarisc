@@ -275,7 +275,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
             addChamp($avisDerogations, 'analyse_de_risque', '');
             addChamp($avisDerogations, 'avis', '');
             addChamp($avisDerogations, 'identifiantdossierleve', '');
-            addChamp($avisDerogations, 'affichagehistorique', '');
+            addChamp($avisDerogations, 'date', '');
 
             $avisDerogations->merge();
         }
@@ -320,16 +320,29 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                             } catch (Exception $e) {}
 
                             if (isset($segmentTableau)) {
-                                foreach ($champ['FILS']['VALEURS'] as $ligne) {
-                                    $idxCol = 0;
+                                if (count($champ['FILS']['VALEURS']) === 0) {
+                                    foreach ($champ['FILS'] as $index => $fils) {
+                                        if(is_int($index)) {
+                                            addChamp($segmentTableau, sprintf('valeur%d', $index), '');
+                                        }
+                                    }
+                                    
+                                    $segmentTableau->merge();
+                                } else {
+                                    foreach ($champ['FILS']['VALEURS'] as $ligne) {
+                                        $idxCol = 0;
 
-                                    foreach ($ligne as $col) {
-                                        if ('Case à cocher' === $col['TYPE']) {
-                                            if (true === boolval($col['VALEUR'])) {
-                                                $col['VALEUR'] = 'Oui';
-                                            } else {
-                                                $col['VALEUR'] = 'Non';
+                                        foreach ($ligne as $col) {
+                                            if ('Case à cocher' === $col['TYPE']) {
+                                                if (true === boolval($col['VALEUR'])) {
+                                                    $col['VALEUR'] = 'Oui';
+                                                } else {
+                                                    $col['VALEUR'] = 'Non';
+                                                }
                                             }
+
+                                            addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
+                                            $idxCol++;
                                         }
                                         else{
                                             // Définition du libellé pour les dates 
@@ -343,11 +356,8 @@ function retrieveInfoDoss($segment, $dossierInfos) {
                                             }
                                         }
 
-                                        addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
-                                        $idxCol++;
+                                        $segmentTableau->merge();
                                     }
-
-                                    $segmentTableau->merge();
                                 }
                             }
 
