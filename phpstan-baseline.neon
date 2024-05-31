@@ -632,7 +632,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
-			count: 15
+			count: 17
 			path: application/controllers/DossierController.php
 
 		-
@@ -747,7 +747,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:inlineScript\\(\\)\\.$#"
-			count: 8
+			count: 10
 			path: application/controllers/EtablissementController.php
 
 		-

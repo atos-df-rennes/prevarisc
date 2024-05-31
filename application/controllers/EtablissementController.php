@@ -619,7 +619,6 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/Calendrier/Calendar.js', 'text/javascript');
 
-
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
         $idEtablissement = $this->getParam('id');
 
