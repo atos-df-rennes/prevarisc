@@ -53,12 +53,16 @@ class Model_PlatauConsultationMapper
             ->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr') : null;
         $dateAvis = null !== $row->DATE_AVIS ? (new Zend_Date($row->DATE_AVIS, 'yyyy-MM-dd'))
             ->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr') : null;
-
+        $DateReponseAttendue = null !== $row->DATE_REPONSE_ATTENDUE ? (new Zend_Date($row->DATE_REPONSE_ATTENDUE, 'yyyy-MM-dd'))
+            ->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR, 'fr') : null;
+        
         $consultation->setId($row->ID_PLATAU)
             ->setStatutAvis($row->STATUT_AVIS ?? Model_Enum_PlatauStatutAvis::INCONNU)
             ->setDateAvis($dateAvis)
             ->setStatutPec($row->STATUT_PEC ?? Model_Enum_PlatauStatutPec::INCONNU)
             ->setDatePec($datePec)
+            ->setDateReponseAttendue($DateReponseAttendue)
+
         ;
 
         return $consultation;

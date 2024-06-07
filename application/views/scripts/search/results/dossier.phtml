@@ -110,6 +110,9 @@
     <div class="pull-right">
         <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
+        <?php if($this->DATE_REPONSE_ATTENDUE !== null) : 
+            $Couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->TempsRestant);
+            echo "<span class='label label-$Couleur'>Temps restant : " . $this->TempsRestant.  "</span>"; endif   ?>
 
         <!-- Avis du dossier -->
         <?php if($this->INCOMPLET_DOSSIER == 1) : ?>

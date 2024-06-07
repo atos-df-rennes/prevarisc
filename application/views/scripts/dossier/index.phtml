@@ -1385,6 +1385,17 @@ $(".delaipresc").live('click', function() {
                     <div class="left span3">Identifiant de la consultation</div>
                     <div class="right span9"><?= $this->id_platau ?></div>
                 </li>
+                <?php if($this->dateReponseAttendue !== null) : ?>
+                <li class="row-fluid" style="margin-bottom: 20px;">
+                    <div class="left span3">Temps restant pour une réponse</div>
+                    <div class="right span9">
+                    <?php    
+                         $Couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->tempsRestant);
+                        echo "<span class='label label-$Couleur'> " . $this->tempsRestant.  "</span>"; 
+                    ?>
+                    </div>
+                </li>
+                <?php endif; ?>
                 <li class="row-fluid" style="margin-bottom: 20px;">
                     <?php
                         $classPec = 'muted';

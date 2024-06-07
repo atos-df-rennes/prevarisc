@@ -7,6 +7,7 @@ class Model_PlatauConsultation
     private $dateAvis;
     private $statutPec;
     private $datePec;
+    private $dateReponseAttendue;
 
     public function setId(string $id): self
     {
@@ -66,5 +67,16 @@ class Model_PlatauConsultation
     public function getDatePec(): ?string
     {
         return $this->datePec;
+    }
+    public function setDateReponseAttendue(?string $dateReponseAttendue): self
+    {
+        $this->dateReponseAttendue = $dateReponseAttendue;
+
+        return $this;
+    }
+
+    public function getDateReponseAttendue(): ?string
+    {
+        return $this->dateReponseAttendue;
     }
 }

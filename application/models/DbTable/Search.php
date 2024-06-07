@@ -265,6 +265,11 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
 
         return $this;
     }
+    public function join($array): self
+    {
+        $this->select->join(...$array);
+        return $this;
+    }
 
     public function having($value): self
     {
