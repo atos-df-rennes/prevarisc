@@ -672,7 +672,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 21
+			count: 22
 			path: application/controllers/EtablissementController.php
 
 		-
