@@ -222,15 +222,17 @@ class EtablissementController extends Zend_Controller_Action
     }
 
     public function descriptifAction()
-    {
+    { 
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
 
         if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) {
+            $hideButton = $this->_request->getParam('hideButton');
+            $this->view->assign('hideButton', $hideButton);
             $this->descriptifPersonnaliseAction();
         } else {
             $this->_helper->layout->setLayout('etablissement');
-
+           
             $descriptifs = $this->serviceEtablissement->getDescriptifs($this->_request->id);
 
             $this->view->assign('descriptif', $descriptifs['descriptif']);
@@ -239,6 +241,18 @@ class EtablissementController extends Zend_Controller_Action
             $this->view->assign('champs_descriptif_technique', $descriptifs['descriptifs_techniques']);
         }
     }
+    public function descriptifModalAction()
+{
+    $this->_helper->layout->disableLayout();
+    $etablissementId = $this->_request->getParam('id');
+    $descriptifs = $this->serviceEtablissement->getDescriptifs($etablissementId);
+    $this->view->assign('descriptif', $descriptifs['descriptif']);
+    $this->view->assign('historique', $descriptifs['historique']);
+    $this->view->assign('derogations', $descriptifs['derogations']);
+    $this->view->assign('champs_descriptif_technique', $descriptifs['descriptifs_techniques']);
+    
+    echo $this->render('/descriptif/descriptif-original');
+}
 
     public function descriptifPersonnaliseAction(): void
     {
@@ -252,7 +266,7 @@ class EtablissementController extends Zend_Controller_Action
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $idEtablissement = $this->getParam('id');
-
+        
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
 

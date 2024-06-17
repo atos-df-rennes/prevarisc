@@ -162,7 +162,7 @@ endif ?>
         <div style='margin:10px; line-height: 20px;' id='infosEtablissement'>
             <?php if($this->enteteEtab) : ?>
                 Etablissement(s) concerné(s) :
-                <a
+                <a  
                     href= <?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT']?>
                     data-target='#modal-desc'
                     data-toggle='modal'
@@ -256,7 +256,7 @@ endif ?>
                             $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
                         ?>
                             <a
-                                href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>
                                 data-target='#modal-desc'
                                 data-toggle='modal'
                                 id='descEtab'

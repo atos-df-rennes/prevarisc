@@ -2,9 +2,18 @@
     <a class='btn' href="<?= $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
 </div>
 
-<div id='descriptif-personnalise'>
-    <h3>Descriptifs</h3>
-
+<div id='descriptif-personnalise'>  
+    <div style="display: flex;">
+        <div>
+            <h3>Descriptifs</h3>
+        </div>
+        <div style="margin-left: 2%;">
+            <?php
+             if ($this->hideButton === null): ?>
+                <h3><button class="btn btn-link" id="linkButton" title='Afficher le descriptif'>Afficher l'ancien descriptif</button></h3>   
+            <?php endif; ?>
+        </div>
+    </div>
     <h4 class='h4_subtitle'>Descriptif technique</h4>
     <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
 
@@ -15,4 +24,46 @@
             'canWrite' => false
         ]); ?>
     </div>
+    <div class="modal fade" id="modal-desc" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h5>L'ancien descriptif :</h5>
+                </div>
+                <div class="modal-body" id="descriptif-original-content">
+                    <a id="descriptif-original"></a>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">Fermer</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+$(document).ready(function(){
+    $("#linkButton").on('click', function(event){
+        event.preventDefault();
+        var etablissementId = <?= $this->etablissement['general']['ID_ETABLISSEMENT']; ?>;
+        var url = '/etablissement/descriptif-modal/id/' + etablissementId;
+        
+        $.ajax({
+            url: url,
+            type: 'GET',
+            beforeSend: function(){
+                $('#modal-desc .modal-body').html('<p>Chargement...</p>');
+            },
+            success: function(response){
+                $('#modal-desc .modal-body').html(response);
+                $('#modal-desc').modal('show');
+            },
+            error: function(xhr, status, error){
+                console.error('Erreur AJAX : ' + error);
+                $('#modal-desc .modal-body').html('<p>Erreur de chargement...</p>');
+            }
+        });
+    });
+});
+</script>
