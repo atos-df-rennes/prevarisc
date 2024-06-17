@@ -51,6 +51,12 @@
                         <route>get_adresse</route>
                         <defaults method="getAdresse" />
                     </get_adresse>
+                    <!-- Nouvelle route pour descriptif-modal -->
+                    <descriptif_modal type="Zend_Controller_Router_Route">
+                        <route>descriptif-modal/id/:id</route>
+                        <defaults action="descriptif-modal" />
+                        <reqs id="\d+" />
+                    </descriptif_modal>
                 </chains>
             </etablissement>
 
