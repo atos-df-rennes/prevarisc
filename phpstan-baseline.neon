@@ -672,7 +672,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Controller_Action_HelperBroker\\:\\:\\$layout\\.$#"
-			count: 22
+			count: 21
 			path: application/controllers/EtablissementController.php
 
 		-
@@ -737,7 +737,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:headLink\\(\\)\\.$#"
-			count: 13
+			count: 12
 			path: application/controllers/EtablissementController.php
 
 		-

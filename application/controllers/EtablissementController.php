@@ -223,16 +223,14 @@ class EtablissementController extends Zend_Controller_Action
 
     public function descriptifAction()
     {
-        $viewHeadLink = $this->view;
-        $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
+        $this->_helper->layout->setLayout('etablissement');
 
-        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) {
-            $hideButton = $this->_request->getParam('hideButton');
-            $this->view->assign('hideButton', $hideButton);
+        $displayOriginal = filter_var($this->_request->getParam('original'), FILTER_VALIDATE_BOOLEAN);
+        $this->view->assign('displayOriginal', $displayOriginal);
+        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE') && false === $displayOriginal) {
+            $this->view->assign('hideButton', $this->_request->getParam('hideButton'));
             $this->descriptifPersonnaliseAction();
         } else {
-            $this->_helper->layout->setLayout('etablissement');
-
             $descriptifs = $this->serviceEtablissement->getDescriptifs($this->_request->id);
 
             $this->view->assign('descriptif', $descriptifs['descriptif']);
@@ -242,23 +240,8 @@ class EtablissementController extends Zend_Controller_Action
         }
     }
 
-    public function descriptifModalAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $etablissementId = $this->_request->getParam('id');
-        $descriptifs = $this->serviceEtablissement->getDescriptifs($etablissementId);
-        $this->view->assign('descriptif', $descriptifs['descriptif']);
-        $this->view->assign('historique', $descriptifs['historique']);
-        $this->view->assign('derogations', $descriptifs['derogations']);
-        $this->view->assign('champs_descriptif_technique', $descriptifs['descriptifs_techniques']);
-
-        $this->render('/descriptif/descriptif-original');
-    }
-
     public function descriptifPersonnaliseAction(): void
     {
-        $this->_helper->layout->setLayout('etablissement');
-
         $viewHeadLink = $this->view;
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/descriptif.css', 'all');
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/tableauInputParent.css', 'all');
@@ -279,6 +262,8 @@ class EtablissementController extends Zend_Controller_Action
 
     public function editDescriptifAction()
     {
+        $this->_helper->layout->setLayout('etablissement');
+
         if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) {
             $this->editDescriptifPersonnaliseAction();
         } else {

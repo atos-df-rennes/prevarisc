@@ -3,19 +3,17 @@
 </div>
 
 <div id='descriptif-personnalise'>  
-    <div style="display: flex;">
-        <div>
-            <h3>Descriptifs</h3>
-        </div>
-        <div style="margin-left: 2%;">
-            <?php
-             if ($this->hideButton === null): ?>
-                <h3><button class="btn btn-link" id="linkButton" title='Afficher le descriptif'>Afficher l'ancien descriptif</button></h3>   
-            <?php endif; ?>
-        </div>
+    <div class="descriptif-personnalise--header">
+        <h3>Descriptifs</h3>
+        <?php if ($this->hideButton === null): ?>
+            <a id="descEtab" href="<?= $this->url(['action' => 'descriptif']).'?original=true' ?>" data-target="#modal-desc" data-toggle="modal">Afficher le descriptif original</a>
+        <?php endif ?>
     </div>
-    <h4 class='h4_subtitle'>Descriptif technique</h4>
-    <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+
+    <div class="descriptif-personnalise_rubriques-infos">
+        <h4 class='h4_subtitle'>Descriptif technique</h4>
+        <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    </div>
 
     <div id='affichage-informations' class='form-horizontal'>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
@@ -29,10 +27,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">x</button>
-                    <h5>L'ancien descriptif :</h5>
+                    <h5>Descriptif original</h5>
                 </div>
                 <div class="modal-body" id="descriptif-original-content">
-                    <a id="descriptif-original"></a>
+                    Chargement des éléments...
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="btn" data-dismiss="modal">Fermer</a>
@@ -41,29 +39,3 @@
         </div>
     </div>
 </div>
-
-<script>
-$(document).ready(function(){
-    $("#linkButton").on('click', function(event){
-        event.preventDefault();
-        var etablissementId = <?= $this->etablissement['general']['ID_ETABLISSEMENT']; ?>;
-        var url = '/etablissement/descriptif-modal/id/' + etablissementId;
-        
-        $.ajax({
-            url: url,
-            type: 'GET',
-            beforeSend: function(){
-                $('#modal-desc .modal-body').html('<p>Chargement...</p>');
-            },
-            success: function(response){
-                $('#modal-desc .modal-body').html(response);
-                $('#modal-desc').modal('show');
-            },
-            error: function(xhr, status, error){
-                console.error('Erreur AJAX : ' + error);
-                $('#modal-desc .modal-body').html('<p>Erreur de chargement...</p>');
-            }
-        });
-    });
-});
-</script>
