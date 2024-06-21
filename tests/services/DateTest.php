@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 final class Service_Utils_DateTest extends TestCase
 {
     /**
@@ -45,11 +50,10 @@ final class Service_Utils_DateTest extends TestCase
     {
         $actual = Service_Utils_Date::formatDateWithDayName($date);
         $this->assertSame(
-            $this->normalizeString($expected), 
+            $this->normalizeString($expected),
             $this->normalizeString($actual)
         );
     }
-
 
     public function formatDateWithDayNameProvider(): array
     {
@@ -59,6 +63,7 @@ final class Service_Utils_DateTest extends TestCase
             'zero string' => ['0', null],
         ];
     }
+
     public function formatDateWithDayNameProvidersecond(): array
     {
         return [
@@ -70,11 +75,10 @@ final class Service_Utils_DateTest extends TestCase
 
     private function normalizeString(?string $string): ?string
     {
-        if ($string === null) {
+        if (null === $string) {
             return null;
         }
+
         return mb_strtolower(str_replace(['é', 'è', 'ê', 'ë'], 'e', $string));
     }
-
-
 }
