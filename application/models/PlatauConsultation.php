@@ -68,6 +68,7 @@ class Model_PlatauConsultation
     {
         return $this->datePec;
     }
+
     public function setDateReponseAttendue(?string $dateReponseAttendue): self
     {
         $this->dateReponseAttendue = $dateReponseAttendue;

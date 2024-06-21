@@ -198,7 +198,6 @@ class DossierController extends Zend_Controller_Action
 
             $this->view->assign('id_platau', $dossier['ID_PLATAU'] ?? null);
 
-           
             if (null !== $dossier['ID_PLATAU']) {
                 if (filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
                     throw new Exception("Plat'AU est désactivé", 500);
@@ -217,16 +216,15 @@ class DossierController extends Zend_Controller_Action
                     $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
                     $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
                     $this->view->assign('dateReponseAttendue', $platauConsultation->getDateReponseAttendue());
-                     
-                    $data = Service_Dashboard::getDossiersPlatAUSansEtablissement([],false);
+
+                    $data = Service_Dashboard::getDossiersPlatAUSansEtablissement([], false);
                     $tempsRestant = '';
-                    foreach ($data as $item){
-                        if($item['ID_PLATAU'] == $dossier['ID_PLATAU']){
-                            $tempsRestant =$item['TempsRestant'];
+                    foreach ($data as $item) {
+                        if ($item['ID_PLATAU'] == $dossier['ID_PLATAU']) {
+                            $tempsRestant = $item['TempsRestant'];
                         }
                     }
                     $this->view->assign('tempsRestant', $tempsRestant);
-
                 }
             }
 
