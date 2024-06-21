@@ -13,3 +13,22 @@
 .colTableInput:first-child {
     margin-left: 0;
 }
+
+.colDate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+}
+
+.colDate input,
+.colDate button {
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+.colDate input {
+    margin-bottom: 5px; 
+}
+
+

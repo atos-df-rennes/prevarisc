@@ -407,12 +407,12 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                             }
                                             else{
                                                 // Définition du libellé pour les dates 
-                                                if ('Date' === $champ['TYPE']) {
-                                                    if (!empty($champ['VALEUR'])) {
-                                                        $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
-                                                        $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                if ('Date' === $col['TYPE']) {
+                                                    if ($col['VALEUR'] !== null) {
+                                                        $zendDate = new Zend_Date($col['VALEUR'], 'dd/MM/yyyy');
+                                                        $col['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
                                                     }else{
-                                                        $champ['VALEUR']= "";
+                                                        $col['VALEUR']= "";
                                                     }
                                                 }
                                             }
@@ -437,12 +437,12 @@ function retrieveInfoDossier($segment, $dossierInfos) {
                                 }
                                 else{
                                     // Définition du libellé pour les dates 
-                                    if ('Date' === $champ['TYPE']) {
-                                        if (!empty($champ['VALEUR'])) {
-                                            $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
-                                            $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                    if ('Date' === $champFils['TYPE']) {
+                                        if (!empty($champFils['VALEUR'])) {
+                                            $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
+                                            $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
                                         }else{
-                                            $champ['VALEUR']= "";
+                                            $champFils['VALEUR']= "";
                                         }
                                     }
                                 }
