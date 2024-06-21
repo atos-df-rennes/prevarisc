@@ -8,9 +8,8 @@ $(document).ready(function() {
         if (mois < 10) mois = '0' + mois;
 
         const dateToday = jour + "/" + mois + "/" + annee;
-        $(this).prev().attr('value',dateToday);
+        $(this).prev().attr('value', dateToday);
     });
-
     
     $('.date').live('click', function() {
         $(this).datepicker({ showOn: 'focus', dateFormat: 'dd/mm/yy', firstDay: 1 }).focus();
