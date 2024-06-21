@@ -1,0 +1,14 @@
+<?php switch ($this->champ['ID_TYPECHAMP']) {
+    case 1:
+    case 3:
+    case 4:
+        echo htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES);
+
+        break;
+    case 2:
+        echo nl2br(htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES));
+
+        break;
+    default:
+        break;
+} ?>
