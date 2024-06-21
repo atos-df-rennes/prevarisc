@@ -21,7 +21,11 @@
     <?php break;
     // Texte long
     case 2: ?>
-        <textarea name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' <?= $this->canWrite ? '' : 'disabled' ?>><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
+        <?php if ($this->canWrite): ?>
+            <textarea name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>'><?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?></textarea>
+        <?php else: ?>
+            <?= nl2br(htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES)) ?>
+        <?php endif ?>
     <?php break;
     // Liste
     case 3: ?>
