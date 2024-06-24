@@ -50,9 +50,13 @@ class Service_Valeur
                 ];
                 $strData = implode('-', $strDataValues);
 
+                $value = $valeur[$typeValeur];
+                if ('VALEUR_DATE' === $typeValeur) {
+                    $value = Service_Utils_Date::convertFromMySQL($value);
+                }
                 $retourValeurs[] =
                     [
-                        'VALEUR' => $valeur[$typeValeur],
+                        'VALEUR' => $value,
                         'ID_VALEUR' => $valeur['ID_VALEUR'],
                         'IDX_VALEUR' => $valeur['idx'],
                         'ID_PARENT' => $valeur['ID_PARENT'],

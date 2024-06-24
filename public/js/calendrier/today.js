@@ -3,7 +3,8 @@ $(document).ready(function() {
         const today = new Date();
         const annee = today.getFullYear();
         let jour = today.getDate();
-        let mois = today.getMonth() + 1; 
+        let mois = today.getMonth() + 1;
+
         if (jour < 10) jour = '0' + jour;
         if (mois < 10) mois = '0' + mois;
 
@@ -12,6 +13,6 @@ $(document).ready(function() {
     });
     
     $('.date').live('click', function() {
-        $(this).datepicker({ showOn: 'focus', dateFormat: 'dd/mm/yy', firstDay: 1 }).focus();
+        $(this).datepicker({ showOn: 'focus', firstDay: 1, regional: 'fr' }).focus();
     });
 });

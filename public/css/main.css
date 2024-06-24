@@ -584,24 +584,20 @@ table.periodicite:first-child {
 }
 
 input.date {
-
 	background: url("images/calendar.gif") left no-repeat;
 	padding-left: 16px;
 	width: 83px;
 }
 
 input.date:hover {
-
 	cursor: pointer;
 }
 
 #save_historique_date span.ui-button-text {
-
 	padding: 5px 2px 2px 0;
 }
 
 #save_historique_date input {
-
 	font-size: 0.8em;
 	height: 20px;
 	width: 90px;
@@ -616,7 +612,6 @@ ul#gestionCommissionMenu {
 }
 
 ul#gestionCommissionMenu li {
-
 	display: inline-block;
 	padding: 20px;
 	margin: 0;
@@ -637,7 +632,6 @@ ul#gestionCommissionMenu li {
 }
 
 ul#gestionCommissionMenu li.active {
-
 	background-color: #EEEEEE;
 }
 
