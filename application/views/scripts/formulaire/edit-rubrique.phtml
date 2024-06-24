@@ -125,9 +125,9 @@
                                     <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-champ', 'rubrique' => $this->rubrique['ID_RUBRIQUE'], 'champ' => $champ['ID_CHAMP']], null, true) ?>">
                                         <i title='Modifier' class='icon-pencil'></i>
                                     </a>
-                                    <a href="" data-id="<?= $champ['ID_CHAMP'] ?>" data-rubrique-id="<?= $this->rubrique['ID_RUBRIQUE'] ?>" class="delete-champ">
+                                    <button data-id="<?= $champ['ID_CHAMP'] ?>" data-rubrique-id="<?= $this->rubrique['ID_RUBRIQUE'] ?>" data-nom="<?= $champ['NOM'] ?>" class="btn btn-link delete-champ">
                                         <i title='Supprimer' class='icon-trash'></i>
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

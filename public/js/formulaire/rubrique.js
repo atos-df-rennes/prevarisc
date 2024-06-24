@@ -90,30 +90,63 @@ function deleteChamp(element) {
     const idChamp = element.getAttribute('data-id')
     const idRubrique = element.getAttribute('data-rubrique-id')
     const idParent = element.getAttribute('data-id-parent')
+    const nom = element.getAttribute('data-nom')
 
-    const parentDiv = $(element).parent().parent().parent()
-    const parentTable = $(element).closest('table')
-    const nbOfRows = parentTable.children('tbody').children('tr').length
+    $('#dialog-supp').dialog("destroy")
+    $("#dialog-supp").remove()
 
-    const parentDivTitleDiv = $('.titles .span6.offset2')
+    const dialog_supp = $("<div id='dialog-supp'></div>").appendTo("body")
+    dialog_supp.html('Vous êtes sur le point de supprimer le champ "' + nom + '".')
+    dialog_supp.dialog({
+        title: "Suppression d'un champ",
+        width: 650,
+        draggable: false,
+        resizable: false,
+        modal: true,
+        buttons: [
+            {
+                text: 'Supprimer',
+                class: 'btn btn-danger',
+                click: function() {
+                    const parentDiv = $(element).parent().parent().parent()
+                    const parentTable = $(element).closest('table')
+                    const nbOfRows = parentTable.children('tbody').children('tr').length
 
-    $.ajax({
-        url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
-        type: 'POST',
-        data: idParent,
-        success: function() {
-            if (nbOfRows === 1) {
-                parentTable.remove()
-                parentDivTitleDiv.remove()
-            } else {
-                parentDiv.remove()
+                    const parentDivTitleDiv = $('.titles .span6.offset2')
+
+                    $.ajax({
+                        url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,
+                        type: 'POST',
+                        data: idParent,
+                        success: function() {
+                            if (nbOfRows === 1) {
+                                parentTable.remove()
+                                parentDivTitleDiv.remove()
+                            } else {
+                                parentDiv.remove()
+                            }
+                        },
+                        error: function() {
+                            return false
+                        }
+                    })
+
+                    dialog_supp.dialog("close")
+                    $("#dialog-supp").html('')
+
+                    return false
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    dialog_supp.dialog("close")
+                    $("#dialog-supp").html('')
+                }
             }
-        },
-        error: function() {
-            return false
-        }
+        ]
     })
-    return false
 }
 
 function getTableElement() {
@@ -145,9 +178,9 @@ function getRowElement(parsedData) {
                 <a href='/formulaire/edit-champ/rubrique/`+parsedData.ID_RUBRIQUE+`/champ/`+parsedData.ID_CHAMP+`'>
                     <i title='Modifier' class='icon-pencil'></i>
                 </a>
-                <a href='' data-id='`+parsedData.ID_CHAMP+`' data-rubrique-id='`+parsedData.ID_RUBRIQUE+`' class='delete-champ' onclick='return deleteChamp(this)'>
+                <button data-id='`+parsedData.ID_CHAMP+`' data-rubrique-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-champ' onclick='return deleteChamp(this)'>
                     <i title='Supprimer' class='icon-trash'></i>
-                </a>
+                </button>
             </div>
         </td>
     </tr>`
