@@ -248,7 +248,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                         addChamp($segmentTableau, sprintf('valeur%d', $index), '');
                                                     }
                                                 }
-                                                
+
                                                 $segmentTableau->merge();
                                             } else {
                                                 foreach ($champ['FILS']['VALEURS'] as $ligne) {
@@ -261,15 +261,14 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                             } else {
                                                                 $col['VALEUR'] = 'Non';
                                                             }
-                                                        }
-                                                        else{
-                                                            // Définition du libellé pour les dates 
+                                                        } else {
+                                                            // Définition du libellé pour les dates
                                                             if ('Date' === $col['TYPE']) {
                                                                 if ($col['VALEUR'] !== null) {
                                                                     $zendDate = new Zend_Date($col['VALEUR'], 'dd/MM/yyyy');
                                                                     $col['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                                                                }else{
-                                                                    $col['VALEUR']= "";
+                                                                } else {
+                                                                    $col['VALEUR'] = "";
                                                                 }
                                                             }
                                                         }
@@ -277,7 +276,6 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                         addChamp($segmentTableau, sprintf('valeur%d', $idxCol), $col['VALEUR'] ?? '');
                                                         $idxCol++;
                                                     }
-                                                   
 
                                                     $segmentTableau->merge();
                                                 }
@@ -293,15 +291,14 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                                 } else {
                                                     $champFils['VALEUR'] = 'Non';
                                                 }
-                                            }
-                                            else{
-                                                // Définition du libellé pour les dates 
+                                            } else {
+                                                // Définition du libellé pour les dates
                                                 if ('Date' === $champFils['TYPE']) {
-                                                    if (!empty($champFils['VALEUR'])) {
+                                                    if ($champFils['VALEUR'] !== null) {
                                                         $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
                                                         $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                                                    }else{
-                                                        $champFils['VALEUR']= "";
+                                                    } else {
+                                                        $champFils['VALEUR'] = "";
                                                     }
                                                 }
                                             }
@@ -319,7 +316,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                             );
                                         }
                                     }
-                                }else{
+                                } else {
                                     // Définition du libellé pour les cases à cocher
                                     if ('Case à cocher' === $champ['TYPE']) {
                                         if (true === boolval($champ['VALEUR'])) {
@@ -327,15 +324,14 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                         } else {
                                             $champ['VALEUR'] = 'Non';
                                         }
-                                    }
-                                    else{
-                                        // Définition du libellé pour les dates 
+                                    } else {
+                                        // Définition du libellé pour les dates
                                         if ('Date' === $champ['TYPE']) {
-                                            if (!empty($champ['VALEUR'])) {
+                                            if ($champ['VALEUR'] !== null) {
                                                 $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
                                                 $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
-                                            }else{
-                                                $champ['VALEUR']= "";
+                                            } else {
+                                                $champ['VALEUR'] = "";
                                             }
                                         }
                                     }
@@ -351,7 +347,7 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
                                         $champ['VALEUR']
                                     );
                                 }
-                                
+
                             }
                         }
                     }
