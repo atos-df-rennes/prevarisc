@@ -4,6 +4,10 @@
     margin-left: 1rem;
 }
 
+#descriptif-personnalise .form-horizontal .control-label {
+    padding-top: 0;
+}
+
 .descriptif-personnalise--header {
     display: flex;
     align-items: center;
