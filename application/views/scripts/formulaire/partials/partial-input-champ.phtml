@@ -120,7 +120,7 @@
         // Date
         case 7: ?>
             <div class="colDate" >
-                <input type='text' class ='date' id='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
+                <input type='text' class='date' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
                 <button type="button" class='today btn'>
                     <i class='icon-calendar' aria-hidden='true'></i>
                     Aujourd'hui
