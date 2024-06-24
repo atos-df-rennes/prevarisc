@@ -222,7 +222,7 @@ foreach($this->membresFiles as $val => $membre){
                                                                 addChamp($segmentTableau, sprintf('valeur%d', $index), '');
                                                             }
                                                         }
-                                                        
+
                                                         $segmentTableau->merge();
                                                     } else {
                                                         foreach ($champ['FILS']['VALEURS'] as $ligne) {
@@ -234,6 +234,16 @@ foreach($this->membresFiles as $val => $membre){
                                                                         $col['VALEUR'] = 'Oui';
                                                                     } else {
                                                                         $col['VALEUR'] = 'Non';
+                                                                    }
+                                                                } else {
+                                                                    // Définition du libellé pour les dates
+                                                                    if ('Date' === $col['TYPE']) {
+                                                                        if ($col['VALEUR'] !== null) {
+                                                                            $zendDate = new Zend_Date($col['VALEUR'], 'dd/MM/yyyy');
+                                                                            $col['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                                        } else {
+                                                                            $col['VALEUR'] = "";
+                                                                        }
                                                                     }
                                                                 }
 
@@ -255,7 +265,18 @@ foreach($this->membresFiles as $val => $membre){
                                                         } else {
                                                             $champFils['VALEUR'] = 'Non';
                                                         }
+                                                    } else {
+                                                        // Définition du libellé pour les dates
+                                                        if ('Date' === $champFils['TYPE']) {
+                                                            if ($champFils['VALEUR'] !== null) {
+                                                                $zendDate = new Zend_Date($champFils['VALEUR'], 'dd/MM/yyyy');
+                                                                $champFils['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                            } else {
+                                                                $champFils['VALEUR'] = "";
+                                                            }
+                                                        }
                                                     }
+
                                                     addChamp(
                                                         $dossInfos,
                                                         $serviceUtils->getFullFusionName(
@@ -278,7 +299,18 @@ foreach($this->membresFiles as $val => $membre){
                                                 } else {
                                                     $champ['VALEUR'] = 'Non';
                                                 }
+                                            } else {
+                                                // Définition du libellé pour les dates
+                                                if ('Date' === $champ['TYPE']) {
+                                                    if ($champ['VALEUR'] !== null) {
+                                                        $zendDate = new Zend_Date($champ['VALEUR'], 'dd/MM/yyyy');
+                                                        $champ['VALEUR'] = $zendDate->get(Zend_Date::DAY . ' ' . Zend_Date::MONTH_NAME . ' ' . Zend_Date::YEAR);
+                                                    } else {
+                                                        $champ['VALEUR'] = "";
+                                                    }
+                                                }
                                             }
+
                                             addChamp(
                                                 $dossInfos,
                                                 $serviceUtils->getFullFusionName(

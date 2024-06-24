@@ -1,15 +1,26 @@
 .tableInput {
     display: flex;
     flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .colTableInput {
     width: auto;
     display: flex;
     flex-flow: column;
-    margin: auto 1em;
 }
 
-.colTableInput:first-child {
-    margin-left: 0;
+.colDate {
+    display: flex;
+    gap: .5rem;
+}
+
+.colTableInput .colDate,
+td .colDate {
+    flex-direction: column;
+}
+
+.colTableInput .colDate input,
+td .colDate input {
+    width: auto;
 }

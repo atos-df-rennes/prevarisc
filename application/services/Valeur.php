@@ -21,6 +21,10 @@ class Service_Valeur
             $idValeur = $valeur['ID_VALEUR'];
             $idxValeur = $valeur['idx'];
             $valeur = $valeur[$typeValeur];
+
+            if ('VALEUR_DATE' === $typeValeur) {
+                $valeur = Service_Utils_Date::convertFromMySQL($valeur);
+            }
         }
 
         return ['ID_VALEUR' => $idValeur, 'VALEUR' => $valeur, 'IDX_VALEUR' => $idxValeur];
@@ -46,9 +50,13 @@ class Service_Valeur
                 ];
                 $strData = implode('-', $strDataValues);
 
+                $value = $valeur[$typeValeur];
+                if ('VALEUR_DATE' === $typeValeur) {
+                    $value = Service_Utils_Date::convertFromMySQL($value);
+                }
                 $retourValeurs[] =
                     [
-                        'VALEUR' => $valeur[$typeValeur],
+                        'VALEUR' => $value,
                         'ID_VALEUR' => $valeur['ID_VALEUR'],
                         'IDX_VALEUR' => $valeur['idx'],
                         'ID_PARENT' => $valeur['ID_PARENT'],
@@ -67,6 +75,11 @@ class Service_Valeur
     {
         if ('' !== $value) {
             $typeValeur = $this->getTypeValeur($idChamp);
+
+            if ('VALEUR_DATE' === $typeValeur) {
+                $value = Service_Utils_Date::convertToMySQL($value);
+            }
+
             $idValeurInsert = $this->modelValeur->insert([
                 $typeValeur => $value,
                 'ID_CHAMP' => $idChamp,
@@ -102,6 +115,11 @@ class Service_Valeur
             $valueInDB->delete();
         } else {
             $typeValeur = $this->getTypeValeur($idChamp);
+
+            if ('VALEUR_DATE' === $typeValeur) {
+                $newValue = Service_Utils_Date::convertToMySQL($newValue);
+            }
+
             $valueInDB->{$typeValeur} = $newValue;
             $valueInDB->idx = $idx;
             $valueInDB->save();
@@ -134,6 +152,11 @@ class Service_Valeur
 
             case 5:
                 $typeValeur = 'VALEUR_CHECKBOX';
+
+                break;
+
+            case 7:
+                $typeValeur = 'VALEUR_DATE';
 
                 break;
 

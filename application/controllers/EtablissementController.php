@@ -293,6 +293,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
 
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
         $idEtablissement = $this->getParam('id');
@@ -616,6 +617,7 @@ class EtablissementController extends Zend_Controller_Action
         $this->view->inlineScript()->appendFile('/js/formulaire/ordonnancement/ordonnancement.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/tableau/gestionTableau.js', 'text/javascript');
         $this->view->inlineScript()->appendFile('/js/formulaire/descriptif/edit.js', 'text/javascript');
+        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
 
         $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
         $idEtablissement = $this->getParam('id');
