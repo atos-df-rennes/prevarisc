@@ -118,27 +118,19 @@
         <?php endif?>
     <?php break;
     // Date
-    case 7: if ($this->canWrite) { ?>
-        <div class="colDate" >
-            <input type='text' class ='date' id='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' <?= $this->canWrite ? '' : 'disabled' ?> value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
-            <button type="button" class='today btn'>
-                <i class='icon-calendar' aria-hidden='true'></i>
-                Aujourd'hui
-            </button>
-        </div>
-    <?php
-    } else { 
-        $formattedDate = ''; 
-        if (!empty($this->champ['VALEUR'])) {
-            $formattedDate = Service_Utils_Date::formatDateWithDayName($this->champ['VALEUR']);
-        }
-        ?>
-        <div class='right form span9' style="margin-top: 5px;">
-            <span><?= htmlspecialchars($formattedDate, ENT_QUOTES) ?></span>
-        </div>
-        <?php
-    }
-    break;
+    case 7:
+        if ($this->canWrite): ?>
+            <div class="colDate" >
+                <input type='text' class ='date' id='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' name='<?= isset($this->champ['STR_DATA']) ? $this->champ['STR_DATA'] : $champStr ?>' <?= $this->canWrite ? '' : 'disabled' ?> value='<?= htmlspecialchars($this->champ['VALEUR'], ENT_QUOTES) ?>'>
+                <button type="button" class='today btn'>
+                    <i class='icon-calendar' aria-hidden='true'></i>
+                    Aujourd'hui
+                </button>
+            </div>
+        <?php else : ?>
+            <?= htmlspecialchars(Service_Utils_Date::formatDateWithDayName($this->champ['VALEUR']), ENT_QUOTES) ?>
+        <?php endif;
+        break;
     default:
         break;
 }?>
