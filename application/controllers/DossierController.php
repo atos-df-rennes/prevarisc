@@ -2430,15 +2430,12 @@ class DossierController extends Zend_Controller_Action
             && in_array($dossierNature['ID_NATURE'], $natureCC)
             && !$this->_getParam('repriseCC')
         ) {
-            // On récupère toutes les cellules
-            $idDateCommAffect = $affectDossier['ID_DATECOMMISSION_AFFECT'];
-            $listeDossierConcerne = $dbAffectDossier->getDossierNonAffect($idDateCommAffect);
-
             if (
                 isset($affectDossier['ID_DATECOMMISSION_AFFECT'])
                 && '' !== $affectDossier['ID_DATECOMMISSION_AFFECT']
             ) {
                 $cptIdArray = 0;
+                $listeDossierConcerne = $dbAffectDossier->getDossierNonAffect($affectDossier['ID_DATECOMMISSION_AFFECT']);
                 foreach ($listeDossierConcerne as $dossier) {
                     $listeDossierConcerne[$cptIdArray]['regl'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 0);
                     $listeDossierConcerne[$cptIdArray]['exploit'] = $service_dossier->getPrescriptions((int) $dossier['ID_DOSSIER'], 1);
