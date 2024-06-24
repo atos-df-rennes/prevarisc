@@ -63,9 +63,9 @@
                                                 <a href="<?= $this->url(['controller' => 'formulaire', 'action' => 'edit-rubrique', 'rubrique' => $rubrique['ID_RUBRIQUE']], null, true) ?>">
                                                     <i title='Modifier' class='icon-pencil'></i>
                                                 </a>
-                                                <a href="" data-id="<?= $rubrique['ID_RUBRIQUE'] ?>" class="delete-rubrique">
+                                                <button data-id="<?= $rubrique['ID_RUBRIQUE'] ?>" data-nom="<?= $rubrique['NOM'] ?>" class="btn btn-link delete-rubrique">
                                                     <i title='Supprimer' class='icon-trash'></i>
-                                                </a>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

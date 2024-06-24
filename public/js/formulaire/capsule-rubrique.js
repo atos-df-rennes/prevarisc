@@ -44,30 +44,63 @@ $(document).ready(function() {
 
 function deleteRubrique(element) {
     const id = element.getAttribute('data-id')
+    const nom = element.getAttribute('data-nom')
+    
+    $('#dialog-supp').dialog("destroy");
+    $("#dialog-supp").remove();
 
-    const parentDiv = $(element).parent().parent().parent()
-    const parentTable = $(element).closest('table')
-    const nbOfRows = parentTable.children('tbody').children('tr').length
+    const dialog_supp = $("<div id='dialog-supp'></div>").appendTo("body")
+    dialog_supp.html('Vous êtes sur le point de supprimer la rubrique "' + nom + '".')
+    dialog_supp.dialog({
+        title: "Suppression d'une rubrique",
+        width: 650,
+        draggable: false,
+        resizable: false,
+        modal: true,
+        buttons: [
+            {
+                text: 'Supprimer',
+                class: 'btn btn-danger',
+                click: function() {
+                    const parentDiv = $(element).parent().parent().parent()
+                    const parentTable = $(element).closest('table')
+                    const nbOfRows = parentTable.children('tbody').children('tr').length
 
-    const parentObject = element.closest('.objet').id
-    let parentDivTitleDiv = $('#'+parentObject+' .titles .span6.offset2')
+                    const parentObject = element.closest('.objet').id
+                    let parentDivTitleDiv = $('#'+parentObject+' .titles .span6.offset2')
 
-    $.ajax({
-        url: '/formulaire/delete-rubrique/rubrique/'+id,
-        type: 'POST',
-        success: function() {
-            if (nbOfRows === 1) {
-                parentTable.remove()
-                parentDivTitleDiv.remove()
-            } else {
-                parentDiv.remove()
+                    $.ajax({
+                        url: '/formulaire/delete-rubrique/rubrique/'+id,
+                        type: 'POST',
+                        success: function() {
+                            if (nbOfRows === 1) {
+                                parentTable.remove()
+                                parentDivTitleDiv.remove()
+                            } else {
+                                parentDiv.remove()
+                            }
+                        },
+                        error: function() {
+                            return false
+                        }
+                    })
+
+                    dialog_supp.dialog("close")
+                    $("#dialog-supp").html('')
+
+                    return false
+                }
+            },
+            {
+                text: 'Annuler',
+                class: 'btn',
+                click: function() {
+                    dialog_supp.dialog("close")
+                    $("#dialog-supp").html('')
+                }
             }
-        },
-        error: function() {
-            return false
-        }
+        ]
     })
-    return false
 }
 
 function getTableElement() {
@@ -107,9 +140,9 @@ function getRowElement(parsedData) {
                 <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>
                     <i title='Modifier' class='icon-pencil'></i>
                 </a>
-                <a href='' data-id='`+parsedData.ID_RUBRIQUE+`' class='delete-rubrique' onclick='return deleteRubrique(this)'>
+                <button data-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-rubrique' onclick='return deleteRubrique(this)'>
                     <i title='Supprimer' class='icon-trash'></i>
-                </a>
+                </button>
             </div>
         </td>
     </tr>`
