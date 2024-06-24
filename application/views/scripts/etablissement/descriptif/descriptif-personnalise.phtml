@@ -2,11 +2,18 @@
     <a class='btn' href="<?= $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
 </div>
 
-<div id='descriptif-personnalise'>
-    <h3>Descriptifs</h3>
+<div id='descriptif-personnalise'>  
+    <div class="descriptif-personnalise--header">
+        <h3>Descriptifs</h3>
+        <?php if ($this->hideButton === null): ?>
+            <a id="descEtab" href="<?= $this->url(['action' => 'descriptif']).'?original=true' ?>" data-target="#modal-desc" data-toggle="modal">Afficher le descriptif original</a>
+        <?php endif ?>
+    </div>
 
-    <h4 class='h4_subtitle'>Descriptif technique</h4>
-    <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    <div class="descriptif-personnalise_rubriques-infos">
+        <h4 class='h4_subtitle'>Descriptif technique</h4>
+        <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    </div>
 
     <div id='affichage-informations' class='form-horizontal'>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
@@ -14,5 +21,21 @@
             'champsvaleurliste' => $this->champsvaleurliste,
             'canWrite' => false
         ]); ?>
+    </div>
+    <div class="modal fade" id="modal-desc" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h5>Descriptif original</h5>
+                </div>
+                <div class="modal-body" id="descriptif-original-content">
+                    Chargement des éléments...
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">Fermer</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

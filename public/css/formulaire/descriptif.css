@@ -1,7 +1,17 @@
-#descriptif-personnalise a {
+#descriptif-personnalise .descriptif-personnalise_rubriques-infos a {
     font-weight: 600;
     text-decoration: underline;
     margin-left: 1rem;
+}
+
+#descriptif-personnalise .form-horizontal .control-label {
+    padding-top: 0;
+}
+
+.descriptif-personnalise--header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .form-horizontal .control-group {
