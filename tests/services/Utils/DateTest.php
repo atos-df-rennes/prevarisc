@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Service_Utils_Date
- * 
+ *
  * @internal
  */
 final class Service_Utils_DateTest extends TestCase
