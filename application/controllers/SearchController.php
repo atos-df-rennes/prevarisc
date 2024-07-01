@@ -130,7 +130,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(8, (string) $ligne, $row['LIBELLE_AVIS']);
 
                         if ('' != $row['DATE_DERNIER_AVIS']) {
-                            $dateDernierAvis = preg_split('/-|\\//', $row['DATE_DERNIER_AVIS']);
+                            $dateDernierAvis = preg_split('/-|\//', $row['DATE_DERNIER_AVIS']);
                             if (!is_numeric($dateDernierAvis[2])) {
                                 // Formattage du jour, qui peut contenir l'heure -> ne passe pas avec FormattedPHPToExcel
                                 $dateDernierAvis[2] = substr($dateDernierAvis[2], 0, 2);
@@ -141,7 +141,7 @@ class SearchController extends Zend_Controller_Action
                         }
 
                         if ('' != $row['DATE_PREMIER_AVIS_FAVORABLE']) {
-                            $datePremierAvisFavorable = preg_split('/-|\\//', $row['DATE_PREMIER_AVIS_FAVORABLE']);
+                            $datePremierAvisFavorable = preg_split('/-|\//', $row['DATE_PREMIER_AVIS_FAVORABLE']);
                             if (!is_numeric($datePremierAvisFavorable[2])) {
                                 $datePremierAvisFavorable[2] = substr($datePremierAvisFavorable[2], 0, 2);
                             }
@@ -151,7 +151,7 @@ class SearchController extends Zend_Controller_Action
                         }
 
                         if ('' != $row['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']) {
-                            $datePremierAvisDefavorableConsecutif = preg_split('/-|\\//', $row['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']);
+                            $datePremierAvisDefavorableConsecutif = preg_split('/-|\//', $row['DATE_PREMIER_AVIS_DEFAVORABLE_CONSECUTIF']);
                             if (!is_numeric($datePremierAvisDefavorableConsecutif[2])) {
                                 $datePremierAvisDefavorableConsecutif[2] = substr($datePremierAvisDefavorableConsecutif[2], 0, 2);
                             }
@@ -165,7 +165,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(14, (string) $ligne, $row['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
 
                         if ('' != $row['DATE_DERNIERE_VISITE']) {
-                            $dateDerniereVisite = preg_split('/-|\\//', $row['DATE_DERNIERE_VISITE']);
+                            $dateDerniereVisite = preg_split('/-|\//', $row['DATE_DERNIERE_VISITE']);
                             if (!is_numeric($dateDerniereVisite[2])) {
                                 $dateDerniereVisite[2] = substr($dateDerniereVisite[2], 0, 2);
                             }
@@ -175,7 +175,7 @@ class SearchController extends Zend_Controller_Action
 
                             if (0 != $row['PERIODICITE_ETABLISSEMENTINFORMATIONS']) {
                                 $dateProchaineVisite = date('Y-m-j', strtotime('+'.$row['PERIODICITE_ETABLISSEMENTINFORMATIONS'].' months', strtotime($row['DATE_DERNIERE_VISITE'])));
-                                $dateProchaineVisite = preg_split('/-|\\//', $dateProchaineVisite);
+                                $dateProchaineVisite = preg_split('/-|\//', $dateProchaineVisite);
                                 if (!is_numeric($dateProchaineVisite[2])) {
                                     $dateProchaineVisite[2] = substr($dateProchaineVisite[2], 0, 2);
                                 }
@@ -186,7 +186,7 @@ class SearchController extends Zend_Controller_Action
                         }
 
                         if ('' != $row['DATE_VISITE_PREVUE']) {
-                            $dateVisitePrevue = preg_split('/-|\\//', $row['DATE_VISITE_PREVUE']);
+                            $dateVisitePrevue = preg_split('/-|\//', $row['DATE_VISITE_PREVUE']);
                             if (!is_numeric($dateVisitePrevue[2])) {
                                 $dateVisitePrevue[2] = substr($dateVisitePrevue[2], 0, 2);
                             }
@@ -410,7 +410,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(9, (string) $ligne, $row['LIBELLE_DOSSIERTYPE']);
                         $sheet->setCellValueByColumnAndRow(10, (string) $ligne, $row['LIBELLE_DOSSIERNATURE']);
                         if ('' != $row['DATEINSERT_DOSSIER']) {
-                            $dateCreationDossier = preg_split('/-|\\//', $row['DATEINSERT_DOSSIER']);
+                            $dateCreationDossier = preg_split('/-|\//', $row['DATEINSERT_DOSSIER']);
                             if (!is_numeric($dateCreationDossier[2])) {
                                 $dateCreationDossier[2] = substr($dateCreationDossier[2], 0, 2);
                             }
@@ -421,7 +421,7 @@ class SearchController extends Zend_Controller_Action
                         $sheet->setCellValueByColumnAndRow(12, (string) $ligne, $row['OBJET_DOSSIER']);
                         $sheet->setCellValueByColumnAndRow(13, (string) $ligne, $row['NUM_DOCURBA']);
                         if ('' != $row['DATEVISITE_DOSSIER']) {
-                            $dateVisiteDossier = preg_split('/-|\\//', $row['DATEVISITE_DOSSIER']);
+                            $dateVisiteDossier = preg_split('/-|\//', $row['DATEVISITE_DOSSIER']);
                             if (!is_numeric($dateVisiteDossier[2])) {
                                 $dateVisiteDossier[2] = substr($dateVisiteDossier[2], 0, 2);
                             }
@@ -430,7 +430,7 @@ class SearchController extends Zend_Controller_Action
                             $sheet->getStyleByColumnAndRow(14, $ligne)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
                         }
                         if ('' != $row['DATECOMM_DOSSIER']) {
-                            $dateCommissionDossier = preg_split('/-|\\//', $row['DATECOMM_DOSSIER']);
+                            $dateCommissionDossier = preg_split('/-|\//', $row['DATECOMM_DOSSIER']);
                             if (!is_numeric($dateCommissionDossier[2])) {
                                 $dateCommissionDossier[2] = substr($dateCommissionDossier[2], 0, 2);
                             }

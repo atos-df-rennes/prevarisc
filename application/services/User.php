@@ -372,23 +372,23 @@ class Service_User
      *
      * @param array $user array définissant l'utilisateur
      *
-     * @return null|array|void
+     * @return null|mixed[]
      */
     public function logFailedLogin($user)
     {
         if ([] === $user) {
-            return;
+            return null;
         }
         if (!isset($user['ID_UTILISATEUR'])) {
-            return;
+            return null;
         }
         if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
-            return;
+            return null;
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser instanceof Zend_Db_Table_Rowset_Abstract) {
-            return;
+            return null;
         }
         $dbUser = $dbUser->current();
         ++$dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR;
@@ -403,18 +403,18 @@ class Service_User
     public function resetFailedLogin($user)
     {
         if (!$user) {
-            return;
+            return null;
         }
         if (!isset($user['ID_UTILISATEUR'])) {
-            return;
+            return null;
         }
         if (!isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])) {
-            return;
+            return null;
         }
         $dbUtilisateur = new Model_DbTable_Utilisateur();
         $dbUser = $dbUtilisateur->find($user['ID_UTILISATEUR']);
         if (!$dbUser instanceof Zend_Db_Table_Rowset_Abstract) {
-            return;
+            return null;
         }
         $dbUser = $dbUser->current();
         $dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = 0;

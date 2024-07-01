@@ -174,6 +174,8 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -222,6 +224,8 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
                 }
             }
         }
+
+        return null;
     }
 
     /**

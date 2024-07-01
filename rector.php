@@ -6,7 +6,6 @@ use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
-use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\ValueObject\PhpVersion;
 use Utils\Rector\Rector\DynamicViewPropertyToAssignRector;
 
@@ -23,7 +22,6 @@ return RectorConfig::configure()
     )
     ->withSkip([
         RemoveUnusedPromotedPropertyRector::class,
-        ChangeAndIfToEarlyReturnRector::class,
         CompleteDynamicPropertiesRector::class,
         RemoveAlwaysTrueIfConditionRector::class => [
             __DIR__.'/application/services/Descriptif.php',

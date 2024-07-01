@@ -739,6 +739,8 @@ class Service_Dossier
 
             return $this->listeEtablissement;
         }
+
+        return null;
     }
 
     public function isDossierDonnantAvis($dossier, $idNature): bool

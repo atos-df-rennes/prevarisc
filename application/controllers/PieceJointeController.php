@@ -470,5 +470,7 @@ class PieceJointeController extends Zend_Controller_Action
         $html = Zend_Layout::getMvcInstance()->getView()->partial('piece-jointe/export.phtml', ['piecesJointes' => $canBeExported]);
 
         echo $html;
+
+        return null;
     }
 }
