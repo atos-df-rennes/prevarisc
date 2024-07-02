@@ -157,6 +157,7 @@ $(document).ready(function() {
 							idDossier : idDossier,
 						},
 						success: function( result ) {
+							result = JSON.parse(result);
 							verrou = result.verrou;
 							var countListeDossierAffect = result.countAffect;
 							var countDossiers = result.count;

@@ -30,10 +30,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     public function init()
     {
         $this->_helper->layout->setLayout('dashboard');
+
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('commissionselection', 'json')
             ->addActionContext('recupevenement', 'json')
             ->addActionContext('recupevenementodj', 'json')
+            ->addActionContext('affectedossodj', 'json')
             ->addActionContext('recupdateliee', 'json')
             ->initContext()
         ;
@@ -403,16 +406,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $countListeDossier = count($listeDesDossiers);
             $countListeDossierAffect = count($listeDossiersAffect);
 
-            $response = $this->getResponse();
-            $response->setHeader('Content-Type', 'application/json');
-            $response->setBody(json_encode([
+            echo Zend_Json::encode([
                 'verrou' => $dossier['VERROU_DOSSIER'],
                 'countAffect' => $countListeDossierAffect,
                 'count' => $countListeDossier,
-            ]));
-            $response->sendResponse();
-
-            exit;
+            ]);
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
