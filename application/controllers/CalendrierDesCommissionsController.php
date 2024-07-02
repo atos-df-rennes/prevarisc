@@ -153,6 +153,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         // Si on prend en compte les heures on récupère uniquement les dossiers n'ayant pas d'heure de passage
         $listeDossiersNonAffect = $dbDossierAffectation->getDossierNonAffect($this->_getParam('dateCommId'));
+        $listeDossiersAffect = $dbDossierAffectation->getDossierAffect($this->_getParam('dateCommId'));
+        $listeDesDossiers = array_merge($listeDossiersAffect, $listeDossiersNonAffect);
 
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
@@ -183,6 +185,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('infosCommissionType', $infosCommissionType);
 
         $this->view->assign('listeDossierNonAffect', $listeDossiersNonAffect);
+        $this->view->assign('listeDossierAffect', $listeDossiersAffect);
+        $this->view->assign('listeDesDossiers', $listeDesDossiers);
+
+
+
     }
 
     public function resizeodjAction()
@@ -392,6 +399,18 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($this->_getParam('idDossier'))->current();
+
+            $listeDossiersAffect = $dbDossierAffect->getDossierAffect($this->_getParam('dateCommId'));
+            $listeDossiersNonAffect = $dbDossierAffect->getDossierNonAffect($this->_getParam('dateCommId'));
+            $listeDesDossiers = array_merge($listeDossiersAffect, $listeDossiersNonAffect);
+            $countListeDossier= count($listeDesDossiers);
+            $countListeDossierAffect = count($listeDossiersAffect);
+
+           $this->_helper->json([
+            'verrou' => $dossier['VERROU_DOSSIER'],
+            'countAffect' => $countListeDossierAffect,
+            'count'=> $countListeDossier
+        ]);
             // On retourne la valeur du verrou pour pour savoir la couleur à afficher dans le calendrier
             echo $dossier['VERROU_DOSSIER'];
         } catch (Exception $e) {
@@ -402,7 +421,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         }
     }
-
+   
     public function dialogcommAction()
     {
         $this->view->assign('do', $this->_getParam('do'));
