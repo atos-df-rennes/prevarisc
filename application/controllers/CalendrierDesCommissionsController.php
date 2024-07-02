@@ -187,9 +187,6 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('listeDossierNonAffect', $listeDossiersNonAffect);
         $this->view->assign('listeDossierAffect', $listeDossiersAffect);
         $this->view->assign('listeDesDossiers', $listeDesDossiers);
-
-
-
     }
 
     public function resizeodjAction()
@@ -403,16 +400,19 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiersAffect = $dbDossierAffect->getDossierAffect($this->_getParam('dateCommId'));
             $listeDossiersNonAffect = $dbDossierAffect->getDossierNonAffect($this->_getParam('dateCommId'));
             $listeDesDossiers = array_merge($listeDossiersAffect, $listeDossiersNonAffect);
-            $countListeDossier= count($listeDesDossiers);
+            $countListeDossier = count($listeDesDossiers);
             $countListeDossierAffect = count($listeDossiersAffect);
 
-           $this->_helper->json([
-            'verrou' => $dossier['VERROU_DOSSIER'],
-            'countAffect' => $countListeDossierAffect,
-            'count'=> $countListeDossier
-        ]);
-            // On retourne la valeur du verrou pour pour savoir la couleur à afficher dans le calendrier
-            echo $dossier['VERROU_DOSSIER'];
+            $response = $this->getResponse();
+            $response->setHeader('Content-Type', 'application/json');
+            $response->setBody(json_encode([
+                'verrou' => $dossier['VERROU_DOSSIER'],
+                'countAffect' => $countListeDossierAffect,
+                'count' => $countListeDossier,
+            ]));
+            $response->sendResponse();
+
+            exit;
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
@@ -421,7 +421,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             ]);
         }
     }
-   
+
     public function dialogcommAction()
     {
         $this->view->assign('do', $this->_getParam('do'));
