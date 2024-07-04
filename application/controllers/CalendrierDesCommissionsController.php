@@ -401,15 +401,10 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $dossier = $DBdossier->find($this->_getParam('idDossier'))->current();
 
             $listeDossiersAffect = $dbDossierAffect->getDossierAffect($this->_getParam('dateCommId'));
-            $listeDossiersNonAffect = $dbDossierAffect->getDossierNonAffect($this->_getParam('dateCommId'));
-            $listeDesDossiers = array_merge($listeDossiersAffect, $listeDossiersNonAffect);
-            $countListeDossier = count($listeDesDossiers);
-            $countListeDossierAffect = count($listeDossiersAffect);
 
             echo Zend_Json::encode([
                 'verrou' => $dossier['VERROU_DOSSIER'],
-                'countAffect' => $countListeDossierAffect,
-                'count' => $countListeDossier,
+                'countAffect' => count($listeDossiersAffect),
             ]);
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
