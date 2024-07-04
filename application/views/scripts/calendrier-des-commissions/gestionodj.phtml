@@ -157,7 +157,10 @@ $(document).ready(function() {
 							idDossier : idDossier,
 						},
 						success: function( result ) {
-							verrou = result;
+							result = JSON.parse(result);
+							verrou = result.verrou;
+            				$("#nbDossiersAffect").text(result.countAffect);
+
 						}
 					});
 					// retrieve the dropped element's stored Event Object
@@ -401,6 +404,11 @@ $(document).ready(function() {
 			<input type='hidden' name='heureFin' id='heureFin' value='".$this->infosDateComm['HEUREFIN_COMMISSION']."' />
 			<h3>".$this->infosDateComm['LIBELLE_DATECOMMISSION'];
 
+            if ($this->infosDateComm['GESTION_HEURES'] === 1) {
+                echo "<span class='badge badge-info' style=' margin:10px;'>
+                    <span id='nbDossiersAffect'>$this->nbDossiersAffect</span> / $this->nbDossiers</span>";
+            }
+
 			echo "</h3>";
 
 	echo "	<input type='hidden' name='dateCommId' id='dateCommId' value='".$this->infosDateComm['ID_DATECOMMISSION']."' />
@@ -540,7 +548,7 @@ $(document).ready(function() {
 			</div>
 		";
 	}else if($this->infosDateComm['GESTION_HEURES'] == 0){
-		//dans le cas ou on ne prend pas en compte les heures (cas par défaut)
+		//dans le cas ou on ne prend pas en compte les heures
 		echo "
 			<h3 style='display:inline;'>Liste des dossiers prévus</h3>
 		";

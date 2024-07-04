@@ -30,10 +30,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     public function init()
     {
         $this->_helper->layout->setLayout('dashboard');
+
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('commissionselection', 'json')
             ->addActionContext('recupevenement', 'json')
             ->addActionContext('recupevenementodj', 'json')
+            ->addActionContext('affectedossodj', 'json')
             ->addActionContext('recupdateliee', 'json')
             ->initContext()
         ;
@@ -153,6 +156,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         // Si on prend en compte les heures on récupère uniquement les dossiers n'ayant pas d'heure de passage
         $listeDossiersNonAffect = $dbDossierAffectation->getDossierNonAffect($this->_getParam('dateCommId'));
+        $listeDossiersAffect = $dbDossierAffectation->getDossierAffect($this->_getParam('dateCommId'));
+        $listeDesDossiers = array_merge($listeDossiersAffect, $listeDossiersNonAffect);
 
         $dbDossier = new Model_DbTable_Dossier();
         $dbDocUrba = new Model_DbTable_DossierDocUrba();
@@ -183,6 +188,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('infosCommissionType', $infosCommissionType);
 
         $this->view->assign('listeDossierNonAffect', $listeDossiersNonAffect);
+        $this->view->assign('nbDossiersAffect', count($listeDossiersAffect));
+        $this->view->assign('nbDossiers', count($listeDesDossiers));
     }
 
     public function resizeodjAction()
@@ -392,8 +399,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
             $DBdossier = new Model_DbTable_Dossier();
             $dossier = $DBdossier->find($this->_getParam('idDossier'))->current();
-            // On retourne la valeur du verrou pour pour savoir la couleur à afficher dans le calendrier
-            echo $dossier['VERROU_DOSSIER'];
+
+            $listeDossiersAffect = $dbDossierAffect->getDossierAffect($this->_getParam('dateCommId'));
+
+            echo Zend_Json::encode([
+                'verrou' => $dossier['VERROU_DOSSIER'],
+                'countAffect' => count($listeDossiersAffect),
+            ]);
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
                 'context' => 'error',

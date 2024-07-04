@@ -66,11 +66,6 @@ parameters:
 			path: application/controllers/CalendrierDesCommissionsController.php
 
 		-
-			message: "#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\\:\\:addActionContext\\(\\)\\.$#"
-			count: 1
-			path: application/controllers/CalendrierDesCommissionsController.php
-
-		-
 			message: "#^Call to an undefined method Zend_View_Interface\\:\\:layout\\(\\)\\.$#"
 			count: 2
 			path: application/controllers/CalendrierDesCommissionsController.php
