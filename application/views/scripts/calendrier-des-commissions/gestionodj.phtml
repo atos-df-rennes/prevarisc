@@ -159,10 +159,8 @@ $(document).ready(function() {
 						success: function( result ) {
 							result = JSON.parse(result);
 							verrou = result.verrou;
-							var countListeDossierAffect = result.countAffect;
-							var countDossiers = result.count;
-            				$("#countDossierAffect").text(countListeDossierAffect + ' / ' + countDossiers);
-        
+            				$("#nbDossiersAffect").text(result.countAffect);
+
 						}
 					});
 					// retrieve the dropped element's stored Event Object
@@ -406,10 +404,8 @@ $(document).ready(function() {
 			<input type='hidden' name='heureFin' id='heureFin' value='".$this->infosDateComm['HEUREFIN_COMMISSION']."' />
 			<h3>".$this->infosDateComm['LIBELLE_DATECOMMISSION'];
 
-			$countListeDossierNonAffect = count($this->listeDossierNonAffect);
-			$countListeDossierAffect = count($this->listeDossierAffect);
-			$listeDesDossiers = count($this->listeDesDossiers);	
-			echo "<span class='badge badge-info'  id='countDossierAffect' style=' margin:10px;'> $countListeDossierAffect / $listeDesDossiers</span>";
+			echo "<span class='badge badge-info' style=' margin:10px;'>
+                <span id='nbDossiersAffect'>$this->nbDossiersAffect</span> / $this->nbDossiers</span>";
 			echo "</h3>";
 
 	echo "	<input type='hidden' name='dateCommId' id='dateCommId' value='".$this->infosDateComm['ID_DATECOMMISSION']."' />

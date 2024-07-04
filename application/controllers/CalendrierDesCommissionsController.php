@@ -188,8 +188,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('infosCommissionType', $infosCommissionType);
 
         $this->view->assign('listeDossierNonAffect', $listeDossiersNonAffect);
-        $this->view->assign('listeDossierAffect', $listeDossiersAffect);
-        $this->view->assign('listeDesDossiers', $listeDesDossiers);
+        $this->view->assign('nbDossiersAffect', count($listeDossiersAffect));
+        $this->view->assign('nbDossiers', count($listeDesDossiers));
     }
 
     public function resizeodjAction()
