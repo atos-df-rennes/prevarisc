@@ -252,6 +252,8 @@ class Service_Prescriptions
 
             return $dbPrescAssoc->getPrescriptionReglAssoc($idPrescription);
         }
+
+        return null;
     }
 
     // FIN getPrescriptionInfo

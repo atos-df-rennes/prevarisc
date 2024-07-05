@@ -1780,6 +1780,8 @@ class DossierController extends Zend_Controller_Action
             }
         } catch (Exception $e) {
         }
+
+        return null;
     }
 
     public function suppdocAction()

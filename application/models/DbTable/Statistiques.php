@@ -137,6 +137,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
             return $this;
         }
+
+        return null;
     }
 
     /**
@@ -149,6 +151,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
             return $this;
         }
+
+        return null;
     }
 
     /**
@@ -174,6 +178,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
             return $this;
         }
+
+        return null;
     }
 
     /**
@@ -188,6 +194,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
             return $this;
         }
+
+        return null;
     }
 
     // Fonctions
@@ -206,6 +214,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         if (null != $this->etablissements) {
             return $this->fetchAll($this->etablissements)->toArray();
         }
+
+        return null;
     }
 
     private function getDate($input): string
@@ -213,7 +223,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         $array_date = explode('/', $input);
         $expectedNumberOfDateParameters = 3;
 
-        if (!is_array($array_date) || $expectedNumberOfDateParameters != count($array_date)) {
+        if ($expectedNumberOfDateParameters != count($array_date)) {
             throw new Exception('Erreur dans la date', 500);
         }
 
