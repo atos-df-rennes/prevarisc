@@ -467,7 +467,7 @@ class Service_Dashboard
      *
      * @return array|int
      */
-    public static function getDossiersPlatAUSansEtablissement(array $user, bool $getCount = false)
+    public function getDossiersPlatAUSansEtablissement(array $user, bool $getCount = false)
     {
         $search = new Model_DbTable_Search();
         $search->setItem('dossier', $getCount);
