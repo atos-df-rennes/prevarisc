@@ -2,32 +2,55 @@
 
 class Service_Utils_TempsRestant
 {
-    public const SEUIL_1 = 6;
-    public const SEUIL_2 = 3;
+    public const SEUIL_OK = 6;
+    public const SEUIL_WARN = 3;
 
-    public static function getCouleurTempsRestant($temps_restant): string
+    public static function calculate(string $limitDate): string
     {
-        if (empty($temps_restant)) {
-            return '';
+        $limitDate = new DateTime($limitDate);
+        $now = new DateTime();
+
+        $diff = $limitDate->diff($now);
+
+        $readableDiff = '';
+
+        if ($diff->y > 0) {
+            $ans = $diff->y > 1 ? 'ans' : 'an';
+            $readableDiff .= "{$diff->y} {$ans}";
         }
 
-        $temps = explode(' et ', $temps_restant);
-        $mois = 0;
-
-        foreach ($temps as $part) {
-            if (false !== strpos($part, 'mois')) {
-                $mois = (int) explode(' ', $part)[0];
+        if ($diff->m > 0) {
+            if ($readableDiff !== '') {
+                $readableDiff .= ' et ';
             }
-        }
-        $couleur = '';
-        if ($mois > self::SEUIL_1) {
-            $couleur = 'success'; // une couleur verte vu qu'il reste plus que 6 mois encore
-        } elseif ($mois > self::SEUIL_2) {
-            $couleur = 'warning'; // une couleur orange vu qu'il reste plus que 3 mois
-        } else {
-            $couleur = 'important'; // une couleur rouge Attention : il reste au moins 3 mois
+            $readableDiff .= "{$diff->m} mois";
         }
 
-        return $couleur;
+        if ($diff->d > 0) {
+            if ($readableDiff !== '') {
+                $readableDiff .= ' et ';
+            }
+            $readableDiff .= "{$diff->d} jours";
+        }
+
+        return $readableDiff;
+    }
+
+    public static function getCouleurTempsRestant(string $limitDate): string
+    {
+        $limitDate = new DateTime($limitDate);
+        $now = new DateTime();
+
+        $diff = $limitDate->diff($now);
+
+        if ($diff->y > 0 || $diff->m > self::SEUIL_OK) {
+            return 'success';
+        }
+
+        if ($diff->m > self::SEUIL_WARN) {
+            return 'warning';
+        }
+
+        return 'important';
     }
 }

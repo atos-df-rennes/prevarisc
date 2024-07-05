@@ -478,36 +478,6 @@ class Service_Dashboard
         if ($getCount) {
             return $search->run(false, null, false, true);
         }
-        $search->columns([
-            'TempsRestant' => new Zend_Db_Expr(
-                "CASE WHEN 
-                        DATE_REPONSE_ATTENDUE IS NULL 
-                    THEN ''
-                    ELSE
-                        CONCAT(
-                            CASE WHEN
-                                    TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE) > 0 
-                                THEN 
-                                    CONCAT(TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE), ' mois')
-                                ELSE ''
-                            END,
-                            CASE WHEN 
-                                    TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE) > 0 
-                                    AND DATEDIFF(DATE_REPONSE_ATTENDUE, DATE_ADD(CURDATE(), INTERVAL TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE) MONTH)) > 0
-                                THEN 
-                                ' et ' 
-                                ELSE ''
-                            END,
-                            CASE WHEN 
-                                    DATEDIFF(DATE_REPONSE_ATTENDUE, DATE_ADD(CURDATE(), INTERVAL TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE) MONTH)) > 0 
-                                THEN 
-                                    CONCAT(DATEDIFF(DATE_REPONSE_ATTENDUE, DATE_ADD(CURDATE(), INTERVAL TIMESTAMPDIFF(MONTH, CURDATE(), DATE_REPONSE_ATTENDUE) MONTH)), ' jours')
-                                ELSE ''
-                            END
-                        )
-                END"
-            ),
-        ]);
 
         return $search->run(false, null, false)->toArray();
     }

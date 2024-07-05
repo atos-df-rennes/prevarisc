@@ -215,16 +215,8 @@ class DossierController extends Zend_Controller_Action
                     $this->view->assign('datePec', $platauConsultation->getDatePec());
                     $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
                     $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
-                    $this->view->assign('dateReponseAttendue', $platauConsultation->getDateReponseAttendue());
-
-                    $data = Service_Dashboard::getDossiersPlatAUSansEtablissement([], false);
-                    $tempsRestant = '';
-                    foreach ($data as $item) {
-                        if ($item['ID_PLATAU'] == $dossier['ID_PLATAU']) {
-                            $tempsRestant = $item['TempsRestant'];
-                        }
-                    }
-                    $this->view->assign('tempsRestant', $tempsRestant);
+                    $this->view->assign('tempsRestant', Service_Utils_TempsRestant::calculate($platauConsultation->getDateReponseAttendue()));
+                    $this->view->assign('couleurTempsRestant', Service_Utils_TempsRestant::getCouleurTempsRestant($platauConsultation->getDateReponseAttendue()));
                 }
             }
 
