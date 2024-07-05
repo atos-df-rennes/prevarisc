@@ -10,7 +10,7 @@ class Service_Utils_TempsRestant
         $limitDate = new DateTime($limitDate);
         $now = new DateTime();
 
-        $diff = $limitDate->diff($now);
+        $diff = $now->diff($limitDate);
 
         $readableDiff = '';
 
@@ -30,7 +30,12 @@ class Service_Utils_TempsRestant
             if ($readableDiff !== '') {
                 $readableDiff .= ' et ';
             }
-            $readableDiff .= "{$diff->d} jours";
+            $jours = $diff->d > 1 ? 'jours' : 'jour';
+            $readableDiff .= "{$diff->d} {$jours}";
+        }
+
+        if ($diff->invert === 1) {
+            $readableDiff = "- {$readableDiff}";
         }
 
         return $readableDiff;
@@ -41,7 +46,11 @@ class Service_Utils_TempsRestant
         $limitDate = new DateTime($limitDate);
         $now = new DateTime();
 
-        $diff = $limitDate->diff($now);
+        $diff = $now->diff($limitDate);
+
+        if ($diff->invert === 1) {
+            return 'inverse';
+        }
 
         if ($diff->y > 0 || $diff->m > self::SEUIL_OK) {
             return 'success';
