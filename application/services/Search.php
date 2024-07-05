@@ -548,6 +548,7 @@ class Service_Search
                 ->joinLeft('adressecommune', 'ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
                 ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', [])
                 ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
+                ->joinLeft('platauconsultation', 'd.ID_PLATAU = platauconsultation.ID_PLATAU', 'DATE_REPONSE_ATTENDUE')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
             ;

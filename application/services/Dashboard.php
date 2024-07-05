@@ -473,6 +473,7 @@ class Service_Dashboard
         $search->setItem('dossier', $getCount);
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
         $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
 
         if ($getCount) {
             return $search->run(false, null, false, true);

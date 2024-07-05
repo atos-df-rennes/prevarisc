@@ -215,6 +215,8 @@ class DossierController extends Zend_Controller_Action
                     $this->view->assign('datePec', $platauConsultation->getDatePec());
                     $this->view->assign('statutAvis', $platauConsultation->getStatutAvis());
                     $this->view->assign('dateAvis', $platauConsultation->getDateAvis());
+                    $this->view->assign('tempsRestant', Service_Utils_TempsRestant::calculate($platauConsultation->getDateReponseAttendue()));
+                    $this->view->assign('couleurTempsRestant', Service_Utils_TempsRestant::getCouleurTempsRestant($platauConsultation->getDateReponseAttendue()));
                 }
             }
 

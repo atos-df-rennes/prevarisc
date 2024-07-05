@@ -24,13 +24,13 @@ class Service_Utils_Date
         return implode('/', [$jour, $mois, $annee]);
     }
 
-    public static function formatDateWithDayName(?string $date): ?string
+    public static function formatDateWithDayName(?string $date, string $dateFormat = 'dd/MM/yyyy'): ?string
     {
         if (null === $date) {
             return null;
         }
 
-        $zendDate = new Zend_Date($date, 'dd/MM/yyyy', 'fr');
+        $zendDate = new Zend_Date($date, $dateFormat, 'fr');
 
         return $zendDate->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR, 'fr');
     }

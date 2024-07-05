@@ -92,6 +92,13 @@
 
 	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
+
+        <?php if($this->DATE_REPONSE_ATTENDUE !== null) :
+            $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
+            $couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->DATE_REPONSE_ATTENDUE);
+
+            echo "<span class='label label-$couleur'>Temps restant : ".$tempsRestant."</span>";
+        endif ?>
     </td>
 
     <!-- Dates du dossier -->
