@@ -636,11 +636,6 @@ parameters:
 			path: application/controllers/DossierController.php
 
 		-
-			message: "#^Method DossierController\\:\\:validdocAction\\(\\) should return false\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/controllers/DossierController.php
-
-		-
 			message: "#^Access to an undefined property ArrayObject\\:\\:\\$exception\\.$#"
 			count: 4
 			path: application/controllers/ErrorController.php
@@ -1566,16 +1561,6 @@ parameters:
 			path: application/forms/FormChampFromParent.php
 
 		-
-			message: "#^Method Model_DbTable_Commission\\:\\:getCommission\\(\\) should return array\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
-			message: "#^Method Model_DbTable_Commission\\:\\:getCommissionIGH\\(\\) should return array\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Commission.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$COMMISSION_CONCERNE\\.$#"
 			count: 2
 			path: application/models/DbTable/DateCommission.php
@@ -1689,31 +1674,6 @@ parameters:
 			message: "#^Cannot call method delete\\(\\) on array\\.$#"
 			count: 1
 			path: application/models/DbTable/PrescriptionDossierAssoc.php
-
-		-
-			message: "#^Method Model_DbTable_Statistiques\\:\\:enExploitation\\(\\) should return Model_DbTable_Statistiques\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Statistiques.php
-
-		-
-			message: "#^Method Model_DbTable_Statistiques\\:\\:go\\(\\) should return array\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Statistiques.php
-
-		-
-			message: "#^Method Model_DbTable_Statistiques\\:\\:sousAvisDefavorable\\(\\) should return Model_DbTable_Statistiques\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Statistiques.php
-
-		-
-			message: "#^Method Model_DbTable_Statistiques\\:\\:sousmisAControle\\(\\) should return Model_DbTable_Statistiques\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Statistiques.php
-
-		-
-			message: "#^Method Model_DbTable_Statistiques\\:\\:surLaCommune\\(\\) should return Model_DbTable_Statistiques\\|null but return statement is missing\\.$#"
-			count: 1
-			path: application/models/DbTable/Statistiques.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_UTILISATEUR\\.$#"
