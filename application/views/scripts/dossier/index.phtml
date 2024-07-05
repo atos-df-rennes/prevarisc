@@ -510,7 +510,7 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                     type = 1;
                 }
             }
-            
+
             $.ajax({
                 url: '/calendrier-des-commissions/recupevenement?start=' + start.getTime() +
                     "&end=" + end.getTime() + "&type=" + type,
@@ -635,7 +635,7 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         if( date < dateStart){
                                             date = dateStart;
                                         }
-                                        
+
                                         dd = date.getDate();
                                         mm = date.getUTCMonth() + 1;
                                         aa = date.getUTCFullYear();
@@ -646,10 +646,10 @@ $.fn.afficheCalendar = function(idComm, emplacement, type, divInfo, infoCalendar
                                         if (mm < 10) {
                                             mm = '0' + mm;
                                         }
-                                    
+
                                         /*
                                         Remplissage du champ concerné
-                                        Pour groupe de visite : 
+                                        Pour groupe de visite :
                                             - type = 1 pour le champ "Date de commission en salle"
                                             - type = 3 pour le champ "Date de visite"
                                         */
@@ -1385,17 +1385,14 @@ $(".delaipresc").live('click', function() {
                     <div class="left span3">Identifiant de la consultation</div>
                     <div class="right span9"><?= $this->id_platau ?></div>
                 </li>
-                <?php if($this->dateReponseAttendue !== null) : ?>
-                <li class="row-fluid" style="margin-bottom: 20px;">
-                    <div class="left span3">Temps restant pour une réponse</div>
-                    <div class="right span9">
-                    <?php    
-                         $Couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->tempsRestant);
-                        echo "<span class='label label-$Couleur'> " . $this->tempsRestant.  "</span>"; 
-                    ?>
-                    </div>
-                </li>
-                <?php endif; ?>
+                <?php if ($this->tempsRestant !== '') : ?>
+                    <li class="row-fluid" style="margin-bottom: 20px;">
+                        <div class="left span3">Temps restant pour une réponse</div>
+                        <div class="right span9">
+                            <span class="label label-<?= $this->couleurTempsRestant ?>"><?= $this->tempsRestant ?></span>
+                        </div>
+                    </li>
+                <?php endif ?>
                 <li class="row-fluid" style="margin-bottom: 20px;">
                     <?php
                         $classPec = 'muted';
