@@ -8,7 +8,7 @@ class Service_Utils_TempsRestant
     public static function calculate(string $limitDate): string
     {
         $limitDate = new DateTime($limitDate);
-        $now = new DateTime();
+        $now = (new DateTime())->setTime(0, 0, 0);
 
         $diff = $now->diff($limitDate);
 
@@ -20,22 +20,22 @@ class Service_Utils_TempsRestant
         }
 
         if ($diff->m > 0) {
-            if ($readableDiff !== '') {
+            if ('' !== $readableDiff) {
                 $readableDiff .= ' et ';
             }
             $readableDiff .= "{$diff->m} mois";
         }
 
         if ($diff->d > 0) {
-            if ($readableDiff !== '') {
+            if ('' !== $readableDiff) {
                 $readableDiff .= ' et ';
             }
             $jours = $diff->d > 1 ? 'jours' : 'jour';
             $readableDiff .= "{$diff->d} {$jours}";
         }
 
-        if ($diff->invert === 1) {
-            $readableDiff = "- {$readableDiff}";
+        if (1 === $diff->invert) {
+            return "- {$readableDiff}";
         }
 
         return $readableDiff;
@@ -44,11 +44,11 @@ class Service_Utils_TempsRestant
     public static function getCouleurTempsRestant(string $limitDate): string
     {
         $limitDate = new DateTime($limitDate);
-        $now = new DateTime();
+        $now = (new DateTime())->setTime(0, 0, 0);
 
         $diff = $now->diff($limitDate);
 
-        if ($diff->invert === 1) {
+        if (1 === $diff->invert) {
             return 'inverse';
         }
 
