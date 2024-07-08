@@ -35,17 +35,17 @@ $(document).ready(function(){
 		}
 	});	
 
-        $(".docManquant").blur(function() {
-            if($(".docManquant").val() != '') {
-                $(".docManquant").css("border-color","black");
-            }
-        });
-        
-        $("#dateDocManquant_1").blur(function() {
-            if($("#dateDocManquant_1").val() != '') {
-                $("#dateDocManquant_1").css("border-color","black");
-            }
-        });
+	$(".docManquant").blur(function() {
+		if($(".docManquant").val() != '') {
+			$(".docManquant").css("border-color","black");
+		}
+	});
+	
+	$("#dateDocManquant_1").blur(function() {
+		if($("#dateDocManquant_1").val() != '') {
+			$("#dateDocManquant_1").css("border-color","black");
+		}
+	});
 	
 	//Permet de vider un input d'une date pour que celle-ci ne s'affiche plus
 	$(".suppDate").live('click',function(){
