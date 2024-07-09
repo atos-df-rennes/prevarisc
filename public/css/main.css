@@ -1247,7 +1247,8 @@ dl.champ_effectif_camping dd input {
 }
 
 #dossierInfos form .btn,
-#ign-accordion .row-fluid {
+#ign-accordion .row-fluid,
+.date + .btn.today {
     margin-bottom: 10px;
 }
 
@@ -1274,4 +1275,15 @@ dl.champ_effectif_camping dd input {
     bottom: 20px;
     right: 20px;
     background-color: #f4f4f4;
+}
+
+#formPrescriptionEdit {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.justification-levee {
+    margin-left: .5rem;
+    cursor: pointer;
 }
