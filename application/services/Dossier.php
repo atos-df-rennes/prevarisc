@@ -353,18 +353,22 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
         $prescriptionArray = [];
         foreach ($listePrescDossier as $ue) {
+            $assoc = [];
+
             if ($ue['ID_PRESCRIPTION_TYPE']) {
                 // cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue['ID_PRESCRIPTION_TYPE'], $ue['ID_PRESCRIPTION_DOSSIER']);
-                if ([] !== $assoc) {
-                    $prescriptionArray[] = $assoc;
-                }
             } else {
                 // cas d'une prescription particulière
                 $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue['ID_PRESCRIPTION_DOSSIER']);
-                if ([] !== $assoc) {
-                    $prescriptionArray[] = $assoc;
-                }
+            }
+
+            foreach ($assoc as $index => $presc) {
+                $assoc[$index]['DATE_LEVEE_FULL'] = Service_Utils_Date::formatDateWithDayName($presc['DATE_LEVEE']);
+            }
+
+            if ([] !== $assoc) {
+                $prescriptionArray[] = $assoc;
             }
         }
 
@@ -396,6 +400,7 @@ class Service_Dossier
             $infos_prescription['assoc'] = $liste_assoc;
             $infos_prescription['LIBELLE_PRESCRIPTION_DOSSIER'] = $liste_assoc[0]['PRESCRIPTIONTYPE_LIBELLE'];
         }
+        $infos_prescription['DATE_LEVEE'] = Service_Utils_Date::convertFromMySQL($infos_prescription['DATE_LEVEE']);
 
         return $infos_prescription;
     }
@@ -427,6 +432,8 @@ class Service_Dossier
             $prescEdit->NUM_PRESCRIPTION_DOSSIER = $numPrescription;
             $prescEdit->LIBELLE_PRESCRIPTION_DOSSIER = $post['PRESCRIPTION_LIBELLE'];
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = $post['TYPE_PRESCRIPTION_DOSSIER'];
+            $prescEdit->DATE_LEVEE = Service_Utils_Date::convertToMySQL($post['DATE_LEVEE']);
+            $prescEdit->JUSTIFICATIF_LEVEE = $post['JUSTIFICATIF_LEVEE'];
             $prescEdit->save();
 
             if ($newCount) {
@@ -493,6 +500,8 @@ class Service_Dossier
             $prescEdit->ID_PRESCRIPTION_TYPE = null;
             $prescEdit->NUM_PRESCRIPTION_DOSSIER = $numPrescription;
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = $post['TYPE_PRESCRIPTION_DOSSIER'];
+            $prescEdit->DATE_LEVEE = Service_Utils_Date::convertToMySQL($post['DATE_LEVEE']);
+            $prescEdit->JUSTIFICATIF_LEVEE = $post['JUSTIFICATIF_LEVEE'];
             $prescEdit->save();
 
             $nombreAssoc = count($post['texte']);
@@ -531,6 +540,8 @@ class Service_Dossier
             $prescEdit->NUM_PRESCRIPTION_DOSSIER = $numPrescription;
             $prescEdit->LIBELLE_PRESCRIPTION_DOSSIER = $post['PRESCRIPTION_LIBELLE'];
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = $post['TYPE_PRESCRIPTION_DOSSIER'];
+            $prescEdit->DATE_LEVEE = Service_Utils_Date::convertToMySQL($post['DATE_LEVEE']);
+            $prescEdit->JUSTIFICATIF_LEVEE = $post['JUSTIFICATIF_LEVEE'];
             $prescEdit->save();
 
             $nombreAssoc = count($post['texte']);

@@ -2845,6 +2845,8 @@ class DossierController extends Zend_Controller_Action
 
     public function prescriptionEditAction()
     {
+        $this->view->inlineScript()->appendFile('/js/calendrier/today.js', 'text/javascript');
+
         $idDossier = $this->_getParam('id');
         $id_prescription = $this->_getParam('id-prescription');
 
