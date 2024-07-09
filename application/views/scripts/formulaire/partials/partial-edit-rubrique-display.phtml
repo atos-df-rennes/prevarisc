@@ -1,16 +1,22 @@
-<div class='span3 control-group'>
-    <label for="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>" class='control-label'><?= $this->NOM ?></label>
-    <div class='controls'>
-        <input
-            type="hidden"
-            name="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>"
-            value="0"
-        >
-        <input
-            type="checkbox"
-            name="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>"
-            value="1"
-            <?= boolval($this->DISPLAY) === true ? 'checked' : '' ?>
-        >
-    </div>
+<div class="descriptif-personnalise_rubrique">
+    <label for="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>">
+        <?php if (boolval($this->DISPLAY) === true): ?>
+            <a href='#<?= strtolower(preg_replace('/\s|\'+/', '-', $this->NOM)) ?>'>
+        <?php endif ?>
+            <?= $this->NOM ?>
+        <?php if (boolval($this->DISPLAY) === true): ?>
+            </a>
+        <?php endif ?>
+    </label>
+    <input
+        type="hidden"
+        name="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>"
+        value="0"
+    >
+    <input
+        type="checkbox"
+        name="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>"
+        value="1"
+        <?= boolval($this->DISPLAY) === true ? 'checked' : '' ?>
+    >
 </div>

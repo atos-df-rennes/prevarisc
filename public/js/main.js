@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     bindEtsPopup($(document));
     loadStickyButtons()
     window.onresize = loadStickyButtons
+    window.onscroll = scrollFunction
 }, false);
 
 function bindTitlePopup() {
@@ -174,4 +175,17 @@ function loadStickyButtons() {
         // /!\ Il faut mettre des ";" après les template literals
         actionButton.style.top = `${headerHeight}px`;
     })
+}
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        $('#go-top').show()
+    } else {
+        $('#go-top').hide()
+    }
+}
+
+function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }

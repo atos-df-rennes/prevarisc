@@ -2,7 +2,7 @@
     <a class='btn' href="<?= $this->url(array('action' => 'edit-descriptif')) ?>">Modifier les descriptifs</a>
 </div>
 
-<div id='descriptif-personnalise'>  
+<div id='descriptif-personnalise'>
     <div class="descriptif-personnalise--header">
         <h3>Descriptifs</h3>
         <?php if ($this->hideButton === null): ?>
@@ -10,8 +10,8 @@
         <?php endif ?>
     </div>
 
+    <h4 class='h4_subtitle'>Descriptif technique</h4>
     <div class="descriptif-personnalise_rubriques-infos">
-        <h4 class='h4_subtitle'>Descriptif technique</h4>
         <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
     </div>
 

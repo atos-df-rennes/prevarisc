@@ -1268,3 +1268,10 @@ dl.champ_effectif_camping dd input {
     background-color: white;
     height: fit-content;
 }
+
+#go-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f4f4f4;
+}

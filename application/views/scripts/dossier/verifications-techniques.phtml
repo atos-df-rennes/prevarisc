@@ -6,7 +6,9 @@
     <h3>Vérifications Techniques</h3>
 
     <h4 class='h4_subtitle'>Rubriques</h4>
-    <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    <div class="descriptif-personnalise_rubriques-infos">
+        <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
+    </div>
 
     <div id='affichage-informations' class='form-horizontal'>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [

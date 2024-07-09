@@ -9,16 +9,10 @@
     <h3>Modification des descriptifs</h3>
     <h4 class='h4_subtitle'>Descriptif</h4>
 
-    <div class='row-fluid'>
-        <div class='span12'>
-            <?php foreach (array_chunk($this->rubriques, 4) as $chunkedRubriques): ?>
-                <div class='row-fluid'>
-                    <?php foreach ($chunkedRubriques as $rubrique):
-                        echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
-                    endforeach ?>
-                </div>
-            <?php endforeach ?>
-        </div>
+    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
+        <?php foreach ($this->rubriques as $rubrique):
+            echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
+        endforeach ?>
     </div>
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
         'rubriques' => $this->rubriques,
