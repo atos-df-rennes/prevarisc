@@ -29,10 +29,11 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
+     * @param bool         $periodicite_standart
      *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1, $periodicite_standart = null)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -62,6 +63,10 @@ class Service_Search
                 ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                 ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER', 'DIFFEREAVIS_DOSSIER'])
                 ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+                ->joinLeft('periodicite', 'etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE AND etablissementinformations.ID_TYPE = periodicite.ID_TYPE 
+                AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2
+                AND  etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE')
+                
                 ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
                 ->joinLeft('typeactivite', 'etablissementinformations.ID_TYPEACTIVITE = typeactivite.ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
                 ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
@@ -135,6 +140,11 @@ class Service_Search
             // Critères : avis favorable
             if (null !== $avis_favorable) {
                 $this->setCriteria($select, 'avis.ID_AVIS', $avis_favorable ? 1 : 2);
+            }
+
+            // Critères : periodicite_standart
+            if (null !== $periodicite_standart) {
+                $this->setCriteria($select, 'periodicite.PERIODICITE_PERIODICITE', $periodicite_standart);
             }
 
             // Critères : statuts

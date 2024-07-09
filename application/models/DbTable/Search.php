@@ -87,6 +87,10 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                     ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                     ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER'])
                     ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
+                    ->joinLeft('periodicite', 'etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE AND etablissementinformations.ID_TYPE = periodicite.ID_TYPE 
+                    AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2
+                    AND  etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE')
+                    
                     ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
                     ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
                     ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', ['pere' => 'ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT'])

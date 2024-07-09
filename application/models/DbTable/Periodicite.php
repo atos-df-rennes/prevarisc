@@ -56,7 +56,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         } catch (Exception $e) {
             $db->rollBack();
 
-            throw $e;
+            throw $e; 
         }
     }
 }
