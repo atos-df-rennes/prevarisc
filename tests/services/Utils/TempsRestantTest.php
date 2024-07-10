@@ -12,7 +12,7 @@ final class Service_Utils_TempsRestantTest extends TestCase
     /**
      * @dataProvider calculateProvider
      */
-    public function testCalculate(string $limitDate, string $expected): void
+    public function testCalculate(?string $limitDate, ?string $expected): void
     {
         $this->assertSame($expected, Service_Utils_TempsRestant::calculate($limitDate));
     }
@@ -28,6 +28,7 @@ final class Service_Utils_TempsRestantTest extends TestCase
             'past limit date months' => [(new DateTime('now -1 month'))->format('Y-m-d'), '- 1 mois'],
             'past limit date years' => [(new DateTime('now -1 year'))->format('Y-m-d'), '- 1 an'],
             'past limit date all parts' => [(new DateTime('now -1 year -1 month -1 day'))->format('Y-m-d'), '- 1 an et 1 mois et 1 jour'],
+            'null' => [null, null],
         ];
     }
 
