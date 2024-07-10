@@ -10,7 +10,7 @@
 
         <div class='container-fluid' >
             <div class='row page-header' style="margin-top: 55px">
-                <div class='span12'>
+                <div class='col-md-12'>
                     <h2 style="margin: 4px 0">
                       <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium', array('style' => "float: left; width: 50px; border: 1px solid #dfdfdf; border-radius: 50%; margin-right: 15px; margin-top: 14px;")) ?>
                       Tableau de bord
@@ -27,7 +27,7 @@
             </div>
 
              <div class='row'>
-                <div class='span12'>
+                <div class='col-md-12'>
                     <?php echo $this->render("includes/notifications.phtml"); ?>
                     <?php echo $this->layout()->content; ?>
                 </div>

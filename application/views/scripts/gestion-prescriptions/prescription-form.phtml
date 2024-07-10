@@ -6,7 +6,7 @@ echo "
 	<input type='hidden' name='typeAction' id='typeAction' value='".$this->typeAction."' />
 	<input type='hidden' name='idPrescription' id='idPrescription' value='".$this->idPrescription."' />
 	<div class='row'>
-				<div class='span12' >
+				<div class='col-md-12' >
 					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span> <a href='/gestion-prescriptions/gestion-rappel-reg'>Gestion rappels réglementaires</a>
 					<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>
 	";
@@ -28,7 +28,7 @@ echo "
 	echo "
 			</h3>
 	<div class='row'>
-		<div class='span12' style='text-align:right;'>
+		<div class='col-md-12' style='text-align:right;'>
 			<a class='btn btn-default' href='/gestion-prescriptions/gestion-rappel-reg'>Annuler la modification</a>
 			<input type='submit' class='btn btn-success' value='Sauvegarder'>
 		</div>
@@ -42,10 +42,10 @@ echo "
 	</div>
 	<br/>
 	<div class='row' ".( ($this->typeAction == 'rappel-reg')? "" : "style='display:none;'" ).">
-		<div class='span4'>
+		<div class='col-md-4'>
 			Ajouter cette prescription pour les &nbsp;
 		</div>
-		<div class='span8'>
+		<div class='col-md-8'>
 			<select id='PRESCRIPTIONREGL_TYPE' name='PRESCRIPTIONREGL_TYPE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 1)? "selected" : "" ).">Etudes</option>
 				<option value='2' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 2)? "selected" : "" ).">Visites</option>
@@ -53,10 +53,10 @@ echo "
 		</div>
 	</div>
 	<div class='row'>
-		<div class='span4'>
+		<div class='col-md-4'>
 			Ajouter par défaut à la création d'un nouveau dossier &nbsp;
 		</div>
-		<div class='span8'>
+		<div class='col-md-8'>
 			<select id='PRESCRIPTIONREGL_VISIBLE' name='PRESCRIPTIONREGL_VISIBLE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 1)? "selected" : "" ).">Oui</option>
 				<option value='0' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 0)? "selected" : "" ).">Non</option>
@@ -65,7 +65,7 @@ echo "
 	</div>
 	<br/>
 	<div class='row'>
-		<div class='span4'>
+		<div class='col-md-4'>
 			Texte&nbsp;
 			<select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>
 ";
@@ -75,7 +75,7 @@ echo "
 echo "
 			</select>
 		</div>
-		<div class='span4'>
+		<div class='col-md-4'>
 			Article&nbsp;
 			<select style='width:80%;' id='LIBELLE_ARTICLE' class='chosen'>
 ";
@@ -86,22 +86,22 @@ echo "
 			</select>
 
 		</div>
-		<div class='span4'>
+		<div class='col-md-4'>
 			<a class='btn btn-default' id='addAssoc' href=''>Ajouter l'association</a>
 		</div>
 	</div>
 	<div class='row'>
-		<div class='span4' class='liste-textes'>
+		<div class='col-md-4' class='liste-textes'>
 		</div>
-		<div class='span4' class='liste-articles'>
+		<div class='col-md-4' class='liste-articles'>
 		</div>
-		<div class='span4'>
+		<div class='col-md-4'>
 		</div>
 	</div>
 ";
 echo "
 	<div class='row'>
-		<div class='span12'>
+		<div class='col-md-12'>
 			<table class='table table-condensed champs_icpe champs rubrique' id='association' >
 				<thead>
 					<tr>
@@ -132,7 +132,7 @@ echo "
 
 echo "
 	<div class='row'>
-		<div class='span12'>
+		<div class='col-md-12'>
 			Contenu :
 			<textarea name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'>";
 echo $this->libelle;

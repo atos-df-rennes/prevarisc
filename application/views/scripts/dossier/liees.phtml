@@ -340,7 +340,7 @@ echo "
 		foreach($this->listeDossierLies as $ref => $dossier){
 			echo "
 				<div class='row' style='margin-bottom:10px;'>
-                    <div class='span10'>
+                    <div class='col-md-10'>
                     	<a href='/dossier/index/id/".$dossier['dossierInfo'][0]['ID_DOSSIER']."'>
 			";
 
@@ -399,7 +399,7 @@ echo "
             echo "<small class='muted'>" . $date_text . " " . $date . "</small>
 				<input type='hidden' value='".$dossier['ID_DOSSIERLIE']."' name='idDossierLie'>
 			</div>
-			<div class='span2'>
+			<div class='col-md-2'>
 				<span>
 					<button class='btn btn-warning deleteLienDossier'>Supprimer la liaison</button>
 				</span>

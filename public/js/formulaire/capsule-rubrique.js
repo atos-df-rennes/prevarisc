@@ -17,7 +17,7 @@ $(document).ready(function() {
                 // On crée la table uniquement si elle n'existe pas
                 if (savedRubriquesDiv.children().length === 0) {
                     savedRubriquesTitlesDiv.append(`
-                        <div class="span6 offset2">
+                        <div class="col-md-6 offset2">
                             <h3>Liste des rubriques</h3>
                         </div>
                     `)
@@ -67,7 +67,7 @@ function deleteRubrique(element) {
                     const nbOfRows = parentTable.children('tbody').children('tr').length
 
                     const parentObject = element.closest('.objet').id
-                    let parentDivTitleDiv = $('#'+parentObject+' .titles .span6.offset2')
+                    let parentDivTitleDiv = $('#'+parentObject+' .titles .col-md-6.offset2')
 
                     $.ajax({
                         url: '/formulaire/delete-rubrique/rubrique/'+id,

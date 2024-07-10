@@ -28,11 +28,11 @@ class View_Helper_AfficheDoc
         }
 
         $return = "
-            <li class='divDoc row span12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
-                <div style='float:left;' class='span1'>
+            <li class='divDoc row col-md-12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
+                <div style='float:left;' class='col-md-1'>
                     <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
                 </div>
-                <div class='span4 libelle' >
+                <div class='col-md-4 libelle' >
         ";
         if ($type) {
             $return .= "<textarea name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;width:100%;'>".nl2br($libelle).'</textarea>';
@@ -41,14 +41,14 @@ class View_Helper_AfficheDoc
         return $return.('
                     <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
                 </div>
-                <div id='div_input_".$natureId.'_'.$id.$type."' class='span7' style='".$styleInput."'>
-                    <div class='span4'>
+                <div id='div_input_".$natureId.'_'.$id.$type."' class='col-md-7' style='".$styleInput."'>
+                    <div class='col-md-4'>
                         <input type='text' readonly='true' name='ref_".$natureId.'_'.$id.$type."' id='ref_".$natureId.'_'.$id.$type."' value=\"".$ref."\" style='width: 100%;' />
                     </div>
-                    <div class='span2'>
+                    <div class='col-md-2'>
                         <input type='text' readonly='true' ".$styleDate."  class='date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
                     </div>
-                    <div class='span3'>
+                    <div class='col-md-3'>
                         <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".((1 == $verrou) ? 'display:none;' : '')."' >
                                 <button class='editDoc btn' id='".'edit_'.$natureId.'_'.$id.$type."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
                                 <button class='deleteDoc btn' name='".$natureId.'_'.$id.$type."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>

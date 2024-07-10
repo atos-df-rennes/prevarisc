@@ -1,6 +1,6 @@
 <h4 class="h4_subtitle"><?= $this->avisDerogations['TYPE'] ?> - <?= $this->avisDerogations['TITRE'] ?></h4>
 
-<form class="form-horizontal span8" method="post">
+<form class="form-horizontal col-md-8" method="post">
     <div class="btn-group pull-right">
         <a class="btn" href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->avisDerogations['ID_DOSSIER']], false, true) ?>">Annuler la modification</a>
         <input type="submit" class="btn btn-success" value="Sauvegarder" />

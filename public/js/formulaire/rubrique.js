@@ -34,7 +34,7 @@ $(document).ready(function() {
                         titleText += ' enfants'
                     }
 
-                    savedFieldsTitlesDiv.append(`<div class="span6 offset2">
+                    savedFieldsTitlesDiv.append(`<div class="col-md-6 offset2">
                         <h3>${titleText}</h3>
                     </div>`)
                     savedFieldsDiv.append(getTableElement())
@@ -112,7 +112,7 @@ function deleteChamp(element) {
                     const parentTable = $(element).closest('table')
                     const nbOfRows = parentTable.children('tbody').children('tr').length
 
-                    const parentDivTitleDiv = $('.titles .span6.offset2')
+                    const parentDivTitleDiv = $('.titles .col-md-6.offset2')
 
                     $.ajax({
                         url: '/formulaire/delete-champ/rubrique/'+idRubrique+'/champ/'+idChamp,

@@ -2,7 +2,7 @@
 
 <div class='row'>
 
-    <div class="span2 tabbable tabs-left">
+    <div class="col-md-2 tabbable tabs-left">
         <ul class='nav nav-tabs' style='width: 100%'>
             <li <?php if(!isset($_GET['gid'])) echo "class='active'" ?>><a href='/users/index' >Tous les utilisateurs</a></li>
             <?php foreach($this->groupes as $groupe) : ?>
@@ -13,7 +13,7 @@
         </ul>
     </div>
 
-    <div class='span10'>
+    <div class='col-md-10'>
         <?php if(array_key_exists('gid', $_GET)) : ?>
         <a href='/users/edit-group?gid=<?php echo $_GET['gid'] ?>' class='btn pull-right' >Modifier le groupe</a>
         <?php endif ?>

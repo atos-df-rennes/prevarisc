@@ -4,25 +4,25 @@
 ?>
 <?php foreach($this->formulaires as $key => $formulaire) : ?>
     <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row objet">
-        <div class="span12">
+        <div class="col-md-12">
             <h2>
                 <?= $formulaire['NOM'] ?>
             </h2>
 
             <div class="row titles">
-                <div class="span4">
+                <div class="col-md-4">
                     <h3>Informations sur la rubrique</h3>
                 </div>
 
                 <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
-                    <div class="span6 offset2">
+                    <div class="col-md-6 offset2">
                         <h3>Liste des rubriques</h3>
                     </div>
                 <?php endif ?>
             </div>
 
             <div class="row">
-                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
+                <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="col-md-4 infos-rubrique">
                     <form action class="form-inline" method="post">
                         <div>
                             <?= $this->form->nom_rubrique->setAttrib('id', sprintf('%s-nom_rubrique', $formulaire['NOM_INTERNE'])) ?>
@@ -35,7 +35,7 @@
                     </form>
                 </div>
 
-                <div class="span6 offset2 saved-rubriques">
+                <div class="col-md-6 offset2 saved-rubriques">
                     <?php if(count($formulaire['RUBRIQUES']) > 0): ?>
                         <table class="table table-bordered table-condensed">
                             <thead>

@@ -208,10 +208,10 @@ if(isset($this->do) && $this->do == 'edit'){
 			<br/>
 			<div class='container-fluid' id='listeDates'>
 				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
-					<li class='span6'>Date</li>
-					<li class='span2'>Heure début</li>
-					<li class='span2'>Heure fin</li>
-					<li class='span2'>
+					<li class='col-md-6'>Date</li>
+					<li class='col-md-2'>Heure début</li>
+					<li class='col-md-2'>Heure fin</li>
+					<li class='col-md-2'>
 						<button class='addDate btn'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
 					</li>
 				</ul>
@@ -227,10 +227,10 @@ if(isset($this->do) && $this->do == 'edit'){
 		}
 		echo "
 					<ul class='list-unstyled row' style='text-align: center; font-weight: bold; float: left; padding: 3px 0pt;'>
-						<li class='span6'>".$dates['date']."</li>
-						<li class='span2'><input type='text' size='8' class='time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
-						<li class='span2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
-						<li class='span2'>
+						<li class='col-md-6'>".$dates['date']."</li>
+						<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$dates['inputH']."' name='D_".$dates['inputH']."' value='".$HD."' /></li>
+						<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$dates['inputH']."' name='F_".$dates['inputH']."' value='".$HF."'/></li>
+						<li class='col-md-2'>
 		";
 		if($paspremier != 0) {
 			echo "<button class='suppression btn'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>";
@@ -256,10 +256,10 @@ if(isset($this->do) && $this->do == 'edit'){
 		case 'addDateN':
 			echo "
 				<ul class='list-unstyled row' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
-					<li class='span6'>".$this->dateAjoutee."</li>
-					<li class='span2'><input type='text' size='8' class='time' id='D_".$this->dateAjouteeInput."' name='D_".$this->dateAjouteeInput."' value='09:00'/></li>
-					<li class='span2'><input type='text' size='8' class='time' id='F_".$this->dateAjouteeInput."' name='F_".$this->dateAjouteeInput."' value='18:00'/></li>
-					<li class='span2'>
+					<li class='col-md-6'>".$this->dateAjoutee."</li>
+					<li class='col-md-2'><input type='text' size='8' class='time' id='D_".$this->dateAjouteeInput."' name='D_".$this->dateAjouteeInput."' value='09:00'/></li>
+					<li class='col-md-2'><input type='text' size='8' class='time' id='F_".$this->dateAjouteeInput."' name='F_".$this->dateAjouteeInput."' value='18:00'/></li>
+					<li class='col-md-2'>
 						<button class='suppression btn' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>
 					</li>
 			";
@@ -351,10 +351,10 @@ function afficheTabListeDates($listeDates){
 	$affiche = "
 				<div class='container-fluid' id='listeDates'>
 					<ul class='list-unstyled row' style='text-align:center;font-weight:bold;border-bottom:1px solid black;float:left;padding:3px 0 3px 0;'>
-						<li class='span6'>Date</li>
-						<li class='span2'>Heure début</li>
-						<li class='span2'>Heure fin</li>
-						<li class='span2'>
+						<li class='col-md-6'>Date</li>
+						<li class='col-md-2'>Heure début</li>
+						<li class='col-md-2'>Heure fin</li>
+						<li class='col-md-2'>
 							<button class='addDate btn'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
 						</li>
 					</ul>
@@ -367,10 +367,10 @@ function afficheTabListeDates($listeDates){
 		$dateLibelle = $date->get(Zend_Date::WEEKDAY." ".Zend_Date::DAY_SHORT." ".Zend_Date::MONTH_NAME_SHORT." ".Zend_Date::YEAR,'fr');
 		$affiche .= "
 					<ul class='list-unstyled row' id='ligne_".$dates['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
-						<li class='span6'>".$dateLibelle."</li>
-						<li class='span2'> ".$heureDebut." </li>
-						<li class='span2'> ".$heureFin." </li>
-						<li class='span2'>
+						<li class='col-md-6'>".$dateLibelle."</li>
+						<li class='col-md-2'> ".$heureDebut." </li>
+						<li class='col-md-2'> ".$heureFin." </li>
+						<li class='col-md-2'>
 		";
 		$affiche .= "
 						<button class='edition btn' name='edition' id='edit_dateComm_".$dates['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
@@ -397,16 +397,16 @@ function afficheDateEdit($dateInfos,$first=null){
 	$date = new Zend_Date($dateInfos['DATE_COMMISSION'],'yyyy.MM.dd','fr');
 	$date = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
 	return "
-		<li class='span6'>
+		<li class='col-md-6'>
 			<input type='text' class='date' value='".$date."' id='date_".$dateInfos['ID_DATECOMMISSION']."' />
 		</li>
-		<li class='span2'>
+		<li class='col-md-2'>
 			<input type='text' size='8' class='time' id='D_".$dateInfos['ID_DATECOMMISSION']."' name='D_".$dateInfos['ID_DATECOMMISSION']."' value='".$heureDebut."' />
 		</li>
-		<li class='span2'>
+		<li class='col-md-2'>
 			<input type='text' size='8' class='time' id='F_".$dateInfos['ID_DATECOMMISSION']."' name='F_".$dateInfos['ID_DATECOMMISSION']."' value='".$heureFin."' />
 		</li>
-		<li class='span2'>
+		<li class='col-md-2'>
 			<button class='validation btn' name='validation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>&nbsp;</button>
 			<button class='annulation btn' name='annulation' id='annule_dateCom_".$dateInfos['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
 			<input type='hidden' name='first' id='first' value='".$first."' />
@@ -423,10 +423,10 @@ function afficheDateValid($date,$first=null){
 	$buttonEdition = $date['ID_DATECOMMISSION'];
 	$affiche = "
 			<ul class='list-unstyled row' id='ligne_".$date['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
-				<li class='span6'>".$dateLibelle."</li>
-				<li class='span2'>".$heureDebut." </li>
-				<li class='span2'>".$heureFin." </li>
-				<li class='span2'>
+				<li class='col-md-6'>".$dateLibelle."</li>
+				<li class='col-md-2'>".$heureDebut." </li>
+				<li class='col-md-2'>".$heureFin." </li>
+				<li class='col-md-2'>
 					<button class='edition btn' id='edit_dateComm_".$buttonEdition."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
 	";
 	if($date['DATECOMMISSION_LIEES']){
@@ -445,10 +445,10 @@ function ajoutDateLiee($tabDate,$date){
 	$heureFin =substr($tabDate['HEUREFIN_COMMISSION'],0,5);
 	return "
 		<ul class='list-unstyled row' id='ligne_".$tabDate['ID_DATECOMMISSION']."' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
-			<li class='span6'>".$date."</li>
-			<li class='span2'>".$heureDebut."</li>
-			<li class='span2'>".$heureFin."</li>
-			<li class='span2'>
+			<li class='col-md-6'>".$date."</li>
+			<li class='col-md-2'>".$heureDebut."</li>
+			<li class='col-md-2'>".$heureFin."</li>
+			<li class='col-md-2'>
 				<button class='edition btn' id='edit_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>&nbsp;</button>
 				<button class='suppression btn' id='supp_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span>&nbsp;</button>
 				<button style='float:right;' class='dateDefaut btn' id='defaut_dateComm_".$tabDate['ID_DATECOMMISSION']."'><span class='glyphicon glyphicon-check' aria-hidden='true'></span>&nbsp;</button>
@@ -503,10 +503,10 @@ function divAddDate(){
 		<div id='divAddDate'  style='display:none;'>
 			&nbsp;&nbsp;
 			<ul class='list-unstyled row' style='text-align:center;font-weight:bold;float:left;padding:3px 0 3px 0;'>
-				<li class='span6'>
+				<li class='col-md-6'>
 					Selectionnez la date <input type='text' class='date' id='addDate' />
 				</li>
-				<li class='span4'>
+				<li class='col-md-4'>
 					<button class='validAddDate btn'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp;</button>
 					<button class='cancelAddDate btn'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>&nbsp;</button>
 				</li>

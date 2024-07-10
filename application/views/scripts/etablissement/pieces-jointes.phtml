@@ -49,7 +49,7 @@
 	<ul class="thumbnails">
 		<?php foreach ($this->pieces_jointes as $piecejointe) : ?>
 			<?php if(in_array($piecejointe['EXTENSION_PIECEJOINTE'], array(".jpg", ".jpeg", ".png", ".gif"))) : ?>
-			<li class="span3">
+			<li class="col-md-3">
 				<a href='<?php echo $this->store->getURLPath($piecejointe, 'etablissement', $this->etablissement['general']['ID_ETABLISSEMENT']); ?>' class="thumbnail">
                                         <?php $piecejointe['EXTENSION_PIECEJOINTE'] = '.jpg'; ?> 
 					<img src="<?php echo $this->store->getURLPath($piecejointe, 'etablissement_miniature', $this->etablissement['general']['ID_ETABLISSEMENT']); ?>" alt="">

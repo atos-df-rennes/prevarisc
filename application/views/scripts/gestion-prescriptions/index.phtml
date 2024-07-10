@@ -1,21 +1,21 @@
 <?php
 	echo "
 		<div class='row'>
-			<div class='span3'>
+			<div class='col-md-3'>
 				<!--
 					<a href='/gestion-prescriptions/gestion-rappel-reg' >Gestion des prescriptions type</a>
 				-->
 			</div>
-			<div class='span3'>
+			<div class='col-md-3'>
 				<a href='/gestion-prescriptions/gestion-rappel-reg' >Gestion des rappels réglementaires</a>
 			</div>
-			<div class='span2'>
+			<div class='col-md-2'>
 				<a href='/gestion-prescriptions/gestion-textes' >Gestion des textes</a>
 			</div>
-			<div class='span2'>
+			<div class='col-md-2'>
 				<a href='/gestion-prescriptions/gestion-articles' >Gestion des articles</a>
 			</div>
-			<div class='span2'>
+			<div class='col-md-2'>
 			</div>
 		</div>
 		<h3 class='page-header'>Gestion des prescriptions types</h3>
@@ -68,13 +68,13 @@
 			$texte = $this->prescriptionType[$i][$j]['LIBELLE_TEXTE'];
 			echo "
 				<tr >
-					<td class='span3' style='vertical-align:top;'>".$texte."</td>
-					<td class='span3' style='vertical-align:top;'>".$article."</td>
+					<td class='col-md-3' style='vertical-align:top;'>".$texte."</td>
+					<td class='col-md-3' style='vertical-align:top;'>".$article."</td>
 			";
 			if($cpt)
 			{
-				echo "<td rowspan='".$nbAssoc."' class='span5'>".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."</td>";
-				echo "<td rowspan='".$nbAssoc."' class='span1' style='vertical-align:top;'><button class='editPrescriptionType btn' id='' >Editer</button></td>";
+				echo "<td rowspan='".$nbAssoc."' class='col-md-5'>".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."</td>";
+				echo "<td rowspan='".$nbAssoc."' class='col-md-1' style='vertical-align:top;'><button class='editPrescriptionType btn' id='' >Editer</button></td>";
 				$cpt = false;
 			}
 			echo "

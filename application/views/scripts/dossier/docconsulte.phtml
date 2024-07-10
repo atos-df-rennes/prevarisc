@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 			$(this).next().remove();
 			$(this).remove();
-			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row span12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
+			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row col-md-12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
 		}
 	});
 });
@@ -187,10 +187,10 @@ foreach($this->listeNatures as $index => $nature) {
 	echo "
 		<div id='".$nature["ID_NATURE"]."' class='nature row'>
 			<h4 class='hideDocConsulte' >Liste des documents consultés concernant la nature '".$nature["LIBELLE_DOSSIERNATURE"]."'</h4>
-			<p class='span5' style='padding-left:20px;'><strong>Libelle</strong></p>
-			<div class='span6'>
-                <p class='span5'><strong>Référence</strong></p>
-                <p class='span2'><strong>Date</strong></p>
+			<p class='col-md-5' style='padding-left:20px;'><strong>Libelle</strong></p>
+			<div class='col-md-6'>
+                <p class='col-md-5'><strong>Référence</strong></p>
+                <p class='col-md-2'><strong>Date</strong></p>
             </div>
 			<br class='clear' />
 			<ul id='listeDocs_".$nature["ID_NATURE"]."'>";

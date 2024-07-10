@@ -12,7 +12,7 @@
 
 	$nbFichier = count($this->fichierVer);
 	echo "<h2>Visible après vérrouillage  (".( ($nbFichier > 0)? "<a id='num_0' href='' >".$nbFichier."</a>" : "0").")</h2>" ;
-	echo "<div class='span12'>";
+	echo "<div class='col-md-12'>";
 	echo "
     	<table id='file_0' class='table table-bordered' >
 		    <thead>
@@ -60,7 +60,7 @@
 			$id_type = $commission['ID_COMMISSIONTYPE'];
 		}
 
-        echo "<div class='span12'>";
+        echo "<div class='col-md-12'>";
         $nbFichier = count($commission['listeFichier']);
         if($nbFichier > 0){
         	echo "<a href='' id='".$commission['ID_COMMISSION']."' class='commission'>".$commission['LIBELLE_COMMISSION']."</a> (<a id='num_".$commission['ID_COMMISSION']."' >".$nbFichier."</a>)";

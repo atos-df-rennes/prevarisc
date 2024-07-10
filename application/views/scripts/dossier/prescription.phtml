@@ -54,7 +54,7 @@ echo "
 		$nbPrescDossier = count($listePrescr);
 
 		if($nbPrescDossier == 0){
-			echo "<div class='span12' style='font-style:italic;'>Actuellement aucune prescription dans cette catégorie</div>";
+			echo "<div class='col-md-12' style='font-style:italic;'>Actuellement aucune prescription dans cette catégorie</div>";
 		}
 
 		for($i=0; $i < $nbPrescDossier; $i++)
@@ -73,15 +73,15 @@ echo "
 					$texte = $listePrescr[$i][$j]['LIBELLE_TEXTE'];
 					echo "
 						<tr>
-							<td class='span3'>".$texte."</td>
-							<td class='span2'>".$article."</td>
+							<td class='col-md-3'>".$texte."</td>
+							<td class='col-md-2'>".$article."</td>
 					";
 
 					if($cpt)
 					{
 						if($listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0){
 							echo "
-								<td rowspan='".$nbAssoc."' class='span1 numPresc'>
+								<td rowspan='".$nbAssoc."' class='col-md-1 numPresc'>
 									".$listePrescr[$i][0]['NUM_PRESCRIPTION_DOSSIER']."
 								</td>
 							";
@@ -89,7 +89,7 @@ echo "
 
 						if($listePrescr[$i][0]["ID_PRESCRIPTION_TYPE"] == null){
 							echo "
-								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "span5" :"span6" )."'>";
+								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "col-md-5" :"col-md-6" )."'>";
                                     if ($listePrescr[$i][$j]['DATE_LEVEE'] !== null) {
                                         echo "<span class='label label-info'>Levée le {$listePrescr[$i][$j]['DATE_LEVEE_FULL']}</span>";
                                     }
@@ -108,14 +108,14 @@ echo "
 							";
 						}else{
 							echo "
-								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "span5" :"span6" )."'>
+								<td rowspan='".$nbAssoc."' class='".( ( $listePrescr[$i][$j]['TYPE_PRESCRIPTION_DOSSIER'] != 0 )? "col-md-5" :"col-md-6" )."'>
 									".nl2br($listePrescr[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."
 								</td>
 							";
 						}
 						if($verrou == 0){
 							echo "
-								<td class='span1' rowspan='".$nbAssoc."'>
+								<td class='col-md-1' rowspan='".$nbAssoc."'>
 									<a class='btn' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
 								</td>
 							";

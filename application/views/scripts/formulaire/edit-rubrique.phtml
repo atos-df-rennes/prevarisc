@@ -5,7 +5,7 @@
 
 <div class="row">
     <h3>Informations sur la rubrique</h3>
-    <div class="span4 infos-rubrique">
+    <div class="col-md-4 infos-rubrique">
         <!-- TODO: Utiliser le formulaire de Zend -->
         <form action class="form-inline" method="post">
             <input type="hidden" id="rubrique-id" value="<?= $this->rubrique['ID_RUBRIQUE'] ?>">
@@ -41,7 +41,7 @@
 ]); ?>
 
 <div id="edit-rubrique" class="row">
-    <div class="span4 infos-champ">
+    <div class="col-md-4 infos-champ">
         <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
             <div>
                 <?= $this->fieldForm->nom_champ ?>
@@ -56,7 +56,7 @@
                     <a href='#' id='add-list-value'>Ajouter une valeur</a>
                 </div>
                 <div class="row">
-                    <div id="list-value" class="span10"></div>
+                    <div id="list-value" class="col-md-10"></div>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
         </form>
     </div>
 
-    <div id="saved-fields" class="span6 offset2">
+    <div id="saved-fields" class="col-md-6 offset2">
         <?php if(count($this->champs) > 0): ?>
             <table class="table table-bordered table-condensed">
                 <thead>
