@@ -1,6 +1,6 @@
 <div id="<?php echo $this->id ?>" class="panel panel-default <?php echo $this->width != 'small' ? 'w2' : '' ?> empty folded">
   <div class="panel-heading">
-    <i class="icon icon-chevron-right"></i>
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
     <?php echo $this->title.' ('.($this->count ?? 0).')' ?>
     <a class='btn btn-small pull-right' data-toggle="modal" data-target="#reponse-modal" href='<?php echo $this->url(array('controller' => 'index', 'action' => 'add-message')) ?>'>Ajouter un message</a>
   </div>

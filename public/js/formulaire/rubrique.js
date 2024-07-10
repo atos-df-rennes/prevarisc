@@ -166,7 +166,7 @@ function getTableElement() {
 
 function getRowElement(parsedData) {
     return `<tr>
-        <td class="tdMove"><i class="icon-move"></i></td>
+        <td class="tdMove"><span class="glyphicon glyphicon-move" aria-hidden="true"></span></td>
         <td>`
         +parsedData.NOM+
         `</td>

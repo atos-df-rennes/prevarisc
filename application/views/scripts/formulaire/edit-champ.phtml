@@ -1,5 +1,5 @@
 <a href="<?= $this->backUrl ?>">
-    <i class="icon-arrow-left"></i>
+    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
 
     <?php if (null !== $this->champ['ID_PARENT']): ?>
         Retourner sur le champ parent "<?= $this->infosParent['NOM'] ?>"
@@ -160,8 +160,8 @@ endif ?>
                 </thead>
                 <tbody id='tableParentChamp' class="grp">
                     <?php foreach($this->listChamp as $champ): ?>
-                        <tr id=<?= $champ['ID_CHAMP'] ?>>
-                            <td class='tdMove'><i class="icon-move"></i></td>
+                        <tr id=<?=$champ['ID_CHAMP']?>>
+                            <td class='tdMove'><span class="glyphicon glyphicon-move" aria-hidden="true"></span></td>
                             <td><?= $champ['NOM'] ?></td>
                             <td>
                                 <?= $champ['TYPE'] ?>

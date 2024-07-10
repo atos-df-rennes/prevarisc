@@ -128,7 +128,7 @@ function getRowElement(parsedData) {
     }
 
     return `<tr id=`+parsedData.ID_RUBRIQUE+`>
-        <td class='tdMove'><i class="icon-move"></i></td>
+        <td class='tdMove'><span class="glyphicon glyphicon-move" aria-hidden="true"></span></td>
         <td>`
         +parsedData.NOM+
         `</td>

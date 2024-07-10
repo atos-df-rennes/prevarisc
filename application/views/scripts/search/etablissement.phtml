@@ -24,7 +24,7 @@
                         <?php echo array_key_exists('zone_de_recherche_text', $_GET) && $_GET['zone_de_recherche_text'] != '' ? $_GET['zone_de_recherche_text'] : 'Département' ?>
                     </strong>
                 </a>
-                <a href='#' id="zone_de_recherche_reset"><i class="icon-remove"></i></a>
+                <a href='#' id="zone_de_recherche_reset"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                 <input type='hidden' name='zone_de_recherche_text' value="<?php if(array_key_exists('zone_de_recherche_text', $_GET)) echo $_GET['zone_de_recherche_text'] ?>" />
                 <input type='hidden' name='city' value="<?php if(array_key_exists('city', $_GET)) echo $_GET['city'] ?>" />
                 <input type='hidden' name='street' value="<?php if(array_key_exists('street', $_GET)) echo $_GET['street'] ?>" />

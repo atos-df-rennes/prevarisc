@@ -2,29 +2,29 @@
 <input type='hidden' name='idCommission' id='idCommission' value='<?php if($this->idComm){ echo $this->idComm; } ?>'/>
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li>
-        <a href="#" id='commissionPj'><i class="icon-share icon-black"></i> Pièces jointes</a>
+        <a href="#" id='commissionPj'><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Pièces jointes</a>
     </li>
     <li class="nav-header">Actions</li>
     <li>
         <a id='exportCom' href='/calendrier-des-commissions/exportoutlook/dateCommId/<?php echo $this->infosDateComm['ID_DATECOMMISSION']; ?>' ><em class='icon-calendar'></em> Exporter pour Outlook</a>
     </li>
     <li>
-        <a href="#" id='createConvoc'><i class="icon-file"></i> Générer Convocations</a>
+        <a href="#" id='createConvoc'><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Générer Convocations</a>
     </li>
     <li>
-        <a href="#" id='createOdj'><i class="icon-list-alt"></i> Générer l'ordre du jour</a>
+        <a href="#" id='createOdj'><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Générer l'ordre du jour</a>
     </li>
     <li>
-        <a href="#" id='createPv'><i class="icon-file"></i> Générer PV</a>
+        <a href="#" id='createPv'><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Générer PV</a>
     </li>
     <li>
-        <a href="#" id='creationCompteRendu'><i class="icon-book"></i> Générer le compte rendu</a>
+        <a href="#" id='creationCompteRendu'><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Générer le compte rendu</a>
     </li>
     <li>
         <?php if($this->infosDateComm['GESTION_HEURES'] == 1): ?>
-            <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><i class="icon-time"></i> Ne pas prendre en compte les heures</a>
+            <a href="#" class="heures" id='non' onclick="return confirm('Confirmez vous de ne pas prendre en compte les heures ?');"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Ne pas prendre en compte les heures</a>
         <?php else : ?>
-            <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><i class="icon-time"></i> Prendre en compte les heures</a>
+            <a href="#" class="heures" id='oui' onclick="return confirm('Confirmez vous de prendre en compte les heures ?');"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Prendre en compte les heures</a>
         <?php endif ?>
     </li>
 </ul>

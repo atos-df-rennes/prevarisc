@@ -54,10 +54,10 @@
                 <dd>
                     <p>
                         <?php if ($this->etablissement['informations']['ID_GENRE'] == 1): ?>
-                            <i class="icon-info-sign" title="Périodicité la plus contraignante des fils ERP"></i>
+                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Périodicité la plus contraignante des fils ERP"></span>
                         <?php endif ?>
                         <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 5)) && $this->etablissement['informations']['PERIODICITE_ETABLISSEMENTINFORMATIONS'] <> $this->default_periodicite): ?>
-                            <i class="icon-exclamation-sign" title="Periodicite non standard"></i>
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" title="Periodicite non standard"></span>
                         <?php endif ?>
                         <?= $this->periodicity ?>
                     </p>

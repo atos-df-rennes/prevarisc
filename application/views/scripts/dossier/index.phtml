@@ -1408,7 +1408,7 @@ $(".delaipresc").live('click', function() {
                     <div class="left span3">Prise en compte métier</div>
                     <div class="right span9">
                         <?php if ($this->enumStatutsPec::EN_ERREUR === $this->statutPec): ?>
-                            <i class="icon-warning-sign"></i>
+                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
                         <?php endif ?>
                         <span id="statut-pec" class="<?= $classPec ?>"><?= $this->enumStatutsPec->getLabel($this->statutPec) ?></span>
                         <?php if ($this->datePec): ?>
@@ -1440,7 +1440,7 @@ $(".delaipresc").live('click', function() {
                     <div class="left span3">Avis</div>
                     <div class="right span9">
                         <?php if ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis): ?>
-                            <i class="icon-warning-sign"></i>
+                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
                         <?php endif ?>
                         <span id="statut-avis" class="<?= $classAvis ?>"><?= $this->enumStatutsAvis->getLabel($this->statutAvis) ?></span>
                         <?php if ($this->dateAvis): ?>

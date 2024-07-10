@@ -54,7 +54,7 @@
     <!-- Nom du dossier -->
     <td class="doss-nom">
         <?php if ($this->VERROU_DOSSIER == 1): ?>
-            <i class="icon-lock"></i>
+            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
         <?php endif ?>
         <a href='/dossier/index/id/<?php echo $this->ID_DOSSIER ?>' title='<?php echo htmlspecialchars($this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . $this->OBJET_DOSSIER : ""), ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . substr($this->OBJET_DOSSIER, 0, 70) . ( strlen($this->OBJET_DOSSIER) > 70 ? "(...)" : "" ) : "") . ( $this->NB_URBA != '' ? " - " . $this->NB_URBA : '') ?>
@@ -162,7 +162,7 @@
     <!-- Pièces jointes -->
     <td>
         <?php if($this->PIECESJOINTES != null) : ?>
-        <a class="btn pj" href="#"><i class="icon-share icon-black" id="<?php echo "iconpj".$this->ID_DOSSIER ?>"></i></a>
+        <a class="btn pj" href="#"><span class="glyphicon glyphicon-share" aria-hidden="true" ="<?php echo "iconpj".$this->ID_DOSSIER ?>"></span></a>
         <?php endif ?>
     </td>
 </tr>

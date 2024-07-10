@@ -9,11 +9,11 @@
 
         <span class="doss-nom">
             <?php if ($this->VERROU_DOSSIER == 1): ?>
-                <i class="icon-lock"></i>
+                <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
             <?php endif ?>
             <?php if($this->NB_PJ > 0) : ?>
                 <a href='/dossier/piece-jointe/id/<?php echo $this->ID_DOSSIER ?>'>
-                    <i class="icon-file"></i>
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
                 </a>
             <?php endif;
 
