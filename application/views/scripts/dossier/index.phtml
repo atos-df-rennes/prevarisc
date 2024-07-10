@@ -1385,7 +1385,7 @@ $(".delaipresc").live('click', function() {
                     <div class="left span3">Identifiant de la consultation</div>
                     <div class="right span9"><?= $this->id_platau ?></div>
                 </li>
-                <?php if ($this->tempsRestant !== '') : ?>
+                <?php if (null !== $this->tempsRestant) : ?>
                     <li class="row-fluid" style="margin-bottom: 20px;">
                         <div class="left span3">Temps restant pour une réponse</div>
                         <div class="right span9">

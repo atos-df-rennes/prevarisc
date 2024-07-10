@@ -5,8 +5,12 @@ class Service_Utils_TempsRestant
     public const SEUIL_OK = 6;
     public const SEUIL_WARN = 3;
 
-    public static function calculate(string $limitDate): string
+    public static function calculate(?string $limitDate): ?string
     {
+        if (null === $limitDate) {
+            return null;
+        }
+
         $limitDate = new DateTime($limitDate);
         $now = (new DateTime())->setTime(0, 0, 0);
 
