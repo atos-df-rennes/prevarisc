@@ -10,7 +10,7 @@ echo "
 	<br/><br/>
 	<div class='row' id='alert' style='display:none;'>
 		<ul class='list-unstyled'>
-			<li class='alert alert-error' >
+			<li class='alert alert-danger' >
 				Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
 			</li>
 		</ul>
@@ -71,10 +71,10 @@ echo "
 		</table>
 	</div>
 	<br/>
-	Contenu : 
+	Contenu :
 	<textarea name='PRESCRIPTIONTYPE_LIBELLE' id='LIBELLE_PRESCRIPTIONTYPE' cols='150' rows='10'>".( ($this->do == 'edit')?$this->assoc[0]['PRESCRIPTIONTYPE_LIBELLE']:"")."</textarea>
 	</div>
-	</form>	
+	</form>
 ";
 
 ?>

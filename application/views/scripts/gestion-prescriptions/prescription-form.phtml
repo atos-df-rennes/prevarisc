@@ -35,7 +35,7 @@ echo "
 	</div>
 	<div class='row' id='alert' style='display:none;'>
 		<ul class='list-unstyled'>
-			<li class='alert alert-error' >
+			<li class='alert alert-danger' >
 				Veuillez spécifier au minimum un texte ou un article et un contenu avant la sauvegarde
 			</li>
 		</ul>
@@ -147,7 +147,7 @@ echo "</textarea>
 $(document).ready(function(){
 
 	$(".chosen").chosen({allow_single_deselect: true});
-	
+
 	$("#formPrescription").submit(function(){
 		if( $("#association tbody tr").length <= 0 || $("#PRESCRIPTION_LIBELLE").val() == '' ){
 			$("#alert").show();
