@@ -14,7 +14,7 @@
 
 <?php if( count($this->results) > 0 ) : ?>
     <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
-    <ul class='recherche_liste unstyled'>
+    <ul class='recherche_liste list-unstyled'>
     <?php echo $this->partialLoop('search/results/dossier.phtml', $this->results ) ?>
     </ul>
     <br/>

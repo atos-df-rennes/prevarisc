@@ -67,7 +67,7 @@
 	<!-- Catégorie -->
 	<td class='checkbox_area' >
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
             <?php foreach( $this->categories as $categorie ) : ?>
                 <li>
                     <input name='<?php echo $this->id_membre ?>_ID_CATEGORIE[]' type='checkbox' value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if( $categorie["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
@@ -81,11 +81,11 @@
 	<!-- Le type -->
 	<td class='checkbox_area' >
         <div class='inner_scroll'>
-            <dl class='unstyled'>
+            <dl class='list-unstyled'>
                 <?php foreach( $this->types as $libelle_type => $_type ) : ?>
                     <dt><?php echo $libelle_type ?><dt>
                     <dd>
-                        <ul class='unstyled'>
+                        <ul class='list-unstyled'>
                         <?php foreach( $_type as $type ) : ?>
                         <li>
                             <input name='<?php echo $this->id_membre ?>_ID_TYPEACTIVITE[]' type='checkbox' value='<?php echo $type["ID_TYPEACTIVITE"] ?>' <?php if( $type["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
@@ -102,7 +102,7 @@
 	<!-- Classe -->
 	<td class='checkbox_area' >
 		<div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
             <?php foreach( $this->classes as $classe ) : ?>
                 <li>
                     <input name='<?php echo $this->id_membre ?>_ID_CLASSE[]' type='checkbox' value='<?php echo $classe["ID_CLASSE"] ?>' <?php if( $classe["ID_COMMISSIONMEMBRE"] != null ) echo "checked" ?> />
@@ -117,7 +117,7 @@
 	<td class='checkbox_area' >
 		<div class='inner_scroll'>
 
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
 
                 <input type="hidden" name="type_membre_value" value="<?php echo $this->id_membre ?>" />
 
@@ -129,7 +129,7 @@
 
                     	<?php echo $dossiertype["LIBELLE_DOSSIERTYPE"] ?>
 
-						<ul class='unstyled' style='margin-left: 1em;'>
+						<ul class='list-unstyled' style='margin-left: 1em;'>
 							<?php foreach( $this->dossiernatures as $dossiernature ) : ?>
 								<?php if($dossiernature["ID_DOSSIERTYPE"] == $dossiertype["ID_DOSSIERTYPE"]) : ?>
 									<li class='<?php echo $this->id_membre."_DOSSIERNATURETYPE_".$dossiernature["ID_DOSSIERTYPE"] ?>' >

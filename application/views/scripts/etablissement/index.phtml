@@ -75,7 +75,7 @@
                 <!-- Type et activités -->
                 <dt>Types & activités</dt>
                 <dd>
-                    <ul class='unstyled'>
+                    <ul class='list-unstyled'>
                         <li>
                             <strong>
                                 <?php
@@ -259,7 +259,7 @@
                     });
                 </script>
             </h4>
-            <ul class='recherche_liste unstyled no_slide' style='max-height: 500px; overflow-y: scroll;'>
+            <ul class='recherche_liste list-unstyled no_slide' style='max-height: 500px; overflow-y: scroll;'>
                 <?php echo $this->partialLoop('search/results/etablissement.phtml', $this->etablissement['etablissement_lies']); ?>
             </ul>
             <?php endif ?>
@@ -494,7 +494,7 @@
                 <?php if (count($this->groupements_de_communes) > 0) : ?>
                 <dt>Groupements</dt>
                 <dd>
-                    <ul class='unstyled'>
+                    <ul class='list-unstyled'>
                         <?php foreach ($this->groupements_de_communes as $groupement) : ?>
                         <li>
                             <a href="/groupement/view?id=<?php echo $groupement["ID_GROUPEMENT"] ?>"><?php echo $groupement["LIBELLE_GROUPEMENT"] ?> (<?php echo $groupement["LIBELLE_GROUPEMENTTYPE"] ?>)</a>

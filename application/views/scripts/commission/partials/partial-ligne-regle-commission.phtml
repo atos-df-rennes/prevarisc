@@ -25,7 +25,7 @@
 	<!-- Catégorie -->
 	<td class='checkbox_area'>
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
                 <?php foreach( $this->categories as $categorie ) : ?>
                 <li>
                 <input name='<?php echo $this->id_regle ?>_ID_CATEGORIE[]' type='checkbox' value='<?php echo $categorie["ID_CATEGORIE"] ?>' <?php if( $categorie["ID_REGLE"] != null ) echo "checked" ?> />
@@ -39,7 +39,7 @@
 	<!-- Le type -->
 	<td class='checkbox_area' >
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
             <?php foreach( $this->types as $type ) : ?>
                 <li>
                     <input name='<?php echo $this->id_regle ?>_ID_TYPE[]' type='checkbox' value='<?php echo $type["ID_TYPE"] ?>' <?php if( $type["ID_REGLE"] != null ) echo "checked" ?> />
@@ -53,7 +53,7 @@
 	<!-- Classes -->
 	<td class='checkbox_area' >
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
             <?php foreach( $this->classes as $classe ) : ?>
                 <li>
                 <input name='<?php echo $this->id_regle ?>_ID_CLASSE[]' type='checkbox' value='<?php echo $classe["ID_CLASSE"] ?>' <?php if( $classe["ID_REGLE"] != null ) echo "checked" ?> />
@@ -67,7 +67,7 @@
 	<!-- Local sommeil ou non -->
 	<td  class='checkbox_area' >
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
                 <li>
                     <input type='checkbox' name='<?php echo $this->id_regle ?>_LOCALSOMMEIL[]' value='1' <?php if(in_array(1, $this->local_sommeil)) echo "checked" ?> />
                     Oui
@@ -83,7 +83,7 @@
 	<!-- Etude et/ou visite -->
 	<td class='checkbox_area' >
         <div class='inner_scroll'>
-            <ul class='unstyled'>
+            <ul class='list-unstyled'>
                 <li>
                     <input type='checkbox' name='<?php echo $this->id_regle ?>_ETUDEVISITE[]' value='1' <?php if(in_array(1, $this->etude_visite)) echo "checked" ?> />
                     Étude

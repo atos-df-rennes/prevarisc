@@ -374,7 +374,6 @@ ul.recherche_liste li.slide + li.ui-helper-hidden {
 
 ul.recherche_liste li:hover {
     background-color: #f5f5f5;
-    /*cursor: pointer;*/
 }
 
 ul.recherche_liste li.slide:hover {
@@ -838,7 +837,7 @@ text-decoration: none;
   cursor: move;
 }
 
-.dashboard .panel .icon {
+.dashboard .panel .glyphicon {
   cursor: pointer;
 }
 

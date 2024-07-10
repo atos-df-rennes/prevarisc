@@ -1,11 +1,11 @@
 <noscript>
-    <ul class="unstyled" >
+    <ul class="list-unstyled" >
         <li class="alert alert-error"><strong class="alert-error">Javascript desactivé</strong> Javascript n'est pas activé sur votre navigateur. Prevarisc ne peut fonctionner correctement sans l'activation du Javascript.</li>
     </ul>
 </noscript>
 
 <?php if( $this->flashMessenger()->hasMessages()) : ?>
-    <ul class="unstyled" >
+    <ul class="list-unstyled" >
         <?php echo $this->flashMessenger()->output(); ?>
     </ul>
 <?php endif ?>

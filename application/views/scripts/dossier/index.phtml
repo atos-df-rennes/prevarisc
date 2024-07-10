@@ -1380,7 +1380,7 @@ $(".delaipresc").live('click', function() {
         <h3>Informations générales</h3>
         <?php if (null !== $this->id_platau): ?>
             <h4 class="title">Informations sur Plat'AU</h4>
-            <ul class="list unstyled">
+            <ul class="list list-unstyled">
                 <li class="row-fluid" style="margin-bottom: 20px;">
                     <div class="left span3">Identifiant de la consultation</div>
                     <div class="right span9"><?= $this->id_platau ?></div>
@@ -1458,7 +1458,7 @@ $(".delaipresc").live('click', function() {
         <?php endif ?>
         <!-- BEGIN UL Type/Nature -->
         <h4>Type et nature du dossier</h4>
-        <ul class='list unstyled'>
+        <ul class='list list-unstyled'>
             <li class='row-fluid' style='margin-bottom:20px;' id='type'>
                 <div class='left libelle span3' style='float:left;'>Type</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
@@ -1508,7 +1508,7 @@ $(".delaipresc").live('click', function() {
         <!-- FIN UL Type/Nature -->
         <h4>Informations sur le dossier</h4>
         <!-- BEGIN UL InfosDossier -->
-        <ul id='InfosDossier' class='list unstyled'>
+        <ul id='InfosDossier' class='list list-unstyled'>
             <li class='row-fluid' id='DATEINSERT'
                 style='<?php echo (in_array('DATEINSERT', $this->afficherChamps) && $this->infosDossier['DATEINSERT_DOSSIER'] != '') ? "" : "display:none;" ?>margin-bottom:20px;'>
                 <div class='left libelle span3' style='float:left;'>Date de création du dossier</div>
@@ -2471,7 +2471,7 @@ $(".delaipresc").live('click', function() {
                     <?php echo $this->partialLoop('users/embedded/user.phtml', $this->preventionnistes) ?>
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
-                    <ul class='unstyled'>
+                    <ul class='list-unstyled'>
                         <li style='list-style-type:none' id='liste_prev'>
                             <?php if (count($this->preventionnistes) > 0) :
 								foreach ($this->preventionnistes as $prev) : ?>

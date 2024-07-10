@@ -25,7 +25,7 @@
 	echo "
 		<form id='FormPrescriptioncat_".$this->idCategorie."' >
 			<input type='hidden' name='type' value='categorie' />
-			<ul class='prescriptioncat unstyled classement'>
+			<ul class='prescriptioncat list-unstyled classement'>
 	";
 	foreach($this->listePrescriptionCat as $val => $ue)
 	{
@@ -50,7 +50,7 @@
 	echo "
 			</ul>
 		</form>
-		<ul class='prescriptiontypeWithoutCat' class='unstyled'>
+		<ul class='prescriptiontypeWithoutCat' class='list-unstyled'>
 	";
 	$nbPrescType = count($this->prescriptionType);
 	for($i=0; $i < $nbPrescType; $i++)

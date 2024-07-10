@@ -4,7 +4,7 @@
 	echo "
 		<form id='FormPrescriptiontexte_".$this->idCategorie."' >
 			<input type='hidden' name='type' value='texte' />
-			<ul class='prescriptiontexte unstyled classement' id='prescriptiontexte_".$this->idCategorie."' >
+			<ul class='prescriptiontexte list-unstyled classement' id='prescriptiontexte_".$this->idCategorie."' >
 	";
 
 	foreach($this->listePrescriptionTexte as $val => $ue){
@@ -34,7 +34,7 @@
 		</ul>
 		<form id='FormPrescriptiontypeCat_".$this->idCategorie."' >
 			<input type='hidden' name='type' value='prescriptionType' />
-			<ul id='prescriptiontypeCat_".$this->idCategorie."' class='unstyled classement'>
+			<ul id='prescriptiontypeCat_".$this->idCategorie."' class='list-unstyled classement'>
 	";
 	$nbPrescType = count($this->prescriptionType);
 	for($i=0; $i < $nbPrescType; $i++)

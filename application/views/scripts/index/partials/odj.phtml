@@ -9,7 +9,7 @@
       <?php if(count($commission["odj"]) == 0 ) : ?>
         <p class="muted">Pas de dossier affecté.</p>
       <?php else : ?>
-        <ul class='recherche_liste unstyled no_slide'>
+        <ul class='recherche_liste list-unstyled no_slide'>
           <?php echo $this->partialLoop('search/results/dossier.phtml', $commission["odj"] ) ?>
         </ul>
       <?php endif ?>
