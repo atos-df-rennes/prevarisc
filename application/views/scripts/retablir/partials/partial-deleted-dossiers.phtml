@@ -1,4 +1,4 @@
-<div class="muted">
+<div class="text-muted">
     <small>Nombre total d'éléments : <?= count($this->data) ?></small>
 </div>
 
@@ -25,7 +25,7 @@
                                 <?php endif ?>
                             </div>
 
-                            <small class='muted'>
+                            <small class='text-muted'>
                                 <?php
                                     $dateSuppression = new Zend_Date($deletedElement['DATESUPPRESSION_DOSSIER'], 'yyyy-MM-dd');
                                     $dateSuppression = $dateSuppression

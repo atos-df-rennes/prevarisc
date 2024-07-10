@@ -1395,7 +1395,7 @@ $(".delaipresc").live('click', function() {
                 <?php endif ?>
                 <li class="row-fluid" style="margin-bottom: 20px;">
                     <?php
-                        $classPec = 'muted';
+                        $classPec = 'text-muted';
                     if ($this->enumStatutsPec::EN_ATTENTE === $this->statutPec):
                         $classPec = 'text-info';
                     elseif ($this->enumStatutsPec::PRISE_EN_COMPTE === $this->statutPec):
@@ -1403,7 +1403,7 @@ $(".delaipresc").live('click', function() {
                     elseif ($this->enumStatutsPec::A_RENVOYER === $this->statutPec):
                         $classPec = 'text-warning';
                     elseif ($this->enumStatutsPec::EN_ERREUR === $this->statutPec):
-                        $classPec = 'text-error';
+                        $classPec = 'text-danger';
                     endif ?>
                     <div class="left col-md-3">Prise en compte métier</div>
                     <div class="right col-md-9">
@@ -1427,7 +1427,7 @@ $(".delaipresc").live('click', function() {
                 </li>
                 <li class="row" style="margin-bottom: 20px;">
                     <?php
-                        $classAvis = 'muted';
+                        $classAvis = 'text-muted';
                     if ($this->enumStatutsAvis::EN_COURS === $this->statutAvis):
                         $classAvis = 'text-info';
                     elseif ($this->enumStatutsAvis::TRAITE === $this->statutAvis):
@@ -1435,7 +1435,7 @@ $(".delaipresc").live('click', function() {
                     elseif ($this->enumStatutsAvis::A_RENVOYER === $this->statutAvis):
                         $classAvis = 'text-warning';
                     elseif ($this->enumStatutsAvis::EN_ERREUR === $this->statutAvis):
-                        $classAvis = 'text-error';
+                        $classAvis = 'text-danger';
                     endif ?>
                     <div class="left col-md-3">Avis</div>
                     <div class="right col-md-9">

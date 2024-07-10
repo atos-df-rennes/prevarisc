@@ -4,16 +4,16 @@
 
 <h3>Ajout d'une couche cartographique IGN</h3>
 
-<div class="accordion" id="ign-accordion">
+<div class="panel-group" id="ign-accordion" role="tablist" aria-multiselectable="true">
     <?php foreach ($this->formats as $index => $format): ?>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab">
+                <a role="button" class="accordion-toggle" data-toggle="collapse" data-parent="#ign-accordion" href="#<?= str_replace(' ', '-', $format) ?>">
                     <?= strtoupper($format) ?>
                 </a>
             </div>
-            <div id="<?= str_replace(' ', '-', $format) ?>" class="accordion-body collapse <?= $index === 0 ? 'in' : '' ?>">
-                <div class="accordion-inner">
+            <div id="<?= str_replace(' ', '-', $format) ?>" class="panel-collapse collapse <?= $index === 0 ? 'in' : '' ?>" role="tabpanel">
+                <div class="panel-body">
                     <table class="table table-hover table-condensed">
                         <thead>
                             <tr>
@@ -49,7 +49,7 @@
                 const layers = getCapabilitiesLayers(parser, format, baseFormat, result)
 
                 if (layers.length > 0) {
-                    contentDiv = $(`#${format.replace(' ', '-')} .accordion-inner table tbody`)
+                    contentDiv = $(`#${format.replace(' ', '-')} .panel-body table tbody`)
 
                     for (let i = 0; i < layers.length; i++) {
                         contentDiv.append(`<tr id="${layers[i].internalName}-${format.replace(' ', '-')}">`)

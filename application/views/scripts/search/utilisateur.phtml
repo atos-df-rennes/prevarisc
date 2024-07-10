@@ -19,13 +19,13 @@
 <hr/>
 
 <?php if( count($this->results) > 0 ) : ?>
-    <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+    <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
     <?php echo $this->partialLoop('users/embedded/user_medium.phtml', $this->results ) ?>
     <br/>
     <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
-	<p class='muted'><small>Aucun résultat disponible.</small></p>
+	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
     <h2 style='color: silver; text-align: center;' ></h2>
 <?php endif ?>
 

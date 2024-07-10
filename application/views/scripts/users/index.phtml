@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     <?php foreach( $this->users as $user ) : ?>
-                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='muted'" ?> >
+                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='text-muted'" ?> >
                         <td style='font-style: italic' ><?php echo $user["USERNAME_UTILISATEUR"] ?></td>
                         <td><?php echo $user["GRADE_UTILISATEURINFORMATIONS"] . " " . $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
                         <td><?php echo $user["LIBELLE_GROUPE"] ?></td>
@@ -65,7 +65,7 @@
                 </thead>
                 <tbody>
                     <?php foreach( $this->inactives_users as $user ) : ?>
-                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='muted'" ?> >
+                    <tr <?php if(!$user["ACTIF_UTILISATEUR"]) echo "class='text-muted'" ?> >
                         <td style='font-style: italic' ><?php echo $user["USERNAME_UTILISATEUR"] ?></td>
                         <td><?php echo $user["GRADE_UTILISATEURINFORMATIONS"] . " " . $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
                         <td><?php echo $user["LIBELLE_GROUPE"] ?></td>

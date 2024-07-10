@@ -12,7 +12,7 @@
 	    </p>
 
 	    <p id='bloc-contact-existant' class='text-center lead'>
-	    	<span class='muted'>Aucun contact selectionné</span>
+	    	<span class='text-muted'>Aucun contact selectionné</span>
 	    	<input type='hidden' name='id_contact' />
 	    </p>
 	    
@@ -59,7 +59,7 @@
             return item.replace( item, html );
         },
         updater: function (item) {
-            $('#bloc-contact-existant span').removeClass('muted').text($($.parseHTML(item)).last().text());
+            $('#bloc-contact-existant span').removeClass('text-muted').text($($.parseHTML(item)).last().text());
             $('#bloc-contact-existant input[type="hidden"]').val($($.parseHTML(item)).last().data('id'));
             return;
         }

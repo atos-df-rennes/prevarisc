@@ -3,9 +3,9 @@
 
     <input type='hidden' name='ID_DOSSIER' value='<?= $this->idDossier ?>' />
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="inputType">Type</label>
-        <div class="controls">
+        <div>
             <select id="inputType" name="TYPE" required>
                 <option value='Avis'>
                     Avis
@@ -17,51 +17,51 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="inputTitre">Titre</label>
-        <div class="controls">
+        <div>
             <input name="TITRE" type="text" id="inputTitre" required>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="inputObjet">Objet</label>
-        <div class="controls">
+        <div>
             <textarea id="inputObjet" name="OBJET"></textarea>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="inputJustification">Justification</label>
-        <div class="controls">
+        <div>
             <textarea id="inputJustification" name="JUSTIFICATION"></textarea>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="inputArticlesConcernes">Article(s) concerné(s)</label>
-        <div class="controls">
+        <div>
             <textarea id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
-        <div class="controls">
+        <div>
             <textarea id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="inputAnalyseDeRisque">Analyse de risque</label>
-        <div class="controls">
+        <div>
             <textarea id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="inputAvis">Avis</label>
-        <div class="controls">
+        <div>
             <select id="inputAvis" name="AVIS">
                 <?php foreach ($this->listeAvis as $avis): ?>
                     <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding">Avis/Dérogation levé(e):</label>
         <?=
             $this->partial(
@@ -85,9 +85,9 @@
 
     <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label no-top-padding" for="DISPLAY_HISTORIQUE">Afficher dans l'onglet de l'établissement</label>
-        <div class="controls">
+        <div>
             <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
             <input
                 type="checkbox"

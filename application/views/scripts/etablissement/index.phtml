@@ -107,7 +107,7 @@
             <?php if ($this->etablissement['informations']["ICPE_ETABLISSEMENTINFORMATIONS"]) : ?>
                 <h4 class='h4_subtitle'>Rubriques ICPE</h4>
                 <?php if (count($this->etablissement['rubriques']) == 0) : ?>
-                    <p class='muted text-center'>Pas de rubriques disponible</p>
+                    <p class='text-muted text-center'>Pas de rubriques disponible</p>
                 <?php else : ?>
                     <table class='table table-condensed'>
                         <thead>
@@ -215,7 +215,7 @@
             <?php if (in_array($this->etablissement['informations']['ID_GENRE'], array(2, 3, 5, 6))) : ?>
                 <h4 class='h4_subtitle'>Plans d'intervention</h4>
                 <?php if (count($this->etablissement['plans']) == 0) : ?>
-                    <p class='muted text-center'>Pas de plans disponible</p>
+                    <p class='text-muted text-center'>Pas de plans disponible</p>
                 <?php else : ?>
                     <table class='table table-condensed'>
                         <thead>
@@ -551,7 +551,7 @@
                 <dt>Préventionnistes</dt>
                 <dd>
                     <?php if (count($this->etablissement['preventionnistes']) == 0) : ?>
-                        <p class='muted'>Aucun préventionniste lié.</p>
+                        <p class='text-muted'>Aucun préventionniste lié.</p>
                     <?php else : ?>
                         <?php echo $this->partialLoop('users/embedded/user.phtml', $this->etablissement['preventionnistes']) ?>
                         <div style='clear: both; margin-bottom: 10px;'></div>

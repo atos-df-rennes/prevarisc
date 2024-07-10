@@ -130,7 +130,7 @@
 <?php if( count($this->results) > 0 ) : ?>
     <div style='display:inline-block;width: 100%;' >
         <div class='pull-left'>
-            <p class='muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
+            <p class='text-muted'><small>Nombre total d'éléments : <?php echo $this->results->getTotalItemCount() ?></small></p>
         </div>
         <?php if( $this->results->getTotalItemCount() <= 10000 ) : ?>
             <div class='pull-right'>
@@ -149,7 +149,7 @@
     <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
-	<p class='muted'><small>Aucun résultat disponible.</small></p>
+	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
     <h2 style='color: silver; text-align: center;' ></h2>
 <?php endif ?>
 

@@ -35,11 +35,11 @@
     gap: 1rem;
 }
 
-.form-horizontal .control-group {
+.form-horizontal .form-group {
     margin-bottom: 25px;
 }
 
-.form-horizontal .control-group .controls {
+.form-horizontal .form-group .controls {
     overflow-x: auto;
 }
 
