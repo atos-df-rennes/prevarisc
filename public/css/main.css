@@ -108,25 +108,6 @@ body > .navbar {
     padding: 4px 6px;
 }
 
-/* FIXME: A voir parce qu'on a plus de navbar-inner */
-.navbar-inner .container-fluid,
-.navbar-inner .container-fluid .nav-collapse > ul > li,
-.navbar-inner .container-fluid .nav-collapse > ul > li > a {
-    line-height: 30px;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #949494;
-    text-decoration: none;
-}
-
-.navbar-inner .container-fluid .nav-collapse > ul > li > a {
-    padding: 10px 8px 10px 5px;
-}
-
-.navbar-inner .container-fluid .nav-collapse > ul > li > a:hover {
-    color: #555;
-}
-
 /* Style de la page d'erreur
 -------------------------------------------------- */
 
