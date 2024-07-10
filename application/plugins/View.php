@@ -64,6 +64,7 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
 
             // CSS
             $view->headLink()->appendStylesheet('/css/bootstrap.min.css', 'all');
+            $view->headLink()->appendStylesheet('/css/bootstrap-theme.min.css', 'all');
             $view->headLink()->appendStylesheet('/css/main.css', 'all');
             $view->headLink()->appendStylesheet('/css/login.css', 'all');
             $view->headLink()->appendStylesheet('/css/utilities.css', 'all');
