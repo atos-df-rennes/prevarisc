@@ -82,7 +82,7 @@ body > .navbar {
     font-size: 12px;
 }
 
-.navbar .btn, .navbar .btn-group {
+.navbar-right {
     margin-top: 10px;
 }
 
@@ -101,7 +101,6 @@ body > .navbar {
 #research-input a {
     font-size: 12px;
     padding: 4px 4px 4px 4px;
-    margin-top: 10px;
     text-transform: initial;
 }
 
@@ -109,14 +108,7 @@ body > .navbar {
     padding: 4px 6px;
 }
 
-.navbar-inner .container-fluid {
-    width: 100%;
-}
-
-.navbar-search {
-    margin: 0;
-}
-
+/* FIXME: A voir parce qu'on a plus de navbar-inner */
 .navbar-inner .container-fluid,
 .navbar-inner .container-fluid .nav-collapse > ul > li,
 .navbar-inner .container-fluid .nav-collapse > ul > li > a {
@@ -134,11 +126,6 @@ body > .navbar {
 .navbar-inner .container-fluid .nav-collapse > ul > li > a:hover {
     color: #555;
 }
-
-.navbar .nav .dropdown-toggle .caret {
-    margin-top: 13px;
-}
-
 
 /* Style de la page d'erreur
 -------------------------------------------------- */
@@ -820,10 +807,6 @@ text-decoration: none;
     width: 10%;
     vertical-align: top;
     padding-top: 70px;
-}
-
-.navbar-fixed-top .navbar-inner {
-    box-shadow: none;
 }
 
 .nav-tabs.nav-stacked.menu_dashboard>li>a {

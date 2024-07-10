@@ -129,7 +129,7 @@
         <?php if (!$verrou && ($this->idDateCommissionAffect != null)) : ?>
             <li>
                 <a class="sep" href='/calendrier-des-commissions/gestionodj/dateCommId/<?= $this->idDateCommissionAffect; ?>'>
-                    <i class='icon-calendar icon-black'></i> Afficher ordre du jour
+                    <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span> Afficher ordre du jour
                 </a>
             </li>
         <?php endif ?>
@@ -168,11 +168,11 @@ endif ?>
                     data-toggle='modal'
                     id='descEtab'
                     title='Afficher le descriptif'>
-                    <i class='icon-list-alt icon-black'></i>
+                    <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
                 </a>
                 <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
                     title='Se rendre à la liste des dossiers' >
-                    <i class='icon-folder-open icon-black'></i>
+                    <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
                 </a>
 
                 <a href=<?= '/etablissement/index/id/'.$this->enteteEtab['ID_ETABLISSEMENT'] ?> class='etab'>
@@ -261,12 +261,12 @@ endif ?>
                                 data-toggle='modal'
                                 id='descEtab'
                                 title='Afficher le descriptif'>
-                                <i class='icon-list-alt icon-black'></i>
+                                <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
                             </a>
                             <a
                                 href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 title='Se rendre à la liste des dossiers' >
-                                <i class='icon-folder-open icon-black'></i>
+                                <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
                             </a>
                             <a
                                 href=<?='/etablissement/index/id/'.$value['ID_ETABLISSEMENT'] ?>

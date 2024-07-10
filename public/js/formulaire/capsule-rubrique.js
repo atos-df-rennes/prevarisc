@@ -123,7 +123,7 @@ function getRowElement(parsedData) {
     if (parsedData.DEFAULT_DISPLAY === 1) {
         defaultDisplay =
             `<div class='text-center'>
-                <i class='icon-ok'></i>
+                <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
             </div>`
     }
 
@@ -138,10 +138,10 @@ function getRowElement(parsedData) {
         <td id='actions'>
             <div class='text-center'>
                 <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>
-                    <i title='Modifier' class='icon-pencil'></i>
+                    <span title='Modifier' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>
                 </a>
                 <button data-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-rubrique' onclick='return deleteRubrique(this)'>
-                    <i title='Supprimer' class='icon-trash'></i>
+                    <i title='Supprimer' class='glyphicon glyphicon-trash' aria-hidden='true'></i>
                 </button>
             </div>
         </td>

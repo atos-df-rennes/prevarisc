@@ -176,10 +176,10 @@ function getRowElement(parsedData) {
         <td id='actions'>
             <div class='text-center'>
                 <a href='/formulaire/edit-champ/rubrique/`+parsedData.ID_RUBRIQUE+`/champ/`+parsedData.ID_CHAMP+`'>
-                    <i title='Modifier' class='icon-pencil'></i>
+                    <span title='Modifier' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>
                 </a>
                 <button data-id='`+parsedData.ID_CHAMP+`' data-rubrique-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-champ' onclick='return deleteChamp(this)'>
-                    <i title='Supprimer' class='icon-trash'></i>
+                    <i title='Supprimer' class='glyphicon glyphicon-trash' aria-hidden='true'></i>
                 </button>
             </div>
         </td>

@@ -19,7 +19,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["visites"]) > 0){
 				echo "
-					Visite(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
+					Visite(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["visites"]);
@@ -31,7 +31,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["etudes"]) > 0){
 				echo "
-					Etude(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
+					Etude(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["etudes"]);
@@ -43,7 +43,7 @@
 			";
 			if(count($this->listeDossierEtab[$val]["dossiers"]["autres"]) > 0){
 				echo "
-					Autre(s) <button  class='btn more'><i class='icon-plus'></i></button><button class='btn less' style='display:none;'><i class='icon-minus'></i></button>
+					Autre(s) <button  class='btn more'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button><button class='btn less' style='display:none;'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button>
 					<ul style='display:none;'>
 				";
 				echo $this->partialLoop('dossier/results/dossierEtab.phtml', $this->listeDossierEtab[$val]["dossiers"]["autres"]);
