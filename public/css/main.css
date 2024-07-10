@@ -75,6 +75,14 @@ h2.page-header {
     color: #005580;
 }
 
+#main-content {
+    margin-top: 55px;
+
+    @media (min-width: 768px) and (max-width: 900px) {
+        margin-top: 100px;
+    }
+}
+
 /* On règle la navbar en mode "super sleek"
 -------------------------------------------------- */
 
@@ -836,10 +844,6 @@ text-decoration: none;
   min-height: 100%;
   box-shadow: inset -3px 0px 8px -4px rgba(0, 0, 0, 0.07);
   font-size: .85em;
-}
-
-.menu_dashboard {
-  margin-left: -20px;
 }
 
 .menu_dashboard a {

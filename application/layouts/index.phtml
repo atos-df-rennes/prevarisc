@@ -9,10 +9,10 @@
         <?php echo $this->render("includes/nav-main.phtml"); ?>
 
         <div class='container-fluid' >
-            <div class='row page-header' style="margin-top: 55px">
+            <div id='main-content' class='row page-header'>
                 <div class='col-md-12'>
-                    <h2 style="margin: 4px 0">
-                      <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium', array('style' => "float: left; width: 50px; border: 1px solid #dfdfdf; border-radius: 50%; margin-right: 15px; margin-top: 14px;")) ?>
+                    <h2>
+                      <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium', array('style' => "float: left; width: 50px; border: 1px solid #dfdfdf; border-radius: 50%; margin-right: 15px;")) ?>
                       Tableau de bord
                       <small>Profil : <?php echo $this->user['group']['LIBELLE_GROUPE'] ?></small>
                     </h2>
