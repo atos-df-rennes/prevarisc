@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 			$(this).next().remove();
 			$(this).remove();
-			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row-fluid span12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
+			$("#listeDocs_"+idDiv).prepend('<li id="'+idLi+'" class="divDoc row span12" style="display: block; margin: 0 15px 15px 15px;" name="divDoc">'+valeurDiv+'</li><br class="clear">');
 		}
 	});
 });
@@ -185,7 +185,7 @@ $(document).ready(function() {
 <?php
 foreach($this->listeNatures as $index => $nature) {
 	echo "
-		<div id='".$nature["ID_NATURE"]."' class='nature row-fluid'>
+		<div id='".$nature["ID_NATURE"]."' class='nature row'>
 			<h4 class='hideDocConsulte' >Liste des documents consultés concernant la nature '".$nature["LIBELLE_DOSSIERNATURE"]."'</h4>
 			<p class='span5' style='padding-left:20px;'><strong>Libelle</strong></p>
 			<div class='span6'>

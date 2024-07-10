@@ -1,10 +1,10 @@
 <form name='etabRapport' id='etabRapport' action='/dossier/rapport/id/<?php echo $this->id_dossier; ?>' method='POST'>
     <input type='hidden' name='idDossier' value='<?php echo $this->id_dossier; ?>' />
     <input type='hidden' name='idCommission' value='<?php echo $this->infosCommission['ID_COMMISSION']; ?>' />
-    <div id='dossierInfos' class='row-fluid'>
+    <div id='dossierInfos' class='row'>
         <h4>Informations sur le dossier</h4>
     </div>
-    <div class='row-fluid'>
+    <div class='row'>
         <div class='span2'>
             Commission concernée
         </div>
@@ -45,10 +45,10 @@
             ?>
         </div>
     </div>
-    <div id='dossierInfos' class='row-fluid'>
+    <div id='dossierInfos' class='row'>
         <h4>Fichiers de la commission</h4>
     </div>
-    <div class='row-fluid'>
+    <div class='row'>
         <div class='span2'>
             Choisissez un document
         </div>
@@ -120,7 +120,7 @@
         ?>
         </div>
     </div>
-    <div id='dossierInfos' class='row-fluid'>
+    <div id='dossierInfos' class='row'>
         <h4>Etablissement(s) concerné(s) pour la génération du rapport</h4>
     </div>
     <div>
@@ -141,7 +141,7 @@
     </div>
     <div class="alert alert-success" id='successDiv' style='display:none;'></div>
     <div class="alert alert-danger" id='failDiv' style='display:none;'></div>
-    <div class='row-fluid'>
+    <div class='row'>
     <?php
         if($this->idTypeActivitePrinc == 29){
             echo "Cochez la case si vous ne souhaitez pas reprendre les prescriptions des cellules <input type='checkbox' name='repriseCC' id='repriseCC'  ><br/>";
@@ -149,7 +149,7 @@
     ?>
     </div>
     <br/>
-    <div class='row-fluid'>
+    <div class='row'>
         <input type='generate' class='btn btn-success' id='test' value='Générer le(s) document(s)' >
     </div>
 </form>

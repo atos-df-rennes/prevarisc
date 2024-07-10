@@ -3,13 +3,13 @@
     $lastKey = end($arrayKeys);
 ?>
 <?php foreach($this->formulaires as $key => $formulaire) : ?>
-    <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row-fluid objet">
+    <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="row objet">
         <div class="span12">
             <h2>
                 <?= $formulaire['NOM'] ?>
             </h2>
 
-            <div class="row-fluid titles">
+            <div class="row titles">
                 <div class="span4">
                     <h3>Informations sur la rubrique</h3>
                 </div>
@@ -21,7 +21,7 @@
                 <?php endif ?>
             </div>
 
-            <div class="row-fluid">
+            <div class="row">
                 <div id="<?= $formulaire['NOM_INTERNE'] ?>" class="span4 infos-rubrique">
                     <form action class="form-inline" method="post">
                         <div>

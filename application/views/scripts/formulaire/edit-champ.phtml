@@ -8,7 +8,7 @@
     <?php endif ?>
 </a>
 
-<div class="row-fluid">
+<div class="row">
     <div class="span4">
         <h3>Informations sur la rubrique</h3>
     </div>
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div id="edit-champ" class="row-fluid">
+<div id="edit-champ" class="row">
     <div class="span4 infos-rubrique">
         <h3>
             <?= $this->rubrique['NOM'] ?>
@@ -72,7 +72,7 @@
 
             <?php if($this->valeursChamp !== null): ?>
                 <!-- Valeurs de la liste -->
-                <div class="row-fluid">
+                <div class="row">
                     <h3>Valeurs de la liste</h3>
                     <?php foreach($this->valeursChamp as $valeur): ?>
                         <div>
@@ -82,10 +82,10 @@
                     <?php endforeach ?>
 
                     <div id="div-valeurs-liste">
-                        <div class="row-fluid">
+                        <div class="row">
                             <a href='#' id='add-list-value'>Ajouter une valeur</a>
                         </div>
-                        <div class="row-fluid">
+                        <div class="row">
                             <div id="list-value" class="span10">
                             </div>
                         </div>
@@ -109,7 +109,7 @@
     ]);
 endif ?>
 
-<div class="row-fluid">
+<div class="row">
     <?php if ($this->type === 'Parent') : ?>
         <div class="span4 infos-champ">
             <form enctype="application/x-www-form-urlencoded" method="post" class="form-inline" action>
@@ -124,10 +124,10 @@ endif ?>
 
                 <div id="div-list-value">
                     <h5>Définition des valeurs de la liste</h5>
-                    <div class="row-fluid">
+                    <div class="row">
                         <a href='#' id='add-list-value'>Ajouter une valeur</a>
                     </div>
-                    <div class="row-fluid">
+                    <div class="row">
                         <div id="list-value" class="span10">
                         </div>
                     </div>

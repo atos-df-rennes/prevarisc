@@ -9,7 +9,7 @@
         <?php echo $this->render("includes/nav-main.phtml"); ?>
 
         <div class='container-fluid'>
-            <div class='row-fluid'>
+            <div class='row'>
                 <div class='span2 sidebar mainsidebar' style="margin-left: -20px; padding-left: 20px; margin-top: 20px; padding-top: 40px;">
                     <br>
                     <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium', array('style' => "float: left; width: 50px; border: 1px solid #dfdfdf; border-radius: 50%; margin-right: 15px;")) ?>
@@ -36,10 +36,14 @@
                   <?php echo $this->placeholder('after_content') ?>
                 </div>
             </div>
+<<<<<<< HEAD
             <button id="go-top" type="button" class="btn hide" onclick="scrollToTop()">
                 <i class="icon-arrow-up"></i>
             </button>
             <div class='row-fluid'>
+=======
+            <div class='row'>
+>>>>>>> bf5e9928 (Modification des classes row)
                 <div class="span12">
                     <?php echo $this->render("includes/footer.phtml"); ?>
                 </div>

@@ -33,7 +33,7 @@
 
 <!-- Onglets permettant de selectionner les entités à rechercher -->
 <h2 class="page-header">Dossiers</h2>
-<form method='get' class='row-fluid'>
+<form method='get' class='row'>
     <div class='navbar-form form-search well well-small span12' style='margin-bottom: 5px;'>
         <div class="pull-left input-append">
             <input type="text" name='objet' class="input-xlarge search-query" placeholder="Objet du dossier ..." value="<?php if(isset($_GET["objet"])) echo htmlentities($_GET["objet"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
@@ -51,7 +51,7 @@
     </div>
 
     <div id='filterContainer' class='well span12' style="margin-left: 0;">
-        <div class='row-fluid'>
+        <div class='row'>
             <div>
                 <select name='types[]' class="span3 chosen" data-placeholder='Types' multiple onchange="masquerBoutonExportCalc()">
                     <?php foreach ($this->DB_type as $type): ?>
@@ -108,9 +108,9 @@
                 <?php endif ?>
             </div>
         </div>
-        <div class='row-fluid mt-5'>
+        <div class='row mt-5'>
             <div class='span7'>
-                <div class='row-fluid'>
+                <div class='row'>
                     <div class='span6'>
                         <select name='commune' class="span12 chosen" data-placeholder='Sélectionner une commune' onchange="masquerBoutonExportCalc()">
                             <option value=''></option>
@@ -129,7 +129,7 @@
                         </select>
                     </div>
                 </div>
-                <div class='row-fluid'>
+                <div class='row'>
                     <div class='span6'>
                         <select name='numero' class="span12 chosen" data-placeholder='Sélectionner un numéro' onchange="masquerBoutonExportCalc()">
                             <option value=''></option>
@@ -139,7 +139,7 @@
                         </select>
                     </div>
                 </div>
-                <div class='row-fluid mt-3'>
+                <div class='row mt-3'>
                     <div class="span6">
                         <select name="preventionniste" class='span12 chosen' data-placeholder='Sélectionner un préventionniste' onchange="masquerBoutonExportCalc()">
                             <option value=''></option>
@@ -149,14 +149,14 @@
                         </select>
                     </div>
                 </div>
-                <div class='row-fluid mt-4'>
+                <div class='row mt-4'>
                     <div class='span6'>
                         <input type="text" name='permis' class='span12' value="<?php echo isset($_GET["permis"])?htmlentities($_GET["permis"]):'' ?>" placeholder="Numéro de permis" onkeypress="masquerBoutonExportCalc()" />
                     </div>
                 </div>
             </div>
             <div class='span5'>
-                <div class='row-fluid'>
+                <div class='row'>
                     <div class='span2'>Création</div>
                     <div class='span1'>du</div>
                     <div class='span3'>
@@ -167,7 +167,7 @@
                         <input type='text' name='date-creation-end' value='<?php echo $dateCreationEnd ?>' class='datepicker span12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
                     </div>
                 </div>
-                <div class='row-fluid'>
+                <div class='row'>
                     <div class='span2'>Réception</div>
                     <div class='span1'>du</div>
                     <div class="span3">
@@ -178,7 +178,7 @@
                         <input type='text' name='date-reception-end' value='<?php echo $dateReceptionEnd ?>' class='datepicker span12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
                     </div>
                 </div>
-                <div class='row-fluid'>
+                <div class='row'>
                     <div class='span2'>Réponse</div>
                     <div class='span1'>du</div>
                     <div class="span3">

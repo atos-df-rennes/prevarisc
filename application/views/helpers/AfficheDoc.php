@@ -28,7 +28,7 @@ class View_Helper_AfficheDoc
         }
 
         $return = "
-            <li class='divDoc row-fluid span12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
+            <li class='divDoc row span12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
                 <div style='float:left;' class='span1'>
                     <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
                 </div>
