@@ -128,7 +128,7 @@ function bindEtsPopup($elem) {
                 }
 
                 html += "<br><br>";
-                html += "<a href='/etablissement/index/id/" + ets_id + "' class='btn btn-small btn-primary btn-block'>Voir la fiche</a>";
+                html += "<a href='/etablissement/index/id/" + ets_id + "' class='btn btn-sm btn-primary btn-block'>Voir la fiche</a>";
 
                 e.popover('destroy');
                 e.popover({html: true, content: html}).popover('show');
