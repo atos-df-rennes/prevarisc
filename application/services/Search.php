@@ -62,7 +62,7 @@ class Service_Search
                         AND dossier.DATESUPPRESSION_DOSSIER IS NULL)'), ])
                 ->join('etablissementinformations', 'e.ID_ETABLISSEMENT = etablissementinformations.ID_ETABLISSEMENT AND etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS = ( SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT )')
                 ->joinLeft('dossier', 'e.ID_DOSSIER_DONNANT_AVIS = dossier.ID_DOSSIER', ['DATEVISITE_DOSSIER', 'DATECOMM_DOSSIER', 'DATEINSERT_DOSSIER', 'DIFFEREAVIS_DOSSIER'])
-                ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')   
+                ->joinLeft('avis', 'dossier.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
                 ->joinLeft('categorie', 'etablissementinformations.ID_CATEGORIE = categorie.ID_CATEGORIE', 'LIBELLE_CATEGORIE')
                 ->joinLeft('type', 'etablissementinformations.ID_TYPE = type.ID_TYPE', 'LIBELLE_TYPE')
                 ->joinLeft('typeactivite', 'etablissementinformations.ID_TYPEACTIVITE = typeactivite.ID_TYPEACTIVITE', 'LIBELLE_ACTIVITE')
@@ -139,22 +139,18 @@ class Service_Search
                 $this->setCriteria($select, 'avis.ID_AVIS', $avis_favorable ? 1 : 2);
             }
 
-             // Critères : periodicite_standart
-             if (null !== $periodicite_standart) {
-                if($periodicite_standart){
+            // Critères : periodicite_standart
+            if (null !== $periodicite_standart) {
+                if ($periodicite_standart) {
                     $select->joinLeft('periodicite', '   etablissementinformations.ID_TYPE = periodicite.ID_TYPE AND etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE
                     AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2 ');
-                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS = periodicite.PERIODICITE_PERIODICITE' );
-    
-                   }
-                   else{
+                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS = periodicite.PERIODICITE_PERIODICITE');
+                } else {
                     $select->joinLeft('periodicite', '   etablissementinformations.ID_TYPE = periodicite.ID_TYPE AND etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE
                     AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2 ');
-                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE' );
-                    
-                   }
+                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE');
+                }
             }
-
 
             // Critères : statuts
             if (null !== $statuts) {
@@ -276,7 +272,8 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
-     * @param bool         $periodicite_standart 
+     * @param bool         $periodicite_standart
+     *
      * @return array
      */
     public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $periodicite_standart = null)
@@ -397,22 +394,18 @@ class Service_Search
                 $this->setCriteria($select, 'etablissementinformations.ID_FAMILLE', $familles);
             }
 
-             // Critères : periodicite_standart
-             if (null !== $periodicite_standart) {
-                if($periodicite_standart){
+            // Critères : periodicite_standart
+            if (null !== $periodicite_standart) {
+                if ($periodicite_standart) {
                     $select->joinLeft('periodicite', '   etablissementinformations.ID_TYPE = periodicite.ID_TYPE AND etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE
                     AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2 ');
-                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS = periodicite.PERIODICITE_PERIODICITE' );
-    
-                   }
-                   else{
+                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS = periodicite.PERIODICITE_PERIODICITE');
+                } else {
                     $select->joinLeft('periodicite', '   etablissementinformations.ID_TYPE = periodicite.ID_TYPE AND etablissementinformations.ID_CATEGORIE = periodicite.ID_CATEGORIE
                     AND etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS = periodicite.LOCALSOMMEIL_PERIODICITE AND etablissementinformations.ID_GENRE =2 ');
-                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE' );
-                    
-                   }
+                    $select->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS != periodicite.PERIODICITE_PERIODICITE');
+                }
             }
-
 
             // Critères : type
             if (null !== $types_activites) {

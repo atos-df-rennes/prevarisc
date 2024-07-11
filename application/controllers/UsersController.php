@@ -114,13 +114,13 @@ class UsersController extends Zend_Controller_Action
                             $row_groupe_priv->id_privilege = $id_privilege;
                             $row_groupe_priv->save();
                         }
-
-                        if (
-                            0 == $value_privilege
-                            && $groupe_privilege_exists
-                        ) {
-                            $model_groupes_privilege->delete('ID_GROUPE = '.$id_groupe.' AND id_privilege = '.$id_privilege);
+                        if (0 != $value_privilege) {
+                            continue;
                         }
+                        if (!$groupe_privilege_exists) {
+                            continue;
+                        }
+                        $model_groupes_privilege->delete('ID_GROUPE = '.$id_groupe.' AND id_privilege = '.$id_privilege);
                     }
                 }
                 $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
