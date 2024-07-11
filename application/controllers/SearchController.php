@@ -584,7 +584,7 @@ class SearchController extends Zend_Controller_Action
 
         $service_search = new Service_Search();
 
-        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null, null,null);
+        $data = $service_search->etablissements(null, null, null, null, null, null, null, null, null, null, null, null, $this->_request->parent, null, null, null, null, null, null);
 
         $data = $data['results'];
 

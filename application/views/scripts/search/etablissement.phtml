@@ -222,7 +222,7 @@
 			var array = $("select[name='genres[]']").multiselect("getChecked").each(function() {
 				switch(this.value) {
 					case '2' : $("#type_span, #categorie_span, #periodicite_span").show(); break;
-					case '3' : $("#type_span, #categorie_span, #periodicite_span").show(); break;
+					case '3' : $("#type_span, #categorie_span").show(); break;
 					case '4' : $("#famille_span").show(); break;
 					case '5' : $("#classe_span").show(); break;
 				}
