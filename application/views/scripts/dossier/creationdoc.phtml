@@ -785,7 +785,7 @@ foreach ($tabEffDegKV as $nomChamp => $valeurChamp) {
 }
 
 try {
-    // Gestion des avis et dérogations
+    // Gestion des avis et dérogations du dossier
     $segmentAvisDerogations = $odf->setSegment('avisDerogations');
 
     foreach ($this->avisDerogations as $avisDerogation) {
@@ -816,6 +816,40 @@ try {
     }
 
     $odf->mergeSegment($segmentAvisDerogations);
+} catch (OdfException $e) {}
+
+try {
+    // Gestion des avis et dérogations historisés sur l'établissement
+    $segmentAvisDerogationsEtablissement = $odf->setSegment('avisDerogationsEtablissement');
+
+    foreach ($this->avisDerogationsEtablissement as $avisDerogationEtablissement) {
+        addChamp($segmentAvisDerogationsEtablissement, 'type', $avisDerogationEtablissement['TYPE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'titre', $avisDerogationEtablissement['TITRE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'objet', $avisDerogationEtablissement['OBJET']);
+        addChamp($segmentAvisDerogationsEtablissement, 'justification', $avisDerogationEtablissement['JUSTIFICATION']);
+        addChamp($segmentAvisDerogationsEtablissement, 'articles_concernes', $avisDerogationEtablissement['ARTICLES_CONCERNES']);
+        addChamp($segmentAvisDerogationsEtablissement, 'mesures_compensatoires_proposees', $avisDerogationEtablissement['MESURES_COMPENSATOIRES_PROPOSEES']);
+        addChamp($segmentAvisDerogationsEtablissement, 'analyse_de_risque', $avisDerogationEtablissement['ANALYSE_DE_RISQUE']);
+        addChamp($segmentAvisDerogationsEtablissement, 'avis', $avisDerogationEtablissement['LIBELLE_AVIS']);
+        addChamp($segmentAvisDerogationsEtablissement, 'identifiantdossierleve', $avisDerogationEtablissement['ID_DOSSIER_LIE']);
+
+        $date = null;
+        if (null !== $avisDerogationEtablissement['DATECOMM_DOSSIER']) {
+            $date = new Zend_Date($avisDerogationEtablissement['DATECOMM_DOSSIER'], Zend_Date::DATES);
+        } elseif (null !== $avisDerogationEtablissement['DATEVISITE_DOSSIER']) {
+            $date = new Zend_Date($avisDerogationEtablissement['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+        }
+
+        if ($date instanceof Zend_Date) {
+            $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+        }
+
+        addChamp($segmentAvisDerogationsEtablissement, 'date', $date);
+
+        $segmentAvisDerogationsEtablissement->merge();
+    }
+
+    $odf->mergeSegment($segmentAvisDerogationsEtablissement);
 } catch (OdfException $e) {}
 
 // Gestion des formulaires personnalisés

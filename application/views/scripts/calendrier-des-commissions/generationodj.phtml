@@ -233,6 +233,7 @@ function retrieveInfoDoss($segment, $dossierInfos) {
     addChamp($segment->infosDoss, 'listeTelPreventioniste', implode(', ', $listeTelPreventioniste));
     addChamp($segment->infosDoss, 'listeMailPreventioniste', implode(', ', $listeMailPreventionniste));
 
+    // Gestion des avis & dérogations
     try {
         $avisDerogations = $segment->infosDoss->avisDerogations;
     } catch (Exception $e) {}
@@ -278,6 +279,55 @@ function retrieveInfoDoss($segment, $dossierInfos) {
             addChamp($avisDerogations, 'date', '');
 
             $avisDerogations->merge();
+        }
+    }
+
+    // Gestion des avis & dérogations établissement
+    try {
+        $avisDerogationsEtablissement = $segment->infosDoss->avisDerogationsEtablissement;
+    } catch (Exception $e) {}
+
+    if (isset($avisDerogationsEtablissement)) {
+        if (!empty($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"])) {
+            foreach ($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"] as $avisDerogationEtablissement) {
+                addChamp($avisDerogationsEtablissement, 'type', $avisDerogationEtablissement['TYPE']);
+                addChamp($avisDerogationsEtablissement, 'titre', $avisDerogationEtablissement['TITRE']);
+                addChamp($avisDerogationsEtablissement, 'objet', $avisDerogationEtablissement['OBJET']);
+                addChamp($avisDerogationsEtablissement, 'justification', $avisDerogationEtablissement['JUSTIFICATION']);
+                addChamp($avisDerogationsEtablissement, 'articles_concernes', $avisDerogationEtablissement['ARTICLES_CONCERNES']);
+                addChamp($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', $avisDerogationEtablissement['MESURES_COMPENSATOIRES_PROPOSEES']);
+                addChamp($avisDerogationsEtablissement, 'analyse_de_risque', $avisDerogationEtablissement['ANALYSE_DE_RISQUE']);
+                addChamp($avisDerogationsEtablissement, 'avis', $avisDerogationEtablissement['LIBELLE_AVIS']);
+                addChamp($avisDerogationsEtablissement, 'identifiantdossierleve', $avisDerogationEtablissement['ID_DOSSIER_LIE']);
+
+                $date = null;
+                if (null !== $avisDerogationEtablissement['DATECOMM_DOSSIER']) {
+                    $date = new Zend_Date($avisDerogationEtablissement['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                } elseif (null !== $avisDerogationEtablissement['DATEVISITE_DOSSIER']) {
+                    $date = new Zend_Date($avisDerogationEtablissement['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                }
+
+                if ($date instanceof Zend_Date) {
+                    $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+                }
+
+                addChamp($avisDerogationsEtablissement, 'date', $date);
+
+                $avisDerogationsEtablissement->merge();
+            }
+        } else {
+            addChamp($avisDerogationsEtablissement, 'type', '');
+            addChamp($avisDerogationsEtablissement, 'titre', '');
+            addChamp($avisDerogationsEtablissement, 'objet', '');
+            addChamp($avisDerogationsEtablissement, 'justification', '');
+            addChamp($avisDerogationsEtablissement, 'articles_concernes', '');
+            addChamp($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', '');
+            addChamp($avisDerogationsEtablissement, 'analyse_de_risque', '');
+            addChamp($avisDerogationsEtablissement, 'avis', '');
+            addChamp($avisDerogationsEtablissement, 'identifiantdossierleve', '');
+            addChamp($avisDerogationsEtablissement, 'date', '');
+
+            $avisDerogationsEtablissement->merge();
         }
     }
 

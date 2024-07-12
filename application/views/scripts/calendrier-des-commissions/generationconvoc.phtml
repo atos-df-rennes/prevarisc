@@ -346,6 +346,55 @@ function retrieveInfoDossier($segment, $dossierInfos) {
         }
     }
 
+    // Gestion des avis & dérogations établissement
+    try {
+        $avisDerogationsEtablissement = $segment->avisDerogationsEtablissement;
+    } catch (Exception $e) {}
+
+    if (isset($avisDerogationsEtablissement)) {
+        if (!empty($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"])) {
+            foreach ($dossierInfos["AVIS_DEROGATIONS_ETABLISSEMENT"] as $avisDerogationEtablissement) {
+                setVars($avisDerogationsEtablissement, 'type', $avisDerogationEtablissement['TYPE']);
+                setVars($avisDerogationsEtablissement, 'titre', $avisDerogationEtablissement['TITRE']);
+                setVars($avisDerogationsEtablissement, 'objet', $avisDerogationEtablissement['OBJET']);
+                setVars($avisDerogationsEtablissement, 'justification', $avisDerogationEtablissement['JUSTIFICATION']);
+                setVars($avisDerogationsEtablissement, 'articles_concernes', $avisDerogationEtablissement['ARTICLES_CONCERNES']);
+                setVars($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', $avisDerogationEtablissement['MESURES_COMPENSATOIRES_PROPOSEES']);
+                setVars($avisDerogationsEtablissement, 'analyse_de_risque', $avisDerogationEtablissement['ANALYSE_DE_RISQUE']);
+                setVars($avisDerogationsEtablissement, 'avis', $avisDerogationEtablissement['LIBELLE_AVIS']);
+                setVars($avisDerogationsEtablissement, 'identifiantdossierleve', $avisDerogationEtablissement['ID_DOSSIER_LIE']);
+
+                $date = null;
+                if (null !== $avisDerogationEtablissement['DATECOMM_DOSSIER']) {
+                    $date = new Zend_Date($avisDerogationEtablissement['DATECOMM_DOSSIER'], Zend_Date::DATES);
+                } elseif (null !== $avisDerogationEtablissement['DATEVISITE_DOSSIER']) {
+                    $date = new Zend_Date($avisDerogationEtablissement['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+                }
+
+                if ($date instanceof Zend_Date) {
+                    $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
+                }
+
+                setVars($avisDerogationsEtablissement, 'date', $date);
+
+                $avisDerogationsEtablissement->merge();
+            }
+        } else {
+            setVars($avisDerogationsEtablissement, 'type', '');
+            setVars($avisDerogationsEtablissement, 'titre', '');
+            setVars($avisDerogationsEtablissement, 'objet', '');
+            setVars($avisDerogationsEtablissement, 'justification', '');
+            setVars($avisDerogationsEtablissement, 'articles_concernes', '');
+            setVars($avisDerogationsEtablissement, 'mesures_compensatoires_proposees', '');
+            setVars($avisDerogationsEtablissement, 'analyse_de_risque', '');
+            setVars($avisDerogationsEtablissement, 'avis', '');
+            setVars($avisDerogationsEtablissement, 'identifiantdossierleve', '');
+            setVars($avisDerogationsEtablissement, 'date', '');
+
+            $avisDerogationsEtablissement->merge();
+        }
+    }
+
     // Gestion des formulaires personnalisés
     $serviceUtils = new Service_Utils();
 
