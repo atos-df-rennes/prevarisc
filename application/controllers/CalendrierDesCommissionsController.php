@@ -942,7 +942,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
             $dbDossier = new Model_DbTable_Dossier();
             $dbDocUrba = new Model_DbTable_DossierDocUrba();
-            $model_etablisssement = new Model_DbTable_Etablissement();
+            $model_etablissement = new Model_DbTable_Etablissement();
 
             $service_etablissement = new Service_Etablissement();
 
@@ -994,7 +994,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 if ([] !== $listeEtab) {
                     $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                     // Ajoute les avis derogations provenant du dossier
-                    $listeDossiers[$val]['AVIS_DEROGATIONS'] = $model_etablisssement->getListAvisDerogationsEtablissement($listeEtab[0]['ID_ETABLISSEMENT']);
+                    $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($listeEtab[0]['ID_ETABLISSEMENT']);
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                     $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
                     $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
@@ -1192,7 +1193,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $model_etablissement = new Model_DbTable_Etablissement();
 
         foreach ($listeDossiers as $key => $dossier) {
-            $listeDossiers[$key]['AVIS_DEROGATIONS'] = $model_etablissement->getListAvisDerogationsEtablissement($dossier['infosEtab']['general']['ID_ETABLISSEMENT']);
+            $listeDossiers[$key]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
+            $listeDossiers[$key]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($dossier['infosEtab']['general']['ID_ETABLISSEMENT']);
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
@@ -1273,7 +1275,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
             $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
 
-            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $model_etablissement->getListAvisDerogationsEtablissement($listeEtab[0]['ID_ETABLISSEMENT']);
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+            $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
 
             // FIXME Remplacer les $listeDossiers[$val] par $ue
             // Gestion des formulaires personnalisés
@@ -1345,7 +1348,8 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
             $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
 
-            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $model_etablissement->getListAvisDerogationsEtablissement($listeEtab[0]['ID_ETABLISSEMENT']);
+            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+            $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
 
             // Gestion des formulaires personnalisés
             $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
