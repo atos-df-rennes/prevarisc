@@ -6,7 +6,7 @@
     </div>
 
     <div class="modal-body" style='min-height: 100px;overflow-y:visible'>
-            
+
             <p class='text-center'>
 	    	<input type='text' name='autocomplete-ignoreit' placeholder='Nom du contact à ajouter ...' />
 	    </p>
@@ -15,11 +15,11 @@
 	    	<span class='text-muted'>Aucun contact selectionné</span>
 	    	<input type='hidden' name='id_contact' />
 	    </p>
-	    
+
     </div>
 
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+        <a href="#" data-dismiss="modal" class="btn btn-default">Annuler</a>
         <input type='submit' id='submit' value='Ajouter' class='btn btn-success' />
     </div>
 
@@ -39,10 +39,10 @@
                 success: function (result) {
                     contacts = [];
                     $.each(result.response, function (i, contact) {
-                        contacts.push("<span data-id='" + contact.ID_UTILISATEURINFORMATIONS + "'>" 
-                                + contact.SOCIETE_UTILISATEURINFORMATIONS + " " 
-                                + contact.NOM_UTILISATEURINFORMATIONS + " " 
-                                + contact.PRENOM_UTILISATEURINFORMATIONS 
+                        contacts.push("<span data-id='" + contact.ID_UTILISATEURINFORMATIONS + "'>"
+                                + contact.SOCIETE_UTILISATEURINFORMATIONS + " "
+                                + contact.NOM_UTILISATEURINFORMATIONS + " "
+                                + contact.PRENOM_UTILISATEURINFORMATIONS
                                 + "</span>");
                     });
 

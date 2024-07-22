@@ -5,7 +5,7 @@
     <?php endif ?>
 
     <!-- Nom du dossier -->
-    <span class="doss-nom">
+    <span>
 		<input type='radio' name='dossierSelect' value='<?php echo $this->ID_DOSSIER ?>' />
         <a href='/dossier/index/id/<?php echo $this->ID_DOSSIER ?>' title='<?php echo htmlspecialchars($this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . $this->OBJET_DOSSIER : ""), ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_DOSSIERTYPE . " - " . $this->LIBELLE_DOSSIERNATURE . (!empty($this->OBJET_DOSSIER) ? " - " . substr($this->OBJET_DOSSIER, 0, 70) . ( strlen($this->OBJET_DOSSIER) > 70 ? "(...)" : "" ) : "") . ( $this->NB_URBA != '' ? " - " . $this->NB_URBA : '') ?>
@@ -73,6 +73,6 @@
         <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
     <?php endif ?>
 
-    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-primary'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
     <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 </li>

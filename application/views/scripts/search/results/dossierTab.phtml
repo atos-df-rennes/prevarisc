@@ -28,7 +28,7 @@
     ?>
 
     <!-- Etablissement -->
-    <td class="doss-nom">
+    <td>
         <a href='/etablissement/index/id/<?php echo $this->ID_ETABLISSEMENT ?>' title='<?php echo htmlspecialchars($this->LIBELLE_ETABLISSEMENTINFORMATIONS , ENT_QUOTES) ?>'>
             <?php echo $this->LIBELLE_ETABLISSEMENTINFORMATIONS  ?>
         </a>
@@ -52,7 +52,7 @@
     <?php endif ?>
 
     <!-- Nom du dossier -->
-    <td class="doss-nom">
+    <td>
         <?php if ($this->VERROU_DOSSIER == 1): ?>
             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
         <?php endif ?>
@@ -90,7 +90,7 @@
         <span class='avis' style='background-color: #3a87ad'>Fait l'objet d'un échéancier de travaux</span>
         <?php endif ?>
 
-	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+	    <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-primary'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
         <?php $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);

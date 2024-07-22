@@ -7,7 +7,7 @@
 
     <div class="pull-left">
 
-        <span class="doss-nom">
+        <span>
             <?php if ($this->VERROU_DOSSIER == 1): ?>
                 <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
             <?php endif ?>
@@ -119,7 +119,7 @@
     </div>
 
     <div class="pull-right">
-        <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-info'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
+        <?php if($this->ID_PLATAU !== null) : echo "<span class='label label-primary'>CONSULTATION PLATAU : " . $this->ID_PLATAU . "</span>"; endif ?>
         <?php if($this->ID_PLATAU !== null && $this->INCOMPLET_DOSSIER === null) : echo "<span class='label label-info'>EN ATTENTE DE PEC</span>"; endif ?>
 
         <!-- Avis du dossier -->

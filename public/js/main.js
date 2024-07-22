@@ -173,7 +173,7 @@ function loadStickyButtons() {
     document.querySelectorAll('.action-buttons').forEach((actionButton) => {
         actionButton.style.position = 'sticky'
         // /!\ Il faut mettre des ";" après les template literals
-        actionButton.style.top = `${headerHeight}px`;
+        actionButton.style.top = `${headerHeight + 25}px`;
     })
 }
 

@@ -37,7 +37,7 @@
     <div class='navbar-form form-search well well-small col-md-12' style='margin-bottom: 5px;'>
         <div class="pull-left input-append">
             <input type="text" name='objet' class="input-xlarge search-query" placeholder="Objet du dossier ..." value="<?php if(isset($_GET["objet"])) echo htmlentities($_GET["objet"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
-                <input type='submit' class="btn" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()" />
+                <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()" />
                 <input type='hidden' name='page' value="1" />
         </div>
 

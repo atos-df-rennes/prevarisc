@@ -40,7 +40,7 @@
                         <td><?php echo $user["GRADE_UTILISATEURINFORMATIONS"] . " " . $user["NOM_UTILISATEURINFORMATIONS"] . " " . $user["PRENOM_UTILISATEURINFORMATIONS"] ?></td>
                         <td><?php echo $user["LIBELLE_GROUPE"] ?></td>
                         <td><?php echo $user["LIBELLE_FONCTION"] ?></td>
-                        <td><?php echo ( time() - strtotime($user["LASTACTION_UTILISATEUR"]) < ini_get('session.gc_maxlifetime') ) ? "<span class='label label-success'>En ligne</span>" : "<span class='label label-inverse'>Hors ligne</span>" ?></td>
+                        <td><?php echo ( time() - strtotime($user["LASTACTION_UTILISATEUR"]) < ini_get('session.gc_maxlifetime') ) ? "<span class='label label-success'>En ligne</span>" : "<span class='label label-default'>Hors ligne</span>" ?></td>
                         <td><a href='/users/edit/uid/<?php echo $user["uid"] ?>'>Modifier</a></td>
                     </tr>
                     <?php endforeach ?>

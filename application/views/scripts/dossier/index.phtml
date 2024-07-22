@@ -1347,9 +1347,9 @@ $(".delaipresc").live('click', function() {
 	$action = $this->do;
 	if ($this->verrouDossier != 1 && 'edit' == $action): ?>
 	<div class='action-buttons pull-right' style='font-weight:normal'>
+        <button type="button" class="btn btn-default" id="modificationDossier">Modifier le dossier</button>
 		<div class="btn-group">
-			<a class="btn" id="modificationDossier" href="#">Modifier le dossier</a>
-			<a id='annulModification' class='btn' style="display:none" href="#">Annuler la modification</a>
+			<button type="button" id='annulModification' class='btn btn-default' style="display:none">Annuler la modification</button>
 			<input id='validModification' type='submit' style="display:none" class="btn btn-success" value='Sauvegarder'>
 		</div>
 	</div>
@@ -1573,10 +1573,10 @@ $(".delaipresc").live('click', function() {
                         </button>
                         <?php if ($action != 'new') :
                             foreach ($this->dossierDocUrba as $docUrba) : ?>
-							<div class='docurba' style=''>
+							<div class='docurba'>
 								<input type='hidden' name='docUrba[]' value='<?php echo $docUrba['NUM_DOCURBA'] ?>'
 									id='urba_<?php echo $docUrba['ID_DOCURBA'] ?>' /><?php echo $docUrba['NUM_DOCURBA'] ?>
-								<a href='' idDocUrba='<?php echo $docUrba['ID_DOCURBA'] ?>' class='suppDocUrba'
+								<a href='#' idDocUrba='<?php echo $docUrba['ID_DOCURBA'] ?>' class='suppDocUrba'
 									<?php echo ('edit' == $action) ? "style='display:none;'" : "" ?>>
 									&times;
 								</a>
