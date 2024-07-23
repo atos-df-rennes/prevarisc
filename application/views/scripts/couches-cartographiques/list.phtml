@@ -119,10 +119,10 @@
     </div>
 <?php else : ?>
     <p class='text-right'>
-        <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a>
+        <a class='btn btn-primary' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a>
     </p>
     <p class='text-right'>
-        <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add-couche-ign'), null, true) ?>'>Ajouter une couche IGN</a>
+        <a class='btn btn-info' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'add'), null, true) ?>'>Ajouter une couche personnalisée</a>
     </p>
     <p class='text-right'>
         <a class='btn btn-default' href='<?php echo $this->url(array('controller' => 'couches-cartographiques', 'action' => 'change-order'), null, true) ?>'>Changer l'ordre des couches</a>
