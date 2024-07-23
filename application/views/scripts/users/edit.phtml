@@ -1,7 +1,6 @@
 <?php echo $this->partial('users/partials/menu_admin_user.phtml') ?>
 
 <form enctype='multipart/form-data' method='post'>
-
     <?php if($this->add) : ?>
         <div class='pull-right' >
             <input type='submit' class="btn btn-success" value="Ajouter l'utilisateur">
@@ -10,7 +9,7 @@
     <?php else : ?>
         <div class='pull-right' >
             <div class="btn-group">
-                <a class='btn' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
+                <a class='btn btn-default' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
                 <input type='submit' class="btn btn-success" value='Sauvegarder'>
             </div>
         </div>
@@ -47,11 +46,11 @@
             </p>
             <?php if (getenv('PREVARISC_ENFORCE_SECURITY') == 1): ?>
             <p id="password_instructions" style="<?php echo $this->add ? '' : 'display:none' ?>">
-                Le mot de passe doit contenir au moins 8 caractères 
+                Le mot de passe doit contenir au moins 8 caractères
                 dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.
             </p>
             <?php endif ?>
-            
+
         </dd>
 
         <dt>Groupe</dt>
@@ -72,14 +71,14 @@
                 <input type='checkbox' name='ACTIF_UTILISATEUR' value='1' <?php if( !isset($this->user) || $this->user['ACTIF_UTILISATEUR'] ) echo "checked" ?> />
             </p>
         </dd>
-        
+
         <dt>Dernière IP authentifiée</dt>
         <dd>
             <p>
                 <input type='text'  class="input-medium" name='IP_UTILISATEUR' maxlength="45" value='<?php echo $this->user["IP_UTILISATEUR"] ?>' />
             </p>
         </dd>
-        
+
         <dt>Connexions en échec</dt>
         <dd>
             <input type='number' min="0" class="input-mini" name='FAILED_LOGIN_ATTEMPTS_UTILISATEUR' value='<?php echo $this->user["FAILED_LOGIN_ATTEMPTS_UTILISATEUR"] ? : '0' ?>' />
@@ -255,7 +254,7 @@
         $(".chosen").chosen({
             search_contains : true
         });
-        
+
         $('#unlock').click(function(e) {
             e.preventDefault();
             $('input[name="FAILED_LOGIN_ATTEMPTS_UTILISATEUR"]').val(0);

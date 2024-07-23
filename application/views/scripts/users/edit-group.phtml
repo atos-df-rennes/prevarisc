@@ -9,7 +9,7 @@
 	<h4>Ajout d'un groupe</h4>
 	<?php else : ?>
 	<div class='pull-right' >
-		<a class='btn' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
+		<a class='btn btn-default' href="<?php echo $this->url(array('action' => 'index')) ?>">Annuler la modification</a>
 	    <div class="btn-group">
 	        <a class='btn btn-danger' href='/users/delete-group?gid=<?php echo $this->group["ID_GROUPE"] ?>'>Supprimer le groupe</a>
 	        <input type='submit' class="btn btn-success" value='Sauvegarder'>

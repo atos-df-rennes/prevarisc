@@ -7,7 +7,7 @@
         <div class='col-md-9' <?= $this->action == 'presc-add' ?  "style='display:none;'" : "" ?>>
             <a class='btn btn-warning' id='del-prescription'>Supprimer la prescription</a>
             <a class='btn btn-danger' id='del-confirm' style='display:none;'>Confirmer la suppression</a>
-            <a class='btn' id='del-cancel' style='display:none;'>Annuler</a>
+            <a class='btn btn-default' id='del-cancel' style='display:none;'>Annuler</a>
         </div>
         <div class='col-md-3' style='float:right;'>
             <a class='btn btn-default' href='/dossier/prescription/id/<?= $this->id_dossier ?>'>Annuler la modification</a>

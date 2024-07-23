@@ -1,17 +1,14 @@
 <?php echo $this->partial('users/partials/menu_admin_user.phtml') ?>
 
-<div class='row'>
-
-    <div class="col-md-2 tabbable tabs-left">
-        <ul class='nav nav-tabs' style='width: 100%'>
-            <li <?php if(!isset($_GET['gid'])) echo "class='active'" ?>><a href='/users/index' >Tous les utilisateurs</a></li>
-            <?php foreach($this->groupes as $groupe) : ?>
+<div class='row mt-4'>
+    <ul class="col-md-2 nav nav-pills nav-stacked" style="padding-left: 15px;">
+        <li <?php if(!isset($_GET['gid'])) echo "class='active'" ?>><a href='/users/index' >Tous les utilisateurs</a></li>
+        <?php foreach($this->groupes as $groupe) : ?>
             <li <?php if(isset($_GET['gid']) && $_GET['gid'] == $groupe['ID_GROUPE']) echo "class='active'" ?> >
                 <a href='/users/index?gid=<?php echo $groupe["ID_GROUPE"] ?>' ><?php echo $groupe["LIBELLE_GROUPE"] ?></a>
             </li>
-            <?php endforeach ?>
-        </ul>
-    </div>
+        <?php endforeach ?>
+    </ul>
 
     <div class='col-md-10'>
         <?php if(array_key_exists('gid', $_GET)) : ?>

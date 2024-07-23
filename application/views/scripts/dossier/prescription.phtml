@@ -4,7 +4,7 @@ if($this->infosDossier['VERROU_DOSSIER'] == 0){
 	echo "
 		<button class='addPresc btn' id='addPrescriptionType' >Ajouter une prescription type</button>
 		&nbsp;&nbsp;
-		<a class='btn' href='".$this->url(array('controller' => 'dossier', 'action' => 'prescription-add'))."' >Ajouter une prescription</a>
+		<a class='btn btn-default' href='".$this->url(array('controller' => 'dossier', 'action' => 'prescription-add'))."' >Ajouter une prescription</a>
 	";
 	if(count($this->prescriptionExploitation) == 0 && count($this->prescriptionAmelioration) == 0){
 		echo "
@@ -116,7 +116,7 @@ echo "
 						if($verrou == 0){
 							echo "
 								<td class='col-md-1' rowspan='".$nbAssoc."'>
-									<a class='btn' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
+									<a class='btn btn-default' href='/dossier/prescription-edit/id/".$id_dossier."/id-prescription/".$listePrescr[$i][0]['ID_PRESCRIPTION_DOSSIER']."' >Modifier</a>
 								</td>
 							";
 						}
