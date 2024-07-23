@@ -32,7 +32,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
-
         function noDest()
         {
             $("#formAlerte").hide();
@@ -43,7 +42,6 @@
         if ($('#mail-emails-dst').val() === "") {
             noDest();
         }
-
 
         $("#formAlerte").on({
             click: function() {
@@ -64,7 +62,6 @@
                 if (arrayMails.length === 0) {
                     noDest();
                 }
-
 
                 return false;
             }
