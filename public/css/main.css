@@ -177,10 +177,6 @@ footer a:hover {
 /* Formulaire
 -------------------------------------------------- */
 
-form * {
-    box-sizing: content-box;
-}
-
 form select {
     box-sizing: border-box;
 }
@@ -357,7 +353,6 @@ ul.recherche_liste li.slide {
 
 ul.recherche_liste li.slide + li.ui-helper-hidden {
     padding: 0;
-    margin-left: 50px;
     background-color: white;
 }
 
@@ -560,8 +555,7 @@ table.periodicite:first-child {
 
 input.date {
 	background: url("images/calendar.gif") left no-repeat;
-	padding-left: 16px;
-	width: 83px;
+	padding-left: 20px;
 }
 
 input.date:hover {
@@ -849,10 +843,6 @@ text-decoration: none;
 .menu_dashboard a {
   border-top: none;
   border-bottom: none;
-}
-
-.menu_dashboard li {
-  margin-bottom: 0;
 }
 
 .menu_dashboard li:hover a
@@ -1213,8 +1203,11 @@ dl.champ_effectif_camping dd input {
     margin-bottom: 1rem;
 }
 
-#dossierInfos form .btn,
-#ign-accordion .row-fluid,
+#dossierInfos .form .input-group input {
+    height: unset;
+}
+
+#ign-accordion .row,
 .date + .btn.today {
     margin-bottom: 10px;
 }
@@ -1234,6 +1227,7 @@ dl.champ_effectif_camping dd input {
 .action-buttons {
     background-color: white;
     height: fit-content;
+    z-index: 10;
 }
 
 #go-top {

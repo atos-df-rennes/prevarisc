@@ -101,6 +101,7 @@
             </a>
         </li>
 
+        <!-- @fixme: Voir comment modifier ce markup pour faire quelque chose de bien -->
         <li class="nav-header">Actions</li>
 
         <?php
@@ -220,7 +221,7 @@ endif ?>
     </h3>
 <?php else :?>
     <h2 class='page-header'>
-        <span style='color: #333333'><?= $this->libelleType ?></span>
+        <span><?= $this->libelleType ?></span>
 
         <?php if ($this->dossierSupprime): ?>
             <span class='label label-danger'>

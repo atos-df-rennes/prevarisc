@@ -33,21 +33,19 @@
 
 <!-- Onglets permettant de selectionner les entités à rechercher -->
 <h2 class="page-header">Dossiers</h2>
-<form method='get' class='row'>
-    <div class='navbar-form form-search well well-small col-md-12' style='margin-bottom: 5px;'>
-        <div class="pull-left input-append">
-            <input type="text" name='objet' class="input-xlarge search-query" placeholder="Objet du dossier ..." value="<?php if(isset($_GET["objet"])) echo htmlentities($_GET["objet"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
-                <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()" />
-                <input type='hidden' name='page' value="1" />
+<form method='get'>
+    <div class='navbar-form well well-sm'>
+        <div class="form-group">
+            <input type="text" name='objet' class="form-control" placeholder="Objet du dossier ..." value="<?php if(isset($_GET["objet"])) echo htmlentities($_GET["objet"]) ?>" onkeypress="masquerBoutonExportCalc()"/>
         </div>
+        <input type='submit' class="btn btn-default" name='Rechercher' value="Rechercher" onsubmit="afficherBoutonExportCalc()"/>
+        <input type='hidden' name='page' value="1" />
 
-        <div class="pull-left" style='margin: 9px 0 0 5px'>
-            <small>
-                <a href="/search/dossier?label=&page=1">
-                    Réinitialiser
-                </a>
-            </small>
-        </div>
+        <small>
+            <a href="/search/dossier?label=&page=1">
+                Réinitialiser
+            </a>
+        </small>
     </div>
 
     <div id='filterContainer' class='well col-md-12' style="margin-left: 0;">
@@ -129,7 +127,7 @@
                         </select>
                     </div>
                 </div>
-                <div class='row'>
+                <div class='row mt-2'>
                     <div class='col-md-6'>
                         <select name='numero' class="col-md-12 chosen" data-placeholder='Sélectionner un numéro' onchange="masquerBoutonExportCalc()">
                             <option value=''></option>
@@ -151,7 +149,7 @@
                 </div>
                 <div class='row mt-4'>
                     <div class='col-md-6'>
-                        <input type="text" name='permis' class='col-md-12' value="<?php echo isset($_GET["permis"])?htmlentities($_GET["permis"]):'' ?>" placeholder="Numéro de permis" onkeypress="masquerBoutonExportCalc()" />
+                        <input class="form-control" type="text" name='permis' class='col-md-12' value="<?php echo isset($_GET["permis"])?htmlentities($_GET["permis"]):'' ?>" placeholder="Numéro de permis" onkeypress="masquerBoutonExportCalc()" />
                     </div>
                 </div>
             </div>
@@ -160,33 +158,33 @@
                     <div class='col-md-2'>Création</div>
                     <div class='col-md-1'>du</div>
                     <div class='col-md-3'>
-                        <input type='text' name='date-creation-start' value='<?php echo $dateCreationStart ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
+                        <input type='text' name='date-creation-start' value='<?php echo $dateCreationStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
                     </div>
                     <div class='col-md-1'>au</div>
                     <div class="col-md-3">
-                        <input type='text' name='date-creation-end' value='<?php echo $dateCreationEnd ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
+                        <input type='text' name='date-creation-end' value='<?php echo $dateCreationEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()">
                     </div>
                 </div>
-                <div class='row'>
+                <div class='row mt-2'>
                     <div class='col-md-2'>Réception</div>
                     <div class='col-md-1'>du</div>
                     <div class="col-md-3">
-                        <input type='text' name='date-reception-start' value='<?php echo $dateReceptionStart ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                        <input type='text' name='date-reception-start' value='<?php echo $dateReceptionStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
                     </div>
                     <div class='col-md-1'>au</div>
                     <div class="col-md-3">
-                        <input type='text' name='date-reception-end' value='<?php echo $dateReceptionEnd ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                        <input type='text' name='date-reception-end' value='<?php echo $dateReceptionEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
                     </div>
                 </div>
-                <div class='row'>
+                <div class='row mt-2'>
                     <div class='col-md-2'>Réponse</div>
                     <div class='col-md-1'>du</div>
                     <div class="col-md-3">
-                        <input type='text' name='date-reponse-start' value='<?php echo $dateReponseStart ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                        <input type='text' name='date-reponse-start' value='<?php echo $dateReponseStart ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
                     </div>
                     <div class='col-md-1'>au</div>
                     <div class="col-md-3">
-                        <input type='text' name='date-reponse-end' value='<?php echo $dateReponseEnd ?>' class='datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
+                        <input type='text' name='date-reponse-end' value='<?php echo $dateReponseEnd ?>' class='form-control datepicker col-md-12' onchange="masquerBoutonExportCalc()" onkeypress="masquerBoutonExportCalc()"/>
                     </div>
                 </div>
             </div>
@@ -219,8 +217,6 @@
         </tr>
         <?php echo $this->partialLoop('search/results/dossierTab.phtml', $this->results ) ?>
     </table>
-    <br/>
-    <div style='clear: both'></div>
     <?php echo $this->results ?>
 <?php else : ?>
 	<p class='text-muted'><small>Aucun résultat disponible.</small></p>
@@ -230,8 +226,7 @@
 
 <script>
     $(document).ready(function() {
-
-    	// Si le champ de recherche est vide, on empêche l'envoi d'une recherche
+        // Si le champ de recherche est vide, on empêche l'envoi d'une recherche
     	$("input[name='num_doc_urba']").focus().keyup(function() {$('input[type="submit"]').attr('disabled', $(this).val() == '')}).keyup();
 
 	    // Gestion des select et multiselect
@@ -239,21 +234,21 @@
             allow_single_deselect: true
         });
 
-      // Affichage des dossiers enfants
-      $("ul.recherche_liste li.slide").live("click", function() {
-          var container = this;
-          if( $(this).hasClass("active") ) {
-              $(this).next().slideUp(400, function() {$(container).next().remove()});
-              $(this).toggleClass("active");
-          }
-          else {
-              $(container).find(".load").show();
-              $.post("/search/display-ajax-search-dossier", {parent: $(this).attr("id")}, function(html) {
-                  $(container).toggleClass("active").find(".load").hide();
-                  $(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
-              });
-          }
-      });
+        // Affichage des dossiers enfants
+        $("ul.recherche_liste li.slide").live("click", function() {
+            var container = this;
+            if( $(this).hasClass("active") ) {
+                $(this).next().slideUp(400, function() {$(container).next().remove()});
+                $(this).toggleClass("active");
+            }
+            else {
+                $(container).find(".load").show();
+                $.post("/search/display-ajax-search-dossier", {parent: $(this).attr("id")}, function(html) {
+                    $(container).toggleClass("active").find(".load").hide();
+                    $(container).after("<li class='ui-helper-hidden' style='overflow: auto; height: auto;' >" + html + "</li>").next().slideDown();
+                });
+            }
+        });
 
         $('select[name=commune]').change(function(){
             var selectedValue = $(this).val()
