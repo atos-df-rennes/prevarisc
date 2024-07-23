@@ -546,9 +546,6 @@ h4.h4_subtitle input {
 
 /* Style du tableau des périodicités */
 
-table.periodicite input {
-	width: 30px;
-}
 table.periodicite:first-child {
 	margin-left: 0;
 }
