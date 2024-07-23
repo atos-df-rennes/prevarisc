@@ -12,7 +12,7 @@
 
     <div class='col-md-10'>
         <?php if(array_key_exists('gid', $_GET)) : ?>
-        <a href='/users/edit-group?gid=<?php echo $_GET['gid'] ?>' class='btn pull-right' >Modifier le groupe</a>
+            <a href='/users/edit-group?gid=<?php echo $_GET['gid'] ?>' class='btn btn-default pull-right' >Modifier le groupe</a>
         <?php endif ?>
 
         <h4>Utilisateurs actifs <small>(<?php echo count($this->users)?> utilisateurs)</small></h4>
