@@ -17,29 +17,33 @@
             
             <!-- Fonction du contact -->
             <?php if( $this->item != "groupement_coord" ) : ?>
-                <dt <?php if($this->item == "commune") echo "style='display: none'"; ?>>Fonction</dt>
-                <dd <?php if($this->item == "commune") echo "style='display: none'"; ?>>
-                    <select name='ID_FONCTION' >
-                        <?php foreach( $this->contact_fonction_list as $item ) : ?>
-                            <?php
-                                if(
-                                    $item["ID_FONCTION"] != 2
-                                    || $this->user_info != null
-                                ) {
-                            ?>
-                                <option value='<?php echo $item["ID_FONCTION"] ?>' <?php if(($item["ID_FONCTION"] == $this->user_info["ID_FONCTION"]) || ($this->item == "commune" && $item["ID_FONCTION"] == 2)) echo "selected" ?> ><?php echo $item["LIBELLE_FONCTION"] ?></option>
-                            <?php } ?>
-                        <?php endforeach ?>
-                    </select>
-                </dd>
+                <div class="mb-4" <?php if($this->item == "commune") echo "style='display: none'"; ?>>
+                    <dt>Fonction</dt>
+                    <dd>
+                        <select class="form-control" name='ID_FONCTION'>
+                            <?php foreach( $this->contact_fonction_list as $item ) : ?>
+                                <?php
+                                    if(
+                                        $item["ID_FONCTION"] != 2
+                                        || $this->user_info != null
+                                    ) {
+                                ?>
+                                    <option value='<?php echo $item["ID_FONCTION"] ?>' <?php if(($item["ID_FONCTION"] == $this->user_info["ID_FONCTION"]) || ($this->item == "commune" && $item["ID_FONCTION"] == 2)) echo "selected" ?> ><?php echo $item["LIBELLE_FONCTION"] ?></option>
+                                <?php } ?>
+                            <?php endforeach ?>
+                        </select>
+                    </dd>
+                </div>
             <?php endif ?>
             
             <!-- Société du contact-->
             <?php if( $this->item != "user" && $this->item != "commune") : ?>
-                <dt>Société</dt>
-                <dd>
-                    <input type='text' value="<?php if(isset($this->user_info["SOCIETE_UTILISATEURINFORMATIONS"])) echo $this->user_info["SOCIETE_UTILISATEURINFORMATIONS"] ?>" name='SOCIETE_UTILISATEURINFORMATIONS' />
-                </dd>
+                <div class="mb-4">
+                    <dt>Société</dt>
+                    <dd>
+                        <input class="form-control" type='text' value="<?php if(isset($this->user_info["SOCIETE_UTILISATEURINFORMATIONS"])) echo $this->user_info["SOCIETE_UTILISATEURINFORMATIONS"] ?>" name='SOCIETE_UTILISATEURINFORMATIONS' />
+                    </dd>
+                </div>
             <?php endif ?>
 		<?php endif ?>
 		

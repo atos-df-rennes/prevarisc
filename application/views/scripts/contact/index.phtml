@@ -1,25 +1,24 @@
 <?php if( !$this->ajax && $this->verrou == 0) : ?>
-	<p style='float: right;' ><a id='add-contact' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un nouveau contact</a></p>
-	<p style='float: right; margin-right: 1em' ><a id='add-contact-existant' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un contact existant</a></p>
+	<p style='float: right;'><a id='add-contact' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un nouveau contact</a></p>
+	<p style='float: right; margin-right: 1em'><a id='add-contact-existant' class='btn btn-default' href="/contact/form?item=<?php echo $this->item ?>&id=<?php echo $this->id ?>">Ajouter un contact existant</a></p>
 <?php endif ?>
 
 <div style='clear: both'></div>
 <div id='contact-content-ajax'>
-
 	<!-- Contacts parents pour les ets -->
-	<?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
-	<h3>Contacts des établissements parents</h3>
-	<?php
+        <?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
+        <h3>Contacts des établissements parents</h3>
+        <?php
             foreach($this->contacts_parent as $contacts){
-				echo $this->partialLoop("contact/partial_fiche_read.phtml", $contacts);
+                echo $this->partialLoop("contact/partial_fiche_read.phtml", $contacts);
             }
-	?>
-	<hr />
+        ?>
+        <hr />
 	<?php endif ?>
 
 	<!-- Contacts de l'ets -->
 	<?php if(isset($this->contacts_parent) && count($this->contacts_parent) > 0) : ?>
-	<h3>Contacts de l'établissement</h3>
+	    <h3>Contacts de l'établissement</h3>
 	<?php endif ?>
 
 	<?php
