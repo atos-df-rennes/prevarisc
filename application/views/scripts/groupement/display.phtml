@@ -9,9 +9,7 @@
 
 	<!-- Partie générale -->
 	<div id="tabs-1">
-
 		<dl class='dl-horizontal'>
-
 			<!-- Libellé du groupement -->
 			<dt>Libellé du groupement</dt>
 			<dd><input type='text' id='nom_groupement' name='nom_groupement' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' size=30 /></dd>
@@ -56,14 +54,11 @@
 					?>
 				</select>
 			</dd>
-
 		</dl>
-
 	</div>
 
 	<!-- Partie des préventionnistes -->
 	<div id="tabs-2">
-        <br />
 		<!-- Ajouter un préventionniste -->
 		<input type='text' size='60' id='preventionnistes-autocomplete' value='' class='input-xlarge' placeholder="Saisissez le nom d'un préventionniste ..."  />
 
@@ -157,47 +152,49 @@
 
 	// Partie prev ----------------------------------------------------------------------------------------------------------------
 
+    // @fixme: Voir comment modifier pour utiliser typeahead
 	// Auto-complétion des préventionnistes
-	$("#preventionnistes-autocomplete").typeahead({
-		minLength: 3,
-		source: function(query, process) {
-			return $.ajax({
-				url: "/api/1.0/search/users",
-				type: 'post',
-				data: {
-					name: query,
-					fonctions: 13,
-					limit: 100,
-				},
-				success: function (result) {
-					preventionnistes = [];
-					$.each(result.response.results, function (i, preventionniste) {
-						preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
-					});
+	// $("#preventionnistes-autocomplete").typeahead({
+	// 	minLength: 3,
+    //     highligth: true,
+	// 	source: function(query, process) {
+	// 		return $.ajax({
+	// 			url: "/api/1.0/search/users",
+	// 			type: 'post',
+	// 			data: {
+	// 				name: query,
+	// 				fonctions: 13,
+	// 				limit: 100,
+	// 			},
+	// 			success: function (result) {
+	// 				preventionnistes = [];
+	// 				$.each(result.response.results, function (i, preventionniste) {
+	// 					preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
+	// 				});
 
-					process(preventionnistes);
-				}
-			});
-		},
-		highlighter: function (item) {
-			libelle = $($.parseHTML(item)).last().text();
-			libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-			html = $.parseHTML(item);
-			$(html).last().text(libelle);
-			html = $(html).text();
-			return item.replace( item, html );
-		},
-		updater: function (item) {
-			var nom = $($.parseHTML(item)).last().text();
-			var id = $($.parseHTML(item)).last().data('id');
+	// 				process(preventionnistes);
+	// 			}
+	// 		});
+	// 	},
+	// 	highlight: function (item) {
+	// 		libelle = $($.parseHTML(item)).last().text();
+	// 		libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+	// 		html = $.parseHTML(item);
+	// 		$(html).last().text(libelle);
+	// 		html = $(html).text();
+	// 		return item.replace( item, html );
+	// 	},
+	// 	updater: function (item) {
+	// 		var nom = $($.parseHTML(item)).last().text();
+	// 		var id = $($.parseHTML(item)).last().data('id');
 
-			$("#liste_prev").append("<li><span class='action' style='float: right'><a style='text-decoration: none;' href='' onclick='$(this).parent().parent().remove(); return false;'>&times;</a></span>"
-				+"<span class='valeur'><a href='/user/profile/uid/"  + id + "'>" + nom + "</a></span>"
-				+"<input type='hidden' name='prev[]' value='" + id + "' /></li>");
+	// 		$("#liste_prev").append("<li><span class='action' style='float: right'><a style='text-decoration: none;' href='' onclick='$(this).parent().parent().remove(); return false;'>&times;</a></span>"
+	// 			+"<span class='valeur'><a href='/user/profile/uid/"  + id + "'>" + nom + "</a></span>"
+	// 			+"<input type='hidden' name='prev[]' value='" + id + "' /></li>");
 
-			return;
-		}
-	});
+	// 		return;
+	// 	}
+	// });
 
 	// Partie Contact ----------------------------------------------------------------------------------------------------------------
 	$("#tabs-4").load("/contact?item=groupement&id=<?php echo $_GET["id"] ?>");

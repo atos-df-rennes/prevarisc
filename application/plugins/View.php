@@ -60,15 +60,14 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->inlineScript()->appendFile('/js/jquery-ui.datepicker.fr.js');
             $view->inlineScript()->appendFile('/js/jquery.marquee.min.js');
             $view->inlineScript()->appendFile('/js/jquery.hoverintent.js');
+            $view->inlineScript()->appendFile('/js/typeahead.bundle.js');
             $view->inlineScript()->appendFile('/js/main.js');
 
             // CSS
             $view->headLink()->appendStylesheet('/css/bootstrap.min.css', 'all');
-            $view->headLink()->appendStylesheet('/css/bootstrap-theme.min.css', 'all');
             $view->headLink()->appendStylesheet('/css/main.css', 'all');
             $view->headLink()->appendStylesheet('/css/login.css', 'all');
             $view->headLink()->appendStylesheet('/css/utilities.css', 'all');
-            // $view->headLink()->appendStylesheet('/css/components/panel.css', 'all');
             $view->headLink()->appendStylesheet('/css/chosen.min.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery-ui-1.8.11.custom.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery.tablesorter.css', 'all');
