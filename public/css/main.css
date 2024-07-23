@@ -1231,7 +1231,7 @@ dl.champ_effectif_camping dd input {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #f4f4f4;
+    z-index: 10;
 }
 
 #formPrescriptionEdit {
