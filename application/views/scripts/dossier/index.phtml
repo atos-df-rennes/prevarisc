@@ -78,55 +78,56 @@ $(document).ready(function() {
 
     // Texte de l'auto complete utilisateurs
     // Auto-complétion des préventionnistes
-    $("#preventionnistes-autocomplete").typeahead({
-        minLength: 3,
-        source: function(query, process) {
-            return $.ajax({
-                url: "/api/1.0/search/users",
-                type: 'post',
-                data: {
-                    name: query,
-                    fonctions: 13,
-                    limit: 100
-                },
-                success: function(result) {
-                    var preventionnistes = [];
-                    $.each(result.response.results, function(i, preventionniste) {
-                        preventionnistes.push("<span data-id='" +
-                            preventionniste.uid + "'>" + preventionniste
-                            .NOM_UTILISATEURINFORMATIONS + " " +
-                            preventionniste.PRENOM_UTILISATEURINFORMATIONS +
-                            "</span>");
-                    });
+    // @fixme: Faire fonctionner
+    // $("#preventionnistes-autocomplete").typeahead({
+    //     minLength: 3,
+    //     source: function(query, process) {
+    //         return $.ajax({
+    //             url: "/api/1.0/search/users",
+    //             type: 'post',
+    //             data: {
+    //                 name: query,
+    //                 fonctions: 13,
+    //                 limit: 100
+    //             },
+    //             success: function(result) {
+    //                 var preventionnistes = [];
+    //                 $.each(result.response.results, function(i, preventionniste) {
+    //                     preventionnistes.push("<span data-id='" +
+    //                         preventionniste.uid + "'>" + preventionniste
+    //                         .NOM_UTILISATEURINFORMATIONS + " " +
+    //                         preventionniste.PRENOM_UTILISATEURINFORMATIONS +
+    //                         "</span>");
+    //                 });
 
-                    process(preventionnistes);
-                }
-            });
-        },
-        highlighter: function(item) {
-            var libelle = $($.parseHTML(item)).last().text();
-            libelle = libelle.replace(new RegExp('(' + this.query + ')', 'gi'),
-                "<strong>$1</strong>");
-            var html = $.parseHTML(item);
-            $(html).last().text(libelle);
-            html = $(html).text();
-            return item.replace(item, html);
-        },
-        updater: function(item) {
-            var prevAdd =
-                "<span class='ui-state-highlight' style='float: left; padding: 2px; margin: 0pt 2px 1em 0pt; display: block;' >";
-            prevAdd += "<input type='hidden' name='preventionniste[]' value='" + $($.parseHTML(
-                item)).last().data('id') + "' />";
-            prevAdd += "<span>";
-            prevAdd += $($.parseHTML(item)).last().text();
-            prevAdd += "</span>";
-            prevAdd +=
-                "<a onclick='$(this).parent().remove(); return false;' style='text-decoration: none;' href=''>×</a>";
-            prevAdd += "</span>";
-            $("#liste_prev").append(prevAdd);
-            return;
-        }
-    });
+    //                 process(preventionnistes);
+    //             }
+    //         });
+    //     },
+    //     highlighter: function(item) {
+    //         var libelle = $($.parseHTML(item)).last().text();
+    //         libelle = libelle.replace(new RegExp('(' + this.query + ')', 'gi'),
+    //             "<strong>$1</strong>");
+    //         var html = $.parseHTML(item);
+    //         $(html).last().text(libelle);
+    //         html = $(html).text();
+    //         return item.replace(item, html);
+    //     },
+    //     updater: function(item) {
+    //         var prevAdd =
+    //             "<span class='ui-state-highlight' style='float: left; padding: 2px; margin: 0pt 2px 1em 0pt; display: block;' >";
+    //         prevAdd += "<input type='hidden' name='preventionniste[]' value='" + $($.parseHTML(
+    //             item)).last().data('id') + "' />";
+    //         prevAdd += "<span>";
+    //         prevAdd += $($.parseHTML(item)).last().text();
+    //         prevAdd += "</span>";
+    //         prevAdd +=
+    //             "<a onclick='$(this).parent().remove(); return false;' style='text-decoration: none;' href=''>×</a>";
+    //         prevAdd += "</span>";
+    //         $("#liste_prev").append(prevAdd);
+    //         return;
+    //     }
+    // });
     //FIN gestion de l'autocomplession pour les préventionniste attachés au dossier
 
     // Auto complétion de la ville pour le service instructeur

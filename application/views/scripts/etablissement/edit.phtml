@@ -843,141 +843,144 @@
         });
 
         // Auto-complétion de l'établissement père
-        $(".etablissement_pere input[type='text']").typeahead({
-            minLength: 3,
-            source: function(query, process) {
-                return $.ajax({
-                    url: "/api/1.0/search/etablissements",
-                    type: 'get',
-                    data: {
-                        label: query
-                    },
-                    success: function (result) {
-                        etablissements = [];
-                        $.each(result.response.results, function (i, etablissement) {
-                            switch(etablissement.ID_GENRE)
-                            {
-                                case 1:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
-                                    break;
+        // @fixme: Faire fonctionner
+        // $(".etablissement_pere input[type='text']").typeahead({
+        //     minLength: 3,
+        //     source: function(query, process) {
+        //         return $.ajax({
+        //             url: "/api/1.0/search/etablissements",
+        //             type: 'get',
+        //             data: {
+        //                 label: query
+        //             },
+        //             success: function (result) {
+        //                 etablissements = [];
+        //                 $.each(result.response.results, function (i, etablissement) {
+        //                     switch(etablissement.ID_GENRE)
+        //                     {
+        //                         case 1:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
+        //                             break;
 
-                                case 3:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-                                    break;
+        //                         case 3:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+        //                             break;
 
-                                default:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-                            }
+        //                         default:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+        //                     }
 
-                            etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
-                        });
+        //                     etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
+        //                 });
 
-                        process(etablissements);
-                    }
-                });
-            },
-            highlighter: function (item) {
-                libelle = $($.parseHTML(item)).last().prev().text();
-                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-                html = $.parseHTML(item);
-                $(html).last().prev().text(libelle);
-                html = $(html).text();
-                return item.replace( item, html );
-            },
-            updater: function (item) {
-                $(".etablissement_pere strong").text($($.parseHTML(item)).last().prev().text());
-                $(".etablissement_pere input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
-                return;
-            }
-        });
+        //                 process(etablissements);
+        //             }
+        //         });
+        //     },
+        //     highlighter: function (item) {
+        //         libelle = $($.parseHTML(item)).last().prev().text();
+        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+        //         html = $.parseHTML(item);
+        //         $(html).last().prev().text(libelle);
+        //         html = $(html).text();
+        //         return item.replace( item, html );
+        //     },
+        //     updater: function (item) {
+        //         $(".etablissement_pere strong").text($($.parseHTML(item)).last().prev().text());
+        //         $(".etablissement_pere input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
+        //         return;
+        //     }
+        // });
 
         // Auto-complétion des établissements enfants
-        $(".etablissements_enfants input[type='text']").typeahead({
-            minLength: 3,
-            source: function(query, process) {
-                return $.ajax({
-                    url: "/api/1.0/search/etablissements",
-                    type: 'get',
-                    data: {
-                        label: query
-                    },
-                    success: function (result) {
-                        etablissements = [];
-                        $.each(result.response.results, function (i, etablissement) {
-                            switch(etablissement.ID_GENRE)
-                            {
-                                case 1:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
-                                    break;
+        // @fixme: Faire fonctionner
+        // $(".etablissements_enfants input[type='text']").typeahead({
+        //     minLength: 3,
+        //     source: function(query, process) {
+        //         return $.ajax({
+        //             url: "/api/1.0/search/etablissements",
+        //             type: 'get',
+        //             data: {
+        //                 label: query
+        //             },
+        //             success: function (result) {
+        //                 etablissements = [];
+        //                 $.each(result.response.results, function (i, etablissement) {
+        //                     switch(etablissement.ID_GENRE)
+        //                     {
+        //                         case 1:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_SITE;
+        //                             break;
 
-                                case 3:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
-                                    break;
+        //                         case 3:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_CELLULE;
+        //                             break;
 
-                                default:
-                                    LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
-                            }
+        //                         default:
+        //                             LIBELLE_COMMUNE = etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT == null ? "non localisé" : etablissement.LIBELLE_COMMUNE_ADRESSE_DEFAULT;
+        //                     }
 
-                            etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
-                        });
+        //                     etablissements.push("<span class='text-muted'>[" + etablissement.LIBELLE_GENRE + "]</span> <span data-id='" + etablissement.ID_ETABLISSEMENT + "' class='result'>" + etablissement.LIBELLE_ETABLISSEMENTINFORMATIONS + "</span> - <small>" + LIBELLE_COMMUNE + "</small>");
+        //                 });
 
-                        process(etablissements);
-                    }
-                });
-            },
-            highlighter: function (item) {
-                libelle = $($.parseHTML(item)).last().prev().text();
-                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-                html = $.parseHTML(item);
-                $(html).last().prev().text(libelle);
-                html = $(html).text();
-                return item.replace( item, html );
-            },
-            updater: function (item) {
-                node = $('#prototype_etablissements_enfants').clone().prependTo( $('.etablissements_enfants table') ).removeClass('hide  prototypes').addClass('etablissement_enfant').attr('id', '');
-                node.find('span').text($($.parseHTML(item)).last().prev().text());
-                node.find("input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
-                return;
-            }
-        });
+        //                 process(etablissements);
+        //             }
+        //         });
+        //     },
+        //     highlighter: function (item) {
+        //         libelle = $($.parseHTML(item)).last().prev().text();
+        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+        //         html = $.parseHTML(item);
+        //         $(html).last().prev().text(libelle);
+        //         html = $(html).text();
+        //         return item.replace( item, html );
+        //     },
+        //     updater: function (item) {
+        //         node = $('#prototype_etablissements_enfants').clone().prependTo( $('.etablissements_enfants table') ).removeClass('hide  prototypes').addClass('etablissement_enfant').attr('id', '');
+        //         node.find('span').text($($.parseHTML(item)).last().prev().text());
+        //         node.find("input[type='hidden']").val($($.parseHTML(item)).last().prev().data('id'));
+        //         return;
+        //     }
+        // });
 
         // Auto-complétion des préventionnistes
-        $(".preventionnistes input[type='text']").typeahead({
-            minLength: 3,
-            source: function(query, process) {
-                return $.ajax({
-                    url: "/api/1.0/search/users",
-                    type: 'post',
-                    data: {
-                        name: query,
-                        fonctions: 13,
-                        limit: 100
-                    },
-                    success: function (result) {
-                        preventionnistes = [];
-                        $.each(result.response.results, function (i, preventionniste) {
-                            preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
-                        });
+        // @fixme: Faire fonctionner
+        // $(".preventionnistes input[type='text']").typeahead({
+        //     minLength: 3,
+        //     source: function(query, process) {
+        //         return $.ajax({
+        //             url: "/api/1.0/search/users",
+        //             type: 'post',
+        //             data: {
+        //                 name: query,
+        //                 fonctions: 13,
+        //                 limit: 100
+        //             },
+        //             success: function (result) {
+        //                 preventionnistes = [];
+        //                 $.each(result.response.results, function (i, preventionniste) {
+        //                     preventionnistes.push("<span data-id='" + preventionniste.uid + "'>" + preventionniste.NOM_UTILISATEURINFORMATIONS + " " + preventionniste.PRENOM_UTILISATEURINFORMATIONS + "</span>");
+        //                 });
 
-                        process(preventionnistes);
-                    }
-                });
-            },
-            highlighter: function (item) {
-                libelle = $($.parseHTML(item)).last().text();
-                libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-                html = $.parseHTML(item);
-                $(html).last().text(libelle);
-                html = $(html).text();
-                return item.replace( item, html );
-            },
-            updater: function (item) {
-                node = $('#prototype_preventionniste').clone().prependTo( $('.preventionnistes table') ).removeClass('hide prototypes').addClass('preventionniste').attr('id', '');
-                node.find('span').text($($.parseHTML(item)).last().text());
-                node.find("input[type='hidden']").val($($.parseHTML(item)).last().data('id'));
-                return;
-            }
-        });
+        //                 process(preventionnistes);
+        //             }
+        //         });
+        //     },
+        //     highlighter: function (item) {
+        //         libelle = $($.parseHTML(item)).last().text();
+        //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+        //         html = $.parseHTML(item);
+        //         $(html).last().text(libelle);
+        //         html = $(html).text();
+        //         return item.replace( item, html );
+        //     },
+        //     updater: function (item) {
+        //         node = $('#prototype_preventionniste').clone().prependTo( $('.preventionnistes table') ).removeClass('hide prototypes').addClass('preventionniste').attr('id', '');
+        //         node.find('span').text($($.parseHTML(item)).last().text());
+        //         node.find("input[type='hidden']").val($($.parseHTML(item)).last().data('id'));
+        //         return;
+        //     }
+        // });
 
         // Auto complétion de la ville
         $("input[name='commune_ac']").autocomplete("/api/1.0/adresse/get_communes", {

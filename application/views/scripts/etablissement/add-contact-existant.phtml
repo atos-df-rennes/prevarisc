@@ -27,41 +27,42 @@
 
 <script>
 	// Auto-complétion des préventionnistes
-    $("input[name='autocomplete-ignoreit']").typeahead({
-        minLength: 3,
-        source: function(query, process) {
-            return $.ajax({
-                url: "/api/1.0/contacts",
-                type: 'post',
-                data: {
-                    name: query
-                },
-                success: function (result) {
-                    contacts = [];
-                    $.each(result.response, function (i, contact) {
-                        contacts.push("<span data-id='" + contact.ID_UTILISATEURINFORMATIONS + "'>"
-                                + contact.SOCIETE_UTILISATEURINFORMATIONS + " "
-                                + contact.NOM_UTILISATEURINFORMATIONS + " "
-                                + contact.PRENOM_UTILISATEURINFORMATIONS
-                                + "</span>");
-                    });
+    // @fixme: Faire fonctionner
+    // $("input[name='autocomplete-ignoreit']").typeahead({
+    //     minLength: 3,
+    //     source: function(query, process) {
+    //         return $.ajax({
+    //             url: "/api/1.0/contacts",
+    //             type: 'post',
+    //             data: {
+    //                 name: query
+    //             },
+    //             success: function (result) {
+    //                 contacts = [];
+    //                 $.each(result.response, function (i, contact) {
+    //                     contacts.push("<span data-id='" + contact.ID_UTILISATEURINFORMATIONS + "'>"
+    //                             + contact.SOCIETE_UTILISATEURINFORMATIONS + " "
+    //                             + contact.NOM_UTILISATEURINFORMATIONS + " "
+    //                             + contact.PRENOM_UTILISATEURINFORMATIONS
+    //                             + "</span>");
+    //                 });
 
-                    process(contacts);
-                }
-            });
-        },
-        highlighter: function (item) {
-            libelle = $($.parseHTML(item)).last().text();
-            libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
-            html = $.parseHTML(item);
-            $(html).last().text(libelle);
-            html = $(html).text();
-            return item.replace( item, html );
-        },
-        updater: function (item) {
-            $('#bloc-contact-existant span').removeClass('text-muted').text($($.parseHTML(item)).last().text());
-            $('#bloc-contact-existant input[type="hidden"]').val($($.parseHTML(item)).last().data('id'));
-            return;
-        }
-    });
+    //                 process(contacts);
+    //             }
+    //         });
+    //     },
+    //     highlighter: function (item) {
+    //         libelle = $($.parseHTML(item)).last().text();
+    //         libelle = libelle.replace( new RegExp( '(' + this.query + ')', 'gi' ), "<strong>$1</strong>" );
+    //         html = $.parseHTML(item);
+    //         $(html).last().text(libelle);
+    //         html = $(html).text();
+    //         return item.replace( item, html );
+    //     },
+    //     updater: function (item) {
+    //         $('#bloc-contact-existant span').removeClass('text-muted').text($($.parseHTML(item)).last().text());
+    //         $('#bloc-contact-existant input[type="hidden"]').val($($.parseHTML(item)).last().data('id'));
+    //         return;
+    //     }
+    // });
 </script>
