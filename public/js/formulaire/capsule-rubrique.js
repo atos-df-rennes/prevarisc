@@ -2,8 +2,8 @@ $(document).ready(function() {
     $('.add-rubrique').on('click', function() {
         const form = this.closest('form')
         const capsuleRubrique = form.closest('.objet').id
-        const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
-        const savedRubriquesTitlesDiv = $('#'+capsuleRubrique+' .titles')
+        let savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
+        const rubriquesDiv = $('#'+capsuleRubrique+' .rubriques')
 
         const formData = $(form).serialize()
 
@@ -15,16 +15,11 @@ $(document).ready(function() {
                 const parsedData = JSON.parse(data)
 
                 // On crée la table uniquement si elle n'existe pas
-                if (savedRubriquesDiv.children().length === 0) {
-                    savedRubriquesTitlesDiv.append(`
-                        <div class="col-md-6 col-md-offset-2">
-                            <h3>Liste des rubriques</h3>
-                        </div>
-                    `)
-                    savedRubriquesDiv.append(getTableElement())
+                if (!!savedRubriquesDiv) {
+                    rubriquesDiv.append($('#saved-rubriques-prototype').removeAttr('id').removeClass('hidden'))
                 }
 
-                const table = savedRubriquesDiv.children('table')
+                const table = $('#'+capsuleRubrique+' .saved-rubriques table tbody')
                 table.append(getRowElement(parsedData))
 
                 form.reset()
@@ -46,76 +41,29 @@ function deleteRubrique(element) {
     const id = element.getAttribute('data-id')
     const nom = element.getAttribute('data-nom')
     
-    $('#dialog-supp').dialog("destroy");
-    $("#dialog-supp").remove();
+    $("#name-rubrique").html(nom)
+    $("#delete-rubrique").click(function() {
+        const parentDiv = $(element).parent().parent().parent()
+        const parentTable = $(element).closest('.saved-rubriques')
+        const nbOfRows = parentTable.children('.panel').children('table').children('tbody').children('tr').length
 
-    const dialog_supp = $("<div id='dialog-supp'></div>").appendTo("body")
-    dialog_supp.html('Vous êtes sur le point de supprimer la rubrique "' + nom + '".')
-    dialog_supp.dialog({
-        title: "Suppression d'une rubrique",
-        width: 650,
-        draggable: false,
-        resizable: false,
-        modal: true,
-        buttons: [
-            {
-                text: 'Supprimer',
-                class: 'btn btn-danger',
-                click: function() {
-                    const parentDiv = $(element).parent().parent().parent()
-                    const parentTable = $(element).closest('table')
-                    const nbOfRows = parentTable.children('tbody').children('tr').length
-
-                    const parentObject = element.closest('.objet').id
-                    let parentDivTitleDiv = $('#'+parentObject+' .titles .col-md-6.col-md-offset-2')
-
-                    $.ajax({
-                        url: '/formulaire/delete-rubrique/rubrique/'+id,
-                        type: 'POST',
-                        success: function() {
-                            if (nbOfRows === 1) {
-                                parentTable.remove()
-                                parentDivTitleDiv.remove()
-                            } else {
-                                parentDiv.remove()
-                            }
-                        },
-                        error: function() {
-                            return false
-                        }
-                    })
-
-                    dialog_supp.dialog("close")
-                    $("#dialog-supp").html('')
-
-                    return false
+        $.ajax({
+            url: '/formulaire/delete-rubrique/rubrique/'+id,
+            type: 'POST',
+            success: function() {
+                if (nbOfRows === 1) {
+                    parentTable.remove()
+                } else {
+                    parentDiv.remove()
                 }
+
+                $("#modal-delete-rubrique").modal('hide')
             },
-            {
-                text: 'Annuler',
-                class: 'btn',
-                click: function() {
-                    dialog_supp.dialog("close")
-                    $("#dialog-supp").html('')
-                }
+            error: function() {
+                return false
             }
-        ]
+        })
     })
-}
-
-function getTableElement() {
-    return `<table class="table table-bordered table-condensed">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Nom de la rubrique</th>
-                <th>Afficher la rubrique par défaut</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>`
 }
 
 function getRowElement(parsedData) {
@@ -138,10 +86,10 @@ function getRowElement(parsedData) {
         <td id='actions'>
             <div class='text-center'>
                 <a href='/formulaire/edit-rubrique/rubrique/`+parsedData.ID_RUBRIQUE+`'>
-                    <span title='Modifier' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>
+                    <span title='Modifier' class='glyphicon glyphicon-pencil'></span>
                 </a>
-                <button data-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-rubrique' onclick='return deleteRubrique(this)'>
-                    <i title='Supprimer' class='glyphicon glyphicon-trash' aria-hidden='true'></i>
+                <button data-id='`+parsedData.ID_RUBRIQUE+`' data-nom='`+parsedData.NOM+`' class='btn btn-link delete-rubrique' onclick='return deleteRubrique(this)' data-toggle="modal" data-target="#modal-delete-rubrique">
+                    <span title='Supprimer' class='glyphicon glyphicon-trash'></span>
                 </button>
             </div>
         </td>
