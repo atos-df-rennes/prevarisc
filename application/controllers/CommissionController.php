@@ -39,6 +39,7 @@ class CommissionController extends Zend_Controller_Action
                 'title' => 'La commission a bien été supprimée',
                 'message' => '',
             ]);
+            $this->redirect('/gestion-des-commissions');
         } catch (Exception $e) {
             $this->_helper->flashMessenger([
                 'context' => 'error',

@@ -1,34 +1,40 @@
 <form id="form-gdc">
-	<ul id="ul-gdc">
+	<ul id="ul-gdc" class="list-unstyled">
 		<?php foreach($this->rowset_commissions as $row_commission) : ?>
-		<li>
-			<p>
-				<input type="hidden" name="id_commission[]" value="<?php echo $row_commission["ID_COMMISSION"] ?>" />
-				<input type="text" size="50" name="nom_commission[]" value="<?php echo $row_commission["LIBELLE_COMMISSION"] ?>" />
-				<select name="idtype_commission[]">
-					<?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
-					<option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" <?php if($row_typeDesCommissions["ID_COMMISSIONTYPE"] == $row_commission["ID_COMMISSIONTYPE"]) echo "selected" ?>><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
-					<?php endforeach ?>
-				</select>
-				<a href="/commission/delete?id=<?php echo $row_commission["ID_COMMISSION"] ?>" class="delete-gdc">&times;</a>
-			</p>
+		<li class="row mb-4">
+            <div class="col-md-6">
+                <input type="hidden" name="id_commission[]" value="<?php echo $row_commission["ID_COMMISSION"] ?>" />
+                <input class="form-control" type="text" size="50" name="nom_commission[]" value="<?php echo $row_commission["LIBELLE_COMMISSION"] ?>" />
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" name="idtype_commission[]">
+                    <?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
+                    <option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" <?php if($row_typeDesCommissions["ID_COMMISSIONTYPE"] == $row_commission["ID_COMMISSIONTYPE"]) echo "selected" ?>><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <a href="/commission/delete?id=<?php echo $row_commission["ID_COMMISSION"] ?>" class="delete-gdc">&times;</a>
+            </div>
 		</li>
 		<?php endforeach ?>
 	</ul>
 </form>
-<p><a href="#" onclick="$('#prototype-gdc').clone().appendTo( $('#ul-gdc') ).removeAttr('id')">+ Ajouter une commission</a></p>
+<p><button type="button" class="btn btn-link" onclick="$('#prototype-gdc').clone().appendTo( $('#ul-gdc') ).removeAttr('id')">+ Ajouter une commission</button></p>
 <p>Note: Les suppressions sont définitives.</p>
 <ul class="ui-helper-hidden">
-	<li id="prototype-gdc" >
-		<p>
-			<input type="hidden" name="id_commission[]" value="0" />
-			<input type="text" size="50" name="nom_commission[]" />
-			<select name="idtype_commission[]">
-				<?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
-				<option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" ><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
-				<?php endforeach ?>
-			</select>
-		</p>
+	<li class="row mb-4" id="prototype-gdc" >
+        <div class="col-md-6">
+            <input type="hidden" name="id_commission[]" value="0" />
+            <input class="form-control" type="text" size="50" name="nom_commission[]" />
+        </div>
+        <div class="col-md-5">
+            <select class="form-control" name="idtype_commission[]">
+                <?php foreach($this->rowset_typesDesCommissions as $row_typeDesCommissions) : ?>
+                <option value="<?php echo $row_typeDesCommissions["ID_COMMISSIONTYPE"] ?>" ><?php echo $row_typeDesCommissions["LIBELLE_COMMISSIONTYPE"] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
 	</li>
 <ul>
 
@@ -40,7 +46,6 @@
 			url: a.href,
 			success: function () {
 				$(a).parent().parent().remove();
-				window.location.reload();
 			}
 		});
 		return false;
