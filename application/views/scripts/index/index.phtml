@@ -143,14 +143,14 @@
                     if (res.healthcheckOk) {
                         $("#bloc__connexion-platau").html(`<div class="alert alert-info">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>La connexion à Plat'AU a fonctionnée.</strong>
+                            <strong>La connexion à Plat'AU a fonctionné.</strong>
                         </div>`)
                     } else {
                         if (res.errorOrigin === 'prevarisc') {
                             $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <h4>La connexion à Plat'AU depuis Prevarisc a échouée.</h4>
-                                Veuillez suivre les instructions du Manuel Utilisateur §6.17.2
+                                <h4>La connexion à Plat'AU depuis Prevarisc a échoué.</h4>
+                                Veuillez contacter votre service informatique.
                             </div>`)
                         } else if (res.errorOrigin === 'PlatAU') {
                             $("#bloc__connexion-platau").html(`<div class="alert alert-block alert-danger">

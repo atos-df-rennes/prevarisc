@@ -1,4 +1,4 @@
-<form method='post' id='formDocType' name='formDocType' enctype='multipart/form-data' action='/gestion-des-documents/add' target='hiddeniframe' >
+<form method='post' id='formDocType' name='formDocType' enctype='multipart/form-data' action='/gestion-des-documents/add' target='hiddeniframe'>
 	<dl class='dl-horizontal'>
 		<dt>Commission</dt>
 		<dd>
@@ -6,8 +6,8 @@
 			<?php
 				$nbCommission = count($this->liste_commission);
 				echo "
-					<select name='commission' id='commission'>
-					<option value='0' ".( ( !isset($commission['ID_COMMISSION']) || $commission['ID_COMMISSION'] == '')? "selected" : "")." >Documents visibles après vérrouillage</option>
+					<select class='form-control' name='commission' id='commission'>
+					<option value='0' ".( ( !isset($commission['ID_COMMISSION']) || $commission['ID_COMMISSION'] == '')? "selected" : "")." >Documents visibles après verrouillage</option>
 				";
 				foreach($this->liste_commission as $commission){
 					if(isset($id_type) && $id_type != $commission['ID_COMMISSIONTYPE']){
@@ -19,7 +19,7 @@
 					}
 
 					echo "<option value='".$commission['ID_COMMISSION']."'>".$commission['LIBELLE_COMMISSION']."</option>";
-					
+
 					$nbCommission--;
 					if($nbCommission == 0){
 						echo "</optgroup>";
@@ -29,7 +29,7 @@
 			?>
 			</p>
 		</dd>
-	</dl>	
+	</dl>
 
 	<dl class='dl-horizontal'>
 		<dt>Fichier à envoyer</dt>
