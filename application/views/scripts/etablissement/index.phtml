@@ -285,7 +285,7 @@
                     <li class='tabs-right' ><a href='#geoconcept' data-toggle="tab">Carte GeoConcept</a></li>
                 <?php endif ?>
             </ul>
-            <div id="reponse-modal" class="modal hide fade"></div>
+            <div id="reponse-modal" class="modal fade"></div>
             <div class="tab-content">
                 <!-- Carte IGN -->
                 <?php if (count($this->etablissement['adresses']) > 0 && $this->key_ign != null && $this->etablissement['adresses'][0]['LAT_ETABLISSEMENTADRESSE'] != null && $this->etablissement['adresses'][0]['LON_ETABLISSEMENTADRESSE'] != null) : ?>
@@ -602,7 +602,7 @@
 </div>
 
 <!-- Boite de confirmation de la suppression (cachée par défaut) -->
-<div id="confirm-modal" class="modal hide fade" >
+<div id="confirm-modal" class="modal fade" >
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Confirmation de la suppression</h3>

@@ -11,7 +11,7 @@ if($this->nbEtab != 1){
 	if(count($this->visites) == 0 && count($this->etudes) == 0 && count($this->autres) == 0) : ?>
 		<div class='well well-large text-center'>
 			<p class='lead'>Il n'y a pas de dossier.</p>
-			<p><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-lg'>Ajouter un dossier</a></p>
+			<p><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-default btn-lg'>Ajouter un dossier</a></p>
 		</div>
 	<?php else : ?>
 

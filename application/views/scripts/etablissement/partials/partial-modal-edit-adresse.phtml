@@ -1,4 +1,4 @@
-<form id="adresse-modal-edit" class="modal hide adresse fade adresse-modal-edit" method='post'>
+<form id="adresse-modal-edit" class="modal adresse fade adresse-modal-edit" method='post'>
     <input type='hidden' name='idAdresse' value=""/>
 
     <div class="modal-header">
@@ -41,7 +41,7 @@
 
             <dt>Géolocalisation</dt>
             <dd>
-                <?php if ($this->key_ign !== null) : ?><button id="geolocme" type='button' class='btn btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <?php if ($this->key_ign !== null) : ?><button id="geolocme" type='button' class='btn btn-default btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
                 <br/>
                 <small>Résultat : <span class='result'>Inconnu</span></small>
             </dd>

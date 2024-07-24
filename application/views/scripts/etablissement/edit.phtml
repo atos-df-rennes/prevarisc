@@ -478,7 +478,7 @@
 </form>
 
 <!-- Boite de confirmation de l'édition (cachée par défaut) -->
-<div id="confirm-modal" class="modal hide fade" >
+<div id="confirm-modal" class="modal fade" >
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Confirmation de l'édition</h3>
@@ -505,7 +505,7 @@
 </div>
 
 <!-- Boite de construction d'adresse-->
-<form id="adresse-modal-ajout" class="modal hide adresse fade" action='#' method='post'>
+<form id="adresse-modal-ajout" class="modal adresse fade" action='#' method='post'>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -547,9 +547,9 @@
 
             <dt>Géolocalisation</dt>
             <dd>
-                <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
-                <button id="geolocme_nominatim" class='btn btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Nominatim)</button>
+                <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-default btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
+                <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-default btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
+                <button id="geolocme_nominatim" class='btn btn-default btn-sm'><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Géolocaliser cette adresse (Nominatim)</button>
                 <br/>
                 <small>Résultat : <span class='result'>Inconnu</span></small>
             </dd>
