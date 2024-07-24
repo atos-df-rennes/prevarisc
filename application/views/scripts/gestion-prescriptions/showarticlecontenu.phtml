@@ -33,7 +33,7 @@ for($i=0; $i < $nbPrescType; $i++)
 						<input type='hidden' name='prescType[]' value='".$this->prescriptionType[$i][0]['ID_PRESCRIPTIONTYPE']."' />
 						".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."
 					</td>";
-				echo "<td rowspan='".$nbAssoc."' class='col-md-1' style='vertical-align:top;'><a href='#myModal' role='button' class='editPrescriptionType btn' data-toggle='modal'>Modifier</a></td>";
+				echo "<td rowspan='".$nbAssoc."' class='col-md-1' style='vertical-align:top;'><a href='#myModal' role='button' class='editPrescriptionType btn btn-default' data-toggle='modal'>Modifier</a></td>";
 				$cpt = false;
 			}
 			echo "
@@ -50,7 +50,7 @@ echo "
 		</ul>
 	</form>
 	<br/>
-	<a href='#myModal' role='button' class='prescription btn' id='addPrescriptionArticle_".$this->idArticle."' data-toggle='modal'>Ajouter une prescription</a>
+	<a href='#myModal' role='button' class='prescription btn btn-default' id='addPrescriptionArticle_".$this->idArticle."' data-toggle='modal'>Ajouter une prescription</a>
 ";
 ?>
 

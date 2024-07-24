@@ -8,8 +8,8 @@ $isLabelChanged = in_array('Plugin_LibelleDossierPrescriptions', $thirdPartyPlug
 <input type='hidden' name='PRESCRIPTIONTYPE_CATEGORIE' id='PRESCRIPTIONTYPE_CATEGORIE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_CATEGORIE']:"" ?>' />
 <input type='hidden' name='PRESCRIPTIONTYPE_TEXTE' id='PRESCRIPTIONTYPE_TEXTE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_TEXTE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_TEXTE']:"" ?>' />
 <input type='hidden' name='PRESCRIPTIONTYPE_ARTICLE' id='PRESCRIPTIONTYPE_ARTICLE' value='<?= ($this->do == 'edit' && $this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE'] != 0)?$this->assoc[0]['PRESCRIPTIONTYPE_ARTICLE']:"" ?>' />
-<button id='emplacement' class='search btn' style='display:none;'>Rechercher les prescriptions  selon le classement</button>
-<button id='word' class='search btn'>Rechercher les prescriptions par mots clés</button>
+<button id='emplacement' class='search btn btn-default' style='display:none;'>Rechercher les prescriptions  selon le classement</button>
+<button id='word' class='search btn btn-default'>Rechercher les prescriptions par mots clés</button>
 Cette prescription est
 <select name='TYPE_PRESCRIPTION_DOSSIER' id='TYPE_PRESCRIPTION_DOSSIER'>
     <option value='0'><?php if ($isLabelChanged): ?>Essais réalisés<?php else: ?>Rappels réglementaires<?php endif ?></option>
@@ -21,7 +21,7 @@ Cette prescription est
 <?php echo '
 	<div id="selectWord" style="display:none;">
 		Saisissez le ou les mots clés (séparés d\'un espace) <input type="texte" name="motscles" id="motscles" value="" style="width:500px;" />
-		<button class="search btn" id="wordSearch">Rechercher</button>
+		<button class="search btn btn-default" id="wordSearch">Rechercher</button>
 	</div>
 ';
 echo "
@@ -56,7 +56,7 @@ for($i=0; $i < $nbPrescType; $i++)
 		if($cpt)
 		{
 			echo "<td rowspan='".$nbAssoc."' style='width:70%;'>".nl2br($this->prescriptionType[$i][0]['PRESCRIPTIONTYPE_LIBELLE'])."</td>";
-			echo "<td rowspan='".$nbAssoc."'><button class='add btn' id='prescType_".$this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE']."'>Ajouter</button></td>";
+			echo "<td rowspan='".$nbAssoc."'><button class='add btn btn-default' id='prescType_".$this->prescriptionType[$i][$j]['ID_PRESCRIPTIONTYPE']."'>Ajouter</button></td>";
 			$cpt = false;
 		}
 		echo "
