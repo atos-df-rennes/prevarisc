@@ -1,7 +1,5 @@
-<td style='text-align: center;' >
-
+<td class="text-center">
 	<p style='line-height: 37px; padding-top: 16px;' >
-
 		<?php if($this->name_courrier != null && is_readable(REAL_DATA_PATH.DS.'uploads'.DS.'courriers'.DS.$this->id_membre.$this->type.'_'.$this->name_courrier)) : ?>
 			<span><img src='/images/file.gif' alt='' /></span>
 			<span style='vertical-align: top;'>
@@ -15,12 +13,11 @@
 		<?php endif ?>
 	</p>
 
-	<p>
-		<form class='courrier' action='/commission/add-courrier' enctype='multipart/form-data' method='post' target='iframe' >
-			<input id='add-file' type='file' name='COURRIER' />
-			<input type='hidden' name='type' value='<?php echo $this->type ?>' />
-			<input type='hidden' name='id_membre' value='<?php echo $this->id_membre ?>' />
-		</form>
-	</p>
-
+    <div style="display: flex; justify-content: center;">
+        <form class='courrier' action='/commission/add-courrier' enctype='multipart/form-data' method='post' target='iframe' >
+            <input id='add-file' type='file' name='COURRIER' />
+            <input type='hidden' name='type' value='<?php echo $this->type ?>' />
+            <input type='hidden' name='id_membre' value='<?php echo $this->id_membre ?>' />
+        </form>
+    </div>
 </td>
