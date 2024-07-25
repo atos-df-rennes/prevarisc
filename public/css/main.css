@@ -364,6 +364,10 @@ ul.recherche_liste li.slide:hover {
     cursor: pointer;
 }
 
+ul.recherche_liste > div > ul.recherche_liste {
+    padding-left: 0;
+}
+
 ul.no_slide li.slide:hover {
     cursor: default;
 }
@@ -1183,9 +1187,8 @@ dl.champ_effectif_camping dd input {
     width: 139px;
 }
 
-.flexCol {
-    display: flex;
-    flex-flow: column;
+#fiche_etablissement h4 {
+    text-align: left;
 }
 
 .buttonOpenClose {

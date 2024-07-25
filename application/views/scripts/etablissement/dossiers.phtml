@@ -11,7 +11,7 @@
         <p><a href='<?php echo $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true) ?>' class='btn btn-default btn-lg'>Ajouter un dossier</a></p>
     </div>
 <?php else : ?>
-    <div class="flexCol" id="content_visites_ets">
+    <div class="text-center" id="content_visites_ets">
         <?php if (count($this->visites) > 0) : ?>
             <h4>Visites</h4>
             <ul class='recherche_liste'>
@@ -25,7 +25,7 @@
         endif ?>
     </div>
 
-    <div class="flexCol" id="content_etudes_ets">
+    <div class="text-center" id="content_etudes_ets">
         <?php if (count($this->etudes) > 0) :
             if (count($this->visites) > 0) : ?>
                 <hr />
@@ -43,7 +43,7 @@
         endif ?>
     </div>
 
-    <div class="flexCol" id="content_autres_ets">
+    <div class="text-center" id="content_autres_ets">
         <?php if (count($this->autres) > 0) :
             if (count($this->visites) > 0 || count($this->etudes) > 0) : ?>
                 <hr />
