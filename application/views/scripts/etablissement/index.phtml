@@ -242,8 +242,8 @@
 
             <!-- Etablissement lié -->
             <?php if (count($this->etablissement['etablissement_lies']) > 0) : ?>
-            <h4 class='h4_subtitle'>Établissements liés <small><?php echo count($this->etablissement['etablissement_lies']) > 0 ? "(" . count($this->etablissement['etablissement_lies']) . ")" : "" ?></small>
-                <input type="text" class="pull-right input-medium" id="filterLinkedEts" placeholder="Filtrer les établissements" />
+            <h4 class='h4_subtitle'>Établissements liés <span class="badge"><?= count($this->etablissement['etablissement_lies']) ?></span>
+                <input type="text" class="pull-right" id="filterLinkedEts" placeholder="Filtrer les établissements" />
                 <script>
                     $(document).ready(function(){
                         $('#filterLinkedEts').keyup(function() {

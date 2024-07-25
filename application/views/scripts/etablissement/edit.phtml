@@ -22,9 +22,11 @@
         <div class='col-md-6'>
             <h4 class='h4_subtitle'>Général</h4>
             <div>
-                <input style='width: 100%; box-sizing: border-box; height: 2.5em;' type='text' placeholder="Libellé de l'établissement" name='LIBELLE_ETABLISSEMENTINFORMATIONS' value='<?php if ($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]) {
-                    echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
-                } ?>' />
+                <div class="form-group">
+                    <input class="form-control" type='text' placeholder="Libellé de l'établissement" name='LIBELLE_ETABLISSEMENTINFORMATIONS' value='<?php if ($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"]) {
+                        echo htmlspecialchars($this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"], ENT_QUOTES);
+                    } ?>' />
+                </div>
 
                 <dl class='dl-horizontal'>
                     <!-- Numéro d'identification -->
