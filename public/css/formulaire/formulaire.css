@@ -29,7 +29,7 @@ label.optional {
 
 #default-display,
 #actions,
-.table td {
+.table > tbody > tr > td {
     vertical-align: middle;
 }
 
