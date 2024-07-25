@@ -26,6 +26,7 @@ class Form_FormChampFromParent extends Zend_Form
             'required' => true,
             'filters' => [new Zend_Filter_HtmlEntities(), new Zend_Filter_StripTags()],
             'validators' => [new Zend_Validate_StringLength(1, 255)],
+            'class' => 'form-control',
         ]);
         $this->addElement(
             'select',
@@ -34,6 +35,7 @@ class Form_FormChampFromParent extends Zend_Form
                 'label' => 'Type du champ',
                 'required' => true,
                 'multiOptions' => $dbType->getTypeWithoutParentToSelectForm(),
+                'class' => 'form-control',
             ]
         );
 

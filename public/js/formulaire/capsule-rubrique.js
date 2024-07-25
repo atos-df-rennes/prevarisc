@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('.add-rubrique').on('click', function() {
         const form = this.closest('form')
         const capsuleRubrique = form.closest('.objet').id
-        const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
+        const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques:not(.hidden)')
         const rubriquesDiv = $('#'+capsuleRubrique+' .rubriques')
 
         const formData = $(form).serialize()
@@ -15,11 +15,11 @@ $(document).ready(function() {
                 const parsedData = JSON.parse(data)
 
                 // On crée la table uniquement si elle n'existe pas
-                if (!!savedRubriquesDiv) {
+                if (savedRubriquesDiv.length === 0) {
                     rubriquesDiv.append($('#saved-rubriques-prototype').removeAttr('id').removeClass('hidden'))
                 }
 
-                const table = $('#'+capsuleRubrique+' .saved-rubriques table tbody')
+                const table = $('#'+capsuleRubrique+' .saved-rubriques:not(.hidden) table tbody')
                 table.append(getRowElement(parsedData))
 
                 form.reset()
@@ -44,7 +44,7 @@ function deleteRubrique(element) {
     $("#name-rubrique").html(nom)
     $("#delete-rubrique").click(function() {
         const parentDiv = $(element).parent().parent().parent()
-        const parentTable = $(element).closest('.saved-rubriques')
+        const parentTable = $(element).closest('.saved-rubriques:not(.hidden)')
         const nbOfRows = parentTable.children('.panel').children('table').children('tbody').children('tr').length
 
         $.ajax({

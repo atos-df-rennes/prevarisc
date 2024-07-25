@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     $('#add-champ').on('click', function() {
         const form = this.closest('form')
-        const savedFieldsDiv = $('.saved-fields')
+        const savedFieldsDiv = $('.saved-fields:not(.hidden)')
         const idRubrique = $('#rubrique-id').val()
         const champsDiv = $('.champs')
 
@@ -28,17 +28,17 @@ $(document).ready(function() {
                 const parsedData = Array.isArray(jsonParsedData) ? jsonParsedData[0] : jsonParsedData
 
                 // On crée la table uniquement si elle n'existe pas
-                if (!!savedFieldsDiv) {
+                if (savedFieldsDiv.length === 0) {
                     let titleText = 'Liste des champs'
                     if (isParent) {
                         titleText += ' enfants'
                     }
 
-                    champsDiv.append($('#saved-champs-prototype').removeAttr('id').removeClass('hidden'))
+                    champsDiv.append($('#saved-champs-prototype').clone().removeAttr('id').removeClass('hidden'))
                     $('.champs .panel-title').html(titleText)
                 }
                 
-                const table = $('.saved-fields table tbody')
+                const table = $('.saved-fields:not(.hidden) #saved-fields-table tbody')
                 table.append(getRowElement(parsedData))
 
                 if (parsedData.TYPE === 'Liste') {
@@ -93,7 +93,7 @@ function deleteChamp(element) {
     $("#name-champ").html(nom)
     $("#delete-champ").click(function() {
         const parentDiv = $(element).parent().parent().parent()
-        const parentTable = $(element).closest('.saved-fields')
+        const parentTable = $(element).closest('.saved-fields:not(.hidden)')
         const nbOfRows = parentTable.children('.panel').children('table').children('tbody').children('tr').length
 
         $.ajax({

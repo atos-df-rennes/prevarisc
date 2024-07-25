@@ -4,7 +4,7 @@
 </a>
 
 <div class="row mt-4">
-    <div class="col-md-4 infos-rubrique">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Informations sur la rubrique</h3>
@@ -79,7 +79,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Liste des champs</h3>
                 </div>
-                <table class="table table-bordered table-condensed">
+                <table id="saved-fields-table" class="table table-bordered table-condensed">
                     <thead>
                         <tr>
                             <th></th>
@@ -98,7 +98,7 @@
 
                                     <?php if($champ['TYPE'] === 'Parent'): ?>
                                         <?php if (1 === intval($champ['tableau'])): ?>
-                                            (affiché comme tableau)
+                                            <small class="text-muted">(affiché comme tableau)</small>
                                         <?php endif ?>
 
                                         <?php if(!empty($champ['LIST_CHAMP'])) : ?>

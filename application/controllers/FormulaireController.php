@@ -373,6 +373,8 @@ class FormulaireController extends Zend_Controller_Action
 
     public function deleteValeurListeAction(): void
     {
+        $this->_helper->viewRenderer->setNoRender(true);
+
         $idValeurListe = $this->getParam('liste');
 
         $valeurListe = $this->modelChampValeurListe->find($idValeurListe)->current();

@@ -7,10 +7,9 @@ form #save-element {
 }
 .champFusionTable {
     margin: 0;
-    border-color: black;
     word-wrap: anywhere;
 }
-.champFusionTable td {
+.champFusionTable > tbody > tr > td {
     border-color: black;
 }
 
