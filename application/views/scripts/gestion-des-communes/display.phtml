@@ -2,10 +2,18 @@
     <h3>Informations sur la commune</h3>
     <dl class='dl-horizontal'>
         <dt>Code INSEE</dt>
-        <dd><?php echo $this->commune->NUMINSEE_COMMUNE ?></dd>
-        
+        <dd>
+            <div class="col-md-12">
+                <?php echo $this->commune->NUMINSEE_COMMUNE ?>
+            </div>
+        </dd>
+
         <dt>Code postal</dt>
-        <dd><?php echo $this->commune->CODEPOSTAL_COMMUNE ?></dd>
+        <dd>
+            <div class="col-md-12">
+                <?php echo $this->commune->CODEPOSTAL_COMMUNE ?>
+            </div>
+        </dd>
     </dl>
 
     <h3>Coordonnées</h3>
@@ -32,7 +40,7 @@
                     $("#save").removeAttr("disabled");
                 }
             });
-        
+
             return false;
         });
     </script>

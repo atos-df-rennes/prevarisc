@@ -41,7 +41,7 @@ echo "
 		</ul>
 	</div>
 	<br/>
-	<div class='row' ".( ($this->typeAction == 'rappel-reg')? "" : "style='display:none;'" ).">
+	<div class='row form-group' ".( ($this->typeAction == 'rappel-reg')? "" : "style='display:none;'" ).">
 		<div class='col-md-4'>
 			Ajouter cette prescription pour les &nbsp;
 		</div>
@@ -52,7 +52,7 @@ echo "
 			</select>
 		</div>
 	</div>
-	<div class='row'>
+	<div class='row form-group'>
 		<div class='col-md-4'>
 			Ajouter par défaut à la création d'un nouveau dossier &nbsp;
 		</div>
@@ -63,8 +63,7 @@ echo "
 			</select>
 		</div>
 	</div>
-	<br/>
-	<div class='row'>
+	<div class='row form-group'>
 		<div class='col-md-4'>
 			Texte&nbsp;
 			<select style='width:80%;' id='LIBELLE_TEXTE' class='chosen'>

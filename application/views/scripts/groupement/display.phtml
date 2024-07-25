@@ -11,11 +11,15 @@
 	<div id="tabs-1">
 		<dl class='dl-horizontal'>
 			<!-- Libellé du groupement -->
-			<dt>Libellé du groupement</dt>
-			<dd><input class="form-control" type='text' id='nom_groupement' name='nom_groupement' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' size=30 /></dd>
+			<div class="form-group">
+                <dt>Libellé du groupement</dt>
+                <dd>
+                    <input class="form-control" type='text' id='nom_groupement' name='nom_groupement' value='<?php echo htmlspecialchars($this->libelle, ENT_QUOTES) ?>' size=30 />
+                </dd>
+            </div>
 
 			<!-- Type du groupement-->
-			<div class="mt-4">
+			<div class="form-group">
                 <dt>Type</st>
                 <dd>
                     <select class="form-control" id='type_groupement' name='type_groupement'>
@@ -28,34 +32,32 @@
             </div>
 
 			<!-- Liste des villes -->
-			<div class="mt-4">
-                <dt>Villes du groupement</dt>
-                <dd style="display: flex; align-items: center;">
-                    <select class="form-control" id='liste_villes' multiple size=20 class='pull-left' style='height: 300px; width: 30%;'>
-                        <?php
-                        foreach($this->villes as $value) {
-                            echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."'>".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
-                        }
-                        ?>
-                    </select>
-                
-                    <div class="btn-group btn-group-vertical" style='padding: 20px;'>
-                        <button id='add_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
-                        <button id='remove_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-                    </div>
+            <dt>Villes du groupement</dt>
+            <dd style="display: flex; align-items: center;">
+                <select class="form-control" id='liste_villes' multiple size=20 class='pull-left' style='height: 300px; width: 30%;'>
+                    <?php
+                    foreach($this->villes as $value) {
+                        echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."'>".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
+                    }
+                    ?>
+                </select>
 
-                    <select class="form-control" id='villes_groupement' name='villes[]' class='pull-left' multiple size=20 style='height: 300px; width: 30%;'>
-                        <?php
-                        if(is_array($this->ville_du_groupement))
-                        {
-                            foreach($this->ville_du_groupement as $value) {
-                                echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."' >".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
-                            }
+                <div class="btn-group btn-group-vertical" style='padding: 20px;'>
+                    <button id='add_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+                    <button id='remove_ville' type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                </div>
+
+                <select class="form-control" id='villes_groupement' name='villes[]' class='pull-left' multiple size=20 style='height: 300px; width: 30%;'>
+                    <?php
+                    if(is_array($this->ville_du_groupement))
+                    {
+                        foreach($this->ville_du_groupement as $value) {
+                            echo "<option id='".$value["NUMINSEE_COMMUNE"]."' value='".$value["NUMINSEE_COMMUNE"]."' >".$value["NUMINSEE_COMMUNE"]." ".$value["LIBELLE_COMMUNE"]."</option>";
                         }
-                        ?>
-                    </select>
-                </dd>
-            </div>
+                    }
+                    ?>
+                </select>
+            </dd>
 		</dl>
 	</div>
 

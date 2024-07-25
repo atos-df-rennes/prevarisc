@@ -18,13 +18,13 @@
 	<?php endif ?>
 
 	<dl class='dl-horizontal'>
-		<dt>Libellé</dt>
-		<dd>
-            <p>
-			    <input class="form-control" type='text' value='<?php if(isset($this->group["LIBELLE_GROUPE"])) echo $this->group["LIBELLE_GROUPE"] ?>' name='LIBELLE_GROUPE' />
-            </p>
-		</dd>
-		
+		<div class="form-group">
+            <dt>Libellé</dt>
+            <dd>
+                <input class="form-control" type='text' value='<?php if(isset($this->group["LIBELLE_GROUPE"])) echo $this->group["LIBELLE_GROUPE"] ?>' name='LIBELLE_GROUPE' />
+            </dd>
+        </div>
+
 		<dt>Description</dt>
 		<dd>
 			<textarea class="form-control" name="DESC_GROUPE" rows="5" ><?php if(isset($this->group["DESC_GROUPE"])) echo $this->group["DESC_GROUPE"] ?></textarea>

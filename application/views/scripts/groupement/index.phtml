@@ -62,13 +62,17 @@
 
                 <div class="modal-body">
                     <form id='add-groupement'>
-                        <dl>
+                        <dl class='dl-horizontal'>
                             <!-- Libellé du groupement -->
-                            <dt>Libellé du groupement</dt>
-                            <dd><input class="form-control" type='text' id='nom_groupement' name='nom_groupement' size=30 /></dd>
+                            <div class="form-group">
+                                <dt>Libellé du groupement</dt>
+                                <dd>
+                                    <input class="form-control" type='text' id='nom_groupement' name='nom_groupement' size=30 />
+                                </dd>
+                            </div>
 
                             <!-- Type du groupement-->
-                            <div class="mt-4">
+                            <div>
                                 <dt>Type</dt>
                                 <dd>
                                     <select class="form-control" id='type_groupement' name='type_groupement'>
@@ -149,7 +153,7 @@
             // On deselectionne les villes
             $("#villes_groupement option").each(function(){ $(this).attr("selected", false); });
         });
-        
+
         // Gestion des évenements de la liste déroulante
         $("#gpt").change( function() {
             if($("#gpt").val() != null)

@@ -7,62 +7,60 @@
 	<h3><?php echo $this->row ? "Modification d'une couche cartographique" : "Ajout d'une couche cartographique" ?></h3>
 
 	<dl class='dl-horizontal'>
-		<dt>Type de la couche</dt>
-		<dd>
-            <p>
+		<div class="form-group">
+            <dt>Type de la couche</dt>
+            <dd>
                 <select class="form-control" name="TYPE_COUCHECARTO">
                     <option value="WMS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMS') echo "selected" ?> >WMS</option>
                     <option value="WMTS" <?php if(isset($this->row) && $this->row['TYPE_COUCHECARTO'] == 'WMTS') echo "selected" ?> >WMTS</option>
                 </select>
-            </p>
-		</dd>
+            </dd>
+        </div>
 
-		<dt>Nom de la couche</dt>
-		<dd>
-            <p>
-			    <input class="form-control" type="text" name="NOM_COUCHECARTO" value="<?php echo $this->row ? $this->row['NOM_COUCHECARTO'] : "" ?>" />
-            </p>
-		</dd>
+		<div class="form-group">
+            <dt>Nom de la couche</dt>
+            <dd>
+                <input class="form-control" type="text" name="NOM_COUCHECARTO" value="<?php echo $this->row ? $this->row['NOM_COUCHECARTO'] : "" ?>" />
+            </dd>
+        </div>
 
-		<dt>URL du flux</dt>
-		<dd>
-            <p>
-			    <input class="form-control" type="text" name="URL_COUCHECARTO" value="<?php echo $this->row ? $this->row['URL_COUCHECARTO'] : "" ?>" />
-            </p>
-		</dd>
+		<div class="form-group">
+            <dt>URL du flux</dt>
+            <dd>
+                <input class="form-control" type="text" name="URL_COUCHECARTO" value="<?php echo $this->row ? $this->row['URL_COUCHECARTO'] : "" ?>" />
+            </dd>
+        </div>
 
-		<dt>Couche de base ?</dt>
-		<dd>
-			<p>
-				<input type="hidden" name="ISBASELAYER_COUCHECARTO" value="0" />
-				<input type="checkbox" name="ISBASELAYER_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['ISBASELAYER_COUCHECARTO']) echo "checked" ?> />
-			</p>
-		</dd>
+		<div class="form-group">
+            <dt>Couche de base ?</dt>
+            <dd>
+                <input type="hidden" name="ISBASELAYER_COUCHECARTO" value="0" />
+                <input type="checkbox" name="ISBASELAYER_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['ISBASELAYER_COUCHECARTO']) echo "checked" ?> />
+            </dd>
+        </div>
 
-		<dt>Nom de la couche dans le flux</dt>
-		<dd>
-            <p>
+		<div class="form-group">
+            <dt>Nom de la couche dans le flux</dt>
+            <dd>
                 <input type="hidden" name="LAYERS_COUCHECARTO" value="0" />
                 <input class="form-control" type="text" name="LAYERS_COUCHECARTO" value="<?php echo isset($this->row) ? $this->row['LAYERS_COUCHECARTO'] : "" ?>" />
-            </p>
-		</dd>
+            </dd>
+        </div>
 
-		<dt>Format de l'image de la couche</dt>
-		<dd>
-            <p>
+		<div class="form-group">
+            <dt>Format de l'image de la couche</dt>
+            <dd>
                 <select class="form-control" name="FORMAT_COUCHECARTO">
                     <option value="image/png" <?php if(isset($this->row) && $this->row['FORMAT_COUCHECARTO'] == "image/png") echo "selected" ?> >image/png</option>
                     <option value="image/jpeg" <?php if(isset($this->row) && $this->row['FORMAT_COUCHECARTO'] == "image/jpeg") echo "selected" ?> >image/jpeg</option>
                 </select>
-            </p>
-		</dd>
+            </dd>
+        </div>
 
 		<dt>Couche masquée ?</dt>
 		<dd>
-			<p>
-            	<input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />
-				<input type="checkbox" name="TRANSPARENT_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['TRANSPARENT_COUCHECARTO']) echo "checked" ?> />
-			</p>
+            <input type="hidden" name="TRANSPARENT_COUCHECARTO" value="0" />
+            <input type="checkbox" name="TRANSPARENT_COUCHECARTO" value="1" <?php if(isset($this->row) && $this->row['TRANSPARENT_COUCHECARTO']) echo "checked" ?> />
 		</dd>
 	</dl>
 </form>
