@@ -2,9 +2,6 @@
 	echo "
 		<div class='row'>
 			<div class='col-md-3'>
-				<!--
-					<a href='/gestion-prescriptions/gestion-rappel-reg' >Gestion des prescriptions type</a>
-				-->
 			</div>
 			<div class='col-md-3'>
 				<a href='/gestion-prescriptions/gestion-rappel-reg' >Gestion des rappels réglementaires</a>
@@ -88,34 +85,32 @@
 	}
 	echo "
 		</ul>
-		<button class='categorie btn btn-default' >Ajouter</button>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<br/>
+		<button class='categorie btn btn-primary' >Ajouter</button>
 	";
 ?>
 
-
-
 <!-- Modal -->
-<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style='width:1000px;margin-left:-500px;' >
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Gestion prescription type</h3>
-	</div>
-	<div class="modal-body">
-	</div>
-	<div class="modal-footer">
-		<img id='loading' src='/images/load.gif' style='display:none;'/>
-		<button class="btn btn-primary savePrescription">Sauvegarder</button>
-		<button class="btn closemodal" data-dismiss="modal" aria-hidden="true">Annuler</button>
-	</div>
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">Gestion prescription type</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <img id='loading' src='/images/load.gif' style='display:none;'/>
+                <button class="btn btn-default closemodal" data-dismiss="modal">Annuler</button>
+                <button class="btn btn-success savePrescription">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
-
 $(document).ready(function(){
-
-//Affiche les textes appartenant à la catégorie
+    //Affiche les textes appartenant à la catégorie
 	$(".showDetailCat").live('click',function(){
 		//requete ajax pour trouver les prescriptions faisant partie de cette catégorie
 		var tabId = $(this).attr('id').split('_');
@@ -268,7 +263,7 @@ $(document).ready(function(){
         ],
 	});
 
-//Gestion des textes
+    //Gestion des textes
 	var dialogTexte = $('<div style="display:none;"></div>').appendTo('body');
 
 	$(".addTexteCat").live('click',function(){
@@ -349,7 +344,7 @@ $(document).ready(function(){
         ],
 	});
 
-//Gestion des articles
+    //Gestion des articles
 	var dialogArticle = $('<div style="display:none;"></div>').appendTo('body');
 
 	$(".addArticleTexte").live('click',function(){
@@ -429,7 +424,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-//Gestion des prescriptions type
+    //Gestion des prescriptions type
 	$(".prescription").live('click',function(){
 		var tabId = $(this).attr('id').split('_');
 		var typePresc = tabId[0];
@@ -630,5 +625,4 @@ $(".classement").sortable({
 		});
 	}
 });
-
 </script>

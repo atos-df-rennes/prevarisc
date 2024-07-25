@@ -46,7 +46,7 @@ echo "
 			Ajouter cette prescription pour les &nbsp;
 		</div>
 		<div class='col-md-8'>
-			<select id='PRESCRIPTIONREGL_TYPE' name='PRESCRIPTIONREGL_TYPE'>
+			<select class='form-control' id='PRESCRIPTIONREGL_TYPE' name='PRESCRIPTIONREGL_TYPE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 1)? "selected" : "" ).">Etudes</option>
 				<option value='2' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_TYPE'] == 2)? "selected" : "" ).">Visites</option>
 			</select>
@@ -57,7 +57,7 @@ echo "
 			Ajouter par défaut à la création d'un nouveau dossier &nbsp;
 		</div>
 		<div class='col-md-8'>
-			<select id='PRESCRIPTIONREGL_VISIBLE' name='PRESCRIPTIONREGL_VISIBLE'>
+			<select class='form-control' id='PRESCRIPTIONREGL_VISIBLE' name='PRESCRIPTIONREGL_VISIBLE'>
 				<option value='1' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 1)? "selected" : "" ).">Oui</option>
 				<option value='0' ".( ($this->infosPrescription[0]['PRESCRIPTIONREGL_VISIBLE'] == 0)? "selected" : "" ).">Non</option>
 			</select>
@@ -134,7 +134,7 @@ echo "
 	<div class='row'>
 		<div class='col-md-12'>
 			Contenu :
-			<textarea name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'>";
+			<textarea class='form-control' name='PRESCRIPTION_LIBELLE' id='PRESCRIPTION_LIBELLE' rows='10'>";
 echo $this->libelle;
 echo "</textarea>
 		</div>

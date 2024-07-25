@@ -46,7 +46,7 @@
 				<div class='col-md-10'>
 	";
 	echo '
-				<input type="text" name="LIBELLE_TEXTE" id="LIBELLE_TEXTE" value="'.$this->texteInfo['LIBELLE_TEXTE'].'" style="width:100%;"/>
+				<input class="form-control" type="text" name="LIBELLE_TEXTE" id="LIBELLE_TEXTE" value="'.$this->texteInfo['LIBELLE_TEXTE'].'" style="width:100%;"/>
 	';
 	echo "
 				</div>
@@ -56,7 +56,7 @@
 					Visibilité du texte
 				</div>
 				<div class='col-md-10'>
-					<select name='VISIBLE_TEXTE'>
+					<select class='form-control' name='VISIBLE_TEXTE'>
 						<option value='1' ".( ($this->texteInfo['VISIBLE_TEXTE'] == 1)? "selected": "" )." >Afficher</option>
 						<option value='0' ".( ($this->texteInfo['VISIBLE_TEXTE'] == 0)? "selected": "" ).">Masquer</option>
 					</select>
@@ -72,4 +72,3 @@
 			</div>
 		</form>
 	";
-
