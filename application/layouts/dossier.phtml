@@ -163,15 +163,19 @@ endif ?>
         <div style='margin:10px; line-height: 20px;' id='infosEtablissement'>
             <?php if($this->enteteEtab) : ?>
                 Etablissement(s) concerné(s) :
-                <a
-                    href=<?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                <button
+                    type="button"
+                    class="btn btn-link btn-sm"
+                    data-href=<?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT'].'?hideButton=true' ?>
                     data-target='#modal-desc'
                     data-toggle='modal'
                     id='descEtab'
                     title='Afficher le descriptif'>
                     <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
-                </a>
-                <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
+                </button>
+                <a
+                    class="btn btn-link btn-sm"
+                    href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
                     title='Se rendre à la liste des dossiers' >
                     <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
                 </a>
@@ -256,15 +260,18 @@ endif ?>
                         <?php if($value['ID_ETABLISSEMENTDOSSIER'] !== $idEtabEnCour) :
                             $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
                         ?>
-                            <a
-                                href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                            <button
+                                type="button"
+                                class="btn btn-link btn-sm"
+                                data-href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>
                                 data-target='#modal-desc'
                                 data-toggle='modal'
                                 id='descEtab'
                                 title='Afficher le descriptif'>
                                 <span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>
-                            </a>
+                            </button>
                             <a
+                                class="btn btn-link btn-sm"
                                 href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
                                 title='Se rendre à la liste des dossiers' >
                                 <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
@@ -337,18 +344,18 @@ endif ?>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" tabindex="-1" id="modal-desc" >
-    <div class="modal-dialog">
+<div class="modal fade" tabindex="-1" id="modal-desc" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">x</button>
-                <h3>Descriptif de l'établissement</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Descriptif de l'établissement</h3>
             </div>
             <div class="modal-body">
                 Chargement des éléments...
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-default" data-dismiss="modal">Fermer</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -405,6 +412,16 @@ endif ?>
 
 			return false;
 		});
+
+        $('#descEtab').click(function() {
+            $.ajax({
+                url: $(this).attr('data-href'),
+                type: 'GET',
+                success: function(result) {
+                    $('#modal-desc .modal-body').html(result)
+                }
+            })
+        })
     });
 </script>
 

@@ -6,7 +6,7 @@
     <div class="descriptif-personnalise--header">
         <h3>Descriptifs</h3>
         <?php if ($this->hideButton === null): ?>
-            <a id="descEtab" href="<?= $this->url(['action' => 'descriptif']).'?original=true' ?>" data-target="#modal-desc" data-toggle="modal">Afficher le descriptif original</a>
+            <button type="button" class="btn btn-link" id="descEtab" data-href="<?= $this->url(['action' => 'descriptif']).'?original=true' ?>" data-target="#modal-desc" data-toggle="modal">Afficher le descriptif original</button>
         <?php endif ?>
     </div>
 
@@ -22,20 +22,32 @@
             'canWrite' => false
         ]); ?>
     </div>
-    <div class="modal fade" id="modal-desc" tabindex="-1">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modal-desc" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">x</button>
-                    <h5>Descriptif original</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Descriptif original</h3>
                 </div>
-                <div class="modal-body" id="descriptif-original-content">
+                <div class="modal-body">
                     Chargement des éléments...
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal">Fermer</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type='text/javascript'>
+    $('#descEtab').click(function() {
+        $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            success: function(result) {
+                $('#modal-desc .modal-body').html(result)
+            }
+        })
+    })
+</script>
