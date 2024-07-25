@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('.add-rubrique').on('click', function() {
         const form = this.closest('form')
         const capsuleRubrique = form.closest('.objet').id
-        let savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
+        const savedRubriquesDiv = $('#'+capsuleRubrique+' .saved-rubriques')
         const rubriquesDiv = $('#'+capsuleRubrique+' .rubriques')
 
         const formData = $(form).serialize()
