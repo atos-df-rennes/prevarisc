@@ -28,25 +28,27 @@ class View_Helper_AfficheDoc
         }
 
         $return = "
-            <li class='divDoc row col-md-12' name='divDoc' id='".$natureId.'_'.$id.$type."' style='display: block; margin: 0 15px 15px 15px;'>
-                <div style='float:left;' class='col-md-1'>
-                    <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
-                </div>
-                <div class='col-md-4 libelle' >
+            <li class='divDoc col-md-12' name='divDoc' id='".$natureId.'_'.$id.$type."'>
+                <div class='col-md-5'>
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' ".$styleChecked.' '.$etatCheck." name='check_".$natureId.'_'.$id.$type."' id='check_".$natureId.'_'.$id.$type."' ".((1 == $verrou) ? "disabled='disabled'" : '')." />
         ";
         if ($type) {
-            $return .= "<textarea name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;width:100%;'>".nl2br($libelle).'</textarea>';
+            $return .= "<textarea class='form-control' name='libelle_".$natureId.'_'.$id.$type."' id='libelle_".$natureId.'_'.$id.$type."' rows='3' style='display:none;'>".nl2br($libelle).'</textarea>';
         }
 
         return $return.('
-                    <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
+                            <strong '.(($type) ? "id='libelleView_".$natureId.'_'.$id.$type."'" : '').'>'.nl2br($libelle)."</strong>
+                        </label>
+                    </div>
                 </div>
                 <div id='div_input_".$natureId.'_'.$id.$type."' class='col-md-7' style='".$styleInput."'>
                     <div class='col-md-4'>
-                        <input type='text' readonly='true' name='ref_".$natureId.'_'.$id.$type."' id='ref_".$natureId.'_'.$id.$type."' value=\"".$ref."\" style='width: 100%;' />
+                        <input class='form-control' type='text' readonly='true' name='ref_".$natureId.'_'.$id.$type."' id='ref_".$natureId.'_'.$id.$type."' value=\"".$ref."\" style='width: 100%;' />
                     </div>
-                    <div class='col-md-2'>
-                        <input type='text' readonly='true' ".$styleDate."  class='date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
+                    <div class='col-md-3'>
+                        <input type='text' readonly='true' ".$styleDate."  class='form-control date' name='date_".$natureId.'_'.$id.$type."' id='date_".$natureId.'_'.$id.$type."' value='".$date."' />
                     </div>
                     <div class='col-md-3'>
                         <span class='modif' id='modif_".$natureId.'_'.$id.$type."' style='".((1 == $verrou) ? 'display:none;' : '')."' >
@@ -60,9 +62,7 @@ class View_Helper_AfficheDoc
                         </span>
                     </div>
                 </div>
-                <br class='clear'/>
             </li>
-            <br class='clear'/>
         ");
     }
 }

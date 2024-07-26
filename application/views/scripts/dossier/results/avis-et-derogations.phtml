@@ -1,47 +1,79 @@
-<div class="col-md-5 cardAvisDerogations">
-    <a href="#" class="close pull-right" data-dismiss="alert" data-id='<?= $this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>'>&times;</a>
-
-    <h1 class='text-center'><?= $this->TITRE ?></h1>
-
-    <div class="row">
-        <div class="col-md-6">
-            <p>Type : <?= $this->TYPE ?></p>
-            <p>Objet : <?= $this->OBJET ?>
-            <p>Avis : <?= $this->LIBELLE_AVIS ?></p>
+<div class="col-md-6 cardAvisDerogations">
+    <div class="panel panel-default form-horizontal">
+        <div class="panel-heading text-center">
+            <h3 class="panel-title"><?= $this->TITRE ?>
+                <button type="button" class="close" data-id='<?= $this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>'>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </h3>
         </div>
-        <div class="col-md-6">
-            <p>Avis/Dérogation levé(e):
-                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
-                    <?php if ($this->ID_DOSSIER_LIE):
-                        echo $this->OBJET_DOSSIER ?? $this->ID_DOSSIER_LIE;
-                    endif ?>
-                </a>
-            </p>
-            <div class="avis-derogation__affichage-historique">
-                <label for="affHistorique">Afficher dans l'onglet de l'établissement</label>
-                <input
-                    type="checkbox"
-                    name="affHistorique"
-                    disabled
-                    <?= boolval($this->DISPLAY_HISTORIQUE) === true ? 'checked' : '' ?>
-                >
+
+        <div class="panel-body">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Type</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static"><?= $this->TYPE ?></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Objet</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static"><?= $this->OBJET ?></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Avis</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static"><?= $this->LIBELLE_AVIS ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label col-sm-7">Avis/Dérogation levé(e)</label>
+                    <div class="col-sm-5">
+                        <p class="form-control-static">
+                            <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'index', 'id' => $this->ID_DOSSIER_LIE], false, true) ?>">
+                                <?php if ($this->ID_DOSSIER_LIE):
+                                    echo $this->OBJET_DOSSIER ?? $this->ID_DOSSIER_LIE;
+                                endif ?>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-7">Afficher dans l'onglet de l'établissement</label>
+                    <div class="col-sm-5">
+                        <p class="form-control-static">
+                            <input
+                                type="checkbox"
+                                name="affHistorique"
+                                disabled
+                                <?= boolval($this->DISPLAY_HISTORIQUE) === true ? 'checked' : '' ?>
+                            >
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="pull-right">
-        <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations-edit', 'id' => $this->ID_DOSSIER, 'avis-derogation' => $this->ID_AVIS_DEROGATION], false, true) ?>">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-        </a>
+        <div class="panel-footer text-right">
+            <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations-edit', 'id' => $this->ID_DOSSIER, 'avis-derogation' => $this->ID_AVIS_DEROGATION], false, true) ?>">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
     $(".close").click(function (event) {
-        event.preventDefault()
         $.ajax({
             type: "delete",
-            url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id')
+            url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'),
+            success: function() {
+                $(event.currentTarget).closest('.cardAvisDerogations').remove()
+            }
         });
     });
 </script>

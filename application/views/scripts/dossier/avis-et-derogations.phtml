@@ -1,77 +1,70 @@
-<form class="form-horizontal col-md-8" method="post">
-    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
-
+<form class="form-horizontal col-md-12" method="post">
     <input type='hidden' name='ID_DOSSIER' value='<?= $this->idDossier ?>' />
+    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
+    <div class="clearfix"></div>
 
     <div class="form-group">
-        <label class="control-label" for="inputType">Type</label>
-        <div>
-            <select id="inputType" name="TYPE" required>
-                <option value='Avis'>
-                    Avis
-                </option>
-                <option value='Dérogation'>
-                    Dérogation
-                </option>
-            </select>
-        </div>
+        <label for="inputType">Type</label>
+        <select class="form-control" id="inputType" name="TYPE" required>
+            <option value='Avis'>
+                Avis
+            </option>
+            <option value='Dérogation'>
+                Dérogation
+            </option>
+        </select>
     </div>
 
     <div class="form-group">
-        <label class="control-label" for="inputTitre">Titre</label>
-        <div>
-            <input name="TITRE" type="text" id="inputTitre" required>
-        </div>
+        <label for="inputTitre">Titre</label> <small class='text-muted'>Obligatoire</small>
+        <input class="form-control" name="TITRE" type="text" id="inputTitre" required>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding" for="inputObjet">Objet</label>
-        <div>
-            <textarea id="inputObjet" name="OBJET"></textarea>
-        </div>
+        <label for="inputObjet">Objet</label>
+        <textarea class="form-control" id="inputObjet" name="OBJET"></textarea>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding" for="inputJustification">Justification</label>
-        <div>
-            <textarea id="inputJustification" name="JUSTIFICATION"></textarea>
-        </div>
+        <label for="inputJustification">Justification</label>
+        <textarea class="form-control" id="inputJustification" name="JUSTIFICATION"></textarea>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding" for="inputArticlesConcernes">Article(s) concerné(s)</label>
-        <div>
-            <textarea id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
-        </div>
+        <label for="inputArticlesConcernes">Article(s) concerné(s)</label>
+        <textarea class="form-control" id="inputArticlesConcernes" name="ARTICLES_CONCERNES"></textarea>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding" for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
-        <div>
-            <textarea id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
-        </div>
+        <label for="inputMesuresCompensatoiresProposees">Mesure(s) compensatoire(s) proposée(s)</label>
+        <textarea class="form-control" id="inputMesuresCompensatoiresProposees" name="MESURES_COMPENSATOIRES_PROPOSEES"></textarea>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding" for="inputAnalyseDeRisque">Analyse de risque</label>
-        <div>
-            <textarea id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
-        </div>
+        <label for="inputAnalyseDeRisque">Analyse de risque</label>
+        <textarea class="form-control" id="inputAnalyseDeRisque" name="ANALYSE_DE_RISQUE"></textarea>
     </div>
 
     <div class="form-group">
-        <label class="control-label" for="inputAvis">Avis</label>
-        <div>
-            <select id="inputAvis" name="AVIS">
-                <?php foreach ($this->listeAvis as $avis): ?>
-                    <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
+        <label for="inputAvis">Avis</label>
+        <select class="form-control" id="inputAvis" name="AVIS">
+            <?php foreach ($this->listeAvis as $avis): ?>
+                <option value='<?= $avis["ID_AVIS"] ?>'><?= $avis['LIBELLE_AVIS'] ?></option>
+            <?php endforeach ?>
+        </select>
     </div>
 
     <div class="form-group">
-        <label class="control-label no-top-padding">Avis/Dérogation levé(e):</label>
+        <div class="col-md-12">
+            <label>Avis/Dérogation levé(e):</label>
+            <button
+                id="deselect"
+                type="button"
+                class="btn btn-info <?php if (null === $this->ID_DOSSIER_LIE) echo 'hidden' ?>"
+            >
+                Désélectionner
+            </button>
+        </div>
         <?=
             $this->partial(
                 'dossier/results/avisderogation/liste-dossier.phtml',
@@ -83,20 +76,22 @@
         ?>
     </div>
 
-    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
-
     <div class="form-group">
-        <label class="control-label no-top-padding" for="DISPLAY_HISTORIQUE">Afficher dans l'onglet de l'établissement</label>
-        <div>
-            <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
-            <input
-                type="checkbox"
-                id="DISPLAY_HISTORIQUE"
-                name="DISPLAY_HISTORIQUE"
-                value='1'
-            >
+        <div class="checkbox">
+            <label>
+                <input type='hidden' name='DISPLAY_HISTORIQUE' value='0'>
+                <input
+                    type="checkbox"
+                    id="DISPLAY_HISTORIQUE"
+                    name="DISPLAY_HISTORIQUE"
+                    value='1'
+                >
+                Afficher dans l'onglet de l'établissement
+            </label>
         </div>
     </div>
+
+    <input class="btn btn-success pull-right" type='submit' value='Ajouter l&apos;avis'/>
 </form>
 
 <?= $this->partialLoop("dossier/results/avis-et-derogations.phtml", $this->arrayAvisDerogations); ?>
