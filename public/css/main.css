@@ -94,26 +94,8 @@ body > .navbar {
     margin-top: 10px;
 }
 
-#research-input input {
-    font-size: 13px;
-    -webkit-transition: width 0.25s ease-in-out;
-    -moz-transition:width 0.25s ease-in-out;
-    -o-transition: width 0.25s ease-in-out;
-    transition: width 0.25s ease-in-out;
-}
-
-#research-input input:focus{
+#nav-main-search-field:focus {
     width: 300px;
-}
-
-#research-input a {
-    font-size: 12px;
-    padding: 4px 4px 4px 4px;
-    text-transform: initial;
-}
-
-#research-input button.btn_search {
-    padding: 4px 6px;
 }
 
 /* Style de la page d'erreur

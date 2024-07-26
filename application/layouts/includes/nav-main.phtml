@@ -44,12 +44,16 @@
             <ul class='nav navbar-nav navbar-right'>
                 <li class="li-searched">
                     <form class="navbar-search" action="/search/etablissement" method="get">
-                        <div class="input-append" id="research-input">
-                            <input name="label" class="input-medium" id="nav-main-search-field" type="text" placeholder="Rechercher ..." />
-                            <input name="page" type="hidden" value="1"  />
-                            <button class="btn btn_search" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> </button>
-                            <a class="btn btn-link" href="/search/etablissement?&statuts%5B%5D=2&statuts%5B%5D=4">Avancée &raquo;</a>
+                        <div class="input-group">
+                            <input name="label" class="form-control" id="nav-main-search-field" type="text" placeholder="Rechercher ..." />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                                <a class="btn btn-link btn-sm" href="/search/etablissement?&statuts%5B%5D=2&statuts%5B%5D=4">Avancée &raquo;</a>
+                            </div>
                         </div>
+                        <input name="page" type="hidden" value="1" />
                     </form>
                 </li>
             </ul>
