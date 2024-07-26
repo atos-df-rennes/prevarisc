@@ -1,8 +1,9 @@
 <form action="/changement" method="post">
-    <div class='pull-right' >
+    <div class='pull-right'>
         <button type='button' class="btn btn-default see-balises" data-toggle="modal" data-target="#liste-balises">Voir les balises disponibles</button>
         <input type='submit' class="btn btn-success" value="Modifier les messages">
     </div>
+    <div class="clearfix"></div>
     <?php foreach($this->changements as $changement) : ?>
         <h3>
             Message de <?php echo strtolower($changement["LIBELLE_CHANGEMENT"]); ?>

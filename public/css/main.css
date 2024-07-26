@@ -1173,12 +1173,6 @@ dl.champ_effectif_camping dd input {
     text-align: left;
 }
 
-.buttonOpenClose {
-    margin: auto;
-    width: fit-content;
-    margin-bottom: 1rem;
-}
-
 #dossierInfos .form .input-group input {
     height: unset;
 }
