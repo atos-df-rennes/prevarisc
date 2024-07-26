@@ -437,7 +437,7 @@
                     <dt>Fax</dt>
                     <dd>
                         <div class="input-group">
-                            <span class="input-group-addon"><i class='glyphicon glyphicon-print' ></i></span>
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-print'></i></span>
                             <input class='form-control' type='text' name='FAX_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["FAX_ETABLISSEMENT"] ?>' />
                         </div>
                     </dd>
@@ -447,7 +447,7 @@
                 <dt>Courriel</dt>
                 <dd>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class='glyphicon glyphicon-envelope' ></i></span>
+                        <span class="input-group-addon"><i class='glyphicon glyphicon-envelope'></i></span>
                         <input class='form-control' type='text' name='COURRIEL_ETABLISSEMENT' value='<?php echo $this->etablissement['general']["COURRIEL_ETABLISSEMENT"] ?>' />
                     </div>
                 </dd>
@@ -513,7 +513,10 @@
                     </div>
                     <div class="form-group">
                         <label>Durée d'une visite</label>
-                        <input class='form-control' type='time' name='DUREEVISITE_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["DUREEVISITE_ETABLISSEMENT"] ?>' />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class='glyphicon glyphicon-time'></i></span>
+                            <input class='form-control' type='time' name='DUREEVISITE_ETABLISSEMENT' value='<?php echo $this->etablissement['donnees_pratiques']["DUREEVISITE_ETABLISSEMENT"] ?>' />
+                        </div>
                     </div>
                 </dd>
             </dl>
