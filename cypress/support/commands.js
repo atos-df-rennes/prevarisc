@@ -4,6 +4,6 @@ Cypress.Commands.add('login', (username, password) => {
         cy.get('[name=prevarisc_login_username]').type(username)
         cy.get('[name=prevarisc_login_passwd]').type(password)
         cy.get('#Connexion').click()
-        cy.url().should('contain', '/')
+        cy.title().should('eq', 'Accueil')
     })
 })
