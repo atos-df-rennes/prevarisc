@@ -1,9 +1,6 @@
 describe('Tests ModifEtablissements', () => {
     beforeEach(() => {
-        cy.on('uncaught:exception', (err, runnable) => {
-            return false;
-        });
-        cy.visit('http://localhost');
+        cy.visit('/');
         cy.get('input[name="prevarisc_login_username"]').type('root');
         cy.get('input[name="prevarisc_login_passwd"]').type('root');
         cy.get('#Connexion').click();
@@ -13,7 +10,6 @@ describe('Tests ModifEtablissements', () => {
         cy.contains('a.dropdown-toggle', 'Établissements').click();
         cy.get('a[href="/search/etablissement?label=&page=1"]').click();       
         cy.contains('Etablissements').should('exist');
-        
     });
 
     it('Modifier le libellé d\'un établissement', () => {
@@ -28,7 +24,5 @@ describe('Tests ModifEtablissements', () => {
         cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLabel);
         cy.get('input[type="submit"][value="Sauvegarder"]').click();
         cy.screenshot('page_test_after_modification');
-
-
     });
 });

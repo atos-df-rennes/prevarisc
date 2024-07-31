@@ -1,12 +1,6 @@
 describe('Tests Authentification', () => {
-    beforeEach(() => {
-        cy.on('uncaught:exception', (err, runnable) => {
-          return false;
-        });
-    });
-
     it('Connexion réussie', () => {
-      cy.visit('http://localhost');
+      cy.visit('/');
       cy.get('input[name="prevarisc_login_username"]').type('root');
       cy.get('input[name="prevarisc_login_passwd"]').type('root');
       cy.get('#Connexion').click();
@@ -14,7 +8,7 @@ describe('Tests Authentification', () => {
     });
 
     it('Connexion échouée', () => {
-      cy.visit('http://localhost');
+      cy.visit('/');
       cy.get('input[name="prevarisc_login_username"]').type('wrongUser');
       cy.get('input[name="prevarisc_login_passwd"]').type('wrongPass');
       cy.get('#Connexion').click();

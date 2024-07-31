@@ -1,9 +1,6 @@
 describe('Tests AjoutDossiers', () => {
     beforeEach(() => {
-        cy.on('uncaught:exception', (err, runnable) => {
-            return false;
-        });
-        cy.visit('http://localhost');
+        cy.visit('/');
         cy.get('input[name="prevarisc_login_username"]').type('root');
         cy.get('input[name="prevarisc_login_passwd"]').type('root');
         cy.get('#Connexion').click();
@@ -16,6 +13,5 @@ describe('Tests AjoutDossiers', () => {
         cy.get('select[name="selectNature"]').select('6');
         cy.get('[name="OBJET_DOSSIER"]').type(`Dossier Test ${Date.now()}`);
         cy.get('#creationDossier').click();
-        cy.screenshot('page');
       });
 });

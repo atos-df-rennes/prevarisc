@@ -1,9 +1,6 @@
 describe('Tests AjoutEtablissements', () => {
     beforeEach(() => {
-        cy.on('uncaught:exception', (err, runnable) => {
-            return false;
-        });
-        cy.visit('http://localhost');
+        cy.visit('/');
         cy.get('input[name="prevarisc_login_username"]').type('root');
         cy.get('input[name="prevarisc_login_passwd"]').type('root');
         cy.get('#Connexion').click();

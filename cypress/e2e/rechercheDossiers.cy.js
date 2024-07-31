@@ -1,9 +1,6 @@
 describe('Tests Etablissements', () => {
     beforeEach(() => {
-        cy.on('uncaught:exception', (err, runnable) => {
-            return false;
-        });
-        cy.visit('http://localhost');
+        cy.visit('/');
         cy.get('input[name="prevarisc_login_username"]').type('root');
         cy.get('input[name="prevarisc_login_passwd"]').type('root');
         cy.get('#Connexion').click();
@@ -13,7 +10,6 @@ describe('Tests Etablissements', () => {
         cy.contains('a.dropdown-toggle', 'Dossiers').click();
         cy.get('a[href="/search/dossier?objet=&page=1"]').click();
         cy.contains('Dossiers').should('exist');
-        
     });
 
     it('Dossier 22990F1619', () => {
@@ -40,7 +36,5 @@ describe('Tests Etablissements', () => {
         .click();
         cy.get('[name=Rechercher]').click();
         cy.screenshot('dossier-avis');
-
     });
-
 });
