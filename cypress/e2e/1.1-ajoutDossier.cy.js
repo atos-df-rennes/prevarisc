@@ -1,10 +1,11 @@
 describe('Tests AjoutDossiers', () => {
-    beforeEach(() => {
-        cy.visit('/');
-        cy.get('input[name="prevarisc_login_username"]').type('root');
-        cy.get('input[name="prevarisc_login_passwd"]').type('root');
-        cy.get('#Connexion').click();
+    before(() => {
+        cy.login('root', 'root')
     });
+
+    beforeEach(() => {
+        cy.visit('/')
+    })
 
     it('AjoutDossier', () => {
         cy.contains('a.dropdown-toggle', 'Dossiers').click();
