@@ -1,9 +1,9 @@
-describe('Tests AjoutDossiers', () => {
-    before(() => {
+describe('Ajout Dossiers', () => {
+    beforeEach(() => {
         cy.login('root', 'root')
     });
 
-    it('AjoutDossier', () => {
+    it('Ajout d\'un dossier', () => {
         const date = Date.now()
 
         cy.visit('/dossier/add')

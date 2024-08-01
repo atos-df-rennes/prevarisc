@@ -1,34 +1,16 @@
-describe('Tests Etablissements', () => {
-    before(() => {
-        cy.login('root', 'root')
-    });
-
+describe('Recherche Dossiers', () => {
     beforeEach(() => {
+        cy.login('root', 'root')
         cy.visit('/')
     })
 
-    it('Dossiers', () => {
+    it('Page de recherche des dossiers', () => {
         cy.contains('a.dropdown-toggle', 'Dossiers').click();
         cy.get('a[href="/search/dossier?objet=&page=1"]').click();
         cy.contains('Dossiers').should('exist');
     });
 
-    it('Dossier 22990F1619', () => {
-        cy.contains('a.dropdown-toggle', 'Dossiers').click();
-        cy.get('a[href="/search/dossier?objet=&page=1"]').click();
-        cy.get('input[name="objet"]').type('22990F1619');
-        cy.get('[name=Rechercher]').click();
-    });
-
-    it(' Dossier Test', () => {
-        cy.contains('a.dropdown-toggle', 'Dossiers').click();
-        cy.get('a[href="/search/dossier?objet=&page=1"]').click();
-        cy.get('input[name="objet"]').type('Dossier Test');
-        cy.get('[name=Rechercher]').click();
-        cy.screenshot('dossier-page');
-    });
-
-   it('Sélection par attribut avis de la commission ', () => {
+   it('Avis favorables', () => {
         cy.contains('a.dropdown-toggle', 'Dossiers').click();
         cy.get('a[href="/search/dossier?objet=&page=1"]').click();
         cy.get('input[value="Avis de la commission"]').clear().type('Favorable');
@@ -36,6 +18,7 @@ describe('Tests Etablissements', () => {
         .contains('Favorable')
         .click();
         cy.get('[name=Rechercher]').click();
-        cy.screenshot('dossier-avis');
+        cy.get('.avis.F').should('exist')
+        cy.get('.avis.D').should('not.exist')
     });
 });

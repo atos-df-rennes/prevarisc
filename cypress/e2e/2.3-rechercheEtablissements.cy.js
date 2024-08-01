@@ -1,31 +1,13 @@
-describe('Tests Etablissements', () => {
-    before(() => {
-        cy.login('root', 'root')
-    });
-
+describe('Recherche Etablissements', () => {
     beforeEach(() => {
+        cy.login('root', 'root')
         cy.visit('/')
     })
 
-    it('Etablissements', () => {
+    it('Page des recherche des établissements', () => {
         cy.contains('a.dropdown-toggle', 'Établissements').click();
-        cy.get('a[href="/search/etablissement?label=&page=1"]').click();       
+        cy.get('a[href="/search/etablissement?label=&page=1"]').click();
         cy.contains('Etablissements').should('exist');
-    });
-
-    it('Etablissement Quick', () => {
-        cy.contains('a.dropdown-toggle', 'Établissements').click();
-        cy.get('a[href="/search/etablissement?label=&page=1"]').click();
-        cy.get('input[name="label"]').eq(1).type('Quick');
-        cy.get('[name=Rechercher]').click();
-    });
-
-    it('Etablissement Test', () => {
-        cy.contains('a.dropdown-toggle', 'Établissements').click();
-        cy.get('a[href="/search/etablissement?label=&page=1"]').click();
-        cy.get('input[name="label"]').eq(1).type('Etablissement Test 1722259235007');
-        cy.get('[name=Rechercher]').click();
-        cy.screenshot('etablissement-page');
     });
 
     it('Etablissement avec avis défavorable', () => {
@@ -38,7 +20,8 @@ describe('Tests Etablissements', () => {
             }
         });
         cy.get('[name=Rechercher]').click();
-        cy.screenshot('etablissement-page-défavorable');
+        cy.get('.avis.F').should('not.exist')
+        cy.get('.avis.D').should('exist')
     });
 
     it('Etablissement avec avis favorable', () => {
@@ -51,6 +34,7 @@ describe('Tests Etablissements', () => {
             }
         });
         cy.get('[name=Rechercher]').click();
-        cy.screenshot('etablissement-page-favorable');
+        cy.get('.avis.F').should('exist')
+        cy.get('.avis.D').should('not.exist')
     });
 });
