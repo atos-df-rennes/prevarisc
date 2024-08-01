@@ -16,3 +16,5 @@ HashedFileDataStore.php
 .vscode
 phpstan.neon
 tests/coverage/*
+node_modules/
+cypress/screenshots/
