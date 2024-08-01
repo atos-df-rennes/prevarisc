@@ -90,6 +90,9 @@ body > .navbar {
     font-size: 12px;
 }
 
+.navbar-fixed-top .navbar-right {
+    margin-right: 0;
+}
 .navbar-right {
     margin-top: 10px;
 }
