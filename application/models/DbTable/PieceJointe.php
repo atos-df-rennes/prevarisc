@@ -18,7 +18,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from(['piecejointe'])
             ->join($table, "piecejointe.ID_PIECEJOINTE = {$table}.ID_PIECEJOINTE")
-            ->joinLeft(['pjs' => 'piecejointestatut'], 'piecejointe.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT', ['NOM_STATUT'])
+            ->joinLeft(['pjs' => 'piecejointestatut'], 'piecejointe.ID_PIECEJOINTESTATUT = pjs.ID_PIECEJOINTESTATUT')
             ->where($champ.' = '.$identifiant)
             ->order('piecejointe.ID_PIECEJOINTE DESC')
         ;
