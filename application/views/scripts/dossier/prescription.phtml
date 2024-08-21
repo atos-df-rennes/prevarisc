@@ -95,7 +95,7 @@ echo "
                                     }
                                     if ($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) {
                                         echo "<i
-                                            class='justification-levee icon-info-sign'
+                                            class='icon-label-right icon-info-sign'
                                             title='Justification'
                                             data-content='".nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE'])."'
                                             data-html='true'
@@ -529,6 +529,6 @@ $(document).ready(function(){
 		return false;
 	});
 
-    $('.justification-levee').popover()
+    $('.icon-label-right').popover()
 });
 </script>
