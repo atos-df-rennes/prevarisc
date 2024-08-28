@@ -1,8 +1,8 @@
-<div class="col-md-6 cardAvisDerogations">
+<div class="col-md-6 cardAvisDerogations" data-id='<?= $this->ID_AVIS_DEROGATION ?>'>
     <div class="panel panel-default form-horizontal">
         <div class="panel-heading text-center">
             <h3 class="panel-title"><?= $this->TITRE ?>
-                <button type="button" class="close" data-id='<?= $this->ID_DOSSIER."/avis-derogation/".$this->ID_AVIS_DEROGATION ?>'>
+                <button type="button" class="close pull-right">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </h3>
@@ -67,13 +67,48 @@
 </div>
 
 <script>
-    $(".close").click(function (event) {
-        $.ajax({
-            type: "delete",
-            url: "/dossier/avis-et-derogations-delete/id/"+$(this).attr('data-id'),
-            success: function() {
-                $(event.currentTarget).closest('.cardAvisDerogations').remove()
-            }
-        });
-    });
+    $(".close").click(function () {
+        const card_avis_derogations = $(this).closest('.cardAvisDerogations')
+        const id = card_avis_derogations.attr('data-id')
+        const title = card_avis_derogations.children('h1')[0].innerText
+
+        $('#dialog-supp').dialog("destroy")
+        $("#dialog-supp").remove()
+
+        const dialog_supp = $("<div id='dialog-supp'></div>").appendTo("body")
+        dialog_supp.html(`Vous êtes sur le point de supprimer l'avis ou la dérogation "${title}".`)
+        dialog_supp.dialog({
+            title: "Suppression d'un avis ou d'une dérogation",
+            width: 650,
+            draggable: false,
+            resizable: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Supprimer',
+                    class: 'btn btn-danger',
+                    click: function() {
+                        $.ajax({
+                            type: "delete",
+                            url: "/dossier/avis-et-derogations-delete/id/" + id
+                        })
+
+                        card_avis_derogations.remove()
+                        dialog_supp.dialog("close")
+                        $("#dialog-supp").html('')
+
+                        return false
+                    }
+                },
+                {
+                    text: 'Annuler',
+                    class: 'btn',
+                    click: function() {
+                        dialog_supp.dialog("close")
+                        $("#dialog-supp").html('')
+                    }
+                }
+            ]
+        })
+    })
 </script>
