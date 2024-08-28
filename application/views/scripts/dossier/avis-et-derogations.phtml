@@ -55,15 +55,17 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-12">
-            <label>Avis/Dérogation levé(e):</label>
-            <button
-                id="deselect"
-                type="button"
-                class="btn btn-info <?php if (null === $this->ID_DOSSIER_LIE) echo 'hidden' ?>"
-            >
-                Désélectionner
-            </button>
+        <div class="row row-no-gutters">
+            <div class="col-md-12">
+                <label>Avis/Dérogation levé(e):</label>
+                <button
+                    id="deselect"
+                    type="button"
+                    class="btn btn-info <?php if (null === $this->ID_DOSSIER_LIE) echo 'hidden' ?>"
+                >
+                    Désélectionner
+                </button>
+            </div>
         </div>
         <?=
             $this->partial(

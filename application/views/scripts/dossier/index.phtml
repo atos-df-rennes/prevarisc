@@ -1974,19 +1974,29 @@ $(".delaipresc").live('click', function() {
 								$date = new Zend_Date($ue['DATE_RECEPTION_DOC'], Zend_Date::DATES);
 								$dateReceptDoc = $date->get(Zend_Date::DAY."/".Zend_Date::MONTH."/".Zend_Date::YEAR);
 							endif; ?>
-							Dossier incomplet le
-							<input <?php echo (isset($ue['DATE_RECEPTION_DOC']))? "readonly='readonly'" : "class='date'" ?>
-								type='text' name='dateDocManquant[]'
-								id='dateDocManquant_<?php echo $ue['NUM_DOCSMANQUANT'] ?>'
-								value='<?php echo $dateDocManquant ?>' />
-							&nbsp;
 
-							<?php if ($cptDocManquant == 1 && $ue['DATE_RECEPTION_DOC'] == null) : ?>
-							<button class='today btn btn-default'>
-								<span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
-							</button>
-							<?php endif ?>
-							<textarea name='docManquant[]' class='docManquant'
+                            <div class='row row-no-gutters form-group'>
+                                <div class='col-md-6'>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Dossier incomplet le</span>
+                                        <input <?= (isset($ue['DATE_RECEPTION_DOC'])) ? "readonly='readonly'" : "class='date form-control'" ?>
+                                            type='text'
+                                            id='dateDocManquant_'
+                                            name='dateDocManquant[]'
+                                            value='<?= $dateDocManquant ?>'
+                                        />
+                                        <?php if ($cptDocManquant == 1 && $ue['DATE_RECEPTION_DOC'] == null) : ?>
+                                            <span class="input-group-btn">
+                                                <button class='today btn btn-default'>
+                                                    <span class='glyphicon glyphicon-calendar' aria-hidden='true'></span>&nbsp;Aujourd'hui
+                                                </button>
+                                            </span>
+                                        <?php endif ?>
+                                    </div>
+                                </div>
+                            </div>
+
+							<textarea name='docManquant[]' class='docManquant form-control'
 								id='docManquant_<?php echo $ue['NUM_DOCSMANQUANT'] ?>' <?php echo $disabledTextArea ?>
 								rows='5' cols='100'><?php echo $ue['DOCMANQUANT'] ?></textarea>
 							Document(s) réceptionné(s) le

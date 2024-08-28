@@ -538,7 +538,8 @@ table.periodicite:first-child {
 
 input.date {
 	background: url("images/calendar.gif") left no-repeat;
-	padding-left: 20px;
+	padding-left: 25px;
+    background-position-x: 5px;
 }
 
 input.date:hover {
