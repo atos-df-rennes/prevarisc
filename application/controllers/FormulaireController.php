@@ -167,6 +167,7 @@ class FormulaireController extends Zend_Controller_Action
             }
         }
     }
+
     public function deleteRubriqueAction(): void
     {
         $idRubrique = (int) $this->getParam('rubrique');
