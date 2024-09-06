@@ -14,4 +14,15 @@ class Model_DbTable_CapsuleRubrique extends Zend_Db_Table_Abstract
 
         return $this->fetchRow($select)->toArray();
     }
+    public function updateCapsuleRubriqueName(int $idCapsuleRubrique, string $newName): void
+    {
+        $CapsuleRubrique = $this->find($idCapsuleRubrique)->current();
+        if ($CapsuleRubrique) {
+            $CapsuleRubrique->NOM = $newName;
+            $CapsuleRubrique->save();
+        } else {
+            throw new Exception('Capsule rubrique non trouvée.');
+        }
+    }
+    
 }
