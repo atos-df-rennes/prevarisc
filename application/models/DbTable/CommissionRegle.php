@@ -43,14 +43,9 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param float|int|string          $first_table
-     * @param array|string|Zend_Db_Expr $second_table
-     * @param float|int|string          $key
      * @param float|int|string          $id_regle
-     *
-     * @psalm-return array<int, mixed>
      */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_regle): array
+    private function fullJoinRegle(string $first_table, string $second_table, string $key, $id_regle): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
         $return = $this->fetchAll($this->select()->union([
@@ -76,12 +71,9 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     // Formaliser les resultats envoyés
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $array
-     * @param mixed $key
      */
-    private function mapResult($array, $key): array
+    private function mapResult($array, string $key): array
     {
         $result = [];
 

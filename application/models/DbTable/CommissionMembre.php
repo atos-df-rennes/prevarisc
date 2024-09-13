@@ -48,12 +48,9 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param float|int|string          $first_table
-     * @param array|string|Zend_Db_Expr $second_table
-     * @param float|int|string          $key
      * @param float|int|string          $id_membre
      */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_membre): array
+    private function fullJoinRegle(string $first_table, string $second_table, string $key, $id_membre): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistré
         $return = $this->fetchAll($this->select()->union([
@@ -77,7 +74,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     // Formaliser les resultats envoyés
-    private function mapResult($array, $key): array
+    private function mapResult(array $array, $key): array
     {
         $result = [];
 
