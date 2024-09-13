@@ -55,7 +55,7 @@ class PieceJointeController extends Zend_Controller_Action
 
         $filteredListePj = array_filter(
             $listePj,
-            function ($pieceJointe) use ($objectType, $modelDossier) {
+            function ($pieceJointe) use ($objectType, $modelDossier): bool {
                 if ('dossier' === $objectType && $modelDossier->isPlatau($this->getRequest()->getParam('id'))) {
                     $pieceJointePath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$pieceJointe['ID_PIECEJOINTE'].$pieceJointe['EXTENSION_PIECEJOINTE'];
                 } else {

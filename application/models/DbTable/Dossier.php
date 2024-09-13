@@ -627,13 +627,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
         }), 0, $nbdossiermax);
-        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
         }), 0, $nbdossiermax);
-        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
         }), 0, $nbdossiermax);
 
@@ -659,13 +659,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $dossiers = $this->getAdapter()->fetchAll($select);
 
-        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Visites'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return Service_Dossier::ID_DOSSIERTYPE_VISITE === $dossier['TYPE_DOSSIER'] || Service_Dossier::ID_DOSSIERTYPE_GRPVISITE === $dossier['TYPE_DOSSIER'];
         }), $nbdossiermax);
-        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Etudes'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return Service_Dossier::ID_DOSSIERTYPE_ETUDE === $dossier['TYPE_DOSSIER'];
         }), $nbdossiermax);
-        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier) {
+        $dossEtab['Autres'] = array_slice(array_filter($dossiers, function ($dossier): bool {
             return !in_array($dossier['TYPE_DOSSIER'], [Service_Dossier::ID_DOSSIERTYPE_ETUDE, Service_Dossier::ID_DOSSIERTYPE_VISITE, Service_Dossier::ID_DOSSIERTYPE_GRPVISITE], true);
         }), $nbdossiermax);
 
