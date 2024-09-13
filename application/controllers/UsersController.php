@@ -275,7 +275,7 @@ class UsersController extends Zend_Controller_Action
 
                                 if (is_array($this->_request->types)) {
                                     $array = $this->_request->types;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
                                         $types = [];
@@ -303,7 +303,7 @@ class UsersController extends Zend_Controller_Action
 
                                 if (is_array($this->_request->types)) {
                                     $array = $this->_request->types;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_type = new Service_TypeActivite();
                                         $tmp_types = $service_type->getAll();
                                         $types = [];
@@ -329,7 +329,7 @@ class UsersController extends Zend_Controller_Action
 
                                 if (is_array($this->_request->familles)) {
                                     $array = $this->_request->familles;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_famille = new Service_Famille();
                                         $tmp_familles = $service_famille->getAll();
                                         $types = [];
@@ -359,7 +359,7 @@ class UsersController extends Zend_Controller_Action
 
                                 if (is_array($this->_request->classes)) {
                                     $array = $this->_request->classes;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_classe = new Service_Classe();
                                         $tmp_classes = $service_classe->getAll();
                                         $classes = [];
@@ -435,7 +435,7 @@ class UsersController extends Zend_Controller_Action
 
                                 if (is_array($this->_request->classements)) {
                                     $array = $this->_request->classements;
-                                    array_walk($array, function (&$val, $key) use (&$array) {
+                                    array_walk($array, function (&$val, $key) use (&$array): void {
                                         $service_genre = new Service_Genre();
                                         $tmp_classement = $service_genre->getClassements();
                                         $classement = [];
@@ -470,7 +470,7 @@ class UsersController extends Zend_Controller_Action
 
                         if (is_array($this->_request->dossier_natures)) {
                             $array = $this->_request->dossier_natures;
-                            array_walk($array, function (&$val, $key) use (&$array) {
+                            array_walk($array, function (&$val, $key) use (&$array): void {
                                 $service_dossier = new Service_Dossier();
                                 $tmp_natures = $service_dossier->getAllNatures();
                                 $natures = [];

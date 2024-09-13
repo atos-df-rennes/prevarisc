@@ -190,13 +190,13 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         $group = $user['group']['ID_GROUPE'];
 
         $groupements = (array) $user['groupements'];
-        array_walk($groupements, function (&$val, $key) use (&$groupements) {
+        array_walk($groupements, function (&$val, $key) use (&$groupements): void {
             $val = $groupements[$key]['ID_GROUPEMENT'];
         });
         $groupements = implode('-', $groupements);
 
         $commissions = (array) $user['commissions'];
-        array_walk($commissions, function (&$val, $key) use (&$commissions) {
+        array_walk($commissions, function (&$val, $key) use (&$commissions): void {
             $val = $commissions[$key]['ID_COMMISSION'];
         });
         $commissions = implode('-', $commissions);

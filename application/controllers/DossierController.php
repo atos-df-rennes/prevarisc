@@ -1720,10 +1720,7 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
-    /**
-     * @return null|false
-     */
-    public function validdocAction()
+    public function validdocAction(): ?bool
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
