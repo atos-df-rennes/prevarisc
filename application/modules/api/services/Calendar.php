@@ -373,7 +373,7 @@ class Api_Service_Calendar
     }
 
     // Vérifie que toutes les informations liés au préventionnistes, grade / prenom / nom, est non null
-    private function isPreventionnisteExist($preventionnistes, $index): bool
+    private function isPreventionnisteExist(array $preventionnistes, $index): bool
     {
         if (empty($preventionnistes[$index]['GRADE_UTILISATEURINFORMATIONS'])) {
             return false;

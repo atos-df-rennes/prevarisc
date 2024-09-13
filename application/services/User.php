@@ -259,12 +259,11 @@ class Service_User
     /**
      * Sauvegarde d'un groupe.
      *
-     * @param array $data
      * @param int   $id_group Optionnel
      *
      * @return int
      */
-    public function saveGroup($data, $id_group = null)
+    public function saveGroup(array $data, $id_group = null)
     {
         $model_groupe = new Model_DbTable_Groupe();
 
@@ -341,11 +340,9 @@ class Service_User
     /**
      * Récupération des ressources / privilèges associés à un utilisateur.
      *
-     * @param array $user
-     *
      * @return array
      */
-    public function getGroupPrivileges($user)
+    public function getGroupPrivileges(array $user)
     {
         $model_user = new Model_DbTable_Utilisateur();
 
@@ -360,7 +357,7 @@ class Service_User
      *
      * @return array La liste des utilisateurs
      */
-    public function getUtilisateursForAlterte($idChangement, $etablissement)
+    public function getUtilisateursForAlterte($idChangement, array $etablissement)
     {
         $dbUtilisateur = new Model_DbTable_Utilisateur();
 

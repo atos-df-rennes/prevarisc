@@ -44,7 +44,7 @@ class Service_Prescriptions
         return $dbPrescTypeAssoc->getPrescriptionAssoc($idPrescType);
     }
 
-    public function savePrescriptionType($post, $idPrescriptionType = null)
+    public function savePrescriptionType(array $post, $idPrescriptionType = null)
     {
         $dbPrescType = new Model_DbTable_PrescriptionType();
         $dbPresTypeAssoc = new Model_DbTable_PrescriptionTypeAssoc();
@@ -105,7 +105,7 @@ class Service_Prescriptions
 
     // FIN getTexte
 
-    public function saveTexte($post, $idTexte = null): void
+    public function saveTexte(array $post, $idTexte = null): void
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
         if (null == $idTexte) {
@@ -154,7 +154,7 @@ class Service_Prescriptions
 
     // FIN getArticle
 
-    public function saveArticle($post, $idArticle = null): void
+    public function saveArticle(array $post, $idArticle = null): void
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
         if (null == $idArticle) {
@@ -185,7 +185,7 @@ class Service_Prescriptions
     }
 
     // GESTION DES PRESCRIPTIONS
-    public function savePrescription($post, $idPrescription = null): void
+    public function savePrescription(array $post, $idPrescription = null): void
     {
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();

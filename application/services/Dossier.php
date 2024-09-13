@@ -77,11 +77,10 @@ class Service_Dossier
      * Ajout d'une pièce jointe pour un dossier.
      *
      * @param int    $id_dossier
-     * @param array  $file
      * @param string $name
      * @param string $description
      */
-    public function addPJ($id_dossier, $file, $name = '', $description = ''): void
+    public function addPJ($id_dossier, array $file, $name = '', $description = ''): void
     {
         $extension = strtolower(strrchr($file['name'], '.'));
 
@@ -407,10 +406,8 @@ class Service_Dossier
 
     /**
      * Sauvegarde une prescription.
-     *
-     * @param array $post
      */
-    public function savePrescription($post): void
+    public function savePrescription(array $post): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -619,10 +616,8 @@ class Service_Dossier
 
     /**
      * Supprime une prescription.
-     *
-     * @param array $post
      */
-    public function deletePrescription($post): void
+    public function deletePrescription(array $post): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -789,7 +784,7 @@ class Service_Dossier
     }
 
     // Retrouve l'avis du dernier dossier donnant avis pour l'établissement courant uniquement
-    public function saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
+    public function saveDossierDonnantAvisCurrentEtab(array $dernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
     {
         $dbEtab = new Model_DbTable_Etablissement();
         $etab = $dbEtab->find($etab['ID_ETABLISSEMENT'])->current();

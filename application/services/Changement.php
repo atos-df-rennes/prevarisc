@@ -110,7 +110,7 @@ class Service_Changement
      *
      * @return string L'objet formaté
      */
-    public function getObjet($idChangement, $ets): string
+    public function getObjet($idChangement, array $ets): string
     {
         switch ($idChangement) {
             case '1':
@@ -169,11 +169,10 @@ class Service_Changement
      * Convertit les balises dans le message avec les bonnes valeurs.
      *
      * @param string $message Le message a envoyer avec des balises
-     * @param mixed  $ets
      *
      * @return string Le message convertit
      */
-    public function convertMessage($message, $ets): string
+    public function convertMessage($message, array $ets): string
     {
         $params = [];
         foreach (self::BALISES as $balise => $content) {
@@ -197,7 +196,7 @@ class Service_Changement
      *
      * @return string L'avis de l'établissement
      */
-    public function getAvis($ets): string
+    public function getAvis(array $ets): string
     {
         $avis = '';
         $serviceEts = new Service_Etablissement();

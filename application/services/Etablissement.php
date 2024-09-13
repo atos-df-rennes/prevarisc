@@ -384,7 +384,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
-        @usort($dossiers_merged, function ($a, $b): int {
+        @usort($dossiers_merged, function (array $a, array $b): int {
             $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             if ($date_a == $date_b) {
@@ -831,12 +831,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
     }
 
     /**
-     * @param mixed $ets
-     * @param mixed $postData
-     *
      * @return false|int
      */
-    public function checkAlerte($ets, $postData)
+    public function checkAlerte(array $ets, array $postData)
     {
         $alerte = false;
 
@@ -1645,7 +1642,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $periodicityString;
     }
 
-    private function compareActivitesSecondaires($ets, $postData): bool
+    private function compareActivitesSecondaires(array $ets, array $postData): bool
     {
         foreach ($ets['types_activites_secondaires'] as $typesASecondaires) {
             if (!array_key_exists(

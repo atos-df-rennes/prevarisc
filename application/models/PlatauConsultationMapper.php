@@ -4,7 +4,7 @@ class Model_PlatauConsultationMapper
 {
     private $dbTable;
 
-    public function setDbTable(string $dbTable)
+    public function setDbTable(string $dbTable): self
     {
         $dbTable = new $dbTable();
 

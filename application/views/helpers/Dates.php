@@ -15,7 +15,7 @@ class View_Helper_Dates
         }
 
         $interval = $end->diff($start);
-        $doPlural = function ($nb, $str) {
+        $doPlural = function ($nb, string $str): string {
             return $nb > 1 ? $str.'s' : $str;
         }; // adds plurals
 
