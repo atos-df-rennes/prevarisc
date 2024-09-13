@@ -368,7 +368,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
-            function ($pieceJointe) use ($store): bool {
+            function (array $pieceJointe) use ($store): bool {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
 
                 return is_readable($pieceJointePath);
@@ -393,7 +393,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $piecesJointes = array_filter(
             $allPiecesJointes,
-            function ($pieceJointe) use ($store): bool {
+            function (array $pieceJointe) use ($store): bool {
                 $pieceJointePath = $store->getFilePath($pieceJointe, 'etablissement', $pieceJointe['ID_ETABLISSEMENT']);
 
                 return is_readable($pieceJointePath);

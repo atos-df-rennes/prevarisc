@@ -181,7 +181,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
      *
      * @return array
      */
-    public function getGroupPrivileges($user)
+    public function getGroupPrivileges(array $user)
     {
         // Récupération des données utilisateur
 
@@ -323,7 +323,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
      *
      * @return array Liste d'utilisateur
      */
-    public function findUtilisateursForAlerte($idChangement, $ets)
+    public function findUtilisateursForAlerte($idChangement, array $ets)
     {
         switch ($idChangement) {
             case '1':

@@ -21,7 +21,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchOne($select);
     }
 
-    public function gn4ForEtablissement($etablissement): ?string
+    public function gn4ForEtablissement(array $etablissement): ?string
     {
         $informations = $etablissement['informations'];
         if (!in_array($informations['ID_GENRE'], [2, 5])) {
