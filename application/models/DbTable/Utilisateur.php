@@ -156,10 +156,8 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
      * @psalm-return array<int, mixed>
      *
      * @param mixed $id
-     *
-     * @return array
      */
-    public function getVillesDeSesGroupements($id)
+    public function getVillesDeSesGroupements($id): array
     {
         $model_groupementCommune = new Model_DbTable_GroupementCommune();
 
