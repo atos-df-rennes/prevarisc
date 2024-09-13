@@ -127,10 +127,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
     // CHAMPS SUPPLEMENTAIRES
 
-    /**
-     * @return null|self
-     */
-    public function enExploitation()
+    public function enExploitation(): ?self
     {
         if (null != $this->etablissements) {
             $this->etablissements->where('ID_STATUT = 2');
@@ -141,10 +138,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         return null;
     }
 
-    /**
-     * @return null|self
-     */
-    public function sousmisAControle()
+    public function sousmisAControle(): ?self
     {
         if (null != $this->etablissements) {
             $this->etablissements->where('etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS > 0 AND etablissementinformations.PERIODICITE_ETABLISSEMENTINFORMATIONS IS NOT NULL');
@@ -155,10 +149,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         return null;
     }
 
-    /**
-     * @return null|self
-     */
-    public function sousAvisDefavorable()
+    public function sousAvisDefavorable(): ?self
     {
         if (null != $this->etablissements) {
             $this->etablissements->where('dossier.AVIS_DOSSIER_COMMISSION = 2'); // AND SCHEMAMISESECURITE_ETABLISSEMENTINFORMATIONS != 1
@@ -184,10 +175,8 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 
     /**
      * @param mixed $commune
-     *
-     * @return null|self
      */
-    public function surLaCommune($commune)
+    public function surLaCommune($commune): ?self
     {
         if (null != $this->etablissements) {
             $this->etablissements->where('adressecommune.NUMINSEE_COMMUNE = ?', $commune);

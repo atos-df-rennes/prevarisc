@@ -10,10 +10,8 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
      *
      * @param mixed $commune
      * @param mixed $id_pere
-     *
-     * @return null|array[]
      */
-    public function getPrev($commune, $id_pere)
+    public function getPrev($commune, $id_pere): ?array
     {
         $array_result = [];
 
