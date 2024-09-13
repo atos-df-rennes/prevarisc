@@ -43,9 +43,7 @@ class Api_Service_Etablissement
     /**
      * Retourne les textes applicables d'un établissement identifié par le paramètre id.
      *
-     * @param int $id
      *
-     * @return array
      */
     public function getTextesApplicables(int $id): array
     {

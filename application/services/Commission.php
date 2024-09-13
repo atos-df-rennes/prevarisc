@@ -4,8 +4,6 @@ class Service_Commission
 {
     /**
      * Récupération de l'ensemble des commissions.
-     *
-     * @return array
      */
     public function getAll(): array
     {

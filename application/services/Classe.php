@@ -4,8 +4,6 @@ class Service_Classe
 {
     /**
      * Récupération de l'ensemble des classes.
-     *
-     * @return array
      */
     public function getAll(): array
     {

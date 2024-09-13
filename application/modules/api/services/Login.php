@@ -7,10 +7,8 @@ class Api_Service_Login
      *
      * @param null|mixed $username
      * @param null|mixed $password
-     *
-     * @return array
      */
-    public function login($username = null, $password = null): array
+    public function login(?string $username = null, ?string $password = null): array
     {
         $Service_login = new Service_Login();
 

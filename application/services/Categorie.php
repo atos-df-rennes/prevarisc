@@ -4,8 +4,6 @@ class Service_Categorie
 {
     /**
      * Récupération de l'ensemble des catégories.
-     *
-     * @return array
      */
     public function getAll(): array
     {
