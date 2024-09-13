@@ -7,7 +7,7 @@ class Service_Categorie
      *
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $DB_categorie = new Model_DbTable_Categorie();
 

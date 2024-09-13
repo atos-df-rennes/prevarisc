@@ -27,7 +27,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                     }
 
                     $privileges_role = $role->findModel_DbTable_PrivilegeViaModel_DbTable_GroupePrivilege()->toArray();
-                    array_walk($privileges_role, function (&$val, $key) use (&$privileges_role) {
+                    array_walk($privileges_role, function (&$val, $key) use (&$privileges_role): void {
                         $val = $privileges_role[$key]['id_privilege'];
                     });
 
@@ -61,7 +61,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
         return self::$acl;
     }
 
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request): void
     {
         // Si l'utilisateur est connecté avec l'application mobile, on utilise le partage d'un token
         if ($request->getParam('key') === getenv('PREVARISC_SECURITY_KEY')) {
@@ -123,19 +123,19 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 $groupes_dbtable = new Model_DbTable_Groupe();
 
                 $groupements = (array) $utilisateur['groupements'];
-                array_walk($groupements, function (&$val, $key) use (&$groupements) {
+                array_walk($groupements, function (&$val, $key) use (&$groupements): void {
                     $val = $groupements[$key]['ID_GROUPEMENT'];
                 });
                 $groupements = implode('-', $groupements);
 
                 $commissions = (array) $utilisateur['commissions'];
-                array_walk($commissions, function (&$val, $key) use (&$commissions) {
+                array_walk($commissions, function (&$val, $key) use (&$commissions): void {
                     $val = $commissions[$key]['ID_COMMISSION'];
                 });
                 $commissions = implode('-', $commissions);
 
                 $privileges_role = $groupes_dbtable->find($utilisateur['ID_GROUPE'])->current()->findModel_DbTable_PrivilegeViaModel_DbTable_GroupePrivilege()->toArray();
-                array_walk($privileges_role, function (&$val, $key) use (&$privileges_role) {
+                array_walk($privileges_role, function (&$val, $key) use (&$privileges_role): void {
                     $val = $privileges_role[$key]['id_privilege'];
                 });
 
@@ -569,7 +569,7 @@ class ResourceContainer implements Iterator
         return 0;
     }
 
-    public function next()
+    public function next(): void
     {
         ++$this->developped_resources_index;
         if (!isset($this->developped_resources[$this->developped_resources_index])) {
@@ -582,7 +582,7 @@ class ResourceContainer implements Iterator
         }
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->developped_resources = [];
         $this->resources_index = 0;
@@ -607,10 +607,8 @@ class ResourceContainer implements Iterator
 
     /**
      * @param array $list_resources_finale
-     *
-     * @return array
      */
-    public function develop_resources(&$list_resources_finale)
+    public function develop_resources(&$list_resources_finale): array
     {
         $list_resources_finaleCount = count($list_resources_finale);
         for ($i = 0; $i < $list_resources_finaleCount; ++$i) {

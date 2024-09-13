@@ -11,7 +11,7 @@ class Api_Service_Calendar
     public const ID_GENRE_CELLULE = 3;
     public const ID_AVIS_DEFAVORABLE = 2;
 
-    public function sync($userid, $commission = null)
+    public function sync($userid, $commission = null): void
     {
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $isAllowedToViewAll = unserialize($cache->load('acl'))->isAllowed(
@@ -58,7 +58,7 @@ class Api_Service_Calendar
         echo $calendar->serialize();
     }
 
-    private function getVTimezoneComponent($calendar): VTimeZone
+    private function getVTimezoneComponent(\Sabre\VObject\Component\VCalendar $calendar): VTimeZone
     {
         $vtimezone = new VTimeZone($calendar, 'VTIMEZONE');
         $daylight = new Component($calendar, 'DAYLIGHT', [
@@ -117,7 +117,7 @@ class Api_Service_Calendar
      *
      * @return null|(DateTime|false|mixed|string)[]
      */
-    private function createICSEvent($commissionEvent)
+    private function createICSEvent($commissionEvent): ?array
     {
         $event = null;
 
@@ -242,7 +242,7 @@ class Api_Service_Calendar
         return $avis;
     }
 
-    private function getEventCorps($commissionEvent, $ets = null): string
+    private function getEventCorps(array $commissionEvent, $ets = null): string
     {
         $corpus = 'Contacts du dossier :'.self::LF;
 

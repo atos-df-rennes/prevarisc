@@ -81,7 +81,7 @@ class Service_Dossier
      * @param string $name
      * @param string $description
      */
-    public function addPJ($id_dossier, $file, $name = '', $description = '')
+    public function addPJ($id_dossier, $file, $name = '', $description = ''): void
     {
         $extension = strtolower(strrchr($file['name'], '.'));
 
@@ -129,7 +129,7 @@ class Service_Dossier
      * @param int $id_dossier
      * @param int $id_pj
      */
-    public function deletePJ($id_dossier, $id_pj)
+    public function deletePJ($id_dossier, $id_pj): void
     {
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $DBitem = new Model_DbTable_DossierPj();
@@ -200,7 +200,7 @@ class Service_Dossier
      *
      * @param int $id_dossier
      */
-    public function saveTextesApplicables($id_dossier, array $textes_applicables)
+    public function saveTextesApplicables($id_dossier, array $textes_applicables): void
     {
         $dbDossier = new Model_DbTable_Dossier();
         $dossierTexteApplicable = new Model_DbTable_DossierTextesAppl();
@@ -261,7 +261,7 @@ class Service_Dossier
      * @param string $adresse
      * @param string $web
      */
-    public function addContact($id_dossier, $nom, $prenom, $id_fonction, $societe, $fixe, $mobile, $fax, $email, $adresse, $web)
+    public function addContact($id_dossier, $nom, $prenom, $id_fonction, $societe, $fixe, $mobile, $fax, $email, $adresse, $web): void
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
@@ -287,7 +287,7 @@ class Service_Dossier
      * @param int $id_dossier
      * @param int $id_contact
      */
-    public function addContactExistant($id_dossier, $id_contact)
+    public function addContactExistant($id_dossier, $id_contact): void
     {
         $DB_contact = new Model_DbTable_DossierContact();
 
@@ -303,7 +303,7 @@ class Service_Dossier
      * @param int $id_dossier
      * @param int $id_contact
      */
-    public function deleteContact($id_dossier, $id_contact)
+    public function deleteContact($id_dossier, $id_contact): void
     {
         $DB_current = new Model_DbTable_EtablissementContact();
         $DB_informations = new Model_DbTable_UtilisateurInformations();
@@ -410,7 +410,7 @@ class Service_Dossier
      *
      * @param array $post
      */
-    public function savePrescription($post)
+    public function savePrescription($post): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -582,7 +582,7 @@ class Service_Dossier
         }
     }
 
-    public function copyPrescriptionDossier($listePrescription, $idDossier)
+    public function copyPrescriptionDossier($listePrescription, $idDossier): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -622,7 +622,7 @@ class Service_Dossier
      *
      * @param array $post
      */
-    public function deletePrescription($post)
+    public function deletePrescription($post): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -660,7 +660,7 @@ class Service_Dossier
         }
     }
 
-    public function savePrescriptionRegl($idDossier, $prescriptionRegl)
+    public function savePrescriptionRegl($idDossier, $prescriptionRegl): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -687,7 +687,7 @@ class Service_Dossier
         }
     }
 
-    public function changePosPrescription($tabId)
+    public function changePosPrescription($tabId): void
     {
         $DBprescDossier = new Model_DbTable_PrescriptionDossier();
 
@@ -870,7 +870,7 @@ class Service_Dossier
         return $dbDossier->getCommissionV2($idDossier);
     }
 
-    public function delete($idDossier, $date = null, $uniqueEtab = false)
+    public function delete($idDossier, $date = null, $uniqueEtab = false): void
     {
         if (!$date) {
             $date = new DateTime();
@@ -895,7 +895,7 @@ class Service_Dossier
         }
     }
 
-    public function deleteByEtab($idEtablissement)
+    public function deleteByEtab($idEtablissement): void
     {
         $date = new DateTime();
         $DB_dossier = new Model_DbTable_Dossier();
@@ -923,7 +923,7 @@ class Service_Dossier
         return !empty($result);
     }
 
-    public function retablirDossier($idDossier)
+    public function retablirDossier($idDossier): void
     {
         $DB_dossier = new Model_DbTable_Dossier();
         $dossier = $DB_dossier->find($idDossier)->current();

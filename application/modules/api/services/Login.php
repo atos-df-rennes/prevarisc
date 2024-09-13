@@ -10,7 +10,7 @@ class Api_Service_Login
      *
      * @return array
      */
-    public function login($username = null, $password = null)
+    public function login($username = null, $password = null): array
     {
         $Service_login = new Service_Login();
 

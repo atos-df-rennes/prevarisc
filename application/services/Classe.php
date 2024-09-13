@@ -7,7 +7,7 @@ class Service_Classe
      *
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $DB_classe = new Model_DbTable_Classe();
 

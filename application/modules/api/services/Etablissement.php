@@ -51,7 +51,7 @@ class Api_Service_Etablissement
      *
      * @return array
      */
-    public function getTextesApplicables($id)
+    public function getTextesApplicables(int $id): array
     {
         $service_etablissement = new Service_Etablissement();
 

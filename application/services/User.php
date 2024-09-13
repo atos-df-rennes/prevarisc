@@ -60,7 +60,7 @@ class Service_User
      * @param int    $id_user
      * @param string $last_action_date Par défaut date("Y:m-d H:i:s")
      */
-    public function updateLastActionDate($id_user, $last_action_date = '')
+    public function updateLastActionDate($id_user, $last_action_date = ''): void
     {
         $model_user = new Model_DbTable_Utilisateur();
         $user = $model_user->find($id_user)->current();
@@ -302,7 +302,7 @@ class Service_User
      *
      * @param int $id_group
      */
-    public function deleteGroup($id_group)
+    public function deleteGroup($id_group): void
     {
         $DB_user = new Model_DbTable_Utilisateur();
         $DB_groupe = new Model_DbTable_Groupe();

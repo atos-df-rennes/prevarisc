@@ -7,7 +7,7 @@ class Service_Famille
      *
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $DB_famille = new Model_DbTable_Famille();
 

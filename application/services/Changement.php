@@ -78,7 +78,7 @@ class Service_Changement
      *
      * @param array $data Les données envoyés en post
      */
-    public function save($data)
+    public function save($data): void
     {
         if (is_array($data)) {
             foreach ($data as $key => $message) {
@@ -197,7 +197,7 @@ class Service_Changement
      *
      * @return string L'avis de l'établissement
      */
-    public function getAvis($ets)
+    public function getAvis($ets): string
     {
         $avis = '';
         $serviceEts = new Service_Etablissement();

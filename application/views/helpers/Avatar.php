@@ -7,7 +7,7 @@ class View_Helper_Avatar extends Zend_View_Helper_HtmlElement
      * @param float|int|string $size
      * @param null|mixed       $attribs
      */
-    public function avatar($id, $size = 'small', $attribs = null)
+    public function avatar($id, $size = 'small', $attribs = null): void
     {
         // Attributs
         $attribs = $attribs ? $this->_htmlAttribs($attribs) : '';

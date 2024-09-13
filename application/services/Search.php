@@ -1170,14 +1170,11 @@ class Service_Search
     /**
      * Méthode pour aider à placer des conditions sur la requête.
      *
-     * @param string                      $key
      * @param array|bool|float|int|string $value
-     * @param bool                        $exact
-     * @param string                      $clause Par défaut where
      *
      * @return Service_Search Interface fluide
      */
-    private function setCriteria(Zend_Db_Select &$select, $key, $value, $exact = true, $clause = 'where')
+    private function setCriteria(Zend_Db_Select &$select, string $key, $value, bool $exact = true, string $clause = 'where')
     {
         $string = null;
 

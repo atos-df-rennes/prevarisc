@@ -288,10 +288,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * Récupération de l'historique d'un établissement.
      *
      * @param int $id_etablissement
-     *
-     * @return array
      */
-    public function getHistorique($id_etablissement)
+    public function getHistorique($id_etablissement): array
     {
         $historique = [];
 
@@ -386,7 +384,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             }
         }
 
-        @usort($dossiers_merged, function ($a, $b) {
+        @usort($dossiers_merged, function ($a, $b): int {
             $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
             if ($date_a == $date_b) {
@@ -466,12 +464,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * Récupération des dossiers d'un établissement.
      *
      * @param int $id_etablissement
-     *
-     * @return array
-     *
-     * @psalm-return array{etudes:mixed, visites:mixed, autres:mixed}
      */
-    public function getDossiers($id_etablissement)
+    public function getDossiers($id_etablissement): array
     {
         // Création de l'objet recherche
         $search = new Model_DbTable_Search();
@@ -586,12 +580,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * Récupération des descriptifs d'un établissement.
      *
      * @param int $id_etablissement
-     *
-     * @return ((array-key|mixed)[][][]|mixed)[]
-     *
-     * @psalm-return array{historique:mixed, descriptif:mixed, derogations:mixed, descriptifs_techniques:array<string|null, array<array-key, array{value:mixed, type:mixed, length:mixed, key:array-key}>>}
      */
-    public function getDescriptifs($id_etablissement)
+    public function getDescriptifs($id_etablissement): array
     {
         $dbtable_etablissement = new Model_DbTable_Etablissement();
         $dbtable_info_etablissement = $dbtable_etablissement->info();
@@ -768,7 +758,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param string $descriptif
      * @param string $derogations
      */
-    public function saveDescriptifs($id_etablissement, $historique, $descriptif, $derogations, array $descriptifs_techniques)
+    public function saveDescriptifs($id_etablissement, $historique, $descriptif, $derogations, array $descriptifs_techniques): void
     {
         $dbtable_etablissement = new Model_DbTable_Etablissement();
         $etablissement = $dbtable_etablissement->find($id_etablissement)->current();
@@ -1196,12 +1186,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int   $classe
      * @param int   $id_etablissement_pere
      * @param array $ids_etablissements_enfants
-     *
-     * @return array
-     *
-     * @psalm-return array{preventionnistes?:mixed, periodicite?:mixed, local_sommeil?:bool, commission?:mixed, "commission"?:empty}
      */
-    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
+    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null): array
     {
         $model_prev = new Model_DbTable_Preventionniste();
         $DB_periodicite = new Model_DbTable_Periodicite();
@@ -1338,7 +1324,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param string $description
      * @param int    $mise_en_avant    0 = aucune mise en avant, 1 = diaporama, 2 = plans
      */
-    public function addPJ($id_etablissement, $file, $name = '', $description = '', $mise_en_avant = 0)
+    public function addPJ($id_etablissement, $file, $name = '', $description = '', $mise_en_avant = 0): void
     {
         $extension = strtolower(strrchr($file['name'], '.'));
 
@@ -1403,7 +1389,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int $id_etablissement
      * @param int $id_pj
      */
-    public function deletePJ($id_etablissement, $id_pj)
+    public function deletePJ($id_etablissement, $id_pj): void
     {
         $DBpieceJointe = new Model_DbTable_PieceJointe();
         $DBitem = new Model_DbTable_EtablissementPj();
@@ -1463,7 +1449,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param string $adresse
      * @param string $web
      */
-    public function addContact($id_etablissement, $nom, $prenom, $id_fonction, $societe, $fixe, $mobile, $fax, $email, $adresse, $web)
+    public function addContact($id_etablissement, $nom, $prenom, $id_fonction, $societe, $fixe, $mobile, $fax, $email, $adresse, $web): void
     {
         $DB_informations = new Model_DbTable_UtilisateurInformations();
 
@@ -1489,7 +1475,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int $id_etablissement
      * @param int $id_contact
      */
-    public function addContactExistant($id_etablissement, $id_contact)
+    public function addContactExistant($id_etablissement, $id_contact): void
     {
         $DB_contact = new Model_DbTable_EtablissementContact();
 
@@ -1505,7 +1491,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int $id_etablissement
      * @param int $id_contact
      */
-    public function deleteContact($id_etablissement, $id_contact)
+    public function deleteContact($id_etablissement, $id_contact): void
     {
         $DB_current = new Model_DbTable_EtablissementContact();
         $DB_informations = new Model_DbTable_UtilisateurInformations();
@@ -1552,7 +1538,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
      *
      * @param int $id_etablissement
      */
-    public function saveTextesApplicables($id_etablissement, array $textes_applicables)
+    public function saveTextesApplicables($id_etablissement, array $textes_applicables): void
     {
         $etsTexteApplicable = new Model_DbTable_EtsTextesAppl();
 
@@ -1604,7 +1590,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         return $DBEtab->getDossierDonnantAvis($idEtablissement);
     }
 
-    public function delete($idEtablissement)
+    public function delete($idEtablissement): void
     {
         $date = new DateTime();
         $DB_Etab = new Model_DbTable_Etablissement();

@@ -7,7 +7,7 @@ class Service_TypePlan
      *
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $DB_typesplan = new Model_DbTable_TypePlan();
 

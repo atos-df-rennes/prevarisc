@@ -24,7 +24,7 @@ class BootstrapTest extends Zend_Application_Bootstrap_Bootstrap
         return parent::run();
     }
 
-    public function _initTranslator()
+    public function _initTranslator(): void
     {
         $translator = new Zend_Translate(
             [

@@ -105,7 +105,7 @@ class Service_Prescriptions
 
     // FIN getTexte
 
-    public function saveTexte($post, $idTexte = null)
+    public function saveTexte($post, $idTexte = null): void
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
         if (null == $idTexte) {
@@ -123,7 +123,7 @@ class Service_Prescriptions
 
     // FIN saveTexte
 
-    public function replaceTexte($newId, $oldId)
+    public function replaceTexte($newId, $oldId): void
     {
         $dbPrescTextes = new Model_DbTable_PrescriptionTexteListe();
         if ('' == $newId) {
@@ -154,7 +154,7 @@ class Service_Prescriptions
 
     // FIN getArticle
 
-    public function saveArticle($post, $idArticle = null)
+    public function saveArticle($post, $idArticle = null): void
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
         if (null == $idArticle) {
@@ -172,7 +172,7 @@ class Service_Prescriptions
 
     // FIN saveArticle
 
-    public function replaceArticle($newId, $oldId)
+    public function replaceArticle($newId, $oldId): void
     {
         $dbPrescArticles = new Model_DbTable_PrescriptionArticleListe();
         if ('' == $newId) {
@@ -185,7 +185,7 @@ class Service_Prescriptions
     }
 
     // GESTION DES PRESCRIPTIONS
-    public function savePrescription($post, $idPrescription = null)
+    public function savePrescription($post, $idPrescription = null): void
     {
         $dbPrescRegl = new Model_DbTable_PrescriptionRegl();
         $dbPrescReglAssoc = new Model_DbTable_PrescriptionReglAssoc();
@@ -258,7 +258,7 @@ class Service_Prescriptions
 
     // FIN getPrescriptionInfo
 
-    public function setOrder($data, $type)
+    public function setOrder($data, $type): void
     {
         if ('prescriptionType' == $type) {
             $dbPrescType = new Model_DbTable_PrescriptionType();

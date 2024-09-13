@@ -2,7 +2,7 @@
 
 class View_Helper_ListeGroupement extends Zend_View_Helper_HtmlElement
 {
-    public function listeGroupement($selected, $attribs = null, $id_type_groupement = null)
+    public function listeGroupement($selected, $attribs = null, $id_type_groupement = null): void
     {
         // Mod�les
         $model_groupements = new Model_DbTable_Groupement();
