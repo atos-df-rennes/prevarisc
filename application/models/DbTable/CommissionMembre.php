@@ -53,7 +53,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
      * @param float|int|string          $key
      * @param float|int|string          $id_membre
      */
-    private function fullJoinRegle($first_table, $second_table, $key, $id_membre)
+    private function fullJoinRegle($first_table, $second_table, $key, $id_membre): array
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistré
         $return = $this->fetchAll($this->select()->union([
