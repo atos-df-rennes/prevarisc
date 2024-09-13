@@ -27,7 +27,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
      */
     public $serviceFormulaire;
 
-    public function init()
+    public function init(): void
     {
         $this->_helper->layout->setLayout('dashboard');
 
@@ -48,7 +48,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->serviceFormulaire = new Service_Formulaire();
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         // Titre de la page
         $this->view->assign('title', 'Calendrier des commissions');
@@ -112,7 +112,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         ));
     }
 
-    public function recupdatelieeAction()
+    public function recupdatelieeAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         $dbDateComm = new Model_DbTable_DateCommission();
@@ -130,7 +130,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
     }
 
     // Gestion de l'affectation des dossier et de l'ordre du jour ODJ
-    public function gestionodjAction()
+    public function gestionodjAction(): void
     {
         // récuperation des informations concernant la date de commission concernant l'ordre du jour
         $dbDateComm = new Model_DbTable_DateCommission();
@@ -192,7 +192,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('nbDossiers', count($listeDesDossiers));
     }
 
-    public function resizeodjAction()
+    public function resizeodjAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -217,7 +217,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function dropodjAction()
+    public function dropodjAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -241,7 +241,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function commissionselectionAction()
+    public function commissionselectionAction(): void
     {
         // Utilisée pour l'auto complétion
         if (isset($_GET['q'])) {
@@ -250,7 +250,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function recupevenementAction()
+    public function recupevenementAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         // Permet la récupération des différents éléments du calendrier pour la commission concernée
@@ -284,7 +284,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('items', $items);
     }
 
-    public function recupevenementodjAction()
+    public function recupevenementodjAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
 
@@ -382,7 +382,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('items', $items);
     }
 
-    public function affectedossodjAction()
+    public function affectedossodjAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -415,7 +415,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function dialogcommAction()
+    public function dialogcommAction(): void
     {
         $this->view->assign('do', $this->_getParam('do'));
         if ('edit' == $this->view->do) {
@@ -650,7 +650,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function adddatecommAction()
+    public function adddatecommAction(): void
     {
         // affiche une ligne suplémentaire dans le tableau de résumé des dates
         $dateAjoutee = new Zend_Date($this->_getParam('date'), Zend_Date::DATES, 'fr');
@@ -658,12 +658,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('dateAjouteeInput', $dateAjoutee->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY));
     }
 
-    public function adddatedialogcommAction()
+    public function adddatedialogcommAction(): void
     {
         echo 'date ajoutée';
     }
 
-    public function adddatesAction()
+    public function adddatesAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -781,7 +781,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function deplacecommissiondateAction()
+    public function deplacecommissiondateAction(): void
     {
         try {
             $date = new Zend_Date($_POST['debut'], Zend_Date::DATES, 'en');
@@ -815,7 +815,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function resizecommissiondateAction()
+    public function resizecommissiondateAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -839,7 +839,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function gestionheuresAction()
+    public function gestionheuresAction(): void
     {
         try {
             // Permet de prendre en compte ou non les horraires de passage en commission
@@ -904,7 +904,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function changementordreAction()
+    public function changementordreAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -932,7 +932,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function generationconvocAction()
+    public function generationconvocAction(): void
     {
         try {
             $dbDateCommPj = new Model_DbTable_DateCommissionPj();
@@ -1087,7 +1087,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         }
     }
 
-    public function generationodjAction()
+    public function generationodjAction(): void
     {
         $tabCommune = [];
         $dateCommId = $this->_getParam('dateCommId');
@@ -1229,7 +1229,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('heureDeb', $listeDossiers[0]['HEUREDEB_COMMISSION']);
     }
 
-    public function generationpvAction()
+    public function generationpvAction(): void
     {
         $dateCommId = $this->_getParam('dateCommId');
         $this->view->assign('idComm', $dateCommId);
@@ -1306,7 +1306,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('dossierComm', $listeDossiers);
     }
 
-    public function generationcompterenduAction()
+    public function generationcompterenduAction(): void
     {
         $dateCommId = $this->_getParam('dateCommId');
         $this->view->assign('idComm', $dateCommId);
@@ -1378,13 +1378,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $this->view->assign('dossierComm', $listeDossiers);
     }
 
-    public function alertsuppressionAction()
+    public function alertsuppressionAction(): void
     {
         $this->view->assign('commissionId', $this->_getParam('commissionId'));
         $this->view->assign('dateCommission', $this->_getParam('dateCommission'));
     }
 
-    public function validsuppressionAction()
+    public function validsuppressionAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         $this->view->assign('commissionId', $this->_getParam('commissionId'));
@@ -1424,7 +1424,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         $dateComm->delete();
     }
 
-    public function exportoutlookAction()
+    public function exportoutlookAction(): void
     {
         $idDateComm = $this->_getParam('dateCommId');
 
@@ -1479,7 +1479,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
         echo $ics;
     }
 
-    public function exportoutlookmoisAction()
+    public function exportoutlookmoisAction(): void
     {
         $idComm = $this->_getParam('CommId');
         $mois = $this->_getParam('Mois');

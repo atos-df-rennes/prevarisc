@@ -4,7 +4,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
 {
     public $path;
 
-    public function init()
+    public function init(): void
     {
         $this->path = REAL_DATA_PATH.DS.'uploads'.DS.'documents';
 
@@ -15,7 +15,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         ;
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -76,14 +76,14 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         $this->view->assign('liste_commission', $liste_commission);
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         $service_commission = new Service_Commission();
 
         $this->view->assign('liste_commission', $service_commission->getAll());
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             $this->_helper->layout->disableLayout();
@@ -119,7 +119,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
         ';
     }
 
-    public function suppdocAction()
+    public function suppdocAction(): void
     {
         try {
             $this->_helper->layout->disableLayout();

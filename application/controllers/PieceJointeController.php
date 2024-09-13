@@ -5,7 +5,7 @@ class PieceJointeController extends Zend_Controller_Action
     public $store;
     private $dbPj;
 
-    public function init()
+    public function init(): void
     {
         $this->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
 
@@ -19,7 +19,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->dbPj = new Model_DbTable_PieceJointe();
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         /** @var Zend_View $view */
         $view = $this->view;
@@ -71,7 +71,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->view->assign('displayDownloadButton', $displayDownloadButton);
     }
 
-    public function getAction()
+    public function getAction(): void
     {
         $type = null;
         $identifiant = null;
@@ -141,7 +141,7 @@ class PieceJointeController extends Zend_Controller_Action
         exit;
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         // Placement
         $this->view->assign('type', $this->_getParam('type'));
@@ -154,7 +154,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -295,7 +295,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -383,7 +383,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function checkAction()
+    public function checkAction(): void
     {
         // Modèle
         $DBused = new Model_DbTable_PieceJointe();

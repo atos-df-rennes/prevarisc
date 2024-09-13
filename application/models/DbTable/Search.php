@@ -205,7 +205,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         return $this;
     }
 
-    public function joinEtablissementDossier()
+    public function joinEtablissementDossier(): void
     {
         $this->select
             ->joinLeft('etablissementdossier', 'etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT')

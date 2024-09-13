@@ -54,7 +54,7 @@ class Model_DbTable_PrescriptionType extends Zend_Db_Table_Abstract
      * @param int|string $idOldType
      * @param mixed      $idNewType
      */
-    public function replaceId($idOldType, $idNewType)
+    public function replaceId($idOldType, $idNewType): void
     {
         $where = [];
         $data = ['ID_PRESCRIPTION_TYPE' => $idNewType];

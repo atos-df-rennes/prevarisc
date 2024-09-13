@@ -33,7 +33,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         return $this->gn4($informations['ID_CATEGORIE'], $type, $informations['LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS'] ? 1 : 0);
     }
 
-    public function apply()
+    public function apply(): void
     {
         $sql = 'UPDATE etablissementinformations
                 INNER JOIN periodicite ON periodicite.ID_CATEGORIE = etablissementinformations.ID_CATEGORIE AND periodicite.ID_TYPE = etablissementinformations.ID_TYPE AND periodicite.LOCALSOMMEIL_PERIODICITE = etablissementinformations.LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS

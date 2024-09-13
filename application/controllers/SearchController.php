@@ -2,12 +2,12 @@
 
 class SearchController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->redirector('etablissement');
     }
 
-    public function etablissementAction()
+    public function etablissementAction(): void
     {
         $this->_helper->layout->setLayout('search');
 
@@ -276,7 +276,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function dossierAction()
+    public function dossierAction(): void
     {
         $this->_helper->layout->setLayout('search');
 
@@ -539,7 +539,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function utilisateurAction()
+    public function utilisateurAction(): void
     {
         $this->_helper->layout->setLayout('search');
 
@@ -570,7 +570,7 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
-    public function displayAjaxSearchEtablissementAction()
+    public function displayAjaxSearchEtablissementAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -588,7 +588,7 @@ class SearchController extends Zend_Controller_Action
         echo $html;
     }
 
-    public function displayAjaxSearchDossierAction()
+    public function displayAjaxSearchDossierAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

@@ -2,7 +2,7 @@
 
 class UsersController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -15,7 +15,7 @@ class UsersController extends Zend_Controller_Action
         $this->view->assign('groupes', $service_user->getAllGroupes());
     }
 
-    public function editAction()
+    public function editAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -49,7 +49,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -84,7 +84,7 @@ class UsersController extends Zend_Controller_Action
         $this->render('edit');
     }
 
-    public function matriceDesDroitsAction()
+    public function matriceDesDroitsAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -144,7 +144,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function editGroupAction()
+    public function editGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -166,7 +166,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function addGroupAction()
+    public function addGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -188,7 +188,7 @@ class UsersController extends Zend_Controller_Action
         $this->render('edit-group');
     }
 
-    public function deleteGroupAction()
+    public function deleteGroupAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -206,7 +206,7 @@ class UsersController extends Zend_Controller_Action
         $this->_helper->redirector('index', null, null);
     }
 
-    public function ressourcesSpecialiseesAction()
+    public function ressourcesSpecialiseesAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -249,7 +249,7 @@ class UsersController extends Zend_Controller_Action
         $this->view->assign('classes', $service_classe->getAll());
     }
 
-    public function addRessourceSpecialiseeAction()
+    public function addRessourceSpecialiseeAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -505,7 +505,7 @@ class UsersController extends Zend_Controller_Action
         }
     }
 
-    public function deleteRessourceSpecialiseeAction()
+    public function deleteRessourceSpecialiseeAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

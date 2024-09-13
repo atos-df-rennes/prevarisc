@@ -2,7 +2,7 @@
 
 class TableauDesPeriodicitesController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         // Définition du layout
         $this->_helper->layout->setLayout('menu_admin');
@@ -32,7 +32,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
         $this->view->assign('tableau', $result);
     }
 
-    public function saveAction()
+    public function saveAction(): void
     {
         try {
             // Model des périodicités
@@ -74,7 +74,7 @@ class TableauDesPeriodicitesController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function applyAction()
+    public function applyAction(): void
     {
         try {
             // Model des périodicités

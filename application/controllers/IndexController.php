@@ -7,7 +7,7 @@ class IndexController extends Zend_Controller_Action
      */
     public $servicePlatau;
 
-    public function init()
+    public function init(): void
     {
         /** @var Zend_Controller_Action_Helper_ContextSwitch $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -19,7 +19,7 @@ class IndexController extends Zend_Controller_Action
         $this->servicePlatau = new Service_Platau();
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $service_user = new Service_User();
         $service_dashboard = new Service_Dashboard();
@@ -76,7 +76,7 @@ class IndexController extends Zend_Controller_Action
         $this->render('index');
     }
 
-    public function blocAction()
+    public function blocAction(): void
     {
         $this->_helper->layout->disableLayout();
 
@@ -106,7 +106,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->assign('bloc', $bloc);
     }
 
-    public function addMessageAction()
+    public function addMessageAction(): void
     {
         $service_feed = new Service_Feed();
         $service_user = new Service_User();
@@ -123,7 +123,7 @@ class IndexController extends Zend_Controller_Action
         }
     }
 
-    public function deleteMessageAction()
+    public function deleteMessageAction(): void
     {
         $service_feed = new Service_Feed();
 

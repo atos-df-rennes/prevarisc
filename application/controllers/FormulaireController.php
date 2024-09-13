@@ -42,7 +42,7 @@ class FormulaireController extends Zend_Controller_Action
      */
     public $serviceChamp;
 
-    public function init()
+    public function init(): void
     {
         $this->modelChamp = new Model_DbTable_Champ();
         $this->modelChampValeurListe = new Model_DbTable_ChampValeurListe();

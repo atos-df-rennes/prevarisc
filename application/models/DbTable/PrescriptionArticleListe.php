@@ -41,7 +41,7 @@ class Model_DbTable_PrescriptionArticleListe extends Zend_Db_Table_Abstract
      * @param int|string $idOldArticle
      * @param mixed      $idNewArticle
      */
-    public function replace($idOldArticle, $idNewArticle)
+    public function replace($idOldArticle, $idNewArticle): void
     {
         $where = [];
         $data = ['ID_ARTICLE' => $idNewArticle];

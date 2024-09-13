@@ -40,7 +40,7 @@ class Model_DbTable_PrescriptionTexteListe extends Zend_Db_Table_Abstract
      * @param int|string $idOldTexte
      * @param mixed      $idNewTexte
      */
-    public function replace($idOldTexte, $idNewTexte)
+    public function replace($idOldTexte, $idNewTexte): void
     {
         $where = [];
         $data = ['ID_TEXTE' => $idNewTexte];

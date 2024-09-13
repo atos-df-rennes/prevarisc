@@ -116,7 +116,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
         $this->delete("ID_DOSSIER_AFFECT = '".$idDossier."'");
     }
 
-    public function deleteDateDossierModifDateAffect($idDossier, $idDateComm)
+    public function deleteDateDossierModifDateAffect($idDossier, $idDateComm): void
     {
         $this->delete([
             'ID_DOSSIER_AFFECT = ?' => $idDossier,

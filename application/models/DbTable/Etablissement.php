@@ -318,7 +318,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
 
     // Recalcule les périod et cat des enfants d'un ets
 
-    public function recalcEnfants($id_ets, $id_info, $historique)
+    public function recalcEnfants($id_ets, $id_info, $historique): void
     {
         $search = new Model_DbTable_Search();
         $etablissement_enfants = $search->setItem('etablissement')->setCriteria('etablissementlie.ID_ETABLISSEMENT', $id_ets)->run();

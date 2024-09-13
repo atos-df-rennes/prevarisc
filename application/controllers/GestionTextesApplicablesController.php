@@ -2,7 +2,7 @@
 
 class GestionTextesApplicablesController extends Zend_Controller_Action
 {
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->_helper->layout->setLayout('menu_admin');
 
@@ -11,7 +11,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
         $this->view->assign('listeTextesAppl', $dbTextesAppl->recupTextesAppl());
     }
 
-    public function formtexteapplAction()
+    public function formtexteapplAction(): void
     {
         // Cas d'une création d'un texte
         $dbTypeTextesAppl = new Model_DbTable_TypeTextesAppl();
@@ -23,7 +23,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
         }
     }
 
-    public function saveAction()
+    public function saveAction(): void
     {
         try {
             // sauvegarde d'un nouveau texte ou mise à jour d'un texte existant
@@ -71,7 +71,7 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function updateorderAction()
+    public function updateorderAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
         $tabId = explode(',', $this->_getParam('tableUpdate'));

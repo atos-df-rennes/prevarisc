@@ -4,7 +4,7 @@ class SessionController extends Zend_Controller_Action
 {
     public const MAX_LOGIN_ATTEMPTS = 2;
 
-    public function loginAction()
+    public function loginAction(): void
     {
         $this->_helper->layout->setLayout('login');
 
@@ -120,7 +120,7 @@ class SessionController extends Zend_Controller_Action
         }
     }
 
-    public function logoutAction()
+    public function logoutAction(): void
     {
         $auth = Zend_Auth::getInstance();
 

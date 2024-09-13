@@ -81,7 +81,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
     /**
      * @param float|int|string $id
      */
-    public function deleteGroupement($id)
+    public function deleteGroupement($id): void
     {
         $this->getAdapter()->query("DELETE FROM `groupementcommune` WHERE `groupementcommune`.`ID_GROUPEMENT` = {$id};");
         $this->getAdapter()->query("DELETE FROM `groupementpreventionniste` WHERE `groupementpreventionniste`.`ID_GROUPEMENT` = {$id};");

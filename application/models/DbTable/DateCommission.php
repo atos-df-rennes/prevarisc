@@ -223,7 +223,7 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         return $this->getAdapter()->fetchAll($select);
     }
 
-    public function updateDependingDossierDates($datecommission)
+    public function updateDependingDossierDates($datecommission): void
     {
         $dbAffectDossier = new Model_DbTable_DossierAffectation();
         $dbDossier = new Model_DbTable_Dossier();

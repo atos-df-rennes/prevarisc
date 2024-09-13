@@ -142,7 +142,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return new $className($options);
     }
 
-    public function _initTranslator()
+    public function _initTranslator(): void
     {
         $translator = new Zend_Translate(
             [

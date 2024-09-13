@@ -6,7 +6,7 @@ class CommissionController extends Zend_Controller_Action
     public const ID_GENRE_ETABLISSEMENT = 2;
     public const ID_GENRE_IGH = 5;
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -50,7 +50,7 @@ class CommissionController extends Zend_Controller_Action
 
     // Champ de compétence de la commission
 
-    public function competencesAction()
+    public function competencesAction(): void
     {
         // Les modèles
         $model_regles = new Model_DbTable_CommissionRegle();
@@ -58,7 +58,7 @@ class CommissionController extends Zend_Controller_Action
         $this->view->assign('array_regles', $model_regles->get($this->_request->id_commission));
     }
 
-    public function addRegleAction()
+    public function addRegleAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -84,7 +84,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function deleteRegleAction()
+    public function deleteRegleAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -119,7 +119,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function saveReglesAction()
+    public function saveReglesAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -214,7 +214,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function applyReglesAction()
+    public function applyReglesAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -282,7 +282,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Membres de la commission
-    public function membresAction()
+    public function membresAction(): void
     {
         // Les modèles
         $model_types = new Model_DbTable_Type();
@@ -314,7 +314,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function addMembreAction()
+    public function addMembreAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -343,7 +343,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function deleteMembreAction()
+    public function deleteMembreAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -385,7 +385,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function saveMembresAction()
+    public function saveMembresAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -486,7 +486,7 @@ class CommissionController extends Zend_Controller_Action
     public function contactsAction() {}
 
     // Courriers types des membres de la commission
-    public function courriersAction()
+    public function courriersAction(): void
     {
         // Les modèles
         $model_membres = new Model_DbTable_CommissionMembre();
@@ -496,7 +496,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function documentsAction()
+    public function documentsAction(): void
     {
         // Les modèles
         $model_commission = new Model_DbTable_Commission();
@@ -508,7 +508,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function addDocumentAction()
+    public function addDocumentAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -560,7 +560,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function deleteDocumentAction()
+    public function deleteDocumentAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -592,7 +592,7 @@ class CommissionController extends Zend_Controller_Action
     }
 
     // Courriers types des membres de la commission
-    public function addCourrierAction()
+    public function addCourrierAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
@@ -645,7 +645,7 @@ class CommissionController extends Zend_Controller_Action
         }
     }
 
-    public function deleteCourrierAction()
+    public function deleteCourrierAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender();
