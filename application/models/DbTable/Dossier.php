@@ -608,7 +608,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
      *
      * @param mixed $idDossier
      */
-    public function getListeDossierFromDossier($idDossier)
+    public function getListeDossierFromDossier($idDossier): array
     {
         $dossEtab = [];
         $nbdossiermax = Service_Utils_DossiersMaxNumber::value();
@@ -640,7 +640,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         return $dossEtab;
     }
 
-    public function getListeDossierFromDossierN($idDossier)
+    public function getListeDossierFromDossierN($idDossier): array
     {
         $dossEtab = [];
         $nbdossiermax = Service_Utils_DossiersMaxNumber::value();
