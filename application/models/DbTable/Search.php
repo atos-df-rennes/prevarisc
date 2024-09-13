@@ -215,7 +215,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
     }
 
     // Filtre
-    public function setCriteria($key, $value = null, $exact = true, $clause = 'where'): self
+    public function setCriteria(string $key, $value = null, $exact = true, $clause = 'where'): self
     {
         $string = null;
 
@@ -237,7 +237,7 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         return $this;
     }
 
-    public function sup($key, $value): self
+    public function sup(string $key, $value): self
     {
         $this->select->where($key.'>'.$this->getAdapter()->quote($value));
 
