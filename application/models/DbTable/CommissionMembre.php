@@ -74,7 +74,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     // Formaliser les resultats envoyés
-    private function mapResult(array $array, $key): array
+    private function mapResult(array $array, string $key): array
     {
         $result = [];
 
