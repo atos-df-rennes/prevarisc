@@ -2,8 +2,10 @@
 
 class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'dossier'; // Nom de la base
-    protected $_primary = 'ID_DOSSIER'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'dossier';
+    // Clé primaire
+    protected $_primary = 'ID_DOSSIER';
 
     // Fonction qui récupére toutes les infos générales d'un dossier
 
@@ -221,13 +223,13 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->from('etablissementdossier', [])
             ->join('dossier', 'etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER', ['ID_DOSSIER', 'LIBELLE_DOSSIER', 'OBJET_DOSSIER', 'DESCRIPTIFGEN_DOSSIER', 'DATESECRETARIAT_DOSSIER'])
             ->join('dossiertype', 'dossier.TYPE_DOSSIER = dossiertype.ID_DOSSIERTYPE', 'VISITEBOOL_DOSSIERTYPE')
-            ->where("etablissementdossier.ID_ETABLISSEMENT = {$etablissement}")
+            ->where('etablissementdossier.ID_ETABLISSEMENT = ' . $etablissement)
             ->where('dossier.DATESUPPRESSION_DOSSIER IS NULL')
             ->order('dossier.DATESECRETARIAT_DOSSIER DESC')
         ;
 
         if ('1' == $type || '0' == $type) {
-            $select->where("dossiertype.VISITEBOOL_DOSSIERTYPE = {$type}");
+            $select->where('dossiertype.VISITEBOOL_DOSSIERTYPE = ' . $type);
         }
 
         return $this->fetchAll($select)->toArray();

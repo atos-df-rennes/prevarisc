@@ -2,8 +2,10 @@
 
 class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'commissionregle'; // Nom de la base
-    protected $_primary = ['ID_REGLE']; // Clé primaire
+    // Nom de la base
+    protected $_name = 'commissionregle';
+    // Clé primaire
+    protected $_primary = ['ID_REGLE'];
 
     /**
      * @param int|string $id_commission
@@ -49,8 +51,8 @@ class Model_DbTable_CommissionRegle extends Zend_Db_Table_Abstract
     {
         // On fait une union entre ce qu'il y a dans la base et les critères enregistrés
         $return = $this->fetchAll($this->select()->union([
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
-            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, "{$first_table}.{$key} = {$second_table}.{$key} AND ID_REGLE = {$id_regle}"),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinLeft($second_table, sprintf('%s.%s = %s.%s AND ID_REGLE = %s', $first_table, $key, $second_table, $key, $id_regle)),
+            $this->select()->setIntegrityCheck(false)->from($first_table)->joinRight($second_table, sprintf('%s.%s = %s.%s AND ID_REGLE = %s', $first_table, $key, $second_table, $key, $id_regle)),
         ]))->toArray();
 
         // Requete sur la table finale

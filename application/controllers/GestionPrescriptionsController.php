@@ -110,11 +110,11 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 'title' => 'La catégorie a bien été sauvegardée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde de la catégorie',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -170,11 +170,11 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 'title' => 'Le texte a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -230,11 +230,11 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                 'title' => 'L\'article a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de la sauvegarde de l\'article',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de la sauvegarde de l'article",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -389,7 +389,7 @@ class GestionPrescriptionsController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression effectuée.', 'message' => 'Le texte a bien été supprimé']);
                 }
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de l\'enregistrement.', 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
+                $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
         }
 

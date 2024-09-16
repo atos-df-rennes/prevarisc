@@ -46,6 +46,7 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                     $item->LIBELLE_COMMISSION = $_POST['nom_commission'][$i];
                     $item->save();
                 }
+
                 $dossier = REAL_DATA_PATH.DS.'uploads'.DS.'documents'.DS.$item->ID_COMMISSION;
                 if (!is_dir($dossier)) {
                     mkdir($dossier);
@@ -57,11 +58,11 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 'title' => 'Les informations ont été sauvegardées',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -116,11 +117,11 @@ class GestionDesCommissionsController extends Zend_Controller_Action
                 'title' => 'La commission a bien été sauvegardée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }

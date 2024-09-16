@@ -61,6 +61,7 @@ class ChangementController extends Zend_Controller_Action
                 $user['MAIL_UTILISATEURINFORMATIONS']
             );
         }
+
         $this->view->assign('tos', implode(', ', $tos));
         $this->view->assign('mails', implode(';', $mails));
 

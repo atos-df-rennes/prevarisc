@@ -59,11 +59,11 @@ class GestionTextesApplicablesController extends Zend_Controller_Action
                 'title' => 'Le texte a bien été sauvegardé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la sauvegarde du texte',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 

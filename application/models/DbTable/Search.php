@@ -3,9 +3,13 @@
 class Model_DbTable_Search extends Zend_Db_Table_Abstract
 {
     public $numpage;
+
     protected $_name = 'type';
+
     private $select;
+
     private $item;
+
     private $nb_items = 100;
 
     // On demare la recherche

@@ -71,12 +71,12 @@ class GestionDesCommunesController extends Zend_Controller_Action
                     'message' => 'La commune '.$commune->LIBELLE_COMMUNE.' a été enregistrée.',
                 ]
             );
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger(
                 [
                     'context' => 'error',
                     'title' => 'Aie',
-                    'message' => $ex->getMessage(),
+                    'message' => $exception->getMessage(),
                 ]
             );
         }

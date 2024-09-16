@@ -41,6 +41,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                 }
             }
         }
+
         closedir($dirVer);
         sort($fichierVer);
 
@@ -66,6 +67,7 @@ class GestionDesDocumentsController extends Zend_Controller_Action
                     }
                 }
             }
+
             closedir($dir);
             sort($fichier);
 
@@ -100,18 +102,20 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if (!move_uploaded_file($_FILES['fichier']['tmp_name'], $this->path.DS.$this->_getParam('commission').DS.$filename)) {
                 throw new Exception('Impossible de déplacer le fichier uploadé');
             }
+
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du document',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du document",
+                'message' => $exception->getMessage(),
             ]);
         }
+
         echo '
             <script type="text/javascript">
                 window.top.window.location.reload();
@@ -137,13 +141,13 @@ class GestionDesDocumentsController extends Zend_Controller_Action
             if ($exist === $exist2) {
                 throw new Exception('Impossible de supprimer le fichier '.$filename);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du document',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
-            echo $e->getMessage();
+            echo $exception->getMessage();
         }
     }
 }

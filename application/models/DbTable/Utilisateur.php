@@ -6,7 +6,9 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
      * @var mixed|Zend_Db_Select
      */
     public $select;
+
     protected $_name = 'utilisateur';
+
     protected $_primary = 'ID_UTILISATEUR';
 
     public function getDroits($id_user)
@@ -53,7 +55,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         ;
 
         if (!empty($group)) {
-            $select->where("ID_GROUPE = {$group}");
+            $select->where('ID_GROUPE = ' . $group);
         }
 
         return $this->fetchAll($select)->toArray();
@@ -68,6 +70,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         if (null !== $id_user) {
             $select->where('ID_UTILISATEUR <> ?', $id_user);
         }
+
         $select->limit(1);
 
         $result = $this->fetchRow($select);
@@ -228,6 +231,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                             $name[$j] = $singleResource_exploded2;
                             $list_resources_finale[] = implode('_', $name);
                         }
+
                         unset($list_resources_finale[$i]);
                         $list_resources_finale = array_unique($list_resources_finale);
                         $list_resources_finale = array_values($list_resources_finale);
@@ -250,9 +254,11 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                         if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $commissions;
                         }
+
                         if ('1' === $resource_exploded[5]) {
                             $resource_exploded[5] = $groupements;
                         }
+
                         if ('1' === $resource_exploded[6]) {
                             $resource_exploded[6] = $commune;
                         }
@@ -264,6 +270,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                         if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $groupements;
                         }
+
                         if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $commune;
                         }
@@ -274,9 +281,11 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                         if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $commissions;
                         }
+
                         if ('1' === $resource_exploded[4]) {
                             $resource_exploded[4] = $groupements;
                         }
+
                         if ('1' === $resource_exploded[5]) {
                             $resource_exploded[5] = $commune;
                         }
@@ -290,6 +299,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
                         if ('1' === $resource_exploded[2]) {
                             $resource_exploded[2] = $groupements;
                         }
+
                         if ('1' === $resource_exploded[3]) {
                             $resource_exploded[3] = $commune;
                         }

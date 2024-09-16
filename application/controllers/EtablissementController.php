@@ -572,8 +572,8 @@ class EtablissementController extends Zend_Controller_Action
 
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été supprimé.']);
             $this->redirect('/search/etablissement?label=&page=1');
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$e->getMessage().')']);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été supprimé. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
     }
 

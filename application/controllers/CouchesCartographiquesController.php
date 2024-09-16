@@ -79,8 +79,8 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         try {
             $this->serviceCarto->delete($this->getRequest()->getParam('id'));
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Suppression réussie !', 'message' => 'La couche cartographique a été supprimée.']);
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$e->getMessage().')']);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'La couche cartographique n\'a pas été supprimée. Veuillez rééssayez. ('.$exception->getMessage().')']);
         }
 
         $this->_helper->redirector('list');

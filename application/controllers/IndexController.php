@@ -117,8 +117,9 @@ class IndexController extends Zend_Controller_Action
                 $service_feed->addMessage($this->_request->getParam('type'), $this->_request->getParam('text'), Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], $this->_request->getParam('conf'));
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message ajouté !', 'message' => 'Le message a bien été ajouté.']);
             } catch (Exception $e) {
-                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de l\'ajout du message : '.$e->getMessage()]);
+                $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => "Erreur lors de l'ajout du message : ".$e->getMessage()]);
             }
+
             $this->_helper->redirector('index', 'index');
         }
     }
@@ -130,9 +131,10 @@ class IndexController extends Zend_Controller_Action
         try {
             $service_feed->deleteMessage($this->_request->getParam('id'));
             $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Message supprimé !', 'message' => 'Le message a bien été supprimé.']);
-        } catch (Exception $e) {
-            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$e->getMessage()]);
+        } catch (Exception $exception) {
+            $this->_helper->flashMessenger(['context' => 'danger', 'title' => 'Erreur !', 'message' => 'Erreur lors de la suppression du message : '.$exception->getMessage()]);
         }
+
         $this->_helper->redirector('index', 'index');
     }
 

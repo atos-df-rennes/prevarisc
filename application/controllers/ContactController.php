@@ -43,6 +43,7 @@ class ContactController extends Zend_Controller_Action
                     }
                 }
             }
+
             $this->view->assign('contacts_parent', $array);
         }
 
@@ -135,11 +136,11 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été ajouté',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
-                'title' => 'Erreur lors de l\'ajout du contact',
-                'message' => $e->getMessage(),
+                'title' => "Erreur lors de l'ajout du contact",
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -175,11 +176,11 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été modifié',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la modification du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -253,11 +254,11 @@ class ContactController extends Zend_Controller_Action
                 'title' => 'Le contact a bien été supprimé',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression du contact',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }

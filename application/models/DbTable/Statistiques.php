@@ -3,7 +3,9 @@
 class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
 {
     public $etablissements;
+
     protected $_name = 'etablissement';
+
     protected $_primary = 'ID_ETABLISSEMENT';
 
     private $ets_date;
@@ -68,6 +70,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         if (null == $dateDebut) {
             $dateDebut = date('01/01/'.date('Y'), time());
         }
+
         if (null == $dateFin) {
             $dateFin = date('31/12/'.date('Y'), time());
         }

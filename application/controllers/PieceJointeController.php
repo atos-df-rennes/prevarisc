@@ -3,6 +3,7 @@
 class PieceJointeController extends Zend_Controller_Action
 {
     public $store;
+
     private $dbPj;
 
     public function init(): void
@@ -219,6 +220,7 @@ class PieceJointeController extends Zend_Controller_Action
 
                 throw new Exception('Impossible de charger la pièce jointe. Veuillez contacter votre service informatique.');
             }
+
             // Dans le cas d'un dossier
             if ('dossier' == $this->_getParam('type')) {
                 // Modèles
@@ -283,11 +285,11 @@ class PieceJointeController extends Zend_Controller_Action
 
             // CALLBACK
             echo "<script type='text/javascript'>window.top.window.callback('".$nouvellePJ->ID_PIECEJOINTE."', '".$extension."');</script>";
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout de la pièce jointe',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
 
             // CALLBACK
@@ -359,9 +361,11 @@ class PieceJointeController extends Zend_Controller_Action
                 if (file_exists($file_path)) {
                     unlink($file_path);
                 }
+
                 if (file_exists($miniature_path)) {
                     unlink($miniature_path);
                 }
+
                 $DBitem->delete('ID_PIECEJOINTE = '.(int) $this->_request->id_pj);
                 $pj->delete();
             }
@@ -371,11 +375,11 @@ class PieceJointeController extends Zend_Controller_Action
                 'title' => 'La pièce jointe a été supprimée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression de la pièce jointe',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 

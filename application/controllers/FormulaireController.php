@@ -122,6 +122,7 @@ class FormulaireController extends Zend_Controller_Action
             if ('Liste' === $champ['TYPE']) {
                 $champs[$key]['VALEURS'] = $this->modelChampValeurListe->getValeurListeByChamp($champ['ID_CHAMP']);
             }
+
             if ('Parent' === $champ['TYPE']) {
                 $champs[$key]['LIST_CHAMP'] = $this->modelChamp->getChampsFromParent($champ['ID_CHAMP']);
             }

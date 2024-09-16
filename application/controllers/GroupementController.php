@@ -99,6 +99,7 @@ class GroupementController extends Zend_Controller_Action
                     if ('null' == $_POST['ID_UTILISATEURCIVILITE']) {
                         unset($_POST['ID_UTILISATEURCIVILITE']);
                     }
+
                     unset($_POST['ID_FONCTION']);
                     $id = $DB_informations->insert(array_intersect_key($_POST, $DB_informations->info('metadata')));
                     $new_groupement->ID_UTILISATEURINFORMATIONS = $id;
@@ -106,6 +107,7 @@ class GroupementController extends Zend_Controller_Action
                     if ('null' == $_POST['ID_UTILISATEURCIVILITE']) {
                         unset($_POST['ID_UTILISATEURCIVILITE']);
                     }
+
                     unset($_POST['ID_FONCTION']);
                     $info->setFromArray(array_intersect_key($_POST, $DB_informations->info('metadata')))->save();
                 }
@@ -150,11 +152,11 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Ajout réussi !',
                 'message' => 'Le groupement '.$new_groupement->LIBELLE_GROUPEMENT.' a été ajouté.',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
@@ -180,11 +182,11 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Suppression réussie !',
                 'message' => 'Le groupement a été supprimé.',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 
@@ -210,13 +212,14 @@ class GroupementController extends Zend_Controller_Action
                 'title' => 'Ajout réussi !',
                 'message' => 'Le traitement est ok.',
             ]);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Aie',
-                'message' => $ex->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
+
         // Redirection
         $this->_helper->redirector('index');
     }

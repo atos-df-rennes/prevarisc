@@ -140,7 +140,7 @@ class StatistiquesController extends Zend_Controller_Action
 
         if ('json' != $this->_getParam('format')) {
             $date = new Zend_Date($this->_getParam('date'), Zend_Date::DATES);
-            $this->view->assign('resume', 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
+            $this->view->assign('resume', 'Prochaines visites de contrôle périodique à faire sur '.array_search($this->_getParam('commune'), $communes, true).' à la date du '.$date->get(Zend_Date::WEEKDAY.' '.Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR));
         }
 
         $this->extractionProcess(
@@ -255,6 +255,7 @@ class StatistiquesController extends Zend_Controller_Action
                     $results[$key]['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = "<a href='/etablissement/edit/id/".$row['ID_ETABLISSEMENT']."'>Modifier la periodicité</a>";
                 }
             }
+
             $this->view->assign('results', $results);
             $this->render('extraction');
         }

@@ -137,6 +137,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOption('resources');
         $options = $options['dataStore'];
+
         $className = $options['adapter'];
 
         return new $className($options);

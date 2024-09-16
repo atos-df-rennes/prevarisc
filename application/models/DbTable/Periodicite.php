@@ -3,8 +3,11 @@
 class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
 {
     public const ID_GENRE_ETABLISSEMENT = 2;
-    protected $_name = 'periodicite'; // Nom de la base
-    protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE']; // Clé primaire
+
+    // Nom de la base
+    protected $_name = 'periodicite';
+    // Clé primaire
+    protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE'];
 
     public function gn4($categorie, $type, $local_sommeil): string
     {
@@ -53,10 +56,10 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
         try {
             $db->getConnection()->query($sql);
             $db->getConnection()->commit();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $db->rollBack();
 
-            throw $e;
+            throw $exception;
         }
     }
 }
