@@ -3,7 +3,9 @@
 class Service_Dossier
 {
     public const ID_DOSSIERTYPE_ETUDE = 1;
+
     public const ID_DOSSIERTYPE_VISITE = 2;
+
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
 
     /**
@@ -145,6 +147,7 @@ class Service_Dossier
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
+
             $DBitem->delete('ID_PIECEJOINTE = '.(int) $id_pj);
             $pj->delete();
         }
@@ -399,6 +402,7 @@ class Service_Dossier
             $infos_prescription['assoc'] = $liste_assoc;
             $infos_prescription['LIBELLE_PRESCRIPTION_DOSSIER'] = $liste_assoc[0]['PRESCRIPTIONTYPE_LIBELLE'];
         }
+
         $infos_prescription['DATE_LEVEE'] = Service_Utils_Date::convertFromMySQL($infos_prescription['DATE_LEVEE']);
 
         return $infos_prescription;
@@ -475,11 +479,13 @@ class Service_Dossier
                 } else {
                     $newAssoc->ID_TEXTE = 1;
                 }
+
                 if (null != $post['article'][$i] && '' != $post['article'][$i] && 0 != $post['article'][$i]) {
                     $newAssoc->ID_ARTICLE = $post['article'][$i];
                 } else {
                     $newAssoc->ID_ARTICLE = 1;
                 }
+
                 $newAssoc->save();
             }
         } elseif ('edit-type' == $post['action']) {
@@ -557,6 +563,7 @@ class Service_Dossier
                 } else {
                     $newAssoc->ID_ARTICLE = 1;
                 }
+
                 $newAssoc->save();
             }
 
@@ -666,6 +673,7 @@ class Service_Dossier
             if (array_key_exists(0, $ue) && array_key_exists('PRESCRIPTIONREGL_LIBELLE', $ue[0])) {
                 $prescEdit->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['PRESCRIPTIONREGL_LIBELLE'];
             }
+
             $prescEdit->TYPE_PRESCRIPTION_DOSSIER = 0;
             $prescEdit->NUM_PRESCRIPTION_DOSSIER = $j++;
             $prescEdit->save();
@@ -719,6 +727,7 @@ class Service_Dossier
             if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
                 $etablissementInfos['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
             }
+
             $this->etablissement['etablissementInfos'] = $etablissementInfos;
 
             if (null != $this->etablissement['etablissementInfos']['general']['ID_DOSSIER_DONNANT_AVIS']) {
@@ -730,6 +739,7 @@ class Service_Dossier
 
             return $this->etablissement;
         }
+
         if (null != $id_dossier) {
             $tabEtablissement = $DBdossier->getEtablissementDossier((int) $id_dossier);
             $this->listeEtablissement = $tabEtablissement;
@@ -740,6 +750,7 @@ class Service_Dossier
                 if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
                     $this->listeEtablissement[$val]['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
                 }
+
                 $this->listeEtablissement[$val]['infosEtab'] = $etablissementInfos;
             }
 
@@ -772,9 +783,11 @@ class Service_Dossier
             if (null == $dossier->DATEVISITE_DOSSIER) {
                 return new Zend_Date($date, Zend_Date::DATES);
             }
+
             if ('' == $dossier->DATEVISITE_DOSSIER) {
                 return new Zend_Date($date, Zend_Date::DATES);
             }
+
             $date = $dossier->DATEVISITE_DOSSIER;
 
             return new Zend_Date($date, Zend_Date::DATES);
@@ -870,6 +883,7 @@ class Service_Dossier
         if (!$date) {
             $date = new DateTime();
         }
+
         $DB_dossier = new Model_DbTable_Dossier();
 
         $dossier = $DB_dossier->find($idDossier)->current();
@@ -878,6 +892,7 @@ class Service_Dossier
             $DB_etsDossier = new Model_DbTable_EtablissementDossier();
             $deleteDossier = count($DB_etsDossier->getEtablissementListe($idDossier)) <= 1;
         }
+
         if ($deleteDossier) {
             $dossier->DATESUPPRESSION_DOSSIER = $date->format('Y-m-d');
             $idDeleteBy = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];

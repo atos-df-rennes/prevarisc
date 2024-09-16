@@ -12,14 +12,18 @@ use Utils\Rector\Rector\DynamicViewPropertyToAssignRector;
 return RectorConfig::configure()
     ->withPaths([
         __DIR__.'/application',
+        __DIR__.'/tests',
     ])
+    ->withSkipPath(__DIR__.'/application/cache/UnserializedMemcache.php')
+    ->withRootFiles()
     ->withPhpVersion(PhpVersion::PHP_71)
     ->withPhpSets(php71: true)
-    ->withPreparedSets(
-        deadCode: true,
-        codeQuality: true,
-        earlyReturn: true,
-    )
+    ->withPhpPolyfill()
+    ->withTypeCoverageLevel(50)
+    ->withDeadCodeLevel(50)
+    ->withCodeQualityLevel(50)
+    ->withImportNames(removeUnusedImports: true)
+    ->withPreparedSets(codingStyle: true, privatization: true, earlyReturn: true)
     ->withSkip([
         RemoveUnusedPromotedPropertyRector::class,
         CompleteDynamicPropertiesRector::class,

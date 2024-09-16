@@ -7,8 +7,11 @@ use Sabre\VObject\Component\VTimeZone;
 class Api_Service_Calendar
 {
     public const LF = "\r\n";
+
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
+
     public const ID_GENRE_CELLULE = 3;
+
     public const ID_AVIS_DEFAVORABLE = 2;
 
     public function sync($userid, $commission = null): void
@@ -58,7 +61,7 @@ class Api_Service_Calendar
         echo $calendar->serialize();
     }
 
-    private function getVTimezoneComponent(\Sabre\VObject\Component\VCalendar $calendar): VTimeZone
+    private function getVTimezoneComponent(VCalendar $calendar): VTimeZone
     {
         $vtimezone = new VTimeZone($calendar, 'VTIMEZONE');
         $daylight = new Component($calendar, 'DAYLIGHT', [
@@ -137,6 +140,7 @@ class Api_Service_Calendar
             } else {
                 $etsLibelle = '';
             }
+
             $commune = $ets && count($ets['adresses']) > 0 ? $ets['adresses'][0]['LIBELLE_COMMUNE'] : '';
             // Cas d'une commission en salle
             if (1 === $commissionEvent['ID_COMMISSIONTYPEEVENEMENT']) {
@@ -145,6 +149,7 @@ class Api_Service_Calendar
                 } else {
                     $libelleSum = $commissionEvent['OBJET_DOSSIER'];
                 }
+
                 $summary = sprintf(
                     '#%s %s (%s) : %s %s - %s',
                     $ets ? $ets['general']['NUMEROID_ETABLISSEMENT'] : '',
@@ -177,6 +182,7 @@ class Api_Service_Calendar
                     $geo = '';
                 }
             }
+
             $dateStartHour = $commissionEvent['HEURE_DEB_AFFECT'] ?
                                 'HEURE_DEB_AFFECT' : 'HEUREDEB_COMMISSION';
             $dateEndHour = $commissionEvent['HEURE_FIN_AFFECT'] ?
@@ -291,6 +297,7 @@ class Api_Service_Calendar
                 $serviceInstruct = [] === $serviceInstruct ?
                                     null : $serviceInstruct[0];
             }
+
             if ($maire && [] !== $maire) {
                 $corpus .= sprintf(
                     'Coordonnées du service instructeur :%s%s%s',
@@ -378,6 +385,7 @@ class Api_Service_Calendar
         if (empty($preventionnistes[$index]['GRADE_UTILISATEURINFORMATIONS'])) {
             return false;
         }
+
         if (empty($preventionnistes[$index]['PRENOM_UTILISATEURINFORMATIONS'])) {
             return false;
         }
@@ -408,24 +416,28 @@ class Api_Service_Calendar
                     $user['VILLEADRESSE_UTILISATEURINFORMATIONS']
                 );
             }
+
             if ($user['TELFIXE_UTILISATEURINFORMATIONS']) {
                 $str .= sprintf(
                     ', %s',
                     $user['TELFIXE_UTILISATEURINFORMATIONS']
                 );
             }
+
             if ($user['TELFAX_UTILISATEURINFORMATIONS']) {
                 $str .= sprintf(
                     ', %s',
                     $user['TELFAX_UTILISATEURINFORMATIONS']
                 );
             }
+
             if ($user['MAIL_UTILISATEURINFORMATIONS']) {
                 $str .= sprintf(
                     ', %s',
                     $user['MAIL_UTILISATEURINFORMATIONS']
                 );
             }
+
             $str .= "\n";
         }
 

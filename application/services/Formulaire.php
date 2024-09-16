@@ -121,6 +121,7 @@ class Service_Formulaire
                         $arrayReturn[$valeur['IDX_VALEUR']][$idChampPattern] = $pattern;
                     }
                 }
+
                 $arrayReturn[$valeur['IDX_VALEUR']][$idChampFils] = $valeur;
             }
         }

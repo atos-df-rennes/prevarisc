@@ -55,6 +55,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                 // Sauvegarde en cache
                 $cache->save(serialize($acl));
             }
+
             self::$acl = $acl;
         }
 
@@ -82,6 +83,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                 phpCAS::setLang(PHPCAS_LANG_FRENCH);
             }
+
             if (1 == getenv('PREVARISC_CAS_NO_SERVER_VALIDATION')) {
                 phpCAS::setNoCasServerValidation();
             }
@@ -149,9 +151,11 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $commissions;
                                 }
+
                                 if ('1' === $resource_exploded[5]) {
                                     $resource_exploded[5] = $groupements;
                                 }
+
                                 if ('1' === $resource_exploded[6]) {
                                     $resource_exploded[6] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
@@ -163,6 +167,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $groupements;
                                 }
+
                                 if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
@@ -173,9 +178,11 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $commissions;
                                 }
+
                                 if ('1' === $resource_exploded[4]) {
                                     $resource_exploded[4] = $groupements;
                                 }
+
                                 if ('1' === $resource_exploded[5]) {
                                     $resource_exploded[5] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
@@ -189,6 +196,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 if ('1' === $resource_exploded[2]) {
                                     $resource_exploded[2] = $groupements;
                                 }
+
                                 if ('1' === $resource_exploded[3]) {
                                     $resource_exploded[3] = $utilisateur['NUMINSEE_COMMUNE'];
                                 }
@@ -263,6 +271,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                         break;
                                     }
                                 }
+
                                 if ($resources->hasNonDeveloppedResource('editsite') && 'edit' == $page->get('action') && ($acl->has('creations') && $acl->isAllowed($role, 'creations', 'add_etablissement'))) {
                                     $access_granted = true;
                                 }
@@ -277,9 +286,11 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                                                 break;
                                             }
+
                                             ++$i;
                                         }
                                     }
+
                                     if ($access_granted_ets || 0 == $i) {
                                         foreach ($resources as $resource) {
                                             if (('dossier' === explode('_', $resource)[0] || 'creations' === explode('_', $resource)[0]) && $acl->has($resource) && $acl->isAllowed($role, $resource, $privilege)) {
@@ -311,6 +322,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                 if ('error' == $request->getControllerName()) {
                                     return;
                                 }
+
                                 $request->setControllerName('error');
                                 $request->setActionName('error');
                                 $error = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
@@ -348,6 +360,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
 
                 return [$page->getResource()];
             }
+
             if ('dossier' == $page->get('controller')) {
                 if (null === $page->getResource() && null != $request) {
                     if ($id_dossier = $request->getParam('id')) {
@@ -358,6 +371,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                         foreach ($etablissements as $etablissement) {
                             $resources = array_merge($resources, $this->getEtablissementPageResourses($etablissement['ID_ETABLISSEMENT']));
                         }
+
                         $resources[] = 'dossier_'.$dossier_nature['ID_NATURE'];
                     }
 
@@ -431,6 +445,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
             if ($groupement_adresse['ID_GROUPEMENT']) {
                 $groupements[$groupement_adresse['ID_ETABLISSEMENT']][] = $groupement_adresse['ID_GROUPEMENT'];
             }
+
             if ($groupement_adresse['NUMINSEE_COMMUNE'] && !isset($communes[$groupement_adresse['ID_ETABLISSEMENT']])) {
                 $communes[$groupement_adresse['ID_ETABLISSEMENT']][] = $groupement_adresse['NUMINSEE_COMMUNE'];
             }
@@ -622,6 +637,7 @@ class ResourceContainer implements Iterator
                         $name[$j] = $singleResource_exploded2;
                         $list_resources_finale[] = implode('_', $name);
                     }
+
                     unset($list_resources_finale[$i]);
                     $list_resources_finale = array_unique($list_resources_finale);
                     $list_resources_finale = array_values($list_resources_finale);

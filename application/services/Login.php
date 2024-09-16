@@ -69,7 +69,7 @@ class Service_Login
                     ],
                 ];
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $reponse = 'erreur';
             $results = [
                 'reponse' => $reponse,

@@ -44,6 +44,7 @@ class Service_Changement
     ];
 
     public const ID_GENRE_CELLULE = 3;
+
     public const ID_AVIS_DEFAVORABLE = 2;
 
     /**
@@ -183,6 +184,7 @@ class Service_Changement
                 && array_key_exists($content['champ'], $ets[$content['model']])) {
                 $replacementstr = $ets[$content['model']][$content['champ']];
             }
+
             $params[$balise] = $replacementstr;
         }
 
