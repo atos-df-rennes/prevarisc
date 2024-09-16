@@ -1074,7 +1074,7 @@ class Service_Search
             }
 
             if (null !== $objet) {
-                $select->where(sprintf('DEMANDEUR_DOSSIER LIKE \'%%%s%%\' OR OBJET_DOSSIER LIKE \'%%%s%%\'', $objet, $objet));
+                $select->where(sprintf("DEMANDEUR_DOSSIER LIKE '%%%s%%' OR OBJET_DOSSIER LIKE '%%%s%%'", $objet, $objet));
             }
 
             // Critères : parent

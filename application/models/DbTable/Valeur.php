@@ -4,6 +4,7 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'valeur';
+
     // Clé primaire
     protected $_primary = 'ID_VALEUR';
 

@@ -26,13 +26,13 @@ class Service_FusionCommand
         $modelAdresseCommune = new Model_DbTable_AdresseCommune();
 
         $numinseeQuery = $modelAdresseCommune->select()
-            ->where(sprintf('NUMINSEE_COMMUNE = \'%s\'', $nouvelleFusion->NUMINSEE))
+            ->where(sprintf("NUMINSEE_COMMUNE = '%s'", $nouvelleFusion->NUMINSEE))
         ;
         $numinseeResult = $modelAdresseCommune->fetchAll($numinseeQuery)->toArray();
         $numinseeCount = count($numinseeResult);
 
         if (0 === $numinseeCount) {
-            error_log(sprintf('Le numero INSEE %s n\'existe pas dans la base de donnees, veuillez l\'ajouter', $nouvelleFusion->NUMINSEE));
+            error_log(sprintf("Le numero INSEE %s n'existe pas dans la base de donnees, veuillez l'ajouter", $nouvelleFusion->NUMINSEE));
 
             return true;
         }
@@ -45,7 +45,7 @@ class Service_FusionCommand
 
         $libelleCommune = $numinseeResult['0']['LIBELLE_COMMUNE'];
         if (0 !== strcmp($nouvelleFusion->nomCommune, $libelleCommune)) {
-            error_log(sprintf('Le numero INSEE %s n\'a pas pour libelle %s, veuillez faire la mise a jour', $nouvelleFusion->NUMINSEE, $nouvelleFusion->nomCommune));
+            error_log(sprintf("Le numero INSEE %s n'a pas pour libelle %s, veuillez faire la mise a jour", $nouvelleFusion->NUMINSEE, $nouvelleFusion->nomCommune));
 
             return true;
         }
@@ -60,7 +60,7 @@ class Service_FusionCommand
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelEtablissementAdresse->select()
                 ->from('etablissementadresse')
-                ->where(sprintf('etablissementadresse.NUMINSEE_COMMUNE = \'%s\'', $oldCommune->NUMINSEE))
+                ->where(sprintf("etablissementadresse.NUMINSEE_COMMUNE = '%s'", $oldCommune->NUMINSEE))
             ;
 
             $oldCommunes = $modelEtablissementAdresse->fetchAll($select);
@@ -79,7 +79,7 @@ class Service_FusionCommand
         foreach ($arrayOldCommune as $oldCommune) {
             $select = $modelAdresseRue->select()
                 ->from('adresserue')
-                ->where(sprintf('adresserue.NUMINSEE_COMMUNE = \'%s\'', $oldCommune->NUMINSEE))
+                ->where(sprintf("adresserue.NUMINSEE_COMMUNE = '%s'", $oldCommune->NUMINSEE))
             ;
 
             $oldCommunes = $modelAdresseRue->fetchAll($select);
