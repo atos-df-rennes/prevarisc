@@ -12,7 +12,6 @@ use Utils\Rector\Rector\DynamicViewPropertyToAssignRector;
 return RectorConfig::configure()
     ->withPaths([
         __DIR__.'/application',
-        __DIR__.'/tests',
     ])
     ->withSkipPath(__DIR__.'/application/cache/UnserializedMemcache.php')
     ->withRootFiles()
