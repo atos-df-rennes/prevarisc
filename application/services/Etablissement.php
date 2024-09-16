@@ -411,11 +411,11 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 return 0;
             }
 
-            if (null === $a) {
+            if ([] === $a) {
                 return 0;
             }
 
-            if (null === $b) {
+            if ([] === $b) {
                 return 0;
             }
 

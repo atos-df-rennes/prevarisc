@@ -139,9 +139,6 @@ class Service_Descriptif
         $serviceUtilsDescriptif->deleteTableValues($tableauDeComparaison);
     }
 
-    /**
-     * @return \non-empty-array<(\int|\string), \non-empty-array<\string, array{\VALEUR: \mixed, \ID_VALEUR: \mixed}>>[]
-     */
     public function groupInputByOrder(array $initialList, int $idObject, string $classObject): array
     {
         $newList = [];

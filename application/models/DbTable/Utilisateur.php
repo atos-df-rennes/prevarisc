@@ -180,8 +180,6 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param mixed $user
-     *
      * @return array
      */
     public function getGroupPrivileges(array $user)
