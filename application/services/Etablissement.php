@@ -405,17 +405,17 @@ class Service_Etablissement implements Service_Interface_Etablissement
         }
 
         @usort($dossiers_merged, function (array $a, array $b): int {
-            $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-            $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
-            if ($date_a == $date_b) {
-                return 0;
-            }
-
             if ([] === $a) {
                 return 0;
             }
 
             if ([] === $b) {
+                return 0;
+            }
+
+            $date_a = @new Zend_Date(null != $a['DATECOMM_DOSSIER'] ? $a['DATECOMM_DOSSIER'] : $a['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+            $date_b = @new Zend_Date(null != $b['DATECOMM_DOSSIER'] ? $b['DATECOMM_DOSSIER'] : $b['DATEVISITE_DOSSIER'], Zend_Date::DATES);
+            if ($date_a == $date_b) {
                 return 0;
             }
 
