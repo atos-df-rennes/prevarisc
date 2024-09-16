@@ -4,6 +4,7 @@ class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'categorie';
+
     // Clé primaire
     protected $_primary = 'ID_CATEGORIE';
 

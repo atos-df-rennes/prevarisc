@@ -547,7 +547,7 @@ class CommissionController extends Zend_Controller_Action
             }
 
             // CALLBACK
-            echo sprintf('<script type=\'text/javascript\'>window.top.window.callback(\'%s\');</script>', $error);
+            echo sprintf("<script type='text/javascript'>window.top.window.callback('%s');</script>", $error);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',
@@ -633,7 +633,7 @@ class CommissionController extends Zend_Controller_Action
             }
 
             // CALLBACK
-            echo sprintf('<script type=\'text/javascript\'>window.top.window.callback(\'%s\');</script>', $error);
+            echo sprintf("<script type='text/javascript'>window.top.window.callback('%s');</script>", $error);
             $this->_helper->flashMessenger([
                 'context' => 'success',
                 'title' => 'Le document a bien été sauvegardé',

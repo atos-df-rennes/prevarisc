@@ -4,6 +4,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'utilisateurinformations';
+
     // Clé primaire
     protected $_primary = 'ID_UTILISATEURINFORMATIONS';
 
@@ -23,7 +24,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
                 $select->from('etablissementcontact', [])
                     ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = etablissementcontact.ID_UTILISATEURINFORMATIONS')
                     ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION', 'LIBELLE_FONCTION')
-                    ->where(sprintf('etablissementcontact.ID_ETABLISSEMENT = \'%s\'', $id))
+                    ->where(sprintf("etablissementcontact.ID_ETABLISSEMENT = '%s'", $id))
                     ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC')
                 ;
 
@@ -33,7 +34,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
                 $select->from('dossiercontact', [])
                     ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = dossiercontact.ID_UTILISATEURINFORMATIONS')
                     ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION', 'LIBELLE_FONCTION')
-                    ->where(sprintf('dossiercontact.ID_DOSSIER = \'%s\'', $id))
+                    ->where(sprintf("dossiercontact.ID_DOSSIER = '%s'", $id))
                     ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC')
                 ;
 
@@ -43,7 +44,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
                 $select->from('groupementcontact', [])
                     ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = groupementcontact.ID_UTILISATEURINFORMATIONS')
                     ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION', 'LIBELLE_FONCTION')
-                    ->where(sprintf('groupementcontact.ID_GROUPEMENT = \'%s\'', $id))
+                    ->where(sprintf("groupementcontact.ID_GROUPEMENT = '%s'", $id))
                     ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC')
                 ;
 
@@ -53,7 +54,7 @@ class Model_DbTable_UtilisateurInformations extends Zend_Db_Table_Abstract
                 $select->from('commissioncontact', [])
                     ->join('utilisateurinformations', 'utilisateurinformations.ID_UTILISATEURINFORMATIONS = commissioncontact.ID_UTILISATEURINFORMATIONS')
                     ->join('fonction', 'utilisateurinformations.ID_FONCTION = fonction.ID_FONCTION', 'LIBELLE_FONCTION')
-                    ->where(sprintf('commissioncontact.ID_COMMISSION = \'%s\'', $id))
+                    ->where(sprintf("commissioncontact.ID_COMMISSION = '%s'", $id))
                     ->order('utilisateurinformations.NOM_UTILISATEURINFORMATIONS ASC')
                 ;
 

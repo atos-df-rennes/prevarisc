@@ -4,6 +4,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'piecejointe';
+
     // Clé primaire
     protected $_primary = 'ID_PIECEJOINTE';
 

@@ -4,6 +4,7 @@ class Model_DbTable_EtablissementInformationsPreventionniste extends Zend_Db_Tab
 {
     // Nom de la base
     protected $_name = 'etablissementinformationspreventionniste';
+
     // Clé primaire
     protected $_primary = ['ID_ETABLISSEMENTINFORMATIONS', 'ID_UTILISATEUR'];
 

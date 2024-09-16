@@ -4,6 +4,7 @@ class Model_DbTable_DossierDocManquant extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'dossierdocmanquant';
+
     // Clé primaire
     protected $_primary = 'ID_DOCMANQUANT';
 

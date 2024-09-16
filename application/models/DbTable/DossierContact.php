@@ -4,6 +4,7 @@ class Model_DbTable_DossierContact extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'dossiercontact';
+
     // Clé primaire
     protected $_primary = ['ID_DOSSIER', 'ID_UTILISATEURINFORMATIONS'];
 

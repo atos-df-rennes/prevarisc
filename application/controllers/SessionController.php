@@ -53,7 +53,7 @@ class SessionController extends Zend_Controller_Action
                     null === $user
                     || (null !== $user && !$user['ACTIF_UTILISATEUR'])
                 ) {
-                    error_log(sprintf('Auth: utilisateur inexistant ou inactif \'%s\'', $username));
+                    error_log(sprintf("Auth: utilisateur inexistant ou inactif '%s'", $username));
 
                     throw new Zend_Auth_Exception('Authentification invalide.');
                 }
@@ -111,7 +111,7 @@ class SessionController extends Zend_Controller_Action
                     }
                 }
 
-                error_log(sprintf('Auth: password incorrect pour \'%s\'', $username));
+                error_log(sprintf("Auth: password incorrect pour '%s'", $username));
 
                 throw new Zend_Auth_Exception('Authentification invalide.');
             }

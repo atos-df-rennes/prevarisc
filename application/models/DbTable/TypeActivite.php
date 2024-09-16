@@ -4,6 +4,7 @@ class Model_DbTable_TypeActivite extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'typeactivite';
+
     // Clé primaire
     protected $_primary = 'ID_TYPEACTIVITE';
 

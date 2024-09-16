@@ -4,6 +4,7 @@ class Model_DbTable_PrescriptionDossierAssoc extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'prescriptiondossierassoc';
+
     // Clé primaire
     protected $_primary = ['ID_PRESCRIPTION_DOSSIER', 'NUM_PRESCRIPTION_DOSSIERASSOC'];
 

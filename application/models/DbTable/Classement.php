@@ -10,6 +10,7 @@ class Model_DbTable_Classement extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'classement';
+
     // Cle primaire
     protected $_primary = 'ID_CLASSEMENT';
 

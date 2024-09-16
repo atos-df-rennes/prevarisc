@@ -4,6 +4,7 @@ class Model_DbTable_DisplayRubriqueDossier extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'displayrubriquedossier';
+
     // Clé primaire
     protected $_primary = ['ID_DOSSIER', 'ID_RUBRIQUE'];
 

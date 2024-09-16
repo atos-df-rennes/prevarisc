@@ -4,6 +4,7 @@ class Model_DbTable_AdresseCommune extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'adressecommune';
+
     // Clé primaire
     protected $_primary = 'NUMINSEE_COMMUNE';
 

@@ -4,6 +4,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'etablissementadresse';
+
     // Clé primaire
     protected $_primary = 'ID_ADRESSE';
 
@@ -66,7 +67,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
                     ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['LIBELLE_COMMUNE', 'CODEPOSTAL_COMMUNE'])
                     ->joinLeft('adresserue', 'etablissementadresse.ID_RUE = adresserue.ID_RUE AND etablissementadresse.NUMINSEE_COMMUNE = adresserue.NUMINSEE_COMMUNE', 'LIBELLE_RUE')
                     ->joinLeft('adresseruetype', 'adresseruetype.ID_RUETYPE = adresserue.ID_RUETYPE', ['LIBELLE_RUETYPE', 'ABREVIATION_RUETYPE'])
-                    ->where(sprintf('etablissementadresse.ID_ETABLISSEMENT = \'%s\'', $id_etablissement))
+                    ->where(sprintf("etablissementadresse.ID_ETABLISSEMENT = '%s'", $id_etablissement))
                 ;
 
                 return $this->fetchAll($select)->toArray();
@@ -122,7 +123,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('adressecommune')
-            ->where(sprintf('CODEPOSTAL_COMMUNE = \'%s\'', $code_postal))
+            ->where(sprintf("CODEPOSTAL_COMMUNE = '%s'", $code_postal))
         ;
 
         return $this->fetchAll($select)->toArray();
@@ -141,7 +142,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('adresserue', [])
             ->join('adresseruetype', 'adresserue.ID_RUETYPE = adresseruetype.ID_RUETYPE')
-            ->where(sprintf('NUMINSEE_COMMUNE = \'%s\'', $code_insee))
+            ->where(sprintf("NUMINSEE_COMMUNE = '%s'", $code_insee))
             ->group('ID_RUETYPE')
         ;
 
@@ -161,7 +162,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('adresserue')
-            ->where(sprintf('NUMINSEE_COMMUNE = \'%s\'', $code_insee))
+            ->where(sprintf("NUMINSEE_COMMUNE = '%s'", $code_insee))
         ;
 
         if (null != $q) {
@@ -179,7 +180,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         $select = $this->select()
             ->setIntegrityCheck(false)
             ->from('etablissementadresse')
-            ->where(sprintf('ID_RUE = \'%d\'', $id_rue))
+            ->where(sprintf("ID_RUE = '%d'", $id_rue))
         ;
 
         return $this->fetchAll($select)->toArray();

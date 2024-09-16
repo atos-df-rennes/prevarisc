@@ -4,6 +4,7 @@ class Model_DbTable_DossierAffectation extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'dossieraffectation';
+
     // Clé primaire
     protected $_primary = ['ID_DATECOMMISSION_AFFECT', 'ID_DOSSIER_AFFECT'];
 

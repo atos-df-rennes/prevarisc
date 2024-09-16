@@ -4,6 +4,7 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'champvaleurliste';
+
     // Clé primaire
     protected $_primary = 'ID_VALEURLISTE';
 

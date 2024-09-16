@@ -4,6 +4,7 @@ class Model_DbTable_DateCommissionPj extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'datecommissionpj';
+
     // Clé primaire
     protected $_primary = 'ID_DATECOMMISSION';
 

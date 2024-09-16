@@ -6,6 +6,7 @@ class Model_DbTable_Periodicite extends Zend_Db_Table_Abstract
 
     // Nom de la base
     protected $_name = 'periodicite';
+
     // Clé primaire
     protected $_primary = ['ID_CATEGORIE', 'ID_TYPE', 'LOCALSOMMEIL_PERIODICITE'];
 

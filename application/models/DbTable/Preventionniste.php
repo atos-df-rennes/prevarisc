@@ -4,6 +4,7 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'utilisateur';
+
     // Clé primaire
     protected $_primary = 'ID_UTILISATEUR';
 

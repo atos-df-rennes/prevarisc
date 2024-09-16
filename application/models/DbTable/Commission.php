@@ -4,9 +4,10 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'commission';
+
     // Clé primaire
     protected $_primary = 'ID_COMMISSION';
-    
+
     protected $_referenceMap = [
         'commissiontype' => [
             'columns' => 'ID_COMMISSIONTYPE',

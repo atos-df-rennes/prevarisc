@@ -4,6 +4,7 @@ class Model_DbTable_Groupe extends Zend_Db_Table_Abstract
 {
     // Nom de la base
     protected $_name = 'groupe';
+
     // Clé primaire
     protected $_primary = 'ID_GROUPE';
 
