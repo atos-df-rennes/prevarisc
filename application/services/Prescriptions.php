@@ -129,9 +129,11 @@ class Service_Prescriptions
         if ('' == $newId) {
             return;
         }
+
         if ('' == $oldId) {
             return;
         }
+
         $dbPrescTextes->replace($newId, $oldId);
     }
 
@@ -178,9 +180,11 @@ class Service_Prescriptions
         if ('' == $newId) {
             return;
         }
+
         if ('' == $oldId) {
             return;
         }
+
         $dbPrescArticles->replace($newId, $oldId);
     }
 

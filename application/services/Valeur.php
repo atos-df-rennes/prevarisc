@@ -57,6 +57,7 @@ class Service_Valeur
                 if ('VALEUR_DATE' === $typeValeur) {
                     $value = Service_Utils_Date::convertFromMySQL($value);
                 }
+
                 $retourValeurs[] =
                     [
                         'VALEUR' => $value,
@@ -99,6 +100,7 @@ class Service_Valeur
                     ]
                 );
             }
+
             if (false !== strpos($classObject, 'Etablissement')) {
                 $modelEtablissementValeur = new Model_DbTable_EtablissementValeur();
 
