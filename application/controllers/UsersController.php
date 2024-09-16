@@ -263,6 +263,7 @@ class UsersController extends Zend_Controller_Action
             try {
                 $name = '';
                 $text = '';
+
                 switch ($this->_request->type_ressource) {
                     case 'etablissement':
                         switch ($this->_request->genre) {

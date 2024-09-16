@@ -23,7 +23,7 @@ class Model_DbTable_Categorie extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where('ID_CATEGORIE = ' . $id);
+            $select->where('ID_CATEGORIE = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

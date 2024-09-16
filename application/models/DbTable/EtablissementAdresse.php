@@ -103,7 +103,7 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where('ID_RUETYPE = ' . $id);
+            $select->where('ID_RUETYPE = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

@@ -30,7 +30,7 @@ class Model_DbTable_Statut extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where('ID_STATUT = ' . $id);
+            $select->where('ID_STATUT = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

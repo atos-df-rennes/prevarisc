@@ -55,7 +55,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
         ;
 
         if (!empty($group)) {
-            $select->where('ID_GROUPE = ' . $group);
+            $select->where('ID_GROUPE = '.$group);
         }
 
         return $this->fetchAll($select)->toArray();

@@ -1418,7 +1418,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $miniature_path = $store->getFilePath($miniature, 'etablissement_miniature', $id_etablissement, true);
             GD_Resize::run($file_path, $miniature_path, 450);
             if (!is_file($miniature_path)) {
-                throw new Exception('Cannot create miniature file: ' . $miniature_path);
+                throw new Exception('Cannot create miniature file: '.$miniature_path);
             }
         }
 

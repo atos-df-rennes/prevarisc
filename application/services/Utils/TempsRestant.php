@@ -29,7 +29,7 @@ class Service_Utils_TempsRestant
                 $readableDiff .= ' et ';
             }
 
-            $readableDiff .= $diff->m . ' mois';
+            $readableDiff .= $diff->m.' mois';
         }
 
         if ($diff->d > 0) {
@@ -42,7 +42,7 @@ class Service_Utils_TempsRestant
         }
 
         if (1 === $diff->invert) {
-            return '- ' . $readableDiff;
+            return '- '.$readableDiff;
         }
 
         return $readableDiff;

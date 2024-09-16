@@ -30,7 +30,7 @@ class Model_DbTable_Genre extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where('ID_GENRE = ' . $id);
+            $select->where('ID_GENRE = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }

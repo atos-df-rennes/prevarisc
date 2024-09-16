@@ -149,11 +149,11 @@ class CommissionController extends Zend_Controller_Action
                 $row_commission = $model_commission->find($rowset_regle->ID_COMMISSION)->current();
 
                 // On supprime les porteuses de la règle
-                $model_reglesTypes->delete('ID_REGLE = ' . $id_regle);
-                $model_reglesClasses->delete('ID_REGLE = ' . $id_regle);
-                $model_reglesCategories->delete('ID_REGLE = ' . $id_regle);
-                $model_reglesLocalSommeil->delete('ID_REGLE = ' . $id_regle);
-                $model_reglesEtudeVisite->delete('ID_REGLE = ' . $id_regle);
+                $model_reglesTypes->delete('ID_REGLE = '.$id_regle);
+                $model_reglesClasses->delete('ID_REGLE = '.$id_regle);
+                $model_reglesCategories->delete('ID_REGLE = '.$id_regle);
+                $model_reglesLocalSommeil->delete('ID_REGLE = '.$id_regle);
+                $model_reglesEtudeVisite->delete('ID_REGLE = '.$id_regle);
 
                 // On met à jour la commune et le groupement
                 $rowset_regle->NUMINSEE_COMMUNE = (self::ID_COMMISSION_COMMUNALE == $row_commission->ID_COMMISSIONTYPE) ? $_POST[$id_regle.'_NUMINSEE_COMMUNE'] : null;
@@ -412,11 +412,11 @@ class CommissionController extends Zend_Controller_Action
                 $rowset_membre = $model_membres->find($id_membre)->current();
 
                 // On supprime les porteuses de la règle
-                $model_membresTypes->delete('ID_COMMISSIONMEMBRE = ' . $id_membre);
-                $model_membresClasses->delete('ID_COMMISSIONMEMBRE = ' . $id_membre);
-                $model_membresCategories->delete('ID_COMMISSIONMEMBRE = ' . $id_membre);
-                $model_membresDossierNatures->delete('ID_COMMISSIONMEMBRE = ' . $id_membre);
-                $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = ' . $id_membre);
+                $model_membresTypes->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresClasses->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresCategories->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresDossierNatures->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
+                $model_membresDossierTypes->delete('ID_COMMISSIONMEMBRE = '.$id_membre);
 
                 // On met à jour la commune et le groupement
                 $rowset_membre->LIBELLE_COMMISSIONMEMBRE = $_POST[$id_membre.'_LIBELLE_COMMISSIONMEMBRE'];

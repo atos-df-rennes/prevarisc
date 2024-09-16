@@ -51,7 +51,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @param float|int|string          $id_membre
+     * @param float|int|string $id_membre
      */
     private function fullJoinRegle(string $first_table, string $second_table, string $key, $id_membre): array
     {

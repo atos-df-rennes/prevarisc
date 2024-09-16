@@ -6,7 +6,7 @@ class Model_DbTable_AdresseRue extends Zend_Db_Table_Abstract
     protected $_name = 'adresserue';
 
     // Clé primaire
-    protected $_primary = 'ID_RUE'; 
+    protected $_primary = 'ID_RUE';
 
     public function getLibelleRue($idRue)
     {

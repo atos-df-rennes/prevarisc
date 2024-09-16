@@ -40,7 +40,7 @@ class Service_Mail
                     $transport = null;
             }
 
-            if ($transport !== null) {
+            if (null !== $transport) {
                 Zend_Mail::setDefaultTransport($transport);
             }
 

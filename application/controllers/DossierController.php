@@ -3400,7 +3400,7 @@ class DossierController extends Zend_Controller_Action
                 'message' => 'Le fichier est vide',
             ]);
 
-            $this->redirect('/dossier/piece-jointe/id/' . $idDossier);
+            $this->redirect('/dossier/piece-jointe/id/'.$idDossier);
         }
 
         header('Content-Type: application/zip');

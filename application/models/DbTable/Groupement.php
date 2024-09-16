@@ -5,7 +5,7 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
     // Nom de la base
     protected $_name = 'groupement';
 
-    // Clé primaire 
+    // Clé primaire
     protected $_primary = 'ID_GROUPEMENT';
 
     protected $_referenceMap = [

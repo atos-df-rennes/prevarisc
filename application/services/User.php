@@ -261,7 +261,7 @@ class Service_User
     /**
      * Sauvegarde d'un groupe.
      *
-     * @param int   $id_group Optionnel
+     * @param int $id_group Optionnel
      *
      * @return int
      */

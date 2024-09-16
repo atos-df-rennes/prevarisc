@@ -48,7 +48,7 @@ class Model_DbTable_PieceJointe extends Zend_Db_Table_Abstract
                 ->where('NOM_STATUT = ?', $status)
         )['ID_PIECEJOINTESTATUT'];
 
-        $this->update(['ID_PIECEJOINTESTATUT' => $idStatus], 'ID_PIECEJOINTE = ' . $id);
+        $this->update(['ID_PIECEJOINTESTATUT' => $idStatus], 'ID_PIECEJOINTE = '.$id);
     }
 
     public function getWithStatus(int $idDossier, string $status): Zend_Db_Table_Rowset_Abstract

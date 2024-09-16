@@ -43,7 +43,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
         ;
 
         if (null != $id) {
-            $select->where('ID_COMMISSION = ' . $id);
+            $select->where('ID_COMMISSION = '.$id);
 
             return $this->fetchRow($select)->toArray();
         }
@@ -64,7 +64,7 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
             ->setIntegrityCheck(false)
             ->from('commission')
             ->join('commissiontype', 'commissiontype.ID_COMMISSIONTYPE = commission.ID_COMMISSIONTYPE', [])
-            ->where('commission.ID_COMMISSIONTYPE = ' . $type)
+            ->where('commission.ID_COMMISSIONTYPE = '.$type)
         ;
 
         return $this->fetchAll($select)->toArray();
