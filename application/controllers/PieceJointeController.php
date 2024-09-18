@@ -38,7 +38,23 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->assign('type', 'dossier');
             $this->view->assign('identifiant', $this->_request->id);
             $this->view->assign('pjcomm', $this->_request->pjcomm);
+
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
+            // @todo Refacto dans un service
+            foreach ($listePj as $key => $pj) {
+                $isNew = false;
+
+                if (
+                    null !== $this->_request->derniereDateVisite
+                    && null !== $pj['DATE_NOTIFICATION']
+                    && $pj['DATE_NOTIFICATION'] > $this->_request->derniereDateVisite
+                ) {
+                    $isNew = true;
+                }
+
+                $listePj[$key]['IS_NEW'] = $isNew;
+            }
+
             $this->view->assign('verrou', $this->_request->verrou);
             $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement

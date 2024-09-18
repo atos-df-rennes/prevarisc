@@ -253,15 +253,23 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
+
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
+
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
+        $derniereDateVisitePageSession = new Zend_Session_Namespace('pieces_jointes_dossier');
+        $derniereDateVisitePage = $derniereDateVisitePageSession->date ?? null;
+
         $this->_forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
             'id' => $this->_request->id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
+            'derniereDateVisite' => $derniereDateVisitePage,
         ]);
+
+        $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
     }
 
     public function addAction()
