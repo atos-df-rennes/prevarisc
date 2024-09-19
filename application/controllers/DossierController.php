@@ -266,9 +266,6 @@ class DossierController extends Zend_Controller_Action
             'id' => $this->_request->id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
         ]);
-
-        $serviceNotification = new Service_Notification();
-        $serviceNotification->setLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
     }
 
     public function addAction()

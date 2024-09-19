@@ -47,6 +47,9 @@ class PieceJointeController extends Zend_Controller_Action
                 $listePj[$key]['IS_NEW'] = $serviceNotification->isNew($pj, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
             }
 
+            $serviceNotification = new Service_Notification();
+            $serviceNotification->setLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
+
             $this->view->assign('verrou', $this->_request->verrou);
             $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement

@@ -30,10 +30,6 @@ class Service_Notification
     {
         $derniereDateVisitePage = $this->getLastPageVisitDate($elementSessionNamespace);
 
-        if (null === $derniereDateVisitePage) {
-            return false;
-        }
-
         if (null === $element['DATE_NOTIFICATION']) {
             return false;
         }
