@@ -105,8 +105,10 @@
                 }
                 $date_text = "créé le";
             }
-            echo "<small class='muted'>" . $date_text . " " . $date . "</small>";
         ?>
+        <span class='label label-inverse'>
+            <i class="icon-calendar icon-white"></i>&nbsp;<?= $date_text . " " . $date ?>
+        </span>
 
         <?php
             $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
@@ -123,6 +125,11 @@
         <?php if ($this->IS_NEW): ?>
             <span class="label label-important">
                 <i class="icon-folder-open icon-white"></i>&nbsp;Nouveau dossier !
+            </span>
+        <?php endif ?>
+        <?php if ($this->HAS_NEW_PJ): ?>
+            <span class="label label-warning">
+                <i class="icon-share icon-white"></i>&nbsp;Nouvelles pièces !
             </span>
         <?php endif ?>
     </div>

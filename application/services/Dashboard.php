@@ -498,6 +498,23 @@ class Service_Dashboard
             }
 
             $results[$key]['IS_NEW'] = $isNew;
+
+            $model_pj = new Model_DbTable_PieceJointe();
+            $pjs = $model_pj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $result['ID_DOSSIER']);
+            $hasNewPj = false;
+            foreach ($pjs as $pj) {
+                if (
+                    null !== $derniereDateVisitePage
+                    && null !== $pj['DATE_NOTIFICATION']
+                    && $pj['DATE_NOTIFICATION'] > $derniereDateVisitePage
+                ) {
+                    $hasNewPj = true;
+
+                    break;
+                }
+            }
+
+            $results[$key]['HAS_NEW_PJ'] = $hasNewPj;
         }
 
         return $results;
