@@ -103,6 +103,11 @@ class IndexController extends Zend_Controller_Action
             ];
         }
 
+        if ($id === 'dossierPlatau') {
+            $derniereDateVisitePageSession = new Zend_Session_Namespace('dashboard_dossier');
+            $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
+        }
+
         $this->view->assign('bloc', $bloc);
     }
 

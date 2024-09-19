@@ -481,7 +481,26 @@ class Service_Dashboard
 
         $search->order('d.DATEINSERT_DOSSIER');
 
-        return $search->run(false, null, false)->toArray();
+        // @todo Faire un service pour ça et modifier pour les PJs également
+        $derniereDateVisitePageSession = new Zend_Session_Namespace('dashboard_dossier');
+        $derniereDateVisitePage = $derniereDateVisitePageSession->date ?? null;
+
+        $results = $search->run(false, null, false)->toArray();
+        foreach ($results as $key => $result) {
+            $isNew = false;
+
+            if (
+                null !== $derniereDateVisitePage
+                && null !== $result['DATE_NOTIFICATION']
+                && $result['DATE_NOTIFICATION'] > $derniereDateVisitePage
+            ) {
+                $isNew = true;
+            }
+
+            $results[$key]['IS_NEW'] = $isNew;
+        }
+
+        return $results;
     }
 
     /**
