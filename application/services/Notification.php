@@ -20,11 +20,11 @@ class Service_Notification
     public function setLastPageVisitDate(string $sessionNamespace): void
     {
         $derniereDateVisitePageSession = new Zend_Session_Namespace($sessionNamespace);
-        $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
+        $derniereDateVisitePageSession->date = date('Y-m-d H:i:s');
     }
 
     /**
-     * Vérifie si un élément Plat'AU est nouveau. (i.e. Ajouté via une notification sans que l'utilisateur ne l'ait consutlée)
+     * Vérifie si un élément Plat'AU est nouveau. (i.e. Ajouté via une notification sans que l'utilisateur ne l'ait consutlée).
      */
     public function isNew(array $element, string $elementSessionNamespace): bool
     {
@@ -49,7 +49,7 @@ class Service_Notification
         $utilisateur = $modelUtilisateur->find($idUtilisateur)->current();
 
         foreach (self::NAMESPACE_MAP as $namespace => $sqlCol) {
-            $utilisateur->$sqlCol = $this->getLastPageVisitDate($namespace);
+            $utilisateur->{$sqlCol} = $this->getLastPageVisitDate($namespace);
         }
 
         $utilisateur->save();

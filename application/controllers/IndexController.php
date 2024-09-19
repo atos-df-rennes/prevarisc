@@ -103,7 +103,7 @@ class IndexController extends Zend_Controller_Action
             ];
         }
 
-        if ($id === 'dossierPlatau') {
+        if ('dossierPlatau' === $id) {
             $serviceNotification = new Service_Notification();
             $serviceNotification->setLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
         }

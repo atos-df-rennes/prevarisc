@@ -936,7 +936,7 @@ class Service_Dossier
     {
         $modelDossier = new Model_DbTable_Dossier();
         $serviceNotification = new Service_Notification();
-        
+
         return $modelDossier->getNombreNouvellesPiecesJointes($idDossier, $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE));
     }
 
