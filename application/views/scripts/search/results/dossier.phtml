@@ -110,11 +110,13 @@
     <div class="pull-left">
         <?php $tempsRestant = Service_Utils_TempsRestant::calculate($this->DATE_REPONSE_ATTENDUE);
 
-            if (null !== $tempsRestant) {
+            if (null !== $tempsRestant):
                 $couleur = Service_Utils_TempsRestant::getCouleurTempsRestant($this->DATE_REPONSE_ATTENDUE);
-
-                echo "<span class='label label-$couleur'>Temps restant : ".$tempsRestant."</span>";
-            }
+            ?>
+                <span class="label label-<?= $couleur ?>">
+                    <i class='icon-time icon-white'></i>&nbsp;Temps restant : <?= $tempsRestant ?>
+                </span>
+            <?php endif
         ?>
     </div>
 
