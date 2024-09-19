@@ -931,4 +931,13 @@ class Service_Dossier
         $dossier->DELETED_BY = null;
         $dossier->save();
     }
+
+    public function getNombreNouvellesPiecesJointes(int $idDossier): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $derniereDateVisite = new Zend_Session_Namespace('pieces_jointes_dossier');
+        
+        return $modelDossier->getNombreNouvellesPiecesJointes($idDossier, $derniereDateVisite->date);
+    }
 }
