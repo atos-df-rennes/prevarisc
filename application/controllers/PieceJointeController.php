@@ -31,7 +31,7 @@ class PieceJointeController extends Zend_Controller_Action
         $modelDossier = new Model_DbTable_Dossier();
 
         // Services
-        $serviceDossier = new Service_Dossier();
+        $serviceNotification = new Service_Notification();
 
         $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOLEAN);
         $objectType = $this->getRequest()->getParam('type');
@@ -44,7 +44,7 @@ class PieceJointeController extends Zend_Controller_Action
 
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
             foreach ($listePj as $key => $pj) {
-                $listePj[$key]['IS_NEW'] = $serviceDossier->isNew($pj, Service_Dossier::DOSSIER_PIECES_SESSION_NAMESPACE);
+                $listePj[$key]['IS_NEW'] = $serviceNotification->isNew($pj, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
             }
 
             $this->view->assign('verrou', $this->_request->verrou);

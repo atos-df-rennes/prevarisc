@@ -267,8 +267,8 @@ class DossierController extends Zend_Controller_Action
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
         ]);
 
-        $derniereDateVisitePageSession = new Zend_Session_Namespace(Service_Dossier::DOSSIER_PIECES_SESSION_NAMESPACE);
-        $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
+        $serviceNotification = new Service_Notification();
+        $serviceNotification->setLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
     }
 
     public function addAction()

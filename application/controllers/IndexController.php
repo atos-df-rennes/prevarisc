@@ -104,8 +104,8 @@ class IndexController extends Zend_Controller_Action
         }
 
         if ($id === 'dossierPlatau') {
-            $derniereDateVisitePageSession = new Zend_Session_Namespace(Service_Dossier::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
-            $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
+            $serviceNotification = new Service_Notification();
+            $serviceNotification->setLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
         }
 
         $this->view->assign('bloc', $bloc);
