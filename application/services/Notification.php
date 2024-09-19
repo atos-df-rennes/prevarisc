@@ -34,11 +34,7 @@ class Service_Notification
             return false;
         }
 
-        if ($element['DATE_NOTIFICATION'] < $derniereDateVisitePage) {
-            return false;
-        }
-
-        return true;
+        return $element['DATE_NOTIFICATION'] >= $derniereDateVisitePage;
     }
 
     public function updateUserLastPageVisitDates(): void

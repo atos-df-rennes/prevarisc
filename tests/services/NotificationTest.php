@@ -29,20 +29,6 @@ final class Service_NotificationTest extends TestCase
     }
 
     /**
-     * @dataProvider sessionSetProvider
-     */
-    public function testSetLastPageVisitDate(string $sessionNamespace, ?string $expected): void
-    {
-        $this->notification->setLastPageVisitDate($sessionNamespace);
-
-        $namespace = new Zend_Session_Namespace('correct');
-
-        $this->assertSame($expected, $namespace->date);
-
-        $namespace->unsetAll();
-    }
-
-    /**
      * @dataProvider isNewProvider
      */
     public function testIsNew(array $element, string $sessionNamespace, bool $expected): void
@@ -63,30 +49,16 @@ final class Service_NotificationTest extends TestCase
         ];
     }
 
-    public function sessionSetProvider(): array
-    {
-        return [
-            'with correct namespace' => [
-                'correct',
-                date('Y-m-d H:i:s'),
-            ],
-            'with incorrect namespace' => [
-                'incorrect',
-                null,
-            ],
-        ];
-    }
-
     public function isNewProvider(): array
     {
         return [
             'is new' => [
-                ['DATE_NOTIFICATION' => (new \DateTime('2024-09-19 17:00:00'))->format('Y-m-d H:i:s')],
+                ['DATE_NOTIFICATION' => (new DateTime('2024-09-19 17:00:00'))->format('Y-m-d H:i:s')],
                 'new',
                 true,
             ],
             'is not new' => [
-                ['DATE_NOTIFICATION' => (new \DateTime('2024-09-19 16:00:00'))->format('Y-m-d H:i:s')],
+                ['DATE_NOTIFICATION' => (new DateTime('2024-09-19 16:00:00'))->format('Y-m-d H:i:s')],
                 'new',
                 false,
             ],
