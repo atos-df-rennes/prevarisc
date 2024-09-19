@@ -714,4 +714,17 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         return $this->fetchAll($select)->toArray();
     }
+
+    public function getNombreNouvellesPiecesJointes(int $idDossier, string $dateVisitePage): int
+    {
+        $select = $this->select()->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['COUNT(*) as count'])
+            ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
+            ->join(['pj' => 'piecejointe'], 'dpj.ID_PIECEJOINTE = pj.ID_PIECEJOINTE', ['DATE_NOTIFICATION'])
+            ->where('d.ID_DOSSIER = ?', $idDossier)
+            ->where('pj.DATE_NOTIFICATION > ?', $dateVisitePage)
+        ;
+
+        return $this->fetchRow($select)['count'];
+    }
 }

@@ -30,6 +30,9 @@ class PieceJointeController extends Zend_Controller_Action
         $DBused = new Model_DbTable_PieceJointe();
         $modelDossier = new Model_DbTable_Dossier();
 
+        // Services
+        $serviceNotification = new Service_Notification();
+
         $displayDownloadButton = filter_var($this->getRequest()->getParam('displayDownloadButton', true), FILTER_VALIDATE_BOOLEAN);
         $objectType = $this->getRequest()->getParam('type');
 
@@ -38,7 +41,15 @@ class PieceJointeController extends Zend_Controller_Action
             $this->view->assign('type', 'dossier');
             $this->view->assign('identifiant', $this->_request->id);
             $this->view->assign('pjcomm', $this->_request->pjcomm);
+
             $listePj = $DBused->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $this->_request->id);
+            foreach ($listePj as $key => $pj) {
+                $listePj[$key]['IS_NEW'] = $serviceNotification->isNew($pj, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
+            }
+
+            $serviceNotification = new Service_Notification();
+            $serviceNotification->setLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE);
+
             $this->view->assign('verrou', $this->_request->verrou);
             $this->view->assign('isPlatau', $modelDossier->isPlatau($this->getRequest()->getParam('id')));
         } elseif ('etablissement' == $this->_request->type) { // Cas établissement

@@ -481,7 +481,16 @@ class Service_Dashboard
 
         $search->order('d.DATEINSERT_DOSSIER');
 
-        return $search->run(false, null, false)->toArray();
+        $serviceDossier = new Service_Dossier();
+        $serviceNotification = new Service_Notification();
+        $results = $search->run(false, null, false)->toArray();
+
+        foreach ($results as $key => $result) {
+            $results[$key]['IS_NEW'] = $serviceNotification->isNew($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
+            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result);
+        }
+
+        return $results;
     }
 
     /**
