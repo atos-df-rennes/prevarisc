@@ -5,6 +5,8 @@ class Service_Dossier
     public const ID_DOSSIERTYPE_ETUDE = 1;
     public const ID_DOSSIERTYPE_VISITE = 2;
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
+    public const DASHBOARD_DOSSIER_SESSION_NAMESPACE = 'dashboard_dossier';
+    public const DOSSIER_PIECES_SESSION_NAMESPACE = 'dossier_pieces_jointes';
 
     /**
      * @var array<string, int>|array<string, mixed>|array<string, mixed[]>|mixed
@@ -939,5 +941,47 @@ class Service_Dossier
         $derniereDateVisite = new Zend_Session_Namespace('pieces_jointes_dossier');
         
         return $modelDossier->getNombreNouvellesPiecesJointes($idDossier, $derniereDateVisite->date);
+    }
+
+    /**
+     * Vérifie si un élément Plat'AU est nouveau. (i.e. Ajouté via une notification sans que l'utilisateur ne l'ait consutlée)
+     */
+    public function isNew(array $element, string $elementSessionNamespace): bool
+    {
+        $derniereDateVisitePageSession = new Zend_Session_Namespace($elementSessionNamespace);
+        $derniereDateVisitePage = $derniereDateVisitePageSession->date ?? null;
+
+        if (null === $derniereDateVisitePage) {
+            return false;
+        }
+
+        if (null === $element['DATE_NOTIFICATION']) {
+            return false;
+        }
+
+        if ($element['DATE_NOTIFICATION'] < $derniereDateVisitePage) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
+     */
+    public function hasNewPj(array $dossier): bool
+    {
+        $modelPj = new Model_DbTable_PieceJointe();
+        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
+
+        foreach ($pjs as $pj) {
+            if (!$this->isNew($pj, self::DASHBOARD_DOSSIER_SESSION_NAMESPACE)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -481,40 +481,11 @@ class Service_Dashboard
 
         $search->order('d.DATEINSERT_DOSSIER');
 
-        // @todo Faire un service pour ça et modifier pour les PJs également
-        $derniereDateVisitePageSession = new Zend_Session_Namespace('dashboard_dossier');
-        $derniereDateVisitePage = $derniereDateVisitePageSession->date ?? null;
-
+        $serviceDossier = new Service_Dossier();
         $results = $search->run(false, null, false)->toArray();
         foreach ($results as $key => $result) {
-            $isNew = false;
-
-            if (
-                null !== $derniereDateVisitePage
-                && null !== $result['DATE_NOTIFICATION']
-                && $result['DATE_NOTIFICATION'] > $derniereDateVisitePage
-            ) {
-                $isNew = true;
-            }
-
-            $results[$key]['IS_NEW'] = $isNew;
-
-            $model_pj = new Model_DbTable_PieceJointe();
-            $pjs = $model_pj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $result['ID_DOSSIER']);
-            $hasNewPj = false;
-            foreach ($pjs as $pj) {
-                if (
-                    null !== $derniereDateVisitePage
-                    && null !== $pj['DATE_NOTIFICATION']
-                    && $pj['DATE_NOTIFICATION'] > $derniereDateVisitePage
-                ) {
-                    $hasNewPj = true;
-
-                    break;
-                }
-            }
-
-            $results[$key]['HAS_NEW_PJ'] = $hasNewPj;
+            $results[$key]['IS_NEW'] = $serviceDossier->isNew($result, Service_Dossier::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
+            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result);
         }
 
         return $results;

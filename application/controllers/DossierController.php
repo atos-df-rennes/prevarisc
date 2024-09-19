@@ -260,16 +260,14 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
-        $derniereDateVisitePageSession = new Zend_Session_Namespace('pieces_jointes_dossier');
-        $derniereDateVisitePage = $derniereDateVisitePageSession->date ?? null;
 
         $this->_forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
             'id' => $this->_request->id,
             'verrou' => $this->infosDossier['VERROU_DOSSIER'],
-            'derniereDateVisite' => $derniereDateVisitePage,
         ]);
 
+        $derniereDateVisitePageSession = new Zend_Session_Namespace(Service_Dossier::DOSSIER_PIECES_SESSION_NAMESPACE);
         $derniereDateVisitePageSession->date = date("Y-m-d H:i:s");
     }
 
