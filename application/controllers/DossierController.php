@@ -1415,16 +1415,17 @@ class DossierController extends Zend_Controller_Action
                     foreach ($updatedEtab as $ue) {
                         $etabInformation = $dbEtab->getInformations($ue['ID_ETABLISSEMENT']);
                         // Si l'établissement est en statut projet, et uniquement ce cas
-                        if (
-                            $etabInformation
-                            && 1 == $etabInformation->ID_STATUT
-                        ) {
-                            $this->_helper->flashMessenger([
-                                'context' => 'warning',
-                                'title' => 'Avertissement',
-                                'message' => "La visite d'avant ouverture étant favorable, vous devriez passer le statut de l'établissement <a title='Ouvrir' href='/etablissement/edit/id/".$ue['ID_ETABLISSEMENT']."'>".$etabInformation['LIBELLE_ETABLISSEMENTINFORMATIONS']."</a> à 'ouvert' (statut actuellement à 'projet').",
-                            ]);
+                        if (!$etabInformation) {
+                            continue;
                         }
+                        if (1 != $etabInformation->ID_STATUT) {
+                            continue;
+                        }
+                        $this->_helper->flashMessenger([
+                            'context' => 'warning',
+                            'title' => 'Avertissement',
+                            'message' => "La visite d'avant ouverture étant favorable, vous devriez passer le statut de l'établissement <a title='Ouvrir' href='/etablissement/edit/id/".$ue['ID_ETABLISSEMENT']."'>".$etabInformation['LIBELLE_ETABLISSEMENTINFORMATIONS']."</a> à 'ouvert' (statut actuellement à 'projet').",
+                        ]);
                     }
                 }
             }
@@ -2985,7 +2986,7 @@ class DossierController extends Zend_Controller_Action
         $service_dossier->changePosPrescription($tabId);
     }
 
-    public function formrecupprescriptionAction()
+    public function formrecupprescriptionAction() 
     {
         // récupération de l'établissement attaché au dossier
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
@@ -3006,9 +3007,10 @@ class DossierController extends Zend_Controller_Action
 
     public function recupprescriptionAction()
     {
+        
         $this->_helper->viewRenderer->setNoRender();
         // On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
-
+        
         $service_dossier = new Service_Dossier();
 
         $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);

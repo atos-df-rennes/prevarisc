@@ -602,6 +602,7 @@ class Service_Dossier
             $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
             $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
             $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
+            $newPresc->Reprise=true;
             $newPresc->save();
 
             foreach ($assoc as $val) {
