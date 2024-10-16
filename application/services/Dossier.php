@@ -588,10 +588,11 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
-            if (
-                null !== $ue[0]['DATE_LEVEE']
-                || (null !== $ue[0]['JUSTIFICATIF_LEVEE'] && '' !== $ue[0]['JUSTIFICATIF_LEVEE'])
-            ) {
+            if (null !== $ue[0]['DATE_LEVEE']) {
+                continue;
+            }
+
+            if (null !== $ue[0]['JUSTIFICATIF_LEVEE'] && '' !== $ue[0]['JUSTIFICATIF_LEVEE']) {
                 continue;
             }
 
