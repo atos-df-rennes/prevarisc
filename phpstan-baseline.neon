@@ -2121,6 +2121,11 @@ parameters:
 			path: application/services/Login.php
 
 		-
+			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$date\\.$#"
+			count: 1
+			path: application/services/Notification.php
+
+		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"
 			count: 2
 			path: application/services/Prescriptions.php

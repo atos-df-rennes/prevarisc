@@ -932,4 +932,32 @@ class Service_Dossier
         $dossier->DELETED_BY = null;
         $dossier->save();
     }
+
+    public function getNombreNouvellesPiecesJointes(int $idDossier): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+        $serviceNotification = new Service_Notification();
+
+        return $modelDossier->getNombreNouvellesPiecesJointes($idDossier, $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE));
+    }
+
+    /**
+     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
+     */
+    public function hasNewPj(array $dossier): bool
+    {
+        $serviceNotification = new Service_Notification();
+        $modelPj = new Model_DbTable_PieceJointe();
+        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
+
+        foreach ($pjs as $pj) {
+            if (!$serviceNotification->isNew($pj, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }
