@@ -2986,7 +2986,7 @@ class DossierController extends Zend_Controller_Action
         $service_dossier->changePosPrescription($tabId);
     }
 
-    public function formrecupprescriptionAction() 
+    public function formrecupprescriptionAction()
     {
         // récupération de l'établissement attaché au dossier
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
@@ -3007,10 +3007,9 @@ class DossierController extends Zend_Controller_Action
 
     public function recupprescriptionAction()
     {
-        
         $this->_helper->viewRenderer->setNoRender();
         // On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
-        
+
         $service_dossier = new Service_Dossier();
 
         $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);
