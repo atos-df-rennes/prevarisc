@@ -588,6 +588,14 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
+            if (null !== $ue[0]['DATE_LEVEE']) {
+                continue;
+            }
+
+            if (null !== $ue[0]['JUSTIFICATIF_LEVEE'] && '' !== $ue[0]['JUSTIFICATIF_LEVEE']) {
+                continue;
+            }
+
             if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
                 // cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
