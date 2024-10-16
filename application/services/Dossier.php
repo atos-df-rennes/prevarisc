@@ -588,30 +588,34 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
-            if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
-                // cas d'une prescription type
-                $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
-            } else {
-                // cas d'une prescription particulière
-                $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue[0]['ID_PRESCRIPTION_DOSSIER']);
-            }
 
-            $newPresc = $dbPrescDossier->createRow();
-            $newPresc->ID_DOSSIER = $idDossier;
-            $newPresc->NUM_PRESCRIPTION_DOSSIER = $ue[0]['NUM_PRESCRIPTION_DOSSIER'];
-            $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
-            $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
-            $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
-            $newPresc->save();
+            if (($ue[0]['DATE_LEVEE'] === null) && (!$ue[0]['JUSTIFICATIF_LEVEE'])) {
+                if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
+                    // cas d'une prescription type
+                    $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
+                } else {
+                    // cas d'une prescription particulière
+                    $assoc = $dbPrescDossierAssoc->getPrescriptionDossierAssoc($ue[0]['ID_PRESCRIPTION_DOSSIER']);
+                } 
 
-            foreach ($assoc as $val) {
-                if (null == $val['ID_PRESCRIPTION_TYPE']) {
-                    $newAssoc = $dbPrescDossierAssoc->createRow();
-                    $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $val['NUM_PRESCRIPTION_DOSSIERASSOC'];
-                    $newAssoc->ID_PRESCRIPTION_DOSSIER = $newPresc->ID_PRESCRIPTION_DOSSIER;
-                    $newAssoc->ID_TEXTE = $val['ID_TEXTE'];
-                    $newAssoc->ID_ARTICLE = $val['ID_ARTICLE'];
-                    $newAssoc->save();
+                    $newPresc = $dbPrescDossier->createRow();
+                    $newPresc->ID_DOSSIER = $idDossier;
+                    $newPresc->NUM_PRESCRIPTION_DOSSIER = $ue[0]['NUM_PRESCRIPTION_DOSSIER'];
+                    $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
+                    $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
+                    $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
+                    $newPresc->save();
+            
+
+                foreach ($assoc as $val) {
+                    if (null == $val['ID_PRESCRIPTION_TYPE']) {
+                        $newAssoc = $dbPrescDossierAssoc->createRow();
+                        $newAssoc->NUM_PRESCRIPTION_DOSSIERASSOC = $val['NUM_PRESCRIPTION_DOSSIERASSOC'];
+                        $newAssoc->ID_PRESCRIPTION_DOSSIER = $newPresc->ID_PRESCRIPTION_DOSSIER;
+                        $newAssoc->ID_TEXTE = $val['ID_TEXTE'];
+                        $newAssoc->ID_ARTICLE = $val['ID_ARTICLE'];
+                        $newAssoc->save();
+                    }
                 }
             }
         }
