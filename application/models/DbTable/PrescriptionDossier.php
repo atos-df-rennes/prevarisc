@@ -2,8 +2,11 @@
 
 class Model_DbTable_PrescriptionDossier extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'prescriptiondossier'; // Nom de la base
-    protected $_primary = 'ID_PRESCRIPTION_DOSSIER'; // Clé primaire
+    // Nom de la base
+    protected $_name = 'prescriptiondossier';
+
+    // Clé primaire
+    protected $_primary = 'ID_PRESCRIPTION_DOSSIER';
 
     public function recupMaxNumPrescDossier($idDossier, $type)
     {

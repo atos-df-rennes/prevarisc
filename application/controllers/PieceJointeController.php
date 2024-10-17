@@ -3,9 +3,10 @@
 class PieceJointeController extends Zend_Controller_Action
 {
     public $store;
+
     private $dbPj;
 
-    public function init()
+    public function init(): void
     {
         $this->store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
 
@@ -19,7 +20,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->dbPj = new Model_DbTable_PieceJointe();
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         /** @var Zend_View $view */
         $view = $this->view;
@@ -66,7 +67,7 @@ class PieceJointeController extends Zend_Controller_Action
 
         $filteredListePj = array_filter(
             $listePj,
-            function ($pieceJointe) use ($objectType, $modelDossier) {
+            function (array $pieceJointe) use ($objectType, $modelDossier): bool {
                 if ('dossier' === $objectType && $modelDossier->isPlatau($this->getRequest()->getParam('id'))) {
                     $pieceJointePath = getenv('PREVARISC_REAL_DATA_PATH').DS.'uploads'.DS.'pieces-jointes'.DS.$pieceJointe['ID_PIECEJOINTE'].$pieceJointe['EXTENSION_PIECEJOINTE'];
                 } else {
@@ -82,7 +83,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->view->assign('displayDownloadButton', $displayDownloadButton);
     }
 
-    public function getAction()
+    public function getAction(): void
     {
         $type = null;
         $identifiant = null;
@@ -152,7 +153,7 @@ class PieceJointeController extends Zend_Controller_Action
         exit;
     }
 
-    public function formAction()
+    public function formAction(): void
     {
         // Placement
         $this->view->assign('type', $this->_getParam('type'));
@@ -165,7 +166,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
     }
 
-    public function addAction()
+    public function addAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -230,6 +231,7 @@ class PieceJointeController extends Zend_Controller_Action
 
                 throw new Exception('Impossible de charger la pièce jointe. Veuillez contacter votre service informatique.');
             }
+
             // Dans le cas d'un dossier
             if ('dossier' == $this->_getParam('type')) {
                 // Modèles
@@ -294,11 +296,11 @@ class PieceJointeController extends Zend_Controller_Action
 
             // CALLBACK
             echo "<script type='text/javascript'>window.top.window.callback('".$nouvellePJ->ID_PIECEJOINTE."', '".$extension."');</script>";
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de l\'ajout de la pièce jointe',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
 
             // CALLBACK
@@ -306,7 +308,7 @@ class PieceJointeController extends Zend_Controller_Action
         }
     }
 
-    public function deleteAction()
+    public function deleteAction(): void
     {
         try {
             $this->_helper->viewRenderer->setNoRender(true);
@@ -370,9 +372,11 @@ class PieceJointeController extends Zend_Controller_Action
                 if (file_exists($file_path)) {
                     unlink($file_path);
                 }
+
                 if (file_exists($miniature_path)) {
                     unlink($miniature_path);
                 }
+
                 $DBitem->delete('ID_PIECEJOINTE = '.(int) $this->_request->id_pj);
                 $pj->delete();
             }
@@ -382,11 +386,11 @@ class PieceJointeController extends Zend_Controller_Action
                 'title' => 'La pièce jointe a été supprimée',
                 'message' => '',
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->_helper->flashMessenger([
                 'context' => 'error',
                 'title' => 'Erreur lors de la suppression de la pièce jointe',
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
 
@@ -394,7 +398,7 @@ class PieceJointeController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
-    public function checkAction()
+    public function checkAction(): void
     {
         // Modèle
         $DBused = new Model_DbTable_PieceJointe();
