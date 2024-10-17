@@ -592,6 +592,14 @@ class Service_Dossier
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
 
         foreach ($listePrescription as $val => $ue) {
+            if (null !== $ue[0]['DATE_LEVEE']) {
+                continue;
+            }
+
+            if (null !== $ue[0]['JUSTIFICATIF_LEVEE'] && '' !== $ue[0]['JUSTIFICATIF_LEVEE']) {
+                continue;
+            }
+
             if (isset($ue[0]['ID_PRESCRIPTION_TYPE']) && null != $ue[0]['ID_PRESCRIPTION_TYPE']) {
                 // cas d'une prescription type
                 $assoc = $dbPrescDossierAssoc->getPrescriptionTypeAssoc($ue[0]['ID_PRESCRIPTION_TYPE'], $ue[0]['ID_PRESCRIPTION_DOSSIER']);
@@ -940,5 +948,33 @@ class Service_Dossier
         $dossier->DATESUPPRESSION_DOSSIER = null;
         $dossier->DELETED_BY = null;
         $dossier->save();
+    }
+
+    public function getNombreNouvellesPiecesJointes(int $idDossier): int
+    {
+        $modelDossier = new Model_DbTable_Dossier();
+        $serviceNotification = new Service_Notification();
+
+        return $modelDossier->getNombreNouvellesPiecesJointes($idDossier, $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE));
+    }
+
+    /**
+     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
+     */
+    public function hasNewPj(array $dossier): bool
+    {
+        $serviceNotification = new Service_Notification();
+        $modelPj = new Model_DbTable_PieceJointe();
+        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
+
+        foreach ($pjs as $pj) {
+            if (!$serviceNotification->isNew($pj, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

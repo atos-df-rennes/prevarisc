@@ -253,6 +253,7 @@ class DossierController extends Zend_Controller_Action
             $serviceDossier = new Service_Dossier();
             $this->view->assign('hasAvisDerogation', $serviceDossier->hasAvisDerogation($this->idDossier));
             $this->view->assign('dossierSupprime', null !== $dossier['DATESUPPRESSION_DOSSIER']);
+            $this->view->assign('nombreNouvellesPiecesJointes', $serviceDossier->getNombreNouvellesPiecesJointes($this->idDossier));
 
             // Définition des autorisations
             $this->view->assign('isAllowedAvisDerogation', unserialize($this->cache->load('acl'))->isAllowed(Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'], 'avisderogations', 'avis_derogations'));
@@ -265,11 +266,13 @@ class DossierController extends Zend_Controller_Action
     {
         $DBdossier = new Model_DbTable_Dossier();
         $service_dossier = new Service_Dossier();
+
         if ($this->idDossier) {
             $this->view->assign('enteteEtab', $service_dossier->getEtabInfos($this->idDossier));
         }
 
         $this->infosDossier = $DBdossier->find((int) $this->_getParam('id'))->current();
+
         $this->_forward('index', 'piece-jointe', null, [
             'type' => 'dossier',
             'id' => $this->_request->id,
