@@ -1,4 +1,8 @@
 <?php $this->placeholder('lateral_navigation')->captureStart(); // Capture du 'lateral_navigation'?>
+<?php
+    $db = Zend_Db_Table::getDefaultAdapter();
+    $descriptif = $db->fetchOne('SELECT NOM FROM capsulerubrique WHERE NOM_INTERNE = ?', 'descriptifEtablissement');
+    $effectifsDegagements = $db->fetchOne('SELECT NOM FROM capsulerubrique WHERE NOM_INTERNE = ?', 'effectifsDegagementsEtablissement');?>
 
 <?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
 
@@ -20,7 +24,7 @@
         <li class="<?= strpos($action_name, 'descriptif') !== false ? 'active' : '' ?>">
             <a href='<?= $this->url(array("action"=>"descriptif")) ?>'>
                 <i class="icon-book icon-black"></i>
-                Descriptif
+                <?= $descriptif ?>
             </a>
         </li>
     <?php endif ?>
@@ -29,7 +33,7 @@
         <li class="<?= strpos($action_name, 'effectifs-degagements-etablissement') !== false ? 'active' : '' ?>">
             <a class='sep' href='<?= $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>
                 <i class="icon-th-list icon-black"></i>
-                Effectifs et dégagements
+                <?= $effectifsDegagements ?>
             </a>
         </li>
     <?php endif ?>
