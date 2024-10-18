@@ -9,7 +9,7 @@
 
 ## Table des matières
 
-- [Fonctionnalités](#fonctionnalites)
+- [Fonctionnalités](#fonctionnalités)
 - [Technologies utilisées](#technologies-utilisées)
 - [Installation](#installation)
 - [Suivi du projet](#suivi-du-projet)
@@ -67,9 +67,9 @@ Une documentation détaillée est disponible ici : [Documentation d'installation
 Pour contribuer à cette version de Prevarisc, consultez la [documentation de contribution](https://github.com/atos-df-rennes/prevarisc/blob/develop/CONTRIBUTING.md).
 
 > En plus de la [procédure d'installation](#installation) standard, il vous faudra installer les dépendances de développement avec une version 8.1 de PHP :
-```sh
-    php8.1 /usr/local/bin/composer install --working-dir=tools
-```
+> ```sh
+>     php8.1 /usr/local/bin/composer install --working-dir=tools
+> ```
 
 Sinon, Prevarisc est une application fork-friendly et vous pouvez parfaitement maintenir une version personnalisée.
 
