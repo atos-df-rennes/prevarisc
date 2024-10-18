@@ -3,6 +3,7 @@
 # Prevarisc
 
 [Prevarisc](http://sdis62.github.io/prevarisc/) - Application web open-source gérant l'ensemble de l'activité du service prévention au sein d'un Service Départemental d'Incendie et de Secours (SDIS).
+> Fork maintenu de [SDIS62/prevarisc](https://github.com/SDIS62/prevarisc)
 
 ![](http://sdis62.github.io/prevarisc/assets/img/screenshot.png)
 
