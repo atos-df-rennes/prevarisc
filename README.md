@@ -44,7 +44,7 @@ $ cd prevarisc
 ```
 3. Installez les dépendances :
 ```sh
-$ php composer.phar install --prefer-source
+$ composer install --prefer-source
 ```
 4. Appliquez les permissions nécessaires :
 ```sh
@@ -64,6 +64,11 @@ Une documentation détaillée est disponible ici : [Documentation d'installation
 ## Contribuer
 
 Pour contribuer à cette version de Prevarisc, consultez la [documentation de contribution](https://github.com/atos-df-rennes/prevarisc/blob/develop/CONTRIBUTING.md).
+
+> En plus de la [procédure d'installation](#installation) standard, il vous faudra installer les dépendances de développement avec une version 8.1 de PHP :
+```sh
+    php8.1 /usr/local/bin/composer install --working-dir=tools
+```
 
 Sinon, Prevarisc est une application fork-friendly et vous pouvez parfaitement maintenir une version personnalisée.
 
