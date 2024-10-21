@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin=""/>
 <form id='etablissement' class="<?php echo $this->add ? 'add' : 'edit' ?>" action='<?php echo $this->url(array('action' => $this->add ? 'add' : 'edit')) ?>' method='post' >
 
     <?php if ($this->add) : ?>
@@ -384,13 +385,8 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php echo $this->partial('etablissement/partials/partial-adresse.phtml') ?>
-                    <?php if ($this->etablissement['adresses']) : ?>
-                        <?php foreach ($this->etablissement['adresses'] as $adresse) : ?>
-                            <?php echo $this->partial('etablissement/partials/partial-adresse.phtml', array('adresse' => $adresse)) ?>
-                        <?php endforeach ?>
-                    <?php endif ?>
+                <tbody id="address-table-body">
+                
                 </tbody>
             </table>
 
@@ -514,71 +510,23 @@
 
     <div class="modal-body">
         <dl class='dl-horizontal'>
-            <dt>Ville</dt>
+        <dt>Adresse complète</dt>
             <dd>
-                <input name='commune_ac' type='text' placeholder='Nom de la commune ou code postal ...' />
-                <input name='code_insee' type='hidden' />
-                <input name='code_postal' type='hidden' />
-            </dd>
-
-            <dt>Voie</dt>
-            <dd>
-                <input type='text' name='voie_ac' placeholder='Nom de la voie ...' disabled />
-                <input type='hidden' name='type_voie' />
-                <input type='hidden' name='voie' />
-            </dd>
-
-            <dt>Numéro</dt>
-            <dd>
-                <input class="input-small" type='text' name='numero' placeholder='Numéro ...' disabled />
-            </dd>
-
-            <dt>Complément d'adresse</dt>
-            <dd>
-                <input type='text' name='complement' placeholder="Complément d'adresse" disabled />
-            </dd>
-
-            <dt>Type de l'adresse</dt>
-            <dd>
-                <select>
-                    <option>Adresse postale</option>
-                </select>
-            </dd>
-
-            <dt>Géolocalisation</dt>
-            <dd>
-                <?php if ($this->key_ign != null) : ?><button type="button" id="geolocme" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button><?php endif ?>
-                <?php if ($this->geoconcept_url != null) : ?><button type="button" id="geolocme-geoconcept" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoconcept)</button><?php endif ?>
-                <button id="geolocme_nominatim" class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Nominatim)</button>
-                <br/>
-                <small>Résultat : <span class='result'>Inconnu</span></small>
+                <input id="adresse-complete" name='adresse_complete' type='text' placeholder='Tapez l’adresse complète ...' required/>
+                <ul id="suggestions-list" style="list-style-type: none; padding-left: 0;"></ul>
             </dd>
 
             <dt>Longitude</dt>
             <dd>
-                <input id="addressLongitude" type='text' name='lon' maxlength="11" />
+                <input id="addressLongitude" type='text' name='lon' maxlength="11"  readonly required />
             </dd>
 
             <dt>Latitude</dt>
             <dd>
-                <input id="addressLatitude" type='text' name='lat' maxlength="10" />
+                <input id="addressLatitude" type='text' name='lat' maxlength="10"  readonly required />
             </dd>
         </dl>
-        <?php if ($this->key_ign != null): ?>
-            <div id="geoportail-container" style="height: 400px;"></div>
-        <?php endif ?>
-
-        <?php if ($this->geoconcept_url != null) : ?>
-            <div id='geoconcept-container' style="height: 400px; width: 100%"></div>
-            <script type="text/javascript" src="/js/geoconcept/OpenLayers.js"></script>
-            <script type="text/javascript" src="/js/geoconcept/proj4js.js"></script>
-            <script type="text/javascript" src="/js/geoconcept/htc-lite.js"></script>
-            <?php if ($projection = getenv('PREVARISC_PLUGIN_GEOCONCEPT_PROJECTION')): ?>
-            <script type="text/javascript" src="/js/geoconcept/defs/<?php echo $projection ?>.js"></script>
-            <?php endif ?>
-            <script type="text/javascript" src="/js/geoconcept/geoconcept.js"></script>
-            <link rel="stylesheet" href="/css/geoconcept/htc.css"/>
-        <?php endif ?>
+        <div id="map" class="d-none" style="height: 400px;"></div>
     </div>
 
     <div class="modal-footer">
@@ -589,6 +537,7 @@
 
 <?= $this->partial('etablissement/partials/partial-modal-edit-adresse.phtml', ['key_ign' => $this->key_ign]) ?>
 
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
 <script type="text/javascript">
     $(document).ready(function() {
         // Action à la sauvegarde de l'établissement
@@ -979,7 +928,7 @@
             }
         });
 
-        // Auto complétion de la ville
+       // Auto complétion de la ville
         $("input[name='commune_ac']").autocomplete("/api/1.0/adresse/get_communes", {
             minChars: 2,
             cacheLength: 0,
@@ -1045,10 +994,89 @@
             }
         <?php endif ?>
 
-        $('#adresse-modal-ajout').on('shown.bs.modal', function () {
-            optionsGeo.geo_container_id = 'geoportail-container'
-            geolocaliseIGN("#adresse-modal-ajout", optionsGeo)
-        })
+let mapAdresse; 
+let addresses = []; 
+
+$('#adresse-modal-ajout').on('shown.bs.modal', function () {
+    $('input[name="adresse_complete"]').on('input', function () {
+        let query = $(this).val();
+        
+        if (query.length > 3) {
+            fetch(`https://api-adresse.data.gouv.fr/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const suggestionsList = document.getElementById('suggestions-list');
+                    suggestionsList.innerHTML = '';
+
+                    data.features.forEach(feature => {
+                        const li = document.createElement('li');
+                        li.textContent = feature.properties.label;
+                        li.addEventListener('click', () => {
+                            document.getElementById('adresse-complete').value = feature.properties.label;
+                            document.getElementById('addressLongitude').value = feature.geometry.coordinates[0];
+                            document.getElementById('addressLatitude').value = feature.geometry.coordinates[1];
+
+                            const lat = feature.geometry.coordinates[1];
+                            const lon = feature.geometry.coordinates[0];
+                            if (!mapAdresse) {
+                                mapAdresse = L.map('map').setView([lat, lon], 13);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    maxZoom: 19,
+                                }).addTo(mapAdresse);
+                            } else {
+                                mapAdresse.setView([lat, lon], 13);
+                            }
+
+                            const marker = L.marker([lat, lon]).addTo(mapAdresse);
+                            marker.setLatLng([lat, lon]); 
+
+                            document.getElementById('map').classList.remove('d-none');
+                            suggestionsList.innerHTML = ''; 
+
+                
+                            const exists = addresses.some(existingAddress => existingAddress.label === feature.properties.label);
+                            if (!exists) {
+                                addresses.push({
+                                    label: feature.properties.label,
+                                    lon: feature.geometry.coordinates[0],
+                                    lat: feature.geometry.coordinates[1]
+                                });
+                            }
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                });
+        }
+    });
+});
+
+$('#btn-save-address').on('click', function () {
+    updateAddressTable(); 
+    $('#adresse-modal-ajout').modal('hide'); 
+});
+
+function updateAddressTable() {
+    const tableBody = document.getElementById('address-table-body');
+    tableBody.innerHTML = ''; 
+
+    
+    addresses.forEach(address => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <span>${address.label}</span>
+                <input type='hidden' value='${address.lon}' name='ADRESSES[-1][LON_ETABLISSEMENTADRESSE]' />
+                <input type='hidden' value='${address.lat}' name='ADRESSES[-1][LAT_ETABLISSEMENTADRESSE]' />
+            </td>
+            <td>Adresse API</td>
+            <td><small><a class="modifierAdresse" href="#adresse-modal-edit" data-toggle="modal" data-backdrop="static">Modifier</a></small></td>
+            <td><small><a href="#" onclick='$(this).parent().parent().parent().remove(); return false;'>Retirer</a></small></td>
+        `;
+        tableBody.appendChild(row); 
+    });
+}
+
 
         $('#adresse-modal-edit').on('shown.bs.modal', function () {
             optionsGeo.geo_container_id = 'edit-geoportail-container'
@@ -1144,7 +1172,7 @@
                 initGeoConceptKey('<?php echo $app_id ?>', '<?php echo $token ?>');
             <?php endif ?>
 
-            var map = initGeoConceptViewer('geoconcept-container',
+            var map = initGeoConceptViewer('geoconcept-container',///////////////// voila la map
                 "<?php echo $this->geoconcept_url ?>",
                 "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_LAYER') ?>",
                 [{lat: <?php echo $this->default_lat ?>,lon: <?php echo $this->default_lon ?>, description: ""}],
@@ -1203,7 +1231,7 @@
                 }
             );
 
-            $('#geolocme-geoconcept').click(function(e) {
+            $('#geolocme-geoconcept').click(function(e) {//////////////////////// donner la carte avec 
                 e.preventDefault();
                 var geocoderUrl = "<?php echo getenv('PREVARISC_PLUGIN_GEOCONCEPT_GEOCODER') ?>";
                 var adresse = "";
@@ -1242,7 +1270,7 @@
 
         <?php endif ?>
 
-        // Géolocalisation de l'adresse
+       ///////////// // Géolocalisation de l'adresse Juste donner attitude et logitude
         $('#geolocme_nominatim').click(function() {
             element = $(this);
             $.ajax({

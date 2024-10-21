@@ -8,7 +8,7 @@ function geolocaliseIGN (idModal, options) {
         $(idModal+" input[name='voie_ac'], "+idModal+" input[name='numero'], "+idModal+" input[name='complement']").val("").attr("disabled", true).blur();
         $("span.result").text("Inconnu");
     }
-    
+               
     $(`${idModal} #${options.geo_container_id}`).css('visibility', 'hidden');
 
     $(idModal+' #geolocme').click(function() {
