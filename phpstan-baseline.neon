@@ -761,18 +761,23 @@ parameters:
 			path: application/controllers/FormulaireController.php
 
 		-
+			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:json\\(\\)\\.$#"
+			count: 2
+			path: application/controllers/FormulaireController.php
+
+		-
 			message: "#^Call to an undefined method Zend_Controller_Action_HelperBroker\\:\\:redirector\\(\\)\\.$#"
 			count: 5
 			path: application/controllers/FormulaireController.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:getPost\\(\\)\\.$#"
-			count: 6
+			count: 7
 			path: application/controllers/FormulaireController.php
 
 		-
 			message: "#^Call to an undefined method Zend_Controller_Request_Abstract\\:\\:isPost\\(\\)\\.$#"
-			count: 6
+			count: 7
 			path: application/controllers/FormulaireController.php
 
 		-
