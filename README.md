@@ -55,7 +55,7 @@ $ chmod –R 755 public/
 ```
 Ensuite vous pouvez créer un fichier secret.ini dans application/configs afin de configurer Prevarisc pour qu'il ait accès à la base de données (entre autres).
 Vous devez créer un Virtualhost pointant vers le dossier public de Prevarisc.
-Une documentation détaillée est disponible ici : [Documentation d'installation](https://github.com/atos-df-rennes/prevarisc/blob/develop/docs/documentation_installation.md).
+Une documentation détaillée est disponible ici : [Documentation d'installation](docs/documentation_installation.md).
 
 ## Suivi du projet
 
@@ -64,7 +64,7 @@ Une documentation détaillée est disponible ici : [Documentation d'installation
 
 ## Contribuer
 
-Pour contribuer à cette version de Prevarisc, consultez la [documentation de contribution](https://github.com/atos-df-rennes/prevarisc/blob/develop/CONTRIBUTING.md).
+Pour contribuer à cette version de Prevarisc, consultez la [documentation de contribution](CONTRIBUTING.md).
 
 > En plus de la [procédure d'installation](#installation) standard, il vous faudra installer les dépendances de développement avec une version 8.1 de PHP :
 > ```sh
@@ -75,4 +75,4 @@ Sinon, Prevarisc est une application fork-friendly et vous pouvez parfaitement m
 
 ## Licence
 
-Ce projet est sous license [CeCILL-B](http://www.cecill.info/licences/Licence_CeCILL-B_V1-fr.html). Consultez le fichier [LICENSE](https://github.com/atos-df-rennes/prevarisc/blob/develop/LICENSE.md) pour plus de détails.
+Ce projet est sous license [CeCILL-B](http://www.cecill.info/licences/Licence_CeCILL-B_V1-fr.html). Consultez le fichier [LICENSE](LICENSE.md) pour plus de détails.

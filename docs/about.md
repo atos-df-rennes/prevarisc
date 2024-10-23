@@ -10,7 +10,7 @@ Le principal objectif de Prevarisc est de fournir un outil complet qui permet au
 
 ## Contribuer
 
-Nous accueillons les contributions de tous ceux qui souhaitent améliorer Prevarisc. Que ce soit par des suggestions, des corrections de bugs ou des ajouts de fonctionnalités, votre aide est précieuse. Consultez la section [Contribuer](CONTRIBUTING.md) pour plus d'informations sur la façon de participer.
+Nous accueillons les contributions de tous ceux qui souhaitent améliorer Prevarisc. Que ce soit par des suggestions, des corrections de bugs ou des ajouts de fonctionnalités, votre aide est précieuse. Consultez la section [Contribuer](../CONTRIBUTING.md) pour plus d'informations sur la façon de participer.
 
 ## Contact
 

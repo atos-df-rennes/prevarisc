@@ -22,7 +22,7 @@ Si vous souhaitez contribuer au projet, voici quelques étapes à suivre :
 2. **Créez une branche** : Pour chaque fonctionnalité ou correction de bug, créez une nouvelle branche.
 3. **Soumettez une Pull Request** : Une fois vos modifications prêtes, soumettez une Pull Request pour que nous puissions les examiner.
 
-Pour plus de détails sur la contribution, consultez le fichier [CONTRIBUTING.md](CONTRIBUTING.md).
+Pour plus de détails sur la contribution, consultez le fichier [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Signaler un problème
 
