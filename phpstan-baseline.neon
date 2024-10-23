@@ -1861,11 +1861,6 @@ parameters:
 			path: application/services/Dossier.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$Reprise\\.$#"
-			count: 1
-			path: application/services/Dossier.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ARTICLE\\.$#"
 			count: 7
 			path: application/services/Dossier.php
@@ -1873,6 +1868,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER\\.$#"
 			count: 4
+			path: application/services/Dossier.php
+
+		-
+			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_REPRISE\\.$#"
+			count: 1
 			path: application/services/Dossier.php
 
 		-
