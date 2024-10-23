@@ -3014,16 +3014,19 @@ class DossierController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
         // On reprend les prescriptions du dossier ayant id : dossierSelect pui on les ajoute au dossier ayant id : idDossier
 
+        $idDossierInitial = (int) $this->_getParam('dossierSelect');
+        $idDossier = (int) $this->_getParam('idDossier');
+
         $service_dossier = new Service_Dossier();
 
-        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 0);
-        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, (int) $this->_getParam('idDossier'));
+        $prescriptionRappelsReglementaire = $service_dossier->getPrescriptions($idDossierInitial, 0);
+        $service_dossier->copyPrescriptionDossier($prescriptionRappelsReglementaire, $idDossier, $idDossierInitial);
 
-        $prescriptionExploitation = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 1);
-        $service_dossier->copyPrescriptionDossier($prescriptionExploitation, (int) $this->_getParam('idDossier'));
+        $prescriptionExploitation = $service_dossier->getPrescriptions($idDossierInitial, 1);
+        $service_dossier->copyPrescriptionDossier($prescriptionExploitation, $idDossier, $idDossierInitial);
 
-        $prescriptionAmelioration = $service_dossier->getPrescriptions((int) $this->_getParam('dossierSelect'), 2);
-        $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, (int) $this->_getParam('idDossier'));
+        $prescriptionAmelioration = $service_dossier->getPrescriptions($idDossierInitial, 2);
+        $service_dossier->copyPrescriptionDossier($prescriptionAmelioration, $idDossier, $idDossierInitial);
     }
 
     public function lienmultipleAction()
