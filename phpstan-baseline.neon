@@ -1871,6 +1871,11 @@ parameters:
 			path: application/services/Dossier.php
 
 		-
+			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_DOSSIER_REPRISE\\.$#"
+			count: 1
+			path: application/services/Dossier.php
+
+		-
 			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$ID_ETABLISSEMENT\\.$#"
 			count: 1
 			path: application/services/Dossier.php

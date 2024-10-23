@@ -367,6 +367,11 @@ class Service_Dossier
 
             foreach ($assoc as $index => $presc) {
                 $assoc[$index]['DATE_LEVEE_FULL'] = Service_Utils_Date::formatDateWithDayName($presc['DATE_LEVEE']);
+                $assoc[$index]['ID_DOSSIER_REPRISE'] = $ue['ID_DOSSIER_REPRISE'];
+                $assoc[$index]['OBJET_DOSSIER'] = $ue['OBJET_DOSSIER'];
+                $assoc[$index]['DATEINSERT_DOSSIER'] = Service_Utils_Date::formatDateWithDayName($ue['DATEINSERT_DOSSIER']);
+                $assoc[$index]['LIBELLE_DOSSIERTYPE'] = $ue['LIBELLE_DOSSIERTYPE'];
+                $assoc[$index]['LIBELLE_DOSSIERNATURE'] = $ue['LIBELLE_DOSSIERNATURE'];
             }
 
             if ([] !== $assoc) {
@@ -586,7 +591,7 @@ class Service_Dossier
         }
     }
 
-    public function copyPrescriptionDossier($listePrescription, $idDossier): void
+    public function copyPrescriptionDossier($listePrescription, $idDossier, ?int $idDossierInitial = null): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -614,6 +619,11 @@ class Service_Dossier
             $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
             $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
             $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
+
+            if (null !== $idDossierInitial) {
+                $newPresc->ID_DOSSIER_REPRISE = $idDossierInitial;
+            }
+
             $newPresc->save();
 
             foreach ($assoc as $val) {
