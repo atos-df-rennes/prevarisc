@@ -1419,17 +1419,16 @@ class DossierController extends Zend_Controller_Action
                     foreach ($updatedEtab as $ue) {
                         $etabInformation = $dbEtab->getInformations($ue['ID_ETABLISSEMENT']);
                         // Si l'établissement est en statut projet, et uniquement ce cas
-                        if (!$etabInformation) {
-                            continue;
+                        if (
+                            $etabInformation
+                            && 1 == $etabInformation->ID_STATUT
+                        ) {
+                            $this->_helper->flashMessenger([
+                                'context' => 'warning',
+                                'title' => 'Avertissement',
+                                'message' => "La visite d'avant ouverture étant favorable, vous devriez passer le statut de l'établissement <a title='Ouvrir' href='/etablissement/edit/id/".$ue['ID_ETABLISSEMENT']."'>".$etabInformation['LIBELLE_ETABLISSEMENTINFORMATIONS']."</a> à 'ouvert' (statut actuellement à 'projet').",
+                            ]);
                         }
-                        if (1 != $etabInformation->ID_STATUT) {
-                            continue;
-                        }
-                        $this->_helper->flashMessenger([
-                            'context' => 'warning',
-                            'title' => 'Avertissement',
-                            'message' => "La visite d'avant ouverture étant favorable, vous devriez passer le statut de l'établissement <a title='Ouvrir' href='/etablissement/edit/id/".$ue['ID_ETABLISSEMENT']."'>".$etabInformation['LIBELLE_ETABLISSEMENTINFORMATIONS']."</a> à 'ouvert' (statut actuellement à 'projet').",
-                        ]);
                     }
                 }
             }

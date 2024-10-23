@@ -53,16 +53,12 @@ class ProxyController extends Zend_Controller_Action
             curl_close($ch);
 
             foreach ($headers as $header) {
-                if ('' === $header) {
-                    continue;
+                if (
+                    $header
+                    && 0 !== preg_match('/^Content-Type/i', $header)
+                ) {
+                    $this->_response->setRawHeader($header);
                 }
-                if ('0' === $header) {
-                    continue;
-                }
-                if (0 === preg_match('/^Content-Type/i', $header)) {
-                    continue;
-                }
-                $this->_response->setRawHeader($header);
             }
         }
 

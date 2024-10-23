@@ -431,13 +431,9 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
             if ($groupement_adresse['ID_GROUPEMENT']) {
                 $groupements[$groupement_adresse['ID_ETABLISSEMENT']][] = $groupement_adresse['ID_GROUPEMENT'];
             }
-            if (!$groupement_adresse['NUMINSEE_COMMUNE']) {
-                continue;
+            if ($groupement_adresse['NUMINSEE_COMMUNE'] && !isset($communes[$groupement_adresse['ID_ETABLISSEMENT']])) {
+                $communes[$groupement_adresse['ID_ETABLISSEMENT']][] = $groupement_adresse['NUMINSEE_COMMUNE'];
             }
-            if (isset($communes[$groupement_adresse['ID_ETABLISSEMENT']])) {
-                continue;
-            }
-            $communes[$groupement_adresse['ID_ETABLISSEMENT']][] = $groupement_adresse['NUMINSEE_COMMUNE'];
         }
 
         foreach ($ids_etablissement as $id) {

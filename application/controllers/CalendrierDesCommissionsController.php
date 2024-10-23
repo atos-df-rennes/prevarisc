@@ -1020,16 +1020,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                 $existe = 0;
                 foreach ($tabCommune as $value) {
-                    if (count($ue['infosEtab']['adresses']) <= 0) {
-                        continue;
+                    if (
+                        count($ue['infosEtab']['adresses']) > 0
+                        && isset($value[0])
+                        && $value[0] == $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE']
+                    ) {
+                        $existe = 1;
                     }
-                    if (!isset($value[0])) {
-                        continue;
-                    }
-                    if ($value[0] != $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE']) {
-                        continue;
-                    }
-                    $existe = 1;
                 }
 
                 if (0 == $existe) {
