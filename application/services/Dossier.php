@@ -587,7 +587,7 @@ class Service_Dossier
         }
     }
 
-    public function copyPrescriptionDossier($listePrescription, $idDossier, int $idDossierInitial = null): void
+    public function copyPrescriptionDossier($listePrescription, $idDossier, ?int $idDossierInitial = null): void
     {
         $dbPrescDossier = new Model_DbTable_PrescriptionDossier();
         $dbPrescDossierAssoc = new Model_DbTable_PrescriptionDossierAssoc();
@@ -607,7 +607,7 @@ class Service_Dossier
             $newPresc->ID_PRESCRIPTION_TYPE = $ue[0]['ID_PRESCRIPTION_TYPE'];
             $newPresc->LIBELLE_PRESCRIPTION_DOSSIER = $ue[0]['LIBELLE_PRESCRIPTION_DOSSIER'];
             $newPresc->TYPE_PRESCRIPTION_DOSSIER = $ue[0]['TYPE_PRESCRIPTION_DOSSIER'];
-            
+
             if (null !== $idDossierInitial) {
                 $newPresc->ID_DOSSIER_REPRISE = $idDossierInitial;
             }

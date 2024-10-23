@@ -114,7 +114,7 @@ class UsersController extends Zend_Controller_Action
                             $row_groupe_priv->id_privilege = $id_privilege;
                             $row_groupe_priv->save();
                         }
-                        
+
                         if (
                             0 == $value_privilege
                             && $groupe_privilege_exists
