@@ -3,8 +3,11 @@
 class Service_Dashboard
 {
     public const ID_DOSSIERTYPE_COURRIER = 5;
+
     public const ID_NATURE_LEVEE_PRESCRIPTIONS = 7;
+
     public const ID_NATURE_LEVEE_AVIS_DEF = 19;
+
     public const ID_NATURE_ECHEANCIER_TRAVAUX = 46;
 
     protected $options = [];
@@ -451,7 +454,7 @@ class Service_Dashboard
         $conditionEtudesSansAvis = 'd.AVIS_DOSSIER IS NULL AND (d.AVIS_DOSSIER_COMMISSION IS NULL OR d.AVIS_DOSSIER_COMMISSION = 0) AND d.TYPE_DOSSIER = 1';
         $conditionCourriersSansReponse = 'd.DATEREP_DOSSIER IS NULL AND d.TYPE_DOSSIER = 5';
 
-        $search->setCriteria("({$conditionEtudesSansAvis}) OR ({$conditionCourriersSansReponse})");
+        $search->setCriteria(sprintf('(%s) OR (%s)', $conditionEtudesSansAvis, $conditionCourriersSansReponse));
 
         $search->order('d.DATEINSERT_DOSSIER desc');
 
