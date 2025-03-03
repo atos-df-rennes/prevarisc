@@ -19,5 +19,30 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "ramsey/conventional-commits": {
+            "config": {
+                "typeCase": "lower",
+                "types": ["adaptation", "chore", "docs", "test", "style", "refactor", "tech", "migration"],
+                "scopeCase": "kebab",
+                "scopes": [
+                    "deps",
+                    "carto",
+                    "dossier",
+                    "etablissement",
+                    "rapports",
+                    "calendrier",
+                    "platau",
+                    "unitaire",
+                    "fonctionnel",
+                    "dashboard",
+                    "prescriptions",
+                    "effectifs-degagements",
+                    "pieces-jointes",
+                    "formulaires"
+                ]
+            }
+        }
+    }
 }
