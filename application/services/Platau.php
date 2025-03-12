@@ -1,8 +1,11 @@
 <?php
 
-class Service_Platau
+class Service_Platau implements Service_Interface_DossierAvis
 {
     private const HEALTHCHECK_ENDPOINT = 'healthcheck';
+    
+    private const NOMECLATURE_ENDPOINT = 'nomenclatures/NATURE_AVIS';
+
 
     private $datastore;
 
@@ -14,12 +17,14 @@ class Service_Platau
 
     private $pisteClientSecret;
 
+    private $platauIdActeurAppelant;
+
     public function __construct()
     {
         $this->datastore = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.implode(DS, ['src', 'Service', 'PlatauAbstract.php']));
         $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.'config.json');
-        [$this->pisteClientId, $this->pisteClientSecret] = $this->getPisteCredentials();
+        [$this->pisteClientId, $this->pisteClientSecret, $this->platauIdActeurAppelant] = $this->getPisteCredentials();
     }
 
     /**
@@ -78,6 +83,97 @@ class Service_Platau
             'healthcheckOk' => true,
         ];
     }
+    
+
+    public function getAvisLibelle($idAvis, $idDossier = null)
+    {
+        $dossierModel = new Model_DbTable_Dossier();
+    
+        $result = $dossierModel->getLibelleDossierAvisCommission($idAvis, $idDossier);
+    
+        if ($result) {
+            return $result;
+        } else {
+            return null; 
+        }
+    }
+    
+    /**
+    * Gère la récupération des avis disponibles.
+    */
+    public function getAvis(): array
+{
+    $pisteTokenData = $this->getPisteTokenData();
+    $pisteToken = $pisteTokenData['access_token'] ?? null;
+
+    if (null === $pisteToken || !$this->isTokenValid($pisteTokenData)) {
+        $pisteData = $this->requestPisteToken();
+
+        if (null === $pisteData) {
+            return [
+                'Nomenclature' => false,
+                'errorOrigin' => 'prevarisc',
+            ];
+        }
+
+        $this->storePisteToken($pisteData);
+        $pisteToken = $pisteData['access_token'];
+    }
+
+    $platauAvis = $this->getPlatauNomenclature($pisteToken);
+
+    $platauAvis = json_decode($platauAvis, true);
+
+    if ($platauAvis === null) {
+        return [];
+    }
+
+    return $platauAvis;
+}
+
+
+    /**
+     * Récupère la nomenclature des types d'avis disponibles sur Plat'AU.
+     */
+    private function getPlatauNomenclature(string $pisteToken): ?string
+    {
+        $url = $this->getConstInFile($this->platauServiceFilePath, 'PLATAU_URL');
+    
+        if (null === $url) {
+            return null;
+        }
+    
+        $url .= self::NOMECLATURE_ENDPOINT;
+    
+        $platauClient = new Service_PlatauClient();
+        $platauClient->addOption(CURLOPT_URL, $url);
+        $platauClient->addOption(
+            CURLOPT_HTTPHEADER,
+            [
+                'Content-Type: application/json',
+                sprintf('Authorization: Bearer %s', $pisteToken),
+                sprintf('Id-Acteur-Appelant: %s', $this->platauIdActeurAppelant),
+            ]
+        );
+    
+        $curlHandle = curl_init();
+        curl_setopt_array($curlHandle, $platauClient->getOptions());
+        $data = curl_exec($curlHandle);
+    
+        if ($data === false) {
+            return null;
+        }
+    
+        curl_close($curlHandle);
+    
+        if (empty($data)) {
+            return null;
+        }
+    
+    
+        return $data;
+    }
+    
 
     private function getPisteCredentials(): array
     {
@@ -86,7 +182,7 @@ class Service_Platau
 
         $platauOptions = $decodedContent['platau.options'];
 
-        return [$platauOptions['PISTE_CLIENT_ID'], $platauOptions['PISTE_CLIENT_SECRET']];
+        return [$platauOptions['PISTE_CLIENT_ID'], $platauOptions['PISTE_CLIENT_SECRET'], $platauOptions['PLATAU_ID_ACTEUR_APPELANT']];
     }
 
     /**
