@@ -2,7 +2,7 @@
 <ul class="nav nav-tabs nav-stacked menu_dashboard">
     <li class="nav-header">Général</li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'admin') echo "class='active'" ?> >
+    <li>
         <a href='/admin' ><i class="icon-info-sign icon-black"></i> Informations</a>
     </li>
 
@@ -54,8 +54,8 @@
         <a href='/groupement' ><i class="icon-tags icon-black"></i> Groupements de communes</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'changement') echo "class='active'" ?> >
-        <a href='/changement' ><i class="icon-bell icon-black"></i> Messages des alertes</a>
+    <li>
+        <a href='/admin/changement' ><i class="icon-bell icon-black"></i> Messages des alertes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
