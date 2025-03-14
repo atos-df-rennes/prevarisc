@@ -1,4 +1,6 @@
 <script type='text/javascript'>
+var isNomenclatureEnabled = <?php echo json_encode(getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') ? true : false); ?>;
+
 $(document).ready(function() {
     $(".alerte-link").click(function() {
         var idEts = $(this).attr("data-ets");
@@ -444,10 +446,31 @@ function majAvisSelect() {
 
     $("#AVIS_DOSSIER_COMMISSION option").each(function() {
         if ($(this).val() != 0) {
-            if ($(this).val() == 1) {
-                var text = "Favorable";
-            } else {
-                var text = "Défavorable";
+            if (!isNomenclatureEnabled) {
+                if ($(this).val() == 1) {
+                    var text = "Favorable";
+                } else {
+                    var text = "Défavorable";
+                }
+            }else {
+                if ($(this).val() == 1) {
+                    var text = "Favorable";
+                } 
+                else if ($(this).val() == 2) {
+                    var text = "Favorable assorti d’une ou plusieurs prescriptions";
+                } 
+                else if ($(this).val() == 3) {
+                    var text = "Défavorable";
+                }
+                else if ($(this).val() == 4) {
+                    var text = "Pas d’avis car consultation sans objet";
+                }
+                else if ($(this).val() == 5) {
+                    var text = "Pas d’avis suite à déclaration d’incomplétude du dossier";
+                }
+                else if ($(this).val() == 6) {
+                    var text = "Pas d’avis - à motiver dans la partie Fondement de l’avis";
+                }
             }
             $(this).text(text + addText);
         }
@@ -998,13 +1021,13 @@ $.fn.afficheChamps = function(listeNature) {
 
             var type = $("#TYPE_DOSSIER").val();
             if (type == 2 || type == 3) {
-                if ($("#AVIS_DOSSIER_COMMISSION").val() == 2) {
+                if (($("#AVIS_DOSSIER_COMMISSION").val() == 2 && (!isNomenclatureEnabled)) ||($("#AVIS_DOSSIER_COMMISSION").val() == 3 && (isNomenclatureEnabled)) ) {
                     $("#FACTDANGE").show();
                     $("#ECHEANCIERTRAV").show();
                 }
                 $("#ANOMALIE").show();
             } else if (type == 1) {
-                if ($("#selectNature").val() == 19 && $("#AVIS_DOSSIER_COMMISSION").val() == 2) {
+                if ($("#selectNature").val() == 19 && (($("#AVIS_DOSSIER_COMMISSION").val() == 2 && (!isNomenclatureEnabled)) ||($("#AVIS_DOSSIER_COMMISSION").val() == 3 && (isNomenclatureEnabled)) )) {
                     $("#FACTDANGE").show();
                 }
                 $("#ANOMALIE").show();
@@ -1046,7 +1069,7 @@ $("#modificationDossier").live('click', function() {
     if ($("#do").val() != 'new') {
         $("#rapport").hide();
         $("#VERROU").hide();
-        $("#validModification").show();
+        $("#validModification").show();      
         $("#annulModification").show().button().click(function() {
             window.location.reload();
         });
@@ -1256,7 +1279,7 @@ $("#creationDossier").live('click', function() {
 $("#AVIS_DOSSIER_COMMISSION").live('change', function() {
     var type = $("#TYPE_DOSSIER").val();
     if (type == 2 || type == 3) {
-        if ($(this).val() == 2) {
+        if (($(this).val()  == 2 && (!isNomenclatureEnabled)) ||($(this).val()  == 3 && (isNomenclatureEnabled)) ) {
             $("#FACTDANGE").show();
             $("#ECHEANCIERTRAV").show();
         } else {
@@ -1265,11 +1288,18 @@ $("#AVIS_DOSSIER_COMMISSION").live('change', function() {
         }
     }
     if (type == 1 && $("#selectNature").val() == 19) {
-        if ($(this).val() == 2) {
+        if (($(this).val()  == 2 && (!isNomenclatureEnabled)) ||($(this).val()  == 3 && (isNomenclatureEnabled))) {
             $("#FACTDANGE").show();
         } else {
             $("#FACTDANGE").hide();
         }
+    }
+
+
+    if(isNomenclatureEnabled){
+        const selectedOption = this.options[this.selectedIndex];
+        var avisLibelle =  selectedOption.getAttribute('data-libelle'); 
+        document.getElementById('AVIS_DOSSIER_COMMISSION_LIBELLE').value = avisLibelle ; 
     }
 });
 
@@ -2055,7 +2085,7 @@ $(".delaipresc").live('click', function() {
                     <?php endif ?>
                 </div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
-                    <span class='avis <?php echo $this->AVIS_VALUE['LIBELLE_AVIS'][0] ?>'>
+                <span class='avis <?php echo $this->AVIS_VALUE['LIBELLE_AVIS'][0] ?>'>
                         <?php echo $this->AVIS_VALUE['LIBELLE_AVIS'];
                         if (1 == $this->infosDossier['TYPE_DOSSIER']) :
                             //etude
@@ -2078,8 +2108,8 @@ $(".delaipresc").live('click', function() {
                 </div>
                 <div class='right form span9' <?php echo ($action != 'new') ? "style='display:none;'" : "" ?>>
                     <select name='AVIS_DOSSIER' id='AVIS_DOSSIER'>
-                        <option value='0'></option>
-                        <?php foreach ($this->listeAvis as $avis) : ?>
+                    <option value='0'></option>
+                    <?php foreach ($this->listeAvisDB as $avis) : ?>
                         <option value='<?php echo $avis["ID_AVIS"] ?>'
                             <?php echo ($this->AVIS_VALUE['ID_AVIS'] == $avis["ID_AVIS"]) ? "selected='selected'" : "" ?>>
                             <?php echo $avis['LIBELLE_AVIS'] ?>
@@ -2113,8 +2143,17 @@ $(".delaipresc").live('click', function() {
                 style='<?php echo ($action != 'new' && in_array('AVIS_COMMISSION', $this->afficherChamps) && $this->infosDossier['AVIS_DOSSIER_COMMISSION'] != '0' && 1 == $this->afficheAvis) ? "" : "display:none;" ?>margin-bottom:20px;'>
                 <div class='left libelle span3' style='float:left;'>Avis de la commission</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
-                    <span class='avis <?php echo $this->AVIS_COMMISSION_VALUE['LIBELLE_AVIS'][0] ?>'>
-                        <?php echo $this->AVIS_COMMISSION_VALUE['LIBELLE_AVIS'];
+                <span class='avis <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')) : 
+                            echo $this->AVIS_COMMISSION_VALUE['LIBELLE_AVIS'][0]; else : 
+                            echo $this->AVIS_COMMISSION_VALUE['AVIS_DOSSIER_COMMISSION_LIBELLE'][0];
+                        endif; 
+                    ?>'>
+                    <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')) : 
+                        echo $this->AVIS_COMMISSION_VALUE['LIBELLE_AVIS']; else : 
+                        echo $this->AVIS_COMMISSION_VALUE['AVIS_DOSSIER_COMMISSION_LIBELLE']; 
+                    endif;
+
+
                         if (1 == $this->infosDossier['TYPE_DOSSIER']) :
                             //etude
                             if (in_array($this->natureConcerne[0]['ID_NATURE'], array(7, 16, 17, 19))) : ?>
@@ -2139,12 +2178,29 @@ $(".delaipresc").live('click', function() {
                         <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?>>
                         <option value='0'></option>
                         <?php foreach ($this->listeAvis as $avis) : ?>
-                        <option value='<?php echo $avis["ID_AVIS"] ?>'
-                            <?php echo ($this->AVIS_COMMISSION_VALUE['ID_AVIS'] == $avis["ID_AVIS"]) ? "selected='selected'" : "" ?>>
-                            <?php echo $avis['LIBELLE_AVIS'] ?>
-                        </option>
+                        <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')) : ?>
+                            <option value='<?php echo $avis["ID_AVIS"] ?>'
+                                <?php echo ($this->AVIS_COMMISSION_VALUE['ID_AVIS'] == $avis["ID_AVIS"]) ? "selected='selected'" : "" ?>>
+                                <?php echo $avis['LIBELLE_AVIS'] ?>
+                            </option>
+                        <?php else : ?>
+                            <option value='<?php echo $avis["idNom"] ?>' data-libelle='<?php echo htmlspecialchars($avis["libNom"]) ?>'
+                            <?php echo ($this->AVIS_COMMISSION_VALUE['AVIS_DOSSIER_COMMISSION'] == $avis["idNom"]) ? "selected='selected'" : "" ?>>
+                            <?php echo $avis['libNom'] ?>
+                            </option>
+                        <?php endif ?>
                         <?php endforeach ?>
+                        <?php if ( (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION'))&&(isset($this->AvisSauvegardé))) : ?>
+                            <option value='<?php echo $this->AvisSauvegardé["id"] ?>' 
+                                data-libelle='<?php echo htmlspecialchars($this->AvisSauvegardé["libelle"]) ?>'
+                                <?php echo $this->AvisSauvegardé["id"] == $this->AvisSauvegardé["id"] ? "selected='selected'" : "" ?>>
+                                <?php echo htmlspecialchars($this->AvisSauvegardé["libelle"]) ?>
+                            </option>
+                        <?php endif ?>
+
                     </select>
+                    <input type="hidden" name="AVIS_DOSSIER_COMMISSION_LIBELLE" id="AVIS_DOSSIER_COMMISSION_LIBELLE"
+                    value="<?php echo htmlspecialchars($this->AVIS_COMMISSION_VALUE['AVIS_DOSSIER_COMMISSION_LIBELLE'] ?? '') ?>">
                     &nbsp;&nbsp;&nbsp;
                     <input type='checkbox' name='repercuterAvis' id='repercuterAvis'
                         <?php echo ($this->is_allowed_change_avis && null === $this->dateAvis) ? '' : 'disabled' ?> /> Répercuter l'avis sur les
@@ -2161,7 +2217,8 @@ $(".delaipresc").live('click', function() {
                     $action != 'new'
                     && $this->infosDossier['FACTDANGE_DOSSIER'] !== null
                     && (
-                        ($isSignalement && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2)
+                        (($isSignalement && $this->AVIS_COMMISSION_VALUE['ID_AVIS'] === 2 && !getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION'))
+                        ||($isSignalement && $this->AVIS_COMMISSION_VALUE['AVIS_DOSSIER_COMMISSION'] === 3 && getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')) )
                         || $this->infosDossier['FACTDANGE_DOSSIER'] > 0
                     )
                 ) ? "" : "display:none;" ?>'

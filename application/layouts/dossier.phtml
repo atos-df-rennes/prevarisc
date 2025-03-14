@@ -293,20 +293,38 @@ endif ?>
                                 <?php endif ?>
                             </a>
 
-                            <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null): ?>
-                                <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"): ?>
-                                    <span class='avis F'><?= $value['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
-                                <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"): ?>
-                                    <span class='avis D'><?=$value['avisExploitation']['LIBELLE_AVIS']?></span>&nbsp;
-                                <?php elseif($value['infosEtab']['presence_avis_differe']): ?>
-                                    <span class='label label-info'>Avis différé</span>&nbsp;
+                            <br>
+                            <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')): ?>
+                                <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null): ?>
+                                    <?php if($value['avisExploitation']['LIBELLE_AVIS'] == "Favorable"): ?>
+                                        <span class='avis F'><?= $value['avisExploitation']['LIBELLE_AVIS'] ?></span>&nbsp;
+                                    <?php elseif($value['avisExploitation']['LIBELLE_AVIS'] == "Défavorable"): ?>
+                                        <span class='avis D'><?=$value['avisExploitation']['LIBELLE_AVIS']?></span>&nbsp;
+                                    <?php elseif($value['infosEtab']['presence_avis_differe']): ?>
+                                        <span class='label label-info'>Avis différé</span>&nbsp;
+                                    <?php else: ?>
+                                        <span class='avis'>Avis indisponible</span>&nbsp;
+                                    <?php endif ?>
                                 <?php else: ?>
                                     <span class='avis'>Avis indisponible</span>&nbsp;
                                 <?php endif ?>
-                            <?php else: ?>
-                                <span class='avis'>Avis indisponible</span>&nbsp;
+                            <?php else : ?>
+                                <?php if($value['infosEtab']['general']['ID_DOSSIER_DONNANT_AVIS'] != null): ?>
+                                    <?php if($value['avisExploitation']['AVIS_DOSSIER_COMMISSION_LIBELLE'] == "Favorable"): ?>
+                                        <span class='avis F'><?= $value['avisExploitation']['AVIS_DOSSIER_COMMISSION_LIBELLE'] ?></span>&nbsp;
+                                    <?php elseif($value['avisExploitation']['AVIS_DOSSIER_COMMISSION_LIBELLE'] == "Favorable assorti d’une ou plusieurs prescriptions"): ?>
+                                        <span class='avis F'>Favorable</span>&nbsp;
+                                    <?php elseif($value['avisExploitation']['AVIS_DOSSIER_COMMISSION_LIBELLE'] == "Défavorable"): ?>
+                                        <span class='avis D'><?=$value['avisExploitation']['AVIS_DOSSIER_COMMISSION_LIBELLE']?></span>&nbsp;
+                                    <?php elseif($value['infosEtab']['presence_avis_differe']): ?>
+                                        <span class='label label-info'>Avis différé</span>&nbsp;
+                                    <?php else: ?>
+                                        <span class='avis'>Avis indisponible</span>&nbsp;
+                                    <?php endif ?>
+                                <?php else: ?>
+                                    <span class='avis'>Avis indisponible</span>&nbsp;
+                                <?php endif ?>
                             <?php endif ?>
-
                             <?php $nbPrev = count($value['infosEtab']['preventionnistes']) ?>
 
                             <?php if($nbPrev > 0): ?>

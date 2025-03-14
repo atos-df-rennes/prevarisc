@@ -325,8 +325,31 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('dossierType', $DBdossierType->fetchAll());
 
         // Récupération de la liste des avis pour la génération du select
+        $dossierManager = new Service_DossierManager();
+        $avisPlatau = $dossierManager->getDossierAvis()->getAvis();
+        $this->view->assign('listeAvis', $avisPlatau);
+        
+    // Vérifie si AvisDossierCommissionLibelle est présent dans $avisPlatau
+    if (getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')){
+        $idDossier = (int) $this->getRequest()->getParam('id');
+        $AvisDossierCommissionId =$DBdossier->getDossierAvisCommissionId($idDossier)['AVIS_DOSSIER_COMMISSION'];
+        $AvisDossierCommissionLibelle =$DBdossier->getDossierAvisCommissionLibelle($idDossier)['AVIS_DOSSIER_COMMISSION_LIBELLE'];
+        $existe = false;
+        foreach ($avisPlatau as $avis) {
+        if ($avis['idNom'] === $AvisDossierCommissionId) {
+            $existe = true;
+            break;    }
+        }
+        if (!$existe) {
+            $avisSauvegarde = [
+                'id' =>  $AvisDossierCommissionId,
+                'libelle' => $AvisDossierCommissionLibelle,
+            ];
+            $this->view->assign('AvisSauvegardé', $avisSauvegarde);
+        }
+    }
         $DBlisteAvis = new Model_DbTable_Avis();
-        $this->view->assign('listeAvis', $DBlisteAvis->getAvis());
+        $this->view->assign('listeAvisDB', $DBlisteAvis->getAvis());
         $this->view->assign('afficherChamps', []);
 
         $listeMois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
@@ -561,7 +584,13 @@ class DossierController extends Zend_Controller_Action
             }
 
             if ('' != $this->view->infosDossier['AVIS_DOSSIER_COMMISSION']) {
-                $this->view->assign('AVIS_COMMISSION_VALUE', $DBlisteAvis->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION']));
+                $dossierManager = new Service_DossierManager();
+                if(getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')){
+                    $avis = $dossierManager->getDossierAvis()->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'], $this->view->infosDossier['ID_DOSSIER']);
+                }else{
+                    $avis = $dossierManager->getDossierAvis()->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION']);
+                }
+                $this->view->assign('AVIS_COMMISSION_VALUE', $avis);
             }
 
             // Récupération du libellé du type de dossier
@@ -1336,7 +1365,7 @@ class DossierController extends Zend_Controller_Action
             // On met le champ ID_DOSSIER_DONNANT_AVIS de établissement avec l'ID du dossier que l'on vient d'enregistrer dans les cas suivant
             if (
                 $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')
-                && (1 == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION') || self::ID_AVIS_DEFAVORABLE == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION'))
+                && (1 == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION') || self::ID_AVIS_DEFAVORABLE == $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')) 
                 && $service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
             ) {
                 if (
@@ -1420,7 +1449,7 @@ class DossierController extends Zend_Controller_Action
             elseif (
                 $this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION')
                 && in_array($this->getRequest()->getParam('AVIS_DOSSIER_COMMISSION'), [1, 2])
-                && !$service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
+                 && !$service_dossier->isDossierDonnantAvis($nouveauDossier, $idNature)
                 && 'edit' == $this->getRequest()->getParam('do')
                 && in_array($oldNature, $naturesDonnantAvis)
             ) {
@@ -2306,7 +2335,7 @@ class DossierController extends Zend_Controller_Action
         // Avis commission
         $libelleAvisCommission = $DBavisDossier->find($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'])->current();
         $this->view->assign('avisDossierCommission', $libelleAvisCommission['LIBELLE_AVIS']);
-
+        
         $DBdossierCommission = new Model_DbTable_Commission();
 
         $this->view->assign('commissionInfos', 'Aucune commission');

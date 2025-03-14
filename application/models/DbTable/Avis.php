@@ -1,6 +1,6 @@
 <?php
 
-class Model_DbTable_Avis extends Zend_Db_Table_Abstract
+class Model_DbTable_Avis extends Zend_Db_Table_Abstract implements Service_Interface_DossierAvis
 {
     // Nom de la base
     protected $_name = 'avis';
@@ -34,7 +34,7 @@ class Model_DbTable_Avis extends Zend_Db_Table_Abstract
      * @param int|string $idAvis
      * @param mixed      $tousLesChamps
      */
-    public function getAvisLibelle($idAvis, $tousLesChamps = 1)
+    public function getAvisLibelle($idAvis, $tousLesChamps = 1, $idDossier = null)
     {
         if (1 == $tousLesChamps) {
             $select = "SELECT *
