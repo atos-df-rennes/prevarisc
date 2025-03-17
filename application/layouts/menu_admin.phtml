@@ -3,7 +3,7 @@
     <li class="nav-header">Général</li>
 
     <li>
-        <a href='/admin' ><i class="icon-info-sign icon-black"></i> Informations</a>
+        <a href='/admin'><i class="icon-info-sign icon-black"></i> Informations</a>
     </li>
 
     <li class="nav-header">Gestion des entités</li>
@@ -13,7 +13,7 @@
     </li>
 
     <li>
-        <a href='/admin/utilisateurs' ><i class="icon-user icon-black"></i> Gestion des utilisateurs</a>
+        <a href='/admin/utilisateurs'><i class="icon-user icon-black"></i> Gestion des utilisateurs</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-communes') echo "class='active'" ?> >
@@ -32,8 +32,8 @@
         <a href='/gestion-des-commissions' ><i class="icon-certificate icon-black"></i> Gestion des commissions</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-documents') echo "class='active'" ?> >
-        <a href='/gestion-des-documents' ><i class="icon-file icon-black"></i> Gestion des documents</a>
+    <li>
+        <a href='/admin/documents'><i class="icon-file icon-black"></i> Gestion des documents</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-prescriptions') echo "class='active'" ?> >
@@ -55,7 +55,7 @@
     </li>
 
     <li>
-        <a href='/admin/changement' ><i class="icon-bell icon-black"></i> Messages des alertes</a>
+        <a href='/admin/changement'><i class="icon-bell icon-black"></i> Messages des alertes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
