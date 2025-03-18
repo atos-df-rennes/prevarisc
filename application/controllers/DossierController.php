@@ -326,11 +326,12 @@ class DossierController extends Zend_Controller_Action
 
         // Récupération de la liste des avis pour la génération du select
         $dossierManager = new Service_DossierManager();
-        $avisPlatau = $dossierManager->getDossierAvis()->getAvis();
+        $isFromPlatau = $service_dossier->isFromPlatau($this->idDossier);
+        $avisPlatau = $dossierManager->getDossierAvis($isFromPlatau)->getAvis();
         $this->view->assign('listeAvis', $avisPlatau);
         
     // Vérifie si AvisDossierCommissionLibelle est présent dans $avisPlatau
-    if (getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')){
+    if (getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') && $isFromPlatau){
         $idDossier = (int) $this->getRequest()->getParam('id');
         $AvisDossierCommissionId =$DBdossier->getDossierAvisCommissionId($idDossier)['AVIS_DOSSIER_COMMISSION'];
         $AvisDossierCommissionLibelle =$DBdossier->getDossierAvisCommissionLibelle($idDossier)['AVIS_DOSSIER_COMMISSION_LIBELLE'];
@@ -585,10 +586,12 @@ class DossierController extends Zend_Controller_Action
 
             if ('' != $this->view->infosDossier['AVIS_DOSSIER_COMMISSION']) {
                 $dossierManager = new Service_DossierManager();
-                if(getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')){
-                    $avis = $dossierManager->getDossierAvis()->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'], $this->view->infosDossier['ID_DOSSIER']);
+                $isPlatau = $service_dossier->isFromPlatau((int)$this->view->infosDossier['ID_DOSSIER']);
+                if(getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') && $isPlatau){
+                    $avis = $dossierManager->getDossierAvis( $isPlatau)->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'], $this->view->infosDossier['ID_DOSSIER']);
                 }else{
-                    $avis = $dossierManager->getDossierAvis()->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION']);
+                    $avis = $dossierManager->getDossierAvis( $isPlatau)->getAvisLibelle($this->view->infosDossier['AVIS_DOSSIER_COMMISSION']);
+
                 }
                 $this->view->assign('AVIS_COMMISSION_VALUE', $avis);
             }

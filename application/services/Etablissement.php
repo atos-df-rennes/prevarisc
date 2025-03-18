@@ -1601,6 +1601,12 @@ class Service_Etablissement implements Service_Interface_Etablissement
         }
     }
 
+    public function isFromPlatau($id_dossier_donnant_avis):bool{
+        $DBdossier = new Model_DbTable_Dossier();
+        $isPlatau = $DBdossier->isPlatau((int)$id_dossier_donnant_avis);
+        return $isPlatau;
+    }
+    
     public function getAvisEtablissement($id_etablissement, $id_dossier_donnant_avis): string
     {
         $idDossierDonnantAvis = $id_dossier_donnant_avis;

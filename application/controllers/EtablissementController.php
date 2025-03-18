@@ -38,6 +38,7 @@ class EtablissementController extends Zend_Controller_Action
         if ($id) {
             $this->etablissement = $this->serviceEtablissement->get($id);
             $this->view->assign('etablissement', $this->etablissement);
+            $this->view->assign('isFromPlatau', $this->serviceEtablissement->isFromPlatau($this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
             $this->view->assign('avis', $this->serviceEtablissement->getAvisEtablissement($this->etablissement['general']['ID_ETABLISSEMENT'], $this->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
             $this->view->assign('hasAvisDerogations', array_key_exists('AVIS_DEROGATIONS', $this->serviceEtablissement->getHistorique($id)));
         }
@@ -256,7 +257,6 @@ class EtablissementController extends Zend_Controller_Action
         $serviceEtablissementDescriptif = new Service_EtablissementDescriptif();
 
         $idEtablissement = $this->getRequest()->getParam('id');
-
         $this->view->assign('etablissement', $service_etablissement->get($idEtablissement));
         $this->view->assign('avis', $service_etablissement->getAvisEtablissement($this->view->etablissement['general']['ID_ETABLISSEMENT'], $this->view->etablissement['general']['ID_DOSSIER_DONNANT_AVIS']));
 

@@ -154,7 +154,7 @@
                 <?php endif ?>
             </span>
         <?php else : ?>
-            <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') ): ?>
+            <?php if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || (is_null($this->ID_PLATAU)) ): ?>
             <!-- Ancienne logique avec ID_AVIS -->
                 <?php if ($this->ID_AVIS == 1) : ?>
                     <span class="avis F">Favorable <?php echo in_array($this->ID_DOSSIERNATURE, [7, 16, 17, 19, 21, 23, 24, 47, 26, 28, 29, 48]) ? ' à l\'exploitation' : '' ?></span>
@@ -165,12 +165,12 @@
                 <?php endif; ?>
             <?php else: ?>
             <!-- Nouvelle logique avec AVIS_DOSSIER_COMMISSION -->
-                <?php if ($this->AVIS_DOSSIER_COMMISSION == 1) : ?>
-                    <span class="avis F">Favorable<?php echo in_array($this->ID_DOSSIERNATURE, [7, 16, 17, 19, 21, 23, 24, 47, 26, 28, 29, 48]) ? ' à l\'exploitation' : '' ?></span>
-                <?php elseif ($this->AVIS_DOSSIER_COMMISSION == 2) : ?>
+                <?php if (in_array($this->AVIS_DOSSIER_COMMISSION , ["1","2"])) : ?>
                     <span class="avis F">Favorable<?php echo in_array($this->ID_DOSSIERNATURE, [7, 16, 17, 19, 21, 23, 24, 47, 26, 28, 29, 48]) ? ' à l\'exploitation' : '' ?></span>
                 <?php elseif ($this->AVIS_DOSSIER_COMMISSION == 3) : ?>
                     <span class="avis D">Défavorable<?php echo in_array($this->ID_DOSSIERNATURE, [7, 16, 17, 19, 21, 23, 24, 47, 26, 28, 29, 48]) ? ' à l\'exploitation' : '' ?></span>
+                <?php elseif (in_array($this->AVIS_DOSSIER_COMMISSION , ["4","5","6"])) : ?>
+                    <span class="avis P">Pas d'avis<?php echo in_array($this->ID_DOSSIERNATURE, [7, 16, 17, 19, 21, 23, 24, 47, 26, 28, 29, 48]) ? ' à l\'exploitation' : '' ?></span>
                 <?php else : ?>
                     <span class="avis">Avis indisponible</span>
                 <?php endif; ?>
