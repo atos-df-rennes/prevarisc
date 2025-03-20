@@ -9,15 +9,15 @@
     <li class="nav-header">Gestion des entités</li>
 
     <li>
-        <a href='/admin/elements-supprimes' ><i class="icon-ok icon-black"></i> Gestion des éléments supprimés</a>
+        <a href='/admin/elements-supprimes'><i class="icon-ok icon-black"></i> Gestion des éléments supprimés</a>
     </li>
 
     <li>
         <a href='/admin/utilisateurs'><i class="icon-user icon-black"></i> Gestion des utilisateurs</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-des-communes') echo "class='active'" ?> >
-        <a href='/gestion-des-communes' ><i class="icon-globe icon-black"></i> Gestion des communes</a>
+    <li>
+        <a href='/admin/communes'><i class="icon-globe icon-black"></i> Gestion des communes</a>
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() === 'fusion-des-communes') echo "class='active'" ?> >
