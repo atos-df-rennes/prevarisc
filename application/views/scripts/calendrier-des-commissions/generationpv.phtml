@@ -18,59 +18,71 @@ function addPrescription($listePrescription,$type,$odf,$typeContenu){
         if($type == 0){
             switch ($typeContenu) {
                 case 'default':
-                    $prescription = $odf->listeReg;
+                    try {
+                        $prescription = $odf->listeReg;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $prescription = $odf->listeRegReprises;
+                    try {
+                        $prescription = $odf->listeRegReprises;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $prescription = $odf->listeRegActuelles;
+                    try {
+                        $prescription = $odf->listeRegActuelles;
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                    break;
             }
         }else if ($type == 1){
             switch ($typeContenu) {
                 case 'default':
-                    $prescription = $odf->listeExploitation;
+                    try {
+                        $prescription = $odf->listeExploitation;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $prescription = $odf->listeExploitationReprises;
+                    try {
+                        $prescription = $odf->listeExploitationReprises;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $prescription = $odf->listeExploitationActuelles;
+                    try {
+                        $prescription = $odf->listeExploitationActuelles;
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                    break;
             }
         }else if ($type == 2){
             switch ($typeContenu) {
                 case 'default':
-                    $prescription = $odf->listeAmelioration;
+                    try {
+                        $prescription = $odf->listeAmelioration;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $prescription = $odf->listeAmeliorationReprises;
+                    try {
+                        $prescription = $odf->listeAmeliorationReprises;
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $prescription = $odf->listeAmeliorationActuelles;
+                    try {
+                        $prescription = $odf->listeAmeliorationActuelles;
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                    break;
             }
         }
 
@@ -552,7 +564,7 @@ foreach($this->membresFiles as $val => $membre){
 			$nouvellePJ = savePj($this->idComm,"Le pv a bien été généré");
             $store = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
             $path = $store->getFilePath($nouvellePJ, 'dateCommission', $this->idComm, true);
-			$odf->saveToDisk($path);
+            $odf->saveToDisk($path);
 			echo "<span id='notif' class='ui-state-highlight' style='padding: 0.3em;'>Le PV a été généré avec succes</span><br/><br/><br/>";
 		}else{
 			echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Le fichier pour le membre : ".$membre->LIBELLE_COMMISSIONMEMBRE." n'a pas été renseigné</span><br/><br/><br/>";

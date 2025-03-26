@@ -203,70 +203,80 @@ function getPrescriptionSegmentName(string $type, string $typeContenu): string
         case 0:
             switch ($typeContenu) {
                 case 'default':
-                    $name = 'listeReg';
+                    try {
+                        $name = 'listeReg';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $name = 'listeRegReprises';
+                    try {
+                        $name = 'listeRegReprises';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $name = 'listeRegActuelles';
+                    try {
+                        $name = 'listeRegActuelles';
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
-        
-                    break;
             }
 
             break;
         case 1:
             switch ($typeContenu) {
                 case 'default':
-                    $name = 'listeExploitation';
+                    try {
+                        $name = 'listeExploitation';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $name = 'listeExploitationReprises';
+                    try {
+                        $name = 'listeExploitationReprises';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $name = 'listeExploitationActuelles';
+                    try {
+                        $name = 'listeExploitationActuelles';
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
-        
-                    break;
             }
 
             break;
         case 2:
             switch ($typeContenu) {
                 case 'default':
-                    $name = 'listeAmelioration';
+                    try {
+                        $name = 'listeAmelioration';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'reprises':
-                    $name = 'listeAmeliorationReprises';
+                    try {
+                        $name = 'listeAmeliorationReprises';
+                    } catch (Exception $e) {}
 
                     break;
                 case 'actuelles':
-                    $name = 'listeAmeliorationActuelles';
+                    try {
+                        $name = 'listeAmeliorationActuelles';
+                    } catch (Exception $e) {}
 
                     break;
                 default:
                     throw new Exception(sprintf('Type de contenu inconnu: %s.', $typeContenu));
-        
-                    break;
             }
 
             break;
         default:
             throw new Exception(sprintf('Type de prescriptions inconnu: %s.', $type));
-
-            break;
     }
 
     return $name;
