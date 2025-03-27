@@ -2191,7 +2191,7 @@ $(".delaipresc").live('click', function() {
                             </option>
                         <?php endif ?>
                         <?php endforeach ?>
-                        <?php if ( (((!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION)')||is_null($this->id_platau)))&&(isset($this->AvisSauvegardé)))) : ?>
+                        <?php if ((!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION)')||is_null($this->id_platau))&& !empty($this->AvisSauvegardé['libelle'])) : ?>
                             <option value='<?php echo $this->AvisSauvegardé["id"] ?>' 
                                 data-libelle='<?php echo htmlspecialchars($this->AvisSauvegardé["libelle"]) ?>'
                                 <?php echo $this->AvisSauvegardé["id"] == $this->AvisSauvegardé["id"] ? "selected='selected'" : "" ?>>
