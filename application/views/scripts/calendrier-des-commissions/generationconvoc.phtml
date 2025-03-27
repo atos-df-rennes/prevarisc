@@ -260,7 +260,7 @@ function retrieveInfoDossier($segment, $dossierInfos) {
     setVars($segment, 'typeLettreP', $dossierInfos['infosEtab']['informations']["LIBELLE_TYPE_PRINCIPAL"]);
     setVars($segment, 'natureDossier', $dossierInfos["LIBELLE_DOSSIERNATURE"]);
     setVars($segment, 'objetDossier', $dossierInfos["OBJET_DOSSIER"]);
-    setVars($segment, 'avisDossierCommission', getAvis($dossierInfos["AVIS_DOSSIER_COMMISSION"]));
+    setVars($segment, 'avisDossierCommission', getAvis($dossierInfos["AVIS_DOSSIER_COMMISSION"],$dossierInfos["ID_PLATAU"]));
     setVars($segment, 'avisDossier', getAvis($dossierInfos["AVIS_DOSSIER"]));
 
 	$heureDebut = '';
@@ -571,15 +571,42 @@ function retrieveInfoGroupementCommission($odf, $commissionInfos, $heureDeb, $da
     setVars($odf,'maires',implode(', ', $maires));
 }
 
-function getAvis($avis) {
+function getAvis($avis, $idPlatau=null) {
     $avisInt = (int) $avis;
 
     if ($avisInt == 0) {
         return "";
-    } else if ($avisInt == 1) {
-        return "Favorable";
-    } else if ($avisInt == 2) {
-        return "Défavorable";
+    } else if(!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || is_null($idPlatau)){
+        if ($avisInt == 1) {
+            return "Favorable";
+        } else if ($avisInt == 2) {
+            return "Défavorable";
+        }
+    }
+    else {
+        switch ($avisInt) {
+            case 1:
+                return "Favorable";
+                break;
+            case 2:
+                return "Favorable assorti d’une ou plusieurs prescriptions";
+                break;
+            case 3:
+                return "Défavorable";
+                break;
+            case 4:
+                return "Pas d’avis car consultation sans objet";
+                break;
+            case 5:
+                return "Pas d’avis suite à déclaration d’incomplétude du dossier";
+                break;
+            case 6:
+                return "Pas d’avis - à motiver dans la partie Fondement de l’avis";
+                break;
+            default:
+                return "Pas d'avis";
+        }
+        
     }
 }
 

@@ -138,17 +138,44 @@ if (file_exists(REAL_DATA_PATH.DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR
 				}
 				addChamp($dossInfos,'avisDossier', $avis);
 
-				switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
-					case 1:
-						$avis_commission = "Favorable";
-					break;
-					case 2:
-						$avis_commission = "Défavorable";
-					break;
-					default:
-						$avis_commission = "";
-					break;
-				}
+                if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || is_null($dossierInfos['ID_PLATAU'])){
+                    switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
+                        case 1:
+                            $avis_commission = "Favorable";
+                            break;
+                        case 2:
+                            $avis_commission = "Défavorable";
+                            break;
+                        default:
+                            $avis_commission = "";
+                            break;
+                    }
+
+                }else{
+                    switch ($dossierInfos['AVIS_DOSSIER_COMMISSION']) {
+                        case 1:
+                            $avis_commission = "Favorable";
+                            break;
+                        case 2:
+                            $avis_commission = "Favorable assorti d’une ou plusieurs prescriptions";
+                            break;
+                        case 3:
+                            $avis_commission = "Défavorable";
+                            break;
+                        case 4:
+                            $avis_commission = "Pas d’avis car consultation sans objet";
+                            break;
+                        case 5:
+                            $avis_commission = "Pas d’avis suite à déclaration d’incomplétude du dossier";
+                            break;
+                        case 6:
+                            $avis_commission = "Pas d’avis - à motiver dans la partie Fondement de l’avis";
+                            break;
+                        default:
+                            $avis_commission = "";
+                            break;
+                    }
+                }
 				addChamp($dossInfos,'avisDossierCommission', $avis_commission);
 
 				$listeDocUrba = "";

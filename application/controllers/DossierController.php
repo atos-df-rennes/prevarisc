@@ -2336,9 +2336,14 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('avisDossier', $libelleAvis['LIBELLE_AVIS']);
 
         // Avis commission
-        $libelleAvisCommission = $DBavisDossier->find($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'])->current();
-        $this->view->assign('avisDossierCommission', $libelleAvisCommission['LIBELLE_AVIS']);
-        
+        $dossier = $DBdossier->find($this->idDossier)->current();
+        if(!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || is_null( $dossier['ID_PLATAU'])){
+            $libelleAvisCommission = $DBavisDossier->find($this->view->infosDossier['AVIS_DOSSIER_COMMISSION'])->current();
+            $this->view->assign('avisDossierCommission', $libelleAvisCommission['LIBELLE_AVIS']);
+        }else{
+            $libelleAvisCommission = $DBdossier->getDossierAvisCommissionLibelle($idDossier)['AVIS_DOSSIER_COMMISSION_LIBELLE'];
+            $this->view->assign('avisDossierCommission', $libelleAvisCommission);
+        }
         $DBdossierCommission = new Model_DbTable_Commission();
 
         $this->view->assign('commissionInfos', 'Aucune commission');

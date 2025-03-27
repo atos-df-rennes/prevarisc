@@ -470,17 +470,44 @@ foreach($this->membresFiles as $val => $membre){
 						}
 						addChamp($dossInfos,'avisDossier', $avis);
 
-						switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
-							case 1:
-								$avis = "Favorable";
-							    break;
-							case 2:
-								$avis = "Défavorable";
-							    break;
-							default:
-								$avis = "";
-							    break;
-						}
+                        if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || is_null($dossierInfos['ID_PLATAU'])){
+                            switch($dossierInfos['AVIS_DOSSIER_COMMISSION']){
+                                case 1:
+                                    $avis = "Favorable";
+                                    break;
+                                case 2:
+                                    $avis = "Défavorable";
+                                    break;
+                                default:
+                                    $avis = "";
+                                    break;
+                            }
+
+                        }else{
+                            switch ($dossierInfos['AVIS_DOSSIER_COMMISSION']) {
+                                case 1:
+                                    $avis = "Favorable";
+                                    break;
+                                case 2:
+                                    $avis = "Favorable assorti d’une ou plusieurs prescriptions";
+                                    break;
+                                case 3:
+                                    $avis = "Défavorable";
+                                    break;
+                                case 4:
+                                    $avis = "Pas d’avis car consultation sans objet";
+                                    break;
+                                case 5:
+                                    $avis = "Pas d’avis suite à déclaration d’incomplétude du dossier";
+                                    break;
+                                case 6:
+                                    $avis = "Pas d’avis - à motiver dans la partie Fondement de l’avis";
+                                    break;
+                                default:
+                                    $avis = "";
+                                    break;
+                            }
+                        }
 						addChamp($dossInfos,'avisDossierCommission', $avis);
 
 						$listeDocUrba = "";
