@@ -113,12 +113,25 @@
                     (<?php echo $this->formatDateDiff(new DateTime($this->DATESDIS_DOSSIER)) ?>)
                 <?php endif ?>
             </span>
-        <?php elseif ($this->ID_AVIS == 1) : ?>
-            <span class="avis F">Favorable <?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
-        <?php elseif ($this->ID_AVIS == 2) : ?>
-            <span class="avis D">Défavorable <?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+        <?php elseif (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || is_null($this->ID_PLATAU )) :?>
+            <?php if ($this->ID_AVIS == 1) : ?>
+                <span class="avis F">Favorable <?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <?php elseif ($this->ID_AVIS == 2) : ?>
+                <span class="avis D">Défavorable <?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <?php else : ?>
+                <span class="avis">Avis indisponible</span>
+            <?php endif; ?>
         <?php else : ?>
-            <span class="avis">Avis indisponible</span>
+            <?php if (in_array($this->AVIS_DOSSIER_COMMISSION, [1,2])) : ?>
+                <span class="avis F">Favorable<?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <?php elseif ($this->AVIS_DOSSIER_COMMISSION == 3) : ?>
+                <span class="avis D">Défavorable <?php echo in_array($this->ID_DOSSIERNATURE, array(19, 21, 23, 24, 47, 26, 28 ,29, 48)) ? ' à l\'exploitation' : '' ?></span>
+            <?php elseif  (in_array($this->AVIS_DOSSIER_COMMISSION, [4,5,6])) : ?>
+                <span class="avis P">Pas d'avis</span>
+            <?php else : ?>
+                <span class="avis">Avis indisponible</span>
+            <?php endif; ?>
+
         <?php endif ?>
 
         <!-- Alerte sur la reception de travaux -->
