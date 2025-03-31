@@ -544,7 +544,6 @@ class Service_Search
                         INNER JOIN dossiernature ON dossierlie.ID_DOSSIER1 = dossiernature.ID_DOSSIER
                         WHERE dossiernature.ID_NATURE = 46 AND dossier.ID_DOSSIER = d.ID_DOSSIER)'), ])
                 ->joinLeft('dossierlie', 'd.ID_DOSSIER = dossierlie.ID_DOSSIER2')
-                ->joinLeft('commission', 'd.COMMISSION_DOSSIER = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
                 ->join('dossiernature', 'dossiernature.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->join('dossiernatureliste', 'dossiernatureliste.ID_DOSSIERNATURE = dossiernature.ID_NATURE', ['LIBELLE_DOSSIERNATURE', 'ID_DOSSIERNATURE'])
                 ->join('dossiertype', 'dossiertype.ID_DOSSIERTYPE = dossiernatureliste.ID_DOSSIERTYPE', 'LIBELLE_DOSSIERTYPE')
@@ -554,13 +553,8 @@ class Service_Search
                 ->joinLeft('genre', 'genre.ID_GENRE = ei.ID_GENRE', 'LIBELLE_GENRE')
                 ->joinLeft('avis', 'd.AVIS_DOSSIER_COMMISSION = avis.ID_AVIS')
                 ->joinLeft('dossierdocurba', 'dossierdocurba.ID_DOSSIER = d.ID_DOSSIER', [])
-                ->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', [])
-                ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', [])
-                ->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', [])
                 ->joinLeft(['ea' => 'etablissementadresse'], 'ea.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
                 ->joinLeft('adressecommune', 'ea.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
-                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', [])
-                ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', 'LIBELLE_GROUPEMENT')
                 ->joinLeft('platauconsultation', 'd.ID_PLATAU = platauconsultation.ID_PLATAU', 'DATE_REPONSE_ATTENDUE')
                 ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
                 ->group('d.ID_DOSSIER')
@@ -604,6 +598,9 @@ class Service_Search
 
             // Critères : commissions
             if (isset($criterias['commissions']) && null !== $criterias['commissions']) {
+                $select->joinLeft('dossieraffectation', 'dossieraffectation.ID_DOSSIER_AFFECT = d.ID_DOSSIER', [])
+                    ->joinLeft('datecommission', 'datecommission.ID_DATECOMMISSION = dossieraffectation.ID_DATECOMMISSION_AFFECT', [])
+                ;
                 $this->setCriteria($select, 'datecommission.COMMISSION_CONCERNE', $criterias['commissions']);
             }
 
@@ -624,6 +621,7 @@ class Service_Search
 
             // Critères : permis
             if (isset($criterias['preventionniste']) && null !== $criterias['preventionniste']) {
+                $select->joinLeft('dossierpreventionniste', 'dossierpreventionniste.ID_DOSSIER = d.ID_DOSSIER', []);
                 $this->setCriteria($select, 'dossierpreventionniste.ID_PREVENTIONNISTE', $criterias['preventionniste']);
             }
 
@@ -641,6 +639,9 @@ class Service_Search
 
             // Critère : groupement territorial
             if (isset($criterias['groupements_territoriaux']) && null !== $criterias['groupements_territoriaux']) {
+                $select->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', [])
+                    ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT', [])
+                ;
                 $this->setCriteria($select, 'groupement.ID_GROUPEMENT', $criterias['groupements_territoriaux']);
             }
 
@@ -677,7 +678,7 @@ class Service_Search
             }
 
             // Performance optimisation : avoid sorting on big queries, and sort only if
-            // there is at least one where part
+            // there is at least one custom where part (for filtering)
             if (count($select->getPart(Zend_Db_Select::WHERE)) > 1) {
                 $select->order('d.DATEINSERT_DOSSIER DESC');
             }
