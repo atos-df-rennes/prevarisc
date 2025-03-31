@@ -28,6 +28,16 @@ final class Service_NotificationTest extends TestCase
         $this->assertSame($expected, $this->notification->getLastPageVisitDate($sessionNamespace));
     }
 
+    public function sessionGetProvider(): array
+    {
+        return [
+            'with value set in session' => [
+                'test',
+                '2024-09-19 16:40:30',
+            ],
+        ];
+    }
+
     /**
      * @dataProvider isNewProvider
      */
@@ -37,16 +47,6 @@ final class Service_NotificationTest extends TestCase
         $session->date = '2024-09-19 16:40:30';
 
         $this->assertSame($expected, $this->notification->isNew($element, $sessionNamespace));
-    }
-
-    public function sessionGetProvider(): array
-    {
-        return [
-            'with value set in session' => [
-                'test',
-                '2024-09-19 16:40:30',
-            ],
-        ];
     }
 
     public function isNewProvider(): array
