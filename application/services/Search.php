@@ -69,14 +69,11 @@ class Service_Search
                 ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', ['pere' => 'ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT'])
                 ->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'ID_RUE', 'NUMERO_ADRESSE'])
                 ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT')
-                ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE')
-                ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT')
                 ->joinLeft('adresserue', 'adresserue.ID_RUE = etablissementadresse.ID_RUE', 'LIBELLE_RUE')
                 ->joinLeft(['etablissementadressesite' => 'etablissementadresse'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_SITE')
                 ->joinLeft(['adressecommunesite' => 'adressecommune'], 'etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE')
                 ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
                 ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
-                ->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
                 // Vincent MICHEL le 12/11/2014 : retrait de cette clause qui tue les performances
                 // sur la recherche. Je n'ai pas vu d'impact sur le retrait du group by.
@@ -197,6 +194,9 @@ class Service_Search
 
             // Critère : groupement territorial
             if (null !== $groupements_territoriaux) {
+                $select->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE')
+                    ->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT')
+                ;
                 $this->setCriteria($select, 'groupement.ID_GROUPEMENT', $groupements_territoriaux);
             }
 
@@ -213,6 +213,7 @@ class Service_Search
 
             // Critère : preventionniste
             if (null !== $preventionniste) {
+                $select->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS');
                 $select->where('etablissementinformationspreventionniste.ID_UTILISATEUR = '.$preventionniste);
             }
 
