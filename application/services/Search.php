@@ -608,7 +608,7 @@ class Service_Search
             }
 
             // Critères : avis commission
-            if (isset($criterias['avisCommission'])) {
+            if (isset($criterias['avisCommission']) && null !== $criterias['avisCommission']) {
                 if (isset($criterias['provenance'])) {
                     $avisFilter = [];
                     if ('1' === $criterias['provenance']) {
@@ -937,7 +937,7 @@ class Service_Search
             }
 
             // Critères : avis commission
-            if (isset($criterias['avisCommission'])) {
+            if (isset($criterias['avisCommission']) && null !== $criterias['avisCommission']) {
                 if (isset($criterias['provenance'])) {
                     $avisFilter = [];
                     if ('1' === $criterias['provenance']) {

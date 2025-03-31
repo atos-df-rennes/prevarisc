@@ -537,7 +537,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_View_Interface\:\:\$infosDossier\.$#'
 			identifier: property.notFound
-			count: 94
+			count: 97
 			path: application/controllers/DossierController.php
 
 		-
@@ -1383,12 +1383,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_Controller_Action_Helper_Abstract\:\:setNoRender\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: application/controllers/ProxyController.php
-
-		-
-			message: '#^Parameter \#3 \$value of function curl_setopt expects int, string\|false given\.$#'
-			identifier: argument.type
 			count: 1
 			path: application/controllers/ProxyController.php
 
