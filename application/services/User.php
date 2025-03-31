@@ -442,6 +442,7 @@ class Service_User
         $dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = 0;
         $dbUser->IP_UTILISATEUR = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
         $dbUser->save();
+
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $cache->remove('user_id_'.$user['ID_UTILISATEUR']);
         $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] = 0;
