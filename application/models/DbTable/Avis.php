@@ -33,6 +33,7 @@ class Model_DbTable_Avis extends Zend_Db_Table_Abstract implements Service_Inter
     /**
      * @param int|string $idAvis
      * @param mixed      $tousLesChamps
+     * @param null|mixed $idDossier
      */
     public function getAvisLibelle($idAvis, $tousLesChamps = 1, $idDossier = null)
     {

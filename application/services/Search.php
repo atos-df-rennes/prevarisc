@@ -611,62 +611,70 @@ class Service_Search
             if (isset($criterias['avisCommission'])) {
                 if (isset($criterias['provenance'])) {
                     $avisFilter = [];
-                    if ($criterias['provenance'] === '1') {
+                    if ('1' === $criterias['provenance']) {
                         foreach ((array) $criterias['avisCommission'] as $avis) {
                             switch ($avis) {
-                            case '1':
-                                $avisFilter = array_merge($avisFilter, ['1','2']);
-                                break;
-                            case '2':
-                                $avisFilter = array_merge($avisFilter, ['3']);
-                                break;
-                            case '3':
-                                $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
-                                break;
+                                case '1':
+                                    $avisFilter = array_merge($avisFilter, ['1', '2']);
+
+                                    break;
+
+                                case '2':
+                                    $avisFilter = array_merge($avisFilter, ['3']);
+
+                                    break;
+
+                                case '3':
+                                    $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
+
+                                    break;
                             }
                         }
-                       
-                    } elseif ($criterias['provenance'] === '2') {
+                    } elseif ('2' === $criterias['provenance']) {
                         foreach ((array) $criterias['avisCommission'] as $avis) {
                             switch ($avis) {
-                            case '1':
-                                $avisFilter = array_merge($avisFilter, ['1']);
-                                break;
-                            case '2':
-                                $avisFilter = array_merge($avisFilter, ['2']);
-                                break;
-                            case '3':
-                                $avisFilter = array_merge($avisFilter, ['4','5','6']);
-                                break;
+                                case '1':
+                                    $avisFilter = array_merge($avisFilter, ['1']);
+
+                                    break;
+
+                                case '2':
+                                    $avisFilter = array_merge($avisFilter, ['2']);
+
+                                    break;
+
+                                case '3':
+                                    $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
+
+                                    break;
                             }
-                        }                      
+                        }
                     }
+
                     if (!empty($avisFilter)) {
                         $this->setCriteria($select, 'd.AVIS_DOSSIER_COMMISSION', $avisFilter);
                     }
-                }
-                else {
+                } else {
                     $conditions = [];
-                
+
                     foreach ((array) $criterias['avisCommission'] as $avis) {
-                        if ($avis === '1') {
+                        if ('1' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NULL AND d.AVIS_DOSSIER_COMMISSION = 1) 
                                             OR (d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION IN (1, 2))';
-                        } elseif ($avis === '2') {
+                        } elseif ('2' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NULL AND d.AVIS_DOSSIER_COMMISSION = 2) 
                                             OR (d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION = 3)';
-                        } elseif ($avis === '3') {
+                        } elseif ('3' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION IN (4, 5, 6))';
                         }
                     }
-                
-                    if ($conditions) {
+
+                    if ([] !== $conditions) {
                         $select->where(implode(' OR ', $conditions));
                     }
-
-                }  
-            
+                }
             }
+
             // Critères : avis rapporteur
             if (isset($criterias['avisRapporteur']) && null !== $criterias['avisRapporteur']) {
                 $this->setCriteria($select, 'd.AVIS_DOSSIER', $criterias['avisRapporteur']);
@@ -932,61 +940,68 @@ class Service_Search
             if (isset($criterias['avisCommission'])) {
                 if (isset($criterias['provenance'])) {
                     $avisFilter = [];
-                    if ($criterias['provenance'] === '1') {
+                    if ('1' === $criterias['provenance']) {
                         foreach ((array) $criterias['avisCommission'] as $avis) {
                             switch ($avis) {
-                            case '1':
-                                $avisFilter = array_merge($avisFilter, ['1','2']);
-                                break;
-                            case '2':
-                                $avisFilter = array_merge($avisFilter, ['3']);
-                                break;
-                            case '3':
-                                $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
-                                break;
+                                case '1':
+                                    $avisFilter = array_merge($avisFilter, ['1', '2']);
+
+                                    break;
+
+                                case '2':
+                                    $avisFilter = array_merge($avisFilter, ['3']);
+
+                                    break;
+
+                                case '3':
+                                    $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
+
+                                    break;
                             }
                         }
-                       
-                    } elseif ($criterias['provenance'] === '2') {
+                    } elseif ('2' === $criterias['provenance']) {
                         foreach ((array) $criterias['avisCommission'] as $avis) {
                             switch ($avis) {
-                            case '1':
-                                $avisFilter = array_merge($avisFilter, ['1']);
-                                break;
-                            case '2':
-                                $avisFilter = array_merge($avisFilter, ['2']);
-                                break;
-                            case '3':
-                                $avisFilter = array_merge($avisFilter, ['4','5','6']);
-                                break;
+                                case '1':
+                                    $avisFilter = array_merge($avisFilter, ['1']);
+
+                                    break;
+
+                                case '2':
+                                    $avisFilter = array_merge($avisFilter, ['2']);
+
+                                    break;
+
+                                case '3':
+                                    $avisFilter = array_merge($avisFilter, ['4', '5', '6']);
+
+                                    break;
                             }
-                        }                      
+                        }
                     }
+
                     if (!empty($avisFilter)) {
                         $this->setCriteria($select, 'd.AVIS_DOSSIER_COMMISSION', $avisFilter);
                     }
-                }
-                else {
+                } else {
                     $conditions = [];
-                
+
                     foreach ((array) $criterias['avisCommission'] as $avis) {
-                        if ($avis === '1') {
+                        if ('1' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NULL AND d.AVIS_DOSSIER_COMMISSION = 1) 
                                             OR (d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION IN (1, 2))';
-                        } elseif ($avis === '2') {
+                        } elseif ('2' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NULL AND d.AVIS_DOSSIER_COMMISSION = 2) 
                                             OR (d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION = 3)';
-                        } elseif ($avis === '3') {
+                        } elseif ('3' === $avis) {
                             $conditions[] = '(d.ID_PLATAU IS NOT NULL AND d.AVIS_DOSSIER_COMMISSION IN (4, 5, 6))';
                         }
                     }
-                
-                    if ($conditions) {
+
+                    if ([] !== $conditions) {
                         $select->where(implode(' OR ', $conditions));
                     }
-
-                }  
-            
+                }
             }
 
             // Critères : avis rapporteur

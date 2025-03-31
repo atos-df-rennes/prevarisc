@@ -30,41 +30,40 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
     // Fonction qui récupère les infos d'un avis d'un dossier selon l'ID d'avis et l'ID du dossier
     public function getLibelleDossierAvisCommission($id_dossier_commission, $id_dossier)
-{
-    $select = $this->select()
-        ->setIntegrityCheck(false)
-        ->from('dossier', ['AVIS_DOSSIER_COMMISSION', 'AVIS_DOSSIER_COMMISSION_LIBELLE'])
-        ->where('dossier.AVIS_DOSSIER_COMMISSION = ?', $id_dossier_commission)
-        ->where('dossier.ID_DOSSIER = ?', $id_dossier); 
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('dossier', ['AVIS_DOSSIER_COMMISSION', 'AVIS_DOSSIER_COMMISSION_LIBELLE'])
+            ->where('dossier.AVIS_DOSSIER_COMMISSION = ?', $id_dossier_commission)
+            ->where('dossier.ID_DOSSIER = ?', $id_dossier)
+        ;
 
+        return $this->getAdapter()->fetchRow($select);
+    }
 
-    $result= $this->getAdapter()->fetchRow($select);
-    return $result;
+    // Fonction qui récupère le libellé de l'avis de commission d'un dossier par son ID
+    public function getDossierAvisCommissionLibelle($id_dossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('dossier', 'AVIS_DOSSIER_COMMISSION_LIBELLE')
+            ->where('dossier.ID_DOSSIER = ?', $id_dossier)
+        ;
 
-}
+        return $this->getAdapter()->fetchRow($select);
+    }
 
-// Fonction qui récupère le libellé de l'avis de commission d'un dossier par son ID
-public function getDossierAvisCommissionLibelle($id_dossier)
-{
-    $select = $this->select()
-        ->setIntegrityCheck(false)
-        ->from('dossier', 'AVIS_DOSSIER_COMMISSION_LIBELLE')
-        ->where('dossier.ID_DOSSIER = ?', $id_dossier);
+    // Fonction qui récupère l'id de l'avis de commission d'un dossier par son ID
+    public function getDossierAvisCommissionId($id_dossier)
+    {
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from('dossier', 'AVIS_DOSSIER_COMMISSION')
+            ->where('dossier.ID_DOSSIER = ?', $id_dossier)
+        ;
 
-    return $this->getAdapter()->fetchRow($select);
-}
-
-
-// Fonction qui récupère l'id de l'avis de commission d'un dossier par son ID
-public function getDossierAvisCommissionId($id_dossier)
-{
-    $select = $this->select()
-        ->setIntegrityCheck(false)
-        ->from('dossier', 'AVIS_DOSSIER_COMMISSION')
-        ->where('dossier.ID_DOSSIER = ?', $id_dossier);
-
-    return $this->getAdapter()->fetchRow($select);
-}
+        return $this->getAdapter()->fetchRow($select);
+    }
 
     // Fonction qui récupére tous les établissements concernés par le dossier
     // PAS CERTAIN QU'ELLE SOIT ENCORE UTILISÉE

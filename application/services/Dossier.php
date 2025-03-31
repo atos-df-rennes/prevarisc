@@ -768,13 +768,12 @@ class Service_Dossier
             $etablissementInfos = $service_etablissement->get($id_etablissement);
             $isPlatau = $this->isFromPlatau($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
             if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
-                if(!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION')  || !$isPlatau){
+                if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || !$isPlatau) {
                     $etablissementInfos['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
-                }else{
-                    $etablissementInfos['avisExploitation']  = $DBdossier->getDossierAvisCommissionId($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
+                } else {
+                    $etablissementInfos['avisExploitation'] = $DBdossier->getDossierAvisCommissionId($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
                     $etablissementInfos['avisExploitationLibelle'] = $this->getLibelleAvis($etablissementInfos['avisExploitation']);
                 }
-                
             }
 
             $this->etablissement['etablissementInfos'] = $etablissementInfos;
@@ -797,16 +796,14 @@ class Service_Dossier
             foreach ($this->listeEtablissement as $val => $ue) {
                 $etablissementInfos = $service_etablissement->get($ue['ID_ETABLISSEMENT']);
                 if (null != $etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']) {
-                    if(!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || !$isPlatau){
+                    if (!getenv('PREVARISC_NOMENCLATURE_AVIS_COMMISSION') || !$isPlatau) {
                         $this->listeEtablissement[$val]['avisExploitation'] = $DBdossier->getAvisDossier($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
-                    }else{
+                    } else {
                         $this->listeEtablissement[$val]['avisExploitation'] = $DBdossier->getDossierAvisCommissionId($etablissementInfos['general']['ID_DOSSIER_DONNANT_AVIS']);
                         $this->listeEtablissement[$val]['avisExploitationLibelle'] = $this->getLibelleAvis($this->listeEtablissement[$val]['avisExploitation']);
-
                     }
-                }  
-               
-               
+                }
+
                 $this->listeEtablissement[$val]['infosEtab'] = $etablissementInfos;
             }
 
@@ -815,33 +812,37 @@ class Service_Dossier
 
         return null;
     }
-    public function getLibelleAvis($avisExploitation)
+
+    public function getLibelleAvis($avisExploitation): string
     {
         if (!isset($avisExploitation['AVIS_DOSSIER_COMMISSION'])) {
-            return "Avis indisponible";
+            return 'Avis indisponible';
         }
+
         switch ($avisExploitation['AVIS_DOSSIER_COMMISSION']) {
             case 1:
             case 2:
                 return 'Favorable';
+
             case 3:
                 return 'Défavorable';
+
             case 4:
             case 5:
             case 6:
                 return "Pas d'avis";
+
             default:
-                return "Avis indisponible";
+                return 'Avis indisponible';
         }
     }
 
-    public function isFromPlatau(int $id_dossier):bool
+    public function isFromPlatau(int $id_dossier): bool
     {
         $DBdossier = new Model_DbTable_Dossier();
-        $isPlatau = $DBdossier->isPlatau($id_dossier);
-        return $isPlatau;
-    }
 
+        return $DBdossier->isPlatau($id_dossier);
+    }
 
     public function isDossierDonnantAvis($dossier, $idNature): bool
     {
