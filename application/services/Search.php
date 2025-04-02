@@ -31,6 +31,7 @@ class Service_Search
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
      * @param null|mixed   $adresse
+     *
      * @return array
      */
     public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, ?string $type = null, $adresse = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
@@ -225,6 +226,7 @@ class Service_Search
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
      * @param null|mixed   $adresse
+     *
      * @return array
      */
     public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, ?string $type = null, $adresse = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
