@@ -30,10 +30,7 @@ class Model_DbTable_EtablissementAdresseApi extends Zend_Db_Table_Abstract imple
                 if (!empty($etablissement_enfants)) {
                     $i = 0;
                     foreach ($etablissement_enfants as $key => $ets) {
-                        if (
-                            ($ets['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $ets['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']) >
-                            ($etablissement_enfants[$i]['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $etablissement_enfants[$i]['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'])
-                        ) {
+                        if (($ets['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $ets['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']) > ($etablissement_enfants[$i]['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $etablissement_enfants[$i]['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS'])) {
                             $i = $key;
                         }
                     }
