@@ -95,11 +95,10 @@ class Model_DbTable_EtablissementAdresse extends Zend_Db_Table_Abstract implemen
 
         return null;
     }
-    
-    public function delete($id_etablissement)
+
+    public function delete($id_etablissement): void
     {
         parent::delete('ID_ETABLISSEMENT = '.$id_etablissement);
-
     }
 
     public function getAllAdresses()

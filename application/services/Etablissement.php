@@ -433,7 +433,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             $value = 1 == $dossier->AVIS_DOSSIER_COMMISSION ? 'Favorable' : 'Défavorable';
             $author = null;
 
-            if (null != $value && (!isset($historique[$key]) || $tmp['valeur'] != $value)) {
+            if (!isset($historique[$key]) || $tmp['valeur'] != $value) {
                 $date = new Zend_Date(null != $dossier->DATECOMM_DOSSIER ? $dossier->DATECOMM_DOSSIER : $dossier->DATEVISITE_DOSSIER, Zend_Date::DATES);
                 if (null != $tmp) {
                     $historique[$key][count($historique[$key]) - 1]['fin'] = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
@@ -1220,11 +1220,9 @@ class Service_Etablissement implements Service_Interface_Etablissement
      * @param int   $id_etablissement_pere
      * @param array $ids_etablissements_enfants
      *
-     * @return array
-     *
      * @psalm-return array{preventionnistes?:mixed, periodicite?:mixed, local_sommeil?:bool, commission?:mixed, "commission"?:empty}
      */
-    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null)
+    public function getDefaultValues($genre, $numinsee = null, $type = null, $categorie = null, $local_sommeil = null, $classe = null, $id_etablissement_pere = null, $ids_etablissements_enfants = null): array
     {
         $model_prev = new Model_DbTable_Preventionniste();
         $DB_periodicite = new Model_DbTable_Periodicite();
