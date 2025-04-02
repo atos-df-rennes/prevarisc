@@ -1,3 +1,4 @@
+SET NAMES 'utf8';
 CREATE TABLE `etablissementadresseapi` (
   `ID_ADRESSE` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ADRESSE` varchar(255) DEFAULT NULL,
@@ -10,4 +11,7 @@ CREATE TABLE `etablissementadresseapi` (
   PRIMARY KEY (`ID_ADRESSE`),
   KEY `fk_etablissementadresseapi_etablissement_idx` (`ID_ETABLISSEMENT`),
   CONSTRAINT `fk_etablissementadresseapi_etablissement` FOREIGN KEY (`ID_ETABLISSEMENT`) REFERENCES `etablissement` (`ID_ETABLISSEMENT`) ON DELETE CASCADE ON UPDATE NO ACTION
-)
+);
+
+ALTER TABLE `etablissementadresseapi` 
+ADD COLUMN `LIBELLE_RUE` varchar(255) NOT NULL ;
