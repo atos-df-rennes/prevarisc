@@ -1,0 +1,45 @@
+<div id="apiedit" class="content">
+                <h4>Ajouter une adresse depuis API adresse</h4>
+                <input type="hidden" name="isApi" value="1">
+                <input type="hidden" id="codePostal_api_edit" name="code_postal" />
+                <input type="hidden" id="inseeCode_api_edit" name="insee_code" />
+                <input type="hidden" id="street_api_edit" name="street" />
+                <input type="hidden" id="city_api_edit" name="city" />
+                <dl class='dl-horizontal'>
+                    <dt>Adresse complète</dt>
+                    <dd>
+                        <input id="adresse-complete-edit" name='adresse_complete' type='text' placeholder='Tapez l’adresse complète ...' required autocomplete="off"/>
+                        <ul id="suggestions-list-edit" style="list-style-type: none; padding-left: 0;"></ul>
+                    </dd>
+
+                    <dt>Type de l'adresse</dt>
+                    <dd>
+                        <select name="address_type"> 
+                            <option value="housenumber">House number</option>
+                            <option value="street">Street</option>
+                        </select>
+                    </dd>
+
+                    <dt>Longitude</dt>
+                    <dd>
+                        <input id="addressLongitude-api-edit" type='text' name='lon_api' maxlength="11" readonly required />
+                    </dd>
+
+                    <dt>Latitude</dt>
+                    <dd>
+                        <input id="addressLatitude-api-edit" type='text' name='lat_api' maxlength="10" readonly required />
+                    </dd>
+
+                    <dt>Géolocalisation</dt>
+                    <dd>
+                        <?php if ($this->key_ign !== null) : ?>
+                            <button id="geolocme" type='button' class='btn btn-small'><i class="icon-map-marker"></i> Géolocaliser cette adresse (Geoportail)</button>
+                        <?php endif; ?>
+                        <br/>
+                        <small>Résultat : <span class='result'>Inconnu</span></small>
+                    </dd>
+                </dl>
+                <?php if ($this->key_ign !== null): ?>
+                    <div id="edit-geoportail-container-api" style="height: 400px;"></div>
+                <?php endif; ?>
+            </div>
