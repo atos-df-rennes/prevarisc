@@ -30,12 +30,10 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
-     * @param null|mixed   $type
      * @param null|mixed   $adresse
-     *
      * @return array
      */
-    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $type = null, $adresse = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
+    public function etablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, ?string $type = null, $adresse = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null, $count = 10, $page = 1)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
@@ -226,12 +224,10 @@ class Service_Search
      * @param null|mixed   $commissions
      * @param null|mixed   $groupements_territoriaux
      * @param null|mixed   $preventionniste
-     * @param null|mixed   $type
      * @param null|mixed   $adresse
-     *
      * @return array
      */
-    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, $type = null, $adresse = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
+    public function extractionEtablissements($label = null, $identifiant = null, $genres = null, $categories = null, $classes = null, $familles = null, $types_activites = null, $avis_favorable = null, $statuts = null, $local_sommeil = null, $lon = null, $lat = null, $parent = null, ?string $type = null, $adresse = null, $city = null, $street_id = null, $number = null, $commissions = null, $groupements_territoriaux = null, $preventionniste = null)
     {
         // Récupération de la ressource cache à partir du bootstrap
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch');
