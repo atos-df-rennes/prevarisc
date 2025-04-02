@@ -72,35 +72,8 @@ class Service_Search
                 ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT', ['pere' => 'ID_ETABLISSEMENT', 'ID_FILS_ETABLISSEMENT'])
             ;
 
-            if ($environnement) {
-                $select->joinLeft('etablissementadresseapi', 'e.ID_ETABLISSEMENT = etablissementadresseapi.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'LIBELLE_RUE', 'ADRESSE']);
-            } else {
-                $select->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'ID_RUE', 'NUMERO_ADRESSE'])
-                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT')
-                ;
-            }
 
-            if (!$environnement) {
-                $select->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE');
-            } else {
-                $select->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = etablissementadresseapi.NUMINSEE_COMMUNE');
-            }
-
-            $select->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT');
-            if (!$environnement) {
-                $select->joinLeft('adresserue', 'adresserue.ID_RUE = etablissementadresse.ID_RUE', 'LIBELLE_RUE')
-                    ->joinLeft(['etablissementadressesite' => 'etablissementadresse'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_SITE')
-                    ->joinLeft(['adressecommunesite' => 'adressecommune'], 'etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE')
-                    ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
-                    ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
-                ;
-            } else {
-                $select->joinLeft(['etablissementadressesite' => 'etablissementadresseapi'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
-                    ->columns(['LIBELLE_COMMUNE_ADRESSE_SITE' => 'etablissementadressesite.LIBELLE_COMMUNE'])
-                    ->joinLeft(['etablissementadressecell' => 'etablissementadresseapi'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
-                    ->columns(['LIBELLE_COMMUNE_ADRESSE_CELLULE' => 'etablissementadressecell.LIBELLE_COMMUNE'])
-                ;
-            }
+            $this->addJoins($select, $environnement);
 
             $select->joinLeft('etablissementinformationspreventionniste', 'etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS = etablissementinformations.ID_ETABLISSEMENTINFORMATIONS')
                 ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
@@ -174,97 +147,10 @@ class Service_Search
                 $this->setCriteria($select, 'LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS', $local_sommeil);
             }
 
-            if (!getenv('PREVARISC_API_ADRESSE_MODAL')) {
-                // Critères : numéro de rue
-                if (null !== $number) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
-
-                // Critère : commune et rue
-                if (null !== $street_id) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                } elseif (null !== $city) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
+            if (!$environnement) {
+                $this->addCriteriaWithoutApi($select, $number, $street_id, $city, $genres);
             } else {
-                $clauses = [];
-                if (null != $type && null != $adresse) {
-                    switch ($type) {
-                        case 'street':
-                            $clauses[] = "CONCAT(etablissementadresseapi.LIBELLE_RUE, ' ', etablissementadresseapi.CODEPOSTAL_COMMUNE, ' ', etablissementadresseapi.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = "CONCAT(etablissementadressesite.LIBELLE_RUE, ' ', etablissementadressesite.CODEPOSTAL_COMMUNE, ' ', etablissementadressesite.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = "CONCAT(etablissementadressecell.LIBELLE_RUE, ' ', etablissementadressecell.CODEPOSTAL_COMMUNE, ' ', etablissementadressecell.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        case 'municipality':
-                            $clauses[] = 'etablissementadresseapi.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = 'etablissementadressesite.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = 'etablissementadressecell.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        case 'housenumber':
-                            $clauses[] = 'etablissementadresseapi.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = 'etablissementadressesite.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = 'etablissementadressecell.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        default:
-                            throw new InvalidArgumentException('Invalid type provided: '.$type);
-                    }
-                }
-
-                if (!empty($clauses)) {
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
+                $this->addCriteriaWithApi($select, $type, $adresse, $genres);
             }
 
             // Critère : commission
@@ -399,38 +285,11 @@ class Service_Search
                 ->joinLeft('commission', 'etablissementinformations.ID_COMMISSION = commission.ID_COMMISSION', 'LIBELLE_COMMISSION')
                 ->joinLeft('statut', 'etablissementinformations.ID_STATUT = statut.ID_STATUT', 'LIBELLE_STATUT')
                 ->join('genre', 'etablissementinformations.ID_GENRE = genre.ID_GENRE', 'LIBELLE_GENRE')
-            ;
-
-            if ($environnement) {
-                $select->joinLeft('etablissementadresseapi', 'e.ID_ETABLISSEMENT = etablissementadresseapi.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'LIBELLE_COMMUNE'])
-                    ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = etablissementadresseapi.NUMINSEE_COMMUNE')
-                ;
-            } else {
-                $select->joinLeft('etablissementadresse', 'e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT', ['NUMINSEE_COMMUNE', 'ID_ADRESSE', 'ID_RUE', 'NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'])
-                    ->joinLeft('adresserue', 'adresserue.ID_RUE = etablissementadresse.ID_RUE', 'LIBELLE_RUE')
-                    ->joinLeft('adressecommune', 'etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE', ['CODEPOSTAL_COMMUNE', 'LIBELLE_COMMUNE'])
-                    ->joinLeft('groupementcommune', 'groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE')
-                ;
-            }
-
-            $select->joinLeft('groupement', 'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5', 'LIBELLE_GROUPEMENT')
                 ->joinLeft('etablissementlie', 'e.ID_ETABLISSEMENT = etablissementlie.ID_FILS_ETABLISSEMENT')
                 ->joinLeft(['etablissementinformationspere' => 'etablissementinformations'], 'etablissementinformationspere.ID_ETABLISSEMENT = etablissementlie.ID_ETABLISSEMENT', ['LIBELLE_ETABLISSEMENT_PERE' => 'LIBELLE_ETABLISSEMENTINFORMATIONS'])
             ;
-            if ($environnement) {
-                $select->joinLeft(['etablissementadressesite' => 'etablissementadresseapi'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
-                    ->columns(['LIBELLE_COMMUNE_ADRESSE_SITE' => 'etablissementadressesite.LIBELLE_COMMUNE'])
-                    ->joinLeft(['etablissementadressecell' => 'etablissementadresseapi'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', [])
-                    ->columns(['LIBELLE_COMMUNE_ADRESSE_CELLULE' => 'etablissementadressecell.LIBELLE_COMMUNE'])
-                    ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
-                ;
-            } else {
-                $select->joinLeft(['etablissementadressesite' => 'etablissementadresse'], 'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_SITE')
-                    ->joinLeft(['adressecommunesite' => 'adressecommune'], 'etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE')
-                    ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
-                    ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
-                ;
-            }
+            $this->addJoins($select, $environnement);
+
 
             $select->joinLeft('etablissementinformationspreventionniste', 'etablissementinformations.ID_ETABLISSEMENTINFORMATIONS = etablissementinformationspreventionniste.ID_ETABLISSEMENTINFORMATIONS')
                 ->joinLeft('utilisateur', 'etablissementinformationspreventionniste.ID_UTILISATEUR = utilisateur.ID_UTILISATEUR')
@@ -507,96 +366,9 @@ class Service_Search
             }
 
             if (!$environnement) {
-                // Critères : numéro de rue
-                if (null !== $number) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
-
-                // Critère : commune et rue
-                if (null !== $street_id) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.ID_RUE = '.$select->getAdapter()->quote($street_id);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                } elseif (null !== $city) {
-                    $clauses = [];
-                    $clauses[] = 'etablissementadresse.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    if (null == $genres || in_array('1', $genres)) {
-                        $clauses[] = 'etablissementadressesite.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    }
-
-                    if (null == $genres || in_array('3', $genres)) {
-                        $clauses[] = 'etablissementadressecell.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
-                    }
-
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
+                $this->addCriteriaWithoutApi($select, $number, $street_id, $city, $genres);
             } else {
-                $clauses = [];
-                if (null != $type && null != $adresse) {
-                    switch ($type) {
-                        case 'street':
-                            $clauses[] = "CONCAT(etablissementadresseapi.LIBELLE_RUE, ' ', etablissementadresseapi.CODEPOSTAL_COMMUNE, ' ', etablissementadresseapi.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = "CONCAT(etablissementadressesite.LIBELLE_RUE, ' ', etablissementadressesite.CODEPOSTAL_COMMUNE, ' ', etablissementadressesite.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = "CONCAT(etablissementadressecell.LIBELLE_RUE, ' ', etablissementadressecell.CODEPOSTAL_COMMUNE, ' ', etablissementadressecell.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        case 'municipality':
-                            $clauses[] = 'etablissementadresseapi.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = 'etablissementadressesite.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = 'etablissementadressecell.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        case 'housenumber':
-                            $clauses[] = 'etablissementadresseapi.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            if (null == $genres || in_array('1', $genres)) {
-                                $clauses[] = 'etablissementadressesite.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            if (null == $genres || in_array('3', $genres)) {
-                                $clauses[] = 'etablissementadressecell.ADRESSE = '.$select->getAdapter()->quote($adresse);
-                            }
-
-                            break;
-
-                        default:
-                            throw new InvalidArgumentException('Invalid type provided: '.$type);
-                    }
-                }
-
-                if (!empty($clauses)) {
-                    $select->where('('.implode(' OR ', $clauses).')');
-                }
+                $this->addCriteriaWithApi($select, $type, $adresse, $genres);
             }
 
             // Critère : commission
@@ -1372,5 +1144,127 @@ class Service_Search
         $select->{$clause}($string);
 
         return $this;
+    }
+
+    private function addCriteriaWithoutApi(Zend_Db_Select $select, $number, $street_id, $city, $genres): void
+    {
+        // Critères : numéro de rue
+        if (null !== $number) {
+            $clauses = [
+                'etablissementadresse.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number),
+            ];
+            if (null == $genres || in_array('1', $genres)) {
+                $clauses[] = 'etablissementadressesite.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
+            }
+            if (null == $genres || in_array('3', $genres)) {
+                $clauses[] = 'etablissementadressecell.NUMERO_ADRESSE = '.$select->getAdapter()->quote($number);
+            }
+            $select->where('('.implode(' OR ', $clauses).')');
+        } 
+
+        // Critère : commune et rue
+        if (null !== $street_id) {
+            $clauses = [
+                'etablissementadresse.ID_RUE = '.$select->getAdapter()->quote($street_id),
+            ];
+            if (null == $genres || in_array('1', $genres)) {
+                $clauses[] = 'etablissementadressesite.ID_RUE = '.$select->getAdapter()->quote($street_id);
+            }
+            if (null == $genres || in_array('3', $genres)) {
+                $clauses[] = 'etablissementadressecell.ID_RUE = '.$select->getAdapter()->quote($street_id);
+            }
+            $select->where('('.implode(' OR ', $clauses).')');
+        } elseif (null !== $city) {
+            $clauses = [
+                'etablissementadresse.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city),
+            ];
+            if (null == $genres || in_array('1', $genres)) {
+                $clauses[] = 'etablissementadressesite.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
+            }
+            if (null == $genres || in_array('3', $genres)) {
+                $clauses[] = 'etablissementadressecell.NUMINSEE_COMMUNE = '.$select->getAdapter()->quote($city);
+            }
+            $select->where('('.implode(' OR ', $clauses).')');
+        }
+    }
+
+    private function addJoins(Zend_Db_Select $select, bool $environnement): void
+    {
+        if ($environnement) {
+            $select->joinLeft(
+                'etablissementadresseapi','e.ID_ETABLISSEMENT = etablissementadresseapi.ID_ETABLISSEMENT',['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'LIBELLE_RUE', 'ADRESSE', 'LIBELLE_COMMUNE'])
+                ->joinLeft('groupementcommune','groupementcommune.NUMINSEE_COMMUNE = etablissementadresseapi.NUMINSEE_COMMUNE')
+                ->joinLeft(['etablissementadressesite' => 'etablissementadresseapi'],'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)',[])->columns(['LIBELLE_COMMUNE_ADRESSE_SITE' => 'etablissementadressesite.LIBELLE_COMMUNE'])
+                ->joinLeft(['etablissementadressecell' => 'etablissementadresseapi'],'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)',[])->columns(['LIBELLE_COMMUNE_ADRESSE_CELLULE' => 'etablissementadressecell.LIBELLE_COMMUNE']);
+        } else {
+            $select->joinLeft(
+            'etablissementadresse','e.ID_ETABLISSEMENT = etablissementadresse.ID_ETABLISSEMENT',['NUMINSEE_COMMUNE', 'LON_ETABLISSEMENTADRESSE', 'LAT_ETABLISSEMENTADRESSE', 'ID_ADRESSE', 'ID_RUE', 'NUMERO_ADRESSE', 'COMPLEMENT_ADRESSE'])
+            ->joinLeft(
+            'adressecommune','etablissementadresse.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE','LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_DEFAULT')
+            ->joinLeft(
+                'groupementcommune','groupementcommune.NUMINSEE_COMMUNE = adressecommune.NUMINSEE_COMMUNE')
+            ->joinLeft(
+                'adresserue','adresserue.ID_RUE = etablissementadresse.ID_RUE','LIBELLE_RUE')
+            ->joinLeft(
+                ['etablissementadressesite' => 'etablissementadresse'],
+                'etablissementadressesite.ID_ETABLISSEMENT = (SELECT ID_FILS_ETABLISSEMENT FROM etablissementlie WHERE ID_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)',
+                'ID_RUE AS ID_RUE_SITE')
+            ->joinLeft(
+                ['adressecommunesite' => 'adressecommune'],'etablissementadressesite.NUMINSEE_COMMUNE = adressecommunesite.NUMINSEE_COMMUNE','LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_SITE')
+            ->joinLeft(
+                ['etablissementadressecell' => 'etablissementadresse'],'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)','ID_RUE AS ID_RUE_CELL')
+            ->joinLeft(
+                ['adressecommunecell' => 'adressecommune'],'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE','LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE');
+        }
+
+        $select->joinLeft(
+            'groupement',
+            'groupement.ID_GROUPEMENT = groupementcommune.ID_GROUPEMENT AND groupement.ID_GROUPEMENTTYPE = 5',
+            'LIBELLE_GROUPEMENT'
+        );
+    }
+    private function addCriteriaWithApi(Zend_Db_Select $select, $type, $adresse, $genres): void
+    {
+        if (null != $type && null != $adresse) {
+            $clauses = [];
+            switch ($type) {
+                case 'street':
+                    $clauses[] = "CONCAT(etablissementadresseapi.LIBELLE_RUE, ' ', etablissementadresseapi.CODEPOSTAL_COMMUNE, ' ', etablissementadresseapi.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
+                    if (null == $genres || in_array('1', $genres)) {
+                        $clauses[] = "CONCAT(etablissementadressesite.LIBELLE_RUE, ' ', etablissementadressesite.CODEPOSTAL_COMMUNE, ' ', etablissementadressesite.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
+                    }
+                    if (null == $genres || in_array('3', $genres)) {
+                        $clauses[] = "CONCAT(etablissementadressecell.LIBELLE_RUE, ' ', etablissementadressecell.CODEPOSTAL_COMMUNE, ' ', etablissementadressecell.LIBELLE_COMMUNE) = ".$select->getAdapter()->quote($adresse);
+                    }
+                    break;
+
+                case 'municipality':
+                    $clauses[] = 'etablissementadresseapi.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
+                    if (null == $genres || in_array('1', $genres)) {
+                        $clauses[] = 'etablissementadressesite.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
+                    }
+                    if (null == $genres || in_array('3', $genres)) {
+                        $clauses[] = 'etablissementadressecell.LIBELLE_COMMUNE = '.$select->getAdapter()->quote($adresse);
+                    }
+                    break;
+
+                case 'housenumber':
+                    $clauses[] = 'etablissementadresseapi.ADRESSE = '.$select->getAdapter()->quote($adresse);
+                    if (null == $genres || in_array('1', $genres)) {
+                        $clauses[] = 'etablissementadressesite.ADRESSE = '.$select->getAdapter()->quote($adresse);
+                    }
+                    if (null == $genres || in_array('3', $genres)) {
+                        $clauses[] = 'etablissementadressecell.ADRESSE = '.$select->getAdapter()->quote($adresse);
+                    }
+                    break;
+
+                default:
+                    throw new InvalidArgumentException('Invalid type provided: '.$type);
+            }
+
+            if (!empty($clauses)) {
+                $select->where('('.implode(' OR ', $clauses).')');
+            }
+        }
     }
 }
