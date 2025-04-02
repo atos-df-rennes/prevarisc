@@ -21,11 +21,11 @@ class MigrationAdressesController extends Zend_Controller_Action
         $migratedAddresses = 0;
 
         foreach ($oldAddresses as $oldAddress) {
-            $query = trim(($oldAddress['NUMERO_ADRESSE'] ?? '').' '.
-                           ($oldAddress['LIBELLE_RUE'] ?? '').' '.
-                           ($oldAddress['COMPLEMENT_ADRESSE'] ?? '').' '.
-                           ($oldAddress['CODEPOSTAL_COMMUNE'] ?? '').' '.
-                           ($oldAddress['LIBELLE_COMMUNE'] ?? ''));
+            $query = trim(($oldAddress['NUMERO_ADRESSE'] ?? '').' '
+                           .($oldAddress['LIBELLE_RUE'] ?? '').' '
+                           .($oldAddress['COMPLEMENT_ADRESSE'] ?? '').' '
+                           .($oldAddress['CODEPOSTAL_COMMUNE'] ?? '').' '
+                           .($oldAddress['LIBELLE_COMMUNE'] ?? ''));
             $apiResult = $adresseApiService->getAdresseApi($query, 'housenumber', 1);
 
             if (null !== $apiResult) {
