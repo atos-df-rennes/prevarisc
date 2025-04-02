@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__.'/EtablissementManager.php';
 class Service_Etablissement implements Service_Interface_Etablissement
 {
     public const STATUT_CHANGE = 1;
@@ -24,6 +23,13 @@ class Service_Etablissement implements Service_Interface_Etablissement
     public const ID_DOSSIERTYPE_GRPVISITE = 3;
 
     public const ID_5EME_CAT = 5;
+
+    private $etablissementManager;
+
+    public function __construct()
+    {
+        $this->etablissementManager = new Service_EtablissementManager();
+    }
 
     /**
      * Récupération d'un établissement.
@@ -261,7 +267,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $informations['PERIODICITE_ETABLISSEMENTINFORMATIONS'] = end($etablissement_parents)['PERIODICITE_ETABLISSEMENTINFORMATIONS'];
             }
 
-            $adresseAffichée = $etablissementManager->getEtablissementAdresse()->get($id_etablissement);
+            $adresseAffichée = $this->etablissementManager->getEtablissementAdresse()->get($id_etablissement);
             $commission = @$DB_commission->find($informations->ID_COMMISSION)->current();
             $etablissement = [
                 'general' => $general->toArray(),
@@ -901,8 +907,6 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DB_types_activites_secondaires = new Model_DbTable_EtablissementInformationsTypesActivitesSecondaires();
         $DB_etablissements_lies = new Model_DbTable_EtablissementLie();
         $DB_preventionniste = new Model_DbTable_EtablissementInformationsPreventionniste();
-        $DB_adresse = new Model_DbTable_EtablissementAdresse();
-        $DB_adresse_api = new Model_DbTable_EtablissementAdresseApi();
         $etablissementManager = new Service_EtablissementManager();
 
         // On commence la transaction
@@ -923,11 +927,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 $DB_etablissements_lies->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
 
-                if (getenv('PREVARISC_API_ADRESSE_MODAL')) {
-                    $DB_adresse_api->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
-                } else {
-                    $DB_adresse->delete('ID_ETABLISSEMENT = '.$etablissement->ID_ETABLISSEMENT);
-                }
+                $this->etablissementManager->getEtablissementAdresse()->delete($etablissement->ID_ETABLISSEMENT);
 
                 if (null != $information_a_la_date_donnee) {
                     $informations = $information_a_la_date_donnee;

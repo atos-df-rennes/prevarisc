@@ -96,6 +96,11 @@ class Model_DbTable_EtablissementAdresseApi extends Zend_Db_Table_Abstract imple
 
         return null;
     }
+  
+    public function delete($id_etablissement)
+    {  
+       parent::delete('ID_ETABLISSEMENT = '.$id_etablissement);
+    }
 
     public function exists(array $data): bool
     {
