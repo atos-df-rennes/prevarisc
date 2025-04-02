@@ -25,20 +25,20 @@ final class Plugin_SimpleFileDataStoreTest extends TestCase
         $this->assertSame($expected, $this->dataStore->getBasePath(null, $type, null));
     }
 
-    /**
-     * @dataProvider filePathProvider
-     */
-    public function testGetFilePath(array $pieceJointe, string $type, string $id, string $expected): void
-    {
-        $this->assertSame($expected, $this->dataStore->getFilePath($pieceJointe, $type, $id));
-    }
-
     public function basePathProvider(): array
     {
         return [
             'internal type' => ['avatar', REAL_DATA_PATH.DS.'uploads'.DS.'avatars'],
             'external type' => ['test', REAL_DATA_PATH.DS.'uploads'.DS.'test'],
         ];
+    }
+
+    /**
+     * @dataProvider filePathProvider
+     */
+    public function testGetFilePath(array $pieceJointe, string $type, string $id, string $expected): void
+    {
+        $this->assertSame($expected, $this->dataStore->getFilePath($pieceJointe, $type, $id));
     }
 
     public function filePathProvider(): array

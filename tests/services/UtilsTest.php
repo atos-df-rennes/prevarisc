@@ -25,22 +25,6 @@ final class Service_UtilsTest extends TestCase
         $this->assertSame($expected, $this->utils->getFullFusionName($baseObject, $options));
     }
 
-    /**
-     * @dataProvider magicalNameProvider
-     */
-    public function testGetDescriptifFieldMagicalName(string $initialName, string $expected): void
-    {
-        $this->assertSame($expected, $this->utils->getFusionNameMagicalCase($initialName));
-    }
-
-    /**
-     * @dataProvider pjProvider
-     */
-    public function testGetPjPath(array $pjData, string $expected): void
-    {
-        $this->assertSame($expected, $this->utils::getPjPath($pjData));
-    }
-
     public function fusionNameProvider(): array
     {
         return [
@@ -50,6 +34,14 @@ final class Service_UtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider magicalNameProvider
+     */
+    public function testGetDescriptifFieldMagicalName(string $initialName, string $expected): void
+    {
+        $this->assertSame($expected, $this->utils->getFusionNameMagicalCase($initialName));
+    }
+
     public function magicalNameProvider(): array
     {
         return [
@@ -57,6 +49,14 @@ final class Service_UtilsTest extends TestCase
             'formatted field' => ['descriptif rUbrique un Champ d\'enfer "Personnalisé"', 'DescriptifRubriqueUnChampDEnferPersonnalisé'],
             'field with leading and trailing spaces' => ['descriptif Rubrique   Un champ avec des espaces ', 'DescriptifRubriqueUnChampAvecDesEspaces'],
         ];
+    }
+
+    /**
+     * @dataProvider pjProvider
+     */
+    public function testGetPjPath(array $pjData, string $expected): void
+    {
+        $this->assertSame($expected, $this->utils::getPjPath($pjData));
     }
 
     public function pjProvider(): array
