@@ -1193,7 +1193,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 $cache->remove('etablissement_id_'.(int) $data['ID_PERE']);
 
                 // Affectation de la catégorie de l'établissement parent à la cellule lors de l'ajout de la cellule
-                if (self::ID_GENRE_CELLULE === filter_var($id_genre, FILTER_VALIDATE_INT)) {
+                if (self::ID_GENRE_CELLULE === $id_genre) {
                     $informations->ID_CATEGORIE = $pere->ID_CATEGORIE;
                     $informations->save();
                 }

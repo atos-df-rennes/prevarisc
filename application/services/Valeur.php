@@ -58,8 +58,8 @@ class Service_Valeur
                     $value = Service_Utils_Date::convertFromMySQL($value);
                 }
 
-                $retourValeurs[] =
-                    [
+                $retourValeurs[]
+                    = [
                         'VALEUR' => $value,
                         'ID_VALEUR' => $valeur['ID_VALEUR'],
                         'IDX_VALEUR' => $valeur['idx'],

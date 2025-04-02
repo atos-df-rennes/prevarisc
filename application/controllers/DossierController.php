@@ -1120,11 +1120,9 @@ class DossierController extends Zend_Controller_Action
                 $dateDocManquantArray = [];
                 $dateDocManquantRecepArray = [];
 
-                if (isset($_POST['docManquant'])) {
-                    foreach ($_POST['docManquant'] as $value) {
-                        if ('' != $value) {
-                            $docManquantArray[] = $value;
-                        }
+                foreach ($_POST['docManquant'] as $value) {
+                    if ('' != $value) {
+                        $docManquantArray[] = $value;
                     }
                 }
 
