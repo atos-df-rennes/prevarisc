@@ -6,10 +6,11 @@ class Service_Notification
 
     public const DOSSIER_PIECES_SESSION_NAMESPACE = 'DERNIERE_VISITE_PIECES_DOSSIER';
 
-    /** @var Zend_Db_Table_Row_Abstract|null */
+    /** @var null|Zend_Db_Table_Row_Abstract */
     private $utilisateur;
 
-    public function __construct() {
+    public function __construct()
+    {
         $modelUtilisateur = new Model_DbTable_Utilisateur();
         $this->utilisateur = $modelUtilisateur->find(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'])->current();
     }

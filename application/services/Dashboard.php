@@ -501,18 +501,18 @@ class Service_Dashboard
         $search->joinLeft(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
         $search->joinLeft(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', []]);
         $search->columns([
-            'IS_NEW' => new Zend_Db_Expr(\sprintf("IF(
+            'IS_NEW' => new Zend_Db_Expr(\sprintf('IF(
                 d.DATE_NOTIFICATION IS NOT NULL AND d.DATE_NOTIFICATION >= %s
                 , 1
                 , 0
-            )", $search->getAdapter()->quote(
+            )', $search->getAdapter()->quote(
                 $serviceNotification->getLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)
             ))),
-            'HAS_NEW_PJ' => new Zend_Db_Expr(\sprintf("IF(
+            'HAS_NEW_PJ' => new Zend_Db_Expr(\sprintf('IF(
                 piecejointe.DATE_NOTIFICATION IS NOT NULL AND piecejointe.DATE_NOTIFICATION >= %s
                 , 1
                 , 0
-            )", $search->getAdapter()->quote(
+            )', $search->getAdapter()->quote(
                 $serviceNotification->getLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)
             ))),
         ]);
