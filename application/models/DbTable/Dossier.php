@@ -446,11 +446,12 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->setCriteria('d.DATEREP_DOSSIER IS NULL');
         $search->setCriteria('d.OBJET_DOSSIER IS NOT NULL');
         $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', $duree_en_jour);
-        $search->order('d.DATEINSERT_DOSSIER desc');
 
         if ($getCount) {
             return $search->run(false, null, false, true);
         }
+
+        $search->order('d.DATEINSERT_DOSSIER desc');
 
         return $search->run(false, null, false)->toArray();
     }

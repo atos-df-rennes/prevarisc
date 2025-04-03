@@ -129,7 +129,20 @@ class Service_Count extends Service_Dashboard
      */
     public function getDossiersPlatAUSansEtablissementCount(array $user): int
     {
-        return $this->getDossiersPlatAUSansEtablissement($user, true);
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $select = $modelDossier->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(*)'])
+            ->joinLeft(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'd.ID_PLATAU = pc.ID_PLATAU', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
+            ->where('d.ID_PLATAU IS NOT NULL')
+            ->where('ed.ID_DOSSIER IS NULL')
+        ;
+        $results = $modelDossier->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**
@@ -138,7 +151,25 @@ class Service_Count extends Service_Dashboard
      */
     public function getDossiersPlatauPjsEnErreurCount(array $user): int
     {
-        return $this->getDossiersPlatauPjsEnErreur($user, true);
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $select = $modelDossier->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(*)'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
+            ->join(['dpj' => 'dossierpj'], 'dpj.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['pj' => 'piecejointe'], 'pj.ID_PIECEJOINTE = dpj.ID_PIECEJOINTE', [])
+            ->join(['pjs' => 'piecejointestatut'], 'pjs.ID_PIECEJOINTESTATUT = pj.ID_PIECEJOINTESTATUT', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
+            ->where('d.ID_PLATAU IS NOT NULL')
+            ->where('pc.STATUT_AVIS = ?', Model_Enum_PlatauStatutAvis::TRAITE)
+            ->where('pjs.NOM_STATUT IN ("to_be_exported", "on_error", "awaiting_status")')
+            ->group('d.ID_DOSSIER')
+        ;
+        $results = $modelDossier->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**
@@ -153,12 +184,13 @@ class Service_Count extends Service_Dashboard
             ->setIntegrityCheck(false)
             ->from(['d' => 'dossier'], ['COUNT(*) AS count'])
             ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
             ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
             ->join(['pj' => 'piecejointe'], 'dpj.ID_PIECEJOINTE = pj.ID_PIECEJOINTE', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
             ->where('d.ID_PLATAU IS NOT NULL')
-            ->where('pj.DATE_NOTIFICATION >= ?', $modelDossier->getAdapter()->quote(
-                $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)
-            ))
+            ->where('pj.DATE_NOTIFICATION >= ?', $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE))
+            ->group('d.ID_DOSSIER')
         ;
         $results = $modelDossier->fetchRow($select)['count'];
 
