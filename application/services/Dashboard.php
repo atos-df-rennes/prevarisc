@@ -326,12 +326,12 @@ class Service_Dashboard
     /**
      * @return array|int
      */
-    public function getERPOuvertsSansProchainesVisitePeriodiques(array $user, bool $getCount = false)
+    public function getERPOuvertsSansProchainesVisitePeriodiques(array $user)
     {
         $dbEtablissement = new Model_DbTable_Etablissement();
         $commissionsUser = $this->getCommissionUser($user);
 
-        return $dbEtablissement->listeErpOuvertsSansProchainesVisitePeriodiques($commissionsUser, $getCount);
+        return $dbEtablissement->listeErpOuvertsSansProchainesVisitePeriodiques($commissionsUser);
     }
 
     /**

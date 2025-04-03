@@ -55,7 +55,49 @@ class Service_Count extends Service_Dashboard
      */
     public function getERPOuvertsSansProchainesVisitePeriodiquesCount(array $user): int
     {
-        return $this->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
+        $modelEtablissement = new Model_DbTable_Etablissement();
+
+        $select = $modelEtablissement->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], ['count' => 'COUNT(DISTINCT e.ID_ETABLISSEMENT)'])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)', [])
+            ->join(['ed' => 'etablissementdossier'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT', [])
+            ->join(['d' => 'dossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER', [])
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+            ->where('ei.ID_STATUT = ?', 2)
+            ->where('ei.ID_GENRE = ?', 2)
+            ->where('ei.PERIODICITE_ETABLISSEMENTINFORMATIONS > ?', 0)
+            ->where('ei.ID_COMMISSION IN (?)', [1, 2, 4])
+            ->where('d.TYPE_DOSSIER IN (?)', [2, 3])
+            ->where('dn.ID_NATURE IN (?)', [21, 23, 24, 26, 28, 29, 47, 48])
+            ->where('d.DATEVISITE_DOSSIER = (
+                SELECT MAX(DATEVISITE_DOSSIER)
+                    FROM dossier
+                    INNER JOIN etablissementdossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                    INNER JOIN dossiernature on dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                    WHERE etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT
+                    AND dossier.TYPE_DOSSIER IN (2, 3)
+                    AND dossiernature.ID_NATURE IN (21, 23, 24, 26, 28, 29, 47, 48)
+            )')
+            ->where("
+                IF(
+                    d.DATECOMM_DOSSIER >= d.DATEVISITE_DOSSIER,
+                    DATE_FORMAT(
+                        DATE_ADD(d.DATECOMM_DOSSIER, INTERVAL ei.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH),
+                        '%Y-%m'
+                    ),
+                    DATE_FORMAT(
+                        DATE_ADD(d.DATEVISITE_DOSSIER, INTERVAL ei.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH),
+                        '%Y-%m'
+                    )
+                ) < DATE_FORMAT(CURDATE(), '%Y-%m')
+            ")
+        ;
+
+        $results = $modelEtablissement->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**

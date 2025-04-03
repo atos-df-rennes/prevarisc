@@ -405,10 +405,10 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
     /**
      * @return array|int
      */
-    public function listeErpOuvertsSansProchainesVisitePeriodiques(array $idsCommission, bool $getCount = false)
+    public function listeErpOuvertsSansProchainesVisitePeriodiques(array $idsCommission)
     {
         $search = new Model_DbTable_Search();
-        $search->setItem('etablissement', $getCount);
+        $search->setItem('etablissement');
 
         $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
         if ($use_date_commission_for_periodicity) {
@@ -440,10 +440,6 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         }
 
         $search->setCriteria($periodicityCondition." < DATE_FORMAT(CURDATE(), '%Y-%m')");
-
-        if ($getCount) {
-            return $search->run(false, null, false, true);
-        }
 
         return $search->run(false, null, false)->toArray();
     }
