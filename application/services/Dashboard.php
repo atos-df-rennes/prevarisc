@@ -492,22 +492,33 @@ class Service_Dashboard
     public function getDossiersPlatAUSansEtablissement(array $user): array
     {
         $search = new Model_DbTable_Search();
+        $serviceNotification = new Service_Notification();
+
         $search->setItem('dossier');
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
-        $search->setCriteria('d.ID_DOSSIER NOT IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->setCriteria('e.ID_DOSSIER IS NULL');
         $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
+        $search->joinLeft(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
+        $search->joinLeft(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', []]);
+        $search->columns([
+            'IS_NEW' => new Zend_Db_Expr(\sprintf("IF(
+                d.DATE_NOTIFICATION IS NOT NULL AND d.DATE_NOTIFICATION >= %s
+                , 1
+                , 0
+            )", $search->getAdapter()->quote(
+                $serviceNotification->getLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)
+            ))),
+            'HAS_NEW_PJ' => new Zend_Db_Expr(\sprintf("IF(
+                piecejointe.DATE_NOTIFICATION IS NOT NULL AND piecejointe.DATE_NOTIFICATION >= %s
+                , 1
+                , 0
+            )", $search->getAdapter()->quote(
+                $serviceNotification->getLastPageVisitDate(Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE)
+            ))),
+        ]);
         $search->order('d.DATEINSERT_DOSSIER');
-        $results = $search->run(false, null, false)->toArray();
 
-        // @fixme: Au lieu de parcourir les résultats, faire ça dans la requête
-        $serviceDossier = new Service_Dossier();
-        $serviceNotification = new Service_Notification();
-        foreach ($results as $key => $result) {
-            $results[$key]['IS_NEW'] = $serviceNotification->isNew($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
-            $results[$key]['HAS_NEW_PJ'] = $serviceDossier->hasNewPj($result, Service_Notification::DASHBOARD_DOSSIER_SESSION_NAMESPACE);
-        }
-
-        return $results;
+        return $search->run(false, null, false)->toArray();
     }
 
     /**
