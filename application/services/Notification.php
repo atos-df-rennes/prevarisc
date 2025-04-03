@@ -6,11 +6,6 @@ class Service_Notification
 
     public const DOSSIER_PIECES_SESSION_NAMESPACE = 'DERNIERE_VISITE_PIECES_DOSSIER';
 
-//    private const NAMESPACE_MAP = [
-//        self::DASHBOARD_DOSSIER_SESSION_NAMESPACE => 'DERNIERE_VISITE_DASHBOARD',
-//        self::DOSSIER_PIECES_SESSION_NAMESPACE => 'DERNIERE_VISITE_PIECES_DOSSIER',
-//    ];
-
     /** @var \Zend_Db_Table_Row_Abstract|null */
     private $utilisateur;
 
@@ -26,9 +21,6 @@ class Service_Notification
 
     public function setLastPageVisitDate(string $sessionNamespace): void
     {
-//        $derniereDateVisitePageSession = new Zend_Session_Namespace($sessionNamespace);
-//        $derniereDateVisitePageSession->date = date('Y-m-d H:i:s');
-
         $this->utilisateur->{$sessionNamespace} = date('Y-m-d H:i:s');
         $this->utilisateur->save();
     }
@@ -44,28 +36,4 @@ class Service_Notification
 
         return $element['DATE_NOTIFICATION'] >= $this->getLastPageVisitDate($elementSessionNamespace);
     }
-
-//    public function updateUserLastPageVisitDates(): void
-//    {
-//        $modelUtilisateur = new Model_DbTable_Utilisateur();
-//
-//        $idUtilisateur = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
-//        $utilisateur = $modelUtilisateur->find($idUtilisateur)->current();
-//
-//        foreach (self::NAMESPACE_MAP as $namespace => $sqlCol) {
-//            $utilisateur->{$sqlCol} = $this->getLastPageVisitDate($namespace);
-//        }
-//
-//        $utilisateur->save();
-//    }
-
-//    private function initLastPageVisitDate(string $sessionNamespace): string
-//    {
-//        $modelUtilisateur = new Model_DbTable_Utilisateur();
-//
-//        $idUtilisateur = Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'];
-//        $utilisateur = $modelUtilisateur->find($idUtilisateur)->current()->toArray();
-//
-//        return $utilisateur[self::NAMESPACE_MAP[$sessionNamespace]];
-//    }
 }

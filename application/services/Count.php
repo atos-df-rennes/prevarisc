@@ -147,6 +147,8 @@ class Service_Count extends Service_Dashboard
     public function getDossiersPlatauNouvellesPjsCount(array $user): int
     {
         $modelDossier = new Model_DbTable_Dossier();
+        $serviceNotification = new Service_Notification();
+
         $select = $modelDossier->select()
             ->setIntegrityCheck(false)
             ->from(['d' => 'dossier'], ['COUNT(*) AS count'])
@@ -154,11 +156,9 @@ class Service_Count extends Service_Dashboard
             ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
             ->join(['pj' => 'piecejointe'], 'dpj.ID_PIECEJOINTE = pj.ID_PIECEJOINTE', [])
             ->where('d.ID_PLATAU IS NOT NULL')
-            ->where(\sprintf('pj.DATE_NOTIFICATION >= (
-                SELECT u.%s
-                FROM utilisateur u
-                WHERE u.ID_UTILISATEUR = %s
-            )', Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE, $user['ID_UTILISATEUR']))
+            ->where('pj.DATE_NOTIFICATION >= ?', $modelDossier->getAdapter()->quote(
+                $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)
+            ))
         ;
         $results = $modelDossier->fetchRow($select)['count'];
 

@@ -550,17 +550,17 @@ class Service_Dashboard
     public function getDossiersPlatauNouvellesPjs(array $user): array
     {
         $search = new Model_DbTable_Search();
+        $serviceNotification = new Service_Notification();
+
         $search->setItem('dossier');
         $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
         $search->join(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
         $search->join(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', []]);
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
         $search->setCriteria('d.ID_DOSSIER = e.ID_DOSSIER');
-        $search->setCriteria(\sprintf('piecejointe.DATE_NOTIFICATION >= (
-            SELECT u.%s
-            FROM utilisateur u
-            WHERE u.ID_UTILISATEUR = %s
-        )', Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE, $user['ID_UTILISATEUR']));
+        $search->setCriteria(\sprintf('piecejointe.DATE_NOTIFICATION >= %s', $search->getAdapter()->quote(
+            $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)
+        )));
         $search->order('d.DATEINSERT_DOSSIER');
 
         $results = $search->run(false, null, false)->toArray();
