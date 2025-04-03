@@ -33,6 +33,8 @@ class IndexController extends Zend_Controller_Action
         $profil = $user['group']['LIBELLE_GROUPE'];
         $blocs = [];
 
+//        $profiler = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('db')->getProfiler();
+//        $start = microtime(true);
         foreach ($blocsConfig as $blocId => $blocConfig) {
             if (
                 !$blocConfig['acl']
@@ -50,6 +52,27 @@ class IndexController extends Zend_Controller_Action
                 ];
             }
         }
+//        $end = microtime(true) - $start;
+//
+//        $totalTime    = $profiler->getTotalElapsedSecs();
+//        $queryCount   = $profiler->getTotalNumQueries();
+//        $longestTime  = 0;
+//        $longestQuery = null;
+//
+//        foreach ($profiler->getQueryProfiles() as $query) {
+//            if ($query->getElapsedSecs() > $longestTime) {
+//                $longestTime  = $query->getElapsedSecs();
+//                $longestQuery = $query->getQuery();
+//            }
+//        }
+//
+//        echo 'Executed ' . $queryCount . ' queries in ' . $totalTime .
+//            ' seconds' . "\n";
+//        echo 'Longest query length: ' . $longestTime . "\n";
+//        echo "Longest query: \n" . $longestQuery . "\n";
+//
+//        var_dump($end);
+//        exit;
 
         // determine the bloc order
         // user preferences

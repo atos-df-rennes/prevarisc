@@ -505,6 +505,7 @@ class Service_Dashboard
         $search->order('d.DATEINSERT_DOSSIER');
         $results = $search->run(false, null, false)->toArray();
 
+        // @fixme: Au lieu de parcourir les résultats, faire ça dans la requête
         $serviceDossier = new Service_Dossier();
         $serviceNotification = new Service_Notification();
         foreach ($results as $key => $result) {
@@ -545,30 +546,25 @@ class Service_Dashboard
 
     /**
      * Retourne la liste des dossiers Plat'AU ayant de nouvelles pièces.
-     *
-     * @return array|int
      */
-    public function getDossiersPlatauNouvellesPjs(array $user, bool $getCount = false)
+    public function getDossiersPlatauNouvellesPjs(array $user): array
     {
         $search = new Model_DbTable_Search();
         $search->setItem('dossier');
         $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
+        $search->join(['etablissementdossier', 'etablissementdossier.ID_DOSSIER = d.ID_DOSSIER', []]);
+        $search->join(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
+        $search->join(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', []]);
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
-        $search->setCriteria('d.ID_DOSSIER IN (SELECT etablissementdossier.ID_DOSSIER from etablissementdossier)');
+        $search->setCriteria(\sprintf('piecejointe.DATE_NOTIFICATION >= (
+            SELECT u.%s
+            FROM utilisateur u
+            WHERE u.ID_UTILISATEUR = %s
+        )', Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE, $user['ID_UTILISATEUR']));
+        $search->group('d.ID_DOSSIER');
         $search->order('d.DATEINSERT_DOSSIER');
 
         $results = $search->run(false, null, false)->toArray();
-
-        $serviceDossier = new Service_Dossier();
-        foreach ($results as $key => $result) {
-            if (!$serviceDossier->hasNewPj($result, Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE)) {
-                unset($results[$key]);
-            }
-        }
-
-        if ($getCount) {
-            return count($results);
-        }
 
         return $results;
     }

@@ -44,6 +44,7 @@ $application = new Zend_Application('production', [
                 'username' => getenv('PREVARISC_DB_USERNAME'),
                 'password' => getenv('PREVARISC_DB_PASSWORD'),
                 'dbname' => getenv('PREVARISC_DB_DBNAME'),
+                'profiler' => true,
             ],
         ],
         'dataStore' => [
