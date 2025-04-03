@@ -561,7 +561,6 @@ class Service_Dashboard
             FROM utilisateur u
             WHERE u.ID_UTILISATEUR = %s
         )', Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE, $user['ID_UTILISATEUR']));
-        $search->group('d.ID_DOSSIER');
         $search->order('d.DATEINSERT_DOSSIER');
 
         $results = $search->run(false, null, false)->toArray();

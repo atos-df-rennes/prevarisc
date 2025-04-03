@@ -283,11 +283,4 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
 
         return $this;
     }
-
-    public function group($value): self
-    {
-        $this->select->group($value);
-
-        return $this;
-    }
 }
