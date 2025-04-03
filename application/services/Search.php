@@ -579,7 +579,7 @@ class Service_Search
                 // recherche par id de consultation Plat'AU
                 } elseif (1 === preg_match('/^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{3}$/', $cleanObjet)) {
                     $select->where('d.ID_PLATAU = ?', $cleanObjet);
-                    // cas par défaut
+                // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
