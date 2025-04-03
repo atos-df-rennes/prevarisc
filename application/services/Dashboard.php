@@ -552,10 +552,10 @@ class Service_Dashboard
         $search = new Model_DbTable_Search();
         $search->setItem('dossier');
         $search->join(['platauconsultation', 'platauconsultation.ID_PLATAU = d.ID_PLATAU', 'DATE_REPONSE_ATTENDUE']);
-        $search->join(['etablissementdossier', 'etablissementdossier.ID_DOSSIER = d.ID_DOSSIER', []]);
         $search->join(['dossierpj', 'dossierpj.ID_DOSSIER = d.ID_DOSSIER', []]);
         $search->join(['piecejointe', 'piecejointe.ID_PIECEJOINTE = dossierpj.ID_PIECEJOINTE', []]);
         $search->setCriteria('d.ID_PLATAU IS NOT NULL');
+        $search->setCriteria('d.ID_DOSSIER = e.ID_DOSSIER');
         $search->setCriteria(\sprintf('piecejointe.DATE_NOTIFICATION >= (
             SELECT u.%s
             FROM utilisateur u
