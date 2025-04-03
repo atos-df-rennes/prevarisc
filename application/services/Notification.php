@@ -6,7 +6,7 @@ class Service_Notification
 
     public const DOSSIER_PIECES_SESSION_NAMESPACE = 'DERNIERE_VISITE_PIECES_DOSSIER';
 
-    /** @var \Zend_Db_Table_Row_Abstract|null */
+    /** @var Zend_Db_Table_Row_Abstract|null */
     private $utilisateur;
 
     public function __construct() {
