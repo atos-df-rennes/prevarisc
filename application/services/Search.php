@@ -576,7 +576,10 @@ class Service_Search
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
-                // cas par défaut
+                // recherche par id de consultation Plat'AU
+                } elseif (1 === preg_match('/^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{3}$/', $cleanObjet)) {
+                    $select->where('d.ID_PLATAU = ?', $cleanObjet);
+                    // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
                 }
@@ -849,6 +852,9 @@ class Service_Search
                 // on test si la chaine contient uniquement des caractères de type identifiant sans espace
                 } elseif (1 === preg_match('/^[0-9A-Z\.]+$/', $cleanObjet)) {
                     $select->having('NB_URBA like ?', '%'.$cleanObjet.'%');
+                // recherche par id de consultation (format xxx-xxx-xxx)
+                } elseif (1 === preg_match('/^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{3}$/', $cleanObjet)) {
+                    $select->where('d.ID_PLATAU = ?', $cleanObjet);
                 // cas par défaut
                 } else {
                     $this->setCriteria($select, 'OBJET_DOSSIER', $cleanObjet, false);
