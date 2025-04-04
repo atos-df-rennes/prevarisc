@@ -205,7 +205,7 @@ class Service_Count extends Service_Dashboard
 
         $select = $modelDossier->select()
             ->setIntegrityCheck(false)
-            ->from(['d' => 'dossier'], ['count' => 'COUNT(*)'])
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(DISTINCT d.ID_DOSSIER)'])
             ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER', [])
             ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
             ->join(['dpj' => 'dossierpj'], 'dpj.ID_DOSSIER = d.ID_DOSSIER', [])
@@ -215,7 +215,6 @@ class Service_Count extends Service_Dashboard
             ->where('d.ID_PLATAU IS NOT NULL')
             ->where('pc.STATUT_AVIS = ?', Model_Enum_PlatauStatutAvis::TRAITE)
             ->where('pjs.NOM_STATUT IN ("to_be_exported", "on_error", "awaiting_status")')
-            ->group('d.ID_DOSSIER')
         ;
         $results = $modelDossier->fetchRow($select)['count'];
 
@@ -232,7 +231,7 @@ class Service_Count extends Service_Dashboard
 
         $select = $modelDossier->select()
             ->setIntegrityCheck(false)
-            ->from(['d' => 'dossier'], ['COUNT(*) AS count'])
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(DISTINCT d.ID_DOSSIER)'])
             ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
             ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
             ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
@@ -240,7 +239,6 @@ class Service_Count extends Service_Dashboard
             ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
             ->where('d.ID_PLATAU IS NOT NULL')
             ->where('pj.DATE_NOTIFICATION >= ?', $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE))
-            ->group('d.ID_DOSSIER')
         ;
         $results = $modelDossier->fetchRow($select)['count'];
 
