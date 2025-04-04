@@ -181,10 +181,10 @@ class Api_Service_Calendar
                 }
             }
 
-            $dateStartHour = $commissionEvent['HEURE_DEB_AFFECT'] ?
-                                'HEURE_DEB_AFFECT' : 'HEUREDEB_COMMISSION';
-            $dateEndHour = $commissionEvent['HEURE_FIN_AFFECT'] ?
-                                'HEURE_FIN_AFFECT' : 'HEUREFIN_COMMISSION';
+            $dateStartHour = $commissionEvent['HEURE_DEB_AFFECT']
+                                ? 'HEURE_DEB_AFFECT' : 'HEUREDEB_COMMISSION';
+            $dateEndHour = $commissionEvent['HEURE_FIN_AFFECT']
+                                ? 'HEURE_FIN_AFFECT' : 'HEUREFIN_COMMISSION';
             $dtStart = new DateTime(
                 sprintf(
                     '%s %s',
@@ -292,8 +292,8 @@ class Api_Service_Calendar
                 $serviceInstruct = $dbGroupement->getByLibelle(
                     $commissionEvent['SERVICEINSTRUC_DOSSIER']
                 );
-                $serviceInstruct = [] === $serviceInstruct ?
-                                    null : $serviceInstruct[0];
+                $serviceInstruct = [] === $serviceInstruct
+                                    ? null : $serviceInstruct[0];
             }
 
             if ($maire && [] !== $maire) {

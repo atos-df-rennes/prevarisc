@@ -1,5 +1,8 @@
 <?php
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+
 class Service_User
 {
     /**
@@ -194,9 +197,20 @@ class Service_User
             if (null !== $avatar && isset($avatar['tmp_name']) && is_file($avatar['tmp_name'])) {
                 $path = REAL_DATA_PATH.DS.'uploads'.DS.'avatars'.DS;
 
-                GD_Resize::run($avatar['tmp_name'], $path.'small'.DS.$user->ID_UTILISATEUR.'.jpg', 25, 25);
-                GD_Resize::run($avatar['tmp_name'], $path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg', 150);
-                GD_Resize::run($avatar['tmp_name'], $path.'large'.DS.$user->ID_UTILISATEUR.'.jpg', 224);
+                $imagine = new Imagine();
+
+                $image = $imagine->open($avatar['tmp_name']);
+                $imageService = new Service_Utils_Image($image);
+
+                $image->resize(new Box(25, 25))
+                    ->save($path.'small'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
+                $image->resize(new Box(150, $imageService->calculateHeightFromWidth(150)))
+                    ->save($path.'medium'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
+                $image->resize(new Box(224, $imageService->calculateHeightFromWidth(224)))
+                    ->save($path.'large'.DS.$user->ID_UTILISATEUR.'.jpg')
+                ;
             }
         } catch (Exception $exception) {
             $db->rollBack();
@@ -428,6 +442,7 @@ class Service_User
         $dbUser->FAILED_LOGIN_ATTEMPTS_UTILISATEUR = 0;
         $dbUser->IP_UTILISATEUR = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
         $dbUser->save();
+
         $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
         $cache->remove('user_id_'.$user['ID_UTILISATEUR']);
         $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] = 0;

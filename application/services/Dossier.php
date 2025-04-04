@@ -383,6 +383,30 @@ class Service_Dossier
     }
 
     /**
+     * Retourne les prescriptions sans celles qui ont été levées.
+     */
+    public function withoutLevees(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'DATE_LEVEE', false, null);
+    }
+
+    /**
+     * Retourne seulement les prescriptions reprises d'autres dossiers.
+     */
+    public function withoutActuals(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'ID_DOSSIER_REPRISE', true, null);
+    }
+
+    /**
+     * Retourne seulement les prescriptions non-reprises d'autres dossiers.
+     */
+    public function withoutPrevious(array $prescriptions): array
+    {
+        return $this->filterPrescriptions($prescriptions, 'ID_DOSSIER_REPRISE', false, null);
+    }
+
+    /**
      * Retourne les détails d'une prescription.
      *
      * @param int $id_prescription
@@ -969,22 +993,32 @@ class Service_Dossier
     }
 
     /**
-     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
+     * Filtre les prescriptions selon une condition sur un des champs.
+     * Remet à jour les indexs après le tri.
+     *
+     * @param array   $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
+     * @param string  $champ         champ se lequel porte la condition
+     * @param bool    $equals        teste l'équalité ou l'inégalité stricte
+     * @param ?string $value         Valeur testée
+     *
+     * @see Service_Dossier::getPrescriptions()
      */
-    public function hasNewPj(array $dossier, string $sessionNamespace): bool
+    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, ?string $value): array
     {
-        $serviceNotification = new Service_Notification();
-        $modelPj = new Model_DbTable_PieceJointe();
-        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
+        foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
+            foreach ($prescriptionsAssoc as $key => $prescription) {
+                $condition = $equals ? $prescription[$champ] === $value : $prescription[$champ] !== $value;
 
-        foreach ($pjs as $pj) {
-            if (!$serviceNotification->isNew($pj, $sessionNamespace)) {
-                continue;
+                if ($condition) {
+                    unset($prescriptions[$keyAssoc][$key]);
+
+                    if ([] === $prescriptions[$keyAssoc]) {
+                        unset($prescriptions[$keyAssoc]);
+                    }
+                }
             }
-
-            return true;
         }
 
-        return false;
+        return $prescriptions;
     }
 }

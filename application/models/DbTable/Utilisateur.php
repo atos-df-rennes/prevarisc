@@ -215,8 +215,8 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
         // On créé une fonction spéciale pour convertir les ressources retravaillées
 
-        $develop_resources =
-        function (&$list_resources_finale) use (&$develop_resources): array {
+        $develop_resources
+        = function (&$list_resources_finale) use (&$develop_resources): array {
             $list_resources_finaleCount = count($list_resources_finale);
             for ($i = 0; $i < $list_resources_finaleCount; ++$i) {
                 $resource_exploded = explode('_', $list_resources_finale[$i]);
@@ -290,7 +290,7 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
 
                         break;
 
-                    case 'eic':
+                    case 'bup':
                     case 'camp':
                     case 'temp':
                     case 'iop':

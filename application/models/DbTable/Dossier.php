@@ -446,11 +446,12 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         $search->setCriteria('d.DATEREP_DOSSIER IS NULL');
         $search->setCriteria('d.OBJET_DOSSIER IS NOT NULL');
         $search->sup('DATEDIFF(CURDATE(), d.DATEINSERT_DOSSIER)', $duree_en_jour);
-        $search->order('d.DATEINSERT_DOSSIER desc');
 
         if ($getCount) {
             return $search->run(false, null, false, true);
         }
+
+        $search->order('d.DATEINSERT_DOSSIER desc');
 
         return $search->run(false, null, false)->toArray();
     }
@@ -725,7 +726,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
             ->join(['pj' => 'piecejointe'], 'dpj.ID_PIECEJOINTE = pj.ID_PIECEJOINTE', ['DATE_NOTIFICATION'])
             ->where('d.ID_DOSSIER = ?', $idDossier)
-            ->where('pj.DATE_NOTIFICATION > ?', $dateVisitePage)
+            ->where('pj.DATE_NOTIFICATION >= ?', $dateVisitePage)
         ;
 
         return $this->fetchRow($select)['count'];
