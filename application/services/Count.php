@@ -68,7 +68,6 @@ class Service_Count extends Service_Dashboard
             ->where('ei.ID_STATUT = ?', 2)
             ->where('ei.ID_GENRE = ?', 2)
             ->where('ei.PERIODICITE_ETABLISSEMENTINFORMATIONS > ?', 0)
-            ->where('ei.ID_COMMISSION IN (?)', [1, 2, 4])
             ->where('d.TYPE_DOSSIER IN (?)', [2, 3])
             ->where('dn.ID_NATURE IN (?)', [21, 23, 24, 26, 28, 29, 47, 48])
             ->where('d.DATEVISITE_DOSSIER = (
@@ -94,6 +93,15 @@ class Service_Count extends Service_Dashboard
                 ) < DATE_FORMAT(CURDATE(), '%Y-%m')
             ")
         ;
+
+        if (isset($user['commissions']) && is_array($user['commissions'])) {
+            $select->where('ei.ID_COMMISSION IN (?)', array_map(
+                function ($commission) {
+                    return $commission['ID_COMMISSION'];
+                }
+                , $user['commissions']
+            ));
+        }
 
         $results = $modelEtablissement->fetchRow($select)['count'];
 
