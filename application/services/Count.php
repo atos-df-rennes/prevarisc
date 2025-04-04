@@ -96,7 +96,7 @@ class Service_Count extends Service_Dashboard
 
         if (isset($user['commissions']) && is_array($user['commissions'])) {
             $select->where('ei.ID_COMMISSION IN (?)', array_map(
-                function ($commission) {
+                function (array $commission) {
                     return $commission['ID_COMMISSION'];
                 }
                 , $user['commissions']
