@@ -993,37 +993,17 @@ class Service_Dossier
     }
 
     /**
-     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
-     */
-    public function hasNewPj(array $dossier, string $sessionNamespace): bool
-    {
-        $serviceNotification = new Service_Notification();
-        $modelPj = new Model_DbTable_PieceJointe();
-        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
-
-        foreach ($pjs as $pj) {
-            if (!$serviceNotification->isNew($pj, $sessionNamespace)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Filtre les prescriptions selon une condition sur un des champs.
      * Remet à jour les indexs après le tri.
      *
-     * @param array  $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
-     * @param string $champ         champ se lequel porte la condition
-     * @param bool   $equals        teste l'équalité ou l'inégalité stricte
-     * @param        $value         Valeur testée
+     * @param array   $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
+     * @param string  $champ         champ se lequel porte la condition
+     * @param bool    $equals        teste l'équalité ou l'inégalité stricte
+     * @param ?string $value         Valeur testée
      *
      * @see Service_Dossier::getPrescriptions()
      */
-    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, $value): array
+    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, ?string $value): array
     {
         foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
             foreach ($prescriptionsAssoc as $key => $prescription) {
