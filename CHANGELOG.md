@@ -4,6 +4,15 @@
 
 <!--- END HEADER -->
 
+## [2.7.3](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.2...v2.7.3) (08-04-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Crash sur le bloc des erps sans prochaine vp pour un utilisateur n'ayant aucune commission (#230) ([fb1913](https://github.com/atos-df-rennes/prevarisc/commit/fb1913571d8367446cda875a961b4482a06f7ab1))
+
+
+---
+
 ## [2.7.2](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.1...v2.7.2) (04-04-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
