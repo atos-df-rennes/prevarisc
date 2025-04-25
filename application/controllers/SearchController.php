@@ -379,9 +379,9 @@ class SearchController extends Zend_Controller_Action
                     $sheet->getStyle('A1:V1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $sheet->getStyle('A1:V1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'V') as $columnID) {
-                        $sheet->getColumnDimension($columnID)->setAutoSize(true);
-                    }
+                    // foreach (range('A', 'V') as $columnID) {
+                    //     $sheet->getColumnDimension($columnID)->setAutoSize(true);
+                    // }
 
                     $sheet->setCellValueByColumnAndRow(0, '1', 'Groupement');
                     $sheet->setCellValueByColumnAndRow(1, '1', 'Commune');
