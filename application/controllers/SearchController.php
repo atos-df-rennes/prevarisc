@@ -89,9 +89,10 @@ class SearchController extends Zend_Controller_Action
                     $sheet->getStyle('A1:X1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $sheet->getStyle('A1:X1')->getFont()->setSize(11)->setBold(true);
 
-                    foreach (range('A', 'X') as $columnID) {
-                        $sheet->getColumnDimension($columnID)->setAutoSize(true);
-                    }
+                    // @fixme: Mode dégradé car Export Calc impossible sur Debian avec cette option
+                    // foreach (range('A', 'X') as $columnID) {
+                    //     $sheet->getColumnDimension($columnID)->setAutoSize(true);
+                    // }
 
                     $sheet->setCellValueByColumnAndRow(0, '1', 'Commune');
                     $sheet->setCellValueByColumnAndRow(1, '1', 'Catégorie');
