@@ -4,6 +4,15 @@
 
 <!--- END HEADER -->
 
+## [2.7.4](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.3...v2.7.4) (25-04-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Timeout sur la génération du fichier d'export ODS des établissements et des dossiers (#232) ([ccc2fe](https://github.com/atos-df-rennes/prevarisc/commit/ccc2fe099231f6292bc17bbc5de09ca06c40260a))
+
+
+---
+
 ## [2.7.3](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.2...v2.7.3) (08-04-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections

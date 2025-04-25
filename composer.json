@@ -32,5 +32,6 @@
         "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/",
         "changelog": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog",
         "release": "/usr/bin/php8.3 tools/vendor/bin/conventional-changelog --commit"
-    }
+    },
+    "version": "2.7.4"
 }
