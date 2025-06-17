@@ -1,0 +1,30 @@
+<form action="/admin/formulaires/import" enctype="multipart/form-data" method="post" class="form-horizontal">
+    <div id="import-configuration" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Import d'une configuration</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="configuration-file">Fichier de configuration</label>
+                <div class="controls">
+                    <input id="configuration-file" name="configuration-file" type="file" />
+                </div>
+            </div>
+
+            <div class="controls">
+                <label class="checkbox">
+                    <input name="delete-existing-configuration" type="checkbox" />
+                    Supprimer la configuration existante
+                </label>
+                <span class="help-block">
+                    La suppression de la configuration existante entrainera également la suppression de toutes les données associées
+                </span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
+            <button type="submit" class="btn btn-success">Importer la configuration</button>
+        </div>
+    </div>
+</form>

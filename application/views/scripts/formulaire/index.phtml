@@ -7,10 +7,13 @@
     }));
 ?>
 
-<div class="pull-right">
-    <a href="/admin/formulaires/export" target="_blank" class="btn btn-primary mb-4">
+<div class="pull-right mb-4">
+    <a href="/admin/formulaires/export" target="_blank" class="btn btn-primary">
         Exporter la configuration
     </a>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#import-configuration">
+        Importer une configuration
+    </button>
 </div>
 
 <div class="panel panel-default" style="width: 100%; margin-bottom: 20px;">
@@ -72,6 +75,8 @@
         <?php endforeach ?>
     </div>
 </div>
+
+<?= $this->partial('formulaire/_import_configuration.phtml') ?>
 
 <script>
     $(document).ready(function() {
