@@ -138,6 +138,16 @@ function addPrescription($listePrescription,$type,$odf,$typeContenu){
 }
 
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
+
+if ($this->erreurGeneration) {
+    echo "<div class='alert alert-error'>
+      <button type='button' class='close' data-dismiss='alert'>&times;</button>
+      <strong>Erreur lors de la génération du PV !</strong> ".$this->erreurGeneration."
+    </div>";
+
+    return false;
+}
+
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
 	return false;
