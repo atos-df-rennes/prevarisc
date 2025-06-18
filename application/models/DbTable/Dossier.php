@@ -351,8 +351,9 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
     public function getEtablissementDossierGenConvoc($id_dossier)
     {
         $select = "SELECT etablissementdossier.ID_ETABLISSEMENTDOSSIER ,t1.ID_ETABLISSEMENT, LIBELLE_ETABLISSEMENTINFORMATIONS, LIBELLE_GENRE
-            FROM etablissementdossier, etablissementinformations t1, genre
+            FROM etablissementdossier, etablissementinformations t1, genre, etablissement
             WHERE etablissementdossier.ID_ETABLISSEMENT = t1.ID_ETABLISSEMENT
+            AND etablissementdossier.ID_ETABLISSEMENT = etablissement.ID_ETABLISSEMENT
             AND t1.ID_GENRE = genre.ID_GENRE
             AND etablissementdossier.ID_DOSSIER = '".$id_dossier."'
             AND t1.DATE_ETABLISSEMENTINFORMATIONS = (
@@ -360,6 +361,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
                 FROM etablissementdossier, etablissementinformations
                 WHERE etablissementinformations.ID_ETABLISSEMENT = t1.ID_ETABLISSEMENT
             )
+            AND etablissement.DATESUPPRESSION_ETABLISSEMENT IS NULL
             GROUP BY ID_ETABLISSEMENT;
         ";
 
