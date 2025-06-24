@@ -35,20 +35,33 @@
         <td>
             <?php if (null !== $pj['DESCRIPTION_PIECEJOINTE']): ?>
                 <?= nl2br(str_replace("<br />", "" ,$pj['DESCRIPTION_PIECEJOINTE'])) ?>
-            <?php else: ?>
-                <p>
-                    <?= $pj['TYPE'] ?>
-                    <?php if (null !== $pj['TYPE'] && null !== $pj['SOUS_TYPE']): ?>
-                        -
-                    <?php endif ?>
-                    <?= $pj['SOUS_TYPE'] ?>
-                </p>
-                <span class="label label-inverse">
-                    <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
-                </span>
-                <span class="label label-success">
-                    <i class="icon-tag icon-white" title="Nature de la pièce"></i>&nbsp;<?= $pj['NATURE'] ?>
-                </span>
+            <?php elseif (
+                null !== $pj['TYPE']
+                || null !== $pj['SOUS_TYPE']
+                || null !== $pj['DATE_DEPOT']
+                || null !== $pj['NATURE']
+            ): ?>
+                <?php if (null !== $pj['TYPE'] || null !== $pj['SOUS_TYPE']): ?>
+                    <p>
+                        <?= $pj['TYPE'] ?>
+                        <?php if (null !== $pj['TYPE'] && null !== $pj['SOUS_TYPE']): ?>
+                            -
+                        <?php endif ?>
+                        <?= $pj['SOUS_TYPE'] ?>
+                    </p>
+                <?php endif ?>
+
+                <?php if (null !== $pj['DATE_DEPOT']): ?>
+                    <span class="label label-inverse">
+                        <i class="icon-calendar icon-white"></i>&nbsp;Déposée le <?= Service_Utils_Date::convertFromMySQL($pj['DATE_DEPOT']) ?>
+                    </span>
+                <?php endif ?>
+
+                <?php if (null !== $pj['NATURE']): ?>
+                    <span class="label label-success">
+                        <i class="icon-tag icon-white" title="Nature de la pièce"></i>&nbsp;<?= $pj['NATURE'] ?>
+                    </span>
+                <?php endif ?>
             <?php endif ?>
         </td>
 
