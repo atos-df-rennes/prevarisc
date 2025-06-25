@@ -1091,325 +1091,343 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $this->view->assign('nomComm', $listeDossiers[0]['LIBELLE_DATECOMMISSION']);
             $this->view->assign('dateComm', $listeDossiers[0]['DATE_COMMISSION']);
             $this->view->assign('heureDeb', $listeDossiers[0]['HEUREDEB_COMMISSION']);
-
-            $this->_helper->flashMessenger([
-                'context' => 'success',
-                'title' => 'Le document a bien été généré',
-                'message' => '',
-            ]);
         } catch (Exception $exception) {
-            $this->_helper->flashMessenger([
-                'context' => 'error',
-                'title' => 'Erreur lors de la génération du document',
-                'message' => $exception->getMessage(),
-            ]);
+            $this->view->assign('erreurGeneration', $exception->getMessage());
         }
     }
 
     public function generationodjAction(): void
     {
-        $tabCommune = [];
-        $dateCommId = $this->getRequest()->getParam('dateCommId');
-        $this->view->assign('idComm', $dateCommId);
+        try {
+            $tabCommune = [];
+            $dateCommId = $this->getRequest()->getParam('dateCommId');
+            $this->view->assign('idComm', $dateCommId);
 
-        // On récupère la liste des dossiers
-        // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
-        $dbDateComm = new Model_DbTable_DateCommission();
-        $commSelect = $dbDateComm->find($dateCommId)->current();
-        $dbDateCommPj = new Model_DbTable_DateCommissionPj();
+            // On récupère la liste des dossiers
+            // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
+            $dbDateComm = new Model_DbTable_DateCommission();
+            $commSelect = $dbDateComm->find($dateCommId)->current();
+            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-        $listeDossiers = null;
-        if (1 == $commSelect['GESTION_HEURES']) {
-            // prise en compte heures
-            $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
-        } elseif (0 == $commSelect['GESTION_HEURES']) {
-            // prise en compte ordre
-            $listeDossiers = $dbDateCommPj->getDossiersInfosByOrder($dateCommId);
-        }
-
-        // On récupère le nom de la commission
-        $model_commission = new Model_DbTable_Commission();
-        $this->view->assign('commissionInfos', $model_commission->find($commSelect['COMMISSION_CONCERNE'])->toArray());
-
-        // Récupération des membres de la commission
-        $model_membres = new Model_DbTable_CommissionMembre();
-        $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commSelect['COMMISSION_CONCERNE']));
-
-        // afin de récuperer les informations des communes (adresse des mairies etc)
-        $model_adresseCommune = new Model_DbTable_AdresseCommune();
-        $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
-
-        $dbDossier = new Model_DbTable_Dossier();
-        $dbDocUrba = new Model_DbTable_DossierDocUrba();
-        $service_etablissement = new Service_Etablissement();
-
-        foreach ($listeDossiers as $val => $ue) {
-            $listeDossiers[$val]['preventionnistes'] = [];
-            $listeDossiers[$val]['listeDocUrba'] = [];
-            $listeDossiers[$val]['infosEtab'] = [];
-
-            $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
-            if ([] !== $listePrev) {
-                $listeDossiers[$val]['preventionnistes'] = $listePrev;
+            $listeDossiers = null;
+            if (1 == $commSelect['GESTION_HEURES']) {
+                // prise en compte heures
+                $listeDossiers = $dbDateCommPj->getDossiersInfosByHour($dateCommId);
+            } elseif (0 == $commSelect['GESTION_HEURES']) {
+                // prise en compte ordre
+                $listeDossiers = $dbDateCommPj->getDossiersInfosByOrder($dateCommId);
             }
 
-            // On recupere la liste des établissements qui concernent le dossier
-            $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
-            // on recupere la liste des infos des établissement
-            if ([] !== $listeEtab) {
-                $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
-                $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+            // On récupère le nom de la commission
+            $model_commission = new Model_DbTable_Commission();
+            $this->view->assign('commissionInfos', $model_commission->find($commSelect['COMMISSION_CONCERNE'])
+                ->toArray());
 
-                $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
-                $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
+            // Récupération des membres de la commission
+            $model_membres = new Model_DbTable_CommissionMembre();
+            $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commSelect['COMMISSION_CONCERNE']));
+
+            // afin de récuperer les informations des communes (adresse des mairies etc)
+            $model_adresseCommune = new Model_DbTable_AdresseCommune();
+            $model_utilisateurInfo = new Model_DbTable_UtilisateurInformations();
+
+            $dbDossier = new Model_DbTable_Dossier();
+            $dbDocUrba = new Model_DbTable_DossierDocUrba();
+            $service_etablissement = new Service_Etablissement();
+
+            foreach ($listeDossiers as $val => $ue) {
+                $listeDossiers[$val]['preventionnistes'] = [];
+                $listeDossiers[$val]['listeDocUrba'] = [];
+                $listeDossiers[$val]['infosEtab'] = [];
+
+                $listePrev = $dbDossier->getPreventionnistesDossier($ue['ID_DOSSIER']);
+                if ([] !== $listePrev) {
+                    $listeDossiers[$val]['preventionnistes'] = $listePrev;
+                }
+
+                // On recupere la liste des établissements qui concernent le dossier
+                $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
+                // on recupere la liste des infos des établissement
+                if ([] !== $listeEtab) {
+                    $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
+                    $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+
+                    $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
+                    $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
+                }
             }
-        }
 
-        $libelleCommune = '';
-        $tabCommune[] = [];
-        $numCommune = 0;
-        foreach ($listeDossiers as $ue) {
-            if (0 == $numCommune) {
-                if (isset($ue['infosEtab']['adresses'][0])) {
-                    $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
-                    $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
+            $libelleCommune = '';
+            $tabCommune[] = [];
+            $numCommune = 0;
+            foreach ($listeDossiers as $ue) {
+                if (0 == $numCommune) {
+                    if (isset($ue['infosEtab']['adresses'][0])) {
+                        $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
+                        $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])
+                            ->toArray()
+                        ;
+                    }
+
+                    if (isset($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])) {
+                        $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])
+                            ->toArray()
+                        ;
+                    }
+
+                    if (isset($libelleCommune, $communeInfo)) {
+                        $tabCommune[$numCommune] = [
+                            $libelleCommune,
+                            $communeInfo,
+                        ];
+                    }
+
+                    ++$numCommune;
                 }
 
-                if (isset($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])) {
-                    $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
-                }
-
-                if (isset($libelleCommune, $communeInfo)) {
-                    $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
-                }
-
-                ++$numCommune;
-            }
-
-            $existe = 0;
-            foreach ($tabCommune as $value) {
-                if (isset($ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'])) {
-                    if (isset($value[0]) && $value[0] == $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE']) {
+                $existe = 0;
+                foreach ($tabCommune as $value) {
+                    if (isset($ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'])) {
+                        if (isset($value[0]) && $value[0] == $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE']) {
+                            $existe = 1;
+                        }
+                    } else {
                         $existe = 1;
                     }
-                } else {
-                    $existe = 1;
+                }
+
+                if (0 == $existe) {
+                    $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
+                    $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])
+                        ->toArray()
+                    ;
+                    $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])
+                        ->toArray()
+                    ;
+                    $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
+                    ++$numCommune;
                 }
             }
 
-            if (0 == $existe) {
-                $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
-                $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
-                $communeInfo = $model_utilisateurInfo->find($adresseCommune[0]['ID_UTILISATEURINFORMATIONS'])->toArray();
-                $tabCommune[$numCommune] = [$libelleCommune, $communeInfo];
-                ++$numCommune;
-            }
-        }
-
-        $listeMembres = $model_membres->get($commSelect['COMMISSION_CONCERNE']);
-        foreach ($listeMembres as $var => $membre) {
-            $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
-        }
-
-        $model_etablissement = new Model_DbTable_Etablissement();
-
-        foreach ($listeDossiers as $key => $dossier) {
-            $listeDossiers[$key]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
-            $listeDossiers[$key]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($dossier['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($dossier['infosEtab']['general']['ID_ETABLISSEMENT']);
-
-            // Gestion des formulaires personnalisés
-            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = empty($dossier['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
-            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissementEffectifsDegagements = empty($dossier['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
-
-            $rubriquesByCapsuleRubrique = [
-                'descriptifVerificationsTechniques' => $rubriquesDossier,
-                'descriptifEtablissement' => $rubriquesEtablissement,
-                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
-                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
-            ];
-
-            // Gestion des rubriques/champs personnalisés
-            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
-
-            // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
-                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+            $listeMembres = $model_membres->get($commSelect['COMMISSION_CONCERNE']);
+            foreach ($listeMembres as $var => $membre) {
+                $listeMembres[$var]['infosFiles'] = $model_membres->fetchAll('ID_COMMISSIONMEMBRE = '.$membre['id_membre']);
             }
 
-            $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
+            $model_etablissement = new Model_DbTable_Etablissement();
+
+            foreach ($listeDossiers as $key => $dossier) {
+                $listeDossiers[$key]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($dossier['ID_DOSSIER']);
+                $listeDossiers[$key]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($dossier['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($dossier['infosEtab']['general']['ID_ETABLISSEMENT']);
+
+                // Gestion des formulaires personnalisés
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissement = empty($dossier['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($dossier['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissementEffectifsDegagements = empty($dossier['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($dossier['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+                $rubriquesByCapsuleRubrique = [
+                    'descriptifVerificationsTechniques' => $rubriquesDossier,
+                    'descriptifEtablissement' => $rubriquesEtablissement,
+                    'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                    'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+                ];
+
+                // Gestion des rubriques/champs personnalisés
+                $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+                // Récupération des rubriques pour chaque objet global
+                foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                    $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                }
+
+                $listeDossiers[$key]['FORMULAIRES'] = $capsulesRubriques;
+            }
+
+            $this->view->assign('informationsMembre', $listeMembres);
+            $this->view->assign('listeCommunes', $tabCommune);
+
+            $this->view->assign('dossierComm', $listeDossiers);
+
+            $this->view->assign('dateComm', $listeDossiers[0]['DATE_COMMISSION']);
+            $this->view->assign('heureDeb', $listeDossiers[0]['HEUREDEB_COMMISSION']);
+        } catch (Exception $exception) {
+            $this->view->assign('erreurGeneration', $exception->getMessage());
         }
-
-        $this->view->assign('informationsMembre', $listeMembres);
-        $this->view->assign('listeCommunes', $tabCommune);
-
-        $this->view->assign('dossierComm', $listeDossiers);
-
-        $this->view->assign('dateComm', $listeDossiers[0]['DATE_COMMISSION']);
-        $this->view->assign('heureDeb', $listeDossiers[0]['HEUREDEB_COMMISSION']);
     }
 
     public function generationpvAction(): void
     {
-        $dateCommId = $this->getRequest()->getParam('dateCommId');
-        $this->view->assign('idComm', $dateCommId);
-        // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
-        $dbDateComm = new Model_DbTable_DateCommission();
+        try {
+            $dateCommId = $this->getRequest()->getParam('dateCommId');
+            $this->view->assign('idComm', $dateCommId);
+            // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
+            $dbDateComm = new Model_DbTable_DateCommission();
 
-        // 1 = salle . 2 = visite . 3 = groupe de visite
-        // on recupere le type de commission (salle / visite / groupe de visite)
-        $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
-        $this->view->assign('dateComm', $commissionInfo['DATE_COMMISSION']);
-        // On récupère le nom de la commission
-        $model_commission = new Model_DbTable_Commission();
-        $this->view->assign('commissionInfos', $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray());
-        $model_membres = new Model_DbTable_CommissionMembre();
-        $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE'].' AND ID_GROUPEMENT IS NULL'));
-        $dbDateCommPj = new Model_DbTable_DateCommissionPj();
+            // 1 = salle . 2 = visite . 3 = groupe de visite
+            // on recupere le type de commission (salle / visite / groupe de visite)
+            $commissionInfo = $dbDateComm->find($dateCommId)
+                ->current()
+                ->toArray()
+            ;
+            $this->view->assign('dateComm', $commissionInfo['DATE_COMMISSION']);
+            // On récupère le nom de la commission
+            $model_commission = new Model_DbTable_Commission();
+            $this->view->assign('commissionInfos', $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])
+                ->toArray());
+            $model_membres = new Model_DbTable_CommissionMembre();
+            $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE'].' AND ID_GROUPEMENT IS NULL'));
+            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-        if (1 == $commissionInfo['GESTION_HEURES']) {
-            $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
-        } else {
-            $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
-        }
-
-        $dbDossier = new Model_DbTable_Dossier();
-        $dbDocUrba = new Model_DbTable_DossierDocUrba();
-        $service_etablissement = new Service_Etablissement();
-        $model_etablissement = new Model_DbTable_Etablissement();
-
-        foreach ($listeDossiers as $val => $ue) {
-            // On recupere la liste des établissements qui concernent le dossier
-            $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
-
-            // on recupere la liste des infos des établissement
-            if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
-                $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
-                $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+            if (1 == $commissionInfo['GESTION_HEURES']) {
+                $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
+            } else {
+                $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
             }
 
-            $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
-            $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-            $service_dossier = new Service_Dossier();
+            $dbDossier = new Model_DbTable_Dossier();
+            $dbDocUrba = new Model_DbTable_DossierDocUrba();
+            $service_etablissement = new Service_Etablissement();
+            $model_etablissement = new Model_DbTable_Etablissement();
 
-            $regles = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
-            $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->withoutLevees($regles);
-            $listeDossiers[$val]['prescriptionReglDossierReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionReglDossier']);
-            $listeDossiers[$val]['prescriptionReglDossierActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionReglDossier']);
+            foreach ($listeDossiers as $val => $ue) {
+                // On recupere la liste des établissements qui concernent le dossier
+                $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
 
-            $exploitation = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
-            $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->withoutLevees($exploitation);
-            $listeDossiers[$val]['prescriptionExploitationReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionExploitation']);
-            $listeDossiers[$val]['prescriptionExploitationActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionExploitation']);
+                // on recupere la liste des infos des établissement
+                if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
+                    $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
+                    $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+                }
 
-            $amelioration = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
-            $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->withoutLevees($amelioration);
-            $listeDossiers[$val]['prescriptionAmeliorationReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionAmelioration']);
-            $listeDossiers[$val]['prescriptionAmeliorationActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionAmelioration']);
+                $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
+                $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
+                $service_dossier = new Service_Dossier();
 
-            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
-            $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
+                $regles = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 0);
+                $listeDossiers[$val]['prescriptionReglDossier'] = $service_dossier->withoutLevees($regles);
+                $listeDossiers[$val]['prescriptionReglDossierReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionReglDossier']);
+                $listeDossiers[$val]['prescriptionReglDossierActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionReglDossier']);
 
-            // FIXME Remplacer les $listeDossiers[$val] par $ue
-            // Gestion des formulaires personnalisés
-            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
-            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $exploitation = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 1);
+                $listeDossiers[$val]['prescriptionExploitation'] = $service_dossier->withoutLevees($exploitation);
+                $listeDossiers[$val]['prescriptionExploitationReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionExploitation']);
+                $listeDossiers[$val]['prescriptionExploitationActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionExploitation']);
 
-            $rubriquesByCapsuleRubrique = [
-                'descriptifVerificationsTechniques' => $rubriquesDossier,
-                'descriptifEtablissement' => $rubriquesEtablissement,
-                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
-                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
-            ];
+                $amelioration = $service_dossier->getPrescriptions((int) $ue['ID_DOSSIER'], 2);
+                $listeDossiers[$val]['prescriptionAmelioration'] = $service_dossier->withoutLevees($amelioration);
+                $listeDossiers[$val]['prescriptionAmeliorationReprises'] = $service_dossier->withoutActuals($listeDossiers[$val]['prescriptionAmelioration']);
+                $listeDossiers[$val]['prescriptionAmeliorationActuelles'] = $service_dossier->withoutPrevious($listeDossiers[$val]['prescriptionAmelioration']);
 
-            // Gestion des rubriques/champs personnalisés
-            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+                $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+                $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
 
-            // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
-                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                // FIXME Remplacer les $listeDossiers[$val] par $ue
+                // Gestion des formulaires personnalisés
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+
+                $rubriquesByCapsuleRubrique = [
+                    'descriptifVerificationsTechniques' => $rubriquesDossier,
+                    'descriptifEtablissement' => $rubriquesEtablissement,
+                    'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                    'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+                ];
+
+                // Gestion des rubriques/champs personnalisés
+                $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+                // Récupération des rubriques pour chaque objet global
+                foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                    $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                }
+
+                $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
             }
 
-            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
+            $this->view->assign('dossierComm', $listeDossiers);
+        } catch (Exception $exception) {
+            $this->view->assign('erreurGeneration', $exception->getMessage());
         }
-
-        $this->view->assign('dossierComm', $listeDossiers);
     }
 
     public function generationcompterenduAction(): void
     {
-        $dateCommId = $this->getRequest()->getParam('dateCommId');
-        $this->view->assign('idComm', $dateCommId);
-        // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
-        $dbDateComm = new Model_DbTable_DateCommission();
-        $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
-        $this->view->assign('dateComm', $commissionInfo['DATE_COMMISSION']);
-        // 1 = salle . 2 = visite . 3 = groupe de visite
-        // on recupere le type de commission (salle / visite / groupe de visite)
-        $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
+        try {
+            $dateCommId = $this->getRequest()->getParam('dateCommId');
+            $this->view->assign('idComm', $dateCommId);
+            // Suivant si l'on prend en compte les heures ou non on choisi la requete à effectuer
+            $dbDateComm = new Model_DbTable_DateCommission();
+            $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
+            $this->view->assign('dateComm', $commissionInfo['DATE_COMMISSION']);
+            // 1 = salle . 2 = visite . 3 = groupe de visite
+            // on recupere le type de commission (salle / visite / groupe de visite)
+            $commissionInfo = $dbDateComm->find($dateCommId)->current()->toArray();
 
-        // On récupère le nom de la commission
-        $model_commission = new Model_DbTable_Commission();
-        $this->view->assign('commissionInfos', $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray());
-        $model_membres = new Model_DbTable_CommissionMembre();
+            // On récupère le nom de la commission
+            $model_commission = new Model_DbTable_Commission();
+            $this->view->assign('commissionInfos', $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray());
+            $model_membres = new Model_DbTable_CommissionMembre();
 
-        $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']));
-        $dbDateCommPj = new Model_DbTable_DateCommissionPj();
+            $this->view->assign('membresFiles', $model_membres->fetchAll('ID_COMMISSION = '.$commissionInfo['COMMISSION_CONCERNE']));
+            $dbDateCommPj = new Model_DbTable_DateCommissionPj();
 
-        if (1 == $commissionInfo['GESTION_HEURES']) {
-            $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
-        } else {
-            $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
-        }
-
-        $dbDossier = new Model_DbTable_Dossier();
-        $dbDocUrba = new Model_DbTable_DossierDocUrba();
-        $service_etablissement = new Service_Etablissement();
-        $model_etablissement = new Model_DbTable_Etablissement();
-
-        foreach ($listeDossiers as $val => $ue) {
-            // On recupere la liste des établissements qui concernent le dossier
-            $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
-            // on recupere la liste des infos des établissement
-            if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
-                $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
-                $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+            if (1 == $commissionInfo['GESTION_HEURES']) {
+                $listeDossiers = $dbDateCommPj->TESTRECUPDOSSHEURE($dateCommId);
+            } else {
+                $listeDossiers = $dbDateCommPj->TESTRECUPDOSS($dateCommId);
             }
 
-            $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
-            $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
+            $dbDossier = new Model_DbTable_Dossier();
+            $dbDocUrba = new Model_DbTable_DossierDocUrba();
+            $service_etablissement = new Service_Etablissement();
+            $model_etablissement = new Model_DbTable_Etablissement();
 
-            $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
-            $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
+            foreach ($listeDossiers as $val => $ue) {
+                // On recupere la liste des établissements qui concernent le dossier
+                $listeEtab = $dbDossier->getEtablissementDossierGenConvoc($ue['ID_DOSSIER']);
+                // on recupere la liste des infos des établissement
+                if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
+                    $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
+                    $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
+                }
 
-            // Gestion des formulaires personnalisés
-            $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
-            $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
-            $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
+                $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
 
-            $rubriquesByCapsuleRubrique = [
-                'descriptifVerificationsTechniques' => $rubriquesDossier,
-                'descriptifEtablissement' => $rubriquesEtablissement,
-                'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
-                'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
-            ];
+                $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+                $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
 
-            // Gestion des rubriques/champs personnalisés
-            $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+                // Gestion des formulaires personnalisés
+                $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissement = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceDescriptifEtablissement->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
+                $rubriquesDossierEffectifsDegagements = $this->serviceDossierEffectifsDegagements->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
+                $rubriquesEtablissementEffectifsDegagements = empty($listeDossiers[$val]['infosEtab']) ? '' : $this->serviceEtablissementEffectifsDegagements->getRubriques($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT'], 'Etablissement');
 
-            // Récupération des rubriques pour chaque objet global
-            foreach ($capsulesRubriques as $index => $capsuleRubrique) {
-                $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                $rubriquesByCapsuleRubrique = [
+                    'descriptifVerificationsTechniques' => $rubriquesDossier,
+                    'descriptifEtablissement' => $rubriquesEtablissement,
+                    'effectifsDegagementsDossier' => $rubriquesDossierEffectifsDegagements,
+                    'effectifsDegagementsEtablissement' => $rubriquesEtablissementEffectifsDegagements,
+                ];
+
+                // Gestion des rubriques/champs personnalisés
+                $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
+
+                // Récupération des rubriques pour chaque objet global
+                foreach ($capsulesRubriques as $index => $capsuleRubrique) {
+                    $capsulesRubriques[$index]['RUBRIQUES'] = $rubriquesByCapsuleRubrique[$capsuleRubrique['NOM_INTERNE']];
+                }
+
+                $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
             }
 
-            $listeDossiers[$val]['FORMULAIRES'] = $capsulesRubriques;
+            $this->view->assign('dossierComm', $listeDossiers);
+        } catch (Exception $exception) {
+            $this->view->assign('erreurGeneration', $exception->getMessage());
         }
-
-        $this->view->assign('dossierComm', $listeDossiers);
     }
 
     public function alertsuppressionAction(): void
