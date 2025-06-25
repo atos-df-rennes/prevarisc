@@ -778,42 +778,10 @@ class DossierController extends Zend_Controller_Action
             } elseif ('edit' == $this->getRequest()->getParam('do')) {
                 $nouveauDossier = $DBdossier->find($this->getRequest()->getParam('idDossier'))->current();
 
-                $oldNature = $DBdossier->getNatureDossier($this->getRequest()->getParam('idDossier'));
-                $oldNature = $oldNature['ID_NATURE'];
+                $newType = filter_var($this->getRequest()->getParam('TYPE_DOSSIER'), FILTER_VALIDATE_INT);
+                $newNature = filter_var($this->getRequest()->getParam('selectNature'), FILTER_VALIDATE_INT);
 
-                $newNature = $this->getRequest()->getParam('selectNature');
-
-                $arrayT2 = [20, 47, 25, 48];
-
-                $dbDocConsulte = new Model_DbTable_DossierDocConsulte();
-                $dbDocAjout = new Model_DbTable_ListeDocAjout();
-
-                if (
-                    in_array($oldNature, $arrayT2)
-                    && in_array($newNature, $arrayT2)
-                ) {
-                    // On conserve les documents consultés en faisant une copie dans la table docajout
-                    $docRestant = $dbDocConsulte->getDocOtheNature($this->getRequest()->getParam('idDossier'), $oldNature);
-                    foreach ($docRestant as $doc) {
-                        $newDocAjout = $dbDocAjout->createRow();
-                        $newDocAjout->LIBELLE_DOCAJOUT = $doc['LIBELLE_DOC'];
-                        $newDocAjout->REF_DOCAJOUT = $doc['REF_CONSULTE'];
-                        $newDocAjout->DATE_DOCAJOUT = $doc['DATE_CONSULTE'];
-                        $newDocAjout->ID_DOSSIER = $doc['ID_DOSSIER'];
-                        $newDocAjout->ID_NATURE = $newNature;
-                        $newDocAjout->save();
-
-                        $where = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIERDOCCONSULTE = ?', $doc['ID_DOSSIERDOCCONSULTE']);
-                        $dbDocConsulte->delete($where);
-                    }
-                } elseif ($oldNature != $newNature) {
-                    // On supprime les documents consultés
-                    $where = $dbDocAjout->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->getRequest()->getParam('idDossier'));
-                    $dbDocAjout->delete($where);
-
-                    $where = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIER = ?', $this->getRequest()->getParam('idDossier'));
-                    $dbDocConsulte->delete($where);
-                }
+                $service_dossier->transfertOuSupprimeDocumentsConsultes($this->getRequest()->getParam('idDossier'), $newType, $newNature);
             }
 
             $excludes = [
