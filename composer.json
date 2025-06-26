@@ -32,5 +32,6 @@
         "test-coverage": "@test --coverage-html tests/coverage/ --whitelist application/",
         "changelog": "tools/vendor/bin/conventional-changelog",
         "release": "tools/vendor/bin/conventional-changelog --commit"
-    }
+    },
+    "version": "2.7.5"
 }
