@@ -4,6 +4,20 @@
 
 <!--- END HEADER -->
 
+## [2.7.5](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.4...v2.7.5) (26-06-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* [#4923] Etend la récupération des documents consultés/ajoutés au changement de type/nature de dossier (#238) ([416ef8](https://github.com/atos-df-rennes/prevarisc/commit/416ef8d9d5508c76658ecda652a19d6737593214))
+* Possibilité de changer un avis envoyé sur Plat'AU (#233) ([2ee446](https://github.com/atos-df-rennes/prevarisc/commit/2ee4469d780934c9873dca0eb2e8993aa553cb67))
+
+##### Calendrier
+
+* Exclut les établissements supprimés des établissements liés au dossier de l'odj (#237) ([049699](https://github.com/atos-df-rennes/prevarisc/commit/049699a999ddde26ae202c04ab30cf929702ec7f))
+
+
+---
+
 ## [2.7.4](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.3...v2.7.4) (25-04-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections

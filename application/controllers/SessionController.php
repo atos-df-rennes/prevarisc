@@ -133,6 +133,7 @@ class SessionController extends Zend_Controller_Action
             $service_user->updateLastActionDate($auth->getIdentity()['ID_UTILISATEUR']);
 
             $auth->clearIdentity();
+            session_unset();
         }
 
         if (1 == getenv('PREVARISC_CAS_ENABLED')) {
