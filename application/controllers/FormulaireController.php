@@ -69,6 +69,7 @@ class FormulaireController extends Zend_Controller_Action
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/formulaire.css', 'all');
         $viewHeadLink->headLink()->appendStylesheet('/css/formulaire/edit-table.css', 'all');
 
+        $importStatus = $this->getRequest()->getParam('importStatus');
         $form = new Form_CustomForm();
 
         $capsulesRubriques = $this->serviceFormulaire->getAllCapsuleRubrique();
@@ -81,6 +82,7 @@ class FormulaireController extends Zend_Controller_Action
         // Assignation des variables à la vue
         $this->view->assign('form', $form);
         $this->view->assign('formulaires', $capsulesRubriques);
+        $this->view->assign('importStatus', $importStatus);
     }
 
     public function addRubriqueAction(): void

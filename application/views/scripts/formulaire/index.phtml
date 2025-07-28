@@ -7,6 +7,26 @@
     }));
 ?>
 
+<?php if (null !== $this->importStatus): ?>
+    <div class="alert alert-<?= $this->importStatus ?>">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <?php if ($this->importStatus === 'success'): ?>
+            <strong>Succès !</strong> La configuration a bien été importée.
+        <?php elseif ($this->importStatus === 'error'): ?>
+            <strong>Erreur !</strong> Un problème a eu lieu lors de l'import de la configuration.
+        <?php endif ?>
+    </div>
+<?php endif ?>
+
+<div class="pull-right mb-4">
+    <a href="/admin/formulaires/export" target="_blank" class="btn btn-primary">
+        Exporter la configuration
+    </a>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#import-configuration">
+        Importer une configuration
+    </button>
+</div>
+
 <div class="panel panel-default" style="width: 100%; margin-bottom: 20px;">
     <div class="panel-heading">
         <h2>Onglets de l'établissement</h2>
@@ -66,6 +86,8 @@
         <?php endforeach ?>
     </div>
 </div>
+
+<?= $this->partial('formulaire/_import_configuration.phtml') ?>
 
 <script>
     $(document).ready(function() {
