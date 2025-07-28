@@ -993,37 +993,87 @@ class Service_Dossier
     }
 
     /**
-     * Vérifie si un dossier Plat'AU à de nouvelles pièces.
+     * Transfert les documents consultés/ajoutés si nécessaire et si le changement
+     * de type et de nature du dossier le permet.
+     * Si ce n'est pas le cas, supprime tous les documents.
+     * S'il n'y a eu aucun changement, ne fait rien.
      */
-    public function hasNewPj(array $dossier, string $sessionNamespace): bool
+    public function transfertOuSupprimeDocumentsConsultes(int $idDossier, int $nouveauType, int $nouvelleNature): void
     {
-        $serviceNotification = new Service_Notification();
-        $modelPj = new Model_DbTable_PieceJointe();
-        $pjs = $modelPj->affichagePieceJointe('dossierpj', 'dossierpj.ID_DOSSIER', $dossier['ID_DOSSIER']);
+        $modelDossier = new Model_DbTable_Dossier();
+        $typesVisite = [2, 3];
+        $naturesRtVao = [20, 47, 25, 48];
 
-        foreach ($pjs as $pj) {
-            if (!$serviceNotification->isNew($pj, $sessionNamespace)) {
-                continue;
-            }
+        $typeDossier = filter_var($modelDossier->getTypeDossier($idDossier)['TYPE_DOSSIER'], FILTER_VALIDATE_INT);
+        $natureDossier = filter_var($modelDossier->getNatureDossier($idDossier)['ID_NATURE'], FILTER_VALIDATE_INT);
 
-            return true;
+        /*
+         * Le type et la nature n'ont pas changé avec l'information précédemment renseignée,
+         * il n'y a rien à faire.
+         */
+        $hasSameTypeAndNature = $typeDossier === $nouveauType && $natureDossier === $nouvelleNature;
+        if ($hasSameTypeAndNature) {
+            return;
         }
 
-        return false;
+        $dbDocConsulte = new Model_DbTable_DossierDocConsulte();
+        $dbDocAjout = new Model_DbTable_ListeDocAjout();
+
+        /*
+         * Le type a changé et n'est pas compatible avec l'ancien type.
+         * Les types ne sont pas compatibles entre eux hormis "Visite de commission"
+         * et "Groupe de visite" qui sont interchangeables.
+         */
+        $hasIncompatibleTypes = (in_array($typeDossier, $typesVisite, true) && !in_array($nouveauType, $typesVisite, true))
+            || (!in_array($typeDossier, $typesVisite, true) && $typeDossier !== $nouveauType);
+
+        /*
+         * La nature a changé et n'est pas compatible avec l'ancienne nature.
+         * Les natures sont compatibles entre elles hormis "Réception de travaux"
+         * et "Visite avant ouverture" qui ne sont interchangeables qu'entre elles.
+         */
+        $naturesDossier = [$natureDossier, $nouvelleNature];
+        $hasIncompatibleNatures = 1 === count(array_diff($naturesDossier, $naturesRtVao));
+
+        /*
+         * Le type ou la nature a changé et est incompatible avec l'information précédemment renseignée,
+         * on supprime les documents consultés/ajoutés.
+         */
+        if (
+            $hasIncompatibleTypes
+            || $hasIncompatibleNatures
+        ) {
+            $where = $dbDocAjout->getAdapter()->quoteInto('ID_DOSSIER = ?', $idDossier);
+            $dbDocAjout->delete($where);
+
+            $where = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIER = ?', $idDossier);
+            $dbDocConsulte->delete($where);
+
+            return;
+        }
+
+        /*
+         * Le type ou la nature a changé et est compatible avec l'information précédemment renseignée,
+         * on met à jour la nature du dossier en conservant tous les documents consultés/ajoutés.
+         */
+        $whereDossier = $dbDocConsulte->getAdapter()->quoteInto('ID_DOSSIER = ?', $idDossier);
+        $dbDocConsulte->update(['ID_NATURE' => $nouvelleNature], $whereDossier);
+        $whereDossier = $dbDocAjout->getAdapter()->quoteInto('ID_DOSSIER = ?', $idDossier);
+        $dbDocAjout->update(['ID_NATURE' => $nouvelleNature], $whereDossier);
     }
 
     /**
      * Filtre les prescriptions selon une condition sur un des champs.
      * Remet à jour les indexs après le tri.
      *
-     * @param array  $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
-     * @param string $champ         champ se lequel porte la condition
-     * @param bool   $equals        teste l'équalité ou l'inégalité stricte
-     * @param        $value         Valeur testée
+     * @param array   $prescriptions tableau initial des prescriptions récupéré depuis l'appel à getPrescriptions
+     * @param string  $champ         champ se lequel porte la condition
+     * @param bool    $equals        teste l'équalité ou l'inégalité stricte
+     * @param ?string $value         Valeur testée
      *
      * @see Service_Dossier::getPrescriptions()
      */
-    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, $value): array
+    private function filterPrescriptions(array $prescriptions, string $champ, bool $equals, ?string $value): array
     {
         foreach ($prescriptions as $keyAssoc => $prescriptionsAssoc) {
             foreach ($prescriptionsAssoc as $key => $prescription) {

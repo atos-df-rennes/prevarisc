@@ -25,22 +25,6 @@ final class Service_DossierTest extends TestCase
         $this->assertSame($expected, $this->dossier->withoutLevees($prescriptions));
     }
 
-    /**
-     * @dataProvider prescriptionsActualsProvider
-     */
-    public function testGetPrescriptionsWithoutActuals(array $prescriptions, array $expected): void
-    {
-        $this->assertSame($expected, $this->dossier->withoutActuals($prescriptions));
-    }
-
-    /**
-     * @dataProvider prescriptionsPreviousProvider
-     */
-    public function testGetPrescriptionsWithoutPrevious(array $prescriptions, array $expected): void
-    {
-        $this->assertSame($expected, $this->dossier->withoutPrevious($prescriptions));
-    }
-
     public function prescriptionsProvider(): array
     {
         return [
@@ -83,6 +67,14 @@ final class Service_DossierTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider prescriptionsActualsProvider
+     */
+    public function testGetPrescriptionsWithoutActuals(array $prescriptions, array $expected): void
+    {
+        $this->assertSame($expected, $this->dossier->withoutActuals($prescriptions));
+    }
+
     public function prescriptionsActualsProvider(): array
     {
         return [
@@ -123,6 +115,14 @@ final class Service_DossierTest extends TestCase
                 [],
             ],
         ];
+    }
+
+    /**
+     * @dataProvider prescriptionsPreviousProvider
+     */
+    public function testGetPrescriptionsWithoutPrevious(array $prescriptions, array $expected): void
+    {
+        $this->assertSame($expected, $this->dossier->withoutPrevious($prescriptions));
     }
 
     public function prescriptionsPreviousProvider(): array

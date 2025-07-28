@@ -31,13 +31,14 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
         }
 
         if ($getCount) {
-            if (!$this->fetchRow($this->select) instanceof Zend_Db_Table_Row_Abstract) {
+            $queryResult = $this->fetchRow($this->select);
+            if (!$queryResult instanceof Zend_Db_Table_Row_Abstract) {
                 error_log('La requête de comptage des éléments a échouée.');
 
                 return 0;
             }
 
-            return filter_var($this->fetchRow($this->select)['count'], FILTER_VALIDATE_INT);
+            return filter_var($queryResult['count'], FILTER_VALIDATE_INT);
         }
 
         if (!$paginator) {
@@ -103,12 +104,12 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
                     ->joinLeft(['etablissementadressecell' => 'etablissementadresse'], 'etablissementadressecell.ID_ETABLISSEMENT = (SELECT ID_ETABLISSEMENT FROM etablissementlie WHERE ID_FILS_ETABLISSEMENT = e.ID_ETABLISSEMENT LIMIT 1)', 'ID_RUE AS ID_RUE_CELL')
                     ->joinLeft(['adressecommunecell' => 'adressecommune'], 'etablissementadressecell.NUMINSEE_COMMUNE = adressecommunecell.NUMINSEE_COMMUNE', 'LIBELLE_COMMUNE AS LIBELLE_COMMUNE_ADRESSE_CELLULE')
                     ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
-                    ->order('CAST(etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS AS UNSIGNED)')
-                    ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS')
                 ;
 
                 if (!$getCount) {
                     $this->select
+                        ->order('CAST(etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS AS UNSIGNED)')
+                        ->order('etablissementinformations.LIBELLE_ETABLISSEMENTINFORMATIONS')
                         ->group('e.ID_ETABLISSEMENT')
                     ;
                 }
@@ -273,6 +274,13 @@ class Model_DbTable_Search extends Zend_Db_Table_Abstract
     public function join($array): self
     {
         $this->select->join(...$array);
+
+        return $this;
+    }
+
+    public function joinLeft($array): self
+    {
+        $this->select->joinLeft(...$array);
 
         return $this;
     }

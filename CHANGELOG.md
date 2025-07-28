@@ -4,6 +4,73 @@
 
 <!--- END HEADER -->
 
+## [2.7.5](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.4...v2.7.5) (26-06-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* [#4923] Etend la récupération des documents consultés/ajoutés au changement de type/nature de dossier (#238) ([416ef8](https://github.com/atos-df-rennes/prevarisc/commit/416ef8d9d5508c76658ecda652a19d6737593214))
+* Possibilité de changer un avis envoyé sur Plat'AU (#233) ([2ee446](https://github.com/atos-df-rennes/prevarisc/commit/2ee4469d780934c9873dca0eb2e8993aa553cb67))
+
+##### Calendrier
+
+* Exclut les établissements supprimés des établissements liés au dossier de l'odj (#237) ([049699](https://github.com/atos-df-rennes/prevarisc/commit/049699a999ddde26ae202c04ab30cf929702ec7f))
+
+
+---
+
+## [2.7.4](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.3...v2.7.4) (25-04-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Timeout sur la génération du fichier d'export ODS des établissements et des dossiers (#232) ([ccc2fe](https://github.com/atos-df-rennes/prevarisc/commit/ccc2fe099231f6292bc17bbc5de09ca06c40260a))
+
+
+---
+
+## [2.7.3](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.2...v2.7.3) (08-04-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Crash sur le bloc des erps sans prochaine vp pour un utilisateur n'ayant aucune commission (#230) ([fb1913](https://github.com/atos-df-rennes/prevarisc/commit/fb1913571d8367446cda875a961b4482a06f7ab1))
+
+
+---
+
+## [2.7.2](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.1...v2.7.2) (04-04-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+* Recherche de dossier par identifiant PLAT'AU (#227) ([ef0ee1](https://github.com/atos-df-rennes/prevarisc/commit/ef0ee1bb13060749484d3a2feeb3a17cb710bebe))
+
+##### Prescriptions
+
+* Possibilité de reprise sans condition et de manière répétée (#219) ([7c8a2b](https://github.com/atos-df-rennes/prevarisc/commit/7c8a2bf37adb492e8d07118c3cff6608ed601844))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gauge-high.svg" width="20" height="20"> Performance
+
+* Optimisation des requêtes de recherche (#226) ([e2e6e0](https://github.com/atos-df-rennes/prevarisc/commit/e2e6e0eef56a75735a82ee0bc3156288536307fb))
+* Optimisation des requêtes sur la page d'accueil (#228) ([c7eb3b](https://github.com/atos-df-rennes/prevarisc/commit/c7eb3b207803fa41de8698c2b31a9deb99d5a965))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Pas de prise en compte des dossiers supprimés dans la vue des dernières visites (#211) ([f888a4](https://github.com/atos-df-rennes/prevarisc/commit/f888a45b44444a2a658a6ce1a793ba01bbc4d251))
+
+##### Etablissement
+
+* Remplacement du genre EIC par BUP (#217) ([01999e](https://github.com/atos-df-rennes/prevarisc/commit/01999e439259252fe5a4ff8a52d2eb5eef26d3fc))
+
+##### Pieces-jointes
+
+* Permet de réinitialiser le statut de pièces non envoyées sur des dossiers traités (#209) ([a50db8](https://github.com/atos-df-rennes/prevarisc/commit/a50db831cb3d5bc008bf9b74443901170374e45a))
+
+##### Rapports
+
+* Mauvais affichage des valeurs numériques (#210) ([59e29c](https://github.com/atos-df-rennes/prevarisc/commit/59e29c1c602cf0384029d49718c0300071a656b1))
+* Ne prend pas en compte les prescriptions levées (#220) ([2917e8](https://github.com/atos-df-rennes/prevarisc/commit/2917e84ad3a3813cbe8d3f9085e546aefc2518e7))
+
+
+---
+
 ## [2.7.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.0...v2.7.1) (10-01-2025)
 
 ### Corrections

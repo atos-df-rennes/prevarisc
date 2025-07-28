@@ -12,6 +12,16 @@ function addChamp($odf, string $nomOdf, ?string $variable){
 }
 
 $consonne = array("a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y");
+
+if ($this->erreurGeneration) {
+    echo "<div class='alert alert-error'>
+      <button type='button' class='close' data-dismiss='alert'>&times;</button>
+      <strong>Erreur lors de la génération du compte-rendu !</strong> ".$this->erreurGeneration."
+    </div>";
+
+    return false;
+}
+
 if(count($this->membresFiles) == 0){
 	echo "<span id='notif' class='ui-state-error' style='padding: 0.3em;'>Aucun membre n'a été renseigné pour la commission</span><br/><br/><br/>";
 	return false;

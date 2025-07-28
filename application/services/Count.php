@@ -55,7 +55,61 @@ class Service_Count extends Service_Dashboard
      */
     public function getERPOuvertsSansProchainesVisitePeriodiquesCount(array $user): int
     {
-        return $this->getERPOuvertsSansProchainesVisitePeriodiques($user, true);
+        $modelEtablissement = new Model_DbTable_Etablissement();
+
+        $select = $modelEtablissement->select()
+            ->setIntegrityCheck(false)
+            ->from(['e' => 'etablissement'], ['count' => 'COUNT(DISTINCT e.ID_ETABLISSEMENT)'])
+            ->join(['ei' => 'etablissementinformations'], 'e.ID_ETABLISSEMENT = ei.ID_ETABLISSEMENT AND ei.DATE_ETABLISSEMENTINFORMATIONS = (SELECT MAX(etablissementinformations.DATE_ETABLISSEMENTINFORMATIONS) FROM etablissementinformations WHERE etablissementinformations.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT)', [])
+            ->join(['ed' => 'etablissementdossier'], 'e.ID_ETABLISSEMENT = ed.ID_ETABLISSEMENT', [])
+            ->join(['d' => 'dossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['dn' => 'dossiernature'], 'd.ID_DOSSIER = dn.ID_DOSSIER', [])
+            ->where('e.DATESUPPRESSION_ETABLISSEMENT IS NULL')
+            ->where('ei.ID_STATUT = ?', 2)
+            ->where('ei.ID_GENRE = ?', 2)
+            ->where('ei.PERIODICITE_ETABLISSEMENTINFORMATIONS > ?', 0)
+            ->where('d.TYPE_DOSSIER IN (?)', [2, 3])
+            ->where('dn.ID_NATURE IN (?)', [21, 23, 24, 26, 28, 29, 47, 48])
+            ->where('d.DATEVISITE_DOSSIER = (
+                SELECT MAX(DATEVISITE_DOSSIER)
+                    FROM dossier
+                    INNER JOIN etablissementdossier on etablissementdossier.ID_DOSSIER = dossier.ID_DOSSIER
+                    INNER JOIN dossiernature on dossier.ID_DOSSIER = dossiernature.ID_DOSSIER
+                    WHERE etablissementdossier.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT
+                    AND dossier.TYPE_DOSSIER IN (2, 3)
+                    AND dossiernature.ID_NATURE IN (21, 23, 24, 26, 28, 29, 47, 48)
+            )')
+            ->where("
+                IF(
+                    d.DATECOMM_DOSSIER >= d.DATEVISITE_DOSSIER,
+                    DATE_FORMAT(
+                        DATE_ADD(d.DATECOMM_DOSSIER, INTERVAL ei.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH),
+                        '%Y-%m'
+                    ),
+                    DATE_FORMAT(
+                        DATE_ADD(d.DATEVISITE_DOSSIER, INTERVAL ei.PERIODICITE_ETABLISSEMENTINFORMATIONS MONTH),
+                        '%Y-%m'
+                    )
+                ) < DATE_FORMAT(CURDATE(), '%Y-%m')
+            ")
+        ;
+
+        if (
+            isset($user['commissions'])
+            && is_array($user['commissions'])
+            && [] !== $user['commissions']
+        ) {
+            $select->where('ei.ID_COMMISSION IN (?)', array_map(
+                function (array $commission) {
+                    return $commission['ID_COMMISSION'];
+                },
+                $user['commissions']
+            ));
+        }
+
+        $results = $modelEtablissement->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**
@@ -129,7 +183,20 @@ class Service_Count extends Service_Dashboard
      */
     public function getDossiersPlatAUSansEtablissementCount(array $user): int
     {
-        return $this->getDossiersPlatAUSansEtablissement($user, true);
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $select = $modelDossier->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(*)'])
+            ->joinLeft(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'd.ID_PLATAU = pc.ID_PLATAU', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
+            ->where('d.ID_PLATAU IS NOT NULL')
+            ->where('ed.ID_DOSSIER IS NULL')
+        ;
+        $results = $modelDossier->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**
@@ -138,7 +205,24 @@ class Service_Count extends Service_Dashboard
      */
     public function getDossiersPlatauPjsEnErreurCount(array $user): int
     {
-        return $this->getDossiersPlatauPjsEnErreur($user, true);
+        $modelDossier = new Model_DbTable_Dossier();
+
+        $select = $modelDossier->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(DISTINCT d.ID_DOSSIER)'])
+            ->join(['ed' => 'etablissementdossier'], 'ed.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
+            ->join(['dpj' => 'dossierpj'], 'dpj.ID_DOSSIER = d.ID_DOSSIER', [])
+            ->join(['pj' => 'piecejointe'], 'pj.ID_PIECEJOINTE = dpj.ID_PIECEJOINTE', [])
+            ->join(['pjs' => 'piecejointestatut'], 'pjs.ID_PIECEJOINTESTATUT = pj.ID_PIECEJOINTESTATUT', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
+            ->where('d.ID_PLATAU IS NOT NULL')
+            ->where('pc.STATUT_AVIS = ?', Model_Enum_PlatauStatutAvis::TRAITE)
+            ->where('pjs.NOM_STATUT IN ("to_be_exported", "on_error", "awaiting_status")')
+        ;
+        $results = $modelDossier->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**
@@ -146,7 +230,23 @@ class Service_Count extends Service_Dashboard
      */
     public function getDossiersPlatauNouvellesPjsCount(array $user): int
     {
-        return $this->getDossiersPlatauNouvellesPjs($user, true);
+        $modelDossier = new Model_DbTable_Dossier();
+        $serviceNotification = new Service_Notification();
+
+        $select = $modelDossier->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['count' => 'COUNT(DISTINCT d.ID_DOSSIER)'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['pc' => 'platauconsultation'], 'pc.ID_PLATAU = d.ID_PLATAU', [])
+            ->join(['dpj' => 'dossierpj'], 'd.ID_DOSSIER = dpj.ID_DOSSIER', [])
+            ->join(['pj' => 'piecejointe'], 'dpj.ID_PIECEJOINTE = pj.ID_PIECEJOINTE', [])
+            ->where('d.DATESUPPRESSION_DOSSIER IS NULL')
+            ->where('d.ID_PLATAU IS NOT NULL')
+            ->where('pj.DATE_NOTIFICATION >= ?', $serviceNotification->getLastPageVisitDate(Service_Notification::DOSSIER_PIECES_SESSION_NAMESPACE))
+        ;
+        $results = $modelDossier->fetchRow($select)['count'];
+
+        return filter_var($results, FILTER_VALIDATE_INT);
     }
 
     /**

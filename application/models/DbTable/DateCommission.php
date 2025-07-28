@@ -64,8 +64,11 @@ class Model_DbTable_DateCommission extends Zend_Db_Table_Abstract
         $select .= "FROM datecommission d
             LEFT JOIN commission c ON d.COMMISSION_CONCERNE = c.ID_COMMISSION
             WHERE DATE_COMMISSION BETWEEN '".date('Y-m-d', $date)."' AND '".date('Y-m-d', $next_date)."'
-            ".([] !== $idsCommission ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')' : '').'
-            ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
+            ".([] !== $idsCommission ? 'AND d.COMMISSION_CONCERNE IN ('.implode(',', $idsCommission).')' : '');
+
+        if (!$getCount) {
+            $select .= ' ORDER BY DATE_COMMISSION, HEUREDEB_COMMISSION';
+        }
 
         if ($getCount) {
             return $this->getAdapter()->fetchRow($select)['count'];
