@@ -2,7 +2,7 @@
 
 <ul class="nav nav-tabs">
     <li class='<?php if(Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'matrice-des-droits') echo "active" ?>'>
-        <a href="/users/matrice-des-droits">Matrice des droits</a>
+        <a href="/admin/groupes/matrice-des-droits">Matrice des droits</a>
     </li>
     <li class='<?php if(Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'ressources-specialisees') echo "active" ?> pull-right'>
         <a href="/users/ressources-specialisees">Gestion des ressources spécialisées</a>
@@ -147,7 +147,7 @@
                     <?php endforeach ?>
                 </select>
             </dd>
-            
+
             <dt class="champ_classement champs">Classement</dt>
             <dd class="champ_classement champs">
                 <select name='classements[]' multiple>
@@ -269,11 +269,11 @@
                     $('.champ_classe, .champ_adresse, .champ_commission').show();
                     break;
 
-                // BUP 
+                // BUP
                 case '6':
                     $('.champ_adresse').show();
                     break;
-                    
+
                 // Zones
                 case '10':
                     $('.champ_classement').show();
