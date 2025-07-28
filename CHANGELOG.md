@@ -4,6 +4,31 @@
 
 <!--- END HEADER -->
 
+## [2.8.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.5...v2.8.0) (28-07-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+##### Formulaires
+
+* Export/import de configuration (#236) ([4ce3e5](https://github.com/atos-df-rennes/prevarisc/commit/4ce3e5e0da0c36fda491006e100e6dd1c75f2aff))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+* Redirection vers les pages migrées (#239) ([4f00b7](https://github.com/atos-df-rennes/prevarisc/commit/4f00b70457aa67f4b7ee08b9c68a64f03ac384be))
+  * Administration
+    * Informations
+    * Gestion des éléments supprimés
+    * Gestion des utilisateurs (Tous les onglets sauf "Gestion des ressources spécialisées")
+    * Gestion des communes
+    * Fusion des communes
+    * Gestion des documents
+    * Tableau des périodicités
+    * Messages des alertes
+
+
+---
+
 ## [2.7.5](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.4...v2.7.5) (26-06-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
