@@ -6,7 +6,7 @@ return [
         'feat' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions'],
         'perf' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gauge-high.svg" width="20" height="20"> Performance'],
         'fix' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections'],
-        'migration' => ['label' => 'Migration Symfony'],
+        'migration' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony'],
     ],
     'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
     'dateFormat' => 'd-m-Y',
