@@ -1423,6 +1423,16 @@ $(".delaipresc").live('click', function() {
                                 <i class='icon-repeat icon-black'></i>
                             </a>
                         <?php endif ?>
+
+                        <?php if (
+                            $this->enumStatutsPec::EN_ATTENTE === $this->statutPec
+                            && null === $this->infosDossier['INCOMPLET_DOSSIER']
+                        ): ?>
+                            <div>
+                                <i class="icon-info-sign"></i>
+                                L'état du dossier est actuellement inconnu dans Prevarisc. Veuillez modifier le dossier pour le renseigner.
+                            </div>
+                        <?php endif ?>
                     </div>
                 </li>
                 <li class="row-fluid" style="margin-bottom: 20px;">
