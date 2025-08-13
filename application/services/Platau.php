@@ -192,6 +192,10 @@ class Service_Platau
     {
         $fileContent = file($filepath);
 
+        if (false === $fileContent) {
+            return null;
+        }
+
         foreach ($fileContent as $line) {
             if (false !== strpos($line, $const)) {
                 return explode("'", $line)[1];
@@ -213,6 +217,10 @@ class Service_Platau
         }
 
         $pisteData = file_get_contents($filepath);
+
+        if (false === $pisteData) {
+            return [];
+        }
 
         return json_decode($pisteData, true);
     }
