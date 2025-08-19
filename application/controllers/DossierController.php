@@ -857,7 +857,7 @@ class DossierController extends Zend_Controller_Action
                     }
 
                     if (
-                        ('AVIS_DOSSIER' == $libelle && 0 == $value)
+                        (('AVIS_DOSSIER' == $libelle || 'AVIS_DOSSIER_COMMISSION' == $libelle) && 0 == $value)
                         || '' == $value
                     ) {
                         $value = null;

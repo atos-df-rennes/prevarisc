@@ -2120,7 +2120,7 @@ $(".delaipresc").live('click', function() {
                 </div>
             </li>
             <li class='row-fluid' id='AVIS_COMMISSION'
-                style='<?php echo ($action != 'new' && in_array('AVIS_COMMISSION', $this->afficherChamps) && $this->infosDossier['AVIS_DOSSIER_COMMISSION'] != '0' && 1 == $this->afficheAvis) ? "" : "display:none;" ?>margin-bottom:20px;'>
+                style='<?php echo ($action != 'new' && in_array('AVIS_COMMISSION', $this->afficherChamps) && $this->infosDossier['AVIS_DOSSIER_COMMISSION'] != '' && 1 == $this->afficheAvis) ? "" : "display:none;" ?>margin-bottom:20px;'>
                 <div class='left libelle span3' style='float:left;'>Avis de la commission</div>
                 <div class='right value span9' <?php echo ('new' == $action) ? "style='display:none;'" : "" ?>>
                     <span class='avis <?php echo $this->AVIS_COMMISSION_VALUE['LIBELLE_AVIS'][0] ?>'>
