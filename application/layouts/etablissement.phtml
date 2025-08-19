@@ -65,8 +65,8 @@
             Dossiers
         </a>
     </li>
-    <li class="<?= $action_name == 'historique' ? 'active' : '' ?>">
-        <a class='sep' href='<?= $this->url(array("action"=>"historique")) ?>'>
+    <li>
+        <a class='sep' href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/historique'>
             <i class="icon-repeat icon-black"></i>
             Afficher l'historique
         </a>
