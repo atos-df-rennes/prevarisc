@@ -1,28 +1,52 @@
 <?php foreach ($this->rubriques as $rubrique) : ?>
-    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="<?= boolval($rubrique['DISPLAY']) === false ? 'hide' : '' ?>">
-        <h4 id='<?= strtolower(preg_replace('/\s|\'+/', '-', $rubrique['NOM'])) ?>' class='h4_subtitle'><?= $rubrique['NOM'] ?></h4>
+    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="panel panel-formulaire-perso<?= boolval($rubrique['DISPLAY']) === false ? ' hide' : '' ?>">
+        <div class="panel-heading">
+            <h4 id='<?= strtolower(preg_replace('/\s|\'+/', '-', $rubrique['NOM'])) ?>'>
+                <?= $rubrique['NOM'] ?>
+            </h4>
 
-        <?php if (empty($rubrique['CHAMPS'])): ?>
-            <?=
-                $this->partial('formulaire/partials/partial-information-manquante.phtml', [
-                    'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
-                ]);
-            ?>
-        <?php else : ?>
-            <?php foreach ($rubrique['CHAMPS'] as $champ) : ?>
-                <div class='control-group'>
-                    <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='control-label'>
-                        <strong><?= htmlspecialchars($champ['NOM']) ?></strong>
-                    </label>
-                    <div class='controls'>
-                        <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                            'champ' => $champ,
-                            'champsvaleurliste' => $this->champsvaleurliste,
-                            'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                        ]); ?>
+            <i class="icon icon-chevron-up"></i>
+        </div>
+
+        <div class="panel-body">
+            <?php if (empty($rubrique['CHAMPS'])): ?>
+                <?=
+                    $this->partial('formulaire/partials/partial-information-manquante.phtml', [
+                        'message' => 'Aucun champ renseigné. Contactez un administrateur Prevarisc.'
+                    ]);
+                ?>
+            <?php else : ?>
+                <?php foreach ($rubrique['CHAMPS'] as $champ) : ?>
+                    <div class='control-group'>
+                        <label for='champ-<?= htmlspecialchars($champ["ID_CHAMP"]) ?>' class='control-label'>
+                            <strong><?= htmlspecialchars($champ['NOM']) ?></strong>
+                        </label>
+                        <div class='controls'>
+                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                'champ' => $champ,
+                                'champsvaleurliste' => $this->champsvaleurliste,
+                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                            ]); ?>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach ?>
-        <?php endif ?>
+                <?php endforeach ?>
+            <?php endif ?>
+        </div>
     </div>
 <?php endforeach ?>
+
+<script type="text/javascript">
+    $('.panel-heading .icon').click(function () {
+        const $self = $(this);
+        const $panel = $self.parents('.panel');
+        $panel.toggleClass('folded');
+
+        if ($self.hasClass('icon-chevron-up')) {
+            $self.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+            $panel.find('.panel-body').hide(400);
+        } else {
+            $self.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+            $panel.find('.panel-body').show(400);
+        }
+    })
+</script>
