@@ -61,12 +61,9 @@
         // Parent
         case 6: ?>
             <?php if(1 === $this->champ['tableau']): ?>
-                <table class='table table-hover'>
+                <table class='table table-bordered table-hover'>
                     <thead>
                         <tr>
-                            <?php if ($this->canWrite): ?>
-                                <th></th>
-                            <?php endif ?>
                             <?php foreach($this->champ['FILS'] as $champsFils) :?>
                                 <?php if(!empty($champsFils['NOM'])) : ?>
                                     <th>
@@ -75,7 +72,7 @@
                                 <?php endif ?>
                             <?php endforeach ?>
                             <?php if($this->canWrite) :?>
-                                <th>Supprimer</th>
+                                <th>Édition</th>
                             <?php endif ?>
                         </tr>
                     </thead>

@@ -15,7 +15,7 @@
         <?= $this->partialLoop('formulaire/partials/partial-rubrique-display.phtml', $this->rubriques) ?>
     </div>
 
-    <div id='affichage-informations' class='form-horizontal'>
+    <div id='affichage-informations'>
         <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
             'rubriques' => $this->rubriques,
             'champsvaleurliste' => $this->champsvaleurliste,

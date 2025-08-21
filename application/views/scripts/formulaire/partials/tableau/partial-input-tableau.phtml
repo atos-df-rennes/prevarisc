@@ -1,6 +1,3 @@
-<td class='tdMove'>
-    <i class="icon-move"></i>
-</td>
 <?php $genTimesTamp = time(); ?>
 <?php foreach ($this->inputs as &$input) : ?>
     <?php
@@ -17,5 +14,10 @@
     </td>
 <?php endforeach ?>
 <td>
-    <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+    <button type="button" class="tdMove btn btn-info">
+        <i class="icon-move icon-white"></i>
+    </button>
+    <button type='button' class='deleteRow btn btn-danger'>
+        <i class='icon-trash icon-white'></i>
+    </button>
 </td>
