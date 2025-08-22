@@ -72,7 +72,7 @@
                                 <?php endif ?>
                             <?php endforeach ?>
                             <?php if($this->canWrite) :?>
-                                <th>Édition</th>
+                                <th class="colonne-edition">Édition</th>
                             <?php endif ?>
                         </tr>
                     </thead>
@@ -94,11 +94,21 @@
                             ]);
                         ?>
                     </tbody>
+                    <?php if ($this->canWrite): ?>
+                        <tfoot>
+                            <tr>
+                                <!--
+                                    On enlève 1 car le tableau contient les fils et la liste des valeurs sous la clé "VALEURS".
+                                    Cette dernière ne nous intéresse pas pour le calcul.
+                                 -->
+                                <td colspan="<?= count($this->champ['FILS']) - 1 ?>">
+                                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                                    <button type='button' class='btn btn-info btn-block addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    <?php endif ?>
                 </table>
-                <?php if ($this->canWrite): ?>
-                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                    <button type='button' class='btn btn-info addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
-                <?php endif ?>
             <?php else: ?>
                 <div class="tableInput">
                     <?php foreach ($this->champ["FILS"] as $champsFils): ?>
