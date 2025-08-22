@@ -110,18 +110,26 @@
                     <?php endif ?>
                 </table>
             <?php else: ?>
-                <div class="tableInput">
-                    <?php foreach ($this->champ["FILS"] as $champsFils): ?>
-                        <div class="colTableInput">
-                            <th><?= $champsFils['NOM'] ?></th>
-                            <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                'champ' => $champsFils,
-                                'champsvaleurliste' => $this->champsvaleurliste,
-                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                            ]) ?>
-                        </div>
-                    <?php endforeach ?>
-                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                                <th><?= $champsFils['NOM'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                            <td>
+                                <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                    'champ' => $champsFils,
+                                    'champsvaleurliste' => $this->champsvaleurliste,
+                                    'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                                ]) ?>
+                            </td>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
             <?php endif;
             break;
         // Date
