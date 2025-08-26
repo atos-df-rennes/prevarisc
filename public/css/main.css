@@ -836,10 +836,10 @@ text-decoration: none;
   color: #555555;
 }
 
-.dashboard .panel {
+#home.dashboard .panel {
   width:  49%;
   float: left;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .dashboard .panel.ui-draggable-dragging {
@@ -851,7 +851,7 @@ text-decoration: none;
   width:  100%;
 }
 
-.dashboard .panel-heading {
+#home.dashboard .panel-heading {
   cursor: move;
 }
 

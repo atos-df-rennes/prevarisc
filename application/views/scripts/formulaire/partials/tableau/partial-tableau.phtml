@@ -1,10 +1,5 @@
 <?php foreach ($this->colonnesChamp['VALEURS'] as $idx => $colonneChamp): ?>
     <tr <?php if ($this->hidden): ?>class='hidden'<?php endif ?>>
-        <?php if ($this->canWrite): ?>
-            <td class='tdMove'>
-                <i class="icon-move"></i>
-            </td>
-        <?php endif ?>
         <?php foreach ($colonneChamp as $valeur): ?>
             <td>
                 <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
@@ -18,8 +13,13 @@
             </td>
         <?php endforeach ?>
         <?php if ($this->canWrite): ?>
-            <td>
-                <button type='button' class='deleteRow btn btn-danger'><i class='icon-trash'></i></button>
+            <td class="colonne-edition">
+                <button type="button" class="tdMove btn btn-info">
+                    <i class="icon-move icon-white"></i>
+                </button>
+                <button type='button' class='deleteRow btn btn-danger ml-3'>
+                    <i class='icon-trash icon-white'></i>
+                </button>
             </td>
         <?php endif ?>
     </tr>

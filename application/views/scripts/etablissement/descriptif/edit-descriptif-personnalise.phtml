@@ -1,4 +1,4 @@
-<form action='<?= $this->url(array('action' => 'edit-descriptif')) ?>' method='post' class='form-horizontal'>
+<form action='<?= $this->url(array('action' => 'edit-descriptif')) ?>' method='post'>
     <div class='action-buttons pull-right'>
         <div class="btn-group">
             <a class='btn' href="<?= $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
@@ -9,11 +9,12 @@
     <h3>Modification des descriptifs</h3>
     <h4 class='h4_subtitle'>Descriptif</h4>
 
-    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
+    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit mb-4'>
         <?php foreach ($this->rubriques as $rubrique):
             echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
         endforeach ?>
     </div>
+
     <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
         'rubriques' => $this->rubriques,
         'champsvaleurliste' => $this->champsvaleurliste,
