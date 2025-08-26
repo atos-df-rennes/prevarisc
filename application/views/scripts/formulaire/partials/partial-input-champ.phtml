@@ -61,75 +61,71 @@
         // Parent
         case 6: ?>
             <?php if(1 === $this->champ['tableau']): ?>
-                <table class='table table-bordered table-hover'>
-                    <thead>
-                        <tr>
-                            <?php foreach($this->champ['FILS'] as $champsFils) :?>
-                                <?php if(!empty($champsFils['NOM'])) : ?>
-                                    <th>
-                                        <?= $champsFils['NOM'] ?>
-                                    </th>
-                                <?php endif ?>
-                            <?php endforeach ?>
-                            <?php if($this->canWrite) :?>
-                                <th class="colonne-edition">Édition</th>
-                            <?php endif ?>
-                        </tr>
-                    </thead>
-                    <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
-                        <?php if ($this->canWrite): ?>
-                            <tr class='ligneTableau hidden'>
-                                <?= $this->partial('formulaire/partials/tableau/partial-input-tableau.phtml',
-                                    [
-                                        'inputs' => $this->champ['FILS']['INPUTS'],
-                                        'champsvaleurliste' => $this->champsvaleurliste
-                                    ]);
-                                ?>
-                            </tr>
-                        <?php endif ?>
-                        <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
-                                'colonnesChamp' => $this->champ['FILS'],
-                                'champsvaleurliste' => $this->champsvaleurliste,
-                                'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                            ]);
-                        ?>
-                    </tbody>
-                    <?php if ($this->canWrite): ?>
-                        <tfoot>
+                <div class="table-responsive table-tableau <?php if($this->canWrite) :?>table-writable<?php endif ?>">
+                    <table class='table table-hover'>
+                        <thead>
                             <tr>
-                                <!--
-                                    On enlève 1 car le tableau contient les fils et la liste des valeurs sous la clé "VALEURS".
-                                    Cette dernière ne nous intéresse pas pour le calcul.
-                                 -->
-                                <td colspan="<?= count($this->champ['FILS']) - 1 ?>">
-                                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
-                                    <button type='button' class='btn btn-info btn-block addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
-                                </td>
+                                <?php foreach($this->champ['FILS'] as $champsFils) :?>
+                                    <?php if(!empty($champsFils['NOM'])) : ?>
+                                        <th>
+                                            <?= $champsFils['NOM'] ?>
+                                        </th>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                                <?php if($this->canWrite) :?>
+                                    <th class="colonne-edition">Édition</th>
+                                <?php endif ?>
                             </tr>
-                        </tfoot>
-                    <?php endif ?>
-                </table>
-            <?php else: ?>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <?php foreach ($this->champ["FILS"] as $champsFils): ?>
-                                <th><?= $champsFils['NOM'] ?></th>
-                            <?php endforeach ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($this->champ["FILS"] as $champsFils): ?>
-                            <td>
-                                <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
-                                    'champ' => $champsFils,
+                        </thead>
+                        <tbody id= <?= 'tbody-'.$this->champ['ID_CHAMP'] ?> class='grp'>
+                            <?php if ($this->canWrite): ?>
+                                <tr class='ligneTableau hidden'>
+                                    <?= $this->partial('formulaire/partials/tableau/partial-input-tableau.phtml',
+                                        [
+                                            'inputs' => $this->champ['FILS']['INPUTS'],
+                                            'champsvaleurliste' => $this->champsvaleurliste
+                                        ]);
+                                    ?>
+                                </tr>
+                            <?php endif ?>
+                            <?= $this->partial('formulaire/partials/tableau/partial-tableau.phtml', [
+                                    'colonnesChamp' => $this->champ['FILS'],
                                     'champsvaleurliste' => $this->champsvaleurliste,
                                     'canWrite' => isset($this->canWrite) ? $this->canWrite : false
-                                ]) ?>
-                            </td>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+                                ]);
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php if ($this->canWrite): ?>
+                  <div class="add-row-button-wrapper">
+                    <!-- [button type='button'] pour desactiver le submit auto suite a un clic de bouton -->
+                    <button type='button' class='btn btn-info btn-block addRow' idparent=<?= $this->champ['ID_CHAMP'] ?>>Ajouter une ligne</button>
+                  </div>
+                <?php endif ?>
+            <?php else: ?>
+                <div class="table-responsive <?php if($this->canWrite) :?>table-writable<?php endif ?>">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                                    <th><?= $champsFils['NOM'] ?></th>
+                                <?php endforeach ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->champ["FILS"] as $champsFils): ?>
+                                <td>
+                                    <?= $this->partial('formulaire/partials/partial-input-champ.phtml', [
+                                        'champ' => $champsFils,
+                                        'champsvaleurliste' => $this->champsvaleurliste,
+                                        'canWrite' => isset($this->canWrite) ? $this->canWrite : false
+                                    ]) ?>
+                                </td>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php endif;
             break;
         // Date
