@@ -18,6 +18,12 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
+    // Il faut ajouter une colonne `idx` dans la table `champvaleurliste`
+    // Cette colonne permettra de stocker l'ordre des valeurs d'un champ.
+    // Grâce à cela, getValeurListeByChamp() pourra récupérer les valeurs
+    // triées selon l'ordre défini dans `idx`, ce qui est indispensable
+    // pour que l'affichage reflète correctement le drag & drop côté utilisateur.
+
     public function getValeurListeByChamp(int $idChamp): array
     {
         $select = $this->select()
