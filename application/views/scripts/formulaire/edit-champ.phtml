@@ -74,12 +74,15 @@
                 <!-- Valeurs de la liste -->
                 <div class="row-fluid">
                     <h3>Valeurs de la liste</h3>
-                    <?php foreach($this->valeursChamp as $valeur): ?>
-                        <div>
-                            <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= htmlspecialchars($valeur['VALEUR'], ENT_QUOTES) ?>">
-                            <a href='#' data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
-                        </div>
-                    <?php endforeach ?>
+                    <div id="list-values-container" class="grp">
+                        <?php foreach($this->valeursChamp as $valeur): ?>
+                            <div class="valeur-item" id="valeur-<?= $valeur['ID_VALEURLISTE'] ?>">
+                                <span class="tdMove"><i class="icon-move"></i></span>
+                                <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= htmlspecialchars($valeur['VALEUR'], ENT_QUOTES) ?>">
+                                <a href='#' data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
 
                     <div id="div-valeurs-liste">
                         <div class="row-fluid">
@@ -214,3 +217,37 @@ endif ?>
         <?php endif ?>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const listValuesContainer = document.getElementById('list-values-container');
+    if (!listValuesContainer) return;
+
+    const getValuesOrder = () => {
+        return Array.from(listValuesContainer.children).map((el, idx) => ({
+            idx: idx,
+            ID: el.id.replace('valeur-', '')
+        }));
+    };
+
+    const updateAllValuesIdx = (list) => {
+        list.forEach((val) => {
+            $.ajax({
+                type: "POST",
+                url: "/formulaire/update-valeur-idx",
+                data: { ID: val.ID, idx: val.idx },
+                datatype: 'json'
+            });
+        });
+    };
+
+    new Sortable(listValuesContainer, {
+        handle: '.tdMove',  
+        animation: 100,
+        onEnd: function () {
+            const newList = getValuesOrder();
+            updateAllValuesIdx(newList);
+        }
+    });
+});
+</script>

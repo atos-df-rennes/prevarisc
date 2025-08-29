@@ -8,6 +8,11 @@ class FormulaireController extends Zend_Controller_Action
     public $modelChamp;
 
     /**
+     * @var mixed|Model_DbTable_Valeur
+     */
+    public $modelValeur; 
+
+    /**
      * @var mixed|Model_DbTable_ChampValeurListe
      */
     public $modelChampValeurListe;
@@ -49,6 +54,8 @@ class FormulaireController extends Zend_Controller_Action
         $this->modelListeTypeChampRubrique = new Model_DbTable_ListeTypeChampRubrique();
         $this->modelRubrique = new Model_DbTable_Rubrique();
         $this->modelCapsuleRubrique = new Model_DbTable_CapsuleRubrique();
+        $this->modelValeur = new Model_DbTable_Valeur();
+
 
         $this->serviceFormulaire = new Service_Formulaire();
         $this->serviceUtils = new Service_Utils();
@@ -413,6 +420,18 @@ class FormulaireController extends Zend_Controller_Action
             $this->modelChamp->updateNewIdx($post);
         }
     }
+
+    public function updateValeurIdxAction(): void
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $this->modelValeur->updateNewIdx($post);
+        }
+    }
+
 
     public function updateRubriqueIdxAction(): void
     {
