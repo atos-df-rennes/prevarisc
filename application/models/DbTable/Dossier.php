@@ -544,7 +544,10 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
 
         $result = $this->fetchRow($select);
 
-        return null !== $result['ID_PLATAU'];
+        /** @var ?string $idPlatau */
+        $idPlatau = $result['ID_PLATAU'];
+
+        return null !== $idPlatau;
     }
 
     // Récupère les dossiers d'un établissement par type
@@ -731,6 +734,6 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
             ->where('pj.DATE_NOTIFICATION >= ?', $dateVisitePage)
         ;
 
-        return $this->fetchRow($select)['count'];
+        return (int) $this->fetchRow($select)['count'];
     }
 }

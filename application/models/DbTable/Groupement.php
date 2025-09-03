@@ -112,11 +112,11 @@ class Model_DbTable_Groupement extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @psalm-return array<mixed, array>
-     *
      * @param mixed $groupements
      *
      * @return array[]
+     *
+     * @psalm-return array<mixed, array>
      */
     public function getPreventionnistesByGpt($groupements): array
     {

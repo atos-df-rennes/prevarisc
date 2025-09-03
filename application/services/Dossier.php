@@ -853,14 +853,14 @@ class Service_Dossier
     }
 
     /**
-     * @psalm-return array<int, Zend_Db_Table_Row_Abstract>
-     *
      * @param mixed $nouveauDossier
      * @param mixed $listeEtab
      * @param mixed $cache
      * @param mixed $repercuterAvis
      *
      * @return Zend_Db_Table_Row_Abstract[]
+     *
+     * @psalm-return array<int, Zend_Db_Table_Row_Abstract>
      */
     public function saveDossierDonnantAvis($nouveauDossier, $listeEtab, $cache, $repercuterAvis = false): array
     {

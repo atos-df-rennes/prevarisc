@@ -233,11 +233,11 @@ class Model_DbTable_Commission extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @psalm-return array<int, array{NUMINSEE_COMMUNE:array<int, string|mixed>, LOCALSOMMEIL:mixed, ID_TYPE:mixed, ID_CLASSE:mixed, ID_CATEGORIE:mixed}>
-     *
      * @param mixed $id_commission
      *
      * @return array[]
+     *
+     * @psalm-return array<int, array{NUMINSEE_COMMUNE:array<int, string|mixed>, LOCALSOMMEIL:mixed, ID_TYPE:mixed, ID_CLASSE:mixed, ID_CATEGORIE:mixed}>
      */
     public function getRegles($id_commission): array
     {

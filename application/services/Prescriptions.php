@@ -5,11 +5,11 @@ class Service_Prescriptions
     // GESTION PRESCRIPTION TYPE
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $categorie
      * @param mixed $texte
      * @param mixed $article
+     *
+     * @psalm-return array<int, mixed>
      */
     public function showPrescriptionType($categorie, $texte, $article): array
     {
@@ -222,10 +222,10 @@ class Service_Prescriptions
     // FIN savePrescription
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed      $type
      * @param null|mixed $mode
+     *
+     * @psalm-return array<int, mixed>
      */
     public function getPrescriptions($type, $mode = null): array
     {

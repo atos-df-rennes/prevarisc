@@ -111,9 +111,9 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $id
+     *
+     * @psalm-return array<int, mixed>
      */
     public function getCommissionsArray($id): array
     {
@@ -156,9 +156,9 @@ class Model_DbTable_Utilisateur extends Zend_Db_Table_Abstract
     }
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $id
+     *
+     * @psalm-return array<int, mixed>
      */
     public function getVillesDeSesGroupements($id): array
     {

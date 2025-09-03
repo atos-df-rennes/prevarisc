@@ -9,10 +9,10 @@ class Model_DbTable_Preventionniste extends Zend_Db_Table_Abstract
     protected $_primary = 'ID_UTILISATEUR';
 
     /**
-     * @psalm-return array<int, array{uid:mixed, nom:mixed, prenom:mixed}>|null
-     *
      * @param mixed $commune
      * @param mixed $id_pere
+     *
+     * @psalm-return array<int, array{uid:mixed, nom:mixed, prenom:mixed}>|null
      */
     public function getPrev($commune, $id_pere): ?array
     {
