@@ -12,7 +12,7 @@
 
     <?php if ($this->etablissement['informations']['LIBELLE_GENRE'] != 'Site') : ?>
         <li class="<?= strpos($action_name, 'textes-applicables') !== false ? 'active' : '' ?>">
-            <a href='<?= $this->url(array("action"=>"textes-applicables")) ?>'>
+            <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/textes-applicables'>
                 <i class="icon-align-center icon-black"></i>
                 Textes applicables
             </a>

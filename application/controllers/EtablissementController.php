@@ -362,7 +362,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les textes applicables n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('textes-applicables', null, null, ['id' => $id]);
+            $this->redirect('/etablissement/'.$id.'/textes-applicables');
         }
     }
 
