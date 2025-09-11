@@ -28,6 +28,7 @@ class Model_DbTable_ChampValeurListe extends Zend_Db_Table_Abstract
             ->join(['c' => 'champ'], 'cvl.ID_CHAMP = c.ID_CHAMP', [])
             ->where('c.ID_CHAMP = ?', $idChamp)
             ->order('cvl.idx ASC')
+            ->order('cvl.ID_VALEURLISTE ASC')
         ;
 
         return $this->fetchAll($select)->toArray();
