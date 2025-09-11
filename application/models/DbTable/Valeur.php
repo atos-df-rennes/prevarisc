@@ -59,14 +59,4 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     {
         return $this->getAllOfParent($idObject, $classObject)->where('c.ID_CHAMP = ?', $idChamp);
     }
-
-    public function updateNewIdx(array $postParam): void
-    {
-        $valeur = $this->find($postParam['ID'])->current();
-        if ($valeur) {
-            $valeur->idx = $postParam['idx'];
-            $valeur->save();
-        }
-    }
-
 }
