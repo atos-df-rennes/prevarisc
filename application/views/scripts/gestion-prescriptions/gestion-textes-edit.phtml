@@ -5,7 +5,7 @@
 			<input type='hidden' name='action' id='action' value='".$this->action."' />
 			<div class='row'>
 				<div class='span12' >
-					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <i class='icon-chevron-right'></i> <a href='/gestion-prescriptions/gestion-textes'>Gestion des textes</a>
+					<a href='/gestion-prescriptions'>Gestion des prescriptions types</a> <i class='icon-chevron-right'></i> <a href='/admin/prescriptions/textes'>Gestion des textes</a>
 					<i class='icon-chevron-right'></i>
 	";
 	if($this->action == 'add'){
@@ -27,7 +27,7 @@
 			</h3>
 			<div class='row'>
 				<div class='span12' style='text-align:right;'>
-					<a class='btn btn-default' href='/gestion-prescriptions/gestion-textes'>
+					<a class='btn btn-default' href='/admin/prescriptions/textes'>
 	";
 	if($this->action == 'add'){
 		echo "Retourner à la liste des textes";

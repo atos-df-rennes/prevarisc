@@ -391,6 +391,8 @@ class GestionPrescriptionsController extends Zend_Controller_Action
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => "Erreur lors de l'enregistrement.", 'message' => 'Une erreur s\'est produite lors de l\enregistrement de la prescription ('.$e->getMessage().')']);
             }
+
+            $this->redirect('/admin/prescriptions/textes');
         }
 
         $liste_textes = $service_prescTextes->getTextesListe();
