@@ -853,8 +853,6 @@ class Service_Dossier
     }
 
     /**
-     * @psalm-return array<int, Zend_Db_Table_Row_Abstract>
-     *
      * @param mixed $nouveauDossier
      * @param mixed $listeEtab
      * @param mixed $cache

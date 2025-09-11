@@ -5,8 +5,6 @@ class Service_Prescriptions
     // GESTION PRESCRIPTION TYPE
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed $categorie
      * @param mixed $texte
      * @param mixed $article
@@ -222,8 +220,6 @@ class Service_Prescriptions
     // FIN savePrescription
 
     /**
-     * @psalm-return array<int, mixed>
-     *
      * @param mixed      $type
      * @param null|mixed $mode
      */

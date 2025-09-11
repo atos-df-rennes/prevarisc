@@ -543,6 +543,7 @@ class Model_DbTable_Dossier extends Zend_Db_Table_Abstract
         ;
 
         $result = $this->fetchRow($select);
+
         /** @var ?string $idPlatau */
         $idPlatau = $result['ID_PLATAU'];
 

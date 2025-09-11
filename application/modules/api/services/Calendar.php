@@ -112,8 +112,6 @@ class Api_Service_Calendar
     }
 
     /**
-     * @psalm-return array{SUMMARY:string|false, LOCATION:string, DESCRIPTION:mixed, DTSTART:DateTime, DTEND:DateTime}|null
-     *
      * @param mixed $commissionEvent
      *
      * @return null|(DateTime|false|mixed|string)[]
