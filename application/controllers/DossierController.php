@@ -2070,7 +2070,7 @@ class DossierController extends Zend_Controller_Action
         $this->view->assign('numPublic', $object_informations['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS']);
         $this->view->assign('numPersonnel', $object_informations['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
         $this->view->assign('numHeberge', $object_informations['EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS']);
-        $this->view->assign('numTotal', $object_informations['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + $object_informations['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
+        $this->view->assign('numTotal', (int) $object_informations['EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS'] + (int) $object_informations['EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS']);
 
         $this->view->assign('etablissementLibelle', $object_informations['LIBELLE_ETABLISSEMENTINFORMATIONS']);
 
