@@ -76,17 +76,17 @@
                     <h3>Valeurs de la liste</h3>
                     <div id="list-values-container" class="grp">
                         <?php foreach($this->valeursChamp as $valeur): ?>
-                            <div class="valeur-item" id="valeur-<?= $valeur['ID_VALEURLISTE'] ?>">
+                            <div id="<?= $valeur['ID_VALEURLISTE'] ?>">
                                 <span class="tdMove"><i class="icon-move"></i></span>
                                 <input type="text" name="valeur-champ-<?= $valeur['ID_VALEURLISTE'] ?>" value="<?= htmlspecialchars($valeur['VALEUR'], ENT_QUOTES) ?>">
-                                <a href='#' data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="delete-list-value">Supprimer</a>
+                                <button type="button" data-id="<?= $valeur['ID_VALEURLISTE'] ?>" class="btn btn-link delete-list-value">Supprimer</button>
                             </div>
                         <?php endforeach ?>
                     </div>
 
                     <div id="div-valeurs-liste">
                         <div class="row-fluid">
-                            <a href='#' id='add-list-value'>Ajouter une valeur</a>
+                            <button type="button" class="btn btn-link" id='add-list-value'>Ajouter une valeur</button>
                         </div>
                         <div class="row-fluid">
                             <div id="list-value" class="span10">
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const getValuesOrder = () => {
         return Array.from(listValuesContainer.children).map((el, idx) => ({
             idx: idx,
-            ID: el.id.replace('valeur-', '')
+            ID: el.id
         }));
     };
 
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         list.forEach((val) => {
             $.ajax({
                 type: "POST",
-                url: "/formulaire/update-valeur-idx",
+                url: "/admin/formulaires/update-champ-valeur-liste-idx",
                 data: { ID: val.ID, idx: val.idx },
                 datatype: 'json'
             });
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     new Sortable(listValuesContainer, {
-        handle: '.tdMove',  
+        handle: '.tdMove',
         animation: 100,
         onEnd: function () {
             const newList = getValuesOrder();
