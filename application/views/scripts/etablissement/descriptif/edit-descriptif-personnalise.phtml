@@ -1,8 +1,8 @@
 <form action='<?= $this->url(array('action' => 'edit-descriptif')) ?>' method='post'>
     <div class='action-buttons pull-right'>
         <div class="btn-group">
-            <a class='btn' href="<?= $this->url(array('action' => 'descriptif')) ?>">Annuler la modification</a>
-            <input type='submit' class="btn btn-success" value='Sauvegarder'>
+            <a class='btn' href="<?= $this->url(array('action' => 'descriptif')) ?>" data-do-not-unload>Annuler la modification</a>
+            <input type='submit' class="btn btn-success" value='Sauvegarder' data-do-not-unload>
         </div>
     </div>
 
