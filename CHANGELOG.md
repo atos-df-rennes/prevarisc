@@ -4,6 +4,40 @@
 
 <!--- END HEADER -->
 
+## [2.8.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.0...v2.8.1) (24-09-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+##### Formulaires
+
+* Glisser les valeurs de la liste dans administration (#247) ([ab58bb](https://github.com/atos-df-rennes/prevarisc/commit/ab58bb10ef53c17c4ee8208c3d710f2a37540ed7))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Meilleure gestion des erreurs sur le healthcheck Plat'AU (#243) ([636a94](https://github.com/atos-df-rennes/prevarisc/commit/636a94abeda523031947e15bfcf2b410156276a4))
+* Suivi et reprise de prescriptions erronés (#248) ([2d24cc](https://github.com/atos-df-rennes/prevarisc/commit/2d24cc0cab7fe7d6f0fe73c5ac2e69153d4f44ed))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+
+##### Administration
+
+* Couches cartographiques ([4763cb](https://github.com/atos-df-rennes/prevarisc/commit/4763cb48d4bf9066fdc56a27c9757c54e94d5db5))
+* Textes applicables ([43ff3c](https://github.com/atos-df-rennes/prevarisc/commit/43ff3cae8fa9ef20b2cd870f0219b48a4e6474b3))
+
+##### Etablissement
+
+* Affichage des textes applicables ([9a79dd](https://github.com/atos-df-rennes/prevarisc/commit/9a79dd88485ec453a3be10ff004ad1f27076f206))
+* Historique (#245) ([51663d](https://github.com/atos-df-rennes/prevarisc/commit/51663def353bbcb99a80270b6c733c7396b5ffd1))
+
+##### Prescriptions
+
+* Affichage des textes (#250) ([3b0249](https://github.com/atos-df-rennes/prevarisc/commit/3b0249fc8d627c171462e1b4f64f2446c77a833b))
+
+
+---
+
 ## [2.8.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.7.5...v2.8.0) (28-07-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
