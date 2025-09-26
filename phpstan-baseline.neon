@@ -2389,12 +2389,6 @@ parameters:
 			path: application/services/Etablissement.php
 
 		-
-			message: '#^Comparison operation "\!\=" between 0 and 0\|0\.0\|''''\|array\{\}\|false\|null results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 2
-			path: application/services/Etablissement.php
-
-		-
 			message: '#^Default value of the parameter \#4 \$date \(string\) of method Service_Etablissement\:\:save\(\) is incompatible with type int\.$#'
 			identifier: parameter.defaultValue
 			count: 1
