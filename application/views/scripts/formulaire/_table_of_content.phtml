@@ -73,7 +73,7 @@
         const sidebar = document.querySelector('.toc-sidebar');
 
         function setRubriqueVisibility(id, visible) {
-            const rubrique = document.querySelector(`.main-content [id*="${id}"]`);
+            const rubrique = document.querySelector(`main [id*="${id}"]`);
             if (rubrique) rubrique.style.display = visible ? 'block' : 'none';
         }
 

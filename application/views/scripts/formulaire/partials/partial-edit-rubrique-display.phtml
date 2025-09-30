@@ -12,11 +12,11 @@
     >
     <label for="afficher_rubrique-<?= $this->ID_RUBRIQUE ?>">
         <?php if (boolval($this->DISPLAY) === true): ?>
-        <a href='#<?= strtolower(preg_replace('/\s|\'+/', '-', $this->NOM)) ?>'>
-            <?php endif ?>
+            <a href='#<?= strtolower(preg_replace('/\s|\'+/', '-', $this->NOM)) ?>'>
+        <?php endif ?>
             <?= $this->NOM ?>
-            <?php if (boolval($this->DISPLAY) === true): ?>
-        </a>
-    <?php endif ?>
+        <?php if (boolval($this->DISPLAY) === true): ?>
+            </a>
+        <?php endif ?>
     </label>
 </div>
