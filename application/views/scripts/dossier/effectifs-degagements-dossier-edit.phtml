@@ -15,12 +15,12 @@
             'rubriques' => $this->rubriques,
         ]) ?>
 
-        <div class="main-content">
+        <main>
             <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
                 'rubriques' => $this->rubriques,
                 'champsvaleurliste' => $this->champsvaleurliste,
                 'canWrite' => true
             ]); ?>
-        </div>
+        </main>
     </div>
 </form>

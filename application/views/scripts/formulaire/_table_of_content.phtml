@@ -46,7 +46,7 @@
 
             <div class="search-bar">
                 <input type="text" id="rubrique-search" placeholder="Rechercher..." autocomplete="off">
-                <span class="search-icon"><i class = "icon-search" ></i></span>
+                <span class="search-icon"><i class = "icon-search"></i></span>
             </div>
         </div>
 
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach ?>
         </div>
     </div>
 </div>
@@ -117,11 +117,35 @@
             toggleBtn.querySelector('svg')?.classList.toggle('rotated');
         });
 
-        updateSelectAll;
+        updateSelectAll();
     });
 </script>
 
 <style>
+    /* === LAYOUT GLOBAL DU FORMULAIRE === */
+    .form-layout {
+        display: flex;
+        gap: 20px;
+    }
+
+    main {
+        min-width: 0;
+    }
+
+    /* === SIDEBAR TOC (Table of Contents) === */
+    .toc-sidebar {
+        width: 250px;
+        height: fit-content;
+        border-radius: 3px;
+        border-right: 1px solid #D4D4D4;
+        border-bottom: 1px solid #D4D4D4;
+        border-left: 1px solid #D4D4D4;
+        border-top: none;
+        background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%);
+        position: sticky;
+        top: 75px;
+    }
+
     /* === TOGGLE ARROW ROTATION === */
     .toggle-arrow svg.rotated {
         transform: rotate(180deg);
@@ -200,21 +224,6 @@
         font-weight: normal;
     }
 
-    /* === SIDEBAR TOC (Table of Contents) === */
-    .toc-sidebar {
-        width: 250px;
-        height: auto;
-        min-height: 54px;
-        border-radius: 3px;
-        border-right: 1px solid #D4D4D4;
-        border-bottom: 1px solid #D4D4D4;
-        border-left: 1px solid #D4D4D4;
-        border-top: none;
-        background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%);
-        position: sticky;
-        top: 10%;
-    }
-
     /* === SIDEBAR COLLAPSÉ : MASQUER LA LISTE ET LA BARRE DE RECHERCHE === */
     .toc-sidebar.collapsed .toc-list,
     .toc-sidebar.collapsed .search-controls {
@@ -235,7 +244,6 @@
     /* === TITRE DU SIDEBAR === */
     .toc-title {
         width: 250px;
-        height: 34px;
         gap: 10px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
@@ -283,17 +291,5 @@
     .toc-item:hover {
         background-color: rgba(89, 190, 220, 0.1);
         border-radius: 3px;
-    }
-
-    /* === LAYOUT GLOBAL DU FORMULAIRE === */
-    .form-layout {
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-    }
-
-    /* === CONTENU PRINCIPAL (DROITE) === */
-    .main-content {
-        flex: 1;
     }
 </style>
