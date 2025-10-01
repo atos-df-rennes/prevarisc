@@ -48,7 +48,7 @@
     <?php endif ?>
 
     <li class="<?= strpos($action_name, 'pieces-jointes') !== false ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"pieces-jointes")) ?>'>
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/pieces-jointes'>
             <i class="icon-share icon-black"></i>
             Pièces jointes
         </a>
