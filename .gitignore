@@ -1,3 +1,9 @@
+###> Config IDE ###
+.idea
+.vscode
+###< Config IDE ###
+
+
 .DS_Store
 .DS_Store?
 ._*
@@ -13,7 +19,6 @@ vendor
 /public/data/uploads/commission
 HashedFileDataStore.php
 .php-cs-fixer.cache
-.vscode
 phpstan.neon
 tests/coverage/*
 node_modules/
