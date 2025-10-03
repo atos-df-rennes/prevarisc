@@ -113,16 +113,16 @@
             $verrou = true;
             if ($this->verrou == 1  || (isset($action) && $action == 'new')) {
                 $label = "Déverrouiller";
-                $idLink = "DEVERROU";
+                $idLink = "/dossier/". $this->idDossier ."/deverrouiller";
             } else {
                 $label = "Verrouiller";
-                $idLink = "VERROU";
+                $idLink = "/dossier/". $this->idDossier ."/verrouiller";
                 $verrou = false;
             }
         ?>
 
         <li>
-            <a class="sep" id="<?= $idLink; ?>" style='cursor:pointer;'><i class="icon-lock icon-black"></i> <?= $label; ?></a>
+            <a class="sep" href="<?= $idLink ?>"><i class="icon-lock icon-black"></i> <?= $label; ?></a>
         </li>
 
         <li class='<?= ($this->action == "rapport") ? "active" : "read" ?>'>
