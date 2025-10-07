@@ -1,4 +1,4 @@
-<div class="toc-sidebar">
+<div class="toc-sidebar visible-desktop">
     <div class="toc-content">
         <h4 class="toc-title">
             <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px; flex-shrink: 0;">
@@ -291,5 +291,11 @@
     .toc-item:hover {
         background-color: rgba(89, 190, 220, 0.1);
         border-radius: 3px;
+    }
+
+    @media (max-width: 979px) {
+        .visible-desktop {
+            display: none;
+        }
     }
 </style>
