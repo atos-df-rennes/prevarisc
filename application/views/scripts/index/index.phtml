@@ -130,7 +130,7 @@
         });
 
         // Vérification de la connexion à Plat'AU
-        <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN) && !filter_var(getenv('PREVARISC_PLATAU_NO_HEALTHCHECK'), FILTER_VALIDATE_BOOLEAN)): ?>
+        <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU', true) !== false ? getenv('PREVARISC_DEACTIVATE_PLATAU', true) : getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN) && !filter_var(getenv('PREVARISC_PLATAU_NO_HEALTHCHECK', true) !== false ? getenv('PREVARISC_PLATAU_NO_HEALTHCHECK', true) : getenv('PREVARISC_PLATAU_NO_HEALTHCHECK'), FILTER_VALIDATE_BOOLEAN)): ?>
             $.ajax({
                 type: 'GET',
                 url: '/index/platau-healthcheck',

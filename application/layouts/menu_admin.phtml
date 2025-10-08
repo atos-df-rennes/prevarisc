@@ -61,6 +61,10 @@
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
         <a href='/formulaire' ><i class="icon-tasks icon-black"></i> Formulaires</a>
     </li>
+
+    <li>
+        <a href='/admin/configuration'><i class="icon-cog icon-black"></i> Configurations</a>
+    </li>
 </ul>
 
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>

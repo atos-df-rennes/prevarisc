@@ -211,7 +211,7 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('id_platau', $dossier['ID_PLATAU'] ?? null);
 
             if (null !== $dossier['ID_PLATAU']) {
-                if (filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+                if (filter_var(false !== getenv('PREVARISC_DEACTIVATE_PLATAU', true) ? getenv('PREVARISC_DEACTIVATE_PLATAU', true) : getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
                     throw new Exception("Plat'AU est désactivé", 500);
                 }
 
@@ -2632,7 +2632,7 @@ class DossierController extends Zend_Controller_Action
         }
 
         $this->view->assign('formulaires', $capsulesRubriques);
-        $this->view->assign('isDescriptifPersonnalise', 1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE'));
+        $this->view->assign('isDescriptifPersonnalise', 1 === (int) (false !== getenv('PREVARISC_DESCRIPTIF_PERSONNALISE', true) ? getenv('PREVARISC_DESCRIPTIF_PERSONNALISE', true) : getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')));
 
         // Sauvegarde de la pièce jointe
         $dateDuJour = new Zend_Date();
