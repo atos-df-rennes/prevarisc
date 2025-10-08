@@ -148,7 +148,7 @@ class Service_User
 
             if (array_key_exists('PASSWD_INPUT', $data)) {
                 if (
-                    1 == getenv('PREVARISC_ENFORCE_SECURITY', true) ?: getenv('PREVARISC_ENFORCE_SECURITY')
+                    1 == (getenv('PREVARISC_ENFORCE_SECURITY', true) !== false ? getenv('PREVARISC_ENFORCE_SECURITY', true) : getenv('PREVARISC_ENFORCE_SECURITY'))
                     && '' != $data['PASSWD_INPUT']
                     && !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/', $data['PASSWD_INPUT'])
                 ) {

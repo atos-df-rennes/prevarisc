@@ -68,7 +68,7 @@ class SessionController extends Zend_Controller_Action
                 ) {
                     $adapters['sso'] = new Service_PassAuthAdapater($username);
                 } elseif (
-                    1 == getenv('PREVARISC_ENFORCE_SECURITY', true) ?: getenv('PREVARISC_ENFORCE_SECURITY')
+                    1 == (getenv('PREVARISC_ENFORCE_SECURITY', true) !== false ? getenv('PREVARISC_ENFORCE_SECURITY', true) : getenv('PREVARISC_ENFORCE_SECURITY'))
                     && isset($user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'])
                     && $user['FAILED_LOGIN_ATTEMPTS_UTILISATEUR'] >= self::MAX_LOGIN_ATTEMPTS
                     && isset($user['IP_UTILISATEUR'])

@@ -5,8 +5,8 @@
 	<h3>ERP</h3>
         <!-- Types pour lesquels on ne définit pas la périodicité sans hebergement -->
         <?php
-        if (getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) ?: getenv('PREVARISC_LOCAL_SOMMEIL_TYPES') != false){
-            $localsommeil_types = explode(';',getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) ?: getenv('PREVARISC_LOCAL_SOMMEIL_TYPES'));
+        if (getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) !== false ? getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) : getenv('PREVARISC_LOCAL_SOMMEIL_TYPES') != false){
+            $localsommeil_types = explode(';',getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) !== false ? getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) : getenv('PREVARISC_LOCAL_SOMMEIL_TYPES'));
         } else $localsommeil_types = array(7,11);
         ?>
 

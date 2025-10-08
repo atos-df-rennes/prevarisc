@@ -34,7 +34,7 @@ $application = new Zend_Application('production', [
             'controllerDirectory' => APPLICATION_PATH.DS.'controllers',
             'moduleDirectory' => APPLICATION_PATH.DS.'modules',
             'params' => [
-                'displayExceptions' => getenv('PREVARISC_DEBUG_ENABLED', true) ?: getenv('PREVARISC_DEBUG_ENABLED'),
+                'displayExceptions' => getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : getenv('PREVARISC_DEBUG_ENABLED'),
             ],
         ],
         'db' => [
@@ -76,8 +76,8 @@ $application = new Zend_Application('production', [
         'session_max_lifetime' => getenv('PREVARISC_SESSION_MAX_LIFETIME'),
     ],
     'phpSettings' => [
-        'display_startup_errors' => getenv('PREVARISC_DEBUG_ENABLED', true) ?: getenv('PREVARISC_DEBUG_ENABLED'),
-        'display_errors' => getenv('PREVARISC_DEBUG_ENABLED', true) ?: getenv('PREVARISC_DEBUG_ENABLED'),
+        'display_startup_errors' => getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : getenv('PREVARISC_DEBUG_ENABLED'),
+        'display_errors' => getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : getenv('PREVARISC_DEBUG_ENABLED'),
     ],
     'mail' => [
         'enabled' => getenv('PREVARISC_MAIL_ENABLED'),

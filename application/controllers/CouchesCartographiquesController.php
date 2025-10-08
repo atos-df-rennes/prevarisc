@@ -14,7 +14,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
         $this->view->headScript()->appendFile('/js/geoportail/sdk-ol/GpSDK2D.js', 'text/javascript');
         $this->view->headScript()->appendFile('/js/geoportail/manageMap.js', 'text/javascript');
 
-        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY', true) ?: getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY', true) !== false ? getenv('PREVARISC_PLUGIN_IGNKEY', true) : getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->serviceCarto = new Service_Carto();
     }
 
@@ -45,7 +45,7 @@ class CouchesCartographiquesController extends Zend_Controller_Action
 
     public function addCoucheIgnAction(): void
     {
-        $this->view->assign('key_ign', explode(',', getenv('PREVARISC_PLUGIN_IGNKEY', true) ?: getenv('PREVARISC_PLUGIN_IGNKEY')));
+        $this->view->assign('key_ign', explode(',', getenv('PREVARISC_PLUGIN_IGNKEY', true) !== false ? getenv('PREVARISC_PLUGIN_IGNKEY', true) : getenv('PREVARISC_PLUGIN_IGNKEY')));
         $this->view->assign('formats', ['wmts', 'wms raster', 'wms vecteur']);
 
         $this->addAction();

@@ -70,7 +70,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
         }
 
         if (1 == getenv('PREVARISC_CAS_ENABLED')) {
-            if (1 == getenv('PREVARISC_DEBUG_ENABLED', true) ?: getenv('PREVARISC_DEBUG_ENABLED')) {
+            if (1 == (getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : getenv('PREVARISC_DEBUG_ENABLED'))) {
                 // Enable debugging
                 phpCAS::setDebug();
                 // Enable verbose error messages. Disable in production!

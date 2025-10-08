@@ -191,19 +191,19 @@ class Service_Dashboard
         ], $options);
 
         // custom configurations
-        if (getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS')) {
-            $this->options['next_commissions_days'] = (int) getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS');
+        if (getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) : getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS')) {
+            $this->options['next_commissions_days'] = (int) getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS', true) : getenv('PREVARISC_DASHBOARD_NEXT_COMMISSIONS_DAYS');
         }
 
-        if (getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS')) {
-            $this->options['dossiers_sans_avis_days'] = (int) getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS');
+        if (getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) : getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS')) {
+            $this->options['dossiers_sans_avis_days'] = (int) getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS', true) : getenv('PREVARISC_DASHBOARD_DOSSIERS_SANS_AVIS_DAYS');
         }
 
-        if (getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS')) {
-            $this->options['courrier_sans_reponse_days'] = (int) getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) ?: getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS');
+        if (getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) : getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS')) {
+            $this->options['courrier_sans_reponse_days'] = (int) getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) !== false ? getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS', true) : getenv('PREVARISC_DASHBOARD_COURRIER_SANS_REPONSE_DAYS');
         }
 
-        if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU', true) ?: getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
+        if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU', true) !== false ? getenv('PREVARISC_DEACTIVATE_PLATAU', true) : getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN)) {
             $this->blocsConfig['dossierPlatau'] = [
                 'service' => 'Service_Dashboard',
                 'method' => 'getDossiersPlatAUSansEtablissement',
