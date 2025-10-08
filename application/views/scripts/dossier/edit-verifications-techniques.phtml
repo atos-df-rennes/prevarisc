@@ -21,3 +21,16 @@
         </main>
     </div>
 </form>
+
+<button
+    id="show-toc"
+    type="button"
+    class="btn hidden-desktop"
+    title="Afficher les rubriques"
+>
+    <i class="icon-filter"></i>
+</button>
+
+<?= $this->partial('formulaire/_modal_table_of_content.phtml', [
+    'rubriques' => $this->rubriques
+]) ?>
