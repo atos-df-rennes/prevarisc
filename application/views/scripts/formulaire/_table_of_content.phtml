@@ -1,21 +1,28 @@
-<div class="toc-sidebar visible-desktop">
+<?php
+$suffix = isset($this->idSuffix) ? $this->idSuffix : '';
+$wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar visible-desktop';
+?>
+
+<div class="<?= $wrapperClass ?>" data-toc-instance="<?= $suffix ?>">
     <div class="toc-content">
+            <?php if (empty($suffix)): ?>
         <h4 class="toc-title">
             <div>
                 <i class="icon-filter icon-white"></i>
                 Rubriques
             </div>
-            <i id="toggle-sidebar" class="icon-chevron-up icon-white" title="Afficher/Masquer" style="cursor: pointer;"></i>
+                <i id="toggle-sidebar<?= $suffix ?>" class="icon-chevron-up icon-white" title="Afficher/Masquer" style="cursor: pointer;"></i>
         </h4>
+        <?php endif; ?>
 
         <div class="search-controls">
             <div class="select-all-container">
-                <input type="checkbox" id="select-all-rubriques" checked>
-                <label for="select-all-rubriques"><strong>Tous</strong></label>
+                <input type="checkbox" id="select-all-rubriques<?= $suffix ?>" checked>
+                <label for="select-all-rubriques<?= $suffix ?>"><strong>Tous</strong></label>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="rubrique-search" placeholder="Rechercher..." autocomplete="off">
+                <input type="text" id="rubrique-search<?= $suffix ?>" placeholder="Rechercher..." autocomplete="off">
                 <span class="search-icon"><i class = "icon-search"></i></span>
             </div>
         </div>
@@ -24,7 +31,7 @@
             <?php foreach ($this->rubriques as $index => $rubrique): ?>
                 <div class="toc-item" data-index="<?= $index ?>">
                     <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
-                        <div id="rubrique-<?= $index ?>" class="rubrique-section">
+                        <div id="rubrique-<?= $index ?><?= $suffix ?>" class="rubrique-section">
                             <?= $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique); ?>
                         </div>
                     </div>
@@ -35,12 +42,17 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('rubrique-search');
-        const selectAllCheckbox = document.getElementById('select-all-rubriques');
-        const tocItems = Array.from(document.querySelectorAll('.toc-item'));
-        const toggleIcon = document.getElementById('toggle-sidebar');
-        const sidebar = document.querySelector('.toc-sidebar');
+        (function() {
+            const suffix = '<?= $suffix ?>';
+            const instance = document.querySelector(`[data-toc-instance="${suffix}"]`);
+
+            if (!instance) return;
+
+            const searchInput = instance.querySelector(`#rubrique-search${suffix}`);
+            const selectAllCheckbox = instance.querySelector(`#select-all-rubriques${suffix}`);
+            const tocItems = Array.from(instance.querySelectorAll('.toc-item'));
+            const toggleIcon = instance.querySelector(`#toggle-sidebar${suffix}`);
+            const sidebar = instance.closest('.toc-sidebar');
 
         function setRubriqueVisibility(id, visible) {
             const rubrique = document.querySelector(`main [id*="${id}"]`);
@@ -88,10 +100,17 @@
                 toggleIcon.classList.toggle('icon-chevron-down');
         });
 
+            document.querySelectorAll('#tocModal .toc-sidebar a[href^="#"]').forEach(link => {
+                link.addEventListener('click', () => {
+                    $('#tocModal').modal('hide');
+                });
+            });
+
         updateSelectAll();
-    });
+    })();
 </script>
 
+<?php if (empty($suffix)): ?>
 <style>
     /* === LAYOUT GLOBAL DU FORMULAIRE === */
     .form-layout {
@@ -255,9 +274,16 @@
         border-radius: 3px;
     }
 
+    /* === STYLES SPÉCIFIQUES MODALE === */
+    #tocModal .toc-sidebar {
+        position: static;
+        width: 100%;
+    }
+
     @media (max-width: 979px) {
         .visible-desktop {
             display: none;
         }
     }
 </style>
+<?php endif; ?>
