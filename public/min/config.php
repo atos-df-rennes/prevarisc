@@ -6,8 +6,8 @@
 
 $min_enableBuilder = false;
 $min_builderPassword = '';
-$min_errorLogger = getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : (bool) getenv('PREVARISC_DEBUG_ENABLED');
-$min_allowDebugFlag = getenv('PREVARISC_DEBUG_ENABLED', true) !== false ? getenv('PREVARISC_DEBUG_ENABLED', true) : (bool) getenv('PREVARISC_DEBUG_ENABLED');
+$min_errorLogger = getenv('PREVARISC_DEBUG_ENABLED') ? true : false;
+$min_allowDebugFlag = getenv('PREVARISC_DEBUG_ENABLED') ? true : false;
 $min_documentRoot = '';
 $min_cacheFileLocking = true;
 $min_serveOptions['bubbleCssImports'] = false;

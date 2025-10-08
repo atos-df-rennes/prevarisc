@@ -65,7 +65,7 @@ class AdminController extends Zend_Controller_Action
             'cache_url' => $cache_config['host'].($cache_config['port'] ? ':'.$cache_config['port'] : ''),
             'cache_lifetime' => $cache_config['lifetime'],
             'cache_enabled' => $cache_config['enabled'],
-            'enforce_security' => 1 == (getenv('PREVARISC_ENFORCE_SECURITY', true) !== false ? getenv('PREVARISC_ENFORCE_SECURITY', true) : getenv('PREVARISC_ENFORCE_SECURITY')),
+            'enforce_security' => 1 == getenv('PREVARISC_ENFORCE_SECURITY'),
         ]);
 
         $service_search = new Service_Search();
