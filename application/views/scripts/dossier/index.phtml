@@ -379,13 +379,11 @@ afficherCacherAvis = function() {
         if (typeDossier == 1) {
             $("#AVIS").show();
             $("#AVIS_COMMISSION").show();
-            $("#DATECOMM").show();
         } else if (typeDossier == 2) {
             $("#AVIS_COMMISSION").show();
         } else if (typeDossier == 3) {
             $("#AVIS").show();
             $("#AVIS_COMMISSION").show();
-            $("#DATECOMM").show();
         }
     } else {
         if ($hideAvis.not('.absquorum').not('.npsp').length > 0) {
@@ -397,9 +395,6 @@ afficherCacherAvis = function() {
         }
         $("#AVIS_COMMISSION").hide();
         $("#AVIS_DOSSIER_COMMISSION option[value='0']").attr('selected', true);
-        $("#DATECOMM").hide();
-        $("#DATECOMM_INPUT").val('');
-        $("#ID_AFFECTATION_DOSSIER_COMMISSION").val('');
     }
 };
 
@@ -986,7 +981,6 @@ $.fn.afficheChamps = function(listeNature) {
                 $("#AVIS").hide();
                 $("#AVIS_COMMISSION").hide();
                 $("#HORSDELAI").hide();
-                $("#DATECOMM").hide();
             } else if (horsdelai) {
                 $("#AVIS").hide();
                 $("#AVIS_COMMISSION").hide();
