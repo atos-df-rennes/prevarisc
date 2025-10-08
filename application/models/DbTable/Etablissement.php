@@ -410,7 +410,7 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         $search = new Model_DbTable_Search();
         $search->setItem('etablissement');
 
-        $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE', true) !== false ? getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE', true) : getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
+        $use_date_commission_for_periodicity = filter_var(false !== getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE', true) ? getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE', true) : getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
         if ($use_date_commission_for_periodicity) {
             $periodicityCondition = "IF(
                 dossiers.DATECOMM_DOSSIER >= dossiers.DATEVISITE_DOSSIER,

@@ -27,7 +27,7 @@ class AdminController extends Zend_Controller_Action
         }
 
         $this->view->assign([
-            'key_ign' => getenv('PREVARISC_PLUGIN_IGNKEY', true) !== false ? getenv('PREVARISC_PLUGIN_IGNKEY', true) : getenv('PREVARISC_PLUGIN_IGNKEY'),
+            'key_ign' => false !== getenv('PREVARISC_PLUGIN_IGNKEY', true) ? getenv('PREVARISC_PLUGIN_IGNKEY', true) : getenv('PREVARISC_PLUGIN_IGNKEY'),
             'key_googlemap' => getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY'),
             'geoconcept_url' => getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'),
             'geoconcept_infos' => [
