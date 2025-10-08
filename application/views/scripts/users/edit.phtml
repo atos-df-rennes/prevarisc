@@ -45,13 +45,13 @@
                     <?php if($this->params["LDAP_ACTIF"]) : ?> Connexion via LDAP/CAS/NTLM ? <input type='checkbox' class='ldap' value='1' <?php if($this->user["PASSWD_UTILISATEUR"] == null) echo "checked"?> /><?php endif ?>
                 <?php endif ?>
             </p>
-            <?php if (getenv('PREVARISC_ENFORCE_SECURITY') == 1): ?>
+            <?php if (getenv('PREVARISC_ENFORCE_SECURITY', true) ?: getenv('PREVARISC_ENFORCE_SECURITY') == 1): ?>
             <p id="password_instructions" style="<?php echo $this->add ? '' : 'display:none' ?>">
-                Le mot de passe doit contenir au moins 8 caractères 
+                Le mot de passe doit contenir au moins 8 caractères
                 dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.
             </p>
             <?php endif ?>
-            
+
         </dd>
 
         <dt>Groupe</dt>
@@ -72,18 +72,18 @@
                 <input type='checkbox' name='ACTIF_UTILISATEUR' value='1' <?php if( !isset($this->user) || $this->user['ACTIF_UTILISATEUR'] ) echo "checked" ?> />
             </p>
         </dd>
-        
+
         <dt>Dernière IP authentifiée</dt>
         <dd>
             <p>
                 <input type='text'  class="input-medium" name='IP_UTILISATEUR' maxlength="45" value='<?php echo $this->user["IP_UTILISATEUR"] ?>' />
             </p>
         </dd>
-        
+
         <dt>Connexions en échec</dt>
         <dd>
             <input type='number' min="0" class="input-mini" name='FAILED_LOGIN_ATTEMPTS_UTILISATEUR' value='<?php echo $this->user["FAILED_LOGIN_ATTEMPTS_UTILISATEUR"] ? : '0' ?>' />
-            <?php if(getenv('PREVARISC_ENFORCE_SECURITY') == 1 && $this->user["FAILED_LOGIN_ATTEMPTS_UTILISATEUR"] >= 2): ?>
+            <?php if(getenv('PREVARISC_ENFORCE_SECURITY', true) ?: getenv('PREVARISC_ENFORCE_SECURITY') == 1 && $this->user["FAILED_LOGIN_ATTEMPTS_UTILISATEUR"] >= 2): ?>
             <a href='#' id='unlock' >Débloquer</a> les connexions autres qu'avec l'IP ci-dessus.
             <?php endif ?>
         </dd>
@@ -255,7 +255,7 @@
         $(".chosen").chosen({
             search_contains : true
         });
-        
+
         $('#unlock').click(function(e) {
             e.preventDefault();
             $('input[name="FAILED_LOGIN_ATTEMPTS_UTILISATEUR"]').val(0);

@@ -6,7 +6,7 @@ class Service_Utils_DossiersMaxNumber
 
     public static function value(): int
     {
-        $envValue = filter_var(getenv('PREVARISC_DOSSIERS_MAX_A_AFFICHER'), FILTER_VALIDATE_INT);
+        $envValue = filter_var(getenv('PREVARISC_DOSSIERS_MAX_A_AFFICHER', true) ?: getenv('PREVARISC_DOSSIERS_MAX_A_AFFICHER'), FILTER_VALIDATE_INT);
 
         if (!is_int($envValue)) {
             return self::DEFAULT;

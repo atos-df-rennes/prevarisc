@@ -60,7 +60,7 @@ class EtablissementController extends Zend_Controller_Action
         $DB_periodicite = new Model_DbTable_Periodicite();
 
         $this->view->assign('couches_cartographiques', $service_carto->getAll());
-        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY', true) ?: getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->view->assign('key_googlemap', getenv('PREVARISC_PLUGIN_GOOGLEMAPKEY'));
         $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
 
@@ -89,7 +89,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $service_carto = new Service_Carto();
 
-        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY', true) ?: getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
         $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
         $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
@@ -193,7 +193,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->assign('add', true);
 
-        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY'));
+        $this->view->assign('key_ign', getenv('PREVARISC_PLUGIN_IGNKEY', true) ?: getenv('PREVARISC_PLUGIN_IGNKEY'));
         $this->view->assign('geoconcept_url', getenv('PREVARISC_PLUGIN_GEOCONCEPT_URL'));
         $this->view->assign('default_lon', getenv('PREVARISC_CARTO_DEFAULT_LON') ?: '2.71490430425517');
         $this->view->assign('default_lat', getenv('PREVARISC_CARTO_DEFAULT_LAT') ?: '50.4727273438818');
@@ -233,7 +233,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $displayOriginal = filter_var($this->getRequest()->getParam('original'), FILTER_VALIDATE_BOOLEAN);
         $this->view->assign('displayOriginal', $displayOriginal);
-        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE') && false === $displayOriginal) {
+        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE', true) ?: getenv('PREVARISC_DESCRIPTIF_PERSONNALISE') && false === $displayOriginal) {
             $this->view->assign('hideButton', $this->getRequest()->getParam('hideButton'));
             $this->descriptifPersonnaliseAction();
         } else {
@@ -270,7 +270,7 @@ class EtablissementController extends Zend_Controller_Action
     {
         $this->_helper->layout->setLayout('etablissement');
 
-        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) {
+        if (1 === (int) getenv('PREVARISC_DESCRIPTIF_PERSONNALISE', true) ?: getenv('PREVARISC_DESCRIPTIF_PERSONNALISE')) {
             $this->editDescriptifPersonnaliseAction();
         } else {
             $this->descriptifAction();

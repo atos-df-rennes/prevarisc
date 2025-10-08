@@ -113,7 +113,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
                 ->setCriteria('ID_NATURE', [21, 26, 47, 48])
             ;
 
-            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
+            $use_date_commission_for_periodicity = filter_var(getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE', true) ?: getenv('PREVARISC_DATE_COMMISSION_RELANCE_PERIODICITE'), FILTER_VALIDATE_BOOLEAN);
             if ($use_date_commission_for_periodicity) {
                 $search->columns([
                     'DATE_RELANCE_PERIODICITE' => new Zend_Db_Expr(
@@ -1262,8 +1262,8 @@ class Service_Etablissement implements Service_Interface_Etablissement
 
                 // Local à sommeil en fonction du type
                 if (null !== $type) {
-                    if (false != getenv('PREVARISC_LOCAL_SOMMEIL_TYPES')) {
-                        $concerned_types = explode(';', getenv('PREVARISC_LOCAL_SOMMEIL_TYPES'));
+                    if (false != getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) ?: getenv('PREVARISC_LOCAL_SOMMEIL_TYPES')) {
+                        $concerned_types = explode(';', getenv('PREVARISC_LOCAL_SOMMEIL_TYPES', true) ?: getenv('PREVARISC_LOCAL_SOMMEIL_TYPES'));
                     } else {
                         $concerned_types = [7, 11];
                     }
@@ -1678,7 +1678,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $periodicityString = sprintf('%s %s', $periodicity, $periodicityUnit);
 
         if (
-            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOLEAN)
+            !filter_var(getenv('PREVARISC_UNITE_PERIODICITE_ANNEES', true) ?: getenv('PREVARISC_UNITE_PERIODICITE_ANNEES'), FILTER_VALIDATE_BOOLEAN)
         ) {
             return $periodicityString;
         }
