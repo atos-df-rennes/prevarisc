@@ -7,16 +7,30 @@
     </div>
 
     <h3>Modification des effectifs et dégagements</h3>
-    <h4 class='h4_subtitle'>Rubriques</h4>
+    <div class="form-layout">
+        <?= $this->partial('formulaire/_table_of_content.phtml', [
+            'rubriques' => $this->rubriques,
+        ]) ?>
 
-    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
-        <?php foreach ($this->rubriques as $rubrique):
-            echo $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique);
-        endforeach ?>
+        <main>
+            <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
+                'rubriques' => $this->rubriques,
+                'champsvaleurliste' => $this->champsvaleurliste,
+                'canWrite' => true
+            ]); ?>
+        </main>
     </div>
-    <?= $this->partial('formulaire/partials/partial-form-custom.phtml', [
-        'rubriques' => $this->rubriques,
-        'champsvaleurliste' => $this->champsvaleurliste,
-        'canWrite' => true
-    ]); ?>
 </form>
+
+<button
+    id="show-toc"
+    type="button"
+    class="btn hidden-desktop"
+    title="Afficher les rubriques"
+>
+    <i class="icon-filter"></i>
+</button>
+
+<?= $this->partial('formulaire/_modal_table_of_content.phtml', [
+    'rubriques' => $this->rubriques
+]) ?>

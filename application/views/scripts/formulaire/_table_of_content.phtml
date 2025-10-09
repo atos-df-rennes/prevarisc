@@ -1,0 +1,264 @@
+<?php
+    $suffix = $this->idSuffix ?? '';
+?>
+
+<div class="toc-sidebar <?= '' === $suffix ? 'visible-desktop' : '' ?>" data-toc-instance="<?= $suffix ?>">
+    <div class="toc-content">
+        <?php if ('' === $suffix): ?>
+            <h4 class="toc-title">
+                <span>
+                    <i class="icon-filter icon-white"></i>
+                    Rubriques
+                </span>
+                <i id="toggle-sidebar<?= $suffix ?>" class="icon-chevron-up icon-white" title="Afficher/Masquer" style="cursor: pointer;"></i>
+            </h4>
+        <?php endif ?>
+
+        <div class="search-controls">
+            <div class="select-all-container">
+                <input type="checkbox" id="select-all-rubriques<?= $suffix ?>" checked>
+                <label for="select-all-rubriques<?= $suffix ?>"><strong>Tous</strong></label>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="rubrique-search<?= $suffix ?>" placeholder="Rechercher..." autocomplete="off">
+                <span class="search-icon"><i class="icon-search"></i></span>
+            </div>
+        </div>
+
+        <div class="toc-list">
+            <?php foreach ($this->rubriques as $index => $rubrique): ?>
+                <div class="toc-item descriptif-personnalise_rubriques-infos" data-index="<?= $index ?>">
+                    <?= $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique); ?>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const suffix = '<?= $suffix ?>';
+        const instance = document.querySelector(`[data-toc-instance="${suffix}"]`);
+
+        if (!instance) return;
+
+        const searchInput = instance.querySelector(`#rubrique-search${suffix}`);
+        const selectAllCheckbox = instance.querySelector(`#select-all-rubriques${suffix}`);
+        const tocItems = Array.from(instance.querySelectorAll('.toc-item'));
+        const toggleIcon = instance.querySelector(`#toggle-sidebar${suffix}`);
+        const sidebar = instance.closest('.toc-sidebar');
+
+        function setRubriqueVisibility(id, visible) {
+            const rubrique = document.querySelector(`main [id*="${id}"]`);
+            if (rubrique) rubrique.style.display = visible ? 'block' : 'none';
+        }
+
+        function updateSelectAll() {
+            const checkboxes = instance.querySelectorAll('input[name^="afficher_rubrique-"]:not(:disabled,[type="hidden"])');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked && checkboxes.length > 0;
+        }
+
+        document.querySelectorAll('input[name^="afficher_rubrique-"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const id = cb.name.replace('afficher_rubrique-', '');
+                setRubriqueVisibility(id, cb.checked);
+                updateSelectAll();
+            });
+        });
+
+        searchInput?.addEventListener('input', () => {
+            const term = searchInput.value.toLowerCase();
+            tocItems.forEach(item => {
+                const match = item.textContent.toLowerCase().includes(term);
+                item.style.display = match ? 'flex' : 'none';
+            });
+        });
+
+        selectAllCheckbox?.addEventListener('change', () => {
+            const checked = selectAllCheckbox.checked;
+            document.querySelectorAll('input[name^="afficher_rubrique-"]').forEach(cb => {
+                const tocItem = cb.closest('.toc-item');
+                if (tocItem && tocItem.style.display !== 'none') {
+                    cb.checked = checked;
+                    const id = cb.name.replace('afficher_rubrique-', '');
+                    setRubriqueVisibility(id, checked);
+                }
+            });
+        });
+
+        toggleIcon?.addEventListener('click', () => {
+            sidebar?.classList.toggle('collapsed');
+
+            toggleIcon.classList.toggle('icon-chevron-up');
+            toggleIcon.classList.toggle('icon-chevron-down');
+        });
+
+        document.querySelectorAll('#tocModal .toc-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                $('#tocModal').modal('hide');
+            });
+        });
+
+        updateSelectAll();
+    })();
+</script>
+
+<style>
+    /* === LAYOUT GLOBAL DU FORMULAIRE === */
+    .form-layout {
+        display: flex;
+        gap: 20px;
+    }
+
+    main {
+        min-width: 0;
+    }
+
+    /* === SIDEBAR TOC (Table of Contents) === */
+    .toc-sidebar {
+        height: fit-content;
+        border-radius: 3px;
+        border-right: 1px solid #D4D4D4;
+        border-bottom: 1px solid #D4D4D4;
+        border-left: 1px solid #D4D4D4;
+        border-top: none;
+        background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%);
+        position: sticky;
+        top: 75px;
+        z-index: 2000;
+    }
+
+    @media (max-width: 979px) {
+        .toc-sidebar {
+            border-top: 1px solid #D4D4D4;
+        }
+    }
+
+    /* === BARRE DE RECHERCHE : WRAPPER === */
+    .search-controls {
+        display: flex;
+        padding: 10px 10px 10px 17px;
+    }
+
+    /* === BARRE DE RECHERCHE : CHAMP ET ICÔNE === */
+    .search-bar {
+        height: 28px;
+    }
+
+    .search-bar input[type="text"] {
+        width: 100%;
+        height: 28px;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        font-size: 12px;
+        box-sizing: border-box;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .search-bar input[type="text"]:focus {
+        outline: none;
+        border-color: #37839A;
+        box-shadow: 0 0 3px rgba(55, 131, 154, 0.3);
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 15px;
+        top: 55px;
+        color: #666;
+        pointer-events: none;
+        font-size: 12px;
+    }
+
+    @media (max-width: 979px) {
+        .search-icon {
+            top: 13px;
+            left: 239px;
+        }
+    }
+
+    /* === CASE À COCHER : "TOUS" (SELECT ALL) === */
+    .select-all-container {
+        height: 28px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #CCCCCC;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        background: linear-gradient(180deg, #FFFFFF 0%, #E7E7E7 100%);
+        box-sizing: border-box;
+    }
+
+    .select-all-container input[type="checkbox"],
+    .select-all-container label {
+        margin: 0;
+    }
+
+    /* === SIDEBAR COLLAPSÉ : MASQUER LA LISTE ET LA BARRE DE RECHERCHE === */
+    .toc-sidebar.collapsed .toc-list,
+    .toc-sidebar.collapsed .search-controls {
+        display: none;
+    }
+
+    /* === TITRE DU SIDEBAR === */
+    .toc-title {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border: 1px solid #37839A;
+        padding: 10px 14px;
+        background: linear-gradient(180deg, #59BEDC 0%, #3097B5 100%);
+        margin: 0;
+        color: white;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .toc-title > span {
+        display: flex;
+        gap: .5rem;
+        align-items: baseline;
+    }
+
+    /* === LISTE DES RUBRIQUES DANS LA SIDEBAR === */
+    .toc-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    @media (min-width: 980px) {
+        .toc-content {
+            width: 250px;
+        }
+    }
+
+    /* === ÉLÉMENT INDIVIDUEL DE LA LISTE (TOC ITEM) === */
+    .toc-item {
+        display: flex;
+        transition: background-color 0.2s ease;
+        padding: 5px;
+    }
+
+    .toc-item:hover {
+        background-color: rgba(89, 190, 220, 0.1);
+        border-radius: 3px;
+    }
+
+    /* === STYLES SPÉCIFIQUES MODALE === */
+    #tocModal .toc-sidebar {
+        width: 100%;
+    }
+
+    @media (max-width: 979px) {
+        .visible-desktop {
+            display: none;
+        }
+    }
+</style>
