@@ -37,17 +37,17 @@
 </div>
 
 <script>
-        (function() {
-            const suffix = '<?= $suffix ?>';
-            const instance = document.querySelector(`[data-toc-instance="${suffix}"]`);
+    (function() {
+        const suffix = '<?= $suffix ?>';
+        const instance = document.querySelector(`[data-toc-instance="${suffix}"]`);
 
-            if (!instance) return;
+        if (!instance) return;
 
-            const searchInput = instance.querySelector(`#rubrique-search${suffix}`);
-            const selectAllCheckbox = instance.querySelector(`#select-all-rubriques${suffix}`);
-            const tocItems = Array.from(instance.querySelectorAll('.toc-item'));
-            const toggleIcon = instance.querySelector(`#toggle-sidebar${suffix}`);
-            const sidebar = instance.closest('.toc-sidebar');
+        const searchInput = instance.querySelector(`#rubrique-search${suffix}`);
+        const selectAllCheckbox = instance.querySelector(`#select-all-rubriques${suffix}`);
+        const tocItems = Array.from(instance.querySelectorAll('.toc-item'));
+        const toggleIcon = instance.querySelector(`#toggle-sidebar${suffix}`);
+        const sidebar = instance.closest('.toc-sidebar');
 
         function setRubriqueVisibility(id, visible) {
             const rubrique = document.querySelector(`main [id*="${id}"]`);
@@ -55,7 +55,7 @@
         }
 
         function updateSelectAll() {
-            const checkboxes = document.querySelectorAll('input[name^="afficher_rubrique-"]:not(:disabled)');
+            const checkboxes = instance.querySelectorAll('input[name^="afficher_rubrique-"]:not(:disabled,[type="hidden"])');
             const allChecked = Array.from(checkboxes).every(cb => cb.checked);
             selectAllCheckbox.checked = allChecked && checkboxes.length > 0;
         }
@@ -88,18 +88,18 @@
             });
         });
 
-            toggleIcon?.addEventListener('click', () => {
-                sidebar?.classList.toggle('collapsed');
+        toggleIcon?.addEventListener('click', () => {
+            sidebar?.classList.toggle('collapsed');
 
-                toggleIcon.classList.toggle('icon-chevron-up');
-                toggleIcon.classList.toggle('icon-chevron-down');
+            toggleIcon.classList.toggle('icon-chevron-up');
+            toggleIcon.classList.toggle('icon-chevron-down');
         });
 
-            document.querySelectorAll('#tocModal .toc-sidebar a[href^="#"]').forEach(link => {
-                link.addEventListener('click', () => {
-                    $('#tocModal').modal('hide');
-                });
+        document.querySelectorAll('#tocModal .toc-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                $('#tocModal').modal('hide');
             });
+        });
 
         updateSelectAll();
     })();
@@ -127,6 +127,7 @@
         background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%);
         position: sticky;
         top: 75px;
+        z-index: 2000;
     }
 
     @media (max-width: 979px) {
