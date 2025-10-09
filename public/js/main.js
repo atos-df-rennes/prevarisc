@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     bindEtsPopup($(document));
     loadStickyButtons()
     window.onresize = loadStickyButtons
-    window.onscroll = scrollFunction
+    scrollFunction()
 }, false);
 
 function bindTitlePopup() {
@@ -178,10 +178,8 @@ function loadStickyButtons() {
 }
 
 function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    if (document.documentElement.scrollHeight > window.innerHeight) {
         $('#go-top').show()
-    } else {
-        $('#go-top').hide()
     }
 }
 
