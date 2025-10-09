@@ -1,19 +1,18 @@
 <?php
-$suffix = isset($this->idSuffix) ? $this->idSuffix : '';
-$wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar visible-desktop';
+    $suffix = $this->idSuffix ?? '';
 ?>
 
-<div class="<?= $wrapperClass ?>" data-toc-instance="<?= $suffix ?>">
+<div class="toc-sidebar <?= '' === $suffix ? 'visible-desktop' : '' ?>" data-toc-instance="<?= $suffix ?>">
     <div class="toc-content">
-            <?php if (empty($suffix)): ?>
-        <h4 class="toc-title">
-            <div>
-                <i class="icon-filter icon-white"></i>
-                Rubriques
-            </div>
+        <?php if ('' === $suffix): ?>
+            <h4 class="toc-title">
+                <span>
+                    <i class="icon-filter icon-white"></i>
+                    Rubriques
+                </span>
                 <i id="toggle-sidebar<?= $suffix ?>" class="icon-chevron-up icon-white" title="Afficher/Masquer" style="cursor: pointer;"></i>
-        </h4>
-        <?php endif; ?>
+            </h4>
+        <?php endif ?>
 
         <div class="search-controls">
             <div class="select-all-container">
@@ -23,18 +22,14 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
 
             <div class="search-bar">
                 <input type="text" id="rubrique-search<?= $suffix ?>" placeholder="Rechercher..." autocomplete="off">
-                <span class="search-icon"><i class = "icon-search"></i></span>
+                <span class="search-icon"><i class="icon-search"></i></span>
             </div>
         </div>
 
         <div class="toc-list">
             <?php foreach ($this->rubriques as $index => $rubrique): ?>
-                <div class="toc-item" data-index="<?= $index ?>">
-                    <div class='descriptif-personnalise_rubriques-infos descriptif-personnalise_rubriques-infos--edit'>
-                        <div id="rubrique-<?= $index ?><?= $suffix ?>" class="rubrique-section">
-                            <?= $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique); ?>
-                        </div>
-                    </div>
+                <div class="toc-item descriptif-personnalise_rubriques-infos" data-index="<?= $index ?>">
+                    <?= $this->partial('formulaire/partials/partial-edit-rubrique-display.phtml', $rubrique); ?>
                 </div>
             <?php endforeach ?>
         </div>
@@ -110,7 +105,6 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
     })();
 </script>
 
-<?php if (empty($suffix)): ?>
 <style>
     /* === LAYOUT GLOBAL DU FORMULAIRE === */
     .form-layout {
@@ -118,13 +112,12 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
         gap: 20px;
     }
 
-    .form-layout main {
-        flex: 2;
+    main {
+        min-width: 0;
     }
 
     /* === SIDEBAR TOC (Table of Contents) === */
     .toc-sidebar {
-        width: 250px;
         height: fit-content;
         border-radius: 3px;
         border-right: 1px solid #D4D4D4;
@@ -136,31 +129,32 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
         top: 75px;
     }
 
+    @media (max-width: 979px) {
+        .toc-sidebar {
+            border-top: 1px solid #D4D4D4;
+        }
+    }
+
     /* === BARRE DE RECHERCHE : WRAPPER === */
     .search-controls {
         display: flex;
-        padding: 10px;
-        padding-left: 17px;
-        align-items: center;
+        padding: 10px 10px 10px 17px;
     }
 
     /* === BARRE DE RECHERCHE : CHAMP ET ICÔNE === */
     .search-bar {
-        width: 147px;
         height: 28px;
-        position: relative;
-        margin: 0;
     }
 
     .search-bar input[type="text"] {
-        width: 147px;
+        width: 100%;
         height: 28px;
         padding: 5px 10px;
         border: 1px solid #CCCCCC;
-        background: #FFFFFF;
         font-size: 12px;
         box-sizing: border-box;
-        border-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
     .search-bar input[type="text"]:focus {
@@ -171,42 +165,37 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
 
     .search-icon {
         position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
+        right: 15px;
+        top: 55px;
         color: #666;
         pointer-events: none;
         font-size: 12px;
     }
 
+    @media (max-width: 979px) {
+        .search-icon {
+            top: 13px;
+            left: 239px;
+        }
+    }
+
     /* === CASE À COCHER : "TOUS" (SELECT ALL) === */
     .select-all-container {
-        width: 76px;
         height: 28px;
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 10px;
         padding: 10px;
         border: 1px solid #CCCCCC;
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px;
         background: linear-gradient(180deg, #FFFFFF 0%, #E7E7E7 100%);
-        font-size: 12px;
         box-sizing: border-box;
-        margin: 0;
     }
 
-    .select-all-container input[type="checkbox"] {
-        margin: 0;
-        cursor: pointer;
-    }
-
+    .select-all-container input[type="checkbox"],
     .select-all-container label {
         margin: 0;
-        cursor: pointer;
-        color: #333;
-        font-weight: normal;
     }
 
     /* === SIDEBAR COLLAPSÉ : MASQUER LA LISTE ET LA BARRE DE RECHERCHE === */
@@ -217,8 +206,6 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
 
     /* === TITRE DU SIDEBAR === */
     .toc-title {
-        width: 250px;
-        gap: 10px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
         border: 1px solid #37839A;
@@ -226,14 +213,12 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
         background: linear-gradient(180deg, #59BEDC 0%, #3097B5 100%);
         margin: 0;
         color: white;
-        font-weight: bold;
         display: flex;
         align-items: baseline;
         justify-content: space-between;
-        box-sizing: border-box;
     }
 
-    .toc-title > div {
+    .toc-title > span {
         display: flex;
         gap: .5rem;
         align-items: baseline;
@@ -241,32 +226,23 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
 
     /* === LISTE DES RUBRIQUES DANS LA SIDEBAR === */
     .toc-list {
-        width: 250px;
+        display: flex;
+        flex-direction: column;
         gap: 14px;
         padding: 14px;
-        box-sizing: border-box;
     }
 
-    /* === CONTENEUR DE LA LISTE DE RUBRIQUES === */
-    .toc-content {
-        width: 100%;
-        gap: 20px;
-        padding: 0;
-        box-sizing: border-box;
+    @media (min-width: 980px) {
+        .toc-content {
+            width: 250px;
+        }
     }
 
     /* === ÉLÉMENT INDIVIDUEL DE LA LISTE (TOC ITEM) === */
     .toc-item {
-        width: 100%;
-        height: auto;
-        min-height: 34px;
-        margin-bottom: 10px;
         display: flex;
-        align-items: center;
-        cursor: pointer;
         transition: background-color 0.2s ease;
         padding: 5px;
-        box-sizing: border-box;
     }
 
     .toc-item:hover {
@@ -276,7 +252,6 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
 
     /* === STYLES SPÉCIFIQUES MODALE === */
     #tocModal .toc-sidebar {
-        position: static;
         width: 100%;
     }
 
@@ -284,9 +259,5 @@ $wrapperClass = isset($this->wrapperClass) ? $this->wrapperClass : 'toc-sidebar 
         .visible-desktop {
             display: none;
         }
-        .form-layout {
-            display: block;
-        }
     }
 </style>
-<?php endif; ?>
