@@ -53,8 +53,8 @@
             Pièces jointes
         </a>
     </li>
-    <li class="<?= $action_name == 'contacts' ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"contacts")) ?>'>
+    <li>
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/contacts'>
             <i class="icon-user icon-black"></i>
             Contacts
         </a>
