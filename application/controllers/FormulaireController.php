@@ -143,7 +143,7 @@ class FormulaireController extends Zend_Controller_Action
                 $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
                 $rubrique->save();
 
-                $this->_helper->redirector('index');
+                $this->redirect('/admin/formulaires');
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
