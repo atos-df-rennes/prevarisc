@@ -291,7 +291,7 @@ class Plugin_ACL extends Zend_Controller_Plugin_Abstract
                                         }
                                     }
 
-                                    if ($access_granted_ets || 0 == $i) {
+                                    if ($access_granted_ets || 0 === $i) {
                                         foreach ($resources as $resource) {
                                             if (('dossier' === explode('_', $resource)[0] || 'creations' === explode('_', $resource)[0]) && $acl->has($resource) && $acl->isAllowed($role, $resource, $privilege)) {
                                                 $access_granted = true;
