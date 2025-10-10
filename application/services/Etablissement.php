@@ -160,7 +160,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
             // Récupération de la date de PC initial
             $pc_inital = $search->setItem('dossier')->setCriteria('e.ID_ETABLISSEMENT', $id_etablissement)->setCriteria('d.TYPE_DOSSIER', 1)->setCriteria('ID_NATURE', 1)->order('DATEINSERT_DOSSIER ASC')->run();
             $pc_inital = $pc_inital->getAdapter()->getItems(0, 1)->toArray();
-            if (1 == count($pc_inital)) {
+            if (1 === count($pc_inital)) {
                 $tmp_date = new Zend_Date($pc_inital[0]['DATEINSERT_DOSSIER'], Zend_Date::DATES);
                 $pc_inital = $tmp_date->get(Zend_Date::DAY.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
             } else {
@@ -684,7 +684,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         ];
 
         foreach ($etablissement->toArray() as $key => $value) {
-            if (preg_match('/DESCTECH/', $key) && 0 != strcmp('DESCTECH_IMPLANTATION_SHOB_ETABLISSEMENT', $key)) {
+            if (preg_match('/DESCTECH/', $key) && 0 !== strcmp('DESCTECH_IMPLANTATION_SHOB_ETABLISSEMENT', $key)) {
                 $key_to_str = str_replace('DESCTECH_', '', $key);
                 $key_to_str = explode('_', $key_to_str);
                 $key_to_str = $key_to_str[0];
@@ -1413,7 +1413,7 @@ class Service_Etablissement implements Service_Interface_Etablissement
         $DBsave->createRow([
             'ID_ETABLISSEMENT' => $id_etablissement,
             'ID_PIECEJOINTE' => $piece_jointe['ID_PIECEJOINTE'],
-            'PLACEMENT_ETABLISSEMENTPJ' => 0 != (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
+            'PLACEMENT_ETABLISSEMENTPJ' => 0 !== (int) $mise_en_avant && in_array($extension, ['.jpg', '.jpeg', '.png', '.gif']) ? $mise_en_avant : 0,
         ])->save();
         if (in_array($extension, ['.jpg', '.jpeg', '.png', '.gif'])) {
             $miniature = $piece_jointe;
