@@ -58,7 +58,9 @@
                     </li>
 
                     <li class="navbar-user">
-                        <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium', array('style' => "float:left;width:40px;border-radius:50%;margin-right:8px;")) ?>
+                        <div class="avatar">
+                            <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium') ?>
+                        </div>
                         <?php echo Zend_Auth::getInstance()->getIdentity()['infos']['PRENOM_UTILISATEURINFORMATIONS'] . ' ' . strtoupper(Zend_Auth::getInstance()->getIdentity()['infos']['NOM_UTILISATEURINFORMATIONS']) ?>
                     </li>
 
