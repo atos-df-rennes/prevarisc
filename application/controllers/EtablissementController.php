@@ -66,7 +66,7 @@ class EtablissementController extends Zend_Controller_Action
 
         $this->view->assign('default_periodicite', $DB_periodicite->gn4ForEtablissement($this->etablissement));
         $this->view->assign('periodicity', $this->serviceEtablissement->getDisplayedPeriodicity($this->etablissement));
-        $this->view->assign('groupements_de_communes', 0 == count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']));
+        $this->view->assign('groupements_de_communes', 0 === count($this->etablissement['adresses']) ? [] : $service_groupement_communes->findAll($this->etablissement['adresses'][0]['NUMINSEE_COMMUNE']));
 
         $this->view->assign('store', Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore'));
 
@@ -212,7 +212,7 @@ class EtablissementController extends Zend_Controller_Action
 
                 if (
                     1 == $post['ID_GENRE']
-                    && 1 == count($post['ID_FILS_ETABLISSEMENT'])
+                    && 1 === count($post['ID_FILS_ETABLISSEMENT'])
                 ) {
                     $this->_helper->flashMessenger(['context' => 'warning', 'title' => 'Ajout des établissements enfants', 'message' => "Les droits d'accès au site sont déterminés par les droits d'accès aux établissements qui le compose. Veillez à ajouter des établissements afin de garantir l'accès au site dans Prevarisc."]);
                     $this->_helper->redirector('edit', null, null, ['id' => $id_etablissement]);

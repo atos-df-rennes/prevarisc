@@ -590,7 +590,7 @@ class DossierController extends Zend_Controller_Action
             $premiereNature = 1;
             $afficherChamps = [];
             foreach ($this->view->natureConcerne as $value) {
-                if (1 == $premiereNature) {
+                if (1 === $premiereNature) {
                     $afficherChamps = $this->listeChamps[$value['ID_NATURE']];
                     $premiereNature = 0;
                 } else {
@@ -716,7 +716,7 @@ class DossierController extends Zend_Controller_Action
             $afficherChamps = [];
 
             foreach ($tabListeIdNature as $idNature) {
-                if (1 == $premiereNature) {
+                if (1 === $premiereNature) {
                     $afficherChamps = $this->listeChamps[$idNature];
                     $premiereNature = 0;
                 } else {
@@ -1685,7 +1685,7 @@ class DossierController extends Zend_Controller_Action
             $idDossier = (int) $this->getRequest()->getParam('id');
             $idValid = $this->getRequest()->getParam('idValid');
             $datePost = $this->_getParam('date_'.$idValid);
-            if (0 == $idDossier) {
+            if (0 === $idDossier) {
                 return false;
             }
 
@@ -2332,14 +2332,14 @@ class DossierController extends Zend_Controller_Action
         foreach ($recupCommLiees as $ue) {
             $date = new Zend_Date($ue['DATE_COMMISSION'], Zend_Date::DATES);
 
-            if ($nbDateDecompte == $nbDatesTotal) {
+            if ($nbDateDecompte === $nbDatesTotal) {
                 // premiere date = date visite donc on renseigne l'input hidden correspondant avec l'id de cette date
                 $this->view->assign('idDateVisiteAffect', $ue['ID_DATECOMMISSION']);
             }
 
             if ($nbDateDecompte > 1) {
                 $listeDateInput .= $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR).', ';
-            } elseif (1 == $nbDateDecompte) {
+            } elseif (1 === $nbDateDecompte) {
                 $listeDateInput .= $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME.' '.Zend_Date::YEAR);
             }
 
@@ -2485,7 +2485,7 @@ class DossierController extends Zend_Controller_Action
                         }
                     }
 
-                    if (0 == $nbEtude) {
+                    if (0 === $nbEtude) {
                         unset($cellulesListe[$celluleKey]);
                     }
                 } else {

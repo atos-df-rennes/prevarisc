@@ -880,7 +880,7 @@ class Service_Dossier
                 $MAJEtab = 1;
             }
 
-            if (1 == $MAJEtab) {
+            if (1 === $MAJEtab) {
                 $etabToEdit->ID_DOSSIER_DONNANT_AVIS = $nouveauDossier->ID_DOSSIER;
                 $etabToEdit->save();
                 $updatedEtab[] = $etabToEdit;

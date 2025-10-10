@@ -215,7 +215,7 @@ class Model_DbTable_Statistiques extends Zend_Db_Table_Abstract
         $array_date = explode('/', $input);
         $expectedNumberOfDateParameters = 3;
 
-        if ($expectedNumberOfDateParameters != count($array_date)) {
+        if ($expectedNumberOfDateParameters !== count($array_date)) {
             throw new Exception('Erreur dans la date', 500);
         }
 
