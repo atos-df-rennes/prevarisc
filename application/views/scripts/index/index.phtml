@@ -2,7 +2,31 @@
 
 <div id="home" class="dashboard">
     <?php foreach($this->blocs as $id => $bloc): ?>
-        <?php echo $this->partial('index/partials/'.$bloc['type'].'_bloc.phtml', array_merge($bloc, array('id' => $id))) ?>
+        <div class="panel panel-default panel-ouvrable">
+            <div class="panel-heading">
+                <?php if (isset($bloc['count']) && (int)$bloc['count'] > 0): ?>
+                    <div class="compteur">
+                        <?php echo (int)$bloc['count']; ?>
+                    </div>
+                <?php endif; ?>
+                    <?php echo $this->escape($bloc['title']) ?>
+            </div>
+
+            <div class="ajouter-favoris">
+                <label for="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
+                    <input type="checkbox" id="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
+                    Ajouter aux favoris
+                </label>
+            </div>
+
+            <div class="panel-footer">
+                <button class="btn-ouvrir" type="button">
+                    <i class="icon icon-folder-open"></i>
+                    Ouvrir
+                    <i class="icon icon-chevron-right" style="margin-left: auto;"></i>
+                </button>
+            </div>
+        </div>
     <?php endforeach ?>
     <div class="grid-gutter"></div>
 
