@@ -8,6 +8,9 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 // Définition du chemin vers le dossier application/
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__).DS.'..'.DS.'application');
 
+// Création d'une constant permettant de pointer sur le répertoire de l'application symfony
+defined('SYMFONY_APPLICATION_PATH') || define('SYMFONY_APPLICATION_PATH', APPLICATION_PATH.DS.'..'.DS.'..'.DS.'prevarisc-migration');
+
 // Définition du chemin vers le dossier command/
 defined('COMMAND_PATH') || define('COMMAND_PATH', getenv('PREVARISC_COMMAND_PATH') ? getenv('PREVARISC_COMMAND_PATH') : APPLICATION_PATH.DS.'command');
 
