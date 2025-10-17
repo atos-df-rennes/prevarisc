@@ -1,38 +1,70 @@
+<?php
+$blocsDossiers = [];
+$blocsEtablissements = [];
+$blocsAutres = [];
+
+foreach($this->blocs as $id => $bloc) {
+    $type = isset($bloc['type']) ? $bloc['type'] : '';
+
+    if ($type === 'dossiers') {
+        $blocsDossiers[$id] = $bloc;
+    } elseif ($type === 'etablissements') {
+        $blocsEtablissements[$id] = $bloc;
+    } else {
+        $blocsAutres[$id] = $bloc;
+    }
+}
+?>
+
 <div id="bloc__connexion-platau" class="mb-4"></div>
 
 <div id="home" class="dashboard">
-    <?php foreach($this->blocs as $id => $bloc): ?>
-        <div class="panel panel-default panel-ouvrable">
-            <div class="panel-heading">
-                <?php if (isset($bloc['count']) && (int)$bloc['count'] > 0): ?>
-                    <div class="compteur">
-                        <?php echo (int)$bloc['count']; ?>
-                    </div>
-                <?php endif; ?>
-                    <?php echo $this->escape($bloc['title']) ?>
-            </div>
 
-            <div class="ajouter-favoris">
-                <label for="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
-                    <input type="checkbox" id="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
-                    Ajouter aux favoris
-                </label>
-            </div>
-
-            <div class="panel-footer">
-                <button class="btn-ouvrir" type="button">
-                    <i class="icon icon-folder-open"></i>
-                    Ouvrir
-                    <i class="icon icon-chevron-right" style="margin-left: auto;"></i>
-                </button>
-            </div>
+    <!-- Section Dossiers -->
+    <?php if (!empty($blocsDossiers)): ?>
+        <div class="titre-section">
+            <hr>
+            <h2><i class="icon-folder-close"></i> Dossiers</h2>
         </div>
-    <?php endforeach ?>
-    <div class="grid-gutter"></div>
 
+        <div id="blocs-container" class="blocs-container">
+            <?php foreach($blocsDossiers as $id => $bloc): ?>
+                <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc]); ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Section Etablissements -->
+    <?php if (!empty($blocsEtablissements)): ?>
+        <div class="titre-section">
+            <hr>
+            <h2><i class="icon-th"></i> Etablissements</h2>
+        </div>
+    <div class="blocs-container">
+    <?php foreach($blocsEtablissements as $id => $bloc): ?>
+            <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc]); ?>
+        <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Section Autres -->
+    <?php if (!empty($blocsAutres)): ?>
+        <div class="titre-section">
+            <hr>
+            <h2>Messages, Courriers & Ordre du jour</h2>
+        </div>
+    <div class="blocs-container">
+    <?php foreach($blocsAutres as $id => $bloc): ?>
+            <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc]); ?>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="grid-gutter"></div>
 </div>
 
-<div id="reponse-modal" class="modal hide fade" ></div>
+<div id="reponse-modal" class="modal hide fade"></div>
+
 
 <br>
 
@@ -45,113 +77,7 @@
             $(target).load(url);
         });
 
-        $container = $('.dashboard').packery({
-            itemSelector: '.panel',
-            gutter: '.grid-gutter',
-            // disable initial layout
-            isInitLayout: false
-        });
-
-        var pckry = $container.data('packery');
-
-        // ----- initial sort ----- //
-        var sortOrder = []; // global variable for saving order, used later
-        var storedSortOrder = <?php echo json_encode($this->blocsOrder) ?>;
-        if ( storedSortOrder ) {
-            // create a hash of items by their tabindex
-            var itemsByTabIndex = {};
-            var tabIndex;
-            for (var i=0, len = pckry.items.length; i < len; i++ ) {
-                var item = pckry.items[i];
-                tabIndex = $( item.element ).attr('id');
-                itemsByTabIndex[tabIndex] = item;
-            }
-            // overwrite packery item order
-            i = 0; len = storedSortOrder.length;
-            var j = 0;
-            for (; i < len; i++) {
-                tabIndex = storedSortOrder[i];
-                if (itemsByTabIndex[tabIndex] !== undefined) {
-                   pckry.items[j] = itemsByTabIndex[tabIndex];
-                   j++;
-                }
-            }
-        }
-
-        // ----- packery setup ----- //
-        // optim de perf : on évite au navigateur de dessiner les blocs
-        // avant qu'ils aient pris leur place finale
         $('.panel').show();
-
-        // trigger initial layout
-        $container.packery();
-
-        var $itemElems = $($container.packery('getItemElements') );
-        $itemElems.draggable({
-            handle: ".panel-heading",
-            containment: "parent"
-        });
-        $container.packery( 'bindUIDraggableEvents', $itemElems );
-
-        var saveTimeout = null;
-        var saveTimeoutMilliseconds = 1000;
-
-        function orderItems() {
-            // First cancel previous timeouts
-            clearTimeout(saveTimeout);
-
-            var itemElems = pckry.getItemElements();
-            // reset / empty oder array
-            sortOrder.length = 0;
-            for (var i=0; i< itemElems.length; i++) {
-                sortOrder[i] = itemElems[i].getAttribute("id");
-            }
-
-            // Init a new timemout
-            if ($('.panel.loading').length == 0) {
-                saveTimeout = setTimeout(function() {
-                    $.post("/api/1.0/user/preferences", {
-                        id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
-                        preferences: {
-                            'DASHBOARD_BLOCS': sortOrder
-                        }
-                    });
-                }, saveTimeoutMilliseconds);
-            }
-        }
-
-        $container.packery( 'on', 'layoutComplete', orderItems );
-
-        $('#reinitBlocOrder').click(function() {
-            $.post("/api/1.0/user/preferences", {
-                id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
-                preferences: {
-                    'DASHBOARD_BLOCS': null
-                }
-            }, function() {
-                window.location.reload();
-            });
-        });
-
-        $(".panel-heading .icon").click(function() {
-            var $self = $(this);
-            var $panel = $self.parents('.panel');
-            $panel.toggleClass('folded');
-            if ($self.hasClass('icon-chevron-right')) {
-                $self.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                if ($panel.hasClass('empty') && !$panel.hasClass('loading')) {
-                    $panel.find('.panel-body img').show();
-                    loadBloc($panel);
-                } else {
-                    $panel.find('.panel-body').show();
-                    $container.packery('fit', $panel.get(0));
-                }
-            } else {
-                $self.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-                $panel.find('.panel-body').hide();
-                $container.packery('fit', $panel.get(0));
-            }
-        });
 
         // Vérification de la connexion à Plat'AU
         <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN) && !filter_var(getenv('PREVARISC_PLATAU_NO_HEALTHCHECK'), FILTER_VALIDATE_BOOLEAN)): ?>
