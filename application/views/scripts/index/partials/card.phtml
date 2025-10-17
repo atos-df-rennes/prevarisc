@@ -3,9 +3,10 @@ if (!isset($this->bloc)) {
     return;
 }
 $bloc = $this->bloc;
+$blocId = $this->blocId;
 ?>
 
-<div class="panel panel-default panel-ouvrable">
+<div id="<?php echo $this->escape($blocId) ?>" class="panel panel-default panel-ouvrable">
     <div class="panel-heading">
         <?php if (isset($bloc['count']) && (int)$bloc['count'] > 0): ?>
             <div class="compteur">
@@ -26,7 +27,7 @@ $bloc = $this->bloc;
         <button class="btn-ouvrir" type="button">
             <i class="icon icon-folder-open"></i>
             Ouvrir
-            <i class="icon icon-chevron-right" style="margin-left: auto;"></i>
+            <i class="icon icon-chevron-right"></i>
         </button>
     </div>
 </div>
