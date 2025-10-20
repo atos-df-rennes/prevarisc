@@ -18,6 +18,31 @@ foreach($this->blocs as $id => $bloc) {
 
 <div id="bloc__connexion-platau" class="mb-4"></div>
 
+<div class="row-fluid filtres-cartes-container">
+    <div class="span6 filtres-cartes-gauche">
+        <div class="filtres-cartes-recherche input-append pull-left">
+            <input name="label" class="filtre-cartes-input" id="filtre-cartes-search" type="text" placeholder="Filtrer les cartes ..." />
+            <button class="btn btn_filtre_search filtre-cartes-btn" type="submit">
+                <i class="icon-search"></i>
+            </button>
+        </div>
+        <label class="checkbox filtre-cartes-favoris">
+            <input type="checkbox" id="filtre-cartes-favoris-checkbox" />
+            Afficher uniquement les favoris
+        </label>
+    </div>
+    <div class="span6 filtres-cartes-droite text-right">
+        <select id="filtre-cartes-tri-select" class="btn">
+            <option value="asc" selected>Trier des cartes par ordre alphabétique A → Z</option>
+            <option value="desc">Trier des cartes par ordre alphabétique Z → A</option>
+        </select>
+
+        <button class="btn filtre-cartes-personnaliser-btn">
+            Personnaliser l'organisation des cartes
+        </button>
+    </div>
+</div>
+
 <div id="home" class="dashboard">
 
     <!-- Section Dossiers -->
@@ -117,6 +142,75 @@ foreach($this->blocs as $id => $bloc) {
                 error: function() {
                     $('#reponse-modal').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3>Erreur</h3></div><div class="modal-body"><div class="alert alert-error">Une erreur est survenue lors du chargement des données.</div></div>');
                 }
+            });
+        });
+
+        $(document).ready(function () {
+            // Filtrage / Recherche / Favoris
+            function filtrerEtTrierCartes() {
+                const searchValue = $('#filtre-cartes-search').val().toLowerCase();
+                const afficherFavorisSeulement = $('#filtre-cartes-favoris-checkbox').is(':checked');
+                const blocsContainers = $('.blocs-container');
+
+                blocsContainers.each(function () {
+                    const cards = $(this).children();
+
+                    cards.each(function () {
+                        const card = $(this);
+                        const titre = card.text().toLowerCase();
+                        const estFavori = card.find('input[type="checkbox"]:checked').length > 0;
+
+                        const correspondRecherche = titre.includes(searchValue);
+                        const correspondFavori = !afficherFavorisSeulement || estFavori;
+
+                        if (correspondRecherche && correspondFavori) {
+                            card.show();
+                        } else {
+                            card.hide();
+                        }
+                    });
+                });
+            }
+
+            $('#filtre-cartes-search').on('input', filtrerEtTrierCartes);
+            $('#filtre-cartes-favoris-checkbox').on('change', filtrerEtTrierCartes);
+
+            // Tri alphabétique A → Z / Z → A
+            $('#filtre-cartes-tri-select').on('change', function () {
+                const newOrder = $(this).val();
+
+                function getTitle(card) {
+                    const heading = $(card).find('.panel-heading').first();
+                    const headingClone = heading.clone();
+                    headingClone.find('.compteur').remove();
+                    return headingClone.text().trim().toLowerCase();
+                }
+
+                $('.blocs-container').each(function () {
+                    const container = $(this);
+                    const cards = container.children().get();
+
+                    cards.sort(function (a, b) {
+                        const textA = getTitle(a);
+                        const textB = getTitle(b);
+
+                        return newOrder === 'asc'
+                            ? textA.localeCompare(textB)
+                            : textB.localeCompare(textA);
+                    });
+
+                    $.each(cards, function (index, card) {
+                        container.append(card);
+                    });
+                });
+
+                $('#filtre-cartes-tri-select option').each(function () {
+                    if ($(this).val() === newOrder) {
+                        $(this).prop('hidden', true);
+                    } else {
+                        $(this).prop('hidden', false);
+                    }
+                });
             });
         });
 

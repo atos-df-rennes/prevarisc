@@ -17,8 +17,11 @@ $blocId = $this->blocId;
     </div>
 
     <div class="ajouter-favoris">
-        <label for="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
-            <input type="checkbox" id="ajouter-fav-<?php echo $this->escape($bloc['id']) ?>">
+        <label>
+            <input type="checkbox"
+                   id="ajouter-fav<?php echo $this->escape($bloc['id']) ?>"
+                   name="favoris[]"
+                   value="<?php echo $this->escape($bloc['id']) ?>">
             Ajouter aux favoris
         </label>
     </div>
