@@ -46,11 +46,6 @@ foreach($this->blocs as $id => $bloc) {
         </div>
     </div>
     <div class="span6 filtres-cartes-droite text-right">
-        <select id="filtre-cartes-tri-select" class="btn">
-            <option value="asc" selected>Trier des cartes par ordre alphabétique A → Z</option>
-            <option value="desc">Trier des cartes par ordre alphabétique Z → A</option>
-        </select>
-
         <button class="btn filtre-cartes-personnaliser-btn">
             Personnaliser l'organisation des cartes
         </button>
@@ -61,7 +56,7 @@ foreach($this->blocs as $id => $bloc) {
 
     <!-- Section Dossiers -->
     <?php if (!empty($blocsDossiers)): ?>
-        <div class="titre-section">
+        <div class="titre-section" data-type="dossiers">
             <hr>
             <h2><i class="icon-folder-close"></i> Dossiers</h2>
         </div>
@@ -79,7 +74,7 @@ foreach($this->blocs as $id => $bloc) {
 
     <!-- Section Etablissements -->
     <?php if (!empty($blocsEtablissements)): ?>
-        <div class="titre-section">
+        <div class="titre-section" data-type="etablissements">
             <hr>
             <h2><i class="icon-th"></i> Etablissements</h2>
         </div>
@@ -96,7 +91,7 @@ foreach($this->blocs as $id => $bloc) {
 
     <!-- Section Autres -->
     <?php if (!empty($blocsAutres)): ?>
-        <div class="titre-section">
+        <div class="titre-section" data-type="autres">
             <hr>
             <h2>Messages, Courriers & Ordre du jour</h2>
         </div>
@@ -202,48 +197,32 @@ foreach($this->blocs as $id => $bloc) {
                         }
                     });
                 });
+
+                // Afficher uniquement le titre de la section correspondante
+                $('.titre-section').each(function () {
+                    const section = $(this);
+                    const sectionType = section.data('type');
+
+                    if (typeFiltre === 'tous') {
+                        section.show();
+                    } else if (typeFiltre === 'autres') {
+                        if (sectionType === 'dossiers' || sectionType === 'etablissements') {
+                            section.hide();
+                        } else {
+                            section.show();
+                        }
+                    } else {
+                        if (sectionType === typeFiltre) {
+                            section.show();
+                        } else {
+                            section.hide();
+                        }
+                    }
+                });
             }
 
             $('#filtre-cartes-search').on('input', filtrerEtTrierCartes);
             $('input[name="filtre-type"]').on('change', filtrerEtTrierCartes);
-
-            // Tri alphabétique A → Z / Z → A
-            $('#filtre-cartes-tri-select').on('change', function () {
-                const newOrder = $(this).val();
-
-                function getTitle(card) {
-                    const heading = $(card).find('.panel-heading').first();
-                    const headingClone = heading.clone();
-                    headingClone.find('.compteur').remove();
-                    return headingClone.text().trim().toLowerCase();
-                }
-
-                $('.blocs-container').each(function () {
-                    const container = $(this);
-                    const cards = container.children().get();
-
-                    cards.sort(function (a, b) {
-                        const textA = getTitle(a);
-                        const textB = getTitle(b);
-
-                        return newOrder === 'asc'
-                            ? textA.localeCompare(textB)
-                            : textB.localeCompare(textA);
-                    });
-
-                    $.each(cards, function (index, card) {
-                        container.append(card);
-                    });
-                });
-
-                $('#filtre-cartes-tri-select option').each(function () {
-                    if ($(this).val() === newOrder) {
-                        $(this).prop('hidden', true);
-                    } else {
-                        $(this).prop('hidden', false);
-                    }
-                });
-            });
         });
 
         // Vérification de la connexion à Plat'AU
