@@ -6,7 +6,7 @@ $bloc = $this->bloc;
 $blocId = $this->blocId;
 ?>
 
-<div id="<?php echo $this->escape($blocId) ?>" class="panel panel-default panel-ouvrable">
+<div id="<?php echo $this->escape($blocId) ?>" class="panel panel-default panel-ouvrable" data-type="<?php echo $this->escape($this->dataType) ?>">
     <div class="panel-heading">
         <?php if (isset($bloc['count']) && (int)$bloc['count'] > 0): ?>
             <div class="compteur">
@@ -14,16 +14,6 @@ $blocId = $this->blocId;
             </div>
         <?php endif; ?>
         <?php echo $this->escape($bloc['title']) ?>
-    </div>
-
-    <div class="ajouter-favoris">
-        <label>
-            <input type="checkbox"
-                   id="ajouter-fav<?php echo $this->escape($bloc['id']) ?>"
-                   name="favoris[]"
-                   value="<?php echo $this->escape($bloc['id']) ?>">
-            Ajouter aux favoris
-        </label>
     </div>
 
     <div class="panel-footer">

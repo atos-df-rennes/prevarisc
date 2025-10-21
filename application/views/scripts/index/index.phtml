@@ -26,10 +26,24 @@ foreach($this->blocs as $id => $bloc) {
                 <i class="icon-search"></i>
             </button>
         </div>
-        <label class="checkbox filtre-cartes-favoris">
-            <input type="checkbox" id="filtre-cartes-favoris-checkbox" />
-            Afficher uniquement les favoris
-        </label>
+        <div class="filtre-cartes-types">
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="tous" checked />
+                Tous
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="dossiers" />
+                Dossiers
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="etablissements" />
+                Établissements
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="autres" />
+                Autres
+            </label>
+        </div>
     </div>
     <div class="span6 filtres-cartes-droite text-right">
         <select id="filtre-cartes-tri-select" class="btn">
@@ -54,7 +68,11 @@ foreach($this->blocs as $id => $bloc) {
 
         <div id="blocs-container" class="blocs-container">
             <?php foreach($blocsDossiers as $id => $bloc): ?>
-                <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc, 'blocId' => $id]); ?>
+                <?php echo $this->partial('index/partials/card.phtml', [
+                    'bloc' => $bloc,
+                    'blocId' => $id,
+                    'dataType' => 'dossiers'
+                ]); ?>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -67,7 +85,11 @@ foreach($this->blocs as $id => $bloc) {
         </div>
         <div class="blocs-container">
             <?php foreach($blocsEtablissements as $id => $bloc): ?>
-                <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc, 'blocId' => $id]); ?>
+                <?php echo $this->partial('index/partials/card.phtml', [
+                    'bloc' => $bloc,
+                    'blocId' => $id,
+                    'dataType' => 'etablissements'
+                ]); ?>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -80,7 +102,11 @@ foreach($this->blocs as $id => $bloc) {
         </div>
         <div class="blocs-container">
             <?php foreach($blocsAutres as $id => $bloc): ?>
-                <?php echo $this->partial('index/partials/card.phtml', ['bloc' => $bloc, 'blocId' => $id]); ?>
+                <?php echo $this->partial('index/partials/card.phtml', [
+                    'bloc' => $bloc,
+                    'blocId' => $id,
+                    'dataType' => 'autres'
+                ]); ?>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -146,24 +172,30 @@ foreach($this->blocs as $id => $bloc) {
         });
 
         $(document).ready(function () {
-            // Filtrage / Recherche / Favoris
+            // Filtrage
             function filtrerEtTrierCartes() {
                 const searchValue = $('#filtre-cartes-search').val().toLowerCase();
-                const afficherFavorisSeulement = $('#filtre-cartes-favoris-checkbox').is(':checked');
-                const blocsContainers = $('.blocs-container');
+                const typeFiltre = $('input[name="filtre-type"]:checked').val();
 
-                blocsContainers.each(function () {
-                    const cards = $(this).children();
-
-                    cards.each(function () {
+                $('.blocs-container').each(function () {
+                    $(this).children().each(function () {
                         const card = $(this);
                         const titre = card.text().toLowerCase();
-                        const estFavori = card.find('input[type="checkbox"]:checked').length > 0;
+                        const type = card.data('type');
 
                         const correspondRecherche = titre.includes(searchValue);
-                        const correspondFavori = !afficherFavorisSeulement || estFavori;
 
-                        if (correspondRecherche && correspondFavori) {
+                        let correspondType = false;
+
+                        if (typeFiltre === 'tous') {
+                            correspondType = true;
+                        } else if (typeFiltre === 'autres') {
+                            correspondType = (type !== 'dossiers' && type !== 'etablissements');
+                        } else {
+                            correspondType = type === typeFiltre;
+                        }
+
+                        if (correspondRecherche && correspondType) {
                             card.show();
                         } else {
                             card.hide();
@@ -173,7 +205,7 @@ foreach($this->blocs as $id => $bloc) {
             }
 
             $('#filtre-cartes-search').on('input', filtrerEtTrierCartes);
-            $('#filtre-cartes-favoris-checkbox').on('change', filtrerEtTrierCartes);
+            $('input[name="filtre-type"]').on('change', filtrerEtTrierCartes);
 
             // Tri alphabétique A → Z / Z → A
             $('#filtre-cartes-tri-select').on('change', function () {
