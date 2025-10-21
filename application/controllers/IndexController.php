@@ -33,24 +33,6 @@ class IndexController extends Zend_Controller_Action
         $profil = $user['group']['LIBELLE_GROUPE'];
         $blocs = [];
 
-        foreach ($blocsConfig as $blocId => $blocConfig) {
-            if (
-                !$blocConfig['acl']
-                || $acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1])
-            ) {
-                $method = $blocConfig['method'];
-                $methodCount = $method.'Count';
-                $serviceCount = new Service_Count();
-                $blocs[$blocId] = [
-                    'type' => $blocConfig['type'],
-                    'title' => $blocConfig['title'],
-                    'count' => $serviceCount->{$methodCount}($user),
-                    'height' => $blocConfig['height'],
-                    'width' => $blocConfig['width'],
-                ];
-            }
-        }
-
         // determine the bloc order
         // user preferences
         if (
@@ -68,9 +50,27 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
+        foreach ($blocsOrder as $blocId) {
+            if (
+                isset($blocsConfig[$blocId]) &&
+                (!isset($blocsConfig[$blocId]['acl'])
+                    || $acl->isAllowed($profil, $blocsConfig[$blocId]['acl'][0], $blocsConfig[$blocId]['acl'][1]))
+            ) {
+                $method = $blocsConfig[$blocId]['method'];
+                $methodCount = $method.'Count';
+                $serviceCount = new Service_Count();
+                $blocs[$blocId] = [
+                    'type' => $blocsConfig[$blocId]['type'],
+                    'title' => $blocsConfig[$blocId]['title'],
+                    'count' => $serviceCount->{$methodCount}($user),
+                    'height' => $blocsConfig[$blocId]['height'],
+                    'width' => $blocsConfig[$blocId]['width'],
+                ];
+            }
+        }
+
         $this->view->assign('user', $user);
         $this->view->assign('blocs', $blocs);
-        $this->view->assign('blocsOrder', $blocsOrder);
         $this->view->inlineScript()->appendFile('/js/jquery.packery.pkgd.min.js');
         $this->_helper->layout->setLayout('index');
         $this->render('index');
