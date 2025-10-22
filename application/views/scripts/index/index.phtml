@@ -75,63 +75,15 @@
     <div class="grid-gutter"></div>
 </div>
 
-<div id="reponse-modal" class="modal hide fade"></div>
+<?php echo $this->partial('index/partials/_modalBlocs.phtml'); ?>
+<?php echo $this->partial('index/partials/_modal.phtml'); ?>
 
 <br>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        // Gestion des boites modales
-        $("a[data-toggle='modal']").click(function() {
-            var target = $(this).attr("data-target");
-            var url = $(this).attr("href");
-            $(target).load(url);
-        });
-
         $('.panel').show();
 
-        // Gestion de l'ouverture de modale via le bouton "Ouvrir"
-        $(document).on('click', '.btn-ouvrir', function(e) {
-            e.preventDefault();
-
-            var $panel = $(this).closest('.panel');
-            var blocId = $panel.attr('id');
-
-            // Afficher un loader dans la modale
-            $('#reponse-modal').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3>Chargement...</h3></div><div class="modal-body text-center"><img src="/images/load.gif" /></div>');
-            $('#reponse-modal').modal('show');
-
-            // Charger le contenu du bloc via l'action existante
-            $.ajax({
-                url: '/index/bloc',
-                type: 'GET',
-                data: {
-                    id: blocId
-                },
-                success: function(response) {
-                    // Récupérer le titre du bloc
-                    var blocTitle = $panel.find('.panel-heading').clone();
-                    blocTitle.find('.compteur').remove();
-                    var title = blocTitle.text().trim();
-
-                    // Construire le contenu de la modale
-                    var modalContent = '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
-                        '<h3>' + title + '</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        response +
-                        '</div>';
-
-                    $('#reponse-modal').html(modalContent);
-                },
-                error: function() {
-                    $('#reponse-modal').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3>Erreur</h3></div><div class="modal-body"><div class="alert alert-error">Une erreur est survenue lors du chargement des données.</div></div>');
-                }
-            });
-        });
-
-        $(document).ready(function () {
             // Filtrage
             function filtrerEtTrierCartes() {
                 const searchValue = $('#filtre-cartes-search').val().toLowerCase();
@@ -163,7 +115,7 @@
                     });
                 });
 
-                // Afficher uniquement le titre de la section correspondante
+                // Afficher les titres de section selon le filtre
                 $('.titre-section').each(function () {
                     const section = $(this);
                     const sectionType = section.data('type');
@@ -188,7 +140,6 @@
 
             $('#filtre-cartes-search').on('input', filtrerEtTrierCartes);
             $('input[name="filtre-type"]').on('change', filtrerEtTrierCartes);
-        });
 
         // Vérification de la connexion à Plat'AU
         <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN) && !filter_var(getenv('PREVARISC_PLATAU_NO_HEALTHCHECK'), FILTER_VALIDATE_BOOLEAN)): ?>
