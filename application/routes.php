@@ -1,5 +1,6 @@
 <?php
 
+// @todo: Ajouter les routes nécessaires pour la modification d'un utilisateur.
 $router = Zend_Controller_Front::getInstance()->getRouter();
 
 $matriceDesDroits = new Zend_Controller_Router_Route('legacy/admin/groupes/matrice-des-droits', [
