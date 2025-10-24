@@ -33,24 +33,6 @@ class IndexController extends Zend_Controller_Action
         $profil = $user['group']['LIBELLE_GROUPE'];
         $blocs = [];
 
-        foreach ($blocsConfig as $blocId => $blocConfig) {
-            if (
-                !$blocConfig['acl']
-                || $acl->isAllowed($profil, $blocConfig['acl'][0], $blocConfig['acl'][1])
-            ) {
-                $method = $blocConfig['method'];
-                $methodCount = $method.'Count';
-                $serviceCount = new Service_Count();
-                $blocs[$blocId] = [
-                    'type' => $blocConfig['type'],
-                    'title' => $blocConfig['title'],
-                    'count' => $serviceCount->{$methodCount}($user),
-                    'height' => $blocConfig['height'],
-                    'width' => $blocConfig['width'],
-                ];
-            }
-        }
-
         // determine the bloc order
         // user preferences
         if (
@@ -68,9 +50,27 @@ class IndexController extends Zend_Controller_Action
             $blocsOrder = array_keys($blocsConfig);
         }
 
+        foreach ($blocsOrder as $blocId) {
+            if (
+                isset($blocsConfig[$blocId]) &&
+                (!isset($blocsConfig[$blocId]['acl'])
+                    || $acl->isAllowed($profil, $blocsConfig[$blocId]['acl'][0], $blocsConfig[$blocId]['acl'][1]))
+            ) {
+                $method = $blocsConfig[$blocId]['method'];
+                $methodCount = $method.'Count';
+                $serviceCount = new Service_Count();
+                $blocs[$blocId] = [
+                    'type' => $blocsConfig[$blocId]['type'],
+                    'title' => $blocsConfig[$blocId]['title'],
+                    'count' => $serviceCount->{$methodCount}($user),
+                    'height' => $blocsConfig[$blocId]['height'],
+                    'width' => $blocsConfig[$blocId]['width'],
+                ];
+            }
+        }
+
         $this->view->assign('user', $user);
         $this->view->assign('blocs', $blocs);
-        $this->view->assign('blocsOrder', $blocsOrder);
         $this->view->inlineScript()->appendFile('/js/jquery.packery.pkgd.min.js');
         $this->_helper->layout->setLayout('index');
         $this->render('index');
@@ -109,6 +109,32 @@ class IndexController extends Zend_Controller_Action
         }
 
         $this->view->assign('bloc', $bloc);
+    }
+
+    public function saveBlocOrderAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        if (!$this->_request->isPost()) {
+            $this->getResponse()->setHttpResponseCode(405);
+            echo json_encode(['error' => 'Méthode non autorisée']);
+            return;
+        }
+
+        $ordre = $this->_request->getParam('ordre');
+
+        if (!$ordre || !is_array($ordre)) {
+            $this->getResponse()->setHttpResponseCode(400);
+            echo json_encode(['error' => 'Aucun ordre reçu']);
+            return;
+        }
+
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        $service_user = new Service_User();
+        $service_user->savePreferences($identity['ID_UTILISATEUR'], ['DASHBOARD_BLOCS' => $ordre]);
+
+        echo json_encode(['success' => true]);
     }
 
     public function addMessageAction(): void

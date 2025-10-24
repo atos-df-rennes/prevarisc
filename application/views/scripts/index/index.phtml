@@ -1,133 +1,144 @@
 <div id="bloc__connexion-platau" class="mb-4"></div>
 
-<div id="home" class="dashboard">
-    <?php foreach($this->blocs as $id => $bloc): ?>
-        <?php echo $this->partial('index/partials/'.$bloc['type'].'_bloc.phtml', array_merge($bloc, array('id' => $id))) ?>
-    <?php endforeach ?>
-    <div class="grid-gutter"></div>
+<div class="row-fluid filtres-cartes-container">
+    <div class="filtres-cartes">
+        <div class="filtres-cartes-recherche input-append">
+            <input name="label" class="filtre-cartes-input" id="filtre-cartes-search" type="text" placeholder="Filtrer les cartes ..." />
+            <button class="btn btn_filtre_search filtre-cartes-btn" type="submit">
+                <i class="icon-search"></i>
+            </button>
+        </div>
+        <div class="filtre-cartes-types">
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="tous" checked />
+                Tous
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="dossiers" />
+                Dossiers
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="etablissements" />
+                Établissements
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="filtre-type" value="autres" />
+                Autres
+            </label>
+        </div>
 
+        <button class="btn filtre-cartes-personnaliser-btn">
+            Personnaliser l'organisation des cartes
+        </button>
+    </div>
 </div>
 
-<div id="reponse-modal" class="modal hide fade" ></div>
+<div id="home" class="dashboard">
+
+<?php $sections = ['dossiers', 'etablissements', 'autres'];
+
+    foreach ($sections as $sectionType):
+        $blocsSection = array_filter($this->blocs, function($bloc) use ($sectionType) {
+            $type = isset($bloc['type']) ? $bloc['type'] : '';
+            if ($sectionType === 'autres') {
+                return $type !== 'dossiers' && $type !== 'etablissements';
+            }
+            return $type === $sectionType;
+        });
+
+        if (!empty($blocsSection)): ?>
+            <div class="titre-section" data-type="<?php echo $sectionType; ?>">
+                <hr>
+                <h2>
+                    <?php if ($sectionType === 'dossiers'): ?>
+                        <i class="icon-folder-close"></i> Dossiers
+                    <?php elseif ($sectionType === 'etablissements'): ?>
+                        <i class="icon-th"></i> Etablissements
+                    <?php else: ?>
+                        Messages, Courriers & Ordre du jour
+                    <?php endif; ?>
+                </h2>
+            </div>
+
+            <div class="blocs-container" <?php if ($sectionType === 'dossiers'): ?>id="blocs-container"<?php endif; ?>>
+                <?php foreach($blocsSection as $id => $bloc): ?>
+                    <?php echo $this->partial('index/partials/card.phtml', [
+                        'bloc' => $bloc,
+                        'blocId' => $id,
+                        'dataType' => $sectionType === 'autres' ? (isset($bloc['type']) ? $bloc['type'] : 'autres') : $sectionType
+                    ]); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; endforeach; ?>
+
+    <div class="grid-gutter"></div>
+</div>
+
+<?php echo $this->partial('index/partials/_modalBlocs.phtml'); ?>
+<?php echo $this->partial('index/partials/_modal.phtml'); ?>
 
 <br>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        // Gestion des boites modales
-        $("a[data-toggle='modal']").click(function() {
-            var target = $(this).attr("data-target");
-            var url = $(this).attr("href");
-            $(target).load(url);
-        });
-
-        $container = $('.dashboard').packery({
-            itemSelector: '.panel',
-            gutter: '.grid-gutter',
-            // disable initial layout
-            isInitLayout: false
-        });
-
-        var pckry = $container.data('packery');
-
-        // ----- initial sort ----- //
-        var sortOrder = []; // global variable for saving order, used later
-        var storedSortOrder = <?php echo json_encode($this->blocsOrder) ?>;
-        if ( storedSortOrder ) {
-            // create a hash of items by their tabindex
-            var itemsByTabIndex = {};
-            var tabIndex;
-            for (var i=0, len = pckry.items.length; i < len; i++ ) {
-                var item = pckry.items[i];
-                tabIndex = $( item.element ).attr('id');
-                itemsByTabIndex[tabIndex] = item;
-            }
-            // overwrite packery item order
-            i = 0; len = storedSortOrder.length;
-            var j = 0;
-            for (; i < len; i++) {
-                tabIndex = storedSortOrder[i];
-                if (itemsByTabIndex[tabIndex] !== undefined) {
-                   pckry.items[j] = itemsByTabIndex[tabIndex];
-                   j++;
-                }
-            }
-        }
-
-        // ----- packery setup ----- //
-        // optim de perf : on évite au navigateur de dessiner les blocs
-        // avant qu'ils aient pris leur place finale
         $('.panel').show();
 
-        // trigger initial layout
-        $container.packery();
+            // Filtrage
+            function filtrerEtTrierCartes() {
+                const searchValue = $('#filtre-cartes-search').val().toLowerCase();
+                const typeFiltre = $('input[name="filtre-type"]:checked').val();
 
-        var $itemElems = $($container.packery('getItemElements') );
-        $itemElems.draggable({
-            handle: ".panel-heading",
-            containment: "parent"
-        });
-        $container.packery( 'bindUIDraggableEvents', $itemElems );
+                $('.blocs-container').each(function () {
+                    $(this).children().each(function () {
+                        const card = $(this);
+                        const titre = card.text().toLowerCase();
+                        const type = card.data('type');
 
-        var saveTimeout = null;
-        var saveTimeoutMilliseconds = 1000;
+                        const correspondRecherche = titre.includes(searchValue);
 
-        function orderItems() {
-            // First cancel previous timeouts
-            clearTimeout(saveTimeout);
+                        let correspondType = false;
 
-            var itemElems = pckry.getItemElements();
-            // reset / empty oder array
-            sortOrder.length = 0;
-            for (var i=0; i< itemElems.length; i++) {
-                sortOrder[i] = itemElems[i].getAttribute("id");
-            }
+                        if (typeFiltre === 'tous') {
+                            correspondType = true;
+                        } else if (typeFiltre === 'autres') {
+                            correspondType = (type !== 'dossiers' && type !== 'etablissements');
+                        } else {
+                            correspondType = type === typeFiltre;
+                        }
 
-            // Init a new timemout
-            if ($('.panel.loading').length == 0) {
-                saveTimeout = setTimeout(function() {
-                    $.post("/api/1.0/user/preferences", {
-                        id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
-                        preferences: {
-                            'DASHBOARD_BLOCS': sortOrder
+                        if (correspondRecherche && correspondType) {
+                            card.show();
+                        } else {
+                            card.hide();
                         }
                     });
-                }, saveTimeoutMilliseconds);
+                });
+
+                // Afficher les titres de section selon le filtre
+                $('.titre-section').each(function () {
+                    const section = $(this);
+                    const sectionType = section.data('type');
+
+                    if (typeFiltre === 'tous') {
+                        section.show();
+                    } else if (typeFiltre === 'autres') {
+                        if (sectionType === 'dossiers' || sectionType === 'etablissements') {
+                            section.hide();
+                        } else {
+                            section.show();
+                        }
+                    } else {
+                        if (sectionType === typeFiltre) {
+                            section.show();
+                        } else {
+                            section.hide();
+                        }
+                    }
+                });
             }
-        }
 
-        $container.packery( 'on', 'layoutComplete', orderItems );
-
-        $('#reinitBlocOrder').click(function() {
-            $.post("/api/1.0/user/preferences", {
-                id: <?php echo $this->user['ID_UTILISATEUR'] ?>,
-                preferences: {
-                    'DASHBOARD_BLOCS': null
-                }
-            }, function() {
-                window.location.reload();
-            });
-        });
-
-        $(".panel-heading .icon").click(function() {
-            var $self = $(this);
-            var $panel = $self.parents('.panel');
-            $panel.toggleClass('folded');
-            if ($self.hasClass('icon-chevron-right')) {
-                $self.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                if ($panel.hasClass('empty') && !$panel.hasClass('loading')) {
-                    $panel.find('.panel-body img').show();
-                    loadBloc($panel);
-                } else {
-                    $panel.find('.panel-body').show();
-                    $container.packery('fit', $panel.get(0));
-                }
-            } else {
-                $self.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-                $panel.find('.panel-body').hide();
-                $container.packery('fit', $panel.get(0));
-            }
-        });
+            $('#filtre-cartes-search').on('input', filtrerEtTrierCartes);
+            $('input[name="filtre-type"]').on('change', filtrerEtTrierCartes);
 
         // Vérification de la connexion à Plat'AU
         <?php if (!filter_var(getenv('PREVARISC_DEACTIVATE_PLATAU'), FILTER_VALIDATE_BOOLEAN) && !filter_var(getenv('PREVARISC_PLATAU_NO_HEALTHCHECK'), FILTER_VALIDATE_BOOLEAN)): ?>
@@ -171,3 +182,5 @@
         <?php endif ?>
     });
 </script>
+
+<script src="/js/accueil/accueil.js"></script>

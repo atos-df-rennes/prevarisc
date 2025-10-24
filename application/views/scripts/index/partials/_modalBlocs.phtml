@@ -1,0 +1,56 @@
+<div id="modal-bloc" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 id="modal-bloc-title">Titre du bloc</h3>
+    </div>
+    <div class="modal-body" id="modal-bloc-body">
+        Contenu du bloc
+    </div>
+</div>
+
+<script type="text/template" id="modal-bloc-loader-template">
+    <p class="text-center">
+        <img src="/images/load.gif" alt="Chargement..." />
+    </p>
+</script>
+
+<script type="text/template" id="modal-bloc-error-template">
+    <div class="alert alert-error">
+        Une erreur est survenue lors du chargement des données.
+    </div>
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('click', '.btn-ouvrir', function (e) {
+            e.preventDefault();
+
+            const $panel = $(this).closest('.panel');
+            const blocId = $panel.attr('id');
+
+            // Afficher le loader
+            $('#modal-bloc-title').text('Chargement...');
+            $('#modal-bloc-body').html($('#modal-bloc-loader-template').html());
+            $('#modal-bloc').modal('show');
+
+            // Charger le contenu via AJAX
+            $.ajax({
+                url: '/index/bloc',
+                type: 'GET',
+                data: { id: blocId },
+                success: function (response) {
+                    const blocTitle = $panel.find('.panel-heading').clone();
+                    blocTitle.find('.compteur').remove();
+                    const title = blocTitle.text().trim();
+
+                    $('#modal-bloc-title').text(title);
+                    $('#modal-bloc-body').html(response);
+                },
+                error: function () {
+                    $('#modal-bloc-title').text('Erreur');
+                    $('#modal-bloc-body').html($('#modal-bloc-error-template').html());
+                }
+            });
+        });
+    });
+</script>

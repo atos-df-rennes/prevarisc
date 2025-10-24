@@ -28,7 +28,7 @@ class Service_Dashboard
             'service' => 'Service_Dashboard',
             'method' => 'getNextCommission',
             'acl' => ['dashboard', 'view_next_commissions_odj'],
-            'title' => 'Prochaines commissions',
+            'title' => 'Ordre du jour des prochaines commissions',
             'type' => 'odj',
             'height' => 'small',
             'width' => 'small',

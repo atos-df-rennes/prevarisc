@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-sticky-top">
     <div class="navbar-inner">
         <div class="container-fluid">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -6,50 +6,78 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="/"><img src='/images/layout-header-logo.png' alt='Prevarisc'  /></a>
+            <a class="brand" href="/">
+                <img class="logo-default" src="/images/layout-header-logo.png" alt="Prevarisc" />
+
+                <svg class="logo-small" width="35" height="26" viewBox="0 0 35 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_318_986)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M34.8765 22.5535C34.8765 12.4818 26.6973 4.31714 16.6077 4.31714C9.34923 4.31714 3.07947 8.54266 0.132382 14.6639C0.0550939 14.8244 0.110769 15.0167 0.260152 15.1141L3.76657 17.4002C3.9551 17.5231 4.20892 17.4449 4.3023 17.2404C6.43021 12.579 11.1385 9.33882 16.605 9.33882C24.0679 9.33882 30.1179 15.378 30.1179 22.8276V24.8089C30.1179 25.0074 30.2791 25.1684 30.478 25.1684H34.5164C34.7152 25.1684 34.8765 25.0074 34.8765 24.8089V22.5535Z" fill="#CA0425"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6 18.7449C11.5134 18.8131 11.4629 18.9171 11.4629 19.0271V24.8122C11.4629 25.0108 11.6241 25.1717 11.823 25.1717H17.1983H22.5737C22.7726 25.1717 22.9338 25.0108 22.9338 24.8122V19.0271C22.9338 18.9171 22.8833 18.8131 22.7967 18.7449L17.4214 14.5124C17.2906 14.4094 17.1061 14.4094 16.9753 14.5124L11.6 18.7449Z" fill="#575759"/>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_318_986">
+                            <rect width="35" height="25" fill="white" transform="translate(0 0.5)"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+            </a>
+
             <div class="nav-collapse collapse">
-                <ul class='nav'>
-                    <li><a href='/'><i class="icon-home grey-icn-plus" title="Accueil"></i></a></li>
+                <ul class="nav nav-fill">
+
+                    <li><a href="/"><i class="icon-list-alt"></i> Tableau de bord</a></li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Établissements
+                            <i class="icon-th"></i> Établissements <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href='/search/etablissement?label=&page=1'><i class="icon-th-list"></i> Rechercher</a></li>
-                            <li><a href='/etablissement/add'><i class="icon-plus"></i> Ajouter</a></li>
+                            <li><a href="/search/etablissement?label=&page=1"><i class="icon-th-list"></i> Rechercher</a></li>
+                            <li><a href="/etablissement/add"><i class="icon-plus"></i> Ajouter</a></li>
                         </ul>
                     </li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Dossiers
+                            <i class="icon-folder-close"></i> Dossiers <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href='/search/dossier?objet=&page=1'><i class="icon-th-list"></i>  Rechercher</a></li>
-                            <li><a href='/dossier/add'><i class="icon-plus"></i>  Ajouter</a></li>
+                            <li><a href="/search/dossier?objet=&page=1"><i class="icon-th-list"></i> Rechercher</a></li>
+                            <li><a href="/dossier/add"><i class="icon-plus"></i> Ajouter</a></li>
                         </ul>
                     </li>
-                    <li><a href='/calendrier-des-commissions'>Calendrier</a></li>
+
+                    <li><a href="/calendrier-des-commissions"><i class="icon-calendar"></i> Calendrier</a></li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-plus grey-icn-plus" title="Plus"></i>
+                            <i class="icon-cog"></i> Administration <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href='/statistiques'>Statistiques</a></li>
-                            <li><a href='/admin'>Administration</a></li>
+                            <li><a href="/statistiques"><i class="icon-signal"></i> Statistiques</a></li>
+                            <li><a href="/admin"><i class="icon-wrench"></i> Administration</a></li>
                         </ul>
                     </li>
-                </ul>
-                <ul class='nav pull-right'>
+
                     <li class="li-searched">
                         <form class="navbar-search" action="/search/etablissement" method="get">
                             <div class="input-append" id="research-input">
-                                <input name="label" class="input-medium" id="nav-main-search-field" type="text" placeholder="Rechercher ..." style='margin-top: 10px' />
-                                <input name="page" type="hidden" value="1"  />
-                                <button class="btn btn_search" type="submit" style='margin-top: 10px'><i class="icon-search"></i> </button>
-                                <a class="btn" href="/search/etablissement?&statuts%5B%5D=2&statuts%5B%5D=4" >Avancée »</a>
+                                <input name="label" class="input-medium" id="nav-main-search-field" type="text" placeholder="Rechercher ..." />
+                                <input name="page" type="hidden" value="1" />
+                                <button class="btn btn_search" type="submit"><i class="icon-search"></i></button>
                             </div>
                         </form>
                     </li>
+
+                    <li class="navbar-user">
+                        <div class="avatar">
+                            <?php echo $this->avatar(Zend_Auth::getInstance()->getIdentity()['ID_UTILISATEUR'], 'medium') ?>
+                        </div>
+                        <?php echo Zend_Auth::getInstance()->getIdentity()['infos']['PRENOM_UTILISATEURINFORMATIONS'] . ' ' . strtoupper(Zend_Auth::getInstance()->getIdentity()['infos']['NOM_UTILISATEURINFORMATIONS']) ?>
+                    </li>
+
+                    <li><a class="deconnexion" href="<?php echo $this->url(array('controller' => 'session', 'action' => 'logout'), null, true) ?>"><i class="icon-off"></i> Déconnexion</a></li>
+
                 </ul>
             </div>
         </div>
