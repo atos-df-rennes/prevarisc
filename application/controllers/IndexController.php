@@ -111,6 +111,32 @@ class IndexController extends Zend_Controller_Action
         $this->view->assign('bloc', $bloc);
     }
 
+    public function saveBlocOrderAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        if (!$this->_request->isPost()) {
+            $this->getResponse()->setHttpResponseCode(405);
+            echo json_encode(['error' => 'Méthode non autorisée']);
+            return;
+        }
+
+        $ordre = $this->_request->getParam('ordre');
+
+        if (!$ordre || !is_array($ordre)) {
+            $this->getResponse()->setHttpResponseCode(400);
+            echo json_encode(['error' => 'Aucun ordre reçu']);
+            return;
+        }
+
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        $service_user = new Service_User();
+        $service_user->savePreferences($identity['ID_UTILISATEUR'], ['DASHBOARD_BLOCS' => $ordre]);
+
+        echo json_encode(['success' => true]);
+    }
+
     public function addMessageAction(): void
     {
         $service_feed = new Service_Feed();
