@@ -1543,7 +1543,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $ics = '';
 
-        if (null != $idComm && null != $mois && null != $annee) {
+        if (!in_array(null, [$idComm, $mois, $annee])) {
             $dbDateCommission = new Model_DbTable_DateCommission();
             $dbCommission = new Model_DbTable_Commission();
             $dossiersaff = new Model_DbTable_DossierAffectation();
