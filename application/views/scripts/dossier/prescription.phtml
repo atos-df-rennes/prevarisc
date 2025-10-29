@@ -110,7 +110,7 @@ echo "
 								<i
 									class='icon-label-right icon-info-sign'
 									title='Justification'
-									data-content='<?= nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE']) ?>'
+									data-content="<?= htmlspecialchars(nl2br($listePrescr[$i][$j]['JUSTIFICATIF_LEVEE'])) ?>"
 									data-html='true'
 									data-placement='top'
 								></i>
@@ -429,7 +429,7 @@ $(document).ready(function(){
 							before: function(){
 								dialogRecupPresc.html("Veuillez patienter pendant la reprise des prescriptions <img src='/images/load.gif' />");
 							},
-							success: function(msg){ 
+							success: function(msg){
 								window.location='/dossier/prescription/id/'+$("#idDossier").val();
 							}
 						});
