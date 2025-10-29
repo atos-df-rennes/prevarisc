@@ -4,6 +4,22 @@
 
 <!--- END HEADER -->
 
+## [2.8.6](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.5...v2.8.6) (29-10-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Prescriptions
+
+* Affichage des justifications de levée contenant des apostrophes ou des guillemets (#274) ([b91f2f](https://github.com/atos-df-rennes/prevarisc/commit/b91f2f90e4eedd7e8c44e71b76f5e36118c63626))
+
+##### Rapports
+
+* Les boucles des prescriptions des cellules sont optionnelles (#273) ([38aa9c](https://github.com/atos-df-rennes/prevarisc/commit/38aa9c54722d7ca030d46d4fe553150c12255d5b))
+
+
+---
+
 ## [2.8.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.0...v2.8.1) (24-09-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
