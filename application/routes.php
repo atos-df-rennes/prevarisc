@@ -1,6 +1,5 @@
 <?php
 
-// @todo: Ajouter les routes nécessaires pour la modification d'un utilisateur.
 $router = Zend_Controller_Front::getInstance()->getRouter();
 
 $matriceDesDroits = new Zend_Controller_Router_Route('legacy/admin/groupes/matrice-des-droits', [
@@ -10,5 +9,13 @@ $matriceDesDroits = new Zend_Controller_Router_Route('legacy/admin/groupes/matri
     'privilege' => 'admin',
     'uri' => '/legacy/admin/groupes/matrice-des-droits'
 ]);
+$sauvegarderUtilisateur = new Zend_Controller_Router_Route('legacy/admin/utilisateurs/sauvegarder', [
+    'controller' => 'legacy',
+    'action' => 'save-user',
+    'resource' => 'gestion_parametrages',
+    'privilege' => 'admin',
+    'uri' => '/legacy/admin/utilisateurs/sauvegarder'
+]);
 
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
+$router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
