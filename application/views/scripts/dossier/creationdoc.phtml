@@ -203,21 +203,15 @@ function getPrescriptionSegmentName(string $type, string $typeContenu): string
         case 0:
             switch ($typeContenu) {
                 case 'default':
-                    try {
-                        $name = 'listeReg';
-                    } catch (Exception $e) {}
+                    $name = 'listeReg';
 
                     break;
                 case 'reprises':
-                    try {
-                        $name = 'listeRegReprises';
-                    } catch (Exception $e) {}
+                    $name = 'listeRegReprises';
 
                     break;
                 case 'actuelles':
-                    try {
-                        $name = 'listeRegActuelles';
-                    } catch (Exception $e) {}
+                    $name = 'listeRegActuelles';
 
                     break;
                 default:
@@ -228,21 +222,15 @@ function getPrescriptionSegmentName(string $type, string $typeContenu): string
         case 1:
             switch ($typeContenu) {
                 case 'default':
-                    try {
-                        $name = 'listeExploitation';
-                    } catch (Exception $e) {}
+                    $name = 'listeExploitation';
 
                     break;
                 case 'reprises':
-                    try {
-                        $name = 'listeExploitationReprises';
-                    } catch (Exception $e) {}
+                    $name = 'listeExploitationReprises';
 
                     break;
                 case 'actuelles':
-                    try {
-                        $name = 'listeExploitationActuelles';
-                    } catch (Exception $e) {}
+                    $name = 'listeExploitationActuelles';
 
                     break;
                 default:
@@ -253,21 +241,15 @@ function getPrescriptionSegmentName(string $type, string $typeContenu): string
         case 2:
             switch ($typeContenu) {
                 case 'default':
-                    try {
-                        $name = 'listeAmelioration';
-                    } catch (Exception $e) {}
+                    $name = 'listeAmelioration';
 
                     break;
                 case 'reprises':
-                    try {
-                        $name = 'listeAmeliorationReprises';
-                    } catch (Exception $e) {}
+                    $name = 'listeAmeliorationReprises';
 
                     break;
                 case 'actuelles':
-                    try {
-                        $name = 'listeAmeliorationActuelles';
-                    } catch (Exception $e) {}
+                    $name = 'listeAmeliorationActuelles';
 
                     break;
                 default:
@@ -354,59 +336,71 @@ if (!function_exists('addPrescriptionCC')) {
             if ($type == 0) {
                 switch ($typeContenu) {
                     case 'default':
-                        $prescription = $odf->listeRegCellule;
+                        try {
+                            $prescription = $odf->listeRegCellule;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'reprises':
-                        $prescription = $odf->listeRegCelluleReprises;
+                        try {
+                            $prescription = $odf->listeRegCelluleReprises;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'actuelles':
-                        $prescription = $odf->listeRegCelluleActuelles;
+                        try {
+                            $prescription = $odf->listeRegCelluleActuelles;
+                        } catch (\Exception $e) {}
 
                         break;
                     default:
                         throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                        break;
                 }
             } else if ($type == 1) {
                 switch ($typeContenu) {
                     case 'default':
-                        $prescription = $odf->listeExploitationCellule;
+                        try {
+                            $prescription = $odf->listeExploitationCellule;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'reprises':
-                        $prescription = $odf->listeExploitationCelluleReprises;
+                        try {
+                            $prescription = $odf->listeExploitationCelluleReprises;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'actuelles':
-                        $prescription = $odf->listeExploitationCelluleActuelles;
+                        try {
+                            $prescription = $odf->listeExploitationCelluleActuelles;
+                        } catch (\Exception $e) {}
 
                         break;
                     default:
                         throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                        break;
                 }
             } else if ($type == 2) {
                 switch ($typeContenu) {
                     case 'default':
-                        $prescription = $odf->listeAmeliorationCellule;
+                        try {
+                            $prescription = $odf->listeAmeliorationCellule;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'reprises':
-                        $prescription = $odf->listeAmeliorationCelluleReprises;
+                        try {
+                            $prescription = $odf->listeAmeliorationCelluleReprises;
+                        } catch (\Exception $e) {}
 
                         break;
                     case 'actuelles':
-                        $prescription = $odf->listeAmeliorationCelluleActuelles;
+                        try {
+                            $prescription = $odf->listeAmeliorationCelluleActuelles;
+                        } catch (\Exception $e) {}
 
                         break;
                     default:
                         throw new Exception(sprintf('Type de contenu non supporté: %s', $typeContenu));
-
-                        break;
                 }
             }
 
