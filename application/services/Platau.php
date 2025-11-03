@@ -18,7 +18,8 @@ class Service_Platau
     {
         $this->datastore = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('dataStore');
         $this->platauServiceFilePath = realpath(PLATAU_PATH.DS.implode(DS, ['src', 'Service', 'PlatauAbstract.php']));
-        $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.'config.json');
+        $platauConfigFile = getenv('PLATAU_CONFIG_FILE', true) ?: getenv('PLATAU_CONFIG_FILE') ?: 'config.json';
+        $this->platauConfigFilePath = realpath(PLATAU_PATH.DS.$platauConfigFile);
         [$this->pisteClientId, $this->pisteClientSecret] = $this->getPisteCredentials();
     }
 
@@ -79,9 +80,16 @@ class Service_Platau
         ];
     }
 
-    private function getPisteCredentials(): array
+    private function getPisteCredentials(): ?array
     {
         $platauConfigContentAsString = file_get_contents($this->platauConfigFilePath);
+
+        if ($platauConfigContentAsString === false) {
+            error_log("Le fichier de configuration Plat'AU n'a pas pu être récupéré correctement.");
+
+            return null;
+        }
+
         $decodedContent = json_decode($platauConfigContentAsString, true);
 
         $platauOptions = $decodedContent['platau.options'];
@@ -210,7 +218,8 @@ class Service_Platau
      */
     private function getPisteTokenData(): array
     {
-        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste', 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
+        $env = getenv('APP_ENV', true) ?: getenv('APP_ENV') ?: 'prod';
+        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste-'.$env, 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
 
         if (!file_exists($filepath)) {
             return [];
@@ -232,7 +241,8 @@ class Service_Platau
     {
         $storedData = json_encode(array_merge_recursive($pisteData, ['request_time' => time()]), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste', 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
+        $env = getenv('APP_ENV', true) ?: getenv('APP_ENV') ?: 'prod';
+        $filepath = $this->datastore->getFilePath(['ID_PIECEJOINTE' => 'piste-'.$env, 'EXTENSION_PIECEJOINTE' => '.json'], 'pieces-jointes', 1, true);
         file_put_contents($filepath, $storedData);
     }
 
