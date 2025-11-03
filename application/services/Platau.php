@@ -84,7 +84,7 @@ class Service_Platau
     {
         $platauConfigContentAsString = file_get_contents($this->platauConfigFilePath);
 
-        if ($platauConfigContentAsString === false) {
+        if (false === $platauConfigContentAsString) {
             error_log("Le fichier de configuration Plat'AU n'a pas pu être récupéré correctement.");
 
             return null;
