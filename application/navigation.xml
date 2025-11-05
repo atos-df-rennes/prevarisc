@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configdata>
     <nav>
+        <!-- Bridge Legacy/Symfony -->
+        <legacy>
+            <controller>legacy</controller>
+            <pages>
+                <matrice-des-droits>
+                    <route>legacy_matrice_des_droits</route>
+                </matrice-des-droits>
+                <sauvegarder-utilisateur>
+                    <route>legacy_sauvegarder_utilisateur</route>
+                </sauvegarder-utilisateur>
+            </pages>
+        </legacy>
+
         <!-- Page d'accueil -->
         <index>
             <label>Accueil</label>

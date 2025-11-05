@@ -173,4 +173,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         return $namespace;
     }
+
+    public function _initRoutes(): void
+    {
+        include APPLICATION_PATH . '/routes.php';
+    }
 }
