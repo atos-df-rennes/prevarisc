@@ -42,7 +42,8 @@
                     "prescriptions",
                     "effectifs-degagements",
                     "pieces-jointes",
-                    "formulaires"
+                    "formulaires",
+                    "administration"
                 ]
             }
         }

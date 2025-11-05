@@ -1203,6 +1203,18 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
 			identifier: property.notFound
+			count: 2
+			path: application/controllers/LegacyController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
+			identifier: property.notFound
+			count: 2
+			path: application/controllers/LegacyController.php
+
+		-
+			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
+			identifier: property.notFound
 			count: 3
 			path: application/controllers/PieceJointeController.php
 
@@ -2117,6 +2129,12 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: application/plugins/XmlHttpRequest.php
+
+		-
+			message: '#^Call to an undefined method Zend_Controller_Router_Interface\:\:addRoute\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: application/routes.php
 
 		-
 			message: '#^Call to method fetch\(\) on an unknown class PDO_Statement\.$#'
