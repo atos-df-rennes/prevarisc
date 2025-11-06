@@ -8,8 +8,7 @@
             <i class="icon icon-chevron-down"></i>
         </div>
 
-        <!-- Style inline pour conserver la règle display: flex; ajoutée en CSS pour le fonctionnement de la méthode show() de jQuery -->
-        <div class="panel-body" style="display: none;">
+        <div class="panel-body panel-body-hidden">
             <?php if (empty($rubrique['CHAMPS'])): ?>
                 <?=
                     $this->partial('formulaire/partials/partial-information-manquante.phtml', [
@@ -40,14 +39,11 @@
     $('.panel-heading .icon').click(function () {
         const $self = $(this);
         const $panel = $self.parents('.panel');
-        $panel.toggleClass('folded');
+        const $body = $panel.find('.panel-body');
 
-        if ($self.hasClass('icon-chevron-up')) {
-            $self.removeClass('icon-chevron-up').addClass('icon-chevron-down');
-            $panel.find('.panel-body').hide(400);
-        } else {
-            $self.removeClass('icon-chevron-down').addClass('icon-chevron-up');
-            $panel.find('.panel-body').show(400);
-        }
+        $self.toggleClass('icon-chevron-down');
+        $self.toggleClass('icon-chevron-up');
+        $panel.toggleClass('folded');
+        $body.toggleClass('panel-body-hidden');
     })
 </script>
