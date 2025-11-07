@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - 2.5
+      - "2.5"
       - develop
 
 jobs:
@@ -19,6 +19,18 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
+
+  composer-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Run composer audit to detect vulnerabilities
+        run: COMPOSER_AUDIT_ABANDONED=ignore composer audit
 
   php-cs-fixer:
     needs: validate-composer
