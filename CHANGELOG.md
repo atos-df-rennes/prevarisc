@@ -4,6 +4,51 @@
 
 <!--- END HEADER -->
 
+## [2.8.8](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.7...v2.8.8) (17-11-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Affiche le dernier libellé de l'établissement sur la recherche de dossiers (#265) ([bb008c](https://github.com/atos-df-rennes/prevarisc/commit/bb008cb89a726ae4feee2bc9cfa1dddfe5b2d1c5))
+
+##### Dossier
+
+* N'efface pas la date de commission si dossier incomplet ou date de réception modifiée (#263) ([c306d0](https://github.com/atos-df-rennes/prevarisc/commit/c306d0befe9b33567cca8648aef697f1ec61af34))
+* Passage incorrect de l'identifiant dans l'URL de suppression (#262) ([18eca5](https://github.com/atos-df-rennes/prevarisc/commit/18eca54105c90fc187935376965b1ae5cf88498e))
+
+##### Etablissement
+
+* Mauvais affichage de la recherche (#272) ([a44537](https://github.com/atos-df-rennes/prevarisc/commit/a4453767bde7ecc8c17fc451c0ae5d9e6e600414))
+
+##### Platau
+
+* Permet l'utilisation d'un fichier de configuration spécifique à un environnement (#276) ([f2918a](https://github.com/atos-df-rennes/prevarisc/commit/f2918ac7bb59e664a87790adc3d88e8ae45a8d75))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+
+##### Administration
+
+* Gestion des formulaires personnalisés (#261) ([05c5f4](https://github.com/atos-df-rennes/prevarisc/commit/05c5f4b22c7cccfbc13d278b182db13a73a8f871))
+* Gestion des prescriptions types (#264) ([c05202](https://github.com/atos-df-rennes/prevarisc/commit/c0520270e0685f8b45b019521ded51ce14a4bd91))
+* Gestion des rubriques des formulaires personnalisés (#268) ([7438ca](https://github.com/atos-df-rennes/prevarisc/commit/7438ca3b602bf2a707e4d6d8bdda318ba08dff55))
+* Permissions avancées pour les établissements et les dossiers (#275) ([f7f797](https://github.com/atos-df-rennes/prevarisc/commit/f7f797edaa811e943ad7c5624c6de90856ac017f))
+
+##### Dossier
+
+* Verrouillage et déverrouillage (#259) ([8309d1](https://github.com/atos-df-rennes/prevarisc/commit/8309d1bd305ffe2c57299d41b24a24c4001fb2bd))
+
+##### Etablissement
+
+* Affichage des pièces jointes (#257) ([34a2b2](https://github.com/atos-df-rennes/prevarisc/commit/34a2b2daf1096ed92bb21b0258e0e44a5ff7b794))
+* Onglet contacts (#258) ([6d42d0](https://github.com/atos-df-rennes/prevarisc/commit/6d42d04b79162f9c6cc814f1b8bebe9530d56eae))
+
+##### Prescriptions
+
+* Ajout, modification et suppression des articles (#251) ([a4cf15](https://github.com/atos-df-rennes/prevarisc/commit/a4cf15e75f4fc5b6b470c118039b111e301cb6a8))
+
+
+---
+
 ## [2.8.6](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.5...v2.8.6) (29-10-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
