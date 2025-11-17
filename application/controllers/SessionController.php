@@ -24,7 +24,7 @@ class SessionController extends Zend_Controller_Action
                     error_log('ntlm auth with no REMOTE_USER set in server variables');
                 } else {
                     $cred = explode('\\', $_SERVER['REMOTE_USER']);
-                    if (1 == count($cred)) {
+                    if (1 === count($cred)) {
                         array_unshift($cred, null);
                     }
 

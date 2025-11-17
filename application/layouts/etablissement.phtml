@@ -48,13 +48,13 @@
     <?php endif ?>
 
     <li class="<?= strpos($action_name, 'pieces-jointes') !== false ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"pieces-jointes")) ?>'>
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/pieces-jointes'>
             <i class="icon-share icon-black"></i>
             Pièces jointes
         </a>
     </li>
-    <li class="<?= $action_name == 'contacts' ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"contacts")) ?>'>
+    <li>
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/contacts'>
             <i class="icon-user icon-black"></i>
             Contacts
         </a>
@@ -103,7 +103,7 @@
                 </a> -
             <?php endforeach ?>
         <?php endif ?>
-        <?= file_exists(APPLICATION_PATH . DS . '..' . DS . 'public' . DS . 'images' . DS . 'types' . DS . 'b' . DS . 'icone-type-' . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . '.png') ? "<img src='/images/types/b/icone-type-" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . ".png' title='" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . "' />" : ''; ?>
+        <?= file_exists(SYMFONY_APPLICATION_PATH  . DS . 'public' . DS . 'images' . DS . 'types' . DS . 'b' . DS . 'icone-type-' . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . '.png') ? "<img src='/images/types/b/icone-type-" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . ".png' title='" . $this->etablissement['informations']['LIBELLE_TYPE_PRINCIPAL'] . "' />" : ''; ?>
         <?= $this->etablissement['informations']["LIBELLE_ETABLISSEMENTINFORMATIONS"] ?>
         <?php if ($this->etablissement['general']['NUMEROID_ETABLISSEMENT']): ?>
             <span class="pull-right">

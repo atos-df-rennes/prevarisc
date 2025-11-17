@@ -333,11 +333,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $affichage = $dossierAffect['infosEtab']['informations']['LIBELLE_ETABLISSEMENTINFORMATIONS'];
 
             $nbAdresse = count($dossierAffect['infosEtab']['adresses']);
-            if (0 != $nbAdresse) {
+            if (0 !== $nbAdresse) {
                 $affichage .= ' (';
                 foreach ($dossierAffect['infosEtab']['adresses'] as $commune) {
                     $affichage .= $commune['LIBELLE_COMMUNE'];
-                    if (1 != $nbAdresse) {
+                    if (1 !== $nbAdresse) {
                         $affichage .= ', ';
                     }
 
@@ -697,13 +697,13 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $varExplode1 = explode('_', $var);
                     $expectedNumberOfParameters = 2;
 
-                    if ($expectedNumberOfParameters == count($varExplode1)) {
+                    if ($expectedNumberOfParameters === count($varExplode1)) {
                         // il n'y à que la premiere date sélectionnée (de début) qui est composée d'un "_"
                         $varExplode2 = explode('-', $varExplode1[1]);
                         $expectedNumberOfDateParameters = 3;
 
                         if (
-                            $expectedNumberOfDateParameters == count($varExplode2)
+                            $expectedNumberOfDateParameters === count($varExplode2)
                             && 'D' === $varExplode1[0]
                         ) {
                             // on s'assure que c'est bien une date jj/mm/aaaa
@@ -719,7 +719,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                             while ($dateDebut->compare($dateFin) <= 0) {
                                 // on liste toutes les dates jusqu'a la date de fin
                                 $dateDb = $dateDebut->get(Zend_Date::YEAR.'-'.Zend_Date::MONTH.'-'.Zend_Date::DAY);
-                                if (1 != $first) {
+                                if (1 !== $first) {
                                     $idOrigine = $dbDateCommission->addDateComm($dateDb, $heureDebRef, $heureFinRef, $this->getRequest()->getParam('idComm'), $this->getRequest()->getParam('typeCom'), $this->getRequest()->getParam('libelle_comm'));
                                     $idCalendrierTab = $idOrigine;
                                 } else {
@@ -745,12 +745,12 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $varExplode1 = explode('_', $var);
                     $expectedNumberOfParameters = 2;
 
-                    if ($expectedNumberOfParameters == count($varExplode1)) {
+                    if ($expectedNumberOfParameters === count($varExplode1)) {
                         // on est dans le cas d'une date
                         $varExplode2 = explode('-', $varExplode1[1]);
                         $expectedNumberOfDateParameters = 3;
 
-                        if ($expectedNumberOfDateParameters == count($varExplode2)) {
+                        if ($expectedNumberOfDateParameters === count($varExplode2)) {
                             // Ici insertion des dates dans la base de données
                             if ('D' === $varExplode1[0]) {
                                 if ($premiereDate) {
@@ -1025,7 +1025,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $tabCommune = [];
             $numCommune = 0;
             foreach ($listeDossiers as $ue) {
-                if (0 == $numCommune) {
+                if (0 === $numCommune) {
                     if (count($ue['infosEtab']['adresses']) > 0) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                         $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
@@ -1047,7 +1047,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     }
                 }
 
-                if (0 == $existe) {
+                if (0 === $existe) {
                     if (count($ue['infosEtab']['adresses']) > 0) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                         $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])->toArray();
@@ -1161,7 +1161,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $tabCommune[] = [];
             $numCommune = 0;
             foreach ($listeDossiers as $ue) {
-                if (0 == $numCommune) {
+                if (0 === $numCommune) {
                     if (isset($ue['infosEtab']['adresses'][0])) {
                         $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                         $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])
@@ -1196,7 +1196,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     }
                 }
 
-                if (0 == $existe) {
+                if (0 === $existe) {
                     $libelleCommune = $ue['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'];
                     $adresseCommune = $model_adresseCommune->find($ue['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'])
                         ->toArray()
@@ -1543,7 +1543,7 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
         $ics = '';
 
-        if (null != $idComm && null != $mois && null != $annee) {
+        if (!in_array(null, [$idComm, $mois, $annee])) {
             $dbDateCommission = new Model_DbTable_DateCommission();
             $dbCommission = new Model_DbTable_Commission();
             $dossiersaff = new Model_DbTable_DossierAffectation();

@@ -143,7 +143,7 @@ class FormulaireController extends Zend_Controller_Action
                 $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
                 $rubrique->save();
 
-                $this->_helper->redirector('index');
+                $this->redirect('/admin/formulaires');
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
@@ -239,11 +239,7 @@ class FormulaireController extends Zend_Controller_Action
         $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
-        $backUrlOptions = [
-            'controller' => 'formulaire',
-            'action' => 'edit-rubrique',
-            'rubrique' => $champ['ID_RUBRIQUE'],
-        ];
+        $backUrl = '/admin/formulaires/'.$rubrique['ID_CAPSULERUBRIQUE'].'/rubriques/'.$rubrique['ID_RUBRIQUE'].'/modifier';
         $champFusionValue = null;
 
         if ('Parent' === $champType['TYPE']) {
@@ -331,8 +327,13 @@ class FormulaireController extends Zend_Controller_Action
                 );
             }
 
-            $backUrlOptions['action'] = 'edit-champ';
-            $backUrlOptions['champ'] = $champ['ID_PARENT'];
+            $backUrlOptions = [
+                'controller' => 'formulaire',
+                'action' => 'edit-champ',
+                'rubrique' => $champ['ID_RUBRIQUE'],
+                'champ' => $champ['ID_PARENT'],
+            ];
+            $backUrl = $this->view->url($backUrlOptions, null, true);
         }
 
         $this->view->assign('champ', $champ);
@@ -340,7 +341,7 @@ class FormulaireController extends Zend_Controller_Action
         $this->view->assign('rubrique', $rubrique);
         $this->view->assign('listeTypeChampRubrique', $listeTypeChampRubrique);
         $this->view->assign('type', $champType['TYPE']);
-        $this->view->assign('backUrl', $this->view->url($backUrlOptions, null, true));
+        $this->view->assign('backUrl', $backUrl);
 
         $request = $this->getRequest();
 
@@ -378,7 +379,8 @@ class FormulaireController extends Zend_Controller_Action
             $champ->NOM = $post['nom_champ'];
             $champ->tableau = (int) filter_var($post['is-tableau'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $champ->save();
-            $this->_helper->redirector('edit-rubrique', null, null, ['rubrique' => $rubrique['ID_RUBRIQUE']]);
+
+            $this->redirect($backUrl);
         }
     }
 

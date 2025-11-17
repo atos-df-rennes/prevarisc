@@ -8,6 +8,9 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 // Définition du chemin vers le dossier application/
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', getenv('PREVARISC_APPLICATION_PATH') ? getenv('PREVARISC_APPLICATION_PATH') : dirname(__FILE__).DS.'..'.DS.'application');
 
+// Création d'une constant permettant de pointer sur le répertoire de l'application symfony
+defined('SYMFONY_APPLICATION_PATH') || define('SYMFONY_APPLICATION_PATH', APPLICATION_PATH.DS.'..'.DS.'..'.DS.'prevarisc-migration');
+
 // Définition du chemin vers le dossier command/
 defined('COMMAND_PATH') || define('COMMAND_PATH', getenv('PREVARISC_COMMAND_PATH') ? getenv('PREVARISC_COMMAND_PATH') : APPLICATION_PATH.DS.'command');
 
@@ -18,10 +21,13 @@ defined('DATA_PATH') || define('DATA_PATH', getenv('PREVARISC_DATA_PATH') ? gete
 defined('REAL_DATA_PATH') || define('REAL_DATA_PATH', getenv('PREVARISC_REAL_DATA_PATH') ? getenv('PREVARISC_REAL_DATA_PATH') : dirname(__FILE__).DS.'..'.DS.'public'.DS.'data');
 
 // Define path to plat'au directory
-defined('PLATAU_PATH') || define('PLATAU_PATH', getenv('PREVARISC_PLATAU_PATH') ?: dirname(__FILE__).DS.'..'.DS.'..'.DS.'prevarisc-passerelle-platau');
+defined('PLATAU_PATH') || define('PLATAU_PATH', getenv('PREVARISC_PLATAU_PATH') ?: dirname(__FILE__, 3).DS.'prevarisc-passerelle-platau');
 
 // Chargements des librairies
 require APPLICATION_PATH.DS.'..'.DS.'vendor'.DS.'autoload.php';
+
+// Chargement du bridge de bootstrap symfony
+require APPLICATION_PATH.DS.'bootstrap-bridge.php';
 
 // Création de l'application avec les fichiers config
 $application = new Zend_Application('production', [

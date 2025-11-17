@@ -36,8 +36,8 @@
         <a href='/admin/documents'><i class="icon-file icon-black"></i> Gestion des documents</a>
     </li>
 
-    <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'gestion-prescriptions') echo "class='active'" ?> >
-        <a href='/gestion-prescriptions' ><i class="icon-flag icon-black"></i> Gestion des prescriptions</a>
+    <li>
+        <a href='/admin/prescriptions' ><i class="icon-flag icon-black"></i> Gestion des prescriptions</a>
     </li>
 
     <li>
@@ -59,7 +59,7 @@
     </li>
 
     <li <?php if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'formulaire') echo "class='active'" ?> >
-        <a href='/formulaire' ><i class="icon-tasks icon-black"></i> Formulaires</a>
+        <a href='/admin/formulaires' ><i class="icon-tasks icon-black"></i> Formulaires</a>
     </li>
 </ul>
 
