@@ -10,7 +10,7 @@ if (!function_exists('addChamp')) {
             $odf->setVars($nomOdf, $variable ?? '', true, 'UTF8');
 
             // Si un fichier de debug existe et est valide, ajoute les informations du champ sous forme de texte.
-            if (null !== $debugFile && false !== $debugFile) {
+            if (\is_resource($debugFile)) {
                 $text = '';
 
                 if ($odf instanceof Segment) {
@@ -1164,10 +1164,7 @@ foreach ($this->formulaires as $formulaire) {
 }
 
 // Ferme le fichier de debug si tout est valide.
-if (
-    null !== $debugFile
-    && false !== $debugFile
-) {
+if (\is_resource($debugFile)) {
     fclose($debugFile);
 }
 
