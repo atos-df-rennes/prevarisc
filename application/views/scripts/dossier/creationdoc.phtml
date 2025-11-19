@@ -27,16 +27,17 @@ if (!function_exists('addChamp')) {
     }
 }
 
+$debugFile = null;
 $odf = new Odf($this->fichierSelect);
 
 // Crée un fichier de debug si l'application est paramétrée pour.
-$debugFile = null;
 if (filter_var(getenv('PREVARISC_DEBUG_ENABLED'), FILTER_VALIDATE_BOOLEAN)) {
     $debugFileName = 'rapport_dossier_' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->idDossier) . '.txt';
     $debugFile = fopen(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $debugFileName, 'wt');
 
     if ($debugFile === false) {
         error_log('Une erreur est survenue lors de la création du fichier de debug : ' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . $debugFileName);
+        $debugFile = null;
     }
 }
 
