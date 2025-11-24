@@ -2,7 +2,7 @@
     $suffix = $this->idSuffix ?? '';
 ?>
 
-<div class="toc-sidebar <?= '' === $suffix ? 'visible-desktop' : '' ?>" data-toc-instance="<?= $suffix ?>">
+<div class="toc-sidebar <?= '' === $suffix ? 'hidden-tablet' : '' ?>" data-toc-instance="<?= $suffix ?>">
     <div class="toc-content">
         <?php if ('' === $suffix): ?>
             <h4 class="toc-title">
@@ -131,12 +131,6 @@
         z-index: 2000;
     }
 
-    @media (max-width: 979px) {
-        .toc-sidebar {
-            border-top: 1px solid #D4D4D4;
-        }
-    }
-
     /* === BARRE DE RECHERCHE : WRAPPER === */
     .search-controls {
         display: flex;
@@ -172,13 +166,6 @@
         color: #666;
         pointer-events: none;
         font-size: 12px;
-    }
-
-    @media (max-width: 979px) {
-        .search-icon {
-            top: 13px;
-            left: 239px;
-        }
     }
 
     /* === CASE À COCHER : "TOUS" (SELECT ALL) === */
@@ -234,12 +221,6 @@
         padding: 14px;
     }
 
-    @media (min-width: 980px) {
-        .toc-content {
-            width: 250px;
-        }
-    }
-
     /* === ÉLÉMENT INDIVIDUEL DE LA LISTE (TOC ITEM) === */
     .toc-item {
         display: flex;
@@ -257,9 +238,24 @@
         width: 100%;
     }
 
-    @media (max-width: 979px) {
-        .visible-desktop {
+    @media (max-width: 1199px) {
+        .hidden-tablet {
             display: none;
+        }
+
+        .toc-sidebar {
+            border-top: 1px solid #D4D4D4;
+        }
+
+        .search-icon {
+            top: 13px;
+            left: 239px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .toc-content {
+            width: 250px;
         }
     }
 </style>
