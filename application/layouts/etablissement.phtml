@@ -3,8 +3,8 @@
 <?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
 
 <ul class='nav nav-tabs nav-stacked menu_dashboard'>
-    <li class="<?= in_array($action_name, ['index', 'edit']) ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"index")) ?>'>
+    <li class="<?= $action_name === 'edit' ? 'active' : '' ?>">
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/informations'>
             <i class="icon-info-sign icon-black"></i>
             Général
         </a>
@@ -98,7 +98,7 @@
     <h2 class="page-header">
         <?php if ($this->etablissement['parents'] > 0) : ?>
             <?php foreach ($this->etablissement['parents'] as $etablissement) : ?>
-                <a href='/etablissement/index/id/<?=  $etablissement["ID_ETABLISSEMENT"] ?>'>
+                <a href='/etablissement/<?=  $etablissement["ID_ETABLISSEMENT"] ?>/informations'>
                     <?= $etablissement["LIBELLE_ETABLISSEMENTINFORMATIONS"] ?>
                 </a> -
             <?php endforeach ?>
