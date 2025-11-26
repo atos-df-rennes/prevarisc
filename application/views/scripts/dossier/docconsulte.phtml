@@ -197,29 +197,32 @@ foreach($this->listeNatures as $index => $nature) {
 
 	//on boucle sur les documents ajoutés à afficher
 	foreach($this->listeDocsAjout[$nature["ID_NATURE"]] as $documentAjout) {
-		echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$documentAjout['ID_DOCAJOUT'],$documentAjout['LIBELLE_DOCAJOUT'],$documentAjout['REF_DOCAJOUT'],$documentAjout['DATE_DOCAJOUT'],"_aj");
-	}
+        if ($documentAjout['visible'] == 1) { // ou true selon votre structure
+            echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$documentAjout['ID_DOCAJOUT'],$documentAjout['LIBELLE_DOCAJOUT'],$documentAjout['REF_DOCAJOUT'],$documentAjout['DATE_DOCAJOUT'],"_aj");
+        }
+    }
 
 	//on boucle sur les documents de base à afficher
 	if (count($this->listeDocs[$nature["ID_NATURE"]]) > 0)
 	{
 		$cpt = 0;
 		foreach($this->listeDocs[$nature["ID_NATURE"]] as $document) {
-			$exist = false;
-			foreach($this->dossierDocConsutle[$nature["ID_NATURE"]] as $docExistant) {
-				if ($docExistant['ID_DOC'] == $document['ID_DOC']) {
-					$exist = true;
-					$ref = $docExistant['REF_CONSULTE'];
-					$date = $docExistant['DATE_CONSULTE'];
-				}
-			}
+            if ($document['visible'] == 1) {
+                $exist = false;
+                foreach ($this->dossierDocConsutle[$nature["ID_NATURE"]] as $docExistant) {
+                    if ($docExistant['ID_DOC'] == $document['ID_DOC']) {
+                        $exist = true;
+                        $ref = $docExistant['REF_CONSULTE'];
+                        $date = $docExistant['DATE_CONSULTE'];
+                    }
+                }
 
-			if ($exist) {
-				echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC'],$ref,$date);
-			} else {
-				echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'],$nature["ID_NATURE"],$document['ID_DOC'],$document['LIBELLE_DOC']);
-			}
-
+                if ($exist) {
+                    echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'], $nature["ID_NATURE"], $document['ID_DOC'], $document['LIBELLE_DOC'], $ref, $date);
+                } else {
+                    echo $this->afficheDoc($this->infosDossier['VERROU_DOSSIER'], $nature["ID_NATURE"], $document['ID_DOC'], $document['LIBELLE_DOC']);
+                }
+            }
 			$cpt++;
 		}
 	}
