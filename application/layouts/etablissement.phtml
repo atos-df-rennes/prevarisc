@@ -3,8 +3,8 @@
 <?php $action_name = Zend_Controller_Front::getInstance()->getRequest()->getActionName() ?>
 
 <ul class='nav nav-tabs nav-stacked menu_dashboard'>
-    <li class="<?= in_array($action_name, ['index', 'edit']) ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"index")) ?>'>
+    <li class="<?= $action_name === 'edit' ? 'active' : '' ?>">
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/informations'>
             <i class="icon-info-sign icon-black"></i>
             Général
         </a>
