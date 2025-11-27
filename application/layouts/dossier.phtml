@@ -15,7 +15,7 @@
             <li class='<?= ($this->action == "descriptif") ? "active" : "" ?>'>
                 <a href='<?= $this->url(array("controller" => "dossier", "action" => "descriptif", "id" => $this->idDossier), false, true) ?>'>
                     <i class="icon-book icon-black"></i>
-                    Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2) ?> des travaux
+                    Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2): ?> des travaux<?php endif ?>
                 </a>
             </li>
         <?php endif ?>
