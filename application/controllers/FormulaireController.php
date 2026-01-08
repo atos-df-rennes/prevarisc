@@ -334,6 +334,7 @@ class FormulaireController extends Zend_Controller_Action
             $backUrlOptions['action'] = 'edit-champ';
             $backUrlOptions['champ'] = $champ['ID_PARENT'];
         }
+
         $backUrl = $this->view->url($backUrlOptions, null, true);
 
         $this->view->assign('champ', $champ);
