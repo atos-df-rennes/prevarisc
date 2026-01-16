@@ -272,7 +272,11 @@ class Api_Service_Calendar
         $corpus .= self::LF.self::LF;
 
         $adresseService = new Service_Adresse();
-        $maire = $adresseService->getMaire($commissionEvent['NUMINSEE_COMMUNE']);
+        $maire = null;
+
+        if (null !== $commissionEvent['NUMINSEE_COMMUNE']) {
+            $maire = $adresseService->getMaire($commissionEvent['NUMINSEE_COMMUNE']);
+        }
         if ($maire && [] !== $maire) {
             $corpus .= sprintf(
                 'Coordonnées de la mairie :%s%s%s',
