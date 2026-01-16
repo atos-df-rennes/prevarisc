@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * @warning: Code non fonctionnel et non utilisé actuellement.
+ * A ne pas migrer. (après vérification)
+ */
 class StatistiquesController extends Zend_Controller_Action
 {
     // Liste des differentes extractions et stats avec le lien vers la page correspondant

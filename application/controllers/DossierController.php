@@ -1418,6 +1418,11 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
+    /*
+     * @warning: Code qui n'est à priori pas utilisé dans l'application.
+     * La colonne ABREVIATION_PRESCRIPTIONTYPE n'existe pas en base.
+     * A ne pas migrer. (après vérification)
+     */
     // Autocomplétion pour selection ABREVIATION
     public function selectionabreviationAction(): void
     {

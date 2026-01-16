@@ -194,6 +194,10 @@ class GroupementController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
+    /*
+     * @warning: Code qui n'est à priori pas utilisé dans l'application.
+     * A ne pas migrer. (après vérification)
+     */
     public function addTypeAction(): void
     {
         try {
@@ -224,6 +228,10 @@ class GroupementController extends Zend_Controller_Action
         $this->_helper->redirector('index');
     }
 
+    /*
+     * @warning: Aucune action effectuée.
+     * A ne pas migrer. (après vérification)
+     */
     public function deleteTypeAction(): void
     {
         // On desactive la vue
