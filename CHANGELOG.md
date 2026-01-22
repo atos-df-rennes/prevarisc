@@ -4,6 +4,18 @@
 
 <!--- END HEADER -->
 
+## [2.8.12](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.11...v2.8.12) (08-01-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Formulaires
+
+* Problèmes de placement de curseur et de saisie (#287) ([63f255](https://github.com/atos-df-rennes/prevarisc/commit/63f2557cb590dd9072af79e0fb8c3d2d55132c66))
+
+
+---
+
 ## [2.8.8](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.7...v2.8.8) (17-11-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
