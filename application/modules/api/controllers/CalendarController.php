@@ -9,11 +9,7 @@ class Api_CalendarController extends Zend_Controller_Action
             $idCommission = $this->getRequest()->getParam('commission');
         }
 
-        $headers = [
-            'Content-Type: text/calendar; charset=utf-8',
-            'Content-Disposition: inline; filename="prevarisc.ics"',
-            'Cache-Control: no-cache, must-revalidate',
-        ];
+        $headers = ['Content-Type: text/calendar; charset=utf-8'];
 
         $this->view->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
