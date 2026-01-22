@@ -40,8 +40,10 @@ class Api_Service_Calendar
         $refreshTime = getenv('PREVARISC_CALENDAR_REFRESH_TIME') ?: 'PT5M';
 
         $calendar = new VCalendar([
+            'METHOD' => 'PUBLISH',
             'NAME' => $calendrierNom,
             'X-WR-CALNAME' => $calendrierNom,
+            'X-WR-CALDESC' => 'Calendrier Prévarisc',
             'REFRESH-INTERVAL;VALUE=DURATION' => $refreshTime,
             'X-PUBLISHED-TTL' => $refreshTime,
         ]);
@@ -209,6 +211,12 @@ class Api_Service_Calendar
                 'DESCRIPTION' => $this->getEventCorps($commissionEvent, $ets),
                 'DTSTART' => $dtStart,
                 'DTEND' => $dtEnd,
+                'UID' => sprintf(
+                    'prevarisc-commission-%s-dossier-%s@prevarisc.local',
+                    $commissionEvent['ID_DATECOMMISSION'],
+                    $commissionEvent['ID_DOSSIER']
+                ),
+                'DTSTAMP' => new DateTime('now', new DateTimeZone(date_default_timezone_get())),
             ];
         }
 
