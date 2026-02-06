@@ -16,6 +16,12 @@ $sauvegarderUtilisateur = new Zend_Controller_Router_Route('legacy/admin/utilisa
     'privilege' => 'admin',
     'uri' => '/legacy/admin/utilisateurs/sauvegarder',
 ]);
+$viderCacheDossier = new Zend_Controller_Router_Route('legacy/dossier/vider-cache', [
+    'controller' => 'legacy',
+    'action' => 'vider-cache-dossier',
+    'uri' => '/legacy/dossier/vider-cache',
+]);
 
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
 $router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
+$router->addRoute('legacy_vider_cache_dossier', $viderCacheDossier);
