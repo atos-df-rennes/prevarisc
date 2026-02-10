@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs nav-stacked menu_dashboard" >
         <li class="<?= ($this->action == "index") ? "active" : "" ?>">
-            <a href='<?= $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'>
+            <a href='/dossier/<?= $this->idDossier ?>'>
                 <i class="icon-info-sign icon-black"></i>
                 Informations générales
             </a>
