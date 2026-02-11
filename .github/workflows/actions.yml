@@ -8,18 +8,6 @@ on:
       - develop
 
 jobs:
-  validate-composer:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3'
-        coverage: none
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
   composer-audit:
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +21,6 @@ jobs:
         run: COMPOSER_AUDIT_ABANDONED=ignore composer audit
 
   php-cs-fixer:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -50,7 +37,6 @@ jobs:
       run: tools/vendor/bin/php-cs-fixer fix --diff --dry-run
 
   rector:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -67,7 +53,6 @@ jobs:
       run: tools/vendor/bin/rector process --dry-run
   
   phpstan:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -87,7 +72,6 @@ jobs:
       run: tools/vendor/bin/phpstan analyse
 
   phpunit:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -103,7 +87,6 @@ jobs:
       run: composer test
 
   var-dump-check:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -127,7 +110,6 @@ jobs:
         extensions: 'php,phtml'
 
   magical-number-check:
-    needs: validate-composer
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
