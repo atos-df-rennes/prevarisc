@@ -4,6 +4,26 @@
 
 <!--- END HEADER -->
 
+## [2.8.13](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.12...v2.8.13) (29-01-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Calendrier
+
+* Ajout d'informations pour la synchronisation du calendrier vers Outlook (#290) ([21e706](https://github.com/atos-df-rennes/prevarisc/commit/21e70695f82f34dcf915f46a415336fdaf0215b9))
+
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/palette.svg" width="20" height="20"> Améliorations visuelles
+
+
+##### Formulaires
+
+* Le menu de navigation prend trop de place par rapport à la zone de saisie (#291) ([143499](https://github.com/atos-df-rennes/prevarisc/commit/143499204f4f47d3bba424803ed14be6ec577158))
+
+
+---
+
 ## [2.8.12](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.11...v2.8.12) (08-01-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
