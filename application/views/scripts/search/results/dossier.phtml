@@ -52,7 +52,7 @@
             endfor;
             ?>
 
-            <a href='/dossier/index/id/<?php echo $this->ID_DOSSIER ?>' title='<?php echo htmlspecialchars($fulltext, ENT_QUOTES) ?>'>
+            <a href='/dossier/<?php echo $this->ID_DOSSIER ?>' title='<?php echo htmlspecialchars($fulltext, ENT_QUOTES) ?>'>
                 <?php if (null !== $this->LIBELLE_ETABLISSEMENTINFORMATIONS): ?>
                     <?php echo '[' . $this->LIBELLE_ETABLISSEMENTINFORMATIONS . '] ' ?>
                 <?php endif;
