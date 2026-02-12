@@ -1397,7 +1397,7 @@ class DossierController extends Zend_Controller_Action
                 $dbDossier = new Model_DbTable_Dossier();
                 // on récupère les infos du dernier dossier donnant avis de l'établissement courant
                 foreach ($listeEtab as $etab) {
-                    $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                    $dernierDossierDonnantAvis = $dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER'];
                     $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
                 }
             }
@@ -3159,7 +3159,7 @@ class DossierController extends Zend_Controller_Action
             $dbDossier = new Model_DbTable_Dossier();
             // on récupère les infos du dernier dossier donnant avis de l'établissement courant
             foreach ($listeEtab as $etab) {
-                $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                $dernierDossierDonnantAvis = $dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER'];
                 $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
             }
 
