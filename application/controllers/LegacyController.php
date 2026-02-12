@@ -24,4 +24,18 @@ class LegacyController extends Zend_Controller_Action
 
         $this->redirect('/admin/utilisateurs');
     }
+
+    public function clearSearchCacheAndRedirectAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        // Nettoyage du cache de recherche
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        // Récupération de l'URL cible depuis les paramètres
+        $target = $this->getRequest()->getParam('target', '/');
+
+        $this->redirect($target);
+    }
 }
