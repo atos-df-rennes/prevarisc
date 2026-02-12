@@ -16,6 +16,12 @@ $sauvegarderUtilisateur = new Zend_Controller_Router_Route('legacy/admin/utilisa
     'privilege' => 'admin',
     'uri' => '/legacy/admin/utilisateurs/sauvegarder',
 ]);
+$clearSearchCacheAndRedirect = new Zend_Controller_Router_Route('legacy/admin/elements-supprimes/clear-search-cache-and-redirect', [
+    'controller' => 'legacy',
+    'action' => 'clear-search-cache-and-redirect',
+    'uri' => '/legacy/admin/elements-supprimes/clear-search-cache-and-redirect',
+]);
 
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
 $router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
+$router->addRoute('legacy_clear_search_cache_and_redirect', $clearSearchCacheAndRedirect);

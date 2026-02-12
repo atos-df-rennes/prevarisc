@@ -25,7 +25,7 @@ class LegacyController extends Zend_Controller_Action
         $this->redirect('/admin/utilisateurs');
     }
 
-    public function clearCacheAndRedirectAction(): void
+    public function clearSearchCacheAndRedirectAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
