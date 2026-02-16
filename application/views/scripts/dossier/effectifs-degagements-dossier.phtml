@@ -19,8 +19,8 @@
                     Copier les données sur l'établissement
                 </a>
             </li>
-            <li class="disabled">
-                <a tabindex="-1" href="#">
+            <li>
+                <a id="copyFromEtablissement" tabindex="-1" href="#">
                     Reprendre les données de l'établissement
                 </a>
             </li>
@@ -162,6 +162,30 @@
                     // Restaurer l'état du bouton en cas d'erreur
                     setDropdownLoading(false);
                     alert('Erreur lors de la copie des données. Veuillez réessayer.');
+                }
+            });
+
+            return false;
+        });
+
+        $(document).on('click', '#copyFromEtablissement', function(event) {
+            event.preventDefault();
+
+            // Afficher l'état de chargement
+            setDropdownLoading(true, 'Reprise en cours...');
+
+            $.ajax({
+                type: "POST",
+                url: "/dossier/recuperer-effectifs-degagements-etablissement",
+                data: {idDossier: $("#idDossier").val()},
+                success: function() {
+                    // Rediriger vers la page avec le flash message
+                    window.location='/dossier/effectifs-degagements-dossier/id/'+$("#idDossier").val();
+                },
+                error: function() {
+                    // Restaurer l'état du bouton en cas d'erreur
+                    setDropdownLoading(false);
+                    alert('Erreur lors de la reprise des données. Veuillez réessayer.');
                 }
             });
 

@@ -13,58 +13,76 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
 
     /**
      * Copie les valeurs de l'onglet "Effectifs et dégagements" d'un dossier vers l'onglet "Effectifs et dégagements" de l'établissement lié.
-     * Si une rubrique ou un champ n'a pas le même nom dans la configuration, on ignore et on loggue.
      */
     public function copyValeursFromDossier(int $idEtablissement, array $rubriquesDossier, array $rubriquesEtablissement): void
+    {
+        $this->copyValeursDossierEtablissement($idEtablissement, 'Etablissement', $rubriquesDossier, $rubriquesEtablissement);
+    }
+
+    /**
+     * Copie les valeurs de l'onglet "Effectifs et dégagements" d'un établissement vers l'onglet "Effectifs et dégagements" du dossier courant.
+     */
+    public function copyValeursToDossier(int $idDossier, array $rubriquesDossier, array $rubriquesEtablissement): void
+    {
+        $this->copyValeursDossierEtablissement($idDossier, 'Dossier', $rubriquesEtablissement, $rubriquesDossier);
+    }
+
+    /**
+     * Copie les valeurs de l'onglet "Effectifs et dégagements" d'un dossier ou établissement vers l'onglet "Effectifs et dégagements" de l'autre entité.
+     * Si une rubrique ou un champ n'a pas le même nom dans la configuration, on ignore et on loggue.
+     */
+    private function copyValeursDossierEtablissement(int $idObject, string $object, array $rubriquesFrom, array $rubriquesTo): void
     {
         $serviceChamp = new Service_Champ();
         $serviceValeur = new Service_Valeur();
 
-        foreach ($rubriquesDossier as $rubriqueDossier) {
-            $rubriqueForCopy = $this->searchElementToCopy($rubriquesEtablissement, $rubriqueDossier['NOM'], 'NOM');
+        foreach ($rubriquesFrom as $rubriqueFrom) {
+            $rubriqueForCopy = $this->searchElementToCopy($rubriquesTo, $rubriqueFrom['NOM'], 'NOM');
 
             if (null === $rubriqueForCopy) {
-                error_log(\sprintf('Copie des valeurs effectifs et degagements du dossier vers l\'etablissement : La rubrique %s n\'existe pas.', $rubriqueDossier['NOM']));
+                error_log(\sprintf('Copie des valeurs effectifs et degagements entre dossier et etablissement : La rubrique %s n\'existe pas.', $rubriqueFrom['NOM']));
 
                 continue;
             }
 
-            $champsDossier = $rubriqueDossier['CHAMPS'];
-            foreach ($champsDossier as $champDossier) {
-                $champForCopy = $this->searchElementToCopy($rubriqueForCopy['CHAMPS'], $champDossier['NOM'], 'NOM');
+            $champsFrom = $rubriqueFrom['CHAMPS'];
+            foreach ($champsFrom as $champFrom) {
+                $champForCopy = $this->searchElementToCopy($rubriqueForCopy['CHAMPS'], $champFrom['NOM'], 'NOM');
 
                 if (null === $champForCopy) {
                     error_log(
                         \sprintf(
-                            'Copie des valeurs effectifs et degagements du dossier vers l\'etablissement : Le champ %s n\'existe pas. (rubrique: %s)',
-                            $champDossier['NOM'],
-                            $rubriqueDossier['NOM']
+                            'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ %s n\'existe pas. (rubrique: %s)',
+                            $champFrom['NOM'],
+                            $rubriqueFrom['NOM']
                         )
                     );
 
                     continue;
                 }
 
+                // Copie des champs simples
                 if ('Parent' !== $champForCopy['TYPE']) {
-                    $this->saveValeurChamp('champ-'.$champForCopy['ID_CHAMP'], $idEtablissement, 'Etablissement', $champDossier['VALEUR']);
+                    $this->saveValeurChamp('champ-'.$champForCopy['ID_CHAMP'], $idObject, $object, $champFrom['VALEUR']);
 
                     continue;
                 }
 
                 // Suppression des valeurs existantes du champ parent avant copie
-                $serviceValeur->deleteValeursChampParent($champForCopy['ID_CHAMP'], $idEtablissement, 'Etablissement');
+                $serviceValeur->deleteValeursChampParent($champForCopy['ID_CHAMP'], $idObject, $object);
 
+                // Copie des champs parents non tableaux
                 if (!$serviceChamp->isTableau($champForCopy)) {
-                    foreach ($champDossier['FILS'] as $enfant) {
+                    foreach ($champFrom['FILS'] as $enfant) {
                         $enfantToCopy = $this->searchElementToCopy($champForCopy['FILS'], $enfant['NOM'], 'NOM');
 
                         if (null === $enfantToCopy) {
                             error_log(
                                 \sprintf(
-                                    'Copie des valeurs effectifs et degagements du dossier vers l\'etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
+                                    'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
                                     $enfant['NOM'],
-                                    $champDossier['NOM'],
-                                    $rubriqueDossier['NOM']
+                                    $champFrom['NOM'],
+                                    $rubriqueFrom['NOM']
                                 )
                             );
 
@@ -73,8 +91,8 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
 
                         $this->saveValeurChamp(
                             implode('-', ['champ', $enfantToCopy['ID_CHAMP']]),
-                            $idEtablissement,
-                            'Etablissement',
+                            $idObject,
+                            $object,
                             $enfant['VALEUR']
                         );
                     }
@@ -82,19 +100,20 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
                     continue;
                 }
 
-                foreach ($champDossier['FILS']['VALEURS'] as $index => $champs) {
+                // Copie des champs parents tableaux
+                foreach ($champFrom['FILS']['VALEURS'] as $index => $champs) {
                     foreach ($champs as $idChamp => $data) {
-                        $nomChamp = $this->searchElementToCopy($champDossier['FILS'], $idChamp, 'ID_CHAMP')['NOM'];
+                        $nomChamp = $this->searchElementToCopy($champFrom['FILS'], $idChamp, 'ID_CHAMP')['NOM'];
 
                         $enfantTableuToCopy = $this->searchElementToCopy($champForCopy['FILS'], $nomChamp, 'NOM');
 
                         if (null === $enfantTableuToCopy) {
                             error_log(
                                 \sprintf(
-                                    'Copie des valeurs effectifs et degagements du dossier vers l\'etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
+                                    'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
                                     $nomChamp,
-                                    $champDossier['NOM'],
-                                    $rubriqueDossier['NOM']
+                                    $champFrom['NOM'],
+                                    $rubriqueFrom['NOM']
                                 )
                             );
 
@@ -103,8 +122,8 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
 
                         $this->saveValeurChamp(
                             implode('-', ['champ', $enfantTableuToCopy['ID_CHAMP'], $index]),
-                            $idEtablissement,
-                            'Etablissement',
+                            $idObject,
+                            $object,
                             $data['VALEUR']
                         );
                     }
