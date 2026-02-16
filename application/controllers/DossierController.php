@@ -3091,6 +3091,30 @@ class DossierController extends Zend_Controller_Action
         $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
     }
 
+    public function copyEffectifsDegagementsToEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        if (1 === count($listeEtab)) {
+            $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+            $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+            $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+            $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+            $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+            $serviceEtablissementEffectifsDegagements->copyValeursFromDossier($idEtablissement, $rubriquesDossier, $rubqriquesEtablissement);
+        }
+    }
+
     public function lienmultipleAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
