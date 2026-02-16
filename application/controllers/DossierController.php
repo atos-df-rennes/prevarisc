@@ -3091,7 +3091,7 @@ class DossierController extends Zend_Controller_Action
         $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
     }
 
-    public function copyEffectifsDegagementsToEtablissementAction(): void
+    public function copierEffectifsDegagementsEtablissementAction(): void
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
@@ -3102,17 +3102,31 @@ class DossierController extends Zend_Controller_Action
         $dbEtabDossier = new Model_DbTable_EtablissementDossier();
         $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
 
-        if (1 === count($listeEtab)) {
-            $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+        if (1 !== count($listeEtab)) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Reprise échouée !',
+                'message' => 'Aucun ou plusieurs établissement(s) lié(s) au dossier. Les effectifs et dégagements n\'ont pas été copiés.',
+            ]);
 
-            $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
-            $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
-
-            $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
-            $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
-
-            $serviceEtablissementEffectifsDegagements->copyValeursFromDossier($idEtablissement, $rubriquesDossier, $rubqriquesEtablissement);
+            return;
         }
+
+        $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $serviceEtablissementEffectifsDegagements->copyValeursFromDossier($idEtablissement, $rubriquesDossier, $rubqriquesEtablissement);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Reprise réussie !',
+            'message' => 'Les effectifs et dégagements ont été copiés sur l\'établissement.',
+        ]);
     }
 
     public function lienmultipleAction(): void
