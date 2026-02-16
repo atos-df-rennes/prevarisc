@@ -243,13 +243,13 @@ parameters:
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$layout\.$#'
 			identifier: property.notFound
-			count: 4
+			count: 6
 			path: application/controllers/DossierController.php
 
 		-
 			message: '#^Access to an undefined property Zend_Controller_Action_HelperBroker\:\:\$viewRenderer\.$#'
 			identifier: property.notFound
-			count: 16
+			count: 18
 			path: application/controllers/DossierController.php
 
 		-
@@ -609,7 +609,7 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
 			identifier: method.notFound
-			count: 30
+			count: 34
 			path: application/controllers/DossierController.php
 
 		-
