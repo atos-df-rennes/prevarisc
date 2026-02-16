@@ -59,4 +59,47 @@ class Model_DbTable_Valeur extends Zend_Db_Table_Abstract
     {
         return $this->getAllOfParent($idObject, $classObject)->where('c.ID_CHAMP = ?', $idChamp);
     }
+
+    /**
+     * Supprime toutes les valeurs des champs enfants d'un champ parent pour un objet donné.
+     *
+     * @param int    $idChampParent ID du champ parent
+     * @param int    $idObject      ID de l'objet (dossier ou établissement)
+     * @param string $classObject   Type d'objet ('Dossier' ou 'Etablissement')
+     *
+     * @return int Nombre de lignes supprimées
+     */
+    public function deleteValeursChampParent(int $idChampParent, int $idObject, string $classObject): int
+    {
+        $db = $this->getAdapter();
+
+        // Récupérer les IDs des valeurs à supprimer via sous-requête
+        $subSelect = $db->select()
+            ->from(['v' => 'valeur'], ['v.ID_VALEUR'])
+            ->join(['c' => 'champ'], 'v.ID_CHAMP = c.ID_CHAMP', [])
+            ->where('c.ID_PARENT = ?', $idChampParent)
+        ;
+
+        if (false !== strpos($classObject, 'Dossier')) {
+            $subSelect->join(['dv' => 'dossiervaleur'], 'dv.ID_VALEUR = v.ID_VALEUR', [])
+                ->where('dv.ID_DOSSIER = ?', $idObject)
+            ;
+        }
+
+        if (false !== strpos($classObject, 'Etablissement')) {
+            $subSelect->join(['ev' => 'etablissementvaleur'], 'ev.ID_VALEUR = v.ID_VALEUR', [])
+                ->where('ev.ID_ETABLISSEMENT = ?', $idObject)
+            ;
+        }
+
+        // Récupérer les IDs sous forme de tableau
+        $idsToDelete = $db->fetchCol($subSelect);
+
+        if ([] === $idsToDelete) {
+            return 0;
+        }
+
+        // Suppression directe via DELETE SQL
+        return $this->delete(['ID_VALEUR IN (?)' => $idsToDelete]);
+    }
 }

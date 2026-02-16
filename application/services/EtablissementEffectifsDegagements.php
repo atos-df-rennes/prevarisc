@@ -18,6 +18,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
     public function copyValeursFromDossier(int $idEtablissement, array $rubriquesDossier, array $rubriquesEtablissement): void
     {
         $serviceChamp = new Service_Champ();
+        $serviceValeur = new Service_Valeur();
 
         foreach ($rubriquesDossier as $rubriqueDossier) {
             $rubriqueForCopy = $this->searchElementToCopy($rubriquesEtablissement, $rubriqueDossier['NOM'], 'NOM');
@@ -49,6 +50,9 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
 
                     continue;
                 }
+
+                // Suppression des valeurs existantes du champ parent avant copie
+                $serviceValeur->deleteValeursChampParent($champForCopy['ID_CHAMP'], $idEtablissement, 'Etablissement');
 
                 if (!$serviceChamp->isTableau($champForCopy)) {
                     foreach ($champDossier['FILS'] as $enfant) {
