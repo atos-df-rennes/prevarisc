@@ -40,7 +40,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
             $rubriqueForCopy = $this->searchElementToCopy($rubriquesTo, $rubriqueFrom['NOM'], 'NOM');
 
             if (null === $rubriqueForCopy) {
-                error_log(\sprintf('Copie des valeurs effectifs et degagements entre dossier et etablissement : La rubrique %s n\'existe pas.', $rubriqueFrom['NOM']));
+                error_log(\sprintf("Copie des valeurs effectifs et degagements entre dossier et etablissement : La rubrique %s n'existe pas.", $rubriqueFrom['NOM']));
 
                 continue;
             }
@@ -52,7 +52,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
                 if (null === $champForCopy) {
                     error_log(
                         \sprintf(
-                            'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ %s n\'existe pas. (rubrique: %s)',
+                            "Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ %s n'existe pas. (rubrique: %s)",
                             $champFrom['NOM'],
                             $rubriqueFrom['NOM']
                         )
@@ -79,7 +79,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
                         if (null === $enfantToCopy) {
                             error_log(
                                 \sprintf(
-                                    'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
+                                    "Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n'existe pas. (champ: %s, rubrique: %s",
                                     $enfant['NOM'],
                                     $champFrom['NOM'],
                                     $rubriqueFrom['NOM']
@@ -110,7 +110,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
                         if (null === $enfantTableuToCopy) {
                             error_log(
                                 \sprintf(
-                                    'Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n\'existe pas. (champ: %s, rubrique: %s',
+                                    "Copie des valeurs effectifs et degagements entre dossier et etablissement : Le champ enfant %s n'existe pas. (champ: %s, rubrique: %s",
                                     $nomChamp,
                                     $champFrom['NOM'],
                                     $rubriqueFrom['NOM']
@@ -137,7 +137,7 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
      */
     private function searchElementToCopy(array $elementToSearchIn, $search, string $column): ?array
     {
-        if (false === array_search($search, array_column($elementToSearchIn, $column), true)) {
+        if (!in_array($search, array_column($elementToSearchIn, $column), true)) {
             return null;
         }
 
