@@ -3091,6 +3091,82 @@ class DossierController extends Zend_Controller_Action
         $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
     }
 
+    public function copierEffectifsDegagementsEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        if (1 !== count($listeEtab)) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Copie échouée !',
+                'message' => 'Aucun ou plusieurs établissement(s) lié(s) au dossier. Les effectifs et dégagements n\'ont pas été copiés.',
+            ]);
+
+            return;
+        }
+
+        $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $serviceEtablissementEffectifsDegagements->copyValeursFromDossier($idEtablissement, $rubriquesDossier, $rubqriquesEtablissement);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Copie réussie !',
+            'message' => 'Les effectifs et dégagements ont été copiés sur l\'établissement.',
+        ]);
+    }
+
+    public function recupererEffectifsDegagementsEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        if (1 !== count($listeEtab)) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Reprise échouée !',
+                'message' => 'Aucun ou plusieurs établissement(s) lié(s) au dossier. Les effectifs et dégagements n\'ont pas été récupérés.',
+            ]);
+
+            return;
+        }
+
+        $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $serviceEtablissementEffectifsDegagements->copyValeursToDossier($idDossier, $rubriquesDossier, $rubqriquesEtablissement);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Reprise réussie !',
+            'message' => 'Les effectifs et dégagements ont été récupérés depuis l\'établissement.',
+        ]);
+    }
+
     public function lienmultipleAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();

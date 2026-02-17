@@ -1,9 +1,32 @@
 <div class='action-buttons pull-right'>
-    <?php if (!$this->hasData): ?>
-        <button type="button" class="btn btn-info recupEffectifsDegagementsDossier">
-            Reprendre les données d'une étude précédente
+    <div class="btn-group">
+        <button id="btnRepriseDropdown" type="button" class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+            Reprise de données
+            <span class="caret"></span>
         </button>
-    <?php endif ?>
+        <ul class="dropdown-menu" role="menu">
+            <?php if (!$this->hasData): ?>
+                <li>
+                    <a id="recupEffectifsDegagementsDossier" tabindex="-1" href="#">
+                        Reprendre les données d'une étude précédente
+                    </a>
+                </li>
+                <hr />
+            <?php endif ?>
+
+            <li>
+                <a id="copyToEtablissement" tabindex="-1" href="#">
+                    Copier les données sur l'établissement
+                </a>
+            </li>
+            <li>
+                <a id="copyFromEtablissement" tabindex="-1" href="#">
+                    Reprendre les données de l'établissement
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <a class='btn btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>">Modifier les effectifs et dégagements</a>
 </div>
 
@@ -28,6 +51,35 @@
     $(document).ready(function() {
 	    var dialogRecupEffectifsDegagements = $('<div style="display:none;"></div>').appendTo('body');
 
+        // Fonction helper pour gérer l'état de chargement du dropdown
+        function setDropdownLoading(isLoading, loadingText) {
+            var $btn = $('#btnRepriseDropdown');
+            var $caret = $btn.find('.caret');
+
+            if (isLoading) {
+                // Sauvegarder le texte original
+                $btn.data('original-text', $btn.html());
+
+                // Désactiver le bouton et afficher le texte de chargement
+                $btn.prop('disabled', true)
+                    .addClass('disabled')
+                $btn.html(loadingText + ' <img src="/images/load.gif" style="height:14px;margin-left:5px;" />');
+
+                // Fermer le dropdown s'il est ouvert
+                $('.btn-group').removeClass('open');
+            } else {
+                // Restaurer le texte original
+                var originalText = $btn.data('original-text');
+                if (originalText) {
+                    $btn.html(originalText);
+                }
+
+                // Réactiver le bouton
+                $btn.prop('disabled', false)
+                    .removeClass('disabled');
+            }
+        }
+
         dialogRecupEffectifsDegagements.dialog({
             title: "Reprise des données d'un dossier précédent",
             modal: true,
@@ -44,11 +96,15 @@
                                 type: "POST",
                                 url: "/dossier/recupeffectifsdegagements",
                                 data: $("#selectionDossier").serialize(),
-                                before: function(){
+                                beforeSend: function(){
                                     dialogRecupEffectifsDegagements.html("Veuillez patienter pendant la reprise des effectifs et dégagements <img src='/images/load.gif' />");
                                 },
-                                success: function(msg){ 
+                                success: function() {
                                     window.location='/dossier/effectifs-degagements-dossier/id/'+$("#idDossier").val();
+                                },
+                                error: function() {
+                                    alert('Erreur lors de la reprise des données. Veuillez réessayer.');
+                                    dialogRecupEffectifsDegagements.dialog("close");
                                 }
                             });
                         } else {
@@ -69,18 +125,71 @@
             ],
         });
 
-        $(".recupEffectifsDegagementsDossier").live('click',function(){
+        $(document).on('click', '#recupEffectifsDegagementsDossier', function(event) {
+            event.preventDefault();
+
             $.ajax({
                 type: "POST",
                 url: "/dossier/formrecupeffectifsdegagements",
-                data: "&idDossier="+$("#idDossier").val(),
-                success: function(msg){
+                data: {idDossier: $("#idDossier").val()},
+                success: function(msg) {
                     dialogRecupEffectifsDegagements.html(msg);
                     dialogRecupEffectifsDegagements.dialog("open");
+                },
+                error: function() {
+                    alert('Erreur lors du chargement du formulaire. Veuillez réessayer.');
                 }
             });
 
             return false;
         });
-    })
+
+        $(document).on('click', '#copyToEtablissement', function(event) {
+            event.preventDefault();
+
+            // Afficher l'état de chargement
+            setDropdownLoading(true, 'Copie en cours...');
+
+            $.ajax({
+                type: "POST",
+                url: "/dossier/copier-effectifs-degagements-etablissement",
+                data: {idDossier: $("#idDossier").val()},
+                success: function() {
+                    // Rediriger vers la page avec le flash message
+                    window.location='/dossier/effectifs-degagements-dossier/id/'+$("#idDossier").val();
+                },
+                error: function() {
+                    // Restaurer l'état du bouton en cas d'erreur
+                    setDropdownLoading(false);
+                    alert('Erreur lors de la copie des données. Veuillez réessayer.');
+                }
+            });
+
+            return false;
+        });
+
+        $(document).on('click', '#copyFromEtablissement', function(event) {
+            event.preventDefault();
+
+            // Afficher l'état de chargement
+            setDropdownLoading(true, 'Reprise en cours...');
+
+            $.ajax({
+                type: "POST",
+                url: "/dossier/recuperer-effectifs-degagements-etablissement",
+                data: {idDossier: $("#idDossier").val()},
+                success: function() {
+                    // Rediriger vers la page avec le flash message
+                    window.location='/dossier/effectifs-degagements-dossier/id/'+$("#idDossier").val();
+                },
+                error: function() {
+                    // Restaurer l'état du bouton en cas d'erreur
+                    setDropdownLoading(false);
+                    alert('Erreur lors de la reprise des données. Veuillez réessayer.');
+                }
+            });
+
+            return false;
+        });
+    });
 </script>

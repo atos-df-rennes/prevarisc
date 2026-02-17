@@ -131,6 +131,20 @@ class Service_Valeur
         }
     }
 
+    /**
+     * Supprime toutes les valeurs d'un champ parent (et de ses enfants si tableau) pour un objet donné.
+     *
+     * @param int    $idChampParent ID du champ parent
+     * @param int    $idObject      ID de l'objet (dossier ou établissement)
+     * @param string $classObject   Type d'objet ('Dossier' ou 'Etablissement')
+     *
+     * @return int Nombre de lignes supprimées
+     */
+    public function deleteValeursChampParent(int $idChampParent, int $idObject, string $classObject): int
+    {
+        return $this->modelValeur->deleteValeursChampParent($idChampParent, $idObject, $classObject);
+    }
+
     private function getTypeValeur(int $idChamp): string
     {
         $modelChamp = new Model_DbTable_Champ();
