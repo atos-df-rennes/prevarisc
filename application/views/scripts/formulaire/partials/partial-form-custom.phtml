@@ -1,14 +1,17 @@
 <?php foreach ($this->rubriques as $rubrique) : ?>
-    <div id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>' class="panel panel-formulaire-perso folded<?= boolval($rubrique['DISPLAY']) === false ? ' hide' : '' ?>">
+    <div
+        id='afficher_rubrique-<?= $rubrique['ID_RUBRIQUE'] ?>'
+        class="panel panel-formulaire-perso <?php if (boolval($rubrique['ouverte']) === false): ?>folded<?php endif ?> <?php if (boolval($rubrique['DISPLAY']) === false): ?>hide<?php endif ?>"
+    >
         <div class="panel-heading">
             <h4 id='<?= strtolower(preg_replace('/\s|\'+/', '-', $rubrique['NOM'])) ?>'>
                 <?= $rubrique['NOM'] ?>
             </h4>
 
-            <i class="icon icon-chevron-down"></i>
+            <i class="icon <?php if (boolval($rubrique['ouverte']) === false): ?>icon-chevron-down<?php else: ?>icon-chevron-up<?php endif ?>"></i>
         </div>
 
-        <div class="panel-body panel-body-hidden">
+        <div class="panel-body <?php if (boolval($rubrique['ouverte']) === false): ?>panel-body-hidden<?php endif ?>">
             <?php if (empty($rubrique['CHAMPS'])): ?>
                 <?=
                     $this->partial('formulaire/partials/partial-information-manquante.phtml', [
