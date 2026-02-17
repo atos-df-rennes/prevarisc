@@ -12,7 +12,7 @@ class Model_DbTable_Rubrique extends Zend_Db_Table_Abstract
     {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->from(['r' => 'rubrique'], ['ID_RUBRIQUE', 'NOM', 'idx'])
+            ->from(['r' => 'rubrique'], ['ID_RUBRIQUE', 'NOM', 'idx', 'ouverte'])
             ->columns(
                 ['DISPLAY' => 'r.DEFAULT_DISPLAY']
             )
