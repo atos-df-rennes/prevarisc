@@ -4,6 +4,25 @@
 
 <!--- END HEADER -->
 
+## [2.8.15](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.14...v2.8.15) (20-02-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+##### Formulaires
+
+* [#5006] choix du mode d'ouverture par défaut des rubriques (#300) ([3e282ff](https://github.com/atos-df-rennes/prevarisc/commit/3e282ffba3e271a024056c0dc07bf9374fe362f8))
+* [#5005] copie/reprise des effectifs et dégagements entre établissement et dossier (#299) ([0be40ef](https://github.com/atos-df-rennes/prevarisc/commit/0be40ef0f045688b51ec0b732b0514129ad1dc7c))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+##### Formulaires
+
+* Prend toute la largeur disponible pour les panneaux des rubriques indépendamment du zoom navigateur (#302) ([2edc26](https://github.com/atos-df-rennes/prevarisc/commit/2edc2675d271cc731e99157beb42e1e8d721540f))
+* Sauvegarde du changement d'affichage des rubriques (#301) ([5db27e](https://github.com/atos-df-rennes/prevarisc/commit/5db27e3237c326c42e43aee6b182adb702c893b3))
+
+
+---
+
 ## [2.8.13](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.12...v2.8.13) (29-01-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
