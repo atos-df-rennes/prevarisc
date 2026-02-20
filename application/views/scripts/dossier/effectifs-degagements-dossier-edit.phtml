@@ -9,6 +9,7 @@
     </div>
 
     <h3>Modification des effectifs et dégagements</h3>
+    <div class="clearfix"></div>
 
     <div class="form-layout">
         <?= $this->partial('formulaire/_table_of_content.phtml', [
@@ -23,6 +24,10 @@
             ]); ?>
         </main>
     </div>
+
+    <?= $this->partial('formulaire/_modal_table_of_content.phtml', [
+        'rubriques' => $this->rubriques
+    ]) ?>
 </form>
 
 <button
@@ -33,7 +38,3 @@
 >
     <i class="icon-filter"></i>
 </button>
-
-<?= $this->partial('formulaire/_modal_table_of_content.phtml', [
-    'rubriques' => $this->rubriques
-]) ?>
