@@ -44,6 +44,12 @@ class LegacyController extends Zend_Controller_Action
 
         // Vider cache pour chaque établissement modifié + son parent
         foreach ($etablissementsIds as $etablissementId) {
+            $etablissementId = filter_var($etablissementId, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
+            if (null === $etablissementId) {
+                continue;
+            }
+
             // Cache établissement
             $cache->remove('etablissement_id_'.$etablissementId);
 
