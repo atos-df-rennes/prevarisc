@@ -2197,6 +2197,7 @@ class DossierController extends Zend_Controller_Action
             $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
             $avisDerogationsEtablissement = array_merge($avisDerogationsEtablissement, $avisDerogationsEtablissementEnfant);
         }
+
         $this->view->assign('avisDerogationsEtablissement', $avisDerogationsEtablissement);
 
         // Récupération du type et de la nature du dossier
