@@ -11,6 +11,9 @@
                 <sauvegarder-utilisateur>
                     <route>legacy_sauvegarder_utilisateur</route>
                 </sauvegarder-utilisateur>
+                <vider-cache-dossier>
+                    <route>legacy_vider_cache_dossier</route>
+                </vider-cache-dossier>
             </pages>
         </legacy>
 
