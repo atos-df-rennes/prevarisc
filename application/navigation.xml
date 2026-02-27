@@ -14,6 +14,9 @@
                 <vider-cache-dossier>
                     <route>legacy_vider_cache_dossier</route>
                 </vider-cache-dossier>
+                <clear-search-cache-and-redirect>
+                    <route>legacy_clear_search_cache_and_redirect</route>
+                </clear-search-cache-and-redirect>
             </pages>
         </legacy>
 
