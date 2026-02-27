@@ -948,7 +948,7 @@ try {
             $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
         }
 
-        addChamp($segmentAvisDerogations, 'date', $date);
+        addChamp($segmentAvisDerogations, 'date_avis_derogation', $date);
 
         $segmentAvisDerogations->merge();
     }
@@ -982,7 +982,7 @@ try {
             $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
         }
 
-        addChamp($segmentAvisDerogationsEtablissement, 'date', $date);
+        addChamp($segmentAvisDerogationsEtablissement, 'date_avis_derogation', $date);
 
         $segmentAvisDerogationsEtablissement->merge();
     }
