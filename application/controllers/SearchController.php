@@ -2,6 +2,10 @@
 
 class SearchController extends Zend_Controller_Action
 {
+    /*
+     * @warning: Simple redirect, utiliser directement l'action établissement.
+     * A ne pas migrer. (après vérification)
+     */
     public function indexAction(): void
     {
         $this->_helper->redirector('etablissement');
@@ -555,6 +559,10 @@ class SearchController extends Zend_Controller_Action
         }
     }
 
+    /*
+     * @warning: Code qui n'est à priori pas utilisé dans l'application.
+     * A ne pas migrer. (après vérification)
+     */
     public function utilisateurAction(): void
     {
         $this->_helper->layout->setLayout('search');

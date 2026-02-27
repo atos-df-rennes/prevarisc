@@ -143,7 +143,7 @@ class FormulaireController extends Zend_Controller_Action
                 $rubrique->DEFAULT_DISPLAY = $post['afficher_rubrique'];
                 $rubrique->save();
 
-                $this->redirect('/admin/formulaires');
+                $this->_helper->redirector('index');
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Erreur lors de la sauvegarde', 'message' => 'La rubrique n\'a pas été modifiée. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
@@ -239,7 +239,11 @@ class FormulaireController extends Zend_Controller_Action
         $capsuleRubrique = $this->modelCapsuleRubrique->find($rubrique['ID_CAPSULERUBRIQUE'])->current();
         $listeTypeChampRubrique = $this->serviceFormulaire->getAllListeTypeChampRubrique();
 
-        $backUrl = '/admin/formulaires/'.$rubrique['ID_CAPSULERUBRIQUE'].'/rubriques/'.$rubrique['ID_RUBRIQUE'].'/modifier';
+        $backUrlOptions = [
+            'controller' => 'formulaire',
+            'action' => 'edit-rubrique',
+            'rubrique' => $champ['ID_RUBRIQUE'],
+        ];
         $champFusionValue = null;
 
         if ('Parent' === $champType['TYPE']) {
@@ -327,14 +331,11 @@ class FormulaireController extends Zend_Controller_Action
                 );
             }
 
-            $backUrlOptions = [
-                'controller' => 'formulaire',
-                'action' => 'edit-champ',
-                'rubrique' => $champ['ID_RUBRIQUE'],
-                'champ' => $champ['ID_PARENT'],
-            ];
-            $backUrl = $this->view->url($backUrlOptions, null, true);
+            $backUrlOptions['action'] = 'edit-champ';
+            $backUrlOptions['champ'] = $champ['ID_PARENT'];
         }
+
+        $backUrl = $this->view->url($backUrlOptions, null, true);
 
         $this->view->assign('champ', $champ);
         $this->view->assign('champFusionValue', $champFusionValue);

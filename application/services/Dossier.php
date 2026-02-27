@@ -835,12 +835,12 @@ class Service_Dossier
     }
 
     // Retrouve l'avis du dernier dossier donnant avis pour l'établissement courant uniquement
-    public function saveDossierDonnantAvisCurrentEtab(array $dernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
+    public function saveDossierDonnantAvisCurrentEtab(?int $idDernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
     {
         $dbEtab = new Model_DbTable_Etablissement();
         $etab = $dbEtab->find($etab['ID_ETABLISSEMENT'])->current();
 
-        $etab->ID_DOSSIER_DONNANT_AVIS = $dernierDossierDonnantAvis['ID_DOSSIER'];
+        $etab->ID_DOSSIER_DONNANT_AVIS = $idDernierDossierDonnantAvis;
         $etab->save();
 
         $cache->remove(sprintf('etablissement_id_%d', $etab['ID_ETABLISSEMENT']));

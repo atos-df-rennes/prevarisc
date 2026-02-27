@@ -221,7 +221,7 @@ foreach($this->membresFiles as $val => $membre){
                                         $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
                                     }
 
-                                    addChamp($avisDerogations, 'date', $date);
+                                    addChamp($avisDerogations, 'date_avis_derogation', $date);
 
                                     $avisDerogations->merge();
                                 }
@@ -235,7 +235,7 @@ foreach($this->membresFiles as $val => $membre){
                                 addChamp($avisDerogations, 'analyse_de_risque', '');
                                 addChamp($avisDerogations, 'avis', '');
                                 addChamp($avisDerogations, 'identifiantdossierleve', '');
-                                addChamp($avisDerogations, 'date', '');
+                                addChamp($avisDerogations, 'date_avis_derogation', '');
 
                                 $avisDerogations->merge();
                             }
@@ -270,7 +270,7 @@ foreach($this->membresFiles as $val => $membre){
                                         $date = $date->get(Zend_Date::DAY_SHORT.' '.Zend_Date::MONTH_NAME_SHORT.' '.Zend_Date::YEAR);
                                     }
 
-                                    addChamp($avisDerogationsEtablissement, 'date', $date);
+                                    addChamp($avisDerogationsEtablissement, 'date_avis_derogation', $date);
 
                                     $avisDerogationsEtablissement->merge();
                                 }
@@ -284,7 +284,7 @@ foreach($this->membresFiles as $val => $membre){
                                 addChamp($avisDerogationsEtablissement, 'analyse_de_risque', '');
                                 addChamp($avisDerogationsEtablissement, 'avis', '');
                                 addChamp($avisDerogationsEtablissement, 'identifiantdossierleve', '');
-                                addChamp($avisDerogationsEtablissement, 'date', '');
+                                addChamp($avisDerogationsEtablissement, 'date_avis_derogation', '');
 
                                 $avisDerogationsEtablissement->merge();
                             }

@@ -4,6 +4,118 @@
 
 <!--- END HEADER -->
 
+## [2.8.15](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.14...v2.8.15) (20-02-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+##### Formulaires
+
+* [#5006] choix du mode d'ouverture par défaut des rubriques (#300) ([3e282ff](https://github.com/atos-df-rennes/prevarisc/commit/3e282ffba3e271a024056c0dc07bf9374fe362f8))
+* [#5005] copie/reprise des effectifs et dégagements entre établissement et dossier (#299) ([0be40ef](https://github.com/atos-df-rennes/prevarisc/commit/0be40ef0f045688b51ec0b732b0514129ad1dc7c))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+##### Formulaires
+
+* Prend toute la largeur disponible pour les panneaux des rubriques indépendamment du zoom navigateur (#302) ([2edc26](https://github.com/atos-df-rennes/prevarisc/commit/2edc2675d271cc731e99157beb42e1e8d721540f))
+* Sauvegarde du changement d'affichage des rubriques (#301) ([5db27e](https://github.com/atos-df-rennes/prevarisc/commit/5db27e3237c326c42e43aee6b182adb702c893b3))
+
+
+---
+
+## [2.8.13](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.12...v2.8.13) (29-01-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Calendrier
+
+* Ajout d'informations pour la synchronisation du calendrier vers Outlook (#290) ([21e706](https://github.com/atos-df-rennes/prevarisc/commit/21e70695f82f34dcf915f46a415336fdaf0215b9))
+
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/palette.svg" width="20" height="20"> Améliorations visuelles
+
+
+##### Formulaires
+
+* Le menu de navigation prend trop de place par rapport à la zone de saisie (#291) ([143499](https://github.com/atos-df-rennes/prevarisc/commit/143499204f4f47d3bba424803ed14be6ec577158))
+
+
+---
+
+## [2.8.12](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.11...v2.8.12) (08-01-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Formulaires
+
+* Problèmes de placement de curseur et de saisie (#287) ([63f255](https://github.com/atos-df-rennes/prevarisc/commit/63f2557cb590dd9072af79e0fb8c3d2d55132c66))
+
+
+---
+
+## [2.8.8](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.7...v2.8.8) (17-11-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Affiche le dernier libellé de l'établissement sur la recherche de dossiers (#265) ([bb008c](https://github.com/atos-df-rennes/prevarisc/commit/bb008cb89a726ae4feee2bc9cfa1dddfe5b2d1c5))
+
+##### Dossier
+
+* N'efface pas la date de commission si dossier incomplet ou date de réception modifiée (#263) ([c306d0](https://github.com/atos-df-rennes/prevarisc/commit/c306d0befe9b33567cca8648aef697f1ec61af34))
+* Passage incorrect de l'identifiant dans l'URL de suppression (#262) ([18eca5](https://github.com/atos-df-rennes/prevarisc/commit/18eca54105c90fc187935376965b1ae5cf88498e))
+
+##### Etablissement
+
+* Mauvais affichage de la recherche (#272) ([a44537](https://github.com/atos-df-rennes/prevarisc/commit/a4453767bde7ecc8c17fc451c0ae5d9e6e600414))
+
+##### Platau
+
+* Permet l'utilisation d'un fichier de configuration spécifique à un environnement (#276) ([f2918a](https://github.com/atos-df-rennes/prevarisc/commit/f2918ac7bb59e664a87790adc3d88e8ae45a8d75))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+
+##### Administration
+
+* Gestion des formulaires personnalisés (#261) ([05c5f4](https://github.com/atos-df-rennes/prevarisc/commit/05c5f4b22c7cccfbc13d278b182db13a73a8f871))
+* Gestion des prescriptions types (#264) ([c05202](https://github.com/atos-df-rennes/prevarisc/commit/c0520270e0685f8b45b019521ded51ce14a4bd91))
+* Gestion des rubriques des formulaires personnalisés (#268) ([7438ca](https://github.com/atos-df-rennes/prevarisc/commit/7438ca3b602bf2a707e4d6d8bdda318ba08dff55))
+* Permissions avancées pour les établissements et les dossiers (#275) ([f7f797](https://github.com/atos-df-rennes/prevarisc/commit/f7f797edaa811e943ad7c5624c6de90856ac017f))
+
+##### Dossier
+
+* Verrouillage et déverrouillage (#259) ([8309d1](https://github.com/atos-df-rennes/prevarisc/commit/8309d1bd305ffe2c57299d41b24a24c4001fb2bd))
+
+##### Etablissement
+
+* Affichage des pièces jointes (#257) ([34a2b2](https://github.com/atos-df-rennes/prevarisc/commit/34a2b2daf1096ed92bb21b0258e0e44a5ff7b794))
+* Onglet contacts (#258) ([6d42d0](https://github.com/atos-df-rennes/prevarisc/commit/6d42d04b79162f9c6cc814f1b8bebe9530d56eae))
+
+##### Prescriptions
+
+* Ajout, modification et suppression des articles (#251) ([a4cf15](https://github.com/atos-df-rennes/prevarisc/commit/a4cf15e75f4fc5b6b470c118039b111e301cb6a8))
+
+
+---
+
+## [2.8.6](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.5...v2.8.6) (29-10-2025)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Prescriptions
+
+* Affichage des justifications de levée contenant des apostrophes ou des guillemets (#274) ([b91f2f](https://github.com/atos-df-rennes/prevarisc/commit/b91f2f90e4eedd7e8c44e71b76f5e36118c63626))
+
+##### Rapports
+
+* Les boucles des prescriptions des cellules sont optionnelles (#273) ([38aa9c](https://github.com/atos-df-rennes/prevarisc/commit/38aa9c54722d7ca030d46d4fe553150c12255d5b))
+
+
+---
+
 ## [2.8.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.0...v2.8.1) (24-09-2025)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions

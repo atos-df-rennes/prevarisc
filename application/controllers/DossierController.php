@@ -1397,7 +1397,7 @@ class DossierController extends Zend_Controller_Action
                 $dbDossier = new Model_DbTable_Dossier();
                 // on récupère les infos du dernier dossier donnant avis de l'établissement courant
                 foreach ($listeEtab as $etab) {
-                    $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                    $dernierDossierDonnantAvis = $dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER'];
                     $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
                 }
             }
@@ -1418,6 +1418,11 @@ class DossierController extends Zend_Controller_Action
         }
     }
 
+    /*
+     * @warning: Code qui n'est à priori pas utilisé dans l'application.
+     * La colonne ABREVIATION_PRESCRIPTIONTYPE n'existe pas en base.
+     * A ne pas migrer. (après vérification)
+     */
     // Autocomplétion pour selection ABREVIATION
     public function selectionabreviationAction(): void
     {
@@ -2190,7 +2195,15 @@ class DossierController extends Zend_Controller_Action
 
         // Avis & Dérogations
         $this->view->assign('avisDerogations', $DBdossier->getListAvisDerogationsFromDossier($idDossier));
-        $this->view->assign('avisDerogationsEtablissement', $model_etablissement->getListAvisDerogationsEtablissement($idEtab));
+
+        $avisDerogationsEtablissement = $model_etablissement->getListAvisDerogationsEtablissement($idEtab);
+        $etablissementsEnfants = $this->view->etablissementInfos['etablissement_lies'];
+        foreach ($etablissementsEnfants as $etablissementEnfant) {
+            $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
+            $avisDerogationsEtablissement = array_merge($avisDerogationsEtablissement, $avisDerogationsEtablissementEnfant);
+        }
+
+        $this->view->assign('avisDerogationsEtablissement', $avisDerogationsEtablissement);
 
         // Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();
@@ -3091,6 +3104,82 @@ class DossierController extends Zend_Controller_Action
         $serviceDossierEffectifsDegagements->copyValeurs($idDossier, $rubriques);
     }
 
+    public function copierEffectifsDegagementsEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        if (1 !== count($listeEtab)) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Copie échouée !',
+                'message' => 'Aucun ou plusieurs établissement(s) lié(s) au dossier. Les effectifs et dégagements n\'ont pas été copiés.',
+            ]);
+
+            return;
+        }
+
+        $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $serviceEtablissementEffectifsDegagements->copyValeursFromDossier($idEtablissement, $rubriquesDossier, $rubqriquesEtablissement);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Copie réussie !',
+            'message' => 'Les effectifs et dégagements ont été copiés sur l\'établissement.',
+        ]);
+    }
+
+    public function recupererEffectifsDegagementsEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $idDossier = (int) $this->getRequest()->getParam('idDossier');
+
+        // récupération de l'établissement attaché au dossier
+        $dbEtabDossier = new Model_DbTable_EtablissementDossier();
+        $listeEtab = $dbEtabDossier->getEtablissementListe($idDossier);
+
+        if (1 !== count($listeEtab)) {
+            $this->_helper->flashMessenger([
+                'context' => 'error',
+                'title' => 'Reprise échouée !',
+                'message' => 'Aucun ou plusieurs établissement(s) lié(s) au dossier. Les effectifs et dégagements n\'ont pas été récupérés.',
+            ]);
+
+            return;
+        }
+
+        $idEtablissement = $listeEtab['0']['ID_ETABLISSEMENT'];
+
+        $serviceDossierEffectifsDegagements = new Service_DossierEffectifsDegagements();
+        $rubriquesDossier = $serviceDossierEffectifsDegagements->getRubriques($idDossier, 'Dossier');
+
+        $serviceEtablissementEffectifsDegagements = new Service_EtablissementEffectifsDegagements();
+        $rubqriquesEtablissement = $serviceEtablissementEffectifsDegagements->getRubriques($idEtablissement, 'Etablissement');
+
+        $serviceEtablissementEffectifsDegagements->copyValeursToDossier($idDossier, $rubriquesDossier, $rubqriquesEtablissement);
+
+        $this->_helper->flashMessenger([
+            'context' => 'success',
+            'title' => 'Reprise réussie !',
+            'message' => 'Les effectifs et dégagements ont été récupérés depuis l\'établissement.',
+        ]);
+    }
+
     public function lienmultipleAction(): void
     {
         $this->_helper->viewRenderer->setNoRender();
@@ -3154,7 +3243,7 @@ class DossierController extends Zend_Controller_Action
             $dbDossier = new Model_DbTable_Dossier();
             // on récupère les infos du dernier dossier donnant avis de l'établissement courant
             foreach ($listeEtab as $etab) {
-                $dernierDossierDonnantAvis = $dbDossier->getGeneral($dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER']);
+                $dernierDossierDonnantAvis = $dbDossier->getDernierIdDossierDonnantAvis($etab['ID_ETABLISSEMENT'])['ID_DOSSIER'];
                 $service_dossier->saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache);
             }
 
