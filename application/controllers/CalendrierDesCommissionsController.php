@@ -1409,14 +1409,21 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                 // on recupere la liste des infos des établissement
                 if (isset($listeEtab[0]['ID_ETABLISSEMENT'])) {
                     $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
+
+                    $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
+
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($etablissementInfos['general']['ID_ETABLISSEMENT']);
+                    $etablissementsEnfants = $etablissementInfos['etablissement_lies'];
+                    foreach ($etablissementsEnfants as $etablissementEnfant) {
+                        $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
+                        $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = array_merge($listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'], $avisDerogationsEtablissementEnfant);
+                    }
+
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                 }
 
                 $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
                 $listeDossiers[$val]['listeDocUrba'] = $listeDocUrba;
-
-                $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
-                $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = empty($listeDossiers[$val]['infosEtab']) ? [] : $model_etablissement->getListAvisDerogationsEtablissement($listeDossiers[$val]['infosEtab']['general']['ID_ETABLISSEMENT']);
 
                 // Gestion des formulaires personnalisés
                 $rubriquesDossier = $this->serviceDescriptifDossier->getRubriques($listeDossiers[$val]['ID_DOSSIER'], 'Dossier');
