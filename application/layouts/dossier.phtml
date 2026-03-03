@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs nav-stacked menu_dashboard" >
         <li class="<?= ($this->action == "index") ? "active" : "" ?>">
-            <a href='<?= $this->url(array("controller" => "dossier", "id" => $this->idDossier), false, true) ?>'>
+            <a href='/dossier/<?= $this->idDossier ?>'>
                 <i class="icon-info-sign icon-black"></i>
                 Informations générales
             </a>
@@ -15,7 +15,7 @@
             <li class='<?= ($this->action == "descriptif") ? "active" : "" ?>'>
                 <a href='<?= $this->url(array("controller" => "dossier", "action" => "descriptif", "id" => $this->idDossier), false, true) ?>'>
                     <i class="icon-book icon-black"></i>
-                    Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2) ?> des travaux
+                    Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2): ?> des travaux<?php endif ?>
                 </a>
             </li>
         <?php endif ?>
@@ -169,19 +169,19 @@ endif ?>
             <?php if($this->enteteEtab) : ?>
                 Etablissement(s) concerné(s) :
                 <a
-                    href=<?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                    href="<?= '/etablissement/descriptif/id/'.$this->enteteEtab['ID_ETABLISSEMENT'].'?hideButton=true' ?>"
                     data-target='#modal-desc'
                     data-toggle='modal'
                     id='descEtab'
                     title='Afficher le descriptif'>
                     <i class='icon-list-alt icon-black'></i>
                 </a>
-                <a href=<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>
+                <a href="<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>"
                     title='Se rendre à la liste des dossiers' >
                     <i class='icon-folder-open icon-black'></i>
                 </a>
 
-                <a href=<?= '/etablissement/'.$this->enteteEtab['ID_ETABLISSEMENT'].'/informations' ?> class='etab'>
+                <a href="<?= '/etablissement/'.$this->enteteEtab['ID_ETABLISSEMENT'].'/informations' ?>" class='etab'>
                     <?= $this->enteteEtab['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
 
                     <?php if($this->enteteEtab['adresses']) : ?>
@@ -249,7 +249,7 @@ endif ?>
             if($nbEtab > 0): ?>
                 <?php if($nbEtab == 1 && $this->enteteEtab[0]["LIBELLE_GENRE"] == "Site"): ?>
                     Site concerné :
-                    <a href=<?='/etablissement/'.$this->enteteEtab[0]['ID_ETABLISSEMENT'].'/informations' ?> class='etab'>
+                    <a href="<?='/etablissement/'.$this->enteteEtab[0]['ID_ETABLISSEMENT'].'/informations' ?>" class='etab'>
                         <?= $this->enteteEtab[0]['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
                     </a>
                     <span style='font-size:10px'>#<?=$this->enteteEtab[0]['infosEtab']['general']['NUMEROID_ETABLISSEMENT'] ?></span>
@@ -262,7 +262,7 @@ endif ?>
                             $idEtabEnCour = $value['ID_ETABLISSEMENTDOSSIER'];
                         ?>
                             <a
-                                href=<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>
+                                href="<?= '/etablissement/descriptif/id/'.$value['ID_ETABLISSEMENT'].'?hideButton=true' ?>"
                                 data-target='#modal-desc'
                                 data-toggle='modal'
                                 id='descEtab'
@@ -270,12 +270,12 @@ endif ?>
                                 <i class='icon-list-alt icon-black'></i>
                             </a>
                             <a
-                                href=<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>
+                                href="<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>"
                                 title='Se rendre à la liste des dossiers' >
                                 <i class='icon-folder-open icon-black'></i>
                             </a>
                             <a
-                                href=<?='/etablissement/'.$value['ID_ETABLISSEMENT'].'/informations' ?>
+                                href="<?='/etablissement/'.$value['ID_ETABLISSEMENT'].'/informations' ?>"
                                 class='etab'
                             >
                                 <?= $value['LIBELLE_ETABLISSEMENTINFORMATIONS'] ?>
@@ -324,6 +324,7 @@ endif ?>
                                         $nbPrev--;
                                     endforeach ?>
                                 )
+                                </span>
                             <?php endif ?>
                             <span style='font-size:10px'>#<?=$value['infosEtab']['general']['NUMEROID_ETABLISSEMENT']?></span>
                         <?php endif ?>

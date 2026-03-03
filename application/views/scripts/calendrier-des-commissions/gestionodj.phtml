@@ -170,7 +170,7 @@ $(document).ready(function() {
 					// assign it the date that was reported
 					copiedEventObject.start = date;
 					copiedEventObject.end = new Date(date.getTime() + 5*60000);
-					copiedEventObject.url = "/dossier/index/id/"+idDossier;
+					copiedEventObject.url = "/dossier/"+idDossier;
 					copiedEventObject.allDay = allDay;
 					if(verrou == 1){
 						copiedEventObject.backgroundColor = "#83bff6";
@@ -472,7 +472,7 @@ $(document).ready(function() {
 						}
 						echo "
 							<div class='external-event eventExtODJ' id='".$dossierNonAffect['ID_DOSSIER']."' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:".$background.";border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-								<a href='/dossier/index/id/".$dossierNonAffect['ID_DOSSIER']."' style='color:black;'>
+								<a href='/dossier/".$dossierNonAffect['ID_DOSSIER']."' style='color:black;'>
 						";
 						if(isset($dossierNonAffect['infosEtab'])){
 							//si le dossier est attaché à un établissement
@@ -572,7 +572,7 @@ $(document).ready(function() {
 				echo "
 					<li num='".$dossierNonAffect['NUM_DOSSIER']."' >
 						<div class='dossierODJ external-event' id='".$dossierNonAffect['ID_DOSSIER_AFFECT']."' style='padding:5px 0 5px 15px;margin:5px;text-align:left;border:1px solid #9FC6FF;background-color:".$background.";border-radius:10px 10px;-moz-border-radius:10px 10px; -webkit-border-radius:10px 10px;'>
-							<a href='/dossier/index/id/".$dossierNonAffect['ID_DOSSIER_AFFECT']."' style='color:black;' >
+							<a href='/dossier/".$dossierNonAffect['ID_DOSSIER_AFFECT']."' style='color:black;' >
 								".$dossierNonAffect['LIBELLE_ETABLISSEMENTINFORMATIONS'];
 
 				$nbAdresse = isset($dossierNonAffect['infosEtab']['adresses']) ? count($dossierNonAffect['infosEtab']['adresses']) : 0;
