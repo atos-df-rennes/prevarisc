@@ -149,7 +149,7 @@ class EtablissementController extends Zend_Controller_Action
                 $date = date('Y-m-d');
                 $this->serviceEtablissement->save($post['ID_GENRE'], $post, $request->id, $date);
                 $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
-                $this->redirect('/etablissement/'.$request->id.'/informations');
+                $this->_helper->redirector('index', null, null, ['id' => $request->id]);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
@@ -217,7 +217,7 @@ class EtablissementController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'warning', 'title' => 'Ajout des établissements enfants', 'message' => "Les droits d'accès au site sont déterminés par les droits d'accès aux établissements qui le compose. Veillez à ajouter des établissements afin de garantir l'accès au site dans Prevarisc."]);
                     $this->_helper->redirector('edit', null, null, ['id' => $id_etablissement]);
                 } else {
-                    $this->redirect('/etablissement/'.$id_etablissement.'/informations');
+                    $this->_helper->redirector('index', null, null, ['id' => $id_etablissement]);
                 }
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
