@@ -121,9 +121,11 @@
             }
         ?>
 
-        <li>
-            <a class="sep" href="<?= $idLink ?>"><i class="icon-lock icon-black"></i> <?= $label; ?></a>
-        </li>
+        <?php if ($this->is_allowed_lock_dossier): ?>
+            <li>
+                <a class="sep" href="<?= $idLink ?>"><i class="icon-lock icon-black"></i> <?= $label; ?></a>
+            </li>
+        <?php endif ?>
 
         <li class='<?= ($this->action == "rapport") ? "active" : "read" ?>'>
             <a href='<?= $this->url(array("controller" => "dossier", "action" => "rapport", "id" => $this->idDossier), false, true) ?>'>

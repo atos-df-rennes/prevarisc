@@ -250,6 +250,20 @@ class DossierController extends Zend_Controller_Action
             $this->view->assign('verrouDossier', $dossier['VERROU_DOSSIER']);
             $this->view->assign('verrou', $dossier->VERROU_DOSSIER);
 
+            // Autorisation de verrouillage du dossier
+            // On vérifie les ressources spécialisées 'dossier_0' (toutes natures) et 'dossier_{ID_NATURE}' (nature spécifique).
+            // Si aucune ressource spécialisée n'existe, le droit est accordé par défaut.
+            // Si au moins l'une des deux ressources accorde le privilège, le droit est accordé.
+            $acl = unserialize($this->cache->load('acl'));
+            $group = Zend_Auth::getInstance()->getIdentity()['group']['LIBELLE_GROUPE'];
+            $resourceNature = 'dossier_'.$natureDossier[0]['ID_NATURE'];
+            $resourceAll = 'dossier_0';
+            $hasSpecializedResource = $acl->has($resourceNature) || $acl->has($resourceAll);
+            $isAllowedLockDossier = !$hasSpecializedResource
+                || ($acl->has($resourceAll) && $acl->isAllowed($group, $resourceAll, 'verrouillage_dossier'))
+                || ($acl->has($resourceNature) && $acl->isAllowed($group, $resourceNature, 'verrouillage_dossier'));
+            $this->view->assign('is_allowed_lock_dossier', $isAllowedLockDossier);
+
             $serviceDossier = new Service_Dossier();
             $this->view->assign('hasAvisDerogation', $serviceDossier->hasAvisDerogation($this->idDossier));
             $this->view->assign('dossierSupprime', null !== $dossier['DATESUPPRESSION_DOSSIER']);
