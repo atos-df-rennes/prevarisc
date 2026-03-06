@@ -26,8 +26,14 @@ $clearSearchCacheAndRedirect = new Zend_Controller_Router_Route('legacy/admin/el
     'action' => 'clear-search-cache-and-redirect',
     'uri' => '/legacy/admin/elements-supprimes/clear-search-cache-and-redirect',
 ]);
+$clearCacheAndRedirect = new Zend_Controller_Router_Route('legacy/admin/clear-cache-and-redirect', [
+    'controller' => 'legacy',
+    'action' => 'clear-cache-and-redirect',
+    'uri' => '/legacy/admin/clear-cache-and-redirect',
+]);
 
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
 $router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
 $router->addRoute('legacy_vider_cache_dossier', $viderCacheDossier);
 $router->addRoute('legacy_clear_search_cache_and_redirect', $clearSearchCacheAndRedirect);
+$router->addRoute('legacy_clear_cache_and_redirect', $clearCacheAndRedirect);
