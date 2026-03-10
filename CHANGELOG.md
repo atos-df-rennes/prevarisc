@@ -4,6 +4,39 @@
 
 <!--- END HEADER -->
 
+## [2.9.0-rc.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.15...v2.9.0-rc.1) (03-03-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+##### Rapports
+
+* Ajoute les avis et dérogations d'une cellule dans les données de l'établissement parent (#305) ([43a3ab](https://github.com/atos-df-rennes/prevarisc/commit/43a3ab55d48b862ede9080e304407a3bf4ecbe09))
+* Ajout de deux nouvelles balises pour la génération du compte-rendu de commission (#304) ([f25b06](https://github.com/atos-df-rennes/prevarisc/commit/f25b06f0bbb66850461f4bcca5dc09716997bd8f))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+* Gestion dossier donnant avis sans précédent (#297) ([34d655](https://github.com/atos-df-rennes/prevarisc/commit/34d6555627d720069ee5389a5edec485714e5afa))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+* Groupements des communes (#295) ([da0404](https://github.com/atos-df-rennes/prevarisc/commit/da040421e0f5bd42caef87bfd8973d268b0ff327))
+
+##### Dossier
+
+* Affichage et édition (#293) ([c90c97](https://github.com/atos-df-rennes/prevarisc/commit/c90c977524e898b565eaf5002a643235e59be41e))
+
+##### Elements-supprimes
+
+* Rétablissement des éléments (#296) ([3f6a16](https://github.com/atos-df-rennes/prevarisc/commit/3f6a16857d44b47dd4e5bd13e3c7ccdb03b7b126))
+
+##### Etablissement
+
+* Affichage de la page établissement (#280) ([169806](https://github.com/atos-df-rennes/prevarisc/commit/16980649088614b41057ec60693605ca27818c18))
+
+
+---
+
 ## [2.8.15](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.14...v2.8.15) (20-02-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions

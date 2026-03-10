@@ -130,26 +130,20 @@ class EtablissementController extends Zend_Controller_Action
         if ($request->isPost()) {
             try {
                 $post = $request->getPost();
-                $options = '';
+                $typeAlerte = false;
                 if (
                     getenv('PREVARISC_MAIL_ENABLED')
                     && 1 == getenv('PREVARISC_MAIL_ENABLED')
                 ) {
                     $typeAlerte = $this->serviceEtablissement->checkAlerte($this->etablissement, $post);
-
-                    if (
-                        unserialize($cache->load('acl'))->isAllowed($mygroupe, 'alerte_email', 'alerte_statut', 'alerte_classement')
-                        && false !== $typeAlerte
-                    ) {
-                        $service_alerte = new Service_Alerte();
-                        $options = $service_alerte->getLink($typeAlerte);
-                    }
                 }
 
                 $date = date('Y-m-d');
                 $this->serviceEtablissement->save($post['ID_GENRE'], $post, $request->id, $date);
-                $this->_helper->flashMessenger(['context' => 'success', 'title' => 'Mise à jour réussie !', 'message' => 'L\'établissement a bien été mis à jour.'.$options]);
-                $this->_helper->redirector('index', null, null, ['id' => $request->id]);
+                // Le flash de succès et la gestion du lien "Alerter" sont délégués à Symfony
+                // via la route etablissement_apres_modification afin d'utiliser les sessions Symfony.
+                $typeAlerteParam = (false === $typeAlerte) ? 0 : (int) $typeAlerte;
+                $this->redirect('/symfony/etablissement/'.$request->id.'/apres-modification?type_alerte='.$typeAlerteParam);
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
@@ -217,7 +211,7 @@ class EtablissementController extends Zend_Controller_Action
                     $this->_helper->flashMessenger(['context' => 'warning', 'title' => 'Ajout des établissements enfants', 'message' => "Les droits d'accès au site sont déterminés par les droits d'accès aux établissements qui le compose. Veillez à ajouter des établissements afin de garantir l'accès au site dans Prevarisc."]);
                     $this->_helper->redirector('edit', null, null, ['id' => $id_etablissement]);
                 } else {
-                    $this->_helper->redirector('index', null, null, ['id' => $id_etablissement]);
+                    $this->redirect('/etablissement/'.$id_etablissement.'/informations');
                 }
             } catch (Exception $e) {
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => '', 'message' => 'L\'établissement n\'a pas été ajouté. Veuillez rééssayez. ('.$e->getMessage().')']);
