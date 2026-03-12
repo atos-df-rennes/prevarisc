@@ -729,13 +729,13 @@ parameters:
 		-
 			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:flashMessenger\(\)\.$#'
 			identifier: method.notFound
-			count: 26
+			count: 25
 			path: application/controllers/EtablissementController.php
 
 		-
 			message: '#^Call to an undefined method Zend_Controller_Action_HelperBroker\:\:redirector\(\)\.$#'
 			identifier: method.notFound
-			count: 11
+			count: 9
 			path: application/controllers/EtablissementController.php
 
 		-
