@@ -77,4 +77,16 @@ class LegacyController extends Zend_Controller_Action
 
         $this->redirect($target);
     }
+
+    public function clearCacheAndRedirectAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        $target = $this->getRequest()->getParam('target', '/');
+
+        $this->redirect($target);
+    }
 }
