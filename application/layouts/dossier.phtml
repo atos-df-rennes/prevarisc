@@ -13,7 +13,7 @@
 
         <?php if ($this->idTypeDossier == 1 && $this->natureDossier != 3 && $this->natureDossier != 9): ?>
             <li class='<?= ($this->action == "descriptif") ? "active" : "" ?>'>
-                <a href='<?= $this->url(array("controller" => "dossier", "action" => "descriptif", "id" => $this->idDossier), false, true) ?>'>
+                <a href='/dossier/<?= $this->idDossier ?>/descriptif'>
                     <i class="icon-book icon-black"></i>
                     Descriptif <?php if ($this->natureDossier == 1 || $this->natureDossier == 2): ?> des travaux<?php endif ?>
                 </a>
