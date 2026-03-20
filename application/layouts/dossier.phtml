@@ -178,7 +178,7 @@ endif ?>
                     title='Afficher le descriptif'>
                     <i class='icon-list-alt icon-black'></i>
                 </a>
-                <a href="<?= '/etablissement/dossiers/id/'. $this->enteteEtab['ID_ETABLISSEMENT']?>"
+                <a href="/etablissement/<?= $this->enteteEtab['ID_ETABLISSEMENT'] ?>/dossiers"
                     title='Se rendre à la liste des dossiers' >
                     <i class='icon-folder-open icon-black'></i>
                 </a>
@@ -272,7 +272,7 @@ endif ?>
                                 <i class='icon-list-alt icon-black'></i>
                             </a>
                             <a
-                                href="<?= '/etablissement/dossiers/id/'.$value['ID_ETABLISSEMENT'] ?>"
+                                href="/etablissement/<?= $value['ID_ETABLISSEMENT'] ?>/dossiers"
                                 title='Se rendre à la liste des dossiers' >
                                 <i class='icon-folder-open icon-black'></i>
                             </a>
