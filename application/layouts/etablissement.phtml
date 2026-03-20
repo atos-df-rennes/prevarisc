@@ -60,7 +60,7 @@
         </a>
     </li>
     <li class="<?= $action_name == 'dossiers' ? 'active' : '' ?>">
-        <a href='<?= $this->url(array("action"=>"dossiers")) ?>'>
+        <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/dossiers'>
             <i class="icon-folder-open icon-black"></i>
             Dossiers
         </a>
