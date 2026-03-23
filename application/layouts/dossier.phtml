@@ -71,7 +71,7 @@
 
         <?php if (!in_array($this->natureDossier, [3, 5, 31, 32, 40, 41, 42, 44])): ?>
             <li class="<?= strpos($this->action, 'presc') !== false || in_array($this->action, ['edit', 'edit-type']) ? 'active' : '' ?>">
-                <a href='<?= $this->url(array("controller" => "dossier", "action" => "prescription", "id" => $this->idDossier), false, true) ?>'>
+                <a href='/dossier/<?= $this->idDossier ?>/prescriptions'>
                     <i class="icon-flag icon-black"></i>
                     Prescriptions
                 </a>
