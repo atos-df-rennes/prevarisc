@@ -4,7 +4,7 @@
 
 <!--- END HEADER -->
 
-## [2.9.0-rc.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.15...v2.9.0-rc.1) (03-03-2026)
+## [2.8.17](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.16...v2.8.17) (24-03-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
 
@@ -13,6 +13,23 @@
 
 * Ajoute les avis et dérogations d'une cellule dans les données de l'établissement parent (#305) ([43a3ab](https://github.com/atos-df-rennes/prevarisc/commit/43a3ab55d48b862ede9080e304407a3bf4ecbe09))
 * Ajout de deux nouvelles balises pour la génération du compte-rendu de commission (#304) ([f25b06](https://github.com/atos-df-rennes/prevarisc/commit/f25b06f0bbb66850461f4bcca5dc09716997bd8f))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Dossier
+
+* Vérification du droit pour afficher le bouton de verrouillage (#306) ([501ed5](https://github.com/atos-df-rennes/prevarisc/commit/501ed5c0fe203c451a52d7ea051cbc070154d058))
+
+##### Recherche
+
+* Recherche dossiers et établissements parfois incohérente ([e760ea](https://github.com/atos-df-rennes/prevarisc/commit/e760eaaffbfe21cacc652e622cfdb9512894e4e3))
+
+
+---
+
+## [2.9.0-rc.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.15...v2.9.0-rc.1) (03-03-2026)
+
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
 
