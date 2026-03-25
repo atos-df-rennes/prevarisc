@@ -60,6 +60,9 @@ class LegacyController extends Zend_Controller_Action
             }
         }
 
+        // Vider le cache de recherche pour rester à jour (iso-fonctionnel saveAction legacy)
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
+
         // Rediriger vers page dossier Symfony
         $this->redirect('/dossier/'.$dossierId);
     }
