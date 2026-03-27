@@ -18,7 +18,7 @@
             </a>
         </li>
         <li class="<?= strpos($action_name, 'descriptif') !== false ? 'active' : '' ?>">
-            <a href='<?= $this->url(array("action"=>"descriptif")) ?>'>
+            <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/descriptif'>
                 <i class="icon-book icon-black"></i>
                 <?= $this->nomOngletDescriptif ?>
             </a>
@@ -27,7 +27,7 @@
 
     <?php if ($this->isAllowedEffectifsDegagements): ?>
         <li class="<?= strpos($action_name, 'effectifs-degagements-etablissement') !== false ? 'active' : '' ?>">
-            <a class='sep' href='<?= $this->url(array("action"=>"effectifs-degagements-etablissement")) ?>'>
+            <a href='/etablissement/<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>/effectifs-degagements'>
                 <i class="icon-th-list icon-black"></i>
                 <?= $this->nomOngletEffectifsDegagements ?>
             </a>
