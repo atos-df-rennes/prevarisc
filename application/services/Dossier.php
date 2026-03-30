@@ -837,7 +837,9 @@ class Service_Dossier
     // Retrouve l'avis du dernier dossier donnant avis pour l'établissement courant uniquement
 
     /**
-     * @param false|array $dernierDossierDonnantAvis
+     * @param array|false $dernierDossierDonnantAvis
+     * @param mixed       $etab
+     * @param mixed       $cache
      */
     public function saveDossierDonnantAvisCurrentEtab($dernierDossierDonnantAvis, $etab, $cache): Zend_Db_Table_Row_Abstract
     {
