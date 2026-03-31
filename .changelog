@@ -7,7 +7,8 @@ return [
         'perf' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gauge-high.svg" width="20" height="20"> Performance'],
         'fix' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections'],
         'migration' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony'],
+        'style' => ['label' => '<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/palette.svg" width="20" height="20"> Style', 'description' => "Améliorations de l'interface utilisateur"],
     ],
-    'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
+    'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'test'],
     'dateFormat' => 'd-m-Y',
 ];
