@@ -4,6 +4,25 @@
 
 <!--- END HEADER -->
 
+## [2.8.18](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.17...v2.8.18) (31-03-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Dossier
+
+* Prise en compte du dernier dossier donnant avis à la suppression d'un dossier (#318) ([69ae30](https://github.com/atos-df-rennes/prevarisc/commit/69ae30035d86e6ab2edcffb32804babcd68d1f8f))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/palette.svg" width="20" height="20"> Style
+
+
+##### Formulaires
+
+* Affiche le label au-dessus du champ pour que ce dernier prenne toute la largeur disponible (#316) ([a2bd2e](https://github.com/atos-df-rennes/prevarisc/commit/a2bd2e750f307c6652530ec1dffb8678cce6f1ac))
+
+
+---
+
 ## [2.8.17](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.16...v2.8.17) (24-03-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
