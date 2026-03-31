@@ -3355,7 +3355,7 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('effectifs-degagements-dossier', null, null, ['id' => $request->getParam('id')]);
+            $this->redirect('/dossier/'.$this->idDossier.'/effectifs-degagements');
         }
     }
 
@@ -3417,7 +3417,7 @@ class DossierController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les vérifications techniques n\'ont pas été mises à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->_helper->redirector('verifications-techniques', null, null, ['id' => $request->getParam('id')]);
+            $this->redirect('/dossier/'.$this->idDossier.'/verifications-techniques');
         }
     }
 

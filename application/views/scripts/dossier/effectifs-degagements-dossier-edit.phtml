@@ -1,7 +1,7 @@
 <form action='<?= $this->url(array('action' => 'effectifs-degagements-dossier-edit')) ?>' method='post'>
     <div class='action-buttons pull-right'>
         <div class="btn-group">
-            <a class='btn' href="<?= $this->url(array('action' => 'effectifs-degagements-dossier')) ?>" data-do-not-unload>
+            <a class='btn' href="/dossier/<?= $this->idDossier ?>/effectifs-degagements" data-do-not-unload>
                 Annuler la modification
             </a>
             <input type='submit' class="btn btn-success" value='Sauvegarder' data-do-not-unload>
