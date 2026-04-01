@@ -179,6 +179,14 @@ class Service_Count extends Service_Dashboard
     }
 
     /**
+     * Retourne le nombre de dossiers incomplets.
+     */
+    public function getDossiersIncompletsCount(array $user): int
+    {
+        return $this->getDossiersIncomplets($user, true);
+    }
+
+    /**
      * Retourne le nombre de dossiers Plat'AU non rattachés à un établissement.
      */
     public function getDossiersPlatAUSansEtablissementCount(array $user): int

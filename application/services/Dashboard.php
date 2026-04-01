@@ -176,6 +176,16 @@ class Service_Dashboard
             'height' => 'small',
             'width' => 'small',
         ],
+        // bloc dossiers incomplets
+        'dossiersIncomplets' => [
+            'service' => 'Service_Dashboard',
+            'method' => 'getDossiersIncomplets',
+            'acl' => ['dashboard', 'view_doss_incomplets'],
+            'title' => 'Dossiers incomplets',
+            'type' => 'dossiers',
+            'height' => 'small',
+            'width' => 'small',
+        ],
     ];
 
     /**
@@ -675,6 +685,24 @@ class Service_Dashboard
         }
 
         return $dossiers;
+    }
+
+    /**
+     * @return array|int
+     */
+    public function getDossiersIncomplets(array $user, bool $getCount = false)
+    {
+        $search = new Model_DbTable_Search();
+        $search->setItem('dossier', $getCount);
+        $search->setCriteria('d.INCOMPLET_DOSSIER = 1');
+
+        if ($getCount) {
+            return $search->run(false, null, false, true);
+        }
+
+        $search->order('d.DATEINSERT_DOSSIER desc');
+
+        return $search->run(false, null, false)->toArray();
     }
 
     protected function getCommissionUser(array $user): array
