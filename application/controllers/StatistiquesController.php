@@ -239,7 +239,7 @@ class StatistiquesController extends Zend_Controller_Action
             $results = $this->view->results;
             foreach ($results as $key => $row) {
                 if (null == $row['DATEVISITE_DOSSIER']) {
-                    $results[$key]['DATEVISITE_DOSSIER'] = "<a href='/dossier/add/id_etablissement/".$row['ID_ETABLISSEMENT']."'>Programmer une visite</a>";
+                    $results[$key]['DATEVISITE_DOSSIER'] = "<a href='/dossier/ajouter?etablissement=".$row['ID_ETABLISSEMENT']."'>Programmer une visite</a>";
                 }
 
                 if (null == $row['NOM_UTILISATEURINFORMATIONS']) {

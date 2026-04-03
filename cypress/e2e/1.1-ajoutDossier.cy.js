@@ -6,7 +6,7 @@ describe('Ajout Dossiers', () => {
     it('Ajout d\'un dossier', () => {
         const date = Date.now()
 
-        cy.visit('/dossier/add')
+        cy.visit('/dossier/ajouter')
         cy.get('select[name="TYPE_DOSSIER"]').select('1');
         cy.get('select[name="selectNature"]').select('1');
         cy.get('[name="OBJET_DOSSIER"]').type(`Dossier Test ${date}`);

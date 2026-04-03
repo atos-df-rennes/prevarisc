@@ -3,8 +3,8 @@
 <ul class="nav nav-tabs nav-stacked menu_dashboard" >
     <li class="<?php echo $action_name == 'etablissement' ? 'active' : '' ?>"><a href='/search/etablissement?label=&page=1&Rechercher=Rechercher'><i class="icon-home icon-black"></i>   Établissements</a></li>
     <li class="<?php echo $action_name == 'dossier' ? 'active' : '' ?>"><a href='/search/dossier?objet=&page=1&Rechercher=Rechercher'><i class="icon-folder-open icon-black"></i>   Dossiers</a></li>
-    <li><a href='../etablissement/add'><i class="icon-plus"></i> Ajouter un établissement</a></li>
-    <li><a href='../dossier/add'><i class="icon-plus"></i> Ajouter un dossier</a></li>
+    <li><a href='/etablissement/add'><i class="icon-plus"></i> Ajouter un établissement</a></li>
+    <li><a href='/dossier/ajouter'><i class="icon-plus"></i> Ajouter un dossier</a></li>
 </ul>
 <?php $this->placeholder('lateral_navigation')->captureEnd(); ?>
 

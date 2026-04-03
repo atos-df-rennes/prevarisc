@@ -73,7 +73,7 @@
     </li>
     <li class="nav-header">Actions</li>
     <li>
-        <a href='<?= $this->url(array('controller' => 'dossier', 'action' => 'add', 'id_etablissement' => $this->etablissement['general']['ID_ETABLISSEMENT']), null, true)?> '>
+        <a href='/dossier/ajouter?etablissement=<?= $this->etablissement['general']['ID_ETABLISSEMENT'] ?>'>
             <i class="icon-plus icon-black"></i>
             Ajouter un dossier
         </a>
