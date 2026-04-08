@@ -326,7 +326,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les descriptifs n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->redirect('/etablissement/'.$idEtablissement.'/descriptif');
+            $this->_helper->redirector('descriptif', null, null, ['id' => $idEtablissement]);
         }
     }
 
@@ -661,7 +661,7 @@ class EtablissementController extends Zend_Controller_Action
                 $this->_helper->flashMessenger(['context' => 'error', 'title' => 'Mise à jour annulée', 'message' => 'Les effectifs et dégagements n\'ont pas été mis à jour. Veuillez rééssayez. ('.$e->getMessage().')']);
             }
 
-            $this->redirect('/etablissement/'.$idEtablissement.'/effectifs-degagements');
+            $this->_helper->redirector('effectifs-degagements-etablissement', null, null, ['id' => $idEtablissement]);
         }
     }
 
