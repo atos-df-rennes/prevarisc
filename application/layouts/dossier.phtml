@@ -31,7 +31,7 @@
 
         <?php if ($this->idTypeDossier != 5): ?>
             <li class = <?= $this->action == "docconsulte" ? "active" : "" ?>>
-                <a href= <?= $this->url(array("controller" => "dossier", "action" => "docconsulte", "id" => $this->idDossier), false, true) ?>>
+                <a href='/dossier/<?= $this->idDossier ?>/documents-consultes'>
                     <i class="icon-file icon-black"></i>
                     Documents consultés
                 </a>
