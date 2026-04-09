@@ -87,7 +87,7 @@
 
         <?php if (!in_array($this->natureDossier, [40, 41, 42, 44])): ?>
             <li class='<?= ($this->action == "contact") ? "active" : "" ?>'>
-                <a href='<?= $this->url(array("controller" => "dossier", "action" => "contact", "id" => $this->idDossier), false, true) ?>'>
+                <a href='/dossier/<?= $this->idDossier ?>/contacts'>
                     <i class="icon-user icon-black"></i>
                     Contacts
                 </a>
