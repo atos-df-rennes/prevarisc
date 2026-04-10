@@ -8,6 +8,21 @@
     <body>
         <?php echo $this->render("includes/nav-main.phtml"); ?>
 
+        <?php
+        if (isset($GLOBALS['kernel'])) {
+            try {
+                $bannerReq = \Symfony\Component\HttpFoundation\Request::create(
+                    '/changelog/banner', 'GET', [], $_COOKIE, [], $_SERVER
+                );
+                $bannerRes = $GLOBALS['kernel']->handle(
+                    $bannerReq,
+                    \Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST
+                );
+                echo $bannerRes->getContent();
+            } catch (\Exception $e) { /* silent fail */ }
+        }
+        ?>
+
         <div class='container-fluid'>
             <div class='row-fluid'>
                 <div class='span2 sidebar mainsidebar' style="margin-left: -20px; padding-left: 20px; margin-top: 20px; padding-top: 40px;">
