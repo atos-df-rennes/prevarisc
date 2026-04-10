@@ -16,7 +16,7 @@
                 );
                 $bannerRes = $GLOBALS['kernel']->handle(
                     $bannerReq,
-                    \Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST
+                    \Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST
                 );
                 echo $bannerRes->getContent();
             } catch (\Exception $e) { /* silent fail */ }
