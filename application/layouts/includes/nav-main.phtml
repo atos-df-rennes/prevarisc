@@ -15,7 +15,7 @@
                             Établissements
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href='/search/etablissement?label=&page=1&Rechercher=Rechercher'><i class="icon-th-list"></i> Rechercher</a></li>
+                            <li><a href='/rechercher/etablissement?label=&page=1&Rechercher=Rechercher'><i class="icon-th-list"></i> Rechercher</a></li>
                             <li><a href='/etablissement/add'><i class="icon-plus"></i> Ajouter</a></li>
                         </ul>
                     </li>
@@ -24,7 +24,7 @@
                             Dossiers
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href='/search/dossier?objet=&page=1&Rechercher=Rechercher'><i class="icon-th-list"></i>  Rechercher</a></li>
+                            <li><a href='/rechercher/dossier?objet=&page=1&Rechercher=Rechercher'><i class="icon-th-list"></i>  Rechercher</a></li>
                             <li><a href='/dossier/ajouter'><i class="icon-plus"></i>  Ajouter</a></li>
                         </ul>
                     </li>
@@ -41,13 +41,13 @@
                 </ul>
                 <ul class='nav pull-right'>
                     <li class="li-searched">
-                        <form class="navbar-search" action="/search/etablissement" method="get">
+                        <form class="navbar-search" action="/rechercher/etablissement" method="get">
                             <div class="input-append" id="research-input">
                                 <input name="label" class="input-medium" id="nav-main-search-field" type="text" placeholder="Rechercher ..." style='margin-top: 10px' />
                                 <input name="page" type="hidden" value="1"  />
                                 <input name="Rechercher" type="hidden" value="Rechercher"  />
                                 <button class="btn btn_search" type="submit" style='margin-top: 10px'><i class="icon-search"></i> </button>
-                                <a class="btn" href="/search/etablissement?Rechercher=Rechercher&statuts%5B%5D=2&statuts%5B%5D=4" >Avancée »</a>
+                                <a class="btn" href="/rechercher/etablissement?Rechercher=Rechercher&statuts%5B%5D=2&statuts%5B%5D=4" >Avancée »</a>
                             </div>
                         </form>
                     </li>
