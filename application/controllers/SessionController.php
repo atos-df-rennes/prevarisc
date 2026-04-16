@@ -107,7 +107,7 @@ class SessionController extends Zend_Controller_Action
                     if ($adapter->authenticate()->isValid()) {
                         $service_user->resetFailedLogin($user);
                         Zend_Auth::getInstance()->getStorage()->write($user);
-                        $this->_helper->redirector->gotoUrl(empty($this->_request->getParams()['redirect']) ? '/' : urldecode($this->_request->getParams()['redirect']));
+                        $this->_helper->redirector->gotoUrl(empty($this->_request->getParams()['redirect']) ? '/accueil' : urldecode($this->_request->getParams()['redirect']));
                     }
                 }
 
