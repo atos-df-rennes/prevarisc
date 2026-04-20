@@ -35,7 +35,7 @@
                     <p>Désactivé</p>
                 <?php endif ?>
                 </dd>
-                
+
                 <dt>Clé(s) IGN</dt>
                 <dd>
                     <?php if (!empty($this->key_ign)):
@@ -51,7 +51,7 @@
                 <dd>
                 <p><?php echo $this->key_googlemap != null ? $this->key_googlemap : 'Aucune clé' ?></p>
                 </dd>
-                
+
                 <dt>Carte Geoconcept</dt>
                 <dd>
                 <?php if ($this->geoconcept_url): ?>
@@ -88,7 +88,7 @@
             <?php if($this->users == null) : ?>
                 <p><strong>Aucun résultat.</strong></p>
             <?php else : ?>
-                <table class='table table-condensed table-striped tablesorter'>
+                <table class='table table-condensed table-striped'>
                     <thead>
                         <tr>
                             <th>Identifiant</th>
