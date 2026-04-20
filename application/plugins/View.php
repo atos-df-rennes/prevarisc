@@ -49,8 +49,6 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->inlineScript()->appendFile('/js/jquery.elastic.js');
             $view->inlineScript()->appendFile('/js/jquery.toggletext.js');
             $view->inlineScript()->appendFile('/js/jquery.multiselect.min.js');
-            $view->inlineScript()->appendFile('/js/jquery.tablesorter.js');
-            $view->inlineScript()->appendFile('/js/jquery.tablesorter.pager.js');
             $view->inlineScript()->appendFile('/js/jquery.tipsy.js');
             $view->inlineScript()->appendFile('/js/jquery.fancybox-1.3.4.js');
             $view->inlineScript()->appendFile('/js/bootstrap.min.js');
@@ -70,7 +68,6 @@ class Plugin_View extends Zend_Controller_Plugin_Abstract
             $view->headLink()->appendStylesheet('/css/components/panel.css', 'all');
             $view->headLink()->appendStylesheet('/css/chosen.min.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery-ui-1.8.11.custom.css', 'all');
-            $view->headLink()->appendStylesheet('/css/jquery/jquery.tablesorter.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery.multiselect.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery.fullcalendar.css', 'all');
             $view->headLink()->appendStylesheet('/css/jquery/jquery.fancybox-1.3.4.css', 'all');
