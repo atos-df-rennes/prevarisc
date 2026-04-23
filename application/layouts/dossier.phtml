@@ -58,7 +58,7 @@
 
         <?php if ($this->idTypeDossier === 1 && $this->isAllowedAvisDerogation): ?>
             <li class="<?= strpos($this->action, 'avis-et-derogations') !== false ? 'active' : '' ?>">
-                <a href="<?= $this->url(['controller' => 'dossier', 'action' => 'avis-et-derogations', 'id' => $this->idDossier], false, true) ?>">
+                <a href="/dossier/<?= $this->idDossier ?>/avis-et-derogations">
                     <i class="icon-pencil icon-black"></i>
                     Avis et dérogations
 
