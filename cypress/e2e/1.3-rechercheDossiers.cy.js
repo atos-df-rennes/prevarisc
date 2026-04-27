@@ -11,16 +11,14 @@ describe('Dossier — recherche', () => {
     });
 
     // Use URL query params to filter by avis — avoids fragile jQuery Chosen interactions.
-    // Rechercher=Rechercher is required: the controller uses it to detect form submission
-    // vs. first-display mode (pre-selection of groupements).
     it('Filtre "Avis favorable" → seuls les dossiers favorables affichés', () => {
-        cy.visit('/rechercher/dossier?avisCommission[]=1&Rechercher=Rechercher')
+        cy.visit('/rechercher/dossier?avisCommission[]=1')
         cy.get('.avis.F').should('exist')
         cy.get('.avis.D').should('not.exist')
     });
 
     it('Filtre "Avis défavorable" → seuls les dossiers défavorables affichés', () => {
-        cy.visit('/rechercher/dossier?avisCommission[]=2&Rechercher=Rechercher')
+        cy.visit('/rechercher/dossier?avisCommission[]=2')
         cy.get('.avis.D').should('exist')
         cy.get('.avis.F').should('not.exist')
     });

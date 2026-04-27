@@ -11,16 +11,14 @@ describe('Établissement — recherche', () => {
     });
 
     // Use URL query params to filter by avis — avoids fragile jQuery Multiselect interactions.
-    // Rechercher=Rechercher is required: the controller uses it to detect form submission
-    // vs. first-display mode (pre-selection of groupements), see SearchController::searchEtablissement.
     it('Filtre "Avis favorable" → seuls les établissements favorables affichés', () => {
-        cy.visit('/rechercher/etablissement?avis[]=true&Rechercher=Rechercher')
+        cy.visit('/rechercher/etablissement?avis[]=true')
         cy.get('.avis.F').should('exist')
         cy.get('.avis.D').should('not.exist')
     });
 
     it('Filtre "Avis défavorable" → seuls les établissements défavorables affichés', () => {
-        cy.visit('/rechercher/etablissement?avis[]=false&Rechercher=Rechercher')
+        cy.visit('/rechercher/etablissement?avis[]=false')
         cy.get('.avis.D').should('exist')
         cy.get('.avis.F').should('not.exist')
     });

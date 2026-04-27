@@ -59,7 +59,7 @@ describe("Administration", () => {
 
     it('Commissions → page de liste chargée', () => {
         cy.contains('a', 'Gestion des commissions').click()
-        cy.contains('Champ de compétence de la commission').should('be.visible')
+        cy.contains('Gérer les commissions').should('be.visible')
     })
 
     it('Documents types → liste et ajout disponibles', () => {
@@ -67,7 +67,7 @@ describe("Administration", () => {
 
         // "Visible après verrouillage" — typo 'vérrouillage' corrigé en 'verrouillage' dans le template
         cy.contains('verrouillage').should('be.visible')
-        cy.contains('a', 'Ajouter un document').click()
+        cy.contains('button', 'Ajouter un document').click()
         cy.contains('Ajouter un document type').should('be.visible')
     })
 

@@ -7,11 +7,16 @@
  * avant une livraison RC.
  *
  * Périmètre : pages GET accessibles à un utilisateur authentifié.
- * Pages nécessitant un ID en base (dossier/{id}, établissement/{id}…)
- * sont intentionnellement exclues — elles relèvent des tests fonctionnels.
+ *
+ * Structure :
+ *   1. Pages statiques (pas d'ID requis) → cy.request() en masse
+ *   2. Onglets établissement → ID récupéré via la recherche
+ *   3. Onglets dossier → ID récupéré via la recherche
  */
 
-const pages = [
+// ─── 1. Pages statiques ───────────────────────────────────────────────────────
+
+const staticPages = [
     // Accueil & navigation
     { label: 'Accueil', url: '/accueil' },
     { label: 'Changelog', url: '/changelog' },
@@ -61,7 +66,7 @@ const pages = [
     { label: 'Admin — textes applicables', url: '/admin/textes-applicables' },
 ];
 
-describe('Smoke — pages migrées (release/2.10)', () => {
+describe('Smoke — pages statiques (release/2.10)', () => {
     before(() => {
         cy.login();
         // Établit la session dans le navigateur afin que cy.request()
@@ -69,12 +74,96 @@ describe('Smoke — pages migrées (release/2.10)', () => {
         cy.visit('/accueil');
     });
 
-    pages.forEach(({ label, url }) => {
+    staticPages.forEach(({ label, url }) => {
         it(label, () => {
             cy.request({ url, failOnStatusCode: false }).then((response) => {
                 expect(
                     response.status,
                     `HTTP ${response.status} reçu sur ${url}`
+                ).to.be.lessThan(500);
+            });
+        });
+    });
+});
+
+// ─── 2. Onglets établissement ─────────────────────────────────────────────────
+
+const etablissementTabs = [
+    'informations',
+    'historique',
+    'textes-applicables',
+    'avis-derogations',
+    'pieces-jointes',
+    'dossiers',
+    'descriptif',
+    'descriptif-original',
+    'effectifs-degagements',
+    'contacts',
+];
+
+describe('Smoke — onglets établissement', () => {
+    let etabId;
+
+    before(() => {
+        cy.login();
+        cy.visit('/accueil');
+        // Récupère l'ID du premier établissement retourné par la recherche
+        cy.request('/rechercher/etablissement?Rechercher=Rechercher').then((res) => {
+            const match = res.body.match(/\/etablissement\/(\d+)\/informations/);
+            expect(match, 'Au moins un établissement doit exister en base').to.not.be.null;
+            etabId = parseInt(match[1], 10);
+        });
+    });
+
+    etablissementTabs.forEach((tab) => {
+        it(`Onglet — ${tab}`, () => {
+            const url = `/etablissement/${etabId}/${tab}`;
+            cy.request({ url, failOnStatusCode: false }).then((res) => {
+                expect(
+                    res.status,
+                    `HTTP ${res.status} reçu sur ${url}`
+                ).to.be.lessThan(500);
+            });
+        });
+    });
+});
+
+// ─── 3. Onglets dossier ───────────────────────────────────────────────────────
+
+const dossierPaths = [
+    '',                         // fiche générale (dossier_index)
+    '/descriptif',
+    '/textes-applicables',
+    '/verifications-techniques',
+    '/effectifs-degagements',
+    '/liees',
+    '/prescriptions',
+    '/documents-consultes',
+    '/contacts',
+];
+
+describe('Smoke — onglets dossier', () => {
+    let dossierId;
+
+    before(() => {
+        cy.login();
+        cy.visit('/accueil');
+        // Récupère l'ID du premier dossier retourné par la recherche
+        cy.request('/rechercher/dossier?Rechercher=Rechercher').then((res) => {
+            const match = res.body.match(/\/dossier\/(\d+)/);
+            expect(match, 'Au moins un dossier doit exister en base').to.not.be.null;
+            dossierId = parseInt(match[1], 10);
+        });
+    });
+
+    dossierPaths.forEach((path) => {
+        const label = path === '' ? 'fiche générale' : path.replace('/', '');
+        it(`Onglet — ${label}`, () => {
+            const url = `/dossier/${dossierId}${path}`;
+            cy.request({ url, failOnStatusCode: false }).then((res) => {
+                expect(
+                    res.status,
+                    `HTTP ${res.status} reçu sur ${url}`
                 ).to.be.lessThan(500);
             });
         });
