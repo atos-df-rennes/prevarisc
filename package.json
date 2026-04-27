@@ -9,7 +9,7 @@
     },
     "scripts": {
         "cy:open": "cypress open",
-        "cy:test": "cypress run"
+        "cy:test": "xvfb-run --auto-servernum cypress run"
     },
     "repository": {
         "type": "git",
