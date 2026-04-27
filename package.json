@@ -1,6 +1,6 @@
 {
     "name": "prevarisc",
-    "version": "2.9.0-rc.1",
+    "version": "2.10.0-rc.1",
     "description": "![Prevarisc](https://github.com/atos-df-rennes/prevarisc/actions/workflows/actions.yml/badge.svg?event=push)",
     "main": "index.js",
     "directories": {
@@ -9,7 +9,7 @@
     },
     "scripts": {
         "cy:open": "cypress open",
-        "cy:test": "cypress run"
+        "cy:test": "xvfb-run --auto-servernum cypress run"
     },
     "repository": {
         "type": "git",

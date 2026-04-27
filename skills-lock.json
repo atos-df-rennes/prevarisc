@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "cypress-author": {
+      "source": "cypress-io/ai-toolkit",
+      "sourceType": "github",
+      "computedHash": "6c66655f7a7b684e1150af4402d472616b4593c2a2a7ae620aeee0aff2a74d38"
+    },
+    "cypress-explain": {
+      "source": "cypress-io/ai-toolkit",
+      "sourceType": "github",
+      "computedHash": "6c5ee97a21d2ce987648841a76db8e37e1cf57cee5a90efd62aa4c1fe294766f"
+    }
+  }
+}

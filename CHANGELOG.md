@@ -4,6 +4,71 @@
 
 <!--- END HEADER -->
 
+## [2.10.0-rc.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.18...v2.10.0-rc.1) (27-04-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+##### Changelog
+
+* Page changelog et bandeau de notification de mise à jour (#325) ([314422](https://github.com/atos-df-rennes/prevarisc/commit/3144224b835778ee8028b5d145110859c11b055d))
+
+##### Dashboard
+
+* Ajout du bloc dossiers incomplets (#319) ([78305a](https://github.com/atos-df-rennes/prevarisc/commit/78305a018257234c723490983e0dbcc77b86ce9f))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+##### Alerte
+
+* Délégation du flash établissement à Symfony après modification ([76124c](https://github.com/atos-df-rennes/prevarisc/commit/76124c280f1270bd6a5b4ab277d8ed27c03e13e3))
+
+##### Rapports
+
+* Rend la balise {dateGeneration} globale (#307) ([d3c861](https://github.com/atos-df-rennes/prevarisc/commit/d3c8615596121fd783d94896aa59a28ee838d12c))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/palette.svg" width="20" height="20"> Style
+
+* Affichage de la table des matières sur grands écrans uniquement (#282) ([5d240e](https://github.com/atos-df-rennes/prevarisc/commit/5d240e5c032c1f57166b9fd077b9288470b3ade7))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+* Page d'accueil (#328) ([14fd09](https://github.com/atos-df-rennes/prevarisc/commit/14fd093ed5d2326cccb63ff5c713549f85eff440))
+
+##### Administration
+
+* Gestion des commissions (#308) ([f38f30](https://github.com/atos-df-rennes/prevarisc/commit/f38f3083e69e545033615630bbfa8b07489266a3))
+
+##### Dossier
+
+* Contacts (#324) ([99c2d0](https://github.com/atos-df-rennes/prevarisc/commit/99c2d02274c5c1805b81c337ffb605f7e048b242))
+* Documents consultés (#322) ([8b0c61](https://github.com/atos-df-rennes/prevarisc/commit/8b0c61faf3d0c616b39bec7b307f9ba58c93c28d))
+* établissements et dossiers liés (#321) ([3ac7a2](https://github.com/atos-df-rennes/prevarisc/commit/3ac7a2ede8ae9dcf1cc0a350f26ef8ff4f159915))
+* Ajout seul ou sur un établissement (#315) ([65d69b](https://github.com/atos-df-rennes/prevarisc/commit/65d69b065af29aace030f08739e06ea39fd9099f))
+* Onglet Prescriptions (#311) ([1eac7a](https://github.com/atos-df-rennes/prevarisc/commit/1eac7ac833eae7f0f9cc8d7469dabf43a4ceb26a))
+* Onglet Textes applicables (#314) ([64964d](https://github.com/atos-df-rennes/prevarisc/commit/64964d3b4fe2108c526628219eaf464f5abe605a))
+* Onglet descriptif (des travaux) (#312) ([cf3097](https://github.com/atos-df-rennes/prevarisc/commit/cf3097eccf623ff12aa6a54fb63285c5f08f7edb))
+
+##### Etablissement
+
+* Onglet Dossiers (#313) ([1b4365](https://github.com/atos-df-rennes/prevarisc/commit/1b4365cfbb3a1f6c5cc667e7ba9e36d660bf9494))
+
+##### Formulaires
+
+* édition des valeurs (#323) ([5e3dce](https://github.com/atos-df-rennes/prevarisc/commit/5e3dce3b2518ac1db584c9c2fb3c3cd9129f203d))
+* Affichage des valeurs saisies (#317) ([7a898c](https://github.com/atos-df-rennes/prevarisc/commit/7a898c6b5e7bc006b45da895444064c16f0ac3a0))
+
+##### Recherche
+
+* établissements et dossiers (#327) ([f35a44](https://github.com/atos-df-rennes/prevarisc/commit/f35a443375022e8409d837e8a91e426ac1a80b7e))
+
+##### Tableau-periodicites
+
+* Application à tous les établissements (#309) ([397d04](https://github.com/atos-df-rennes/prevarisc/commit/397d040e28e2906f555662fd3be47cd4aea36023))
+
+
+---
+
 ## [2.8.18](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.17...v2.8.18) (31-03-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
