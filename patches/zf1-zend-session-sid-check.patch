@@ -1,0 +1,22 @@
+diff --git a/library/Zend/Session.php b/library/Zend/Session.php
+index 6378cbf6..4ec0e4f8 100644
+--- a/library/Zend/Session.php
++++ b/library/Zend/Session.php
+@@ -458,7 +458,7 @@ class Zend_Session extends Zend_Session_Abstract
+         }
+ 
+         // See http://www.php.net/manual/en/ref.session.php for explanation
+-        if (!self::$_unitTestEnabled && defined('SID')) {
++        if (!self::$_unitTestEnabled && PHP_SESSION_ACTIVE === session_status()) {
+             /** @see Zend_Session_Exception */
+             require_once 'Zend/Session/Exception.php';
+             throw new Zend_Session_Exception('session has already been started by session.auto-start or session_start()');
+@@ -661,7 +661,7 @@ class Zend_Session extends Zend_Session_Abstract
+      */
+     public static function setId($id)
+     {
+-        if (!self::$_unitTestEnabled && defined('SID')) {
++        if (!self::$_unitTestEnabled && PHP_SESSION_ACTIVE === session_status()) {
+             /** @see Zend_Session_Exception */
+             require_once 'Zend/Session/Exception.php';
+             throw new Zend_Session_Exception('The session has already been started.  The session id must be set first.');

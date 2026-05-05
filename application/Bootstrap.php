@@ -168,28 +168,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOption('cache');
         $max_lifetime = isset($options['session_max_lifetime']) ? (int) $options['session_max_lifetime'] : 7200;
-
-        // Bridge Symfony → Zend : PHP définit la constante SID dès le premier session_start()
-        // et elle ne peut jamais être undéfinie. ZF1 interdit alors tout nouveau démarrage via
-        // son check defined('SID') → Zend_Session_Exception.
-        // Quand le fallback legacy est déclenché après traitement Symfony, on doit :
-        //   1. Rouvrir la session PHP (fermée par session_write_close() côté Symfony)
-        //   2. Synchroniser les drapeaux internes de ZF1 pour bypasser son start()
-        if (defined('SID')) {
-            if (PHP_SESSION_NONE === session_status()) {
-                session_start();
-            }
-
-            $rStarted  = new ReflectionProperty('Zend_Session', '_sessionStarted');
-            $rReadable = new ReflectionProperty('Zend_Session_Abstract', '_readable');
-            $rWritable = new ReflectionProperty('Zend_Session_Abstract', '_writable');
-
-            foreach ([$rStarted, $rReadable, $rWritable] as $r) {
-                $r->setAccessible(true);
-                $r->setValue(null, true);
-            }
-        }
-
         $namespace = new Zend_Session_Namespace(Zend_Auth::class);
         $namespace->setExpirationSeconds($max_lifetime);
 
