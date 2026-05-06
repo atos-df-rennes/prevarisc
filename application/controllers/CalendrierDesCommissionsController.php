@@ -996,7 +996,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             // On récupère le nom de la commission
             $this->view->assign('commissionInfos', $model_commission->find($commissionInfo['COMMISSION_CONCERNE'])->toArray());
 
-            error_log(sprintf('[generation:convoc][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                error_log(sprintf('[generation:convoc][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            }
 
             // FIXME Grouper les foreach en un seul, là c'est débile de faire 3 fois le même
             // afin de récuperer les informations des communes (adresse des mairies etc)
@@ -1019,7 +1021,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                         [$etablissementInfos['general']['ID_ETABLISSEMENT']],
                         array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
                     );
-                    error_log(sprintf('[generation:convoc][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                        error_log(sprintf('[generation:convoc][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    }
                     $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
@@ -1145,7 +1149,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $model_etablissement = new Model_DbTable_Etablissement();
             $service_etablissement = new Service_Etablissement();
 
-            error_log(sprintf('[generation:odj][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                error_log(sprintf('[generation:odj][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            }
 
             foreach ($listeDossiers as $val => $ue) {
                 $listeDossiers[$val]['preventionnistes'] = [];
@@ -1168,7 +1174,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                         [$etablissementInfos['general']['ID_ETABLISSEMENT']],
                         array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
                     );
-                    error_log(sprintf('[generation:odj][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                        error_log(sprintf('[generation:odj][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    }
                     $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
@@ -1305,7 +1313,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $service_etablissement = new Service_Etablissement();
             $model_etablissement = new Model_DbTable_Etablissement();
 
-            error_log(sprintf('[generation:pv][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                error_log(sprintf('[generation:pv][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            }
 
             foreach ($listeDossiers as $val => $ue) {
                 // On recupere la liste des établissements qui concernent le dossier
@@ -1321,7 +1331,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                         [$etablissementInfos['general']['ID_ETABLISSEMENT']],
                         array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
                     );
-                    error_log(sprintf('[generation:pv][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                        error_log(sprintf('[generation:pv][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    }
                     $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
@@ -1409,7 +1421,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
             $service_etablissement = new Service_Etablissement();
             $model_etablissement = new Model_DbTable_Etablissement();
 
-            error_log(sprintf('[generation:compterendu][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                error_log(sprintf('[generation:compterendu][dateCommId=%s] %d dossiers a traiter', $dateCommId, count($listeDossiers)));
+            }
 
             foreach ($listeDossiers as $val => $ue) {
                 // On recupere la liste des établissements qui concernent le dossier
@@ -1424,7 +1438,9 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                         [$etablissementInfos['general']['ID_ETABLISSEMENT']],
                         array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
                     );
-                    error_log(sprintf('[generation:compterendu][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    if (1 == getenv('PREVARISC_DEBUG_ENABLED')) {
+                        error_log(sprintf('[generation:compterendu][dateCommId=%s][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $dateCommId, $ue['ID_DOSSIER'], count($idsEtablissements), count($idsEtablissements) - 1));
+                    }
                     $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
