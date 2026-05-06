@@ -2205,14 +2205,11 @@ class DossierController extends Zend_Controller_Action
         // Avis & Dérogations
         $this->view->assign('avisDerogations', $DBdossier->getListAvisDerogationsFromDossier($idDossier));
 
-        $avisDerogationsEtablissement = $model_etablissement->getListAvisDerogationsEtablissement($idEtab);
-        $etablissementsEnfants = $this->view->etablissementInfos['etablissement_lies'];
-        foreach ($etablissementsEnfants as $etablissementEnfant) {
-            $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
-            $avisDerogationsEtablissement = array_merge($avisDerogationsEtablissement, $avisDerogationsEtablissementEnfant);
-        }
-
-        $this->view->assign('avisDerogationsEtablissement', $avisDerogationsEtablissement);
+        $idsEtablissements = array_merge(
+            [$idEtab],
+            array_column($this->view->etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
+        );
+        $this->view->assign('avisDerogationsEtablissement', $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements));
 
         // Récupération du type et de la nature du dossier
         $dbType = new Model_DbTable_DossierType();

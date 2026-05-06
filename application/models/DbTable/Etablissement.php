@@ -514,6 +514,35 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
+    /**
+     * Retourne la liste des avis et dérogations d'une liste d'établissements (parent + enfants)
+     * en une seule requête, évitant le problème N+1.
+     *
+     * @param array $idsEtablissement
+     *
+     * @return array
+     */
+    public function getListAvisDerogationsEtablissements(array $idsEtablissement)
+    {
+        if (empty($idsEtablissement)) {
+            return [];
+        }
+
+        $select = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(['d' => 'dossier'], ['ID_DOSSIER', 'DATECOMM_DOSSIER', 'DATEVISITE_DOSSIER'])
+            ->join(['ed' => 'etablissementdossier'], 'd.ID_DOSSIER = ed.ID_DOSSIER', [])
+            ->join(['e' => 'etablissement'], 'ed.ID_ETABLISSEMENT = e.ID_ETABLISSEMENT', [])
+            ->join(['ad' => 'avisderogations'], 'd.ID_DOSSIER = ad.ID_DOSSIER')
+            ->join(['a' => 'avis'], 'a.ID_AVIS = ad.AVIS', 'LIBELLE_AVIS')
+            ->joinLeft(['d2' => 'dossier'], 'd2.ID_DOSSIER = ad.ID_DOSSIER_LIE', ['TYPE_DOSSIER'])
+            ->where('e.ID_ETABLISSEMENT IN (?)', $idsEtablissement)
+            ->where('ad.DISPLAY_HISTORIQUE = ?', 1)
+        ;
+
+        return $this->fetchAll($select)->toArray();
+    }
+
     public function getDeleteEtablissement(): array
     {
         $select = $this->select()->setIntegrityCheck(false)

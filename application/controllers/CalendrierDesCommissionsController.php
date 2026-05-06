@@ -1013,12 +1013,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     // Ajoute les avis derogations provenant du dossier
                     $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
-                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($etablissementInfos['general']['ID_ETABLISSEMENT']);
-                    $etablissementsEnfants = $etablissementInfos['etablissement_lies'];
-                    foreach ($etablissementsEnfants as $etablissementEnfant) {
-                        $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
-                        $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = array_merge($listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'], $avisDerogationsEtablissementEnfant);
-                    }
+                    $idsEtablissements = array_merge(
+                        [$etablissementInfos['general']['ID_ETABLISSEMENT']],
+                        array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
+                    );
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                     $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
@@ -1160,12 +1159,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
                     $etablissementInfos = $service_etablissement->get($listeEtab[0]['ID_ETABLISSEMENT']);
                     $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
-                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($etablissementInfos['general']['ID_ETABLISSEMENT']);
-                    $etablissementsEnfants = $etablissementInfos['etablissement_lies'];
-                    foreach ($etablissementsEnfants as $etablissementEnfant) {
-                        $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
-                        $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = array_merge($listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'], $avisDerogationsEtablissementEnfant);
-                    }
+                    $idsEtablissements = array_merge(
+                        [$etablissementInfos['general']['ID_ETABLISSEMENT']],
+                        array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
+                    );
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                     $listeDocUrba = $dbDocUrba->getDossierDocUrba($ue['ID_DOSSIER']);
@@ -1311,12 +1309,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                     $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
-                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($etablissementInfos['general']['ID_ETABLISSEMENT']);
-                    $etablissementsEnfants = $etablissementInfos['etablissement_lies'];
-                    foreach ($etablissementsEnfants as $etablissementEnfant) {
-                        $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
-                        $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = array_merge($listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'], $avisDerogationsEtablissementEnfant);
-                    }
+                    $idsEtablissements = array_merge(
+                        [$etablissementInfos['general']['ID_ETABLISSEMENT']],
+                        array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
+                    );
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                 }
@@ -1412,12 +1409,11 @@ class CalendrierDesCommissionsController extends Zend_Controller_Action
 
                     $listeDossiers[$val]['AVIS_DEROGATIONS'] = $dbDossier->getListAvisDerogationsFromDossier($ue['ID_DOSSIER']);
 
-                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissement($etablissementInfos['general']['ID_ETABLISSEMENT']);
-                    $etablissementsEnfants = $etablissementInfos['etablissement_lies'];
-                    foreach ($etablissementsEnfants as $etablissementEnfant) {
-                        $avisDerogationsEtablissementEnfant = $model_etablissement->getListAvisDerogationsEtablissement($etablissementEnfant['ID_ETABLISSEMENT']);
-                        $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = array_merge($listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'], $avisDerogationsEtablissementEnfant);
-                    }
+                    $idsEtablissements = array_merge(
+                        [$etablissementInfos['general']['ID_ETABLISSEMENT']],
+                        array_column($etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
+                    );
+                    $listeDossiers[$val]['AVIS_DEROGATIONS_ETABLISSEMENT'] = $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements);
 
                     $listeDossiers[$val]['infosEtab'] = $etablissementInfos;
                 }
