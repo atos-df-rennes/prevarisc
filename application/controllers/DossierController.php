@@ -2209,6 +2209,7 @@ class DossierController extends Zend_Controller_Action
             [$idEtab],
             array_column($this->view->etablissementInfos['etablissement_lies'], 'ID_ETABLISSEMENT')
         );
+        error_log(sprintf('[generation:rapport-dossier][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $idDossier, count($idsEtablissements), count($idsEtablissements) - 1));
         $this->view->assign('avisDerogationsEtablissement', $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements));
 
         // Récupération du type et de la nature du dossier
