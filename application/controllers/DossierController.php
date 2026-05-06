@@ -2212,6 +2212,7 @@ class DossierController extends Zend_Controller_Action
         if ('1' === getenv('PREVARISC_DEBUG_ENABLED')) {
             error_log(sprintf('[generation:rapport-dossier][dossier=%s] batch avis/derogations : %d etablissement(s) (1 parent + %d enfant(s))', $idDossier, count($idsEtablissements), count($idsEtablissements) - 1));
         }
+
         $this->view->assign('avisDerogationsEtablissement', $model_etablissement->getListAvisDerogationsEtablissements($idsEtablissements));
 
         // Récupération du type et de la nature du dossier
