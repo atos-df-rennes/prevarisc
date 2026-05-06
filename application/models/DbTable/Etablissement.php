@@ -518,8 +518,6 @@ class Model_DbTable_Etablissement extends Zend_Db_Table_Abstract
      * Retourne la liste des avis et dérogations d'une liste d'établissements (parent + enfants)
      * en une seule requête, évitant le problème N+1.
      *
-     * @param array $idsEtablissement
-     *
      * @return array
      */
     public function getListAvisDerogationsEtablissements(array $idsEtablissement)
