@@ -6,13 +6,14 @@
 
 	<form method='post' action='/commission/saveMembres?id_commission=<?php echo $_GET["id_commission"] ?>' >
 		<!-- Tableau contenant les membres -->
-		<table class='table table-condensed'>
+		<table class='table table-condensed' style="table-layout: fixed;">
 			<thead>
 				<tr>
-					<th rowspan="2" >Libellé du membre</th>
-					<th colspan="2" >ERP</th>
-					<th colspan="1" >IGH</th>
+					<th rowspan="2" colspan="2">Libellé du membre</th>
+					<th colspan="2">ERP</th>
+					<th colspan="1">IGH</th>
 					<th rowspan="2">Type/nature de dossier</th>
+					<th rowspan="2">Manifestation</th>
 					<th></th>
 				</tr>
 				<tr>
