@@ -43,6 +43,7 @@ class Model_DbTable_CommissionMembre extends Zend_Db_Table_Abstract
                 'types' => $this->fullJoinRegle('typeactivite', 'commissionmembretypeactivite', 'ID_TYPEACTIVITE', $row_membreDeLaCommission['ID_COMMISSIONMEMBRE']),
                 'dossiertypes' => $this->fullJoinRegle('dossiertype', 'commissionmembredossiertype', 'ID_DOSSIERTYPE', $row_membreDeLaCommission['ID_COMMISSIONMEMBRE']),
                 'dossiernatures' => $this->fullJoinRegle('dossiernatureliste', 'commissionmembredossiernature', 'ID_DOSSIERNATURE', $row_membreDeLaCommission['ID_COMMISSIONMEMBRE']),
+                'manifestation' => (bool) $row_membreDeLaCommission['MANIFESTATION_COMMISSIONMEMBRE'],
                 'infos' => $infos_commission,
             ];
         }

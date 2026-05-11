@@ -10,15 +10,15 @@
 	<form method='post' action='/commission/saveRegles?id_commission=<?php echo $_GET["id_commission"] ?>' >
                 <input type="hidden" name="ID_COMMISSION" value="<?php echo $_GET["id_commission"] ?>" />
 		<!-- Tableau contenant les règles -->
-		<table class='table table-condensed'>
+		<table class='table table-condensed' style="table-layout: fixed;">
 			<thead>
 				<tr>
-					<th rowspan="2" >Zone géographique</th>
-					<th colspan="2" >ERP</th>
-					<th colspan="1" >IGH</th>
-					<th rowspan="2" >Local Sommeil</th>
-					<th rowspan="2" >Étude / visite</th>
-					<th rowspan="2" ></th>
+					<th rowspan="2" colspan="2">Zone géographique</th>
+					<th colspan="2">ERP</th>
+					<th colspan="1">IGH</th>
+					<th rowspan="2">Local Sommeil</th>
+					<th rowspan="2">Étude / visite</th>
+					<th rowspan="2"></th>
 				</tr>
 				<tr>
 					<th>Catégorie</th>

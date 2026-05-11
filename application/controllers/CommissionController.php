@@ -428,6 +428,7 @@ class CommissionController extends Zend_Controller_Action
                 $rowset_membre->LIBELLE_COMMISSIONMEMBRE = $_POST[$id_membre.'_LIBELLE_COMMISSIONMEMBRE'];
                 $rowset_membre->PRESENCE_COMMISSIONMEMBRE = $_POST[$id_membre.'_PRESENCE_COMMISSIONMEMBRE'];
                 $rowset_membre->ID_GROUPEMENT = null;
+                $rowset_membre->MANIFESTATION_COMMISSIONMEMBRE = isset($_POST[$id_membre.'_MANIFESTATION']) ? 1 : 0;
 
                 if ('1' === $_POST[$id_membre.'_typemembre']) {
                     $rowset_membre->ID_GROUPEMENT = $_POST[$id_membre.'_ID_GROUPEMENT'];
