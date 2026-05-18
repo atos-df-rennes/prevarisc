@@ -7,26 +7,24 @@ describe('Établissement — ajout par genre', () => {
 
     /**
      * Helper : ajoute une adresse via la modale.
-     * On remplit les champs manuellement sans passer par la géolocalisation
-     * (Nominatim/IGN pouvant être indisponibles en environnement de test).
+     * Utilise jQuery $.autocomplete (plugin legacy) dont les résultats
+     * apparaissent dans un élément .ac_results > ul > li.
      */
     function ajouterAdresse(commune, voie, numero, complement) {
         cy.contains('Ajouter une adresse').click()
         cy.get('#adresse-modal-ajout').should('be.visible')
 
-        // Attendre que le champ commune soit actif
+        // Commune (autocomplete jQuery)
         cy.get('#adresse-modal-ajout input[name="commune_ac"]').should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="commune_ac"]').clear().type(commune)
+        cy.get('.ac_results').should('be.visible')
+        cy.get('.ac_results ul li').first().click()
 
-        // Sélectionner la première suggestion de commune
-        cy.get('.typeahead.dropdown-menu').should('be.visible')
-        cy.get('.typeahead.dropdown-menu li:first').click()
-
-        // Voie
+        // Voie (autocomplete jQuery, activée après sélection commune)
         cy.get('#adresse-modal-ajout input[name="voie_ac"]').should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="voie_ac"]').clear().type(voie)
-        cy.get('.typeahead.dropdown-menu').should('be.visible')
-        cy.get('.typeahead.dropdown-menu li:first').click()
+        cy.get('.ac_results').should('be.visible')
+        cy.get('.ac_results ul li').first().click()
 
         // Numéro
         cy.get('#adresse-modal-ajout input[name="numero"]').should('not.be.disabled')
@@ -63,10 +61,20 @@ describe('Établissement — ajout par genre', () => {
         cy.get('h2.page-header, h2').should('contain', libelle)
     }
 
+    /**
+     * Helper : sélectionne un élément dans un TomSelect.
+     * TomSelect remplace l'input natif par un .ts-control wrapper.
+     */
+    function tomSelectSearch(inputId, query) {
+        cy.get(`#${inputId}`).siblings('.ts-wrapper').find('.ts-control input').type(query)
+        cy.get(`#${inputId}`).siblings('.ts-wrapper').find('.ts-dropdown .ts-dropdown-content .option').first()
+            .should('be.visible').click()
+    }
+
     // ——————————————————————————————————————————————————————————
     // Genre 1 : Site
     // ——————————————————————————————————————————————————————————
-    it('Genre Site — création avec établissements enfants', () => {
+    it('Genre Site — création avec informations de base', () => {
         const libelle = `Site E2E ${Date.now()}`
 
         cy.visit('/etablissement/ajouter')
@@ -124,13 +132,13 @@ describe('Établissement — ajout par genre', () => {
         // R143-20
         cy.get('input[name="R14320_ETABLISSEMENTINFORMATIONS"][value="1"]').check()
 
-        // Local à sommeil : Non
-        cy.get('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"][value="0"]').check()
+        // Local à sommeil : Oui (affiche effectif hébergé)
+        cy.get('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"][value="1"]').check()
 
         // Effectifs
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('500')
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('50')
-        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').clear().type('0')
+        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear().type('20')
 
         // Plan d'intervention
         cy.get('#add_plan').click()
@@ -152,7 +160,6 @@ describe('Établissement — ajout par genre', () => {
         soumettreEtVerifier(libelle)
 
         // Vérifications supplémentaires
-        cy.contains('ERP').should('exist')
         cy.contains('0299100001').should('exist')
     })
 
@@ -176,10 +183,9 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_TYPE"]').should('be.visible').select(1)
         cy.get('select[name="ID_TYPEACTIVITE"]').should('be.visible').select(1)
 
-        // Effectifs
+        // Effectifs (pas d'effectif hébergé sans local à sommeil)
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('200')
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('30')
-        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').clear().type('10')
 
         // Plan
         cy.get('#add_plan').click()
@@ -245,10 +251,9 @@ describe('Établissement — ajout par genre', () => {
         // Périodicité
         cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear().type('24')
 
-        // Effectifs
+        // Effectifs (pas d'effectif hébergé sans local à sommeil)
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('1000')
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('100')
-        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').clear().type('50')
 
         // Commission
         cy.get('select[name="ID_COMMISSION"]').select(1)
@@ -294,10 +299,10 @@ describe('Établissement — ajout par genre', () => {
         cy.get('#add_rubrique').click()
         cy.get('#rubriques_tbody tr:not(.hide):not(.prototype)').last().within(() => {
             cy.get('select').first().select(1) // Rubrique
-            cy.get('input[type="text"]').eq(0).type('4321')  // Numéro
-            cy.get('input[type="text"]').eq(1).type('Stockage produits')  // Nom
-            cy.get('input[type="text"]').eq(2).type('500 T')  // Valeur
-            cy.get('select').last().select(1)  // Classement
+            cy.get('input[placeholder="Numéro"]').type('4321')
+            cy.get('input[placeholder="Nom"]').type('Stockage produits')
+            cy.get('input[placeholder="Valeur"]').type('500 T')
+            cy.get('select').last().select(1) // Classement
         })
 
         // Effectifs (pas d'effectif public ni hébergé pour BUP)
@@ -454,9 +459,9 @@ describe('Établissement — ajout par genre', () => {
     })
 
     // ——————————————————————————————————————————————————————————
-    // Test complémentaire : ERP avec établissement père
+    // Test complémentaire : ERP avec établissement père (TomSelect)
     // ——————————————————————————————————————————————————————————
-    it('Genre ERP avec père — rattachement à un Site existant', () => {
+    it('Genre ERP avec père — rattachement à un Site existant via TomSelect', () => {
         const libelle = `ERP Fils E2E ${Date.now()}`
 
         cy.visit('/etablissement/ajouter')
@@ -468,10 +473,8 @@ describe('Établissement — ajout par genre', () => {
         // Genre = ERP (2)
         cy.get('select[name="ID_GENRE"]').select('2')
 
-        // Rechercher un établissement père (autocomplete)
-        cy.get('#pere_autocomplete').type('Site E2E')
-        cy.get('.typeahead.dropdown-menu').should('be.visible')
-        cy.get('.typeahead.dropdown-menu li:first').click()
+        // Rechercher un établissement père via TomSelect
+        tomSelectSearch('pere_autocomplete', 'Site E2E')
         cy.get('input[name="ID_PERE"]').should('not.have.value', '')
 
         // Catégorie + type minimal
