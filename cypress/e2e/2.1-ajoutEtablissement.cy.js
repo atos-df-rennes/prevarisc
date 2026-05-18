@@ -19,27 +19,42 @@ describe('Établissement — ajout par genre', () => {
      * @param {string} complement - Complément d'adresse (optionnel)
      */
     function ajouterAdresse(commune, voie, numero, complement) {
+        // Intercepter les appels API pour synchroniser le test
+        cy.intercept('GET', '/api/2.0/adresse/get_communes*').as('getCommunes')
+        cy.intercept('GET', '/api/2.0/adresse/get_voies*').as('getVoies')
+
         cy.contains('Ajouter une adresse').click()
         cy.get('#adresse-modal-ajout').should('be.visible')
 
         // Commune (autocomplete jQuery — minChars: 2)
-        cy.get('#adresse-modal-ajout input[name="commune_ac"]').should('not.be.disabled')
-        cy.get('#adresse-modal-ajout input[name="commune_ac"]').clear().type(commune)
-        cy.get('.ac_results', { timeout: 10000 }).should('be.visible')
-        cy.get('.ac_results ul li').first().click()
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]')
+            .should('be.visible')
+            .should('not.be.disabled')
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]').clear()
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]').type(commune, { delay: 50 })
+        cy.wait('@getCommunes')
+        cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
+        cy.get('.ac_results:visible ul li').first().click()
 
         // Voie (autocomplete jQuery — minChars: 2, activée après sélection commune)
-        cy.get('#adresse-modal-ajout input[name="voie_ac"]').should('not.be.disabled')
-        cy.get('#adresse-modal-ajout input[name="voie_ac"]').clear().type(voie)
-        cy.get('.ac_results', { timeout: 10000 }).should('be.visible')
-        cy.get('.ac_results ul li').first().click()
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]')
+            .should('be.visible')
+            .should('not.be.disabled')
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]').clear()
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]').type(voie, { delay: 50 })
+        cy.wait('@getVoies')
+        cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
+        cy.get('.ac_results:visible ul li').first().click()
 
         // Numéro
-        cy.get('#adresse-modal-ajout input[name="numero"]').should('not.be.disabled')
-        cy.get('#adresse-modal-ajout input[name="numero"]').clear().type(numero)
+        cy.get('#adresse-modal-ajout input[name="numero"]')
+            .should('not.be.disabled')
+        cy.get('#adresse-modal-ajout input[name="numero"]').clear()
+        cy.get('#adresse-modal-ajout input[name="numero"]').type(numero)
 
         if (complement) {
-            cy.get('#adresse-modal-ajout input[name="complement"]').clear().type(complement)
+            cy.get('#adresse-modal-ajout input[name="complement"]').clear()
+            cy.get('#adresse-modal-ajout input[name="complement"]').type(complement)
         }
 
         // Coordonnées manuelles (bypass géolocalisation)
@@ -53,19 +68,26 @@ describe('Établissement — ajout par genre', () => {
 
     /**
      * Helper : soumet le formulaire et vérifie la création.
+     * Intercepte l'appel API defaults_values et auto-confirme la modale si elle apparaît.
      */
     function soumettreEtVerifier(libelle) {
-        cy.contains("Ajouter l'établissement").click()
+        // Intercepter l'appel qui décide si la modale de confirmation s'affiche
+        cy.intercept('POST', '**/defaults_values*').as('defaultsValues')
 
-        // Si la modale de confirmation apparaît, la valider
-        cy.get('body').then($body => {
-            if ($body.find('#confirm-modal:visible').length > 0) {
-                cy.contains('Confirmer et sauvegarder les changements').click()
-            }
+        // Pré-configurer un listener Bootstrap : si la modale apparaît, auto-confirmer
+        cy.window().then(win => {
+            win.$('#confirm-modal').on('shown.bs.modal', function () {
+                win.$(this).find('input[type="submit"]').trigger('click')
+            })
         })
 
-        // Vérification : on arrive sur la fiche de l'établissement créé
-        cy.url().should('match', /\/etablissement\/\d+/)
+        cy.contains("Ajouter l'établissement").click()
+
+        // Attendre la réponse API (déclenche soit la modale soit le submit direct)
+        cy.wait('@defaultsValues')
+
+        // Vérification : redirection vers la fiche de l'établissement créé
+        cy.url({ timeout: 15000 }).should('match', /\/etablissement\/\d+/)
         cy.get('h2.page-header, h2').should('contain', libelle)
     }
 
@@ -74,8 +96,8 @@ describe('Établissement — ajout par genre', () => {
      * TomSelect remplace l'input natif par un .ts-control wrapper.
      */
     function tomSelectSearch(inputId, query) {
-        cy.get(`#${inputId}`).siblings('.ts-wrapper').find('.ts-control input').type(query)
-        cy.get(`#${inputId}`).siblings('.ts-wrapper').find('.ts-dropdown .ts-dropdown-content .option').first()
+        cy.get('#' + inputId).siblings('.ts-wrapper').find('.ts-control input').type(query)
+        cy.get('#' + inputId).siblings('.ts-wrapper').find('.ts-dropdown .ts-dropdown-content .option').first()
             .should('be.visible').click()
     }
 
