@@ -1,5 +1,8 @@
 // Tests fonctionnels — Ajout d'un établissement (un test par genre)
 // URL migrée : /etablissement/ajouter
+// Note : l'autocomplete voies utilise LIBELLE_RUE qui contient l'abréviation du type
+// (ex: "R SAINT-JEAN" pour Rue Saint-Jean, "BD CLEMENCEAU" pour Boulevard Clemenceau)
+// La commune de test est Louviers (27375, code postal 27400)
 describe('Établissement — ajout par genre', () => {
     beforeEach(() => {
         cy.login()
@@ -9,21 +12,26 @@ describe('Établissement — ajout par genre', () => {
      * Helper : ajoute une adresse via la modale.
      * Utilise jQuery $.autocomplete (plugin legacy) dont les résultats
      * apparaissent dans un élément .ac_results > ul > li.
+     *
+     * @param {string} commune - Texte à taper pour la recherche commune (min 2 chars)
+     * @param {string} voie - Texte à taper pour la recherche voie (min 2 chars, format LIBELLE_RUE ex: "SAINT-JEAN")
+     * @param {string} numero - Numéro de voie
+     * @param {string} complement - Complément d'adresse (optionnel)
      */
     function ajouterAdresse(commune, voie, numero, complement) {
         cy.contains('Ajouter une adresse').click()
         cy.get('#adresse-modal-ajout').should('be.visible')
 
-        // Commune (autocomplete jQuery)
+        // Commune (autocomplete jQuery — minChars: 2)
         cy.get('#adresse-modal-ajout input[name="commune_ac"]').should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="commune_ac"]').clear().type(commune)
-        cy.get('.ac_results').should('be.visible')
+        cy.get('.ac_results', { timeout: 10000 }).should('be.visible')
         cy.get('.ac_results ul li').first().click()
 
-        // Voie (autocomplete jQuery, activée après sélection commune)
+        // Voie (autocomplete jQuery — minChars: 2, activée après sélection commune)
         cy.get('#adresse-modal-ajout input[name="voie_ac"]').should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="voie_ac"]').clear().type(voie)
-        cy.get('.ac_results').should('be.visible')
+        cy.get('.ac_results', { timeout: 10000 }).should('be.visible')
         cy.get('.ac_results ul li').first().click()
 
         // Numéro
@@ -35,8 +43,8 @@ describe('Établissement — ajout par genre', () => {
         }
 
         // Coordonnées manuelles (bypass géolocalisation)
-        cy.get('#adresse-modal-ajout input[name="lon"]').invoke('val', '-1.6778')
-        cy.get('#adresse-modal-ajout input[name="lat"]').invoke('val', '48.1172')
+        cy.get('#adresse-modal-ajout input[name="lon"]').invoke('val', '1.1667')
+        cy.get('#adresse-modal-ajout input[name="lat"]').invoke('val', '49.2167')
 
         // Sauvegarder l'adresse
         cy.get('#adresse-modal-ajout').contains('Sauvegarder').click()
@@ -155,7 +163,7 @@ describe('Établissement — ajout par genre', () => {
         cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear().type('02:30')
 
         // Adresse
-        ajouterAdresse('Rennes', 'Rue', '10', 'Bâtiment A')
+        ajouterAdresse('Louviers', 'CHAMP DE VILLE', '10', 'Bâtiment A')
 
         soumettreEtVerifier(libelle)
 
@@ -222,7 +230,7 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_FAMILLE"]').should('be.visible').select(1)
 
         // Adresse
-        ajouterAdresse('Rennes', 'Rue', '5', '')
+        ajouterAdresse('Louviers', 'SAINT-JEAN', '5', '')
 
         soumettreEtVerifier(libelle)
         cy.contains('Habitation').should('exist')
@@ -266,7 +274,7 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Adresse
-        ajouterAdresse('Rennes', 'Avenue', '1', 'Tour A')
+        ajouterAdresse('Louviers', 'CLEMENCEAU', '1', 'Tour A')
 
         // Données pratiques
         cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear().type('3')
@@ -316,7 +324,7 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Adresse
-        ajouterAdresse('Rennes', 'Boulevard', '25', 'Zone Industrielle')
+        ajouterAdresse('Louviers', 'NEUBOURG', '25', 'Zone Industrielle')
 
         soumettreEtVerifier(libelle)
         cy.contains('BUP').should('exist')
@@ -356,7 +364,7 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Adresse
-        ajouterAdresse('Rennes', 'Chemin', '1', '')
+        ajouterAdresse('Louviers', 'NUNGESSER', '1', '')
 
         soumettreEtVerifier(libelle)
         cy.contains('Camping').should('exist')
@@ -390,7 +398,7 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Adresse
-        ajouterAdresse('Rennes', 'Place', '1', 'Parc des expositions')
+        ajouterAdresse('Louviers', 'CHAMP DE VILLE', '1', 'Parc des expositions')
 
         soumettreEtVerifier(libelle)
         cy.contains('Manifestation').should('exist')
@@ -426,7 +434,7 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Adresse
-        ajouterAdresse('Rennes', 'Allée', '3', '')
+        ajouterAdresse('Louviers', 'BOMBARD', '3', '')
 
         soumettreEtVerifier(libelle)
         cy.contains('IOP').should('exist')
@@ -452,7 +460,7 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_CLASSEMENT"]').should('be.visible').select(1)
 
         // Adresse
-        ajouterAdresse('Rennes', 'Impasse', '2', '')
+        ajouterAdresse('Louviers', 'NOVEMBRE', '2', '')
 
         soumettreEtVerifier(libelle)
         cy.contains('Zone').should('exist')
@@ -484,7 +492,7 @@ describe('Établissement — ajout par genre', () => {
         cy.get('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"][value="0"]').check()
 
         // Adresse
-        ajouterAdresse('Rennes', 'Rue', '12', '')
+        ajouterAdresse('Louviers', 'SAINT-JEAN', '12', '')
 
         soumettreEtVerifier(libelle)
     })
