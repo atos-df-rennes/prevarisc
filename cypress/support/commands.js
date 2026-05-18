@@ -2,9 +2,9 @@
 Cypress.Commands.add('login', (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.session([username, password], () => {
         cy.visit('/session/login')
-        cy.get('[name=prevarisc_login_username]').type(username)
-        cy.get('[name=prevarisc_login_passwd]').type(password)
-        cy.get('#Connexion').click()
+        cy.get('[name=_username]').type(username)
+        cy.get('[name=_password]').type(password)
+        cy.contains('button', 'Connexion').click()
         cy.title().should('eq', 'Tableau de bord')
     })
 })
