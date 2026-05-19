@@ -206,7 +206,8 @@ describe('Établissement — modification par genre', () => {
     // Test CSRF : un token invalide ne provoque pas la sauvegarde
     // ——————————————————————————————————————————————————————————
     it('Soumission avec token CSRF invalide affiche une erreur', () => {
-        naviguerVersEdition('Site E2E')
+        // Utiliser "Modifié" car les tests précédents ont renommé les établissements "E2E"
+        naviguerVersEdition('Modifié')
 
         // Altérer le token CSRF dans le DOM
         cy.get('input[name="_token"]').invoke('val', 'token_invalide_csrf')
