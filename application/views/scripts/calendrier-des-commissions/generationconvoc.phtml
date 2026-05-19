@@ -44,11 +44,14 @@ foreach($this->informationsMembre as $val => $membre){
 				&& $dossierInfos['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'] == $commune[0]
 				&& (
 					(
-					$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
-					&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+						8 == $dossierInfos['infosEtab']['informations']['ID_GENRE']
+						&& $membre['manifestation']
 					)
-					||
-					$membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
+					|| (
+						$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
+						&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+					)
+					|| $membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 				)
 				&& $membre['dossiertypes'][$dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 			){
@@ -95,11 +98,14 @@ foreach($this->informationsMembre as $val => $membre){
 						&& $dossierInfos['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'] == $commune[0]
 						&& (
 							(
-							$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+								8 == $dossierInfos['infosEtab']['informations']['ID_GENRE']
+								&& $membre['manifestation']
 							)
-							||
-							$membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
+							|| (
+								$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
+								&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+							)
+							|| $membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
 						&& $membre['dossiertypes'][$dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 						&& isset($dossierInfos["HEURE_DEB_AFFECT"])
@@ -120,11 +126,14 @@ foreach($this->informationsMembre as $val => $membre){
 						&& $dossierInfos['infosEtab']['adresses'][0]['LIBELLE_COMMUNE'] == $commune[0]
 						&& (
 							(
-							$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+								8 == $dossierInfos['infosEtab']['informations']['ID_GENRE']
+								&& $membre['manifestation']
 							)
-							||
-							$membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
+							|| (
+								$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
+								&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+							)
+							|| $membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
 						&& $membre['dossiertypes'][$dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 					){
@@ -177,11 +186,14 @@ foreach($this->informationsMembre as $val => $membre){
 						&& $dossierInfos['infosEtab']['adresses'][0]['NUMINSEE_COMMUNE'] == $val['NUMINSEE_COMMUNE']
 						&& (
 							(
-							$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
-							&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+								8 == $dossierInfos['infosEtab']['informations']['ID_GENRE']
+								&& $membre['manifestation']
 							)
-							||
-							$membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
+							|| (
+								$membre['categories'][$dossierInfos['infosEtab']['informations']['ID_CATEGORIE']]['ID_COMMISSIONMEMBRE']
+								&& $membre['types'][$dossierInfos['infosEtab']['informations']['ID_TYPEACTIVITE']]['ID_COMMISSIONMEMBRE']
+							)
+							|| $membre['classes'][$dossierInfos['infosEtab']['informations']['ID_CLASSE']]['ID_COMMISSIONMEMBRE']
 						)
 						&& $membre['dossiertypes'][$dossierInfos['TYPE_DOSSIER']]['ID_COMMISSIONMEMBRE']
 					){
