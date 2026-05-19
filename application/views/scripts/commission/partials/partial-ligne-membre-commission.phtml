@@ -1,5 +1,5 @@
 <tr>
-	<td style='width: 300px'>
+	<td style='width: 300px' colspan="2">
 		<div class='inner_scroll'>
             <!-- ID de la règle -->
             <input type='hidden' name='ID_COMMISSIONMEMBRE[]' value='<?php echo $this->id_membre ?>' />
@@ -148,6 +148,12 @@
 
 		</div>
 	</td>
+
+    <!-- Manifestation temporaire -->
+    <td>
+        <input type='checkbox' name='<?php echo $this->id_membre ?>_MANIFESTATION' value='1' <?php if($this->manifestation) echo "checked" ?> />
+        Inclure
+    </td>
 
 	<!-- Action -->
 	<td style='text-align: center;' >
