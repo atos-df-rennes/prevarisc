@@ -26,13 +26,18 @@ describe('Établissement — ajout par genre', () => {
         cy.contains('Ajouter une adresse').click()
         cy.get('#adresse-modal-ajout').should('be.visible')
 
+        // Attendre que la transition Bootstrap soit terminée (300ms animation)
+        // et que le plugin autocomplete soit prêt
+        cy.wait(500)
+
         // Commune (autocomplete jQuery — minChars: 2)
         cy.get('#adresse-modal-ajout input[name="commune_ac"]')
             .should('be.visible')
             .should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="commune_ac"]').clear()
-        cy.get('#adresse-modal-ajout input[name="commune_ac"]').type(commune, { delay: 50 })
-        cy.wait('@getCommunes')
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]').focus()
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]').type(commune, { delay: 80 })
+        cy.wait('@getCommunes', { timeout: 10000 })
         cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
         cy.get('.ac_results:visible ul li').first().click()
 
@@ -41,8 +46,9 @@ describe('Établissement — ajout par genre', () => {
             .should('be.visible')
             .should('not.be.disabled')
         cy.get('#adresse-modal-ajout input[name="voie_ac"]').clear()
-        cy.get('#adresse-modal-ajout input[name="voie_ac"]').type(voie, { delay: 50 })
-        cy.wait('@getVoies')
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]').focus()
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]').type(voie, { delay: 80 })
+        cy.wait('@getVoies', { timeout: 10000 })
         cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
         cy.get('.ac_results:visible ul li').first().click()
 
