@@ -33,6 +33,7 @@ describe('Établissement — ajout par genre', () => {
             .should('be.visible')
             .should('not.be.disabled')
             .clear()
+        cy.get('#adresse-modal-ajout input[name="commune_ac"]')
             .type(commune, { delay: 80 })
         cy.wait('@getCommunes', { timeout: 10000 })
         cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
@@ -43,6 +44,7 @@ describe('Établissement — ajout par genre', () => {
             .should('be.visible')
             .should('not.be.disabled')
             .clear()
+        cy.get('#adresse-modal-ajout input[name="voie_ac"]')
             .type(voie, { delay: 80 })
         cy.wait('@getVoies', { timeout: 10000 })
         cy.get('.ac_results:visible', { timeout: 10000 }).should('exist')
@@ -52,10 +54,12 @@ describe('Établissement — ajout par genre', () => {
         cy.get('#adresse-modal-ajout input[name="numero"]')
             .should('not.be.disabled')
             .clear()
+        cy.get('#adresse-modal-ajout input[name="numero"]')
             .type(numero)
 
         if (complement) {
-            cy.get('#adresse-modal-ajout input[name="complement"]').clear().type(complement)
+            cy.get('#adresse-modal-ajout input[name="complement"]').clear()
+            cy.get('#adresse-modal-ajout input[name="complement"]').type(complement)
         }
 
         // Coordonnées manuelles (bypass géolocalisation)
@@ -147,7 +151,8 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_CATEGORIE"]').should('be.visible').select(1)
 
         // Périodicité
-        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear().type('36')
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').type('36')
 
         // Type principal & Activité
         cy.get('select[name="ID_TYPE"]').should('be.visible').select(1)
@@ -167,9 +172,12 @@ describe('Établissement — ajout par genre', () => {
         cy.get('input[name="LOCALSOMMEIL_ETABLISSEMENTINFORMATIONS"][value="1"]').check()
 
         // Effectifs
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('500')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('50')
-        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear().type('20')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('500')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('50')
+        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear()
+        cy.get('input[name="EFFECTIFHEBERGE_ETABLISSEMENTINFORMATIONS"]').type('20')
 
         // Plan d'intervention
         cy.get('#add_plan').click()
@@ -182,8 +190,10 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_COMMISSION"]').select(1)
 
         // Données pratiques
-        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear().type('2')
-        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear().type('02:30')
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear()
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').type('2')
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear()
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').type('02:30')
 
         // Adresse
         ajouterAdresse('Louviers', 'CHAMP DE VILLE', '10', 'Bâtiment A')
@@ -215,8 +225,10 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_TYPEACTIVITE"]').should('be.visible').select(1)
 
         // Effectifs (pas d'effectif hébergé sans local à sommeil)
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('200')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('30')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('200')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('30')
 
         // Plan
         cy.get('#add_plan').click()
@@ -226,8 +238,10 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Données pratiques
-        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear().type('1')
-        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear().type('01:00')
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear()
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').type('1')
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear()
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').type('01:00')
 
         soumettreEtVerifier(libelle)
         cy.contains('Cellule').should('exist')
@@ -280,11 +294,14 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_CLASSE"]').should('be.visible').select(1)
 
         // Périodicité
-        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear().type('24')
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').type('24')
 
         // Effectifs (pas d'effectif hébergé sans local à sommeil)
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('1000')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('100')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('1000')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('100')
 
         // Commission
         cy.get('select[name="ID_COMMISSION"]').select(1)
@@ -300,8 +317,10 @@ describe('Établissement — ajout par genre', () => {
         ajouterAdresse('Louviers', 'CLEMENCEAU', '1', 'Tour A')
 
         // Données pratiques
-        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear().type('3')
-        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear().type('04:00')
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').clear()
+        cy.get('input[name="NBPREV_ETABLISSEMENT"]').type('3')
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').clear()
+        cy.get('input[name="DUREEVISITE_ETABLISSEMENT"]').type('04:00')
 
         soumettreEtVerifier(libelle)
         cy.contains('IGH').should('exist')
@@ -337,7 +356,8 @@ describe('Établissement — ajout par genre', () => {
         })
 
         // Effectifs (pas d'effectif public ni hébergé pour BUP)
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('80')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('80')
 
         // Plan
         cy.get('#add_plan').click()
@@ -371,10 +391,14 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_GENRE"]').select('7')
 
         // Emplacements camping
-        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear().type('50')
-        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').clear().type('30')
-        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').clear().type('100')
-        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').clear().type('20')
+        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear()
+        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').type('50')
+        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').type('30')
+        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').type('100')
+        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').type('20')
 
         // Vérifier le calcul automatique du total
         cy.get('input[name="EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS"]').should('have.value', '200')
@@ -410,8 +434,10 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_GENRE"]').select('8')
 
         // Effectifs
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear().type('5000')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('200')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('5000')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('200')
 
         // Plan
         cy.get('#add_plan').click()
@@ -446,8 +472,10 @@ describe('Établissement — ajout par genre', () => {
         cy.get('select[name="ID_GENRE"]').select('9')
 
         // Effectifs
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear().type('2000')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('50')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').should('be.visible').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('2000')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('50')
 
         // Plan
         cy.get('#add_plan').click()

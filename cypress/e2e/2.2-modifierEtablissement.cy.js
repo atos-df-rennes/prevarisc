@@ -16,7 +16,8 @@ describe('Établissement — modification par genre', () => {
      */
     function naviguerVersEdition(searchTerm) {
         cy.visit('/rechercher/etablissement')
-        cy.get('input[name="label"].search-query').clear().type(searchTerm)
+        cy.get('input[name="label"].search-query').clear()
+        cy.get('input[name="label"].search-query').type(searchTerm)
         cy.get('input[type="submit"][name="Rechercher"]').click()
         cy.contains(searchTerm).should('exist')
         cy.contains(searchTerm).first().click()
@@ -52,8 +53,10 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Site E2E')
 
         const newLibelle = `Site Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="TELEPHONE_ETABLISSEMENT"]').clear().type('0299000099')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="TELEPHONE_ETABLISSEMENT"]').clear()
+        cy.get('input[name="TELEPHONE_ETABLISSEMENT"]').type('0299000099')
 
         soumettreModificationEtVerifier(newLibelle)
         cy.contains('0299000099').should('exist')
@@ -66,14 +69,18 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('ERP E2E')
 
         const newLibelle = `ERP Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
 
         // Modifier les effectifs
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('750')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('80')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('750')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('80')
 
         // Modifier la périodicité
-        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear().type('24')
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').type('24')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -85,8 +92,10 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Cellule E2E')
 
         const newLibelle = `Cellule Modifiée ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('300')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('300')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -98,7 +107,8 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Habitation E2E')
 
         const newLibelle = `Habitation Modifiée ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
 
         // Changer la famille (sélection index 2 si disponible, sinon 1)
         cy.get('select[name="ID_FAMILLE"]').then($select => {
@@ -116,9 +126,12 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('IGH E2E')
 
         const newLibelle = `IGH Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear().type('12')
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('1500')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').type('12')
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('1500')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -130,8 +143,10 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('BUP E2E')
 
         const newLibelle = `BUP Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('120')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('120')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -143,13 +158,18 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Camping E2E')
 
         const newLibelle = `Camping Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
 
         // Modifier les emplacements
-        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').clear().type('60')
-        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').clear().type('40')
-        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').clear().type('120')
-        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').clear().type('10')
+        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFHABITATION_ETABLISSEMENTINFORMATIONS"]').type('60')
+        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFCARAVANE__ETABLISSEMENTINFORMATIONS"]').type('40')
+        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFEMPLACEMENTNU_ETABLISSEMENTINFORMATIONS"]').type('120')
+        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFDIVERS_ETABLISSEMENTINFORMATIONS"]').type('10')
 
         // Vérifier le calcul dynamique du total
         cy.get('input[name="EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS"]').should('have.value', '230')
@@ -164,9 +184,12 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Manif E2E')
 
         const newLibelle = `Manif Modifiée ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('8000')
-        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear().type('300')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('8000')
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('300')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -178,8 +201,10 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('IOP E2E')
 
         const newLibelle = `IOP Modifié ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
-        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear().type('3000')
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('3000')
 
         soumettreModificationEtVerifier(newLibelle)
     })
@@ -191,7 +216,8 @@ describe('Établissement — modification par genre', () => {
         naviguerVersEdition('Zone E2E')
 
         const newLibelle = `Zone Modifiée ${Date.now()}`
-        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear().type(newLibelle)
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').clear()
+        cy.get('input[name="LIBELLE_ETABLISSEMENTINFORMATIONS"]').type(newLibelle)
 
         // Changer le classement (sélection index 2 si disponible, sinon 1)
         cy.get('select[name="ID_CLASSEMENT"]').then($select => {
