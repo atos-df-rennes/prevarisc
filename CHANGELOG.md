@@ -4,6 +4,29 @@
 
 <!--- END HEADER -->
 
+## [2.8.19](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.18...v2.8.19) (11-05-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+##### Calendrier-des-commission
+
+* Permet la génération de documents sur des manifestations temporaires (#336) ([793b21](https://github.com/atos-df-rennes/prevarisc/commit/793b217dd60d8c66118ff2aa0686be11d90b1e4d))
+
+##### Dashboard
+
+* Ajout du bloc dossiers incomplets (#319) ([78305a](https://github.com/atos-df-rennes/prevarisc/commit/78305a018257234c723490983e0dbcc77b86ce9f))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gauge-high.svg" width="20" height="20"> Performance
+
+
+##### Commission
+
+* Lenteurs sur la génération de document (#335) ([986f23](https://github.com/atos-df-rennes/prevarisc/commit/986f23f13770b032415f195ff81d72c3ae16c610))
+
+
+---
+
 ## [2.8.18](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.17...v2.8.18) (31-03-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
