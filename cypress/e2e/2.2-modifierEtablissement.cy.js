@@ -238,10 +238,20 @@ describe('Établissement — modification par genre', () => {
         // Altérer le token CSRF dans le DOM
         cy.get('input[name="_token"]').invoke('val', 'token_invalide_csrf')
 
+        // Le JS déclenche un appel defaults_values puis affiche une modale de confirmation
+        cy.intercept('POST', '**/defaults_values*').as('defaultsValues')
+
+        cy.window().then(win => {
+            win.$('#confirm-modal').on('shown.bs.modal', function () {
+                win.$(this).find('input[type="submit"]').trigger('click')
+            })
+        })
+
         cy.get("form#etablissement input[type='submit']").click()
+        cy.wait('@defaultsValues')
 
         // La page ne redirige pas, elle affiche un flash d'erreur
-        cy.url().should('include', '/modifier')
+        cy.url({ timeout: 15000 }).should('include', '/modifier')
         cy.contains('Token CSRF invalide').should('exist')
     })
 })
