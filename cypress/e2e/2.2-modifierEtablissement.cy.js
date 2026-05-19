@@ -29,22 +29,6 @@ describe('Établissement — modification par genre', () => {
      * Helper : soumet le formulaire de modification et vérifie le succès.
      * Intercepte l'appel defaults_values et auto-confirme la modale si elle apparaît.
      */
-    function soumettreModificationEtVerifier(expectedText) {
-        cy.intercept('POST', '**/defaults_values*').as('defaultsValues')
-
-        cy.window().then(win => {
-            win.$('#confirm-modal').on('shown.bs.modal', function () {
-                win.$(this).find('input[type="submit"]').trigger('click')
-            })
-        })
-
-        cy.get("form#etablissement input[type='submit']").click()
-        cy.wait('@defaultsValues')
-
-        // Vérification : redirection vers la fiche informations
-        cy.url({ timeout: 15000 }).should('match', /\/etablissement\/\d+/)
-        cy.get('h2.page-header, h2').should('contain', expectedText)
-    }
 
     // ——————————————————————————————————————————————————————————
     // Genre 1 : Site
@@ -58,7 +42,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="TELEPHONE_ETABLISSEMENT"]').clear()
         cy.get('input[name="TELEPHONE_ETABLISSEMENT"]').type('0299000099')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
         cy.contains('0299000099').should('exist')
     })
 
@@ -82,7 +66,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="PERIODICITE_ETABLISSEMENTINFORMATIONS"]').type('24')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -97,7 +81,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('300')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -116,7 +100,7 @@ describe('Établissement — modification par genre', () => {
             cy.get('select[name="ID_FAMILLE"]').select(options > 2 ? 2 : 1)
         })
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -133,7 +117,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('1500')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -148,7 +132,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('120')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -174,7 +158,7 @@ describe('Établissement — modification par genre', () => {
         // Vérifier le calcul dynamique du total
         cy.get('input[name="EFFECTIFTOTALCAMPING_ETABLISSEMENTINFORMATIONS"]').should('have.value', '230')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -191,7 +175,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="EFFECTIFPERSONNEL_ETABLISSEMENTINFORMATIONS"]').type('300')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -206,7 +190,7 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').clear()
         cy.get('input[name="EFFECTIFPUBLIC_ETABLISSEMENTINFORMATIONS"]').type('3000')
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
@@ -225,7 +209,7 @@ describe('Établissement — modification par genre', () => {
             cy.get('select[name="ID_CLASSEMENT"]').select(options > 2 ? 2 : 1)
         })
 
-        soumettreModificationEtVerifier(newLibelle)
+        cy.submitEstablishment(newLibelle)
     })
 
     // ——————————————————————————————————————————————————————————
