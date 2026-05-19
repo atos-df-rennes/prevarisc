@@ -19,8 +19,8 @@ describe('Établissement — modification par genre', () => {
         cy.get('input[name="label"].search-query').clear()
         cy.get('input[name="label"].search-query').type(searchTerm)
         cy.get('input[type="submit"][name="Rechercher"]').click()
-        cy.contains(searchTerm).should('exist')
-        cy.contains(searchTerm).first().click()
+        cy.get('ul.recherche_liste').contains('a', searchTerm).should('exist')
+        cy.get('ul.recherche_liste').contains('a', searchTerm).first().click()
         cy.contains('Modifier la fiche').click()
         cy.url().should('include', '/modifier')
     }
