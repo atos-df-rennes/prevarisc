@@ -1,3 +1,4 @@
+// @deprecated — Cette suite est maintenue dans prevarisc-migration/cypress/. Toute modification doit y être faite.
 // Tests fonctionnels — Ajout d'un établissement (un test par genre)
 // URL migrée : /etablissement/ajouter
 // Note : l'autocomplete voies utilise LIBELLE_RUE qui contient l'abréviation du type
