@@ -1,3 +1,4 @@
+// @deprecated — Cette suite est maintenue dans prevarisc-migration/cypress/. Toute modification doit y être faite.
 /**
  * Smoke tests — release/2.10
  *

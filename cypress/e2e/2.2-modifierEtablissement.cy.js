@@ -1,3 +1,4 @@
+// @deprecated — Cette suite est maintenue dans prevarisc-migration/cypress/. Toute modification doit y être faite.
 // Tests fonctionnels — Modification d'un établissement (un test par genre)
 // URL migrée : /etablissement/{id}/modifier
 // Pré-requis : les tests 2.1 (ajout) doivent avoir été exécutés au préalable
