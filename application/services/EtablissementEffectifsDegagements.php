@@ -137,10 +137,23 @@ class Service_EtablissementEffectifsDegagements extends Service_Descriptif
      */
     private function searchElementToCopy(array $elementToSearchIn, $search, string $column): ?array
     {
-        if (!in_array($search, array_column($elementToSearchIn, $column), true)) {
+        $normalizedSearch = is_string($search) ? $this->normalizeString($search) : $search;
+
+        $normalizedColumnValues = array_map(function ($value) {
+            return is_string($value) ? $this->normalizeString($value) : $value;
+        }, array_column($elementToSearchIn, $column));
+
+        $index = array_search($normalizedSearch, $normalizedColumnValues, true);
+
+        if (false === $index) {
             return null;
         }
 
-        return $elementToSearchIn[array_search($search, array_column($elementToSearchIn, $column), true)];
+        return $elementToSearchIn[$index];
+    }
+
+    private function normalizeString(string $str): string
+    {
+        return (string) preg_replace('/\s+/', ' ', trim($str));
     }
 }
