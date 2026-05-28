@@ -4,6 +4,37 @@
 
 <!--- END HEADER -->
 
+## [2.10.0-rc.2](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.10.0-rc.2) (28-05-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
+
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+##### Formulaires
+
+* Supprime les espaces superflus lors de la recherche des champs par nom (#341) ([5fc3c2](https://github.com/atos-df-rennes/prevarisc/commit/5fc3c24265fb4c7879570a7df4789716a1a01573))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+* Authentification (#334) ([01cced](https://github.com/atos-df-rennes/prevarisc/commit/01cceda5ee48411590f9884c057be3086d46ddb7))
+
+##### Calendrier-des-commissions
+
+* Affichage et gestion des ordres du jour (#331) ([be4709](https://github.com/atos-df-rennes/prevarisc/commit/be470958d2a4b6f47286d3c0808fa65ecd1cb131))
+
+##### Dossier
+
+* Avis et dérogations (#332) ([dcf87a](https://github.com/atos-df-rennes/prevarisc/commit/dcf87ab3773eb2ab81eb6f8f9610fc48ca40c904))
+
+##### Etablissement
+
+* édition d'un établissement (#338) ([280aab](https://github.com/atos-df-rennes/prevarisc/commit/280aab333fab15df01f1bd7c3e9c3c1a1948f4b2))
+* Ajout d'un établissement (#337) ([0eda4e](https://github.com/atos-df-rennes/prevarisc/commit/0eda4e9ae4a9fe9562a36f226bb6b3281db05029))
+
+
+---
+
 ## [2.10.0-rc.1](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.18...v2.10.0-rc.1) (27-04-2026)
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
 
