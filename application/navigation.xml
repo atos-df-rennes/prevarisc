@@ -20,6 +20,9 @@
                 <vider-cache>
                     <route>legacy_clear_cache_and_redirect</route>
                 </vider-cache>
+                <vider-cache-etablissement>
+                    <route>legacy_vider_cache_etablissement</route>
+                </vider-cache-etablissement>
             </pages>
         </legacy>
 
