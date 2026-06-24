@@ -93,4 +93,46 @@ class LegacyController extends Zend_Controller_Action
 
         $this->redirect($target);
     }
+
+    /**
+     * Vide le cache Zend (etablissement_id_<id>) pour une liste d'établissements.
+     *
+     * Utilisé depuis Symfony après une action modifiant les données d'établissements
+     * (ex : suppression d'un dossier, recalcul du dossier donnant avis).
+     * Le cache établissement n'étant pas encore implémenté côté Symfony, ce nettoyage
+     * passe par le legacy qui détient ce cache.
+     *
+     * Paramètres GET :
+     *   ids    JSON array d'identifiants entiers (ex : "[1,2,3]")
+     *   target URL cible après nettoyage (défaut : '/')
+     */
+    public function viderCacheEtablissementAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $ids = json_decode($this->getRequest()->getParam('ids', '[]'), true);
+        if (!is_array($ids)) {
+            $ids = [];
+        }
+
+        $cache = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache');
+
+        foreach ($ids as $id) {
+            $id = filter_var($id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
+            if (null === $id) {
+                continue;
+            }
+
+            $cache->remove('etablissement_id_'.$id);
+        }
+
+        // Nettoyage du cache de recherche legacy (iso-fonctionnel DossierController::deleteAction())
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cacheSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        $target = $this->getRequest()->getParam('target', '/');
+
+        $this->redirect($target);
+    }
 }
