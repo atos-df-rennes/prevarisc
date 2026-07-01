@@ -36,6 +36,13 @@ $viderCacheEtalissement = new Zend_Controller_Router_Route('legacy/etablissement
     'action' => 'vider-cache-etablissement',
     'uri' => '/legacy/etablissement/vider-cache',
 ]);
+$viderCacheCouchesCartographiques = new Zend_Controller_Router_Route('legacy/admin/couches-cartographiques/vider-cache', [
+    'controller' => 'legacy',
+    'action' => 'vider-cache-couches-cartographiques',
+    'resource' => 'gestion_parametrages',
+    'privilege' => 'admin',
+    'uri' => '/legacy/admin/couches-cartographiques/vider-cache',
+]);
 
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
 $router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
@@ -43,3 +50,4 @@ $router->addRoute('legacy_vider_cache_dossier', $viderCacheDossier);
 $router->addRoute('legacy_clear_search_cache_and_redirect', $clearSearchCacheAndRedirect);
 $router->addRoute('legacy_clear_cache_and_redirect', $clearCacheAndRedirect);
 $router->addRoute('legacy_vider_cache_etablissement', $viderCacheEtalissement);
+$router->addRoute('legacy_vider_cache_couches_cartographiques', $viderCacheCouchesCartographiques);
