@@ -24,4 +24,14 @@ class LegacyController extends Zend_Controller_Action
 
         $this->redirect('/admin/utilisateurs');
     }
+
+    public function viderCacheCouchesCartographiquesAction(): void
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('cache')->remove('couches_cartographiques');
+
+        $this->redirect('/admin/couches-cartographiques');
+    }
 }

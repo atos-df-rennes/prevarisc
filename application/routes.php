@@ -17,5 +17,14 @@ $sauvegarderUtilisateur = new Zend_Controller_Router_Route('legacy/admin/utilisa
     'uri' => '/legacy/admin/utilisateurs/sauvegarder',
 ]);
 
+$viderCacheCouchesCartographiques = new Zend_Controller_Router_Route('legacy/admin/couches-cartographiques/vider-cache', [
+    'controller' => 'legacy',
+    'action' => 'vider-cache-couches-cartographiques',
+    'resource' => 'gestion_parametrages',
+    'privilege' => 'admin',
+    'uri' => '/legacy/admin/couches-cartographiques/vider-cache',
+]);
+
 $router->addRoute('legacy_matrice_des_droits', $matriceDesDroits);
 $router->addRoute('legacy_sauvegarder_utilisateur', $sauvegarderUtilisateur);
+$router->addRoute('legacy_vider_cache_couches_cartographiques', $viderCacheCouchesCartographiques);
