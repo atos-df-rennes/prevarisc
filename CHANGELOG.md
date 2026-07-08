@@ -4,6 +4,22 @@
 
 <!--- END HEADER -->
 
+## [2.8.20](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.8.20) (08-07-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
+##### Couches-carto
+
+* Vidage du cache lors de l'ajout/modification/suppression d'une couche (#346) ([e84eba](https://github.com/atos-df-rennes/prevarisc/commit/e84eba977e15847dfd6727a8f2602e1270b1dfe4))
+
+##### Formulaires
+
+* Supprime les espaces superflus lors de la recherche des champs par nom (#341) ([5fc3c2](https://github.com/atos-df-rennes/prevarisc/commit/5fc3c24265fb4c7879570a7df4789716a1a01573))
+
+
+---
+
 ## [2.8.19](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.18...v2.8.19) (11-05-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
