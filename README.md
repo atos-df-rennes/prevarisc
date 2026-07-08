@@ -4,6 +4,8 @@
 ![Static Badge](https://img.shields.io/badge/license-CeCILL--B-yellow)
 ![GitHub Repo stars](https://img.shields.io/github/stars/atos-df-rennes/prevarisc)
 
+> [!IMPORTANT]
+> Ce dépôt n'est plus maintenu et va prochainement être archivé. Considérez d'utiliser la nouvelle version de Prevarisc.
 
 # Prevarisc
 
