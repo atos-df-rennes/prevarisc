@@ -22,7 +22,7 @@
     },
     "homepage": "https://github.com/atos-df-rennes/prevarisc#readme",
     "dependencies": {
-        "cypress": "^13.13.1"
+        "cypress": "^15.18.1"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1"
