@@ -4,11 +4,7 @@
 
 <!--- END HEADER -->
 
-## [2.10.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.10.0) (08-07-2026)
-
-### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
-
-## [2.8.20](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.8.20) (08-07-2026)
+## [2.8.20](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.8.20) (08-07-2026) / [2.10.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.10.0) (08-07-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
 
