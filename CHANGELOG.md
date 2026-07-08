@@ -8,6 +8,11 @@
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
 
+## [2.8.20](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.8.20) (08-07-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+
 ##### Couches-carto
 
 * Vidage du cache lors de l'ajout/modification/suppression d'une couche (#346) ([e84eba](https://github.com/atos-df-rennes/prevarisc/commit/e84eba977e15847dfd6727a8f2602e1270b1dfe4))
