@@ -4,6 +4,23 @@
 
 <!--- END HEADER -->
 
+## [2.10.0](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.10.0) (08-07-2026)
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/bug.svg" width="20" height="20"> Corrections
+
+##### Couches-carto
+
+* Vidage du cache lors de l'ajout/modification/suppression d'une couche (#346) ([e84eba](https://github.com/atos-df-rennes/prevarisc/commit/e84eba977e15847dfd6727a8f2602e1270b1dfe4))
+
+### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/gears.svg" width="20" height="20"> Migration Symfony
+
+##### Dossier
+
+* Suppression logique d'un dossier (#345) ([e1e5ff](https://github.com/atos-df-rennes/prevarisc/commit/e1e5ffc48c044552287762bd925772527249ce9e))
+
+
+---
+
 ## [2.10.0-rc.2](https://github.com/atos-df-rennes/prevarisc/compare/v2.8.19...v2.10.0-rc.2) (28-05-2026)
 
 ### <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/wand-magic-sparkles.svg" width="20" height="20"> Évolutions
