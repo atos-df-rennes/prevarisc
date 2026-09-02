@@ -25,6 +25,6 @@
         "cypress": "^13.13.1"
     },
     "devDependencies": {
-        "@faker-js/faker": "^8.4.1"
+        "@faker-js/faker": "^10.5.0"
     }
 }
